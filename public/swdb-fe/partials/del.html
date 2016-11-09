@@ -1,0 +1,15 @@
+<section>
+  <form ng-submit="processForm()">
+    <H4>Are you sure?</h4><br>
+    <!-- SUBMIT BUTTON -->
+    <button id="submitBtn" type="submit" class="btn btn-success btn-md">
+      <span class="submit glyphicon glyphicon-ok-sign"></span> Yes, delete document {{whichItem}}
+    </button>
+    <a id="cancelBtn" href="#/list" class="btn btn-danger btn-md"><span class="glyphicon glyphicon-backward"></span>
+     No, cancel 
+   </a>
+    <p id="formStatus" ng-show="formShowStatus" class="alert alert-success"><span class="glyphicon glyphicon-info-sign"></span> {{formStatus}}</p>
+    <p id="formError" ng-show="formShowErr" class="alert alert-danger"><span class="glyphicon glyphicon-exclamation-sign"></span> {{formErr}}</p>
+  </form>
+
+</section>

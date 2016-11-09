@@ -1,0 +1,4 @@
+{
+  "levelOfCareEnums": ["NONE","LOW","MEDIUM","HIGH"],
+  "statusEnums": ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"]
+}

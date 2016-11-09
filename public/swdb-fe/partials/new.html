@@ -1,0 +1,301 @@
+<section>
+  <h2>Add/update ({{formData._id}})</h2>
+  <div class="container-fluid">
+    <form name="inputForm" class-"form-horizontal" ng-submit="processForm()">
+
+      <!-- NAME -->
+      <div class="row" ng-class="{ 'has-error' : inputForm.swNameInput.$invalid && !inputForm.swNameInput.$pristine }">
+        <div id="swName-group" class="form-group">
+          <label class="col-sm-2 control-label">Software Name*</label>
+          <div class="col-sm-8">
+            <input id="swName" type="text" name="swNameInput" class="form-control" placeholder="SW Name" ng-model="formData.swName" ng-minlength="2" ng-maxlength="30" required>
+          </input>
+        </div>
+        <div class="col-sm-2" id="swNameInputSts" ng-messages="inputForm.swNameInput.$error" ng-if="inputForm.swNameInput.$dirty">
+          <div ng-message="required">Name is required</div>
+          <div ng-message="minlength">Name must exceed 2 characters</div>
+          <div ng-message="maxlength">Name must not exceed 30 characters</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OWNER -->
+    <div class="row" ng-class="{ 'has-error' : inputForm.ownerInput.$invalid && !inputForm.ownerInput.$pristine }">
+      <div id="owner-group" class="form-group">
+        <label class="col-sm-2 control-label">Owner*</label>
+        <div class="col-sm-8">
+          <input id="owner" type="text" name="ownerInput" class="form-control" placeholder="SW owner" ng-model="formData.owner" ng-minlength="2" ng-maxlength="30" required>
+        </input>
+      </div>
+      <div class="col-sm-2" id="ownerInputSts" ng-messages="inputForm.ownerInput.$error" ng-if="inputForm.ownerInput.$dirty">
+        <div ng-message="required">Owner is required</div>
+        <div ng-message="minlength">Owner must exceed 2 characters</div>
+        <div ng-message="maxlength">Owner must not exceed 30 characters</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEVEL OF CARE -->
+  <div class="row" ng-class="{ 'has-error' : inputForm.levelOfCareInput.$invalid && !inputForm.levelOfCareInput.$pristine }">
+    <div id="levelOfCare-group" class="form-group">
+      <label class="col-sm-2 control-label">Level of Care*</label>
+      <div class="col-sm-8">
+        <select id="levelOfCare" ng-model="formData.levelOfCare" ng-options="o for o in levelOfCareEnums track by o"></select>
+      </div>
+      <div class="col-sm-2" id="levelOfCareInputSts" ng-messages="inputForm.levelOfCareInput.$error" ng-if="inputForm.levelOfCareInput.$dirty">
+      </div>
+    </div>
+  </div>
+
+  <!-- STATUS -->
+  <div class="row" ng-class="{ 'has-error' : inputForm.statusInput.$invalid && !inputForm.statusInput.$pristine }">
+    <div id="status-group" class="form-group">
+      <label class="col-sm-2 control-label">Status*</label>
+      <div class="col-sm-10">
+        <select id="status" ng-model="formData.status" ng-options="o for o in statusEnums track by o"></select>
+      </div>
+      <div class="col-sm-2" id="statusInputSts" ng-messages="inputForm.statusInput.$error" ng-if="inputForm.statusInput.$dirty">
+      </div>
+    </div>
+  </div>
+
+<!-- STATUS DATE -->
+<div class="row" ng-class="{ 'has-error' : inputForm.statusDateInput.$invalid && !inputForm.statusDateInput.$pristine }">
+  <div id="statusDate-group" class="form-group">
+    <label class="col-sm-2 control-label">Status Date*</label>
+    <div class="col-sm-8">
+      <input id="statusDate" type="text" name="statusDateInput" class="form-control" placeholder="YYYY/MM/DD" ng-model="formData.statusDate" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/" required>
+    </input>
+  </div>
+  <div class="col-sm-2" id="statusDateInputSts" ng-messages="inputForm.statusDateInput.$error" ng-if="inputForm.statusDateInput.$dirty">
+    <div ng-message="required">Date is required</div>
+    <div ng-message="pattern">Use date format YYYY/MM/DD</div>
+  </div>
+</div>
+</div>
+
+<!-- RELEASED VERSION -->
+<div class="row" ng-class="{ 'has-error' : inputForm.releasedVersionInput.$invalid && !inputForm.releasedVersionInput.$pristine }">
+  <div id="releasedVersion-group" class="form-group">
+    <label class="col-sm-2 control-label">Released Version</label>
+    <div class="col-sm-8">
+      <input id="releasedVersion" type="text" name="releasedVersionInput" class="form-control" placeholder="Released version" ng-model="formData.releasedVersion" ng-minlength="2">
+    </input>
+  </div>
+  <div class="col-sm-2" id="releasedVersionInputSts" ng-messages="inputForm.releasedVersionInput.$error" ng-if="inputForm.releasedVersionInput.$dirty">
+    <div ng-message="minlength">Minimum 2 characters</div>
+  </div>
+</div>
+</div>
+
+<!-- PLATFORM -->
+<div class="row" ng-class="{ 'has-error' : inputForm.platformsInput.$invalid && !inputForm.platformsInput.$pristine }">
+  <div id="platforms-group" class="form-group">
+    <label class="col-sm-2 control-label">Platforms</label>
+    <div class="col-sm-8">
+      <input id="platforms" type="text" name="platformsInput" class="form-control" placeholder="platforms" ng-model="formData.platforms" ng-minlength="4">
+    </input>
+  </div>
+  <div class="col-sm-2" id="platformsInputSts" ng-messages="inputForm.platformsInput.$error" ng-if="inputForm.platformsInput.$dirty">
+    <div ng-message="minlength">Minimum 4 characters</div>
+  </div>
+</div>
+</div>
+
+<!-- AUX SW -->
+<div class="row">
+  <label class="col-sm-2">
+    <a id="add.auxSw" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)"><span  class="glyphicon glyphicon-plus"></span></a>
+    Auxiliary SW docs</label>
+    <span class="col-sm-10"></span>
+  </div>
+  <div id="auxSw-group" class="form-group">
+    <div ng-repeat="(key, value) in formData.auxSw track by $index">
+      <div class="row" ng-class="{ 'has-error' : inputForm['auxSwInput.'+$index].$invalid && !inputForm['auxSwInput.'+$index].$pristine }">
+        <label class="col-sm-2">
+          &nbsp&nbsp
+          <a id="rm.auxSw.{{$index}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)"><span class="glyphicon glyphicon-remove" ></span></a>
+          aux SW {{key}}</label>
+          <div class="col-sm-8">
+            <input id="auxSw.{{key}}" type="text" name="auxSwInput.{{key}}" class="form-control" ng-model="formData.auxSw[$index]" ng-minlength="4"> </input>
+          </div>
+          <div class="col-sm-2" id="auxSwInputSts.{{key}}" ng-messages="inputForm['auxSwInput.'+$index].$error" ng-if="inputForm['auxSwInput.'+$index].$dirty">
+            <div ng-message="minlength">Minimum 4 characters</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SW DESCRIPTION DOCS -->
+    <div class="row">
+      <label class="col-sm-2">
+        <a id="add.swDescDoc" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)"><span  class="glyphicon glyphicon-plus"></span></a>
+        SW description docs</label>
+        <span class="col-sm-10"></span>
+      </div>
+      <div id="swDescDoc-group" class="form-group">
+        <div ng-repeat="(key, value) in formData.swDescDoc track by $index">
+          <div class="row" ng-class="{ 'has-error' : inputForm['swDescDocInput.'+$index].$invalid && !inputForm['swDescDocInput.'+$index].$pristine }">
+            <label class="col-sm-2">
+              &nbsp&nbsp
+              <a id="rm.swDescDoc.{{$index}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)"><span class="glyphicon glyphicon-remove" ></span></a>
+              SW desc doc {{key}}</label>
+              <div class="col-sm-8">
+                <input id="swDescDoc.{{key}}" type="text" name="swDescDocInput.{{key}}" class="form-control" ng-model="formData.swDescDoc[$index]" ng-minlength="4"> </input>
+              </div>
+              <div class="col-sm-2" id="swDescDocInputSts.{{key}}" ng-messages="inputForm['swDescDocInput.'+$index].$error" ng-if="inputForm['swDescDocInput.'+$index].$dirty">
+                <div ng-message="minlength">Minimum 4 characters</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VALIDATION DOC -->
+        <div class="row">
+          <label class="col-sm-2">
+            <a id="add.validationDoc" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)"><span  class="glyphicon glyphicon-plus"></span></a>
+            Validation docs</label>
+            <span class="col-sm-10"></span>
+          </div>
+          <div id="validationDoc-group" class="form-group">
+            <div ng-repeat="(key, value) in formData.validationDoc">
+              <div class="row">
+                <label class="col-sm-2">&nbsp&nbsp
+                  <a id="rm.validationDoc.{{key}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)"><span class="glyphicon glyphicon-remove" ></span></a>
+                  Validation doc {{key}}</label> <label class="col-sm-10"> </label>
+                </div>
+                <div class="row" ng-class="{ 'has-error' : inputForm['validationDocInput.'+$index+'.doc'].$invalid && !inputForm['validationDocInput.'+$index+'.doc'].$pristine }">
+                  <label class="col-sm-2">&nbsp&nbsp&nbsp&nbspDoc</label>
+                  <div class="col-sm-8">
+                    <input id="validationDocInput.{{key}}.doc" type="text" name="validationDocInput.{{key}}.doc" class="form-control" ng-model="formData.validationDoc[key]['doc']" ng-minlength="4"> </input>
+                  </div>
+                  <div class="col-sm-2" id="validationDocInputSts.{{key}}.doc" ng-messages="inputForm['validationDocInput.'+$index+'.doc'].$error" ng-if="inputForm['validationDocInput.'+$index+'.doc'].$dirty">
+                    <div ng-message="minlength">Minimum 4 characters</div>
+                  </div>
+                </div>
+                <div class="row" ng-class="{ 'has-error' : inputForm['validationDocInput.'+$index+'.date'].$invalid && !inputForm['validationDocInput.'+$index+'.date'].$pristine }">
+                  <label class="col-sm-2">&nbsp&nbsp&nbsp&nbspDate</label>
+                  <div class="col-sm-8">
+                    <input id="validationDocInput.{{key}}.date" type="text" placeholder="YYYY/MM/DD" name="validationDocInput.{{key}}.date" class="form-control" ng-model="formData.validationDoc[key]['date']"  ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"> </input>
+                  </div>
+                  <div class="col-sm-2" id="validationDocInputSts.{{key}}.date" ng-messages="inputForm['validationDocInput.'+$index+'.date'].$error" ng-if="inputForm['validationDocInput.'+$index+'.date'].$dirty">
+                    <div ng-message="pattern">Use date format YYYY/MM/DD</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- VERIFICATION DOC -->
+            <div class="row">
+              <label class="col-sm-2">
+                <a id="add.verificationDoc" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)"><span  class="glyphicon glyphicon-plus"></span></a>
+                Verification docs</label>
+                <span class="col-sm-10"></span>
+              </div>
+              <div id="verificationDoc-group" class="form-group">
+                <div ng-repeat="(key, value) in formData.verificationDoc">
+                  <div class="row">
+                    <label class="col-sm-2">&nbsp&nbsp
+                      <a id="rm.verificationDoc.{{key}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)"><span class="glyphicon glyphicon-remove" ></span></a>
+                      Verification doc {{key}}</label> <label class="col-sm-10"> </label>
+                    </div>
+                    <div class="row" ng-class="{ 'has-error' : inputForm['verificationDocInput.'+$index+'.doc'].$invalid && !inputForm['verificationDocInput.'+$index+'.doc'].$pristine }">
+                      <label class="col-sm-2">&nbsp&nbsp&nbsp&nbspDoc</label>
+                      <div class="col-sm-8">
+                        <input id="verificationDocInput.{{key}}.doc" type="text" name="verificationDocInput.{{key}}.doc" class="form-control" ng-model="formData.verificationDoc[key]['doc']" ng-minlength="4"> </input>
+                      </div>
+                      <div class="col-sm-2" id="verificationDocInputSts.{{key}}.doc" ng-messages="inputForm['verificationDocInput.'+$index+'.doc'].$error" ng-if="inputForm['verificationDocInput.'+$index+'.doc'].$dirty">
+                        <div ng-message="minlength">Minimum 4 characters</div>
+                      </div>
+                    </div>
+                    <div class="row" ng-class="{ 'has-error' : inputForm['verificationDocInput.'+$index+'.date'].$invalid && !inputForm['verificationDocInput.'+$index+'.date'].$pristine }">
+                      <label class="col-sm-2">&nbsp&nbsp&nbsp&nbspDate</label>
+                      <div class="col-sm-8">
+                        <input id="verificationDocInput.{{key}}.date" type="text" placeholder="YYYY/MM/DD" name="verificationDocInput.{{key}}.date" class="form-control" ng-model="formData.verificationDoc[key]['date']"  ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"> </input>
+                      </div>
+                      <div class="col-sm-2" id="verificationDocInputSts.{{key}}.date" ng-messages="inputForm['verificationDocInput.'+$index+'.date'].$error" ng-if="inputForm['verificationDocInput.'+$index+'.date'].$dirty">
+                        <div ng-message="pattern" ng-class="{ 'has-error' : inputForm['verificationDocInput.'+$index+'.date'].$invalid && !inputForm['verificationDocInput.'+$index+'.date'].$pristine }"><span class="glyphicon glyphicon-exclamation-sign"></span>Use date format YYYY/MM/DD</div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <!-- REVISION CONTROL -->
+                  <div class="row" ng-class="{ 'has-error' : inputForm.revisionControlInput.$invalid && !inputForm.revisionControlInput.$pristine }">
+                    <div id="revisionControl-group" class="form-group">
+                      <label class="col-sm-2 control-label">Revision Control</label>
+                      <div class="col-sm-8">
+                        <input id="revisionControl" type="text" name="revisionControlInput" class="form-control" placeholder="Revision Control" ng-model="formData.revisionControl" ng-minlength="4">
+                        <span class="help-block"></span>
+                      </input>
+                    </div>
+                    <div class="col-sm-2" id="revisionControlInputSts" ng-messages="inputForm.revisionControlInput.$error" ng-if="inputForm.revisionControlInput.$dirty">
+                      <div ng-message="minlength">Minimum 4 characters</div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- RECERTIFICATION FREQUENCY -->
+                <div class="row" ng-class="{ 'has-error' : inputForm.recertFreqInput.$invalid && !inputForm.recertFreqInput.$pristine }">
+                  <div id="recertFreq-group" class="form-group">
+                    <label class="col-sm-3 control-label">Recertification Frequency</label>
+                    <div class="col-sm-7">
+                      <input id="recertFreq" type="text" name="recertFreqInput" class="form-control" placeholder="Recertification frequency" ng-model="formData.recertFreq" ng-minlength="4">
+                      <span class="help-block"></span>
+                    </input>
+                  </div>
+                  <div class="col-sm-2" id="recertFreqInputSts" ng-messages="inputForm.recertFreqInput.$error" ng-if="inputForm.recertFreqInput.$dirty">
+                    <div ng-message="minlength">Minimum 4 characters</div>
+                  </div>
+                </div>
+              </div>
+              <!-- RECERTIFICATION STATUS -->
+              <div class="row" ng-class="{ 'has-error' : inputForm.recertStatusInput.$invalid && !inputForm.recertStatusInput.$pristine }">
+
+                <div id="recerStatus-group" class="form-group">
+                  <label class="col-sm-3 control-label">Recertification Status</label>
+                  <div class="col-sm-7">
+                    <input id="recertStatus" type="text" name="recertStatusInput" class="form-control" placeholder="Recertification status" ng-model="formData.recertStatus" ng-minlength="4">
+                    <span class="help-block"></span>
+                  </input>
+                </div>
+                <div class="col-sm-2" id="recertStatusInputSts" ng-messages="inputForm.recertStatusInput.$error" ng-if="inputForm.recertStatusInput.$dirty">
+                  <div ng-message="minlength">Minimum 4 characters</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- COMMENTS -->
+            <div class="row">
+              <label class="col-sm-2">
+                <a id="add.comment" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)"><span  class="glyphicon glyphicon-plus"></span></a>
+                Comments</label>
+                <span class="col-sm-10"></span>
+              </div>
+              <div id="comments-group" class="form-group">
+                <div ng-repeat="(key, value) in formData.comment track by $index">
+                  <div class="row" ng-class="{ 'has-error' : inputForm['commentInput.'+$index].$invalid && !inputForm['commentInput.'+$index].$pristine }">
+                    <label class="col-sm-2">
+                      &nbsp&nbsp
+                      <a id="rm.comment.{{$index}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)"><span class="glyphicon glyphicon-remove" ></span></a>
+                      Comment {{key}}</label>
+                      <div class="col-sm-8">
+                        <input id="comment.{{key}}" type="text" name="comment" class="form-control" ng-model="formData.comment[$index]"> </input>
+                      </div>
+                      <div class="col-sm-2" id="commentInputSts.{{key}}"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SUBMIT BUTTON -->
+              <div id='formStatus' ng-show="swdbParams.formShowStatus" class="alert alert-success form-group col-sm-12"><span class="glyphicon glyphicon-info-sign"></span> {{swdbParams.formStatus}}</div>
+              <div id='formError' ng-show="swdbParams.formShowErr" class="alert alert-danger form-group col-sm-12"><span class="glyphicon glyphicon-exclamation-sign"></span> {{swdbParams.formErr}}</div>
+              <button id="submitBtn" type="submit" class="btn btn-success">
+                <span class="submit glyphicon glyphicon-ok-sign"></span> Submit!
+              </button>
+              <a href="#/list" id="cancelBtn" type="submit" class="btn btn-danger"><span class="submit glyphicon glyphicon-backward"></span> Cancel </a>
+              <br>
+            </form>
+          </div>
+        </section>

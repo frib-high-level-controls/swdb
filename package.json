@@ -1,0 +1,30 @@
+{
+  "name": "swdb",
+  "version": "1.0.0",
+  "description": "SW DB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "enumify": "^1.0.4",
+    "expect": "^1.20.2",
+    "express": "^4.14.0",
+    "express-validator": "^2.21.0",
+    "file-stream-rotator": "0.0.7",
+    "mongoose": "^4.6.0",
+    "morgan": "^1.7.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "grunt": "^1.0.1",
+    "grunt-contrib-jshint": "^1.0.0",
+    "mocha": "^3.0.2",
+    "selenium-webdriver": "^3.0.0-beta-3",
+    "supertest": "^2.0.0"
+  }
+}

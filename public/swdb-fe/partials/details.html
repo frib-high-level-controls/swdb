@@ -1,0 +1,232 @@
+<section>
+  <h2>Details ({{formData._id}})</h2>
+  <div class="container-fluid">
+    <form class-"form-horizontal" ng-submit="processForm()">
+      <!-- ID -->
+      <!-- <div class="row">
+        <div id="id-group" class="form-group">
+          <label class="col-sm-2 control-label">Record ID</label>
+          <div class="col-sm-10">
+            <input id="id" type="text" name="id" class="form-control"  ng-model="formData._id" ng-readonly="true">
+          </input>
+        </div>
+      </div>
+    </div> -->
+
+    <!-- NAME -->
+    <div class="row">
+      <div id="swName-group" class="form-group">
+        <label class="col-sm-2 control-label">Software Name</label>
+        <div class="col-sm-10">
+          <input id="swName" type="text" name="swName" class="form-control" placeholder="SW Name" ng-model="formData.swName" ng-readonly="true">
+        </input>
+      </div>
+    </div>
+  </div>
+
+  <!-- OWNER -->
+  <div class="row">
+    <div id="owner-group" class="form-group">
+      <label class="col-sm-2 control-label">Owner</label>
+      <div class="col-sm-10">
+        <input id="owner" type="text" name="owner" class="form-control" placeholder="SW owner" ng-model="formData.owner" ng-readonly="true">
+      </input>
+    </div>
+  </div>
+</div>
+
+<!-- LEVEL OF CARE -->
+<div class="row">
+  <div id="levelOfCare-group" class="form-group">
+    <label class="col-sm-2 control-label">Level of Care</label>
+    <div class="col-sm-10">
+      <input id="levelOfCare" type="text" name="levelOfCare" class="form-control" placeholder="SW level of care" ng-model="formData.levelOfCare" ng-readonly="true">
+    </input>
+  </div>
+</div>
+</div>
+
+<!-- STATUS -->
+<div class="row">
+  <div id="status-group" class="form-group">
+    <label class="col-sm-2 control-label">Status</label>
+    <div class="col-sm-10">
+      <input id="status" type="text" name="Status" class="form-control" placeholder="SW status" ng-model="formData.status" ng-readonly="true">
+    </input>
+  </div>
+</div>
+</div>
+
+<!-- STATUS DATE -->
+<div class="row">
+  <div id="statusDate-group" class="form-group">
+    <label class="col-sm-2 control-label">Status Date</label>
+    <div class="col-sm-10">
+      <input id="statusDate" type="text" name="statusDate" class="form-control" placeholder="SW status date" ng-model="formData.statusDate" ng-readonly="true">
+    </input>
+  </div>
+</div>
+</div>
+
+<!-- RELEASED VERSION -->
+<div class="row">
+  <div id="releasedVersion-group" class="form-group">
+    <label class="col-sm-2 control-label">Released Version</label>
+    <div class="col-sm-10">
+      <input id="releasedVersion" type="text" name="releasedVersion" class="form-control" placeholder="Released version" ng-model="formData.releasedVersion" ng-readonly="true">
+    </input>
+  </div>
+</div>
+</div>
+
+<!-- PLATFORM -->
+<div class="row">
+  <div id="platforms-group" class="form-group">
+    <label class="col-sm-2 control-label">Platforms</label>
+    <div class="col-sm-10">
+      <input id="platforms" type="text" name="platforms" class="form-control" placeholder="platforms" ng-model="formData.platforms" ng-readonly="true">
+    </input>
+  </div>
+</div>
+</div>
+
+<!-- AUX SW -->
+<div class="row">
+<label class="col-sm-2">
+  Auxiliary SW docs</label>
+<span class="col-sm-10"></span>
+</div>
+<div id="auxSw-group" class="form-group">
+  <div ng-repeat="(key, value) in formData.auxSw track by $index">
+    <div class="row">
+      <label class="col-sm-2">
+      &nbsp&nbsp
+        aux SW {{key}}</label>
+      <div class="col-sm-10">
+        <input id="auxSW.{{key}}" type="text" name="auxSw" class="form-control" ng-model="formData.auxSw[$index]" ng-readonly="true"> </input>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SW DESCRIPTION DOCS -->
+<div class="row">
+  <label class="col-sm-2">
+    SW description docs</label>
+    <span class="col-sm-10"></span>
+  </div>
+  <div id="swDescDoc-group" class="form-group">
+    <div ng-repeat="(key, value) in formData.swDescDoc track by $index">
+      <div class="row">
+        <label class="col-sm-2">
+          &nbsp&nbsp
+          SW desc doc {{key}}</label>
+          <div class="col-sm-10">
+            <input id="swDescDoc.{{key}}" type="text" name="auxSw" class="form-control" ng-model="formData.swDescDoc[$index]" ng-readonly="true"> </input>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- VALIDATION DOC -->
+<div class="row">
+  <label class="col-sm-2">
+    Validation docs</label>
+  <span class="col-sm-10"></span>
+</div>
+<div id="validationDoc-group" class="form-group">
+  <div ng-repeat="(key, value) in formData.validationDoc">
+    <div class="row">
+      <label class="col-sm-2">&nbsp&nbsp
+        Validation doc {{key}}</label> <label class="col-sm-10"> </label>
+    </div>
+    <div ng-repeat="(subkey, subvalue) in formData.validationDoc[key] track by $index">
+      <div ng-if="subkey != '_id'" class="row">
+        <label class="col-sm-2">&nbsp&nbsp&nbsp&nbsp{{subkey}}</label>
+        <div class="col-sm-10">
+          <input id="validationDoc.{{subkey}}" type="text" name="ValidationDoc" class="form-control" ng-model="formData.validationDoc[key][subkey]" ng-readonly="true"> </input>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VERIFICATION DOC -->
+<div class="row">
+  <label class="col-sm-2">
+    Verification docs</label>
+    <span class="col-sm-10"></span>
+  </div>
+  <div id="verificationDoc-group" class="form-group">
+    <div ng-repeat="(key, value) in formData.verificationDoc">
+      <div class="row">
+        <label class="col-sm-2">&nbsp&nbsp
+          Verification doc {{key}}</label> <label class="col-sm-10"> </label>
+        </div>
+        <div ng-repeat="(subkey, subvalue) in formData.verificationDoc[key] track by $index">
+          <div ng-if="subkey != '_id'" class="row">
+            <label class="col-sm-2">&nbsp&nbsp&nbsp&nbsp{{subkey}}</label>
+            <div class="col-sm-10">
+              <input id="verificationDoc.{{subkey}}" type="text" name="VerificationDoc" class="form-control" ng-model="formData.verificationDoc[key][subkey]" ng-readonly="true"> </input>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+<!-- REVISION CONTROL -->
+<div id="revisionControl-group" class="form-group">
+  <label class="col-sm-2 control-label">Revision Control</label>
+  <div class="col-sm-10">
+    <input id="revisionControl" type="text" name="revisionControl" class="form-control" placeholder="Revision Control" ng-model="formData.revisionControl" ng-readonly="true">
+    <span class="help-block"></span>
+  </input>
+</div>
+</div>
+
+<!-- RECERTIFICATION FREQUENCY -->
+<div id="recertFreq-group" class="form-group">
+  <label class="col-sm-3 control-label">Recertification Frequency</label>
+  <div class="col-sm-9">
+    <input id="recertFreq" type="text" name="recertFreq" class="form-control" placeholder="Recertification frequency" ng-model="formData.recertFreq" ng-readonly="true">
+    <span class="help-block"></span>
+  </input>
+</div>
+</div>
+<!-- RECERTIFICATION STATUS -->
+
+<div id="recerStatus-group" class="form-group">
+  <label class="col-sm-3 control-label">Recertification Status</label>
+  <div class="col-sm-9">
+    <input id="recertStatus" type="text" name="recertStatus" class="form-control" placeholder="Recertification status" ng-model="formData.recertStatus" ng-readonly="true">
+    <span class="help-block"></span>
+  </input>
+</div>
+</div>
+
+<!-- COMMENTS -->
+<div class="row">
+<label class="col-sm-2">
+  Comments</label>
+<span class="col-sm-10"></span>
+</div>
+<div id="comments-group" class="form-group">
+  <div ng-repeat="(key, value) in formData.comment track by $index">
+    <div class="row">
+      <label class="col-sm-2">
+      &nbsp&nbsp
+        Comment {{key}}</label>
+      <div class="col-sm-10">
+        <input id="comment.{{key}}" type="text" name="comment" class="form-control" ng-model="formData.comment[$index]" ng-readonly="true"> </input>
+      </div>
+    </div>
+  </div>
+</div>
+
+<a class="btn btn-success" href="#/list"><span class="glyphicon glyphicon-backward"></span> Back to    search </a>
+<a class="btn btn-info" href="#/update/{{formData._id}}"><span class="glyphicon glyphicon-edit"></span>      Update this document </a>
+
+</form>
+</div>
+</section>
