@@ -48,6 +48,11 @@ mocha test/swdb-spec.js
 #install the selenium chromewdriver
 # Get it here http://chromedriver.storage.googleapis.com/index.html
 # It can go anywhere on your PATH. (I used /opt/chromedriver)
+# The Node/selenium-webdriver/chromedriver trifecta can be a struggle
+#  This is known to work:
+#  Node 6.9.1
+#  selenium-webdriver 3.0.1
+#  chromedriver 2.25.426924
 # to run all tests
 cd ~/swdb
 mocha
