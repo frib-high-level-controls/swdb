@@ -16,7 +16,8 @@
     "express-validator": "^2.21.0",
     "file-stream-rotator": "0.0.7",
     "mongoose": "^4.6.0",
-    "morgan": "^1.7.0"
+    "morgan": "^1.7.0",
+    "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",

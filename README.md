@@ -1,4 +1,4 @@
-# swdb-test
+# swdb
 This ia a prototype web application for storing meta-information on software.
 #Installation overview
 This install has been tested on Debin Jessie.
@@ -8,19 +8,19 @@ sudo apt-get install curl sudo git mongodb
 ```
 ``` sh
 #Get Node
-curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 sudo apt-get install -y nodejs
 ```
-# SWDB-test installation
+# SWDB installation
 ``` bash
-# install swdb-test
-git clone http://github.com/rellis6022/swdb-test
-cd swdb-test
+# install swdb
+git clone http://github.com/rellis6022/swdb
+cd swdb
 npm install
+(npm install --save-dev for development)
 
 #install the swdb front end
-mkdir public; cd public
-git clone http://github.com/rellis6022/swdb-fe
+cd public/swdb-fe
 sudo npm install -g bower
 bower install
 ```
@@ -38,7 +38,7 @@ sudo npm install -g chai
 npm install selenium-webdriver
 
 # do initial  non-browser tests
-cd ~/swdb-test
+cd ~/swdb
 mocha test/swdb-spec.js
 ```
 # Web tests (Selenium)
@@ -49,13 +49,13 @@ mocha test/swdb-spec.js
 # Get it here http://chromedriver.storage.googleapis.com/index.html
 # It can go anywhere on your PATH. (I used /opt/chromedriver)
 # to run all tests
-cd ~/swdb-test
+cd ~/swdb
 mocha
 ```
 # Manual testing
 ```sh
 # start the server
-cd ~/swdb-test
+cd ~/swdb
 node server.js
 # in another terminal, populate the backend with some fake data
 # (The the automated tests clean the test db every run.)
