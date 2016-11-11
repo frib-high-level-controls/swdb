@@ -263,16 +263,16 @@ test.describe('SWDB record tests', function() {
         expect(text).to.eventually.equal("");
         input.clear();
 
-         var input = driver.findElement(By.id('validationDocInput.0.date'));
-         input.sendKeys('7');
-         var inputSts = driver.findElement(By.id('validationDocInputSts.0.date'));
-         var text = inputSts.getText();
-         expect(text).to.eventually.equal("Use date format YYYY/MM/DD");
-         input.clear();
-         input.sendKeys('0123456789012345678901234567890');
-         text = inputSts.getText();
-         expect(text).to.eventually.equal("Use date format YYYY/MM/DD");
-         input.clear();
+        input = driver.findElement(By.id('validationDocInput.0.date'));
+        input.sendKeys('7');
+        inputSts = driver.findElement(By.id('validationDocInputSts.0.date'));
+        text = inputSts.getText();
+        expect(text).to.eventually.equal("Use date format YYYY/MM/DD");
+        input.clear();
+        input.sendKeys('0123456789012345678901234567890');
+        text = inputSts.getText();
+        expect(text).to.eventually.equal("Use date format YYYY/MM/DD");
+        input.clear();
         rmButton.click();
       });
       // verificationDoc add
@@ -281,7 +281,7 @@ test.describe('SWDB record tests', function() {
         driver.get('http://localhost:3000/#/new');
         var addButton = driver.findElement(By.id('add.verificationDoc'));
         addButton.click();
-        var input = driver.findElement(By.id('verificationDocInput.0.doc'));
+        input = driver.findElement(By.id('verificationDocInput.0.doc'));
         var rmButton = driver.findElement(By.id('rm.verificationDoc.0'));
         input.sendKeys('7');
         var inputSts = driver.findElement(By.id('verificationDocInputSts.0.doc'));
@@ -293,16 +293,16 @@ test.describe('SWDB record tests', function() {
         expect(text).to.eventually.equal("");
         input.clear();
 
-         var input = driver.findElement(By.id('verificationDocInput.0.date'));
-         input.sendKeys('7');
-         var inputSts = driver.findElement(By.id('verificationDocInputSts.0.date'));
-         var text = inputSts.getText();
-         expect(text).to.eventually.equal("Use date format YYYY/MM/DD");
-         input.clear();
-         input.sendKeys('0123456789012345678901234567890');
-         text = inputSts.getText();
-         expect(text).to.eventually.equal("Use date format YYYY/MM/DD");
-         input.clear();
+        var input = driver.findElement(By.id('verificationDocInput.0.date'));
+        input.sendKeys('7');
+        inputSts = driver.findElement(By.id('verificationDocInputSts.0.date'));
+        text = inputSts.getText();
+        expect(text).to.eventually.equal("Use date format YYYY/MM/DD");
+        input.clear();
+        input.sendKeys('0123456789012345678901234567890');
+        text = inputSts.getText();
+        expect(text).to.eventually.equal("Use date format YYYY/MM/DD");
+        input.clear();
         rmButton.click();
       });
 
@@ -310,7 +310,7 @@ test.describe('SWDB record tests', function() {
       test.it('revisionControl', function() {
         this.timeout(8000);
         driver.get('http://localhost:3000/#/new');
-        var input = driver.findElement(By.id('revisionControl'));
+        input = driver.findElement(By.id('revisionControl'));
         input.sendKeys('7');
         var inputSts = driver.findElement(By.id('revisionControlInputSts'));
         var text = inputSts.getText();
@@ -325,7 +325,7 @@ test.describe('SWDB record tests', function() {
       test.it('recertFreq', function() {
         this.timeout(8000);
         driver.get('http://localhost:3000/#/new');
-        var input = driver.findElement(By.id('recertFreq'));
+        input = driver.findElement(By.id('recertFreq'));
         input.sendKeys('7');
         var inputSts = driver.findElement(By.id('recertFreqInputSts'));
         var text = inputSts.getText();
@@ -340,7 +340,7 @@ test.describe('SWDB record tests', function() {
       test.it('recertFreq', function() {
         this.timeout(8000);
         driver.get('http://localhost:3000/#/new');
-        var input = driver.findElement(By.id('recertStatus'));
+        input = driver.findElement(By.id('recertStatus'));
         input.sendKeys('7');
         var inputSts = driver.findElement(By.id('recertStatusInputSts'));
         var text = inputSts.getText();
