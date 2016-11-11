@@ -61,6 +61,7 @@ appController.controller('DetailsController', ['$scope', '$http','$routeParams',
 
 appController.controller('NewController', ['$scope', '$http', function ($scope, $http) {
 	$scope.processForm = function(){
+		delete $scope.formData.__v;
 		if ($scope.inputForm.$valid){
 			$http({
 				method: 'POST',
@@ -107,25 +108,25 @@ appController.controller('NewController', ['$scope', '$http', function ($scope, 
 		} else if (parts[1] === 'comment'){
 			$scope.formData.comment.push("");
 		}
-		console.log("adding blank entry to "+parts[1]);
+		//console.log("adding blank entry to "+parts[1]);
 	};
 	$scope.removeItem = function(event) {
 		var parts = event.currentTarget.id.split('.');
 		if (parts[1] === 'auxSw'){
 			$scope.formData.auxSw.splice(parts[2],1);
-			console.log("removing auxsw idx "+parts[2]);
+			//console.log("removing auxsw idx "+parts[2]);
 		} else if (parts[1] === 'swDescDoc'){
 			$scope.formData.swDescDoc.splice(parts[2],1);
-			console.log("removing swDescDoc idx "+parts[2]);
+			//console.log("removing swDescDoc idx "+parts[2]);
 		} else if (parts[1] === 'validationDoc'){
 			$scope.formData.validationDoc.splice(parts[2],1);
-			console.log("removing validationDoc idx "+parts[2]);
+			//console.log("removing validationDoc idx "+parts[2]);
 		} else if (parts[1] === 'verificationDoc'){
 			$scope.formData.verificationDoc.splice(parts[2],1);
-			console.log("removing verificationDoc idx "+parts[2]);
+			//console.log("removing verificationDoc idx "+parts[2]);
 		} else if (parts[1] === 'comment'){
 			$scope.formData.comment.splice(parts[2],1);
-			console.log("removing comment idx "+parts[2]);
+			//console.log("removing comment idx "+parts[2]);
 		}
 	};
 
@@ -156,8 +157,9 @@ appController.controller('NewController', ['$scope', '$http', function ($scope, 
 
 appController.controller('UpdateController', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
 	$scope.processForm = function(){
-		console.log("validation: "+$scope.inputForm.$valid);
+		//console.log("validation: "+$scope.inputForm.$valid);
 		if ($scope.inputForm.$valid){
+			delete $scope.formData.__v;
 			$http({
 				method: 'PUT',
 				url: 'http://localhost:3000/swdbserv/v1/'+$scope.formData._id,
@@ -172,7 +174,7 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 			})
 			.error(function(error, status){
 				$scope.swdbParams.error = {message: error, status: status};
-				$scope.swdbParams.formErr="Error: "+error.message+"("+status+")";
+				$scope.swdbParams.formErr="Error: "+$scope.swdbParams.error.message+"("+status+")";
 				$scope.swdbParams.formShowStatus=false;
 				$scope.swdbParams.formShowErr=true;
 			});
@@ -182,6 +184,7 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 				$scope.swdbParams.formShowErr=true;
 		}
 	};
+
 	$scope.newItem = function(event) {
 		var parts = event.currentTarget.id.split('.');
 		if (parts[1] === 'auxSw'){
@@ -203,27 +206,30 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 		} else if (parts[1] === 'comment'){
 			$scope.formData.comment.push("");
 		}
-		console.log("adding blank entry to "+parts[1]);
+		//console.log("adding blank entry to "+parts[1]);
 	};
+
+
 	$scope.removeItem = function(event) {
 		var parts = event.currentTarget.id.split('.');
 		if (parts[1] === 'auxSw'){
 			$scope.formData.auxSw.splice(parts[2],1);
-			console.log("removing auxsw idx "+parts[2]);
+			//console.log("removing auxsw idx "+parts[2]);
 		} else if (parts[1] === 'swDescDoc'){
 			$scope.formData.swDescDoc.splice(parts[2],1);
-			console.log("removing swDescDoc idx "+parts[2]);
+			//console.log("removing swDescDoc idx "+parts[2]);
 		} else if (parts[1] === 'validationDoc'){
 			$scope.formData.validationDoc.splice(parts[2],1);
-			console.log("removing validationDoc idx "+parts[2]);
+			//console.log("removing validationDoc idx "+parts[2]);
 		} else if (parts[1] === 'verificationDoc'){
 			$scope.formData.verificationDoc.splice(parts[2],1);
-			console.log("removing verificationDoc idx "+parts[2]);
+			//console.log("removing verificationDoc idx "+parts[2]);
 		} else if (parts[1] === 'comment'){
 			$scope.formData.comment.splice(parts[2],1);
-			console.log("removing comment idx "+parts[2]);
+			//console.log("removing comment idx "+parts[2]);
 		}
 	};
+
 	getEnums = function() {
 		$scope.levelOfCareEnums = ["NONE","LOW","MEDIUM","HIGH"];
 		$scope.statusEnums = ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"];

@@ -154,6 +154,8 @@ app.put('/swdbserv/v1*', function(req, res, next) {
 
   // Do validation for updates
   tools.updateValidation(req);
+  tools.updateSanitization(req);
+
   var errors = req.validationErrors();
 
   if (errors) {
@@ -195,6 +197,7 @@ app.use(function(err, req, res, next) {
     return next(err);
   }
   if (err.name === 'ValidationError') {
+    // catch mongo validation errors
     res.status(400);
     res.send(err);
   } else {
