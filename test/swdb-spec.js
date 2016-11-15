@@ -6,6 +6,19 @@ var be = require("../lib/db");
 var expect2 = require("expect");
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
+var testLogin = function(request, done) {
+  console.log('Login start');
+  supertest
+  .get("/login?username=testuser&password=testuserpasswd")
+  .send(testAcct)
+  .expect(200)
+  .end(function(err,res){
+    console.log('Login complete');
+    agent.saveCookies(res);
+    done();
+  });
+};
+
 // clear the test collection before and after tests suite
 before(function(done) {
   // clear the test collection
@@ -18,8 +31,20 @@ after(function(done) {
   be.swDoc.db.collections.swdbs.drop();
   done();
 });
+
+var Cookies;
 //
 describe("app", function() {
+  before("login as test user", function(done){
+    supertest
+    .get("/login?username=testuser&password=testuserpasswd")
+    .expect(200)
+    .end(function(err,res){
+      Cookies = res.headers['set-cookie'].pop().split(';')[0];
+      //console.log('Login complete. Cookie: '+Cookies);
+      done();
+    });
+  });
 
   // web facing tests
   //
@@ -45,8 +70,9 @@ describe("app", function() {
   it("Post a new record", function(done) {
     supertest
     .post("/swdbserv/v1/")
-    .send({swName: "test1000", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
     .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
+    .send({swName: "test1000", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
     .expect(201)
     .end(done);
   });
@@ -57,6 +83,7 @@ describe("app", function() {
     .post("/swdbserv/v1/")
     .send({swName: "test1000", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
     .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
     .expect(500)
     .expect('There was a duplicate key error')
     .end();
@@ -69,6 +96,7 @@ describe("app", function() {
     .send({swName: "test1002", owner: "Owner 1002", levelOfCare: "LOW",
     status: "DEVEL", statusDate: "date 1002"})
     .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
     .expect(201)
     .end(done);
   });
@@ -139,6 +167,7 @@ describe("app", function() {
       supertest
       .put("/swdbserv/v1/"+wrapper.origId)
       .send({swName: "Test name 1002"})
+    .set('Cookie', [Cookies])
       .expect(200)
       .end(done);
     });
@@ -405,6 +434,7 @@ describe("app", function() {
           supertest
           .put(value.req.url+wrapper.origId)
           .send(value.req.msg)
+          .set('Cookie', [Cookies])
           .expect(value.req.err.status)
           .end(function(err,res){
             if (value.req.err.msgHas) {
@@ -419,6 +449,7 @@ describe("app", function() {
           supertest
           .post(value.req.url)
           .send(value.req.msg)
+          .set('Cookie', [Cookies])
           .expect(value.req.err.status)
           .end(function(err,res){
             if (value.req.err.msgHas) {
@@ -452,6 +483,7 @@ describe("app", function() {
     it("Can update a record via PATCH auxSw id:1002", function(done) {
       supertest
       .patch("/swdbserv/v1/"+wrapper.origId)
+      .set('Cookie', [Cookies])
       .send({auxSw: ["aux sw 1","aux sw 2","aux sw 3"]})
       .expect(200)
       .end(done);
@@ -471,6 +503,7 @@ describe("app", function() {
     it("Errors on update a nonexistant record via PUT swName id:badbeef", function(done) {
       supertest
       .put("/swdbserv/v1/badbeef")
+      .set('Cookie', [Cookies])
       .send({swName: "Test name 1000"})
       .expect(500)
       .expect('Record not found')
@@ -479,6 +512,7 @@ describe("app", function() {
     it("Errors on update a nonexistant record via PATCH swName id:badbeef", function(done) {
       supertest
       .patch("/swdbserv/v1/badbeef")
+      .set('Cookie', [Cookies])
       .send({swName: "Test name 1000"})
       .expect(500)
       .expect('Record not found')

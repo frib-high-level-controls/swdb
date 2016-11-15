@@ -1,6 +1,7 @@
 "use strict";
 var express = require('express');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
 var app = express();
 var tools = require('./lib/swdblib.js');
@@ -10,6 +11,7 @@ var FileStreamRotator = require('file-stream-rotator');
 var mongoose = require('mongoose');
 var be = require('./lib/db');
 var expressValidator = require('express-validator');
+var expressSession = require('express-session');
 const props = JSON.parse(fs.readFileSync('./lib/properties.json', 'utf8'));
 
 //allow access to staic files
@@ -17,6 +19,8 @@ app.use(express.static(__dirname + '/public'));
 
 // use JSON for data
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(expressSession({secret: '1234567890'}));
 app.use(expressValidator({
   customValidators: {
     isOneOf: function(str,arr) {
@@ -122,9 +126,38 @@ app.listen(3000, function() {
   console.log('listening on 3000');
 });
 
+// auth middleware
+var auth = function(req, res, next) {
+  if (req.session && req.session.user === "testuser" && req.session.admin){
+    return next();
+  } else {
+    //console.log("session is :"+JSON.stringify(req.session));
+    //console.log("cookies is :"+JSON.stringify(req.cookies));
+    return res.status(401).send('Not authorized');
+  }
+};
+
 // handle incoming get requests
 app.get('/', function(req,res) {
   res.sendFile('index.html', {root: path.join(__dirname, '/public/swdb-fe/')});
+});
+
+// login
+app.get('/login', function(req,res) {
+  if (!req.query.username || !req.query.password ) {
+    res.send('Auth failed');
+  } else if(req.query.username === 'testuser' &&
+   req.query.password === 'testuserpasswd') {
+     req.session.user = "testuser";
+     req.session.admin = true;
+     res.send('Auth complete');
+  }
+});
+
+// logoff
+app.get('/logout', function(req,res) {
+  req.session.destroy();
+  res.send('logout completed');
 });
 
 // for get requests that are not specific return all
@@ -133,7 +166,7 @@ app.get('/swdbserv/v1*', function(req, res, next) {
 });
 
 // handle incoming post requests
-app.post('/swdbserv/v1', function(req, res, next) {
+app.post('/swdbserv/v1', auth, function(req, res, next) {
 
   // Do validation for  new records
   tools.newValidation(req);
@@ -150,7 +183,7 @@ app.post('/swdbserv/v1', function(req, res, next) {
 });
 
 // handle incoming put requests for update
-app.put('/swdbserv/v1*', function(req, res, next) {
+app.put('/swdbserv/v1*', auth, function(req, res, next) {
 
   // Do validation for updates
   tools.updateValidation(req);
@@ -169,7 +202,7 @@ app.put('/swdbserv/v1*', function(req, res, next) {
 });
 
 // handle incoming patch requests for update
-app.patch('/swdbserv/v1*', function(req,res,next) {
+app.patch('/swdbserv/v1*', auth, function(req,res,next) {
 
   // Do validation for updates
   tools.updateValidation(req);

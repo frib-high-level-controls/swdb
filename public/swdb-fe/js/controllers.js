@@ -77,7 +77,7 @@ appController.controller('NewController', ['$scope', '$http', function ($scope, 
 			})
 			.error(function(error, status){
 				$scope.swdbParams.error = {message: error, status: status};
-				$scope.swdbParams.formErr="Error: "+error.message+"("+status+")";
+				$scope.swdbParams.formErr="Error: "+$scope.swdbParams.error.message+"("+status+")";
 				$scope.swdbParams.formShowStatus=false;
 				$scope.swdbParams.formShowErr=true;
 			});
@@ -139,6 +139,7 @@ appController.controller('NewController', ['$scope', '$http', function ($scope, 
 
 	// initialize this record
 	$scope.formData = {
+		//revisionControl: "",
 		auxSw: [],
 		swDescDoc: [],
 		validationDoc: [],
