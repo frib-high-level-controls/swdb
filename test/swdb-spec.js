@@ -41,7 +41,7 @@ describe("app", function() {
     .expect(200)
     .end(function(err,res){
       Cookies = res.headers['set-cookie'].pop().split(';')[0];
-      //console.log('Login complete. Cookie: '+Cookies);
+      console.log('Login complete. Cookie: '+Cookies);
       done();
     });
   });

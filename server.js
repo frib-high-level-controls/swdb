@@ -128,7 +128,7 @@ app.listen(3000, function() {
 
 // auth middleware
 var auth = function(req, res, next) {
-  if (req.session && req.session.user === "testuser" && req.session.admin){
+  if (req.session && req.session.username === "testuser" && req.session.admin){
     return next();
   } else {
     //console.log("session is :"+JSON.stringify(req.session));
@@ -145,19 +145,19 @@ app.get('/', function(req,res) {
 // login
 app.get('/login', function(req,res) {
   if (!req.query.username || !req.query.password ) {
-    res.send('Auth failed');
+    res.send('<p id="Test auth failed">Test auth failed</p>');
   } else if(req.query.username === 'testuser' &&
    req.query.password === 'testuserpasswd') {
-     req.session.user = "testuser";
+     req.session.username = "testuser";
      req.session.admin = true;
-     res.send('Auth complete');
+     res.send('<p id="Test auth success">Test auth success</p>');
   }
 });
 
 // logoff
 app.get('/logout', function(req,res) {
   req.session.destroy();
-  res.send('logout completed');
+  res.send('<p id="Logout complete">logout complete</p>');
 });
 
 // for get requests that are not specific return all

@@ -168,7 +168,7 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 				headers: { 'Content-Type': 'application/json' }
 			})
 			.success(function(data){
-				$scope.swdbParams.formStatus="Document updates sucessfully posted";
+				$scope.swdbParams.formStatus="Document updates successfully posted";
 				$scope.swdbParams.formShowErr=false;
 				$scope.swdbParams.formShowStatus=true;
 				console.log("sent "+data);
