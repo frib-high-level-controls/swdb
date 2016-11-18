@@ -64,8 +64,19 @@
   <div id="statusDate-group" class="form-group">
     <label class="col-sm-2 control-label">Status Date*</label>
     <div class="col-sm-8">
-      <input id="statusDate" type="text" name="statusDateInput" class="form-control" placeholder="YYYY/MM/DD" ng-model="formData.statusDate" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/" required>
-    </input>
+
+      <p class="input-group">
+        <input id="statusDate" name="statusDateInput" type="text" class="form-control"
+         uib-datepicker-popup="{{format}}" ng-model="formData.statusDate" is-open="popup1.opened"
+          datepicker-options="dateOptions" ng-required="true" close-text="Close"
+           alt-input-formats="altInputFormats" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"/>
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+      </p>
+
+      <!-- <input id="statusDate" type="text" name="statusDateInput" class="form-control" placeholder="YYYY/MM/DD" ng-model="formData.statusDate" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/" required> -->
+    <!-- </input> -->
   </div>
   <div class="col-sm-2" id="statusDateInputSts" ng-messages="inputForm.statusDateInput.$error" ng-if="inputForm.statusDateInput.$dirty">
     <div ng-message="required">Date is required</div>
