@@ -67,11 +67,11 @@
 
       <p class="input-group">
         <input id="statusDate" name="statusDateInput" type="text" class="form-control"
-         uib-datepicker-popup="{{format}}" ng-model="formData.statusDate" is-open="popup1.opened"
-          datepicker-options="dateOptions" ng-required="true" close-text="Close"
+         uib-datepicker-popup="{{datePicker.format}}" ng-model="formData.statusDate" is-open="datePicker.instances['statusDate']"
+          datepicker-options="datePicker.options" ng-required="true" close-text="Close"
            alt-input-formats="altInputFormats" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"/>
         <span class="input-group-btn">
-          <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+          <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'statusDate')"><i class="glyphicon glyphicon-calendar"></i></button>
         </span>
       </p>
 
@@ -187,7 +187,18 @@
                 <div class="row" ng-class="{ 'has-error' : inputForm['validationDocInput.'+$index+'.date'].$invalid && !inputForm['validationDocInput.'+$index+'.date'].$pristine }">
                   <label class="col-sm-2">&nbsp&nbsp&nbsp&nbspDate</label>
                   <div class="col-sm-8">
-                    <input id="validationDocInput.{{key}}.date" type="text" placeholder="YYYY/MM/DD" name="validationDocInput.{{key}}.date" class="form-control" ng-model="formData.validationDoc[key]['date']"  ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"> </input>
+
+                        <p class="input-group">
+                          <input id="validationDocInput.{{key}}.date" name="validationDocInput.{{key}}.date" type="text" class="form-control"
+                          uib-datepicker-popup="{{datePicker.format}}" ng-model="formData.validationDoc[key]['date']" is-open="datePicker.instances['validationDocInput.'+$index+'.date']"
+                          datepicker-options="datePicker.options" ng-required="true" close-text="Close"
+                          alt-input-formats="altInputFormats" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"/>
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'validationDocInput.'+$index+'.date')"><i class="glyphicon glyphicon-calendar"></i></button>
+                          </span>
+                        </p>
+
+                    <!-- <input id="validationDocInput.{{key}}.date" type="text" placeholder="YYYY/MM/DD" name="validationDocInput.{{key}}.date" class="form-control" ng-model="formData.validationDoc[key]['date']"  ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"> </input> -->
                   </div>
                   <div class="col-sm-2" id="validationDocInputSts.{{key}}.date" ng-messages="inputForm['validationDocInput.'+$index+'.date'].$error" ng-if="inputForm['validationDocInput.'+$index+'.date'].$dirty">
                     <div ng-message="pattern">Use date format YYYY/MM/DD</div>
@@ -222,7 +233,17 @@
                     <div class="row" ng-class="{ 'has-error' : inputForm['verificationDocInput.'+$index+'.date'].$invalid && !inputForm['verificationDocInput.'+$index+'.date'].$pristine }">
                       <label class="col-sm-2">&nbsp&nbsp&nbsp&nbspDate</label>
                       <div class="col-sm-8">
-                        <input id="verificationDocInput.{{key}}.date" type="text" placeholder="YYYY/MM/DD" name="verificationDocInput.{{key}}.date" class="form-control" ng-model="formData.verificationDoc[key]['date']"  ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"> </input>
+
+                        <p class="input-group">
+                          <input id="verificationDocInput.{{key}}.date" name="verificationDocInput.{{key}}.date" type="text" class="form-control"
+                          uib-datepicker-popup="{{datePicker.format}}" ng-model="formData.verificationDoc[key]['date']" is-open="datePicker.instances['verificationDocInput.'+$index+'.date']"
+                          datepicker-options="datePicker.options" ng-required="true" close-text="Close"
+                          alt-input-formats="altInputFormats" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"/>
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'verificationDocInput.'+$index+'.date')"><i class="glyphicon glyphicon-calendar"></i></button>
+                          </span>
+                        </p>
+
                       </div>
                       <div class="col-sm-2" id="verificationDocInputSts.{{key}}.date" ng-messages="inputForm['verificationDocInput.'+$index+'.date'].$error" ng-if="inputForm['verificationDocInput.'+$index+'.date'].$dirty">
                         <div ng-message="pattern" ng-class="{ 'has-error' : inputForm['verificationDocInput.'+$index+'.date'].$invalid && !inputForm['verificationDocInput.'+$index+'.date'].$pristine }"><span class="glyphicon glyphicon-exclamation-sign"></span>Use date format YYYY/MM/DD</div>

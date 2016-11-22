@@ -60,6 +60,28 @@ appController.controller('DetailsController', ['$scope', '$http','$routeParams',
 }]);
 
 appController.controller('NewController', ['$scope', '$http', function ($scope, $http) {
+	$scope.datePicker = (function () {
+		var method = {};
+		method.instances = [];
+
+		method.open = function ($event, instance) {
+			$event.preventDefault();
+			$event.stopPropagation();
+
+			method.instances[instance] = true;
+			console.log("open: "+instance);
+		};
+
+		method.options = {
+			'show-weeks': false,
+			startingDay: 0
+		};
+
+		var formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+		method.format = formats[2];
+
+		return method;
+	}());
 
 	$scope.today = function() {
      $scope.formData.statusDate = new Date();
@@ -144,6 +166,7 @@ appController.controller('NewController', ['$scope', '$http', function ($scope, 
 	$scope.processForm = function(){
 		delete $scope.formData.__v;
 		if ($scope.inputForm.$valid){
+			console.log("sending: "+JSON.stringify($scope.formData));
 			$http({
 				method: 'POST',
 				url: 'http://localhost:3000/swdbserv/v1',
@@ -154,7 +177,6 @@ appController.controller('NewController', ['$scope', '$http', function ($scope, 
 				$scope.swdbParams.formStatus="Document posted";
 				$scope.swdbParams.formShowErr=false;
 				$scope.swdbParams.formShowStatus=true;
-				console.log("sent "+data);
 			})
 			.error(function(error, status){
 				$scope.swdbParams.error = {message: error, status: status};
@@ -330,7 +352,7 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 	$http.get('http://localhost:3000/swdbserv/v1/'+$routeParams.itemId).success(function(data) {
 		$scope.formData = data;
 		$scope.whichItem = $routeParams.itemId;
-		
+
 		// make a Date object from this string
 		console.log($scope.formData);
 		$scope.formData.statusDate = new Date($scope.formData.statusDate);
