@@ -267,14 +267,6 @@ test.describe("SWDB record tests", function() {
     driver.wait(until.elementTextIs(inputSts, ""),5000);
     input.clear();
 
-    // input = driver.findElement(By.id("validationDocInput.0.date"));
-    // input.sendKeys("7");
-    // inputSts = driver.findElement(By.id("validationDocInputSts.0.date"));
-    // driver.wait(until.elementTextIs(inputSts, "Use date format YYYY/MM/DD"),5000);
-    // input.clear();
-    // input.sendKeys("0123456789012345678901234567890");
-    // driver.wait(until.elementTextIs(inputSts, "Use date format YYYY/MM/DD"),5000);
-    // input.clear();
     rmButton.click();
   });
   // verificationDoc add
@@ -295,16 +287,6 @@ test.describe("SWDB record tests", function() {
     driver.wait(until.elementTextIs(inputSts, ""),5000);
     input.clear();
 
-    // var input = driver.findElement(By.id("verificationDocInput.0.date"));
-    // input.sendKeys("7");
-    // driver.wait(until.elementLocated(By.id("verificationDocInputSts.0.date")), 3000);
-    // inputSts = driver.findElement(By.id("verificationDocInputSts.0.date"));
-    // driver.wait(until.elementTextIs(inputSts, "Use date format YYYY/MM/DD"),5000);
-    // input.clear();
-    // input.sendKeys("0123456789012345678901234567890");
-    // //text = inputSts.getText();
-    // driver.wait(until.elementTextIs(inputSts, "Use date format YYYY/MM/DD"),5000);
-    // input.clear();
     rmButton.click();
   });
 
@@ -369,7 +351,7 @@ test.describe("SWDB record tests", function() {
     driver.findElement(By.id("owner")).sendKeys("Software owner - 4001");
     driver.findElement(By.id("levelOfCare")).sendKeys("LOW");
     driver.findElement(By.id("status")).sendKeys("DEVEL");
-    driver.findElement(By.id("statusDate")).sendKeys("7/7/1978");
+    driver.findElement(By.id("statusDate")).sendKeys("1978/07/07");
     driver.findElement(By.id("releasedVersion")).sendKeys("v0.3001");
     driver.findElement(By.id("submitBtn")).click();
 
