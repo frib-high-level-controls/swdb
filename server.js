@@ -12,7 +12,7 @@ var mongoose = require('mongoose');
 var be = require('./lib/db');
 var expressValidator = require('express-validator');
 var expressSession = require('express-session');
-const props = JSON.parse(fs.readFileSync('./lib/properties.json', 'utf8'));
+const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 
 //allow access to staic files
 app.use(express.static(__dirname + '/public'));
@@ -122,8 +122,8 @@ stream: writeLogStream
 ));
 
 // start the server
-app.listen(3000, function() {
-  console.log('listening on 3000');
+app.listen(props.webPort, function() {
+  console.log('listening on port '+props.webPort);
 });
 
 // auth middleware

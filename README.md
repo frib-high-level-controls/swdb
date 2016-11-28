@@ -65,5 +65,5 @@ node server.js
 # in another terminal, populate the backend with some fake data
 # (The the automated tests clean the test db every run.)
 ~/swdb-test/test/misc/pop-db.py
-# point your browser to http://localhost:3000
+# point your browser to http://localhost:3000 (or 'webPort' in config/properties)
 ```

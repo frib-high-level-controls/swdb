@@ -21,7 +21,7 @@ function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q) {
 	var vm = this;
 	vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
 		var defer = $q.defer();
-		$http.get('http://localhost:3000/swdbserv/v1').then(function(result) {
+		$http.get("http://localhost:3005/swdbserv/v1").then(function(result) {
 			defer.resolve(result.data);
 		});
 		return defer.promise;
@@ -45,7 +45,7 @@ function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q) {
 appController.controller('DetailsController', ['$scope', '$http','$routeParams', function ($scope, $http, $routeParams) {
 
 	//update document fields with existing data
-	$http.get('http://localhost:3000/swdbserv/v1/'+$routeParams.itemId).success(function(data) {
+	$http.get("http://localhost:3005/swdbserv/v1/"+$routeParams.itemId).success(function(data) {
 		$scope.formData = data;
 		$scope.whichItem = $routeParams.itemId;
 	});
@@ -82,7 +82,7 @@ appController.controller('NewController', ['$scope', '$http', function ($scope, 
 			//console.log("sending: "+JSON.stringify($scope.formData));
 			$http({
 				method: 'POST',
-				url: 'http://localhost:3000/swdbserv/v1',
+				url: "http://localhost:3005/swdbserv/v1",
 				data: $scope.formData,
 				headers: { 'Content-Type': 'application/json' }
 			})
@@ -179,7 +179,7 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 			delete $scope.formData.__v;
 			$http({
 				method: 'PUT',
-				url: 'http://localhost:3000/swdbserv/v1/'+$scope.formData._id,
+				url: "http://localhost:3005/swdbserv/v1/"+$scope.formData._id,
 				data: $scope.formData,
 				headers: { 'Content-Type': 'application/json' }
 			})
@@ -262,7 +262,7 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 	getEnums();
 
 	//update document fields with existing data
-	$http.get('http://localhost:3000/swdbserv/v1/'+$routeParams.itemId).success(function(data) {
+	$http.get("http://localhost:3005/swdbserv/v1/"+$routeParams.itemId).success(function(data) {
 		$scope.formData = data;
 		$scope.whichItem = $routeParams.itemId;
 
