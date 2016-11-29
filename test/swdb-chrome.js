@@ -45,7 +45,7 @@ test.describe("SWDB record tests", function() {
   test.it("should add a new record", function() {
     this.timeout(8000);
     driver.get("http://localhost:"+props.webPort+"/#/new");
-    driver.findElement(By.id("swName")).sendKeys("Software Name - 3001");
+    driver.wait(until.elementLocated(By.id("swName")),3000).sendKeys("Software Name - 3001");
     driver.findElement(By.id("owner")).sendKeys("Software owner - 3001");
     driver.findElement(By.id("levelOfCare")).sendKeys("LOW");
     driver.findElement(By.id("status")).sendKeys("DEVEL");

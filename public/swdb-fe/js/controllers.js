@@ -1,10 +1,14 @@
 var appController = angular.module('appController', ['datatables','ngAnimate','ngSanitize','ui.bootstrap']);
 
-appController.run(['$rootScope','$route', function($rootScope,$route) {
+appController.run(['$rootScope','$route','$http','$routeParams', function($rootScope,$route,$http,$routeParams) {
 	$rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute){
     //Change page title, based on Route information
     $rootScope.title = $route.current.title;
   });
+	$http.get("http://localhost:3005/swdbserv/v1/config").success(function(data) {
+		$rootScope.props = data;
+	});
+
 }]);
 
 // expose system status to all controllers via service.
@@ -17,11 +21,11 @@ appController.factory('StatusService', function() {
 
 appController.controller('ListController', WithPromiseCtrl);
 
-function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q) {
+function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $rootScope) {
 	var vm = this;
 	vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
 		var defer = $q.defer();
-		$http.get("http://localhost:3005/swdbserv/v1").then(function(result) {
+		$http.get("http://localhost:"+$rootScope.props.restPort+"/swdbserv/v1").then(function(result) {
 			defer.resolve(result.data);
 		});
 		return defer.promise;
@@ -42,16 +46,16 @@ function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q) {
 }
 
 
-appController.controller('DetailsController', ['$scope', '$http','$routeParams', function ($scope, $http, $routeParams) {
+appController.controller('DetailsController', ['$scope', '$http','$routeParams', '$rootScope', function ($scope, $http, $routeParams, $rootScope) {
 
 	//update document fields with existing data
-	$http.get("http://localhost:3005/swdbserv/v1/"+$routeParams.itemId).success(function(data) {
+	$http.get("http://localhost:"+$rootScope.props.restPort+"/swdbserv/v1/"+$routeParams.itemId).success(function(data) {
 		$scope.formData = data;
 		$scope.whichItem = $routeParams.itemId;
 	});
 }]);
 
-appController.controller('NewController', ['$scope', '$http', function ($scope, $http) {
+appController.controller('NewController', ['$scope', '$http','$rootScope', function ($scope, $http, $rootScope) {
 	$scope.datePicker = (function () {
 		var method = {};
 		method.instances = [];
@@ -61,7 +65,6 @@ appController.controller('NewController', ['$scope', '$http', function ($scope, 
 			$event.stopPropagation();
 
 			method.instances[instance] = true;
-			console.log("open: "+instance);
 		};
 
 		method.options = {
@@ -79,10 +82,9 @@ appController.controller('NewController', ['$scope', '$http', function ($scope, 
 	$scope.processForm = function(){
 		delete $scope.formData.__v;
 		if ($scope.inputForm.$valid){
-			//console.log("sending: "+JSON.stringify($scope.formData));
 			$http({
 				method: 'POST',
-				url: "http://localhost:3005/swdbserv/v1",
+				url: "http://localhost:"+$rootScope.props.restPort+"/swdbserv/v1",
 				data: $scope.formData,
 				headers: { 'Content-Type': 'application/json' }
 			})
@@ -124,25 +126,19 @@ appController.controller('NewController', ['$scope', '$http', function ($scope, 
 		} else if (parts[1] === 'comment'){
 			$scope.formData.comment.push("");
 		}
-		//console.log("adding blank entry to "+parts[1]);
 	};
 	$scope.removeItem = function(event) {
 		var parts = event.currentTarget.id.split('.');
 		if (parts[1] === 'auxSw'){
 			$scope.formData.auxSw.splice(parts[2],1);
-			//console.log("removing auxsw idx "+parts[2]);
 		} else if (parts[1] === 'swDescDoc'){
 			$scope.formData.swDescDoc.splice(parts[2],1);
-			//console.log("removing swDescDoc idx "+parts[2]);
 		} else if (parts[1] === 'validationDoc'){
 			$scope.formData.validationDoc.splice(parts[2],1);
-			//console.log("removing validationDoc idx "+parts[2]);
 		} else if (parts[1] === 'verificationDoc'){
 			$scope.formData.verificationDoc.splice(parts[2],1);
-			//console.log("removing verificationDoc idx "+parts[2]);
 		} else if (parts[1] === 'comment'){
 			$scope.formData.comment.splice(parts[2],1);
-			//console.log("removing comment idx "+parts[2]);
 		}
 	};
 
@@ -172,14 +168,13 @@ appController.controller('NewController', ['$scope', '$http', function ($scope, 
 
 }]);
 
-appController.controller('UpdateController', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
+appController.controller('UpdateController', ['$scope', '$http', '$routeParams','$rootScope', function ($scope, $http, $routeParams, $rootScope) {
 	$scope.processForm = function(){
-		//console.log("validation: "+$scope.inputForm.$valid);
 		if ($scope.inputForm.$valid){
 			delete $scope.formData.__v;
 			$http({
 				method: 'PUT',
-				url: "http://localhost:3005/swdbserv/v1/"+$scope.formData._id,
+				url: "http://localhost:"+$rootScope.props.restPort+"/swdbserv/v1/"+$scope.formData._id,
 				data: $scope.formData,
 				headers: { 'Content-Type': 'application/json' }
 			})
@@ -223,7 +218,6 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 		} else if (parts[1] === 'comment'){
 			$scope.formData.comment.push("");
 		}
-		//console.log("adding blank entry to "+parts[1]);
 	};
 
 
@@ -231,19 +225,14 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 		var parts = event.currentTarget.id.split('.');
 		if (parts[1] === 'auxSw'){
 			$scope.formData.auxSw.splice(parts[2],1);
-			//console.log("removing auxsw idx "+parts[2]);
 		} else if (parts[1] === 'swDescDoc'){
 			$scope.formData.swDescDoc.splice(parts[2],1);
-			//console.log("removing swDescDoc idx "+parts[2]);
 		} else if (parts[1] === 'validationDoc'){
 			$scope.formData.validationDoc.splice(parts[2],1);
-			//console.log("removing validationDoc idx "+parts[2]);
 		} else if (parts[1] === 'verificationDoc'){
 			$scope.formData.verificationDoc.splice(parts[2],1);
-			//console.log("removing verificationDoc idx "+parts[2]);
 		} else if (parts[1] === 'comment'){
 			$scope.formData.comment.splice(parts[2],1);
-			//console.log("removing comment idx "+parts[2]);
 		}
 	};
 
@@ -262,12 +251,11 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 	getEnums();
 
 	//update document fields with existing data
-	$http.get("http://localhost:3005/swdbserv/v1/"+$routeParams.itemId).success(function(data) {
+	$http.get("http://localhost:"+$rootScope.props.restPort+"/swdbserv/v1/"+$routeParams.itemId).success(function(data) {
 		$scope.formData = data;
 		$scope.whichItem = $routeParams.itemId;
 
 		// make a Date object from this string
-		console.log($scope.formData);
 		$scope.formData.statusDate = new Date($scope.formData.statusDate);
 	});
 

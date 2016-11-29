@@ -161,6 +161,10 @@ app.get('/logout', function(req,res) {
 });
 
 // for get requests that are not specific return all
+app.get('/swdbserv/v1/config', function(req, res, next) {
+  res.send(JSON.stringify(props));
+});
+// for get requests that are not specific return all
 app.get('/swdbserv/v1*', function(req, res, next) {
   be.getDocs(req, res, next);
 });
