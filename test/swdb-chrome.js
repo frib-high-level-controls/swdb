@@ -181,18 +181,6 @@ test.describe("SWDB record tests", function() {
     driver.wait(until.elementTextIs(inputSts, ""),5000);
     input.clear();
   });
-  test.it("statusDate date date picker", function() {
-    this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
-    driver.wait(until.elementLocated(
-      By.xpath('//*[@id="statusDate-group"]/div/p/span/button')), 3000);
-    driver.findElement(
-      By.xpath('//*[@id="statusDate-group"]/div/p/span/button')).click();
-    driver.wait(until.elementLocated(
-      By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
-    driver.findElement(
-      By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')).click();
-  });
   test.it("releasedVersion format", function() {
     this.timeout(8000);
     driver.get(props.webUrl+"#/new");
@@ -281,24 +269,7 @@ test.describe("SWDB record tests", function() {
     //text = inputSts.getText();
     driver.wait(until.elementTextIs(inputSts, ""),5000);
     input.clear();
-    rmButton.click();
-  });
-  test.it("validationDoc date picker", function() {
-    this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
-    driver.wait(until.elementLocated(By.id("add.validationDoc")), 3000);
-    var addButton = driver.findElement(By.id("add.validationDoc"));
-    addButton.click();
-    var input = driver.findElement(By.id("validationDocInput.0.doc"));
-    var rmButton = driver.findElement(By.id("rm.validationDoc.0"));
-    driver.wait(until.elementLocated(
-      By.xpath('//*[@id="validationDoc-group"]/div/div[3]/div/p/span/button')), 3000);
-    driver.findElement(
-      By.xpath('//*[@id="validationDoc-group"]/div/div[3]/div/p/span/button')).click();
-    driver.wait(until.elementLocated(
-      By.xpath('//*[@id="validationDoc-group"]/div/div[3]/div/p/div/ul/li[2]/span/button[1]')), 3000);
-    driver.findElement(
-      By.xpath('//*[@id="validationDoc-group"]/div/div[3]/div/p/div/ul/li[2]/span/button[1]')).click();
+
     rmButton.click();
   });
   // verificationDoc add
@@ -318,24 +289,7 @@ test.describe("SWDB record tests", function() {
     input.sendKeys("0123456789012345678901234567890");
     driver.wait(until.elementTextIs(inputSts, ""),5000);
     input.clear();
-    rmButton.click();
-  });
-  test.it("verificationDoc date picker", function() {
-    this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
-    driver.wait(until.elementLocated(By.id("add.verificationDoc")), 3000);
-    var addButton = driver.findElement(By.id("add.verificationDoc"));
-    addButton.click();
-    var input = driver.findElement(By.id("verificationDocInput.0.doc"));
-    var rmButton = driver.findElement(By.id("rm.verificationDoc.0"));
-    driver.wait(until.elementLocated(
-      By.xpath('//*[@id="verificationDoc-group"]/div[1]/div[3]/div/p/span/button')), 3000);
-    driver.findElement(
-      By.xpath('//*[@id="verificationDoc-group"]/div[1]/div[3]/div/p/span/button')).click();
-    driver.wait(until.elementLocated(
-      By.xpath('//*[@id="verificationDoc-group"]/div[1]/div[3]/div/p/div/ul/li[2]/span/button[1]')), 3000);
-    driver.findElement(
-      By.xpath('//*[@id="verificationDoc-group"]/div[1]/div[3]/div/p/div/ul/li[2]/span/button[1]')).click();
+
     rmButton.click();
   });
 
