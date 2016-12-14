@@ -8,6 +8,7 @@ appController.run(['$rootScope','$route','$http','$routeParams','$location', fun
 	$http.get($location.protocol()+"://"+
 		$location.host()+":"+$location.port()+"/swdbserv/v1/config").success(function(data) {
 		$rootScope.props = data;
+    console.log(data);
 		$rootScope.clientProps = {"port": $location.port()};
 	});
 
@@ -27,8 +28,7 @@ function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $rootScop
 	var vm = this;
 	vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
 		var defer = $q.defer();
-		console.log("port got:"+$rootScope.clientProps.port);
-		$http.get("http://localhost:"+$rootScope.clientProps.port+"/swdbserv/v1").then(function(result) {
+		$http.get($rootScope.props.apiUrl).then(function(result) {
 			defer.resolve(result.data);
 		});
 		return defer.promise;
@@ -52,7 +52,7 @@ function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $rootScop
 appController.controller('DetailsController', ['$scope', '$http','$routeParams', '$rootScope', function ($scope, $http, $routeParams, $rootScope) {
 
 	//update document fields with existing data
-	$http.get("http://localhost:"+$rootScope.clientProps.port+"/swdbserv/v1/"+$routeParams.itemId).success(function(data) {
+	$http.get($rootScope.props.apiUrl+$routeParams.itemId).success(function(data) {
 		$scope.formData = data;
 		$scope.whichItem = $routeParams.itemId;
 	});
@@ -87,7 +87,7 @@ appController.controller('NewController', ['$scope', '$http','$rootScope', funct
 		if ($scope.inputForm.$valid){
 			$http({
 				method: 'POST',
-				url: "http://localhost:"+$rootScope.clientProps.port+"/swdbserv/v1",
+				url: $rootScope.props.apiUrl,
 				data: $scope.formData,
 				headers: { 'Content-Type': 'application/json' }
 			})
@@ -177,7 +177,7 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 			delete $scope.formData.__v;
 			$http({
 				method: 'PUT',
-				url: "http://localhost:"+$rootScope.clientProps.port+"/swdbserv/v1/"+$scope.formData._id,
+				url: $rootScope.props.apiUrl+$scope.formData._id,
 				data: $scope.formData,
 				headers: { 'Content-Type': 'application/json' }
 			})
@@ -254,7 +254,7 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 	getEnums();
 
 	//update document fields with existing data
-	$http.get("http://localhost:"+$rootScope.clientProps.port+"/swdbserv/v1/"+$routeParams.itemId).success(function(data) {
+	$http.get($rootScope.props.apiUrl+$routeParams.itemId).success(function(data) {
 		$scope.formData = data;
 		$scope.whichItem = $routeParams.itemId;
 

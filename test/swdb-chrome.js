@@ -37,14 +37,14 @@ test.describe("SWDB record tests", function() {
 
   test.it("should login", function() {
     // get test authentication
-    driver.get("http://localhost:"+props.webPort+"/login?username=testuser&password=testuserpasswd");
+    driver.get(props.webUrl+"login?username=testuser&password=testuserpasswd");
     driver.wait(until.elementLocated(By.id("Test auth success")),3000);
   });
 
   // Open the new page and insert test data
   test.it("should add a new record", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
+    driver.get(props.webUrl+"#/new");
     driver.wait(until.elementLocated(By.id("swName")),3000).sendKeys("Software Name - 3001");
     driver.findElement(By.id("owner")).sendKeys("Software owner - 3001");
     driver.findElement(By.id("levelOfCare")).sendKeys("LOW");
@@ -60,7 +60,7 @@ test.describe("SWDB record tests", function() {
   // find a record
   test.it("should find and update a record", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/list");
+    driver.get(props.webUrl+"#/list");
     driver.wait(until.elementLocated(By.id("swdbList_filter")), 8000)
     .findElement(By.tagName("Input"))
     .sendKeys("3001");
@@ -95,7 +95,7 @@ test.describe("SWDB record tests", function() {
   // test field limits
   test.it("SW Name required", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
+    driver.get(props.webUrl+"#/new");
     driver.wait(until.elementLocated(By.id("swName")), 3000);
     var input = driver.findElement(By.id("swName"));
     input.sendKeys("0123456789012345678901234567891");
@@ -107,7 +107,7 @@ test.describe("SWDB record tests", function() {
   });
   test.it("SW Name min for field ", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
+    driver.get(props.webUrl+"#/new");
     driver.wait(until.elementLocated(By.id("swName")), 3000);
     var input = driver.findElement(By.id("swName"));
     input.sendKeys("1");
@@ -120,7 +120,7 @@ test.describe("SWDB record tests", function() {
   });
   test.it("SW Name max for field ", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
+    driver.get(props.webUrl+"#/new");
     driver.wait(until.elementLocated(By.id("swName")), 3000);
     var input = driver.findElement(By.id("swName"));
     input.sendKeys("0123456789012345678901234567891");
@@ -133,7 +133,7 @@ test.describe("SWDB record tests", function() {
   });
   test.it("SW owner required", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
+    driver.get(props.webUrl+"#/new");
     driver.wait(until.elementLocated(By.id("owner")), 3000);
     var input = driver.findElement(By.id("owner"));
     input.sendKeys("1");
@@ -144,7 +144,7 @@ test.describe("SWDB record tests", function() {
   });
   test.it("SW owner min for field ", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
+    driver.get(props.webUrl+"#/new");
     driver.wait(until.elementLocated(By.id("owner")), 3000);
     var input = driver.findElement(By.id("owner"));
     input.sendKeys("1");
@@ -157,7 +157,7 @@ test.describe("SWDB record tests", function() {
   });
   test.it("SW owner max for field ", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
+    driver.get(props.webUrl+"#/new");
     driver.wait(until.elementLocated(By.id("owner")), 3000);
     var input = driver.findElement(By.id("owner"));
     input.sendKeys("0123456789012345678901234567891");
@@ -171,7 +171,7 @@ test.describe("SWDB record tests", function() {
 
   test.it("statusDate date format", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
+    driver.get(props.webUrl+"#/new");
     driver.wait(until.elementLocated(By.id("statusDate")), 3000);
     var input = driver.findElement(By.id("statusDate"));
     input.sendKeys("7");
@@ -183,7 +183,7 @@ test.describe("SWDB record tests", function() {
   });
   test.it("releasedVersion format", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
+    driver.get(props.webUrl+"#/new");
     driver.wait(until.elementLocated(By.id("releasedVersion")), 3000);
     var input = driver.findElement(By.id("releasedVersion"));
     input.sendKeys("7");
@@ -196,7 +196,7 @@ test.describe("SWDB record tests", function() {
   });
   test.it("platforms format min", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
+    driver.get(props.webUrl+"#/new");
     driver.wait(until.elementLocated(By.id("platforms")), 3000);
     var input = driver.findElement(By.id("platforms"));
     input.sendKeys("7");
@@ -217,7 +217,7 @@ test.describe("SWDB record tests", function() {
   // auxSw
   test.it("Add auxSw min", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
+    driver.get(props.webUrl+"#/new");
     driver.wait(until.elementLocated(By.id("add.auxSw")), 3000);
     var addButton = driver.findElement(By.id("add.auxSw"));
     addButton.click();
@@ -236,7 +236,7 @@ test.describe("SWDB record tests", function() {
   // swDescDoc add
   test.it("Add swDescDoc min", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
+    driver.get(props.webUrl+"#/new");
     driver.wait(until.elementLocated(By.id("add.swDescDoc")), 3000);
     var addButton = driver.findElement(By.id("add.swDescDoc"));
     addButton.click();
@@ -255,7 +255,7 @@ test.describe("SWDB record tests", function() {
   // validationDoc add
   test.it("Add validationDoc doc min", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
+    driver.get(props.webUrl+"#/new");
     driver.wait(until.elementLocated(By.id("add.validationDoc")), 3000);
     var addButton = driver.findElement(By.id("add.validationDoc"));
     addButton.click();
@@ -275,7 +275,7 @@ test.describe("SWDB record tests", function() {
   // verificationDoc add
   test.it("Add verificationDoc doc min", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
+    driver.get(props.webUrl+"#/new");
     driver.wait(until.elementLocated(By.id("add.verificationDoc")), 3000);
     var addButton = driver.findElement(By.id("add.verificationDoc"));
     addButton.click();
@@ -296,7 +296,7 @@ test.describe("SWDB record tests", function() {
   // versionControl
   test.it("revisionControl", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
+    driver.get(props.webUrl+"#/new");
     driver.wait(until.elementLocated(By.id("revisionControl")), 3000);
     input = driver.findElement(By.id("revisionControl"));
     input.sendKeys("7");
@@ -311,7 +311,7 @@ test.describe("SWDB record tests", function() {
   // recertFreq
   test.it("recertFreq", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
+    driver.get(props.webUrl+"#/new");
     driver.wait(until.elementLocated(By.id("recertFreq")), 3000);
     input = driver.findElement(By.id("recertFreq"));
     input.sendKeys("7");
@@ -325,7 +325,7 @@ test.describe("SWDB record tests", function() {
   // recertStatus
   test.it("recertStatus", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
+    driver.get(props.webUrl+"#/new");
     driver.wait(until.elementLocated(By.id("recertStatus")), 3000);
     input = driver.findElement(By.id("recertStatus"));
     input.sendKeys("7");
@@ -341,14 +341,14 @@ test.describe("SWDB record tests", function() {
 
   test.it("should logout", function() {
     // get test authentication
-    driver.get("http://localhost:"+props.webPort+"/logout");
+    driver.get(props.webUrl+"logout");
     driver.wait(until.elementLocated(By.id("Logout complete")),3000);
   });
 
   // test unauthorized record adds
   test.it("should fail add a new record", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/new");
+    driver.get(props.webUrl+"#/new");
     driver.wait(until.elementLocated(By.id("swName")), 3000);
     driver.findElement(By.id("swName")).sendKeys("Software Name - 4001");
     driver.findElement(By.id("owner")).sendKeys("Software owner - 4001");
@@ -364,7 +364,7 @@ test.describe("SWDB record tests", function() {
   // find a record and fail to update it
   test.it("should find and fail to update a record", function() {
     this.timeout(8000);
-    driver.get("http://localhost:"+props.webPort+"/#/list");
+    driver.get(props.webUrl+"#/list");
     driver.wait(until.elementLocated(By.id("swdbList_filter")), 8000)
     .findElement(By.tagName("Input"))
     .sendKeys("3001");
