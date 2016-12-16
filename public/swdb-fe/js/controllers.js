@@ -1,17 +1,64 @@
-var appController = angular.module('appController', ['datatables','ngAnimate','ngSanitize','ui.bootstrap']);
+var appController = angular.module('appController', ['datatables','ngAnimate','ngSanitize','ui.bootstrap','ngCookies']);
 
 appController.run(['$rootScope','$route','$http','$routeParams','$location', function($rootScope,$route,$http,$routeParams,$location) {
-	$rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute){
+  $rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute){
     //Change page title, based on Route information
     $rootScope.title = $route.current.title;
-  });
-	$http.get($location.protocol()+"://"+
-		$location.host()+":"+$location.port()+"/swdbserv/v1/config").success(function(data) {
-		$rootScope.props = data;
-    console.log(data);
-		$rootScope.clientProps = {"port": $location.port()};
-	});
 
+    if (!$rootScope.props){
+      // first start
+      $http.get($location.protocol()+"://"+
+          $location.host()+":"+$location.port()+"/swdbserv/v1/config").success(function(data) {
+        $rootScope.props = data;
+        console.log('initial props'+JSON.stringify($rootScope.props));
+        $rootScope.clientProps = {"port": $location.port()};
+        $http({
+          method: 'GET',
+          url: $rootScope.props.apiUrl+'user',
+          headers: { 'Content-Type': 'application/json' }
+        })
+        .success(function(data){
+          $rootScope.session = data;
+          //console.log("got ident "+JSON.stringify(data));
+        })
+        .error(function(error, status){
+          $scope.swdbParams.error = {message: error, status: status};
+        });
+      });
+      //TODO This needs to be removed once there is a solution for making
+      // sure the props data is populated before the controllers are up!
+      $rootScope.props = {
+        "levelOfCareEnums": ["NONE","LOW","MEDIUM","HIGH"],
+        "statusEnums": ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"],
+        "apiUrl":"http://swdb-dev:3005/swdbserv/v1/",
+        "restPort":"3005",
+        "webUrl":"http://swdb-dev:3005/",
+        "webPort":"3005",
+        "mongodbUrl":"mongodb://localhost:27017/test",
+        "auth":{
+          "cas": "https://cas.nscl.msu.edu",
+          "service": "swdb-dev:3005",
+          "login_service": "http://swdb-dev:3005"
+        }
+      };
+
+    } else {
+      // all route changes after the first
+      $http({
+        method: 'GET',
+        url: $rootScope.props.apiUrl+'user',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .success(function(data){
+        $rootScope.session = data;
+        console.log('updated session'+JSON.stringify($rootScope.session));
+      })
+      .error(function(error, status){
+        $scope.swdbParams.error = {message: error, status: status};
+      });
+
+    }
+  });
 }]);
 
 // expose system status to all controllers via service.
@@ -24,8 +71,9 @@ appController.factory('StatusService', function() {
 
 appController.controller('ListController', WithPromiseCtrl);
 
-function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $rootScope) {
-	var vm = this;
+function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $rootScope,$cookies) {
+  //console.log("session in list: "+$rootScope.session);
+  var vm = this;
 	vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
 		var defer = $q.defer();
 		$http.get($rootScope.props.apiUrl).then(function(result) {
@@ -58,7 +106,7 @@ appController.controller('DetailsController', ['$scope', '$http','$routeParams',
 	});
 }]);
 
-appController.controller('NewController', ['$scope', '$http','$rootScope', function ($scope, $http, $rootScope) {
+appController.controller('NewController', ['$scope', '$http','$rootScope', '$window', function ($scope, $http, $rootScope, $window) {
 	$scope.datePicker = (function () {
 		var method = {};
 		method.instances = [];
@@ -108,7 +156,8 @@ appController.controller('NewController', ['$scope', '$http','$rootScope', funct
 			$scope.swdbParams.formShowErr=true;
 		}
 	};
-	$scope.newItem = function(event) {
+	
+  $scope.newItem = function(event) {
 		var parts = event.currentTarget.id.split('.');
 		if (parts[1] === 'auxSw'){
 			$scope.formData.auxSw.push("");
@@ -130,6 +179,7 @@ appController.controller('NewController', ['$scope', '$http','$rootScope', funct
 			$scope.formData.comment.push("");
 		}
 	};
+
 	$scope.removeItem = function(event) {
 		var parts = event.currentTarget.id.split('.');
 		if (parts[1] === 'auxSw'){
@@ -152,6 +202,14 @@ appController.controller('NewController', ['$scope', '$http','$rootScope', funct
 		$scope.formData.status = "DEVEL";
 	};
 
+  if (!$rootScope.session || !$rootScope.session.username) {
+    console.log("User not found!");
+    console.log($rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service));
+    $window.location.href = $rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service);
+  } else {
+    console.log("Found user: "+$rootScope.session.username);
+  }
+
 	// initialize this record
 	$scope.formData = {
 		//revisionControl: "",
@@ -168,10 +226,10 @@ appController.controller('NewController', ['$scope', '$http','$rootScope', funct
 		formErr: ""
 	};
 	getEnums();
-
+  
 }]);
 
-appController.controller('UpdateController', ['$scope', '$http', '$routeParams','$rootScope', function ($scope, $http, $routeParams, $rootScope) {
+appController.controller('UpdateController', ['$scope', '$http', '$routeParams','$rootScope', '$window', function ($scope, $http, $routeParams, $rootScope, $window) {
 	$scope.processForm = function(){
 		if ($scope.inputForm.$valid){
 			delete $scope.formData.__v;
@@ -243,6 +301,15 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 		$scope.levelOfCareEnums = ["NONE","LOW","MEDIUM","HIGH"];
 		$scope.statusEnums = ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"];
 	};
+
+
+  if (!$rootScope.session || !$rootScope.session.username) {
+    console.log("User not found!");
+    console.log($rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service));
+    $window.location.href = $rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service);
+  } else {
+    console.log("Found user: "+$rootScope.session.username);
+  }
 
 	$scope.swdbParams = {
 		formShowErr: false,

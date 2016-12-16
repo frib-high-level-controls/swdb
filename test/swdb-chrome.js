@@ -37,7 +37,7 @@ test.describe("SWDB record tests", function() {
 
   test.it("should login", function() {
     // get test authentication
-    driver.get(props.webUrl+"login?username=testuser&password=testuserpasswd");
+    driver.get(props.webUrl+"testlogin?username=testuser&password=testuserpasswd");
     driver.wait(until.elementLocated(By.id("Test auth success")),3000);
   });
 

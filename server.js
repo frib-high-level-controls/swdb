@@ -8,10 +8,12 @@ var tools = require('./lib/swdblib.js');
 var fs = require('fs');
 var path = require('path');
 var FileStreamRotator = require('file-stream-rotator');
+var util = require('util');
 var mongoose = require('mongoose');
 var be = require('./lib/db');
 var expressValidator = require('express-validator');
 var expressSession = require('express-session');
+var casAuth = require('./lib/auth');
 const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 
 //allow access to staic files
@@ -143,7 +145,7 @@ app.get('/', function(req,res) {
 });
 
 // login
-app.get('/login', function(req,res) {
+app.get('/testlogin', function(req,res) {
   if (!req.query.username || !req.query.password ) {
     res.send('<p id="Test auth failed">Test auth failed</p>');
   } else if(req.query.username === 'testuser' &&
@@ -154,10 +156,25 @@ app.get('/login', function(req,res) {
   }
 });
 
+app.get('/caslogin', casAuth.ensureAuthenticated, function(req,res) {
+  console.log("caslogin req: "+JSON.stringify(util.inspect(req.session)));
+  if (req.session.username) {
+     res.send('<p id="CAS auth success">CAS auth success</p>');
+  } else {
+    res.send('<p id="CAS auth failed">CAS auth failed</p>');
+  }
+});
+
 // logoff
 app.get('/logout', function(req,res) {
   req.session.destroy();
+  delete req.query.ticket;
+  res.clearCookie('connect.sid',{path: '/'});
   res.send('<p id="Logout complete">logout complete</p>');
+});
+// for get requests that are not specific return all
+app.get('/swdbserv/v1/user', function(req, res, next) {
+  res.send(JSON.stringify(req.session));
 });
 
 // for get requests that are not specific return all
@@ -170,7 +187,7 @@ app.get('/swdbserv/v1*', function(req, res, next) {
 });
 
 // handle incoming post requests
-app.post('/swdbserv/v1', auth, function(req, res, next) {
+app.post('/swdbserv/v1', casAuth.ensureAuthenticated, function(req, res, next) {
 
   // Do validation for  new records
   tools.newValidation(req);
@@ -187,7 +204,7 @@ app.post('/swdbserv/v1', auth, function(req, res, next) {
 });
 
 // handle incoming put requests for update
-app.put('/swdbserv/v1*', auth, function(req, res, next) {
+app.put('/swdbserv/v1*', casAuth.ensureAuthenticated, function(req, res, next) {
 
   // Do validation for updates
   tools.updateValidation(req);
@@ -206,7 +223,7 @@ app.put('/swdbserv/v1*', auth, function(req, res, next) {
 });
 
 // handle incoming patch requests for update
-app.patch('/swdbserv/v1*', auth, function(req,res,next) {
+app.patch('/swdbserv/v1*', casAuth.ensureAuthenticated, function(req,res,next) {
 
   // Do validation for updates
   tools.updateValidation(req);

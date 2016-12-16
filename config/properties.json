@@ -9,7 +9,7 @@
   "auth":{
     "cas": "https://cas.nscl.msu.edu",
     "service": "swdb-dev:3005",
-    "login_service": "swdb-dev:3005"
+    "login_service": "http://swdb-dev:3005/caslogin"
   }
 }
 

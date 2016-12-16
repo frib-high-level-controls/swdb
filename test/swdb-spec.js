@@ -37,7 +37,7 @@ var Cookies;
 describe("app", function() {
   before("login as test user", function(done){
     supertest
-    .get("/login?username=testuser&password=testuserpasswd")
+    .get("/testlogin?username=testuser&password=testuserpasswd")
     .expect(200)
     .end(function(err,res){
       Cookies = res.headers['set-cookie'].pop().split(';')[0];
