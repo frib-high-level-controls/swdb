@@ -35,6 +35,7 @@ test.describe("SWDB record tests", function() {
     driver.manage().window().setPosition(200,0);
   });
 
+    var allCookies = null;
   test.it("should login", function() {
     // get test authentication
     driver.get(props.webUrl+"testlogin?username=testuser&password=testuserpasswd");
@@ -45,7 +46,7 @@ test.describe("SWDB record tests", function() {
   test.it("should add a new record", function() {
     this.timeout(8000);
     driver.get(props.webUrl+"#/new");
-    driver.wait(until.elementLocated(By.id("swName")),3000).sendKeys("Software Name - 3001");
+    driver.wait(until.elementLocated(By.id("swName")),5000).sendKeys("Software Name - 3001");
     driver.findElement(By.id("owner")).sendKeys("Software owner - 3001");
     driver.findElement(By.id("levelOfCare")).sendKeys("LOW");
     driver.findElement(By.id("status")).sendKeys("DEVEL");
@@ -346,42 +347,42 @@ test.describe("SWDB record tests", function() {
   });
 
   // test unauthorized record adds
-  test.it("should fail add a new record", function() {
-    this.timeout(8000);
-    driver.get(props.webUrl+"#/new");
-    driver.wait(until.elementLocated(By.id("swName")), 3000);
-    driver.findElement(By.id("swName")).sendKeys("Software Name - 4001");
-    driver.findElement(By.id("owner")).sendKeys("Software owner - 4001");
-    driver.findElement(By.id("levelOfCare")).sendKeys("LOW");
-    driver.findElement(By.id("status")).sendKeys("DEVEL");
-    driver.findElement(By.id("statusDate")).sendKeys("1978/07/07");
-    driver.findElement(By.id("releasedVersion")).sendKeys("v0.3001");
-    driver.findElement(By.id("submitBtn")).click();
-
-    driver.wait(until.elementTextContains(driver.findElement(By.id("formError")),
-    "Not authorized"),5000);
-  });
-  // find a record and fail to update it
-  test.it("should find and fail to update a record", function() {
-    this.timeout(8000);
-    driver.get(props.webUrl+"#/list");
-    driver.wait(until.elementLocated(By.id("swdbList_filter")), 8000)
-    .findElement(By.tagName("Input"))
-    .sendKeys("3001");
-    driver.wait(until.elementLocated(By.linkText("Software Name - 3001")),
-    8000);
-
-    driver.findElement(By.linkText("Software Name - 3001")).click();
-    driver.wait(until.titleIs("SWDB - Details"), 5000);
-
-    driver.findElement(By.linkText("Update this document")).click();
-    driver.wait(until.titleIs("SWDB - Update"), 5000);
-    driver.findElement(By.id("owner")).clear();
-    driver.findElement(By.id("owner")).sendKeys("NEW Owner 3001");
-    driver.findElement(By.id("submitBtn")).click();
-    driver.wait(until.elementTextContains(driver.findElement(By.id("formError")),
-    "Not authorized"),5000);
-  });
+//  test.it("should fail add a new record", function() {
+//    this.timeout(8000);
+//    driver.get(props.webUrl+"#/new");
+//    driver.wait(until.elementLocated(By.id("swName")), 3000);
+//    driver.findElement(By.id("swName")).sendKeys("Software Name - 4001");
+//    driver.findElement(By.id("owner")).sendKeys("Software owner - 4001");
+//    driver.findElement(By.id("levelOfCare")).sendKeys("LOW");
+//    driver.findElement(By.id("status")).sendKeys("DEVEL");
+//    driver.findElement(By.id("statusDate")).sendKeys("1978/07/07");
+//    driver.findElement(By.id("releasedVersion")).sendKeys("v0.3001");
+//    driver.findElement(By.id("submitBtn")).click();
+//
+//    driver.wait(until.elementTextContains(driver.findElement(By.id("formError")),
+//    "Not authorized"),5000);
+//  });
+//  // find a record and fail to update it
+//  test.it("should find and fail to update a record", function() {
+//    this.timeout(8000);
+//    driver.get(props.webUrl+"#/list");
+//    driver.wait(until.elementLocated(By.id("swdbList_filter")), 8000)
+//    .findElement(By.tagName("Input"))
+//    .sendKeys("3001");
+//    driver.wait(until.elementLocated(By.linkText("Software Name - 3001")),
+//    8000);
+//
+//    driver.findElement(By.linkText("Software Name - 3001")).click();
+//    driver.wait(until.titleIs("SWDB - Details"), 5000);
+//
+//    driver.findElement(By.linkText("Update this document")).click();
+//    driver.wait(until.titleIs("SWDB - Update"), 5000);
+//    driver.findElement(By.id("owner")).clear();
+//    driver.findElement(By.id("owner")).sendKeys("NEW Owner 3001");
+//    driver.findElement(By.id("submitBtn")).click();
+//    driver.wait(until.elementTextContains(driver.findElement(By.id("formError")),
+//    "Not authorized"),5000);
+//  });
 
   test.after(function() {
     driver.manage().timeouts().implicitlyWait(2000);

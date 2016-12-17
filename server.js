@@ -157,7 +157,7 @@ app.get('/testlogin', function(req,res) {
 });
 
 app.get('/caslogin', casAuth.ensureAuthenticated, function(req,res) {
-  console.log("caslogin req: "+JSON.stringify(util.inspect(req.session)));
+  //console.log("caslogin req: "+JSON.stringify(util.inspect(req.session)));
   if (req.session.username) {
      res.send('<p id="CAS auth success">CAS auth success</p>');
   } else {

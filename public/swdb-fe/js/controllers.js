@@ -10,7 +10,6 @@ appController.run(['$rootScope','$route','$http','$routeParams','$location', fun
       $http.get($location.protocol()+"://"+
           $location.host()+":"+$location.port()+"/swdbserv/v1/config").success(function(data) {
         $rootScope.props = data;
-        console.log('initial props'+JSON.stringify($rootScope.props));
         $rootScope.clientProps = {"port": $location.port()};
         $http({
           method: 'GET',
@@ -19,7 +18,6 @@ appController.run(['$rootScope','$route','$http','$routeParams','$location', fun
         })
         .success(function(data){
           $rootScope.session = data;
-          //console.log("got ident "+JSON.stringify(data));
         })
         .error(function(error, status){
           $scope.swdbParams.error = {message: error, status: status};
@@ -51,7 +49,6 @@ appController.run(['$rootScope','$route','$http','$routeParams','$location', fun
       })
       .success(function(data){
         $rootScope.session = data;
-        console.log('updated session'+JSON.stringify($rootScope.session));
       })
       .error(function(error, status){
         $scope.swdbParams.error = {message: error, status: status};
@@ -72,7 +69,6 @@ appController.factory('StatusService', function() {
 appController.controller('ListController', WithPromiseCtrl);
 
 function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $rootScope,$cookies) {
-  //console.log("session in list: "+$rootScope.session);
   var vm = this;
 	vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
 		var defer = $q.defer();
@@ -202,13 +198,21 @@ appController.controller('NewController', ['$scope', '$http','$rootScope', '$win
 		$scope.formData.status = "DEVEL";
 	};
 
-  if (!$rootScope.session || !$rootScope.session.username) {
-    console.log("User not found!");
-    console.log($rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service));
-    $window.location.href = $rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service);
-  } else {
-    console.log("Found user: "+$rootScope.session.username);
-  }
+  // check our user session and redirect if needed
+  $http({
+    method: 'GET',
+    url: $rootScope.props.apiUrl+'user',
+    headers: { 'Content-Type': 'application/json' }
+  })
+  .success(function(data){
+    if (!data.username) {
+      $window.location.href = $rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service);
+    } else {
+    }
+  })
+  .error(function(error, status){
+    $scope.swdbParams.error = {message: error, status: status};
+  });
 
 	// initialize this record
 	$scope.formData = {
@@ -243,7 +247,6 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 				$scope.swdbParams.formStatus="Document updates successfully posted";
 				$scope.swdbParams.formShowErr=false;
 				$scope.swdbParams.formShowStatus=true;
-				console.log("sent "+data);
 			})
 			.error(function(error, status){
 				$scope.swdbParams.error = {message: error, status: status};
@@ -302,14 +305,21 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 		$scope.statusEnums = ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"];
 	};
 
-
-  if (!$rootScope.session || !$rootScope.session.username) {
-    console.log("User not found!");
-    console.log($rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service));
-    $window.location.href = $rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service);
-  } else {
-    console.log("Found user: "+$rootScope.session.username);
-  }
+  // check our user session and redirect if needed
+  $http({
+    method: 'GET',
+    url: $rootScope.props.apiUrl+'user',
+    headers: { 'Content-Type': 'application/json' }
+  })
+  .success(function(data){
+    if (!data.username) {
+      $window.location.href = $rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service);
+    } else {
+    }
+  })
+  .error(function(error, status){
+    $scope.swdbParams.error = {message: error, status: status};
+  });
 
 	$scope.swdbParams = {
 		formShowErr: false,
