@@ -1,60 +1,39 @@
 var appController = angular.module('appController', ['datatables','ngAnimate','ngSanitize','ui.bootstrap','ngCookies']);
 
 appController.run(['$rootScope','$route','$http','$routeParams','$location', function($rootScope,$route,$http,$routeParams,$location) {
+
+  // first start
+//    url: $location.protocol()+'://'+$location.host()+':'+$location.port()+'/swdbserv/v1/config',
+//    url: 'http://swdb-dev:3005/swdbserv/v1/config',
+  var configurl = encodeURIComponent('http://swdb-dev:3005/swdbserv/v1/config');
+  var userurl = encodeURIComponent('http://swdb-dev:3005/swdbserv/v1/user');
+  console.log("url: "+configurl);
+  $http({
+    method: 'GET',
+    url: 'http://swdb-dev:3005/swdbserv/v1/config',
+    headers: { 'Content-Type': 'application/json' }
+  })
+  .success(function(data) {
+    $rootScope.props = data;
+    console.log("got config: "+JSON.stringify($rootScope.props));
+    $rootScope.clientProps = {"port": $location.port()};
+    $http({
+      method: 'GET',
+      url: 'http://swdb-dev:3005/swdbserv/v1/user',
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .success(function(data){
+      $rootScope.session = data;
+    })
+    .error(function(error, status){
+      $scope.swdbParams.error = {message: error, status: status};
+    });
+  });
+
   $rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute){
     //Change page title, based on Route information
     $rootScope.title = $route.current.title;
 
-    if (!$rootScope.props){
-      // first start
-      $http.get($location.protocol()+"://"+
-          $location.host()+":"+$location.port()+"/swdbserv/v1/config").success(function(data) {
-        $rootScope.props = data;
-        $rootScope.clientProps = {"port": $location.port()};
-        $http({
-          method: 'GET',
-          url: $rootScope.props.apiUrl+'user',
-          headers: { 'Content-Type': 'application/json' }
-        })
-        .success(function(data){
-          $rootScope.session = data;
-        })
-        .error(function(error, status){
-          $scope.swdbParams.error = {message: error, status: status};
-        });
-      });
-      //TODO This needs to be removed once there is a solution for making
-      // sure the props data is populated before the controllers are up!
-      $rootScope.props = {
-        "levelOfCareEnums": ["NONE","LOW","MEDIUM","HIGH"],
-        "statusEnums": ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"],
-        "apiUrl":"http://swdb-dev:3005/swdbserv/v1/",
-        "restPort":"3005",
-        "webUrl":"http://swdb-dev:3005/",
-        "webPort":"3005",
-        "mongodbUrl":"mongodb://localhost:27017/test",
-        "auth":{
-          "cas": "https://cas.nscl.msu.edu",
-          "service": "swdb-dev:3005",
-          "login_service": "http://swdb-dev:3005"
-        }
-      };
-
-    } else {
-      // all route changes after the first
-      $http({
-        method: 'GET',
-        url: $rootScope.props.apiUrl+'user',
-        headers: { 'Content-Type': 'application/json' }
-      })
-      .success(function(data){
-        $rootScope.session = data;
-      })
-      .error(function(error, status){
-        $scope.swdbParams.error = {message: error, status: status};
-      });
-
-    }
   });
 }]);
 
@@ -68,7 +47,20 @@ appController.factory('StatusService', function() {
 
 appController.controller('ListController', WithPromiseCtrl);
 
-function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $rootScope,$cookies) {
+function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $rootScope,$cookies) {
+
+  // prep for login button
+  if ($rootScope.session) {
+    $scope.usrBtnHref = $rootScope.props.auth.cas+'/logout';
+    $scope.usrBtnTxt = $rootScope.session.username;
+  } else {
+    $scope.usrBtnHref = $rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service);
+    $scope.usrBtnTxt = '(click to login)';
+  }
+  console.log("usrBtnHref="+$scope.usrBtnHref);
+  console.log("usrBtnTxt="+$scope.usrBtnTxt);
+
+
   var vm = this;
 	vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
 		var defer = $q.defer();
@@ -90,6 +82,10 @@ function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $rootScop
 		DTColumnBuilder.newColumn('statusDate').withTitle('Status date'),
 		DTColumnBuilder.newColumn('releasedVersion').withTitle('SW version').withOption('defaultContent','')
 	];
+
+  $scope.init = function(){
+
+  }
 }
 
 

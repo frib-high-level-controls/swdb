@@ -1,8 +1,33 @@
 <section>
-  <h2>SWDB Search</h2>
-  <div ng-controller="ListController as showCase">
-    <table id="swdbList" datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" class="row-border hover"></table>
+<div class="header swdb-top-div container-fluid">
+  <div class="row">
+    <div class="col-sm-3">
+      <a href="#/list/" class="btn btn-info">
+        <span class="glyphicon glyphicon-search"></span>
+        Search
+      </a>
+      <a href="#/new/" class="btn btn-info">
+        <span class="glyphicon glyphicon-plus"></span>
+        Add New
+      </a>
+    </div>
+    <div class="col-sm-6"></div>
+    <div class="col-sm-3">
+      <a href="{{usrBtnHref}}" class="btn btn-primary">
+        <span class="glyphicon glyphicon-user"></span>
+        {{usrBtnTxt}}
+      </a>
+      <a href="#/about/" class="btn btn-info">
+        <span class="glyphicon glyphicon-info-sign"></span>
+        About
+      </a>
+    </div>
   </div>
+</div>
+<h2>SWDB Search</h2>
+<div ng-controller="ListController as showCase">
+  <table id="swdbList" datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" class="row-border hover"></table>
+</div>
 </section>
 
 
