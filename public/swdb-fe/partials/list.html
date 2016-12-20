@@ -13,9 +13,9 @@
     </div>
     <div class="col-sm-6"></div>
     <div class="col-sm-3">
-      <a href="{{usrBtnHref}}" class="btn btn-primary">
+      <a ng-click="usrBtnClk()" class="btn btn-primary">
         <span class="glyphicon glyphicon-user"></span>
-        {{usrBtnTxt}}
+        {{session.username}} {{usrBtnTxt}}
       </a>
       <a href="#/about/" class="btn btn-info">
         <span class="glyphicon glyphicon-info-sign"></span>

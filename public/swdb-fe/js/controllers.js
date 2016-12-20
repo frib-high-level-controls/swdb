@@ -2,6 +2,23 @@ var appController = angular.module('appController', ['datatables','ngAnimate','n
 
 appController.run(['$rootScope','$route','$http','$routeParams','$location', function($rootScope,$route,$http,$routeParams,$location) {
 
+
+  $rootScope.props = {
+    "levelOfCareEnums": ["NONE","LOW","MEDIUM","HIGH"],
+    "statusEnums": ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"],
+    "apiUrl":"http://swdb-dev:3005/swdbserv/v1/",
+    "restPort":"3005",
+    "webUrl":"http://swdb-dev:3005/",
+    "webPort":"3005",
+    "mongodbUrl":"mongodb://localhost:27017/test",
+    "auth":{
+      "cas": "https://cas.nscl.msu.edu",
+      "service": "swdb-dev:3005",
+      "login_service": "http://swdb-dev:3005/caslogin"
+    }
+  };
+
+
   // first start
 //    url: $location.protocol()+'://'+$location.host()+':'+$location.port()+'/swdbserv/v1/config',
 //    url: 'http://swdb-dev:3005/swdbserv/v1/config',
@@ -47,18 +64,16 @@ appController.factory('StatusService', function() {
 
 appController.controller('ListController', WithPromiseCtrl);
 
-function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $rootScope,$cookies) {
+function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $rootScope,$cookies, $window) {
 
   // prep for login button
   if ($rootScope.session) {
     $scope.usrBtnHref = $rootScope.props.auth.cas+'/logout';
-    $scope.usrBtnTxt = $rootScope.session.username;
+    $scope.usrBtnTxt = "";
   } else {
     $scope.usrBtnHref = $rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service);
     $scope.usrBtnTxt = '(click to login)';
   }
-  console.log("usrBtnHref="+$scope.usrBtnHref);
-  console.log("usrBtnTxt="+$scope.usrBtnTxt);
 
 
   var vm = this;
@@ -85,6 +100,23 @@ function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
 
   $scope.init = function(){
 
+  };
+  $scope.usrBtnClk = function(){
+    console.log("in usrBtnClk...");
+    if ($rootScope.session.username) {
+      // logout if alredy logged in
+      console.log("in logout...");
+      $http.get($rootScope.props.webUrl+'logout').success(function(data) {
+        console.log("in redirect...");
+        $window.location.href = $rootScope.props.auth.cas+'/logout';
+      });
+    } else {
+      //login
+      console.log("in login...");
+        $window.location.href = 
+        $rootScope.props.auth.cas+'/login?service='+
+          encodeURIComponent($rootScope.props.auth.login_service);
+    }
   };
 }
 
