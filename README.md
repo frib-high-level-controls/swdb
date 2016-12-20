@@ -64,6 +64,10 @@ cd ~/swdb
 node server.js
 # in another terminal, populate the backend with some fake data
 # (The the automated tests clean the test db every run.)
+# This script requires two pip modules. 
+sudo apt-get install python-pip
+pip install requests
+pip install JSON
 ~/swdb-test/test/misc/pop-db.py
-# point your browser to http://localhost:3000 (or 'webPort' in config/properties)
+# point your browser to http://localhost:3005 (or 'webPort' in config/properties)
 ```

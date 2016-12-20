@@ -85,7 +85,7 @@ function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
 
   $scope.init = function(){
 
-  }
+  };
 }
 
 

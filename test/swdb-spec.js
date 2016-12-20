@@ -376,23 +376,23 @@ describe("app", function() {
       {"type":"PUT", "req": {"msg": {"swDescDoc": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '"param":"swDescDoc[2]","msg":"SW description doc 2 must be 4-30 characters"'}}},
       // test update validationDoc
-       {"type":"PUT", "req": {"msg": {"validationDoc": ""}, "url": "/swdbserv/v1/",
-       "err": {"status": 400, "msgHas": '"param":"validationDoc","msg":"Validation doc must be an array of strings 4-30 characters and dates"'}}},
-       {"type":"PUT", "req": {"msg": {"validationDoc": [{"doc": "NEW validation doc1","date": "trash"}]}, "url": "/swdbserv/v1/",
-       "err": {"status": 400, "msgHas": '"param":"validationDoc[0].date","msg":"Validation doc 0 date must be a date"'}}},
-       {"type":"PUT", "req": {"msg": {"validationDoc": [{"doc": "NEW","date": "7/7/77"}]}, "url": "/swdbserv/v1/",
-       "err": {"status": 400, "msgHas": '"param":"validationDoc[0].doc","msg":"Validation doc 0 must be 4-30 characters"'}}},
-       {"type":"PUT", "req": {"msg": {"validationDoc": [{"doc": "NEW validation doc1","date": "7/7/77"},{"doc": "NEW validation doc1","date": "trash"}]}, "url": "/swdbserv/v1/",
-       "err": {"status": 400, "msgHas": '"param":"validationDoc[1].date","msg":"Validation doc 1 date must be a date"'}}},
+      {"type":"PUT", "req": {"msg": {"validationDoc": ""}, "url": "/swdbserv/v1/",
+      "err": {"status": 400, "msgHas": '"param":"validationDoc","msg":"Validation doc must be an array of strings 4-30 characters and dates"'}}},
+      {"type":"PUT", "req": {"msg": {"validationDoc": [{"doc": "NEW validation doc1","date": "trash"}]}, "url": "/swdbserv/v1/",
+      "err": {"status": 400, "msgHas": '"param":"validationDoc[0].date","msg":"Validation doc 0 date must be a date"'}}},
+      {"type":"PUT", "req": {"msg": {"validationDoc": [{"doc": "NEW","date": "7/7/77"}]}, "url": "/swdbserv/v1/",
+      "err": {"status": 400, "msgHas": '"param":"validationDoc[0].doc","msg":"Validation doc 0 must be 4-30 characters"'}}},
+      {"type":"PUT", "req": {"msg": {"validationDoc": [{"doc": "NEW validation doc1","date": "7/7/77"},{"doc": "NEW validation doc1","date": "trash"}]}, "url": "/swdbserv/v1/",
+      "err": {"status": 400, "msgHas": '"param":"validationDoc[1].date","msg":"Validation doc 1 date must be a date"'}}},
       // test update verificationDoc
-       {"type":"PUT", "req": {"msg": {"verificationDoc": ""}, "url": "/swdbserv/v1/",
-       "err": {"status": 400, "msgHas": '"param":"verificationDoc","msg":"Verification doc must be an array of strings 4-30 characters and dates"'}}},
-       {"type":"PUT", "req": {"msg": {"verificationDoc": [{"doc": "NEW verification doc1","date": "trash"}]}, "url": "/swdbserv/v1/",
-       "err": {"status": 400, "msgHas": '"param":"verificationDoc[0].date","msg":"Verification doc 0 date must be a date"'}}},
-       {"type":"PUT", "req": {"msg": {"verificationDoc": [{"doc": "NEW","date": "7/7/77"}]}, "url": "/swdbserv/v1/",
-       "err": {"status": 400, "msgHas": '"param":"verificationDoc[0].doc","msg":"Verification doc 0 must be 4-30 characters"'}}},
-       {"type":"PUT", "req": {"msg": {"verificationDoc": [{"doc": "NEW verification doc1","date": "7/7/77"},{"doc": "NEW validation doc1","date": "trash"}]}, "url": "/swdbserv/v1/",
-       "err": {"status": 400, "msgHas": '"param":"verificationDoc[1].date","msg":"Verification doc 1 date must be a date"'}}},
+      {"type":"PUT", "req": {"msg": {"verificationDoc": ""}, "url": "/swdbserv/v1/",
+      "err": {"status": 400, "msgHas": '"param":"verificationDoc","msg":"Verification doc must be an array of strings 4-30 characters and dates"'}}},
+      {"type":"PUT", "req": {"msg": {"verificationDoc": [{"doc": "NEW verification doc1","date": "trash"}]}, "url": "/swdbserv/v1/",
+      "err": {"status": 400, "msgHas": '"param":"verificationDoc[0].date","msg":"Verification doc 0 date must be a date"'}}},
+      {"type":"PUT", "req": {"msg": {"verificationDoc": [{"doc": "NEW","date": "7/7/77"}]}, "url": "/swdbserv/v1/",
+      "err": {"status": 400, "msgHas": '"param":"verificationDoc[0].doc","msg":"Verification doc 0 must be 4-30 characters"'}}},
+      {"type":"PUT", "req": {"msg": {"verificationDoc": [{"doc": "NEW verification doc1","date": "7/7/77"},{"doc": "NEW validation doc1","date": "trash"}]}, "url": "/swdbserv/v1/",
+      "err": {"status": 400, "msgHas": '"param":"verificationDoc[1].date","msg":"Verification doc 1 date must be a date"'}}},
       // test update verificationApprover min, max
       {"type":"PUT", "req": {"msg": {"verificationApprover": "NEW"}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '"param":"verificationApprover","msg":"Verification approver must be 4-30 characters"'}}},
@@ -500,7 +500,7 @@ describe("app", function() {
       });
     });
 
-    it("Errors on update a nonexistant record via PUT swName id:badbeef", function(done) {
+    it("Errors on update a nonexistent record via PUT swName id:badbeef", function(done) {
       supertest
       .put("/swdbserv/v1/badbeef")
       .set('Cookie', [Cookies])
@@ -509,7 +509,7 @@ describe("app", function() {
       .expect('Record not found')
       .end(done);
     });
-    it("Errors on update a nonexistant record via PATCH swName id:badbeef", function(done) {
+    it("Errors on update a nonexistent record via PATCH swName id:badbeef", function(done) {
       supertest
       .patch("/swdbserv/v1/badbeef")
       .set('Cookie', [Cookies])

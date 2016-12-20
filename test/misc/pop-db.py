@@ -2,7 +2,10 @@
 # helper script for loading db with test entries
 import requests
 import json
-url = 'http://127.0.0.1:3000/swdbserv/v1'
+
+urlHost = "http://swdb-dev:3005"
+url = urlHost+'/swdbserv/v1'
+
 payload = {
   # 'id': '2000',
   'swName': '2000',
@@ -14,7 +17,7 @@ payload = {
 }
 headers = {'content-type': 'application/json'}
 session = requests.Session()
-r = session.get("http://127.0.0.1:3000/login?username=testuser&password=testuserpasswd")
+r = session.get(urlHost+"/testlogin?username=testuser&password=testuserpasswd")
 
 for i in range(2000,3000):
   print "sending ID "+str(i)
@@ -44,7 +47,6 @@ for i in range(2000,3000):
   payload['comment'] = ["comment1","comment2","comment3"]
 
   response = session.post(url, json=payload, headers=headers)
-  # print "Sending: "
-  # print payload
-  # print "Response: "
-  # print response
+  print "sending: "+str(payload.items())
+  print "to: "+url
+  print "Response: "+str(response)+"\n"
