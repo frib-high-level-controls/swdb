@@ -1,4 +1,30 @@
 <section>
+  <div class="header swdb-top-div container-fluid">
+    <div class="row">
+      <div class="col-sm-3">
+        <a id="srchBtn" href="#/list/" class="btn btn-info">
+          <span class="glyphicon glyphicon-search"></span>
+          Search
+        </a>
+        <a id="addBtn" href="#/new/" class="btn btn-info">
+          <span class="glyphicon glyphicon-plus"></span>
+          Add New
+        </a>
+      </div>
+      <div class="col-sm-6"></div>
+      <div class="col-sm-3">
+        <a id="usrBtn" ng-click="usrBtnClk()" class="btn btn-primary">
+          <span class="glyphicon glyphicon-user"></span>
+          {{session.username}} {{usrBtnTxt}}
+        </a>
+        <a id="abtBtn" href="#/about/" class="btn btn-info">
+          <span class="glyphicon glyphicon-info-sign"></span>
+          About
+        </a>
+      </div>
+    </div>
+  </div>
+
   <h2>Add/update ({{formData._id}})</h2>
   <div class="container-fluid">
     <form name="inputForm" class-"form-horizontal" ng-submit="processForm()">

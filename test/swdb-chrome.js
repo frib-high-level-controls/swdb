@@ -339,29 +339,30 @@ test.describe("SWDB record tests", function() {
     driver.wait(until.elementTextIs(inputSts, ""),5000);
     input.clear();
   });
+  // test unauthorized record adds
+  test.it("user button should show testuser", function() {
+    this.timeout(8000);
+    driver.get(props.webUrl+"#/new");
+    driver.wait(until.elementTextContains(driver.findElement(By.id("usrBtn")),
+    "testuser"),5000);
+  });
 
-  test.it("should logout", function() {
+  test.it("should logout (CAS)", function() {
+    this.timeout(8000);
     // get test authentication
     driver.get(props.webUrl+"logout");
-    driver.wait(until.elementLocated(By.id("Logout complete")),3000);
+    //driver.wait(until.elementLocated(By.id("messagebox container")),3000);
+    //driver.wait(until.elementTextContains(driver.findElement(By.id("messagebox confirmation")),
+    //"You have successfully logged out."),5000);
   });
 
   // test unauthorized record adds
-//  test.it("should fail add a new record", function() {
-//    this.timeout(8000);
-//    driver.get(props.webUrl+"#/new");
-//    driver.wait(until.elementLocated(By.id("swName")), 3000);
-//    driver.findElement(By.id("swName")).sendKeys("Software Name - 4001");
-//    driver.findElement(By.id("owner")).sendKeys("Software owner - 4001");
-//    driver.findElement(By.id("levelOfCare")).sendKeys("LOW");
-//    driver.findElement(By.id("status")).sendKeys("DEVEL");
-//    driver.findElement(By.id("statusDate")).sendKeys("1978/07/07");
-//    driver.findElement(By.id("releasedVersion")).sendKeys("v0.3001");
-//    driver.findElement(By.id("submitBtn")).click();
-//
-//    driver.wait(until.elementTextContains(driver.findElement(By.id("formError")),
-//    "Not authorized"),5000);
-//  });
+  test.it("should show no user", function() {
+    this.timeout(8000);
+    driver.get(props.webUrl+"#/list");
+    driver.wait(until.elementTextContains(driver.findElement(By.id("usrBtn")),
+    "click to login"),5000);
+  });
 //  // find a record and fail to update it
 //  test.it("should find and fail to update a record", function() {
 //    this.timeout(8000);
