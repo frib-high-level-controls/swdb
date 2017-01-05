@@ -36,10 +36,27 @@ test.describe("SWDB record tests", function() {
   });
 
     var allCookies = null;
+
+  test.it("should show search page with login button", function() {
+    this.timeout(8000);
+    driver.get(props.webUrl+"#/list");
+    driver.wait(until.elementLocated(By.id("usrBtn")),5000);
+    driver.wait(until.elementTextContains(driver.findElement(By.id("usrBtn")),
+    "(click to login)"),5000);
+  });
+
   test.it("should login", function() {
     // get test authentication
     driver.get(props.webUrl+"testlogin?username=testuser&password=testuserpasswd");
     driver.wait(until.elementLocated(By.id("Test auth success")),3000);
+  });
+  
+  test.it("should show search page with username on logout button", function() {
+    this.timeout(8000);
+    driver.get(props.webUrl+"#/list");
+    driver.wait(until.elementLocated(By.id("usrBtn")),5000);
+    driver.wait(until.elementTextContains(driver.findElement(By.id("usrBtn")),
+    "testuser (click to logout)"),5000);
   });
 
   // Open the new page and insert test data
