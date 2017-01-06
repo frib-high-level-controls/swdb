@@ -296,8 +296,8 @@ appController.controller('NewController', ['$scope', '$http','$rootScope', '$win
   })
   .success(function(data){
     if (!data.username) {
+      //go to cas
       $window.location.href = $rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service);
-    } else {
     }
   })
   .error(function(error, status){
