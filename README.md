@@ -53,6 +53,18 @@ mocha test/swdb-spec.js
 #  Node 6.9.1
 #  selenium-webdriver 3.0.1
 #  chromedriver 2.25.426924
+
+# Setting up firefox tests
+# install Firefox (I used a newer version than debian's firefox-esr)
+# Install Geckodriver (I used 
+ https://github.com/mozilla/geckodriver/releases/download/v0.13.0/geckodriver-v0.13.0-linux64.tar.gz)
+#  Known good config:
+#  Node 6.9.1
+#  selenium-Webdriver 3.0.1
+#  Geckodriver v0.13.0
+#  firefox 50.1.0
+# NOTE: swdb/tests/swdb-firefox.js instructs geckodriver as to which firefox it should use. Update the 
+  firefox path here if necessary.
 # to run all tests
 cd ~/swdb
 mocha
