@@ -3,50 +3,50 @@ var appController = angular.module('appController', ['datatables','ngAnimate','n
 appController.run(['$rootScope','$route','$http','$routeParams','$location', function($rootScope,$route,$http,$routeParams,$location) {
 
 
-  $rootScope.props = {
-    "levelOfCareEnums": ["NONE","LOW","MEDIUM","HIGH"],
-    "statusEnums": ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"],
-    "apiUrl":"http://swdb-dev:3005/swdbserv/v1/",
-    "restPort":"3005",
-    "webUrl":"http://swdb-dev:3005/",
-    "webPort":"3005",
-    "mongodbUrl":"mongodb://localhost:27017/test",
-    "auth":{
-      "cas": "https://cas.nscl.msu.edu",
-      "service": "swdb-dev:3005",
-      "login_service": "http://swdb-dev:3005/caslogin"
-    }
-  };
-
-
-  // first start
-//    url: $location.protocol()+'://'+$location.host()+':'+$location.port()+'/swdbserv/v1/config',
-//    url: 'http://swdb-dev:3005/swdbserv/v1/config',
-  var configurl = encodeURIComponent('http://swdb-dev:3005/swdbserv/v1/config');
-  var userurl = encodeURIComponent('http://swdb-dev:3005/swdbserv/v1/user');
-  console.log("url: "+configurl);
-  $http({
-    method: 'GET',
-    url: 'http://swdb-dev:3005/swdbserv/v1/config',
-    headers: { 'Content-Type': 'application/json' }
-  })
-  .success(function(data) {
-    $rootScope.props = data;
-    console.log("got config: "+JSON.stringify($rootScope.props));
-    $rootScope.clientProps = {"port": $location.port()};
-    $http({
-      method: 'GET',
-      url: 'http://swdb-dev:3005/swdbserv/v1/user',
-      headers: { 'Content-Type': 'application/json' }
-    })
-    .success(function(data){
-      $rootScope.session = data;
-    })
-    .error(function(error, status){
-      $scope.swdbParams.error = {message: error, status: status};
-    });
-  });
-
+//   $rootScope.props = {
+//     "levelOfCareEnums": ["NONE","LOW","MEDIUM","HIGH"],
+//     "statusEnums": ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"],
+//     "apiUrl":"http://localhost:3005/swdbserv/v1/",
+//     "restPort":"3005",
+//     "webUrl":"http://localhost:3005/",
+//     "webPort":"3005",
+//     "mongodbUrl":"mongodb://localhost:27017/test",
+//     "auth":{
+//       "cas": "https://cas.nscl.msu.edu",
+//       "service": "swdb-dev:3005",
+//       "login_service": "http://swdb-dev:3005/caslogin"
+//     }
+//   };
+//
+//
+//   // first start
+// //    url: $location.protocol()+'://'+$location.host()+':'+$location.port()+'/swdbserv/v1/config',
+// //    url: 'http://swdb-dev:3005/swdbserv/v1/config',
+//   var configurl = encodeURIComponent($rootScope.props.apiUrl+'swdbserv/v1/config');
+//   var userurl = encodeURIComponent($rootScope.props.apiUrl+'swdbserv/v1/user');
+//   console.log("url: "+configurl);
+//   $http({
+//     method: 'GET',
+//     url: $rootScope.props.apiUrl+'config',
+//     headers: { 'Content-Type': 'application/json' }
+//   })
+//   .success(function(data) {
+//     $rootScope.props = data;
+//     console.log("got config: "+JSON.stringify($rootScope.props));
+//     $rootScope.clientProps = {"port": $location.port()};
+//     $http({
+//       method: 'GET',
+//       url: $rootScope.props.apiUrl+'user',
+//       headers: { 'Content-Type': 'application/json' }
+//     })
+//     .success(function(data){
+//       $rootScope.session = data;
+//     })
+//     .error(function(error, status){
+//       $scope.swdbParams.error = {message: error, status: status};
+//     });
+//   });
+//
   $rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute){
     //Change page title, based on Route information
     $rootScope.title = $route.current.title;
@@ -64,7 +64,7 @@ appController.factory('StatusService', function() {
 
 appController.controller('ListController', WithPromiseCtrl);
 
-function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $rootScope,$cookies, $window) {
+function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $rootScope,$cookies, $window, configService) {
 
   $scope.$watch(function() {
     return $rootScope.session;
@@ -88,7 +88,7 @@ function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
       });
     } else {
       //login
-        $window.location.href = 
+        $window.location.href =
         $rootScope.props.auth.cas+'/login?service='+
           encodeURIComponent($rootScope.props.auth.login_service);
     }
@@ -96,6 +96,7 @@ function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
 
 
 
+$rootScope.props = configService.doStuff();
   var vm = this;
 	vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
 		var defer = $q.defer();
@@ -126,7 +127,6 @@ function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
 
 
 appController.controller('DetailsController', ['$scope', '$http','$routeParams', '$rootScope', '$window', function ($scope, $http, $routeParams, $rootScope, $window) {
-
   $scope.$watch(function() {
     return $rootScope.session;
   }, function() {
@@ -149,7 +149,7 @@ appController.controller('DetailsController', ['$scope', '$http','$routeParams',
       });
     } else {
       //login
-        $window.location.href = 
+        $window.location.href =
         $rootScope.props.auth.cas+'/login?service='+
           encodeURIComponent($rootScope.props.auth.login_service);
     }
@@ -186,13 +186,13 @@ appController.controller('NewController', ['$scope', '$http','$rootScope', '$win
       });
     } else {
       //login
-        $window.location.href = 
+        $window.location.href =
         $rootScope.props.auth.cas+'/login?service='+
           encodeURIComponent($rootScope.props.auth.login_service);
     }
   };
-  
-  
+
+
   $scope.datePicker = (function () {
 		var method = {};
 		method.instances = [];
@@ -242,7 +242,7 @@ appController.controller('NewController', ['$scope', '$http','$rootScope', '$win
 			$scope.swdbParams.formShowErr=true;
 		}
 	};
-	
+
   $scope.newItem = function(event) {
 		var parts = event.currentTarget.id.split('.');
 		if (parts[1] === 'auxSw'){
@@ -320,7 +320,7 @@ appController.controller('NewController', ['$scope', '$http','$rootScope', '$win
 		formErr: ""
 	};
 	getEnums();
-  
+
 }]);
 
 appController.controller('UpdateController', ['$scope', '$http', '$routeParams','$rootScope', '$window', function ($scope, $http, $routeParams, $rootScope, $window) {
@@ -347,7 +347,7 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
       });
     } else {
       //login
-        $window.location.href = 
+        $window.location.href =
         $rootScope.props.auth.cas+'/login?service='+
           encodeURIComponent($rootScope.props.auth.login_service);
     }

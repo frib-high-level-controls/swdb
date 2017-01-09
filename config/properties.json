@@ -1,9 +1,9 @@
 {
   "levelOfCareEnums": ["NONE","LOW","MEDIUM","HIGH"],
   "statusEnums": ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"],
-  "apiUrl":"http://swdb-dev:3005/swdbserv/v1/",
+  "apiUrl":"http://localhost:3005/swdbserv/v1/",
   "restPort":"3005",
-  "webUrl":"http://swdb-dev:3005/",
+  "webUrl":"http://localhost:3005/",
   "webPort":"3005",
   "mongodbUrl":"mongodb://localhost:27017/test",
   "auth":{
@@ -12,4 +12,3 @@
     "login_service": "http://swdb-dev:3005/caslogin"
   }
 }
-
