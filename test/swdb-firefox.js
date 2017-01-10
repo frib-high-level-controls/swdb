@@ -37,7 +37,7 @@ test.describe("SWDB record tests", function() {
     .setFirefoxOptions(firefoxOptions)
     .build();
     //driver = new FirefoxDriver();
-    //driver.manage().window().setPosition(200,0);
+    driver.manage().window().setPosition(200,0);
   });
 
     var allCookies = null;
@@ -365,6 +365,7 @@ test.describe("SWDB record tests", function() {
   test.it("user button should show testuser", function() {
     this.timeout(8000);
     driver.get(props.webUrl+"#/new");
+    driver.wait(until.elementLocated(By.id("usrBtn")), 3000);
     driver.wait(until.elementTextContains(driver.findElement(By.id("usrBtn")),
     "testuser"),5000);
   });
@@ -382,6 +383,7 @@ test.describe("SWDB record tests", function() {
   test.it("should show no user", function() {
     this.timeout(8000);
     driver.get(props.webUrl+"#/list");
+    driver.wait(until.elementLocated(By.id("usrBtn")), 3000);
     driver.wait(until.elementTextContains(driver.findElement(By.id("usrBtn")),
     "click to login"),5000);
   });

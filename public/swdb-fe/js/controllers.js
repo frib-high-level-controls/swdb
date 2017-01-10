@@ -228,9 +228,12 @@ appController.controller('NewController', ['$scope', '$http', '$window', 'config
 	};
 
 	getEnums = function() {
-		$scope.levelOfCareEnums = ["NONE","LOW","MEDIUM","HIGH"];
+		//$scope.levelOfCareEnums = ["NONE","LOW","MEDIUM","HIGH"];
+		$scope.levelOfCareEnums = $scope.props.levelOfCareEnums;
 		$scope.formData.levelOfCare = "NONE";
-		$scope.statusEnums = ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"];
+
+		//$scope.statusEnums = ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"];
+		$scope.statusEnums = $scope.props.statusEnums;
 		$scope.formData.status = "DEVEL";
 	};
 
@@ -356,8 +359,11 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 	};
 
 	getEnums = function() {
-		$scope.levelOfCareEnums = ["NONE","LOW","MEDIUM","HIGH"];
-		$scope.statusEnums = ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"];
+		//$scope.levelOfCareEnums = ["NONE","LOW","MEDIUM","HIGH"];
+		$scope.levelOfCareEnums = $scope.props.levelOfCareEnums;
+
+		//$scope.statusEnums = ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"];
+		$scope.statusEnums = $scope.props.statusEnums;
 	};
 
   $scope.props = configService.getConfig();

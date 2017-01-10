@@ -360,6 +360,7 @@ test.describe("SWDB record tests", function() {
   test.it("user button should show testuser", function() {
     this.timeout(8000);
     driver.get(props.webUrl+"#/new");
+    driver.wait(until.elementLocated(By.id("usrBtn")), 3000);
     driver.wait(until.elementTextContains(driver.findElement(By.id("usrBtn")),
     "testuser"),5000);
   });
