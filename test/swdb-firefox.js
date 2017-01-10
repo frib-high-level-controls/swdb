@@ -87,10 +87,10 @@ test.describe("SWDB record tests", function() {
     driver.wait(until.elementLocated(By.id("swdbList_filter")), 8000)
     .findElement(By.tagName("Input"))
     .sendKeys("3001");
-    driver.wait(until.elementLocated(By.linkText("Software Name - 3001")),
+    driver.wait(until.elementLocated(By.linkText("Software Name - 3002")),
     8000);
 
-    driver.findElement(By.linkText("Software Name - 3001")).click();
+    driver.findElement(By.linkText("Software Name - 3002")).click();
     driver.wait(until.titleIs("SWDB - Details"), 5000);
 
     driver.findElement(By.linkText("Update this document")).click();
