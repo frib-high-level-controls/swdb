@@ -4,15 +4,7 @@ var app = angular.module('app', [
 	'ngMessages'
 	]);
 
-	// app.factory('Resolver', ['$http', '$rootScope', function($http, $rootScope){
-	// 	return function(){
-	// 		return $http({url: '/swdbserv/v1/config',method: "GET"}).then(function(data) {
-	// 			console.log("completed config call"+JSON.stringify(data));
-	// 			$rootScope.props=data;
-	// 		});
-	// 	}
-	// }]);
-
+	// Service to get config data to controllers
 	app.service('configService', function($http) {
 		var configData = null;
 
@@ -25,8 +17,27 @@ var app = angular.module('app', [
 			setData: function (data) {
 				configData = data;
 			},
-			doStuff: function () {
+			getConfig: function () {
 				return configData;
+			}
+		};
+	});
+
+	// Service to get user data to controllers
+	app.service('userService', function($http) {
+		var userData = null;
+
+		var promise = 	$http({url: '/swdbserv/v1/user',method: "GET"}).success(function(data) {
+			userData = data;
+		});
+
+		return {
+			promise: promise,
+			setData: function (data) {
+				userData = data;
+			},
+			getUser: function () {
+				return userData;
 			}
 		};
 	});
@@ -40,23 +51,50 @@ app.config(['$routeProvider', function($routeProvider){
 		resolve:{
 			'configServiceData': function(configService){
 				return configService.promise;
-			}
+			},
+			'userServiceData': function(userService){
+				return userService.promise;
+			},
 		}
 	})
 	.when('/details/:itemId', {
 		templateUrl: 'swdb-fe/partials/details.html',
 		controller: 'DetailsController',
-		title: 'Details'
+		title: 'Details',
+		resolve:{
+			'configServiceData': function(configService){
+				return configService.promise;
+			},
+			'userServiceData': function(userService){
+				return userService.promise;
+			}
+		}
 	})
 	.when('/new', {
 		templateUrl: 'swdb-fe/partials/new.html',
 		controller: 'NewController',
-		title: 'New'
+		title: 'New',
+		resolve:{
+			'configServiceData': function(configService){
+				return configService.promise;
+			},
+			'userServiceData': function(userService){
+				return userService.promise;
+			}
+		}
 	})
 	.when('/update/:itemId', {
 		templateUrl: 'swdb-fe/partials/new.html',
 		controller: 'UpdateController',
-		title: 'Update'
+		title: 'Update',
+		resolve:{
+			'configServiceData': function(configService){
+				return configService.promise;
+			},
+			'userServiceData': function(userService){
+				return userService.promise;
+			}
+		}
 	})
 	.when('/del/:itemId', {
 		templateUrl: 'swdb-fe/partials/del.html',

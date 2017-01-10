@@ -1,52 +1,7 @@
 var appController = angular.module('appController', ['datatables','ngAnimate','ngSanitize','ui.bootstrap','ngCookies']);
 
-appController.run(['$rootScope','$route','$http','$routeParams','$location', function($rootScope,$route,$http,$routeParams,$location) {
+appController.run(['$rootScope','$route','$http','$routeParams','$location','configService', function($rootScope,$route,$http,$routeParams,$location, configService) {
 
-
-//   $rootScope.props = {
-//     "levelOfCareEnums": ["NONE","LOW","MEDIUM","HIGH"],
-//     "statusEnums": ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"],
-//     "apiUrl":"http://localhost:3005/swdbserv/v1/",
-//     "restPort":"3005",
-//     "webUrl":"http://localhost:3005/",
-//     "webPort":"3005",
-//     "mongodbUrl":"mongodb://localhost:27017/test",
-//     "auth":{
-//       "cas": "https://cas.nscl.msu.edu",
-//       "service": "swdb-dev:3005",
-//       "login_service": "http://swdb-dev:3005/caslogin"
-//     }
-//   };
-//
-//
-//   // first start
-// //    url: $location.protocol()+'://'+$location.host()+':'+$location.port()+'/swdbserv/v1/config',
-// //    url: 'http://swdb-dev:3005/swdbserv/v1/config',
-//   var configurl = encodeURIComponent($rootScope.props.apiUrl+'swdbserv/v1/config');
-//   var userurl = encodeURIComponent($rootScope.props.apiUrl+'swdbserv/v1/user');
-//   console.log("url: "+configurl);
-//   $http({
-//     method: 'GET',
-//     url: $rootScope.props.apiUrl+'config',
-//     headers: { 'Content-Type': 'application/json' }
-//   })
-//   .success(function(data) {
-//     $rootScope.props = data;
-//     console.log("got config: "+JSON.stringify($rootScope.props));
-//     $rootScope.clientProps = {"port": $location.port()};
-//     $http({
-//       method: 'GET',
-//       url: $rootScope.props.apiUrl+'user',
-//       headers: { 'Content-Type': 'application/json' }
-//     })
-//     .success(function(data){
-//       $rootScope.session = data;
-//     })
-//     .error(function(error, status){
-//       $scope.swdbParams.error = {message: error, status: status};
-//     });
-//   });
-//
   $rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute){
     //Change page title, based on Route information
     $rootScope.title = $route.current.title;
@@ -64,7 +19,7 @@ appController.factory('StatusService', function() {
 
 appController.controller('ListController', WithPromiseCtrl);
 
-function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $rootScope,$cookies, $window, configService) {
+function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $rootScope,$cookies, $window, configService, userService) {
 
   $scope.$watch(function() {
     return $rootScope.session;
@@ -96,7 +51,8 @@ function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
 
 
 
-$rootScope.props = configService.doStuff();
+  $rootScope.props = configService.getConfig();
+  $rootScope.session = userService.getUser();
   var vm = this;
 	vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
 		var defer = $q.defer();
@@ -126,7 +82,7 @@ $rootScope.props = configService.doStuff();
 }
 
 
-appController.controller('DetailsController', ['$scope', '$http','$routeParams', '$rootScope', '$window', function ($scope, $http, $routeParams, $rootScope, $window) {
+appController.controller('DetailsController', ['$scope', '$http','$routeParams', '$rootScope', '$window', 'configService', 'userService', function ($scope, $http, $routeParams, $rootScope, $window, configService, userService) {
   $scope.$watch(function() {
     return $rootScope.session;
   }, function() {
@@ -155,6 +111,8 @@ appController.controller('DetailsController', ['$scope', '$http','$routeParams',
     }
   };
 
+  $rootScope.props = configService.getConfig();
+  $rootScope.session = userService.getUser();
 	//update document fields with existing data
 	$http.get($rootScope.props.apiUrl+$routeParams.itemId).success(function(data) {
 		$scope.formData = data;
@@ -162,7 +120,7 @@ appController.controller('DetailsController', ['$scope', '$http','$routeParams',
 	});
 }]);
 
-appController.controller('NewController', ['$scope', '$http','$rootScope', '$window', function ($scope, $http, $rootScope, $window) {
+appController.controller('NewController', ['$scope', '$http','$rootScope', '$window', 'configService', 'userService', function ($scope, $http, $rootScope, $window, configService, userService) {
 
   $scope.$watch(function() {
     return $rootScope.session;
@@ -288,6 +246,8 @@ appController.controller('NewController', ['$scope', '$http','$rootScope', '$win
 		$scope.formData.status = "DEVEL";
 	};
 
+  $rootScope.props = configService.getConfig();
+  $rootScope.session = userService.getUser();
   // check our user session and redirect if needed
   $http({
     method: 'GET',
@@ -323,7 +283,7 @@ appController.controller('NewController', ['$scope', '$http','$rootScope', '$win
 
 }]);
 
-appController.controller('UpdateController', ['$scope', '$http', '$routeParams','$rootScope', '$window', function ($scope, $http, $routeParams, $rootScope, $window) {
+appController.controller('UpdateController', ['$scope', '$http', '$routeParams','$rootScope', '$window', 'configService', 'userService', function ($scope, $http, $routeParams, $rootScope, $window, configService, userService) {
 
   $scope.$watch(function() {
     return $rootScope.session;
@@ -424,6 +384,8 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 		$scope.statusEnums = ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"];
 	};
 
+  $rootScope.props = configService.getConfig();
+  $rootScope.session = userService.getUser();
   // check our user session and redirect if needed
   $http({
     method: 'GET',
