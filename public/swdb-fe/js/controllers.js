@@ -19,44 +19,41 @@ appController.factory('StatusService', function() {
 
 appController.controller('ListController', WithPromiseCtrl);
 
-function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $rootScope,$cookies, $window, configService, userService) {
+function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $cookies, $window, configService, userService) {
 
   $scope.$watch(function() {
-    return $rootScope.session;
+    return $scope.session;
   }, function() {
     // prep for login button
-    if ($rootScope.session && $rootScope.session.username) {
-      //$scope.usrBtnHref = $rootScope.props.auth.cas+'/logout';
+    if ($scope.session && $scope.session.username) {
       $scope.usrBtnTxt = "(click to logout)";
     } else {
-      //$scope.usrBtnHref = $rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service);
       $scope.usrBtnTxt = '(click to login)';
     }
   },true);
 
   $scope.usrBtnClk = function(){
-    if ($rootScope.session.username) {
+    if ($scope.session.username) {
       // logout if alredy logged in
-      $http.get($rootScope.props.webUrl+'logout').success(function(data) {
+      $http.get($scope.props.webUrl+'logout').success(function(data) {
         console.log("in redirect...");
-        $window.location.href = $rootScope.props.auth.cas+'/logout';
+        $window.location.href = $scope.props.auth.cas+'/logout';
       });
     } else {
       //login
         $window.location.href =
-        $rootScope.props.auth.cas+'/login?service='+
-          encodeURIComponent($rootScope.props.auth.login_service);
+        $scope.props.auth.cas+'/login?service='+
+          encodeURIComponent($scope.props.auth.login_service);
     }
   };
 
-
-
-  $rootScope.props = configService.getConfig();
-  $rootScope.session = userService.getUser();
+  // get intitialization info
+  $scope.props = configService.getConfig();
+  $scope.session = userService.getUser();
   var vm = this;
 	vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
 		var defer = $q.defer();
-		$http.get($rootScope.props.apiUrl).then(function(result) {
+		$http.get($scope.props.apiUrl).then(function(result) {
 			defer.resolve(result.data);
 		});
 		return defer.promise;
@@ -74,79 +71,70 @@ function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
 		DTColumnBuilder.newColumn('statusDate').withTitle('Status date'),
 		DTColumnBuilder.newColumn('releasedVersion').withTitle('SW version').withOption('defaultContent','')
 	];
-
-  $scope.init = function(){
-
-  };
-
 }
 
 
-appController.controller('DetailsController', ['$scope', '$http','$routeParams', '$rootScope', '$window', 'configService', 'userService', function ($scope, $http, $routeParams, $rootScope, $window, configService, userService) {
+appController.controller('DetailsController', ['$scope', '$http','$routeParams', '$window', 'configService', 'userService', function ($scope, $http, $routeParams, $window, configService, userService) {
   $scope.$watch(function() {
-    return $rootScope.session;
+    return $scope.session;
   }, function() {
     // prep for login button
-    if ($rootScope.session && $rootScope.session.username) {
-      //$scope.usrBtnHref = $rootScope.props.auth.cas+'/logout';
+    if ($scope.session && $scope.session.username) {
       $scope.usrBtnTxt = "(click to logout)";
     } else {
-      //$scope.usrBtnHref = $rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service);
       $scope.usrBtnTxt = '(click to login)';
     }
   },true);
 
   $scope.usrBtnClk = function(){
-    if ($rootScope.session.username) {
+    if ($scope.session.username) {
       // logout if alredy logged in
-      $http.get($rootScope.props.webUrl+'logout').success(function(data) {
+      $http.get($scope.props.webUrl+'logout').success(function(data) {
         console.log("in redirect...");
-        $window.location.href = $rootScope.props.auth.cas+'/logout';
+        $window.location.href = $scope.props.auth.cas+'/logout';
       });
     } else {
       //login
         $window.location.href =
-        $rootScope.props.auth.cas+'/login?service='+
-          encodeURIComponent($rootScope.props.auth.login_service);
+        $scope.props.auth.cas+'/login?service='+
+          encodeURIComponent($scope.props.auth.login_service);
     }
   };
 
-  $rootScope.props = configService.getConfig();
-  $rootScope.session = userService.getUser();
+  $scope.props = configService.getConfig();
+  $scope.session = userService.getUser();
 	//update document fields with existing data
-	$http.get($rootScope.props.apiUrl+$routeParams.itemId).success(function(data) {
+	$http.get($scope.props.apiUrl+$routeParams.itemId).success(function(data) {
 		$scope.formData = data;
 		$scope.whichItem = $routeParams.itemId;
 	});
 }]);
 
-appController.controller('NewController', ['$scope', '$http','$rootScope', '$window', 'configService', 'userService', function ($scope, $http, $rootScope, $window, configService, userService) {
+appController.controller('NewController', ['$scope', '$http', '$window', 'configService', 'userService', function ($scope, $http, $window, configService, userService) {
 
   $scope.$watch(function() {
-    return $rootScope.session;
+    return $scope.session;
   }, function() {
     // prep for login button
-    if ($rootScope.session && $rootScope.session.username) {
-      //$scope.usrBtnHref = $rootScope.props.auth.cas+'/logout';
+    if ($scope.session && $scope.session.username) {
       $scope.usrBtnTxt = "(click to logout)";
     } else {
-      //$scope.usrBtnHref = $rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service);
       $scope.usrBtnTxt = '(click to login)';
     }
   },true);
 
   $scope.usrBtnClk = function(){
-    if ($rootScope.session.username) {
+    if ($scope.session.username) {
       // logout if alredy logged in
-      $http.get($rootScope.props.webUrl+'logout').success(function(data) {
+      $http.get($scope.props.webUrl+'logout').success(function(data) {
         console.log("in redirect...");
-        $window.location.href = $rootScope.props.auth.cas+'/logout';
+        $window.location.href = $scope.props.auth.cas+'/logout';
       });
     } else {
       //login
         $window.location.href =
-        $rootScope.props.auth.cas+'/login?service='+
-          encodeURIComponent($rootScope.props.auth.login_service);
+        $scope.props.auth.cas+'/login?service='+
+          encodeURIComponent($scope.props.auth.login_service);
     }
   };
 
@@ -179,7 +167,7 @@ appController.controller('NewController', ['$scope', '$http','$rootScope', '$win
 		if ($scope.inputForm.$valid){
 			$http({
 				method: 'POST',
-				url: $rootScope.props.apiUrl,
+				url: $scope.props.apiUrl,
 				data: $scope.formData,
 				headers: { 'Content-Type': 'application/json' }
 			})
@@ -246,23 +234,14 @@ appController.controller('NewController', ['$scope', '$http','$rootScope', '$win
 		$scope.formData.status = "DEVEL";
 	};
 
-  $rootScope.props = configService.getConfig();
-  $rootScope.session = userService.getUser();
+  $scope.props = configService.getConfig();
+  $scope.session = userService.getUser();
+
   // check our user session and redirect if needed
-  $http({
-    method: 'GET',
-    url: $rootScope.props.apiUrl+'user',
-    headers: { 'Content-Type': 'application/json' }
-  })
-  .success(function(data){
-    if (!data.username) {
-      //go to cas
-      $window.location.href = $rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service);
-    }
-  })
-  .error(function(error, status){
-    $scope.swdbParams.error = {message: error, status: status};
-  });
+  if (!$scope.session.username) {
+    //go to cas
+    $window.location.href = $scope.props.auth.cas+'/login?service='+encodeURIComponent($scope.props.auth.login_service);
+  }
 
 	// initialize this record
 	$scope.formData = {
@@ -280,36 +259,33 @@ appController.controller('NewController', ['$scope', '$http','$rootScope', '$win
 		formErr: ""
 	};
 	getEnums();
-
 }]);
 
-appController.controller('UpdateController', ['$scope', '$http', '$routeParams','$rootScope', '$window', 'configService', 'userService', function ($scope, $http, $routeParams, $rootScope, $window, configService, userService) {
+appController.controller('UpdateController', ['$scope', '$http', '$routeParams', '$window', 'configService', 'userService', function ($scope, $http, $routeParams, $window, configService, userService) {
 
   $scope.$watch(function() {
-    return $rootScope.session;
+    return $scope.session;
   }, function() {
     // prep for login button
-    if ($rootScope.session && $rootScope.session.username) {
-      //$scope.usrBtnHref = $rootScope.props.auth.cas+'/logout';
+    if ($scope.session && $scope.session.username) {
       $scope.usrBtnTxt = "(click to logout)";
     } else {
-      //$scope.usrBtnHref = $rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service);
       $scope.usrBtnTxt = '(click to login)';
     }
   },true);
 
   $scope.usrBtnClk = function(){
-    if ($rootScope.session.username) {
+    if ($scope.session.username) {
       // logout if alredy logged in
-      $http.get($rootScope.props.webUrl+'logout').success(function(data) {
+      $http.get($scope.props.webUrl+'logout').success(function(data) {
         console.log("in redirect...");
-        $window.location.href = $rootScope.props.auth.cas+'/logout';
+        $window.location.href = $scope.props.auth.cas+'/logout';
       });
     } else {
       //login
         $window.location.href =
-        $rootScope.props.auth.cas+'/login?service='+
-          encodeURIComponent($rootScope.props.auth.login_service);
+        $scope.props.auth.cas+'/login?service='+
+          encodeURIComponent($scope.props.auth.login_service);
     }
   };
 
@@ -318,7 +294,7 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 			delete $scope.formData.__v;
 			$http({
 				method: 'PUT',
-				url: $rootScope.props.apiUrl+$scope.formData._id,
+				url: $scope.props.apiUrl+$scope.formData._id,
 				data: $scope.formData,
 				headers: { 'Content-Type': 'application/json' }
 			})
@@ -384,23 +360,13 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 		$scope.statusEnums = ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"];
 	};
 
-  $rootScope.props = configService.getConfig();
-  $rootScope.session = userService.getUser();
+  $scope.props = configService.getConfig();
+  $scope.session = userService.getUser();
   // check our user session and redirect if needed
-  $http({
-    method: 'GET',
-    url: $rootScope.props.apiUrl+'user',
-    headers: { 'Content-Type': 'application/json' }
-  })
-  .success(function(data){
-    if (!data.username) {
-      $window.location.href = $rootScope.props.auth.cas+'/login?service='+encodeURIComponent($rootScope.props.auth.login_service);
-    } else {
-    }
-  })
-  .error(function(error, status){
-    $scope.swdbParams.error = {message: error, status: status};
-  });
+  if (!$scope.session.username) {
+    //go to cas
+    $window.location.href = $scope.props.auth.cas+'/login?service='+encodeURIComponent($scope.props.auth.login_service);
+  }
 
 	$scope.swdbParams = {
 		formShowErr: false,
@@ -412,7 +378,7 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 	getEnums();
 
 	//update document fields with existing data
-	$http.get($rootScope.props.apiUrl+$routeParams.itemId).success(function(data) {
+	$http.get($scope.props.apiUrl+$routeParams.itemId).success(function(data) {
 		$scope.formData = data;
 		$scope.whichItem = $routeParams.itemId;
 
