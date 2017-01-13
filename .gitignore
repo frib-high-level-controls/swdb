@@ -1,3 +1,4 @@
 node_modules
 log
 public/swdb-fe/bower_components
+*.pyc
