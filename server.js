@@ -15,6 +15,17 @@ var expressValidator = require('express-validator');
 var expressSession = require('express-session');
 var casAuth = require('./lib/auth');
 const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
+const swTable = JSON.parse(fs.readFileSync('./config/swData.json', 'utf8'));
+
+// mae table of sw names
+var swNames = [];
+for (var i in swTable)
+{
+  swNames.push({id: i, "name": swTable[i].Name});
+  //console.log(swTable[i]["Name"]);
+}
+props.swNames = swNames;
+//console.log(JSON.stringify(swTable));
 
 //allow access to staic files
 app.use(express.static(__dirname + '/public'));

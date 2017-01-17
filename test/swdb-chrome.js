@@ -11,6 +11,16 @@ test = require("../node_modules/selenium-webdriver/testing");
 var fs = require('fs');
 var path = require('path');
 const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
+const swTable = JSON.parse(fs.readFileSync('./config/swData.json', 'utf8'));
+
+// mae table of sw names
+var swNames = [];
+for (var i in swTable)
+{
+  swNames.push({id: i, "name": swTable[i].Name});
+  //console.log(swTable[i]["Name"]);
+}
+props.swNames = swNames;
 
 // clear the test collection before and after tests suite
 before(function(done) {
@@ -61,9 +71,13 @@ test.describe("SWDB record tests", function() {
 
   // Open the new page and insert test data
   test.it("should add a new record", function() {
-    this.timeout(8000);
+    this.timeout(10000);
     driver.get(props.webUrl+"#/new");
-    driver.wait(until.elementLocated(By.id("swName")),5000).sendKeys("Software Name - 3001");
+    driver.wait(until.elementIsVisible(driver.findElement(By.id("swName")),5000)).click();
+    driver.wait(until.elementLocated(By.xpath('//*[@id="swName-group"]/div/div/input[1]')),5000).sendKeys("Beast"+webdriver.Key.RETURN+webdriver.Key.ESCAPE);
+    driver.sleep(1000);
+    driver.findElement(By.id("owner")).click();
+    driver.sleep(1000);
     driver.findElement(By.id("owner")).sendKeys("Software owner - 3001");
     driver.findElement(By.id("levelOfCare")).sendKeys("LOW");
     driver.findElement(By.id("status")).sendKeys("DEVEL");
@@ -74,18 +88,17 @@ test.describe("SWDB record tests", function() {
     driver.wait(until.elementTextContains(driver.findElement(By.id("formStatus")),
     "Document posted"),5000);
   });
-
   // find a record
   test.it("should find and update a record", function() {
     this.timeout(8000);
     driver.get(props.webUrl+"#/list");
     driver.wait(until.elementLocated(By.id("swdbList_filter")), 8000)
     .findElement(By.tagName("Input"))
-    .sendKeys("3001");
-    driver.wait(until.elementLocated(By.linkText("Software Name - 3001")),
+    .sendKeys("BEA");
+    driver.wait(until.elementLocated(By.linkText("BEAST")),
     8000);
 
-    driver.findElement(By.linkText("Software Name - 3001")).click();
+    driver.findElement(By.linkText("BEAST")).click();
     driver.wait(until.titleIs("SWDB - Details"), 5000);
 
     driver.findElement(By.linkText("Update this document")).click();
@@ -97,58 +110,6 @@ test.describe("SWDB record tests", function() {
     "Document updates successfully posted"),5000);
   });
 
-  // // delete a record
-  // test.it("should delete a record", function() {
-  //   this.timeout(5000);
-  //   driver.get("http://localhost:"+props.webPort+"/#/del/3001");
-  //   driver.wait(until.titleIs("SWDB - Delete"), 5000);
-  //   driver.findElement(By.id("submitBtn")).click();
-
-  //   // wait for success message
-  //   driver.wait(until.elementTextContains(
-  //     driver.findElement(By.id("formStatus")),
-  //      "Document successfully deleted"),5000);
-  // });
-
-  // test field limits
-  test.it("SW Name required", function() {
-    this.timeout(8000);
-    driver.get(props.webUrl+"#/new");
-    driver.wait(until.elementLocated(By.id("swName")), 3000);
-    var input = driver.findElement(By.id("swName"));
-    input.sendKeys("0123456789012345678901234567891");
-    input.clear();
-    var inputSts = driver.findElement(By.id("swNameInputSts"));
-    text = inputSts.getText();
-    driver.wait(until.elementTextIs(inputSts, "Name is required"),5000);
-    input.clear();
-  });
-  test.it("SW Name min for field ", function() {
-    this.timeout(8000);
-    driver.get(props.webUrl+"#/new");
-    driver.wait(until.elementLocated(By.id("swName")), 3000);
-    var input = driver.findElement(By.id("swName"));
-    input.sendKeys("1");
-    var inputSts = driver.findElement(By.id("swNameInputSts"));
-    driver.wait(until.elementTextIs(inputSts, "Name must exceed 2 characters"),5000);
-    input.clear();
-    input.sendKeys("11");
-    driver.wait(until.elementTextIs(inputSts, ""),5000);
-    input.clear();
-  });
-  test.it("SW Name max for field ", function() {
-    this.timeout(8000);
-    driver.get(props.webUrl+"#/new");
-    driver.wait(until.elementLocated(By.id("swName")), 3000);
-    var input = driver.findElement(By.id("swName"));
-    input.sendKeys("0123456789012345678901234567891");
-    var inputSts = driver.findElement(By.id("swNameInputSts"));
-    driver.wait(until.elementTextIs(inputSts, "Name must not exceed 30 characters"),5000);
-    input.clear();
-    input.sendKeys("012345678901234567890123456789");
-    driver.wait(until.elementTextIs(inputSts, ""),5000);
-    input.clear();
-  });
   test.it("SW owner required", function() {
     this.timeout(8000);
     driver.get(props.webUrl+"#/new");
@@ -378,6 +339,7 @@ test.describe("SWDB record tests", function() {
   test.it("should show no user", function() {
     this.timeout(8000);
     driver.get(props.webUrl+"#/list");
+    driver.wait(until.elementLocated(By.id("usrBtn")), 3000);
     driver.wait(until.elementTextContains(driver.findElement(By.id("usrBtn")),
     "click to login"),5000);
   });

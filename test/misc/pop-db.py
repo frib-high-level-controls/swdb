@@ -3,6 +3,7 @@
 import requests
 import json
 import re
+import pprint
 import datafile
 
 urlHost = "http://swdb-dev:3005"
@@ -14,14 +15,14 @@ headers = {'content-type': 'application/json'}
 session = requests.Session()
 r = session.get(urlHost+"/testlogin?username=testuser&password=testuserpasswd")
 
-for i in (datafile.data):
+for i in (datafile.testdata):
   payload={}
-  print "adding "+i["Name"]
+  #print "adding "+i["Name"]
 # swName
   payload['swName'] = i["Name"]
 # owner
   if "Engineer in charge" not in i.keys() or i["Engineer in charge"] == "" :
-    print "Owner is missing, setting to 'test owner'"
+    #print "Owner is missing, setting to 'test owner'"
     payload['owner'] = "test owner"
   else:
     payload['owner'] = i["Engineer in charge"]
@@ -31,7 +32,7 @@ for i in (datafile.data):
         or i["Level Of Care"].upper() == "HIGH")):
       payload['levelOfCare'] = i["Level Of Care"].upper()
   else:
-    print 'Found invalid level of care in record, setting to "LOW".'
+    #print 'Found invalid level of care in record, setting to "LOW".'
     payload['levelOfCare'] = "LOW"
 # status
   if ("Status" in i.keys() and ( i["Status"].upper() == "DEVEL"
@@ -41,7 +42,7 @@ for i in (datafile.data):
         or i["Status"].upper() == "RETIRED")):
       payload['status'] = i["Status"].upper()
   else:
-    print 'Found invalid status in record, setting to "DEVEL".'
+    #print 'Found invalid status in record, setting to "DEVEL".'
     payload['status'] = "DEVEL"
   payload['statusDate'] =  "1970/07/07"
 #releasedVersion
@@ -74,8 +75,9 @@ for i in (datafile.data):
     payload['comment'] = [re.sub('[^\s!-~]', '', i["Comments"])]
 
 
-  print "sending: "+str(payload.items())
-  print "to: "+url
   response = session.post(url, json=payload, headers=headers)
-  print "Response: "+str(response)+"\n"
-
+  if response.status_code != 201:
+    print "sending: "+str(payload.items())
+    print "to: "+url
+    print "Response: "+str(response)+"\n"+response.text+"\n"
+    #pprint.pprint(response)

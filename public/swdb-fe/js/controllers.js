@@ -1,4 +1,4 @@
-var appController = angular.module('appController', ['datatables','ngAnimate','ngSanitize','ui.bootstrap','ngCookies']);
+var appController = angular.module('appController', ['datatables','ngAnimate','ngSanitize','ui.bootstrap','ngCookies','ui.select']);
 
 appController.run(['$rootScope','$route','$http','$routeParams','$location','configService', function($rootScope,$route,$http,$routeParams,$location, configService) {
 
@@ -162,8 +162,13 @@ appController.controller('NewController', ['$scope', '$http', '$window', 'config
 	}());
 
 
+
 	$scope.processForm = function(){
 		delete $scope.formData.__v;
+    // handle swName
+    console.log("Got: "+$scope.selectedItem.name);
+    $scope.formData.swName = $scope.selectedItem.name;
+
 		if ($scope.inputForm.$valid){
 			$http({
 				method: 'POST',
@@ -228,17 +233,16 @@ appController.controller('NewController', ['$scope', '$http', '$window', 'config
 	};
 
 	getEnums = function() {
-		//$scope.levelOfCareEnums = ["NONE","LOW","MEDIUM","HIGH"];
 		$scope.levelOfCareEnums = $scope.props.levelOfCareEnums;
 		$scope.formData.levelOfCare = "NONE";
 
-		//$scope.statusEnums = ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"];
 		$scope.statusEnums = $scope.props.statusEnums;
 		$scope.formData.status = "DEVEL";
 	};
 
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
+  $scope.itemArray = $scope.props.swNames;
 
   // check our user session and redirect if needed
   if (!$scope.session.username) {
