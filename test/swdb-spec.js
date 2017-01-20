@@ -72,7 +72,7 @@ describe("app", function() {
     .post("/swdbserv/v1/")
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
-    .send({swName: "test1000", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
+    .send({swName: "Test Record", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
     .expect(201)
     .end(done);
   });
@@ -81,7 +81,7 @@ describe("app", function() {
     //be.swDoc.db.collections.swdbs.drop();
     supertest
     .post("/swdbserv/v1/")
-    .send({swName: "test1000", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
+    .send({swName: "Test Record", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(500)
@@ -90,10 +90,10 @@ describe("app", function() {
     done();
   });
 
-  it("Post a new record test1002", function(done) {
+  it("Post a new record Test Record2", function(done) {
     supertest
     .post("/swdbserv/v1/")
-    .send({swName: "test1002", owner: "Owner 1002", levelOfCare: "LOW",
+    .send({swName: "Test Record2", owner: "Owner 1002", levelOfCare: "LOW",
     status: "DEVEL", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -101,9 +101,9 @@ describe("app", function() {
     .end(done);
   });
 
-  describe('get id for test1000', function() {
+  describe('get id for Test Record', function() {
     var wrapper = {origId:null};
-    before("Get ID record id:1000", function(done) {
+    before("Get ID record id:Test Record", function(done) {
       //var origId = tools.getIdFromSwName("test1000");
       supertest
       .get("/swdbserv/v1")
@@ -111,19 +111,19 @@ describe("app", function() {
       .end(function(err,res){
         res=JSON.parse(res.text);
         for (var i=0, iLen=res.length; i<iLen; i++){
-          if (res[i].swName=="test1000") wrapper.origId=res[i]._id;
+          if (res[i].swName=="Test Record") wrapper.origId=res[i]._id;
         }
         done();
       });
     });
 
-    it("Returns test record id:1000", function(done) {
+    it("Returns test record id:Test Record", function(done) {
       supertest
       .get("/swdbserv/v1/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
         expect(res.body).to.have.property("_id");
-        expect(res.body.swName).to.equal("test1000");
+        expect(res.body.swName).to.equal("Test Record");
         expect(res.body._id).to.match(/.{24}/);
         expect(res.body.__v).to.match(/\d+/);
         done();
@@ -145,9 +145,9 @@ describe("app", function() {
   });
 
 
-  describe('get id for test1002', function() {
+  describe('get id for Test Record2', function() {
     var wrapper = {origId:null};
-    before("Get ID record id:1002", function(done) {
+    before("Get ID record id:Test Record2", function(done) {
       supertest
       .get("/swdbserv/v1")
       .expect(200)
@@ -155,7 +155,7 @@ describe("app", function() {
       .end(function(err,res){
         res=JSON.parse(res.text);
         for (var i=0, iLen=res.length; i<iLen; i++){
-          if (res[i].swName=="test1002"){
+          if (res[i].swName=="Test Record2"){
             wrapper.origId=res[i]._id;
           }
         }
@@ -163,22 +163,22 @@ describe("app", function() {
       });
     });
 
-    it("Can update a record via PUT swName id:1002", function(done) {
+    it("Can update a record via PUT swName id:Test Record3", function(done) {
       supertest
       .put("/swdbserv/v1/"+wrapper.origId)
-      .send({swName: "Test name 1002"})
+      .send({swName: "Test Record3"})
     .set('Cookie', [Cookies])
       .expect(200)
       .end(done);
     });
-    it("Returns test record 1d:1002", function(done) {
+    it("Returns test record 1d:Test Record3", function(done) {
       supertest
       .get("/swdbserv/v1/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
         expect(res.body).to.have.property("_id");
         //expect(res.body._id).to.equal(wrapper.origId);
-        expect(res.body.swName).to.equal("Test name 1002");
+        expect(res.body.swName).to.equal("Test Record3");
         done();
       });
     });
@@ -189,10 +189,10 @@ describe("app", function() {
     //  res:{msg:,url:,type:,err{status:}}
     //  }
     var testUpdateParams = [
-      {"type": "PUT", "req": {"msg": {"swName": "New test name 1002"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET", "res": {"msg": {"swName": "New test name 1002"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "PUT", "req": {"msg": {"swName": "Test Record4"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
+      {"type": "GET", "res": {"msg": {"swName": "Test Record4"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"owner": "New test owner 1002"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"owner": "New test owner 1002"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"owner": "New test owner 1002"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"levelOfCare": "MEDIUM"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"levelOfCare": "MEDIUM"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"levelOfCare": "ERRONEOUS_VALUE"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
@@ -467,6 +467,7 @@ describe("app", function() {
           .get(value.res.url+wrapper.origId)
           .expect(value.res.err.status)
           .end(function(err, res) {
+            //console.log("GET of"+value.res.url+wrapper.origId);
             for (var prop in value.res.msg) {
               //console.log("res.body."+prop+":"+res.body[prop]+"  "+
               //  "value.res.msg."+prop+":"+value.res.msg[prop]);
@@ -500,11 +501,20 @@ describe("app", function() {
       });
     });
 
+    it("Errors on update a nonexistent record via POST swName id:badbeef", function(done) {
+      supertest
+      .post("/swdbserv/v1/badbeef")
+      .set('Cookie', [Cookies])
+      .send({swName: "Test Record4"})
+      .expect(404)
+      .expect('Cannot POST /swdbserv/v1/badbeef\n')
+      .end(done);
+    });
     it("Errors on update a nonexistent record via PUT swName id:badbeef", function(done) {
       supertest
       .put("/swdbserv/v1/badbeef")
       .set('Cookie', [Cookies])
-      .send({swName: "Test name 1000"})
+      .send({swName: "Test Record4"})
       .expect(500)
       .expect('Record not found')
       .end(done);
@@ -513,7 +523,7 @@ describe("app", function() {
       supertest
       .patch("/swdbserv/v1/badbeef")
       .set('Cookie', [Cookies])
-      .send({swName: "Test name 1000"})
+      .send({swName: "Test Record4"})
       .expect(500)
       .expect('Record not found')
       .end(done);

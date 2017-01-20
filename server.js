@@ -17,7 +17,7 @@ var casAuth = require('./lib/auth');
 const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 const swTable = JSON.parse(fs.readFileSync('./config/swData.json', 'utf8'));
 
-// mae table of sw names
+// make table of sw names
 var swNames = [];
 for (var i in swTable)
 {
@@ -227,9 +227,11 @@ app.put('/swdbserv/v1*', casAuth.ensureAuthenticated, function(req, res, next) {
 
   if (errors) {
     //console.log("got errors:"+JSON.stringify(errors));
+    //console.log("got PUTe: "+JSON.stringify(errors));
     res.status(400).send('Validation errors: ' + JSON.stringify(errors));
     return;
   } else {
+    //console.log("got PUT: "+JSON.stringify(req.body));
     be.updateDoc(req, res, next);
   }
 
