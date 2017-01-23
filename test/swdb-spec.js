@@ -22,13 +22,12 @@ var testLogin = function(request, done) {
 // clear the test collection before and after tests suite
 before(function(done) {
   // clear the test collection
-  be.swDoc.db.collections.swdbs.drop();
-  //app.listen(3000);
+  be.swDoc.db.collections.swdbCollection.drop();
   done();
 });
 after(function(done) {
   // clear the test collection
-  be.swDoc.db.collections.swdbs.drop();
+  be.swDoc.db.collections.swdbCollection.drop();
   done();
 });
 
@@ -75,6 +74,20 @@ describe("app", function() {
     .send({swName: "Test Record", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
     .expect(201)
     .end(done);
+  });
+
+  it("Errors posting a bad swName", function(done) {
+    //be.swDoc.db.collections.swdbs.drop();
+    supertest
+    .post("/swdbserv/v1/")
+    .send({swName: "Bogus Test Record", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
+    .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
+    .expect(400)
+    .end(function(err, res){
+      expect(res.text).to.match(/Software Name must be in the sw name list/);
+      done();
+    });
   });
 
   it("Errors posting a duplicate new record", function(done) {

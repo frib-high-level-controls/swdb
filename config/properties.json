@@ -5,7 +5,7 @@
   "restPort":"4005",
   "webUrl":"http://swdb-dev:4005/",
   "webPort":"4005",
-  "mongodbUrl":"mongodb://localhost:27017/test",
+  "mongodbUrl":"mongodb://localhost:27017/maxTest",
   "auth":{
     "cas": "https://cas.nscl.msu.edu",
     "service": "swdb-dev:4005",

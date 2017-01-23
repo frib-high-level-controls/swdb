@@ -17,15 +17,18 @@ var casAuth = require('./lib/auth');
 const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 const swTable = JSON.parse(fs.readFileSync('./config/swData.json', 'utf8'));
 
-// make table of sw names
-var swNames = [];
-for (var i in swTable)
-{
-  swNames.push({id: i, "name": swTable[i].Name});
-  //console.log(swTable[i]["Name"]);
-}
-props.swNames = swNames;
-//console.log(JSON.stringify(swTable));
+// get the valid swNames from the db and populate the properties area
+be.swNamesDoc.find({}, function(err, docs) {
+  var swNames = [];
+  if(!err){
+    for (var i in docs)
+    {
+      swNames.push({id: i, "name": docs[i].swName});
+      //console.log(swTable[i]["Name"]);
+    }
+  }
+  props.swNames = swNames;
+});
 
 //allow access to staic files
 app.use(express.static(__dirname + '/public'));
