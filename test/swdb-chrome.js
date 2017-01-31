@@ -12,13 +12,13 @@ var fs = require('fs');
 var path = require('path');
 const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 const swTable = JSON.parse(fs.readFileSync('./config/swData.json', 'utf8'));
+const testSwNames = JSON.parse(fs.readFileSync('./test/misc/testSwNames.json', 'utf8'));
 
 // mae table of sw names
 var swNames = [];
 for (var i in swTable)
 {
   swNames.push({id: i, "name": swTable[i].Name});
-  //console.log(swTable[i]["Name"]);
 }
 props.swNames = swNames;
 
@@ -28,31 +28,14 @@ before(function(done) {
   // clear the test collection
   this.timeout(5000);
   console.log("Dropping collections...");
-    //console.log("Dropping swdbCollection...");
   be.swDoc.db.collections.swdbCollection.drop(function(err){
-    //console.log("Dropping swNamesProp...");
     be.swDoc.db.collections.swNamesProp.drop(function(err){
-      if(!err) {
-      } else {
-        //console.log("swNames err:"+JSON.stringify(err));
-      }
-      be.swNamesDoc.db.collections.swNamesProp.insert(
-          [{"id":0,"swName":"Test Record"},
-          {"id":1,"swName":"Test Record2"},
-          {"id":2,"swName":"Test Record3"},
-          {"id":3,"swName":"Test Record4"},
-          {"id":4,"swName":"BEAST"}],
+      console.log("inserting testSwNames in swNamesProp collection:"+JSON.stringify(testSwNames,null,2));
+      be.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
           function(err, records){
-        //console.log("Record added "+JSON.stringify(records));
-        //console.log("Record added err"+JSON.stringify(err));
-        //console.log("Dropped collections.");
         done();
       });
     });
-    if(!err) {
-    } else {
-      //console.log("swdbCollections err:"+JSON.stringify(err));
-    }
   });
 });
 

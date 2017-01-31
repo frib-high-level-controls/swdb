@@ -21,6 +21,6 @@ client = MongoClient(prop_data["mongodbUrl"])
 db = client[prop_data["mongodbUrl"].split("/")[-1]]
 #coll = client['swNamesProp']
 
-result = db.swNamesProp.insert_many(data)
+result = db.swNamesProp.drop()
 
 

@@ -13,37 +13,47 @@ var fs = require('fs');
 var path = require('path');
 const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 const swTable = JSON.parse(fs.readFileSync('./config/swData.json', 'utf8'));
+const testSwNames = JSON.parse(fs.readFileSync('./test/misc/testSwNames.json', 'utf8'));
 
 // mae table of sw names
 var swNames = [];
 for (var i in swTable)
 {
   swNames.push({id: i, "name": swTable[i].Name});
-  //console.log(swTable[i]["Name"]);
 }
 props.swNames = swNames;
 
 // clear the test collection before and after tests suite
 before(function(done) {
   // clear the test collection
-  console.log("Dropping swdb collection...");
-  be.swDoc.db.collections.swdbs.drop();
   this.timeout(5000);
-  done();
+  console.log("Dropping collections...");
+  be.swDoc.db.collections.swdbCollection.drop(function(err){
+    be.swDoc.db.collections.swNamesProp.drop(function(err){
+      console.log("inserting testSwNames in swNamesProp collection:"+JSON.stringify(testSwNames,null,2));
+      be.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
+          function(err, records){
+        done();
+      });
+    });
+  });
 });
+
 after(function(done) {
   // clear the test collection
-  be.swDoc.db.collections.swdbs.drop();
-  done();
+  be.swDoc.db.collections.swdbCollection.drop(function(err){
+    be.swDoc.db.collections.swNamesProp.drop(function(err){
+    done();
+    });
+  });
 });
+
 test.describe("Firefox SWDB record tests", function() {
   var driver;
 
 
   test.before(function() {
     this.timeout(5000);
-    console.log("Clearing swdb collection...");
-    be.swDoc.db.collections.swdbs.drop();
     var firefoxOptions = new firefox.Options();
     firefoxOptions.setBinary('/usr/local/firefox/firefox');
     driver = new webdriver.Builder()

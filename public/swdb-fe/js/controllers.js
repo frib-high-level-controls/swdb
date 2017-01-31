@@ -36,7 +36,6 @@ function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
     if ($scope.session.username) {
       // logout if alredy logged in
       $http.get($scope.props.webUrl+'logout').success(function(data) {
-        console.log("in redirect...");
         $window.location.href = $scope.props.auth.cas+'/logout';
       });
     } else {
@@ -90,7 +89,6 @@ appController.controller('DetailsController', ['$scope', '$http','$routeParams',
     if ($scope.session.username) {
       // logout if alredy logged in
       $http.get($scope.props.webUrl+'logout').success(function(data) {
-        console.log("in redirect...");
         $window.location.href = $scope.props.auth.cas+'/logout';
       });
     } else {
@@ -127,7 +125,6 @@ appController.controller('NewController', ['$scope', '$http', '$window', 'config
     if ($scope.session.username) {
       // logout if alredy logged in
       $http.get($scope.props.webUrl+'logout').success(function(data) {
-        console.log("in redirect...");
         $window.location.href = $scope.props.auth.cas+'/logout';
       });
     } else {
@@ -166,7 +163,6 @@ appController.controller('NewController', ['$scope', '$http', '$window', 'config
 	$scope.processForm = function(){
 		delete $scope.formData.__v;
     // handle swName
-    console.log("Got: "+$scope.selectedItem.name);
     $scope.formData.swName = $scope.selectedItem.name;
 
 		if ($scope.inputForm.$valid){
@@ -242,7 +238,7 @@ appController.controller('NewController', ['$scope', '$http', '$window', 'config
 
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
-  $scope.itemArray = $scope.props.swNames;
+  $scope.itemArray = $scope.props.validSwNamesGUIList;
 
   // check our user session and redirect if needed
   if (!$scope.session.username) {
@@ -285,7 +281,6 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
     if ($scope.session.username) {
       // logout if alredy logged in
       $http.get($scope.props.webUrl+'logout').success(function(data) {
-        console.log("in redirect...");
         $window.location.href = $scope.props.auth.cas+'/logout';
       });
     } else {

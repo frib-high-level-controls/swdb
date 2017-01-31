@@ -50,22 +50,6 @@
         </div>
       </div>
     </div>
-      <!-- NAME 
-      <div class="row" ng-class="{ 'has-error' : inputForm.swNameInput.$invalid && !inputForm.swNameInput.$pristine }">
-        <div id="swName-group" class="form-group">
-          <label class="col-sm-2 control-label">Software Name*</label>
-          <div class="col-sm-8">
-            <input id="swName" type="text" name="swNameInput" class="form-control" placeholder="SW Name" ng-model="formData.swName" ng-minlength="2" ng-maxlength="30" required>
-          </input>
-        </div>
-        <div class="col-sm-2" id="swNameInputSts" ng-messages="inputForm.swNameInput.$error" ng-if="inputForm.swNameInput.$dirty">
-          <div ng-message="required">Name is required</div>
-          <div ng-message="minlength">Name must exceed 2 characters</div>
-          <div ng-message="maxlength">Name must not exceed 30 characters</div>
-        </div>
-      </div>
-    </div>
-    -->
     <!-- OWNER -->
     <div class="row" ng-class="{ 'has-error' : inputForm.ownerInput.$invalid && !inputForm.ownerInput.$pristine }">
       <div id="owner-group" class="form-group">
@@ -122,7 +106,6 @@
         </span>
       </p>
 
-      <!-- <input id="statusDate" type="text" name="statusDateInput" class="form-control" placeholder="YYYY/MM/DD" ng-model="formData.statusDate" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/" required> -->
     <!-- </input> -->
   </div>
   <div class="col-sm-2" id="statusDateInputSts" ng-messages="inputForm.statusDateInput.$error" ng-if="inputForm.statusDateInput.$dirty">

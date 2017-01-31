@@ -5,7 +5,10 @@ var tools = require("../lib/swdblib");
 var be = require("../lib/db");
 var expect2 = require("expect");
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+var fs = require('fs');
+var path = require('path');
 const exec = require('child_process').exec;
+const testSwNames = JSON.parse(fs.readFileSync('./test/misc/testSwNames.json', 'utf8'));
 
 var testLogin = function(request, done) {
   console.log('Login start');
@@ -25,30 +28,14 @@ before(function(done) {
   // clear the test collection
   this.timeout(5000);
   console.log("Dropping collections...");
-    //console.log("Dropping swdbCollection...");
   be.swDoc.db.collections.swdbCollection.drop(function(err){
-    //console.log("Dropping swNamesProp...");
     be.swDoc.db.collections.swNamesProp.drop(function(err){
-      if(!err) {
-      } else {
-        //console.log("swNames err:"+JSON.stringify(err));
-      }
-      be.swNamesDoc.db.collections.swNamesProp.insert(
-          [{"id":0,"swName":"Test Record"},
-          {"id":1,"swName":"Test Record2"},
-          {"id":2,"swName":"Test Record3"},
-          {"id":3,"swName":"Test Record4"}],
+      console.log("inserting testSwNames in swNamesProp collection:"+JSON.stringify(testSwNames,null,2));
+      be.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
           function(err, records){
-        //console.log("Record added "+JSON.stringify(records));
-        //console.log("Record added err"+JSON.stringify(err));
-        //console.log("Dropped collections.");
         done();
       });
     });
-    if(!err) {
-    } else {
-      //console.log("swdbCollections err:"+JSON.stringify(err));
-    }
   });
 });
 
@@ -81,7 +68,6 @@ describe("app", function() {
     .get("/")
     .expect(200)
     .end(function(err, res){
-      //console.log(res.res.text);
       expect(res.res.text).to.match(/SWDB \(Prototype Interface\)/);
       done(err);
     });
@@ -114,7 +100,6 @@ describe("app", function() {
     .set('Cookie', [Cookies])
     .expect(400)
     .end(function(err, res){
-      console.log("res.body:"+JSON.stringify(res));
       expect(res.text).to.match(/Software Name must be in the sw name list/);
       done();
     });
@@ -130,7 +115,7 @@ describe("app", function() {
     .expect(500)
     .expect('There was a duplicate key error')
     .end(function(err,res) {
-      expect(res.text).to.match(/E11000 duplicate key error/);
+      //expect(res.text).to.match(/E11000 duplicate key error/);
       done();
     });
   });
@@ -474,7 +459,6 @@ describe("app", function() {
       if (value.type === "PUT") {
         it(value.req.err.status+" "+value.type+" msg: "+
         JSON.stringify(JSON.stringify(value.req.msg)), function(done) {
-          //console.log("PUT to"+value.req.url+wrapper.origId);
           supertest
           .put(value.req.url+wrapper.origId)
           .send(value.req.msg)
@@ -511,10 +495,7 @@ describe("app", function() {
           .get(value.res.url+wrapper.origId)
           .expect(value.res.err.status)
           .end(function(err, res) {
-            //console.log("GET of"+value.res.url+wrapper.origId);
             for (var prop in value.res.msg) {
-              //console.log("res.body."+prop+":"+res.body[prop]+"  "+
-              //  "value.res.msg."+prop+":"+value.res.msg[prop]);
               expect(res.body).to.have.property(prop);
               // This is to allow sloppy matching on whole objects.
               // See the npm "expect" module for more
