@@ -5,6 +5,7 @@ var tools = require("../lib/swdblib");
 var be = require("../lib/db");
 var expect2 = require("expect");
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+const exec = require('child_process').exec;
 
 var testLogin = function(request, done) {
   console.log('Login start');
@@ -22,12 +23,40 @@ var testLogin = function(request, done) {
 // clear the test collection before and after tests suite
 before(function(done) {
   // clear the test collection
-  be.swDoc.db.collections.swdbCollection.drop();
-  done();
+  this.timeout(5000);
+  console.log("Dropping collections...");
+    //console.log("Dropping swdbCollection...");
+  be.swDoc.db.collections.swdbCollection.drop(function(err){
+    //console.log("Dropping swNamesProp...");
+    be.swDoc.db.collections.swNamesProp.drop(function(err){
+      if(!err) {
+      } else {
+        //console.log("swNames err:"+JSON.stringify(err));
+      }
+      be.swNamesDoc.db.collections.swNamesProp.insert(
+          [{"id":0,"swName":"Test Record"},
+          {"id":1,"swName":"Test Record2"},
+          {"id":2,"swName":"Test Record3"},
+          {"id":3,"swName":"Test Record4"}],
+          function(err, records){
+        //console.log("Record added "+JSON.stringify(records));
+        //console.log("Record added err"+JSON.stringify(err));
+        //console.log("Dropped collections.");
+        done();
+      });
+    });
+    if(!err) {
+    } else {
+      //console.log("swdbCollections err:"+JSON.stringify(err));
+    }
+  });
 });
+
 after(function(done) {
   // clear the test collection
+  console.log("Dropping collections...");
   be.swDoc.db.collections.swdbCollection.drop();
+  be.swDoc.db.collections.swNamesProp.drop();
   done();
 });
 
@@ -85,6 +114,7 @@ describe("app", function() {
     .set('Cookie', [Cookies])
     .expect(400)
     .end(function(err, res){
+      console.log("res.body:"+JSON.stringify(res));
       expect(res.text).to.match(/Software Name must be in the sw name list/);
       done();
     });
@@ -94,20 +124,21 @@ describe("app", function() {
     //be.swDoc.db.collections.swdbs.drop();
     supertest
     .post("/swdbserv/v1/")
-    .send({swName: "Test Record", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
+    .send({swName: "Test Record", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "1/1/1970"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(500)
     .expect('There was a duplicate key error')
-    .end();
-    done();
+    .end(function(err,res) {
+      expect(res.text).to.match(/E11000 duplicate key error/);
+      done();
+    });
   });
 
   it("Post a new record Test Record2", function(done) {
     supertest
     .post("/swdbserv/v1/")
-    .send({swName: "Test Record2", owner: "Owner 1002", levelOfCare: "LOW",
-    status: "DEVEL", statusDate: "date 1002"})
+    .send({swName: "Test Record2", owner: "Owner 1002", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -543,3 +574,5 @@ describe("app", function() {
     });
   });
 });
+
+

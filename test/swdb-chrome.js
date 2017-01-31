@@ -24,16 +24,47 @@ props.swNames = swNames;
 
 // clear the test collection before and after tests suite
 before(function(done) {
+
   // clear the test collection
-  be.swDoc.db.collections.swdbs.drop();
   this.timeout(5000);
-  done();
+  console.log("Dropping collections...");
+    //console.log("Dropping swdbCollection...");
+  be.swDoc.db.collections.swdbCollection.drop(function(err){
+    //console.log("Dropping swNamesProp...");
+    be.swDoc.db.collections.swNamesProp.drop(function(err){
+      if(!err) {
+      } else {
+        //console.log("swNames err:"+JSON.stringify(err));
+      }
+      be.swNamesDoc.db.collections.swNamesProp.insert(
+          [{"id":0,"swName":"Test Record"},
+          {"id":1,"swName":"Test Record2"},
+          {"id":2,"swName":"Test Record3"},
+          {"id":3,"swName":"Test Record4"},
+          {"id":4,"swName":"BEAST"}],
+          function(err, records){
+        //console.log("Record added "+JSON.stringify(records));
+        //console.log("Record added err"+JSON.stringify(err));
+        //console.log("Dropped collections.");
+        done();
+      });
+    });
+    if(!err) {
+    } else {
+      //console.log("swdbCollections err:"+JSON.stringify(err));
+    }
+  });
 });
+
 after(function(done) {
   // clear the test collection
-  be.swDoc.db.collections.swdbs.drop();
-  done();
+  be.swDoc.db.collections.swdbCollection.drop(function(err){
+    be.swDoc.db.collections.swNamesProp.drop(function(err){
+    done();
+    });
+  });
 });
+
 test.describe("SWDB record tests", function() {
   var driver;
 

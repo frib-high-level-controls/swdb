@@ -14,20 +14,24 @@ var be = require('./lib/db');
 var expressValidator = require('express-validator');
 var expressSession = require('express-session');
 var casAuth = require('./lib/auth');
-const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
-const swTable = JSON.parse(fs.readFileSync('./config/swData.json', 'utf8'));
+const circJSON = require('circular-json');
+var props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
+//const swTable = JSON.parse(fs.readFileSync('./config/swData.json', 'utf8'));
 
 // get the valid swNames from the db and populate the properties area
 be.swNamesDoc.find({}, function(err, docs) {
   var swNames = [];
+  var validSwNames = [];
   if(!err){
     for (var i in docs)
     {
       swNames.push({id: i, "name": docs[i].swName});
-      //console.log(swTable[i]["Name"]);
+      validSwNames.push(docs[i].swName);
     }
   }
   props.swNames = swNames;
+  props.validSwNames = validSwNames;
+  console.log("props.validSwNames:"+JSON.stringify(props.validSwNames));
 });
 
 //allow access to staic files
@@ -206,55 +210,150 @@ app.get('/swdbserv/v1*', function(req, res, next) {
 app.post('/swdbserv/v1', casAuth.ensureAuthenticated, function(req, res, next) {
 
   // Do validation for  new records
-  tools.newValidation(req);
+  //props.swNames = swNames;
+  //console.log("Got records test");
+  be.swNamesDoc.find(function(err,docs){
+    if (!err) {
+      //console.log("Got records:"+JSON.stringify(docs));
+      var validSwNames=[];
+      for (var i in docs)
+      {
+        validSwNames.push(docs[i].swName);
+      }
+      props.validSwNames = validSwNames;
+      //console.log("props.validSwNames:"+JSON.stringify(props.validSwNames));
+    } else {
+      //console.log("Got err:"+JSON.stringify(err));
+    }
 
-  var errors = req.validationErrors();
+    //console.log("swNames array: "+JSON.stringify(props.validSwNames, null, 2));
+    //console.log("req.swName: "+JSON.stringify(req.body.swName));
+    tools.newValidation(props.validSwNames,req);
+    //var errors = req.validationErrors();
+    //`console.log("val errors: "+JSON.stringify(errors, null, 2));
 
-  if (errors) {
-    //console.log("got errors:"+JSON.stringify(errors));
-    res.status(400).send('Validation errors: ' + JSON.stringify(errors));
-    return;
-  } else {
-    be.createDoc(req, res, next);
-  }
+    //console.log("req errors: "+JSON.stringify(req._validationErrors, null, 2));
+
+    var errors = req.validationErrors();
+    if (errors) {
+      //console.log("got errors:"+JSON.stringify(errors));
+      res.status(400).send('Validation errors: ' + JSON.stringify(errors));
+      return;
+    } else {
+      //console.log("adding record: "+JSON.stringify(req.body, null, 2));
+      be.createDoc(req, res, next);
+    }
+  });
+//
+//    req.getValidationResult().then(function(result) {
+//      if (!result.isEmpty()) {
+//        res.status(400).send('Validation errors: ' + JSON.stringify(errors));
+//        return;
+//      }
+//      be.createDoc(req, res, next);
+//    });
+  //tools.newValidation(req);
+
+//  console.log("req errors: "+JSON.stringify(req._validationErrors, null, 2));
+//  var errors = req.validationErrors();
+//
+//  if (errors) {
+//    //console.log("got errors:"+JSON.stringify(errors));
+//    res.status(400).send('Validation errors: ' + JSON.stringify(errors));
+//    return;
+//  } else {
+//    be.createDoc(req, res, next);
+//  }
 });
 
 // handle incoming put requests for update
 app.put('/swdbserv/v1*', casAuth.ensureAuthenticated, function(req, res, next) {
 
   // Do validation for updates
-  tools.updateValidation(req);
-  tools.updateSanitization(req);
+  be.swNamesDoc.find(function(err,docs){
+    if (!err) {
+      //console.log("Got records:"+JSON.stringify(docs));
+      var validSwNames=[];
+      for (var i in docs)
+      {
+        validSwNames.push(docs[i].swName);
+      }
+      props.validSwNames = validSwNames;
+      //console.log("props.validSwNames:"+JSON.stringify(props.validSwNames));
+    } else {
+      console.log("Got err:"+JSON.stringify(err));
+    }
 
-  var errors = req.validationErrors();
+    //console.log("swNames array: "+JSON.stringify(props.validSwNames, null, 2));
+    //console.log("req.swName: "+JSON.stringify(req.body.swName));
+    tools.updateValidation(props.validSwNames,req);
+    tools.updateSanitization(req);
 
-  if (errors) {
-    //console.log("got errors:"+JSON.stringify(errors));
-    //console.log("got PUTe: "+JSON.stringify(errors));
-    res.status(400).send('Validation errors: ' + JSON.stringify(errors));
-    return;
-  } else {
-    //console.log("got PUT: "+JSON.stringify(req.body));
-    be.updateDoc(req, res, next);
-  }
+    var errors = req.validationErrors();
 
+    if (errors) {
+      //console.log("got errors:"+JSON.stringify(errors));
+      //console.log("got PUTe: "+JSON.stringify(errors));
+      res.status(400).send('Validation errors: ' + JSON.stringify(errors));
+      return;
+    } else {
+      //console.log("got PUT: "+JSON.stringify(req.body));
+      be.updateDoc(req, res, next);
+    }
+
+  });
 });
 
 // handle incoming patch requests for update
 app.patch('/swdbserv/v1*', casAuth.ensureAuthenticated, function(req,res,next) {
 
   // Do validation for updates
-  tools.updateValidation(req);
-  var errors = req.validationErrors();
+  be.swNamesDoc.find(function(err,docs){
+    if (!err) {
+      //console.log("Got records:"+JSON.stringify(docs));
+      var validSwNames=[];
+      for (var i in docs)
+      {
+        validSwNames.push(docs[i].swName);
+      }
+      props.validSwNames = validSwNames;
+      //console.log("props.validSwNames:"+JSON.stringify(props.validSwNames));
+    } else {
+      console.log("Got err:"+JSON.stringify(err));
+    }
 
-  if (errors) {
-    //console.log("got errors:"+JSON.stringify(errors));
-    res.status(400).send('Validation errors: ' + JSON.stringify(errors));
-    return;
-  } else {
-    be.updateDoc(req, res, next);
-  }
+    //console.log("swNames array: "+JSON.stringify(props.validSwNames, null, 2));
+    //console.log("req.swName: "+JSON.stringify(req.body.swName));
+    tools.updateValidation(props.validSwNames,req);
+    tools.updateSanitization(req);
 
+    var errors = req.validationErrors();
+
+    if (errors) {
+      //console.log("got errors:"+JSON.stringify(errors));
+      //console.log("got PUTe: "+JSON.stringify(errors));
+      res.status(400).send('Validation errors: ' + JSON.stringify(errors));
+      return;
+    } else {
+      //console.log("got PUT: "+JSON.stringify(req.body));
+      be.updateDoc(req, res, next);
+    }
+
+  });
+
+  
+  
+  //  tools.updateValidation(req);
+//  var errors = req.validationErrors();
+//
+//  if (errors) {
+//    //console.log("got errors:"+JSON.stringify(errors));
+//    res.status(400).send('Validation errors: ' + JSON.stringify(errors));
+//    return;
+//  } else {
+//    be.updateDoc(req, res, next);
+//  }
+//
 });
 
 // handle incoming delete requests
