@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <h2>Add/update ({{formData._id}})</h2>
+  <h2>Add/update</h2> 
   <div class="container-fluid">
     <form name="inputForm" class-"form-horizontal" ng-submit="processForm()">
 
@@ -38,7 +38,7 @@
             <ui-select-match id="swName">
             <span ng-bind="$select.selected.name"></span>
             </ui-select-match>
-            <ui-select-choices repeat="item in (itemArray | filter: $select.search) track by item.id"> 
+            <ui-select-choices repeat="item in (itemArray | filter: $select.search) track by item.id">
             <span ng-bind="item.name"></span>
             </ui-select-choices>
             </ui-select>

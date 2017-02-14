@@ -13,13 +13,11 @@ appController.run(['$rootScope','$route','$http','$routeParams','$location','con
 appController.factory('StatusService', function() {
 	return {
 		dbConnected : 'false'
-		// apiConnected : 'false'
 	};
 });
 
-appController.controller('ListController', WithPromiseCtrl);
-
-function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $cookies, $window, configService, userService) {
+appController.controller('ListController', ListPromiseCtrl);
+function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $cookies, $window, configService, userService) {
 
   $scope.$watch(function() {
     return $scope.session;
@@ -73,7 +71,9 @@ function WithPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
 }
 
 
-appController.controller('DetailsController', ['$scope', '$http','$routeParams', '$window', 'configService', 'userService', function ($scope, $http, $routeParams, $window, configService, userService) {
+
+appController.controller('DetailsController', DetailsPromiseCtrl);
+function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService, userService) {
   $scope.$watch(function() {
     return $scope.session;
   }, function() {
@@ -106,9 +106,11 @@ appController.controller('DetailsController', ['$scope', '$http','$routeParams',
 		$scope.formData = data;
 		$scope.whichItem = $routeParams.itemId;
 	});
-}]);
+}
 
-appController.controller('NewController', ['$scope', '$http', '$window', 'configService', 'userService', function ($scope, $http, $window, configService, userService) {
+
+appController.controller('NewController', NewPromiseCtrl);
+function NewPromiseCtrl($scope, $http, $window, configService, userService) {
 
   $scope.$watch(function() {
     return $scope.session;
@@ -262,9 +264,10 @@ appController.controller('NewController', ['$scope', '$http', '$window', 'config
 		formErr: ""
 	};
 	getEnums();
-}]);
+}
 
-appController.controller('UpdateController', ['$scope', '$http', '$routeParams', '$window', 'configService', 'userService', function ($scope, $http, $routeParams, $window, configService, userService) {
+appController.controller('UpdateController', UpdatePromiseCtrl);
+function UpdatePromiseCtrl($scope, $http, $routeParams, $window, configService, userService) {
 
   $scope.$watch(function() {
     return $scope.session;
@@ -343,6 +346,7 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 
 
 	$scope.removeItem = function(event) {
+    // handle removal of list items from the display
 		var parts = event.currentTarget.id.split('.');
 		if (parts[1] === 'auxSw'){
 			$scope.formData.auxSw.splice(parts[2],1);
@@ -358,10 +362,8 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 	};
 
 	getEnums = function() {
-		//$scope.levelOfCareEnums = ["NONE","LOW","MEDIUM","HIGH"];
+    // Set the enumerated values for this scope
 		$scope.levelOfCareEnums = $scope.props.levelOfCareEnums;
-
-		//$scope.statusEnums = ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"];
 		$scope.statusEnums = $scope.props.statusEnums;
 	};
 
@@ -389,6 +391,9 @@ appController.controller('UpdateController', ['$scope', '$http', '$routeParams',
 
 		// make a Date object from this string
 		$scope.formData.statusDate = new Date($scope.formData.statusDate);
+    // set selctor to current swName value
+    $scope.formData.swName = $scope.selectedItem.name;
+    $scope.selectedItem.name = $scope.formData.swName;
 	});
 
-}]);
+}

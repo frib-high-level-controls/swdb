@@ -5,17 +5,31 @@ import json
 import re
 import pprint
 import datafile
+import json
+from pprint import pprint
 
-urlHost = "http://swdb-dev:3005"
-url = urlHost+'/swdbserv/v1'
+with open("./swData.json") as data_file:
+    data = json.load(data_file)
+
+with open("../../config/properties.json") as prop_file:
+    prop_data = json.load(prop_file)
+
+url =  prop_data["apiUrl"]
+urlHost =  prop_data["webUrl"]
 
 payload = {}
 
 headers = {'content-type': 'application/json'}
 session = requests.Session()
-r = session.get(urlHost+"/testlogin?username=testuser&password=testuserpasswd")
+r = session.get(urlHost+"testlogin?username=testuser&password=testuserpasswd")
+pprint(r)
 
-for i in (datafile.testdata):
+print "WARNING; This program will be monkeying with the DB behind"
+print "the url: "+prop_data["webUrl"]
+
+raw_input("Hit ENTER to continue (ctl-c to exit)...")
+
+for i in (data):
   payload={}
   #print "adding "+i["Name"]
 # swName
@@ -28,7 +42,7 @@ for i in (datafile.testdata):
     payload['owner'] = i["Engineer in charge"]
 # levelOfCare
   if ("Level Of Care" in i.keys() and ( i["Level Of Care"].upper() == "LOW"
-        or i["Level Of Care"].upper() == "MEDIUM" 
+        or i["Level Of Care"].upper() == "MEDIUM"
         or i["Level Of Care"].upper() == "HIGH")):
       payload['levelOfCare'] = i["Level Of Care"].upper()
   else:
