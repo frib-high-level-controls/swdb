@@ -256,7 +256,7 @@ app.put('/swdbserv/v1*', casAuth.ensureAuthenticated, function(req, res, next) {
       }
       props.validSwNames = validSwNames;
     } else {
-      console.log("Got err:"+JSON.stringify(err));
+      //console.log("Got err:"+JSON.stringify(err));
     }
 
     tools.updateValidation(props.validSwNames,req);
@@ -287,7 +287,7 @@ app.patch('/swdbserv/v1*', casAuth.ensureAuthenticated, function(req,res,next) {
       }
       props.validSwNames = validSwNames;
     } else {
-      console.log("Got err:"+JSON.stringify(err));
+      //console.log("Got err:"+JSON.stringify(err));
     }
 
     tools.updateValidation(props.validSwNames,req);

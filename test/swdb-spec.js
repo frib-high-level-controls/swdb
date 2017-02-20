@@ -226,12 +226,14 @@ describe("app", function() {
       {"type": "GET","res": {"msg": {"levelOfCare": "MEDIUM"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"levelOfCare": "ERRONEOUS_VALUE"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
       {"type": "GET","res": {"msg": {"levelOfCare": "MEDIUM"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"levelOfCare": "SAFETY"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"levelOfCare": "SAFETY"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"status": "RDY_INSTALL"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"status": "RDY_INSTALL"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"status": "ERRONEOUS_VALUE"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
       {"type": "GET","res": {"msg": {"status": "RDY_INSTALL"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"statusDate": "7/7/1977"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"statusDate": "1977-07-07T04:00:00.000Z"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"statusDate": "1977-07-07"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"releasedVersion": "NEW test version"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"releasedVersion": "NEW test version"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"platforms": "NEW test platform"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
@@ -241,9 +243,9 @@ describe("app", function() {
       {"req": {"msg": {"swDescDoc": ["NEW sw desc 1","sw desc 2","sw desc 3"]},"url": "/swdbserv/v1/","type": "PUT", "err": {"status": 200}}},
       {"res": {"msg": {"swDescDoc": ["NEW sw desc 1","sw desc 2","sw desc 3"]},"url": "/swdbserv/v1/", "type": "GET", "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"validationDoc": [{"doc": "NEW validation doc1","date": "7/7/77"},{"doc": "NEW validation doc 2","date": "7/7/79"}]},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"validationDoc": [{"doc": "NEW validation doc1","date": "1977-07-07T04:00:00.000Z"},{"doc": "NEW validation doc 2","date": "1979-07-07T04:00:00.000Z"}]},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"validationDoc": [{"doc": "NEW validation doc1","date": "1977-07-07"},{"doc": "NEW validation doc 2","date": "1979-07-07"}]},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"verificationDoc": [{"doc": "NEW verification doc1","date": "7/7/77"}, {"doc": "NEW verification doc 2","date": "7/7/79"}]},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"verificationDoc": [{"doc": "NEW verification doc1","date": "1977-07-07T04:00:00.000Z","_id": /.{24}/},{"doc": "NEW verification doc 2","date": "1979-07-07T04:00:00.000Z"}]},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"verificationDoc": [{"doc": "NEW verification doc1","date": "1977-07-07","_id": /.{24}/},{"doc": "NEW verification doc 2","date": "1979-07-07"}]},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"verificationApprover": "NEW test approver"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"verificationApprover": "NEW test approver"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"revisionControl": "NEW revision control"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
@@ -369,7 +371,7 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '"param":"owner","msg":"Owner must be between 2 and 30 characters"'}}},
       // test update levelOfCare enumerated
       {"type":"PUT", "req": {"msg": {"levelOfCare": "not-enumerated"}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '{"param":"levelOfCare","msg":"LevelOfCare must be one of NONE,LOW,MEDIUM,HIGH","value":"not-enumerated"}'}}},
+      "err": {"status": 400, "msgHas": '{"param":"levelOfCare","msg":"LevelOfCare must be one of NONE,LOW,MEDIUM,HIGH,SAFETY","value":"not-enumerated"}'}}},
       // test update status enumerated
       {"type":"PUT", "req": {"msg": {"status": "not-enumerated"}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_INSTALL,RDY_INT_TEST,RDY_BEAM,RETIRED","value":"not-enumerated"}'}}},
@@ -555,5 +557,3 @@ describe("app", function() {
     });
   });
 });
-
-

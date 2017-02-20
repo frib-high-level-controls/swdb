@@ -53,7 +53,7 @@ test.describe("Firefox SWDB record tests", function() {
 
 
   test.before(function() {
-    this.timeout(5000);
+    this.timeout(10000);
     var firefoxOptions = new firefox.Options();
     firefoxOptions.setBinary('/usr/local/firefox/firefox');
     driver = new webdriver.Builder()
@@ -61,7 +61,7 @@ test.describe("Firefox SWDB record tests", function() {
     .setFirefoxOptions(firefoxOptions)
     .build();
     //driver = new FirefoxDriver();
-    driver.manage().window().setPosition(200,0);
+    //driver.manage().window().setPosition(200,0);
   });
 
     var allCookies = null;
@@ -79,7 +79,7 @@ test.describe("Firefox SWDB record tests", function() {
     driver.get(props.webUrl+"testlogin?username=testuser&password=testuserpasswd");
     driver.wait(until.elementLocated(By.id("Test auth success")),3000);
   });
-  
+
   test.it("should show search page with username on logout button", function() {
     this.timeout(8000);
     driver.get(props.webUrl+"#/list");
