@@ -92,7 +92,6 @@ describe("app", function() {
   });
 
   it("Errors posting a bad swName", function(done) {
-    //be.swDoc.db.collections.swdbs.drop();
     supertest
     .post("/swdbserv/v1/")
     .send({swName: "Bogus Test Record", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
@@ -106,7 +105,6 @@ describe("app", function() {
   });
 
   it("Errors posting a duplicate new record", function(done) {
-    //be.swDoc.db.collections.swdbs.drop();
     supertest
     .post("/swdbserv/v1/")
     .send({swName: "Test Record", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "1/1/1970"})
@@ -115,7 +113,6 @@ describe("app", function() {
     .expect(500)
     .expect('There was a duplicate key error')
     .end(function(err,res) {
-      //expect(res.text).to.match(/E11000 duplicate key error/);
       done();
     });
   });
@@ -158,19 +155,45 @@ describe("app", function() {
         done();
       });
     });
-    // it("Deletes test record id:1000", function(done) {
-    //   supertest
-    //   .delete("/swdbserv/v1/"+wrapper.origId)
-    //   .expect(200)
-    //   .end(done);
-    // });
-    // it("Returns empty record list id:1000", function(done) {
-    //   supertest
-    //   .get("/swdbserv/v1/"+wrapper.origId)
-    //   .expect(200)
-    //   .expect('')
-    //   .end(done);
-    // });
+  });
+
+  it("Post a new record Desc Test Record", function(done) {
+    supertest
+    .post("/swdbserv/v1/")
+    .send({swName: "Desc Test Record", owner: "Owner 1002", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
+    .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
+    .expect(201)
+    .end(done);
+  });
+
+  describe('get id for Desc Test Recor4', function() {
+    var wrapper = {origId:null};
+    before("Get ID record id: Desc Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1")
+      .expect(200)
+      .end(function(err,res){
+        res=JSON.parse(res.text);
+        for (var i=0, iLen=res.length; i<iLen; i++){
+          if (res[i].swName=="Desc Test Record") wrapper.origId=res[i]._id;
+        }
+        done();
+      });
+    });
+
+    it("Returns test record id: Desc Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1/"+wrapper.origId)
+      .expect(200)
+      .end(function(err, res){
+        expect(res.body).to.have.property("_id");
+        expect(res.body.swName).to.equal("Desc Test Record");
+        expect(res.body._id).to.match(/.{24}/);
+        expect(res.body.__v).to.match(/\d+/);
+        done();
+      });
+    });
   });
 
 
@@ -453,6 +476,16 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '"param":"comment[0]","msg":"Comment 0 must be 4-30 characters"'}}},
       {"type":"PUT", "req": {"msg": {"comment": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '"param":"comment[2]","msg":"Comment 2 must be 4-30 characters"'}}},
+
+      // test update desc
+      {"type":"PUT", "req": {"msg": {"desc": "NEW"}, "url": "/swdbserv/v1/",
+      "err": {"status": 400, "msgHas": '"param":"desc","msg":"Description must an array of strings be 4-30 characters"'}}},
+      {"type":"PUT", "req": {"msg": {"desc": ["NE"]}, "url": "/swdbserv/v1/",
+      "err": {"status": 400, "msgHas": '"param":"desc[0]","msg":"Description 0 must be 4-30 characters"'}}},
+      {"type":"PUT", "req": {"msg": {"desc": ["0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
+      "err": {"status": 400, "msgHas": '"param":"desc[0]","msg":"Description 0 must be 4-30 characters"'}}},
+      {"type":"PUT", "req": {"msg": {"desc": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
+      "err": {"status": 400, "msgHas": '"param":"desc[2]","msg":"Description 2 must be 4-30 characters"'}}},
     ];
 
     // go through the table and check the given parameters

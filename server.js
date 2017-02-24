@@ -109,6 +109,18 @@ app.use(expressValidator({
       } else {
         return false;
       }
+    },
+    isDesc: function(val,req) {
+      if (Array.isArray(val)){
+        val.forEach(function(element, idx, arr){
+          req.checkBody("desc["+idx+"]",
+          "Description "+idx+" must be 4-30 characters")
+          .optional().isAscii().isLength({min:4,max:30});
+        });
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 }));
