@@ -167,7 +167,7 @@ describe("app", function() {
     .end(done);
   });
 
-  describe('get id for Desc Test Recor4', function() {
+  describe('get id for Desc Test Record', function() {
     var wrapper = {origId:null};
     before("Get ID record id: Desc Test Record", function(done) {
       supertest
@@ -196,6 +196,83 @@ describe("app", function() {
     });
   });
 
+  it("Post a new record Engineer Test Record", function(done) {
+    supertest
+    .post("/swdbserv/v1/")
+    .send({swName: "Engineer Test Record", owner: "Owner 1002", engineer: "Any Engineer",  levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
+    .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
+    .expect(201)
+    .end(done);
+  });
+
+  describe('get id for Engineer Test Record', function() {
+    var wrapper = {origId:null};
+    before("Get ID record id: Engineer Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1")
+      .expect(200)
+      .end(function(err,res){
+        res=JSON.parse(res.text);
+        for (var i=0, iLen=res.length; i<iLen; i++){
+          if (res[i].swName=="Engineer Test Record") wrapper.origId=res[i]._id;
+        }
+        done();
+      });
+    });
+
+    it("Returns test record id: Engineer Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1/"+wrapper.origId)
+      .expect(200)
+      .end(function(err, res){
+        expect(res.body).to.have.property("_id");
+        expect(res.body.swName).to.equal("Engineer Test Record");
+        expect(res.body.engineer).to.equal("Any Engineer");
+        expect(res.body._id).to.match(/.{24}/);
+        expect(res.body.__v).to.match(/\d+/);
+        done();
+      });
+    });
+  });
+
+  it("Post a new record versionControlLoc Test Record", function(done) {
+    supertest
+    .post("/swdbserv/v1/")
+    .send({swName: "versionControlLoc Test Record", owner: "versioControlLoc Test Owner", versionControlLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
+    .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
+    .expect(201)
+    .end(done);
+  });
+
+  describe('get id for versionControlLoc Test Record', function() {
+    var wrapper = {origId:null};
+    before("Get ID record id: versionControlLoc Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1")
+      .expect(200)
+      .end(function(err,res){
+        res=JSON.parse(res.text);
+        for (var i=0, iLen=res.length; i<iLen; i++){
+          if (res[i].swName=="versionControlLoc Test Record") wrapper.origId=res[i]._id;
+        }
+        done();
+      });
+    });
+
+    it("Returns test record id: versionControlLoc Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1/"+wrapper.origId)
+      .expect(200)
+      .end(function(err, res){
+        expect(res.body).to.have.property("_id");
+        expect(res.body.swName).to.equal("versionControlLoc Test Record");
+        expect(res.body.versionControlLoc).to.equal("http://www.somehost/some-path/some-file");
+        done();
+      });
+    });
+  });
 
   describe('get id for Test Record2', function() {
     var wrapper = {origId:null};
@@ -245,6 +322,8 @@ describe("app", function() {
       {"type": "GET", "res": {"msg": {"swName": "Test Record4"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"owner": "New test owner 1002"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"owner": "New test owner 1002"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"engineer": "New Engineer"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"engineer": "New Engineer"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"levelOfCare": "MEDIUM"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"levelOfCare": "MEDIUM"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"levelOfCare": "ERRONEOUS_VALUE"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
@@ -273,6 +352,8 @@ describe("app", function() {
       {"type": "GET","res": {"msg": {"verificationApprover": "NEW test approver"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"revisionControl": "NEW revision control"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"revisionControl": "NEW revision control"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"versionControlLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"versionControlLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"recertFreq": "NEW test recert frequency"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"recertFreq": "NEW test recert frequency"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"recertStatus": "NEW test recert status"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
