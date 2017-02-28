@@ -6,5 +6,7 @@
   {"id": 4, "swName": "BEAST"},
   {"id": 5, "swName": "Desc Test Record"},
   {"id": 6, "swName": "Engineer Test Record"},
-  {"id": 7, "swName": "versionControlLoc Test Record"}
+  {"id": 7, "swName": "versionControlLoc Test Record"},
+  {"id": 8, "swName": "designDescDocLoc Test Record"},
+  {"id": 9, "swName": "descDocLoc Test Record"}
 ]

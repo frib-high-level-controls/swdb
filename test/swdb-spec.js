@@ -273,6 +273,82 @@ describe("app", function() {
       });
     });
   });
+  
+  it("Post a new record designDescDocLoc Test Record", function(done) {
+    supertest
+    .post("/swdbserv/v1/")
+    .send({swName: "designDescDocLoc Test Record", owner: "designDescDocLoc Test Owner", designDescDocLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
+    .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
+    .expect(201)
+    .end(done);
+  });
+
+  describe('get id for designDescDocLoc Test Record', function() {
+    var wrapper = {origId:null};
+    before("Get ID record id: designDescDocLoc Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1")
+      .expect(200)
+      .end(function(err,res){
+        res=JSON.parse(res.text);
+        for (var i=0, iLen=res.length; i<iLen; i++){
+          if (res[i].swName=="designDescDocLoc Test Record") wrapper.origId=res[i]._id;
+        }
+        done();
+      });
+    });
+
+    it("Returns test record id: designDescDocLoc Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1/"+wrapper.origId)
+      .expect(200)
+      .end(function(err, res){
+        expect(res.body).to.have.property("_id");
+        expect(res.body.swName).to.equal("designDescDocLoc Test Record");
+        expect(res.body.designDescDocLoc).to.equal("http://www.somehost/some-path/some-file");
+        done();
+      });
+    });
+  });
+
+  it("Post a new record descDocLoc Test Record", function(done) {
+    supertest
+    .post("/swdbserv/v1/")
+    .send({swName: "descDocLoc Test Record", owner: "descDocLoc Test Owner", descDocLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
+    .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
+    .expect(201)
+    .end(done);
+  });
+
+  describe('get id for descDocLoc Test Record', function() {
+    var wrapper = {origId:null};
+    before("Get ID record id: descDocLoc Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1")
+      .expect(200)
+      .end(function(err,res){
+        res=JSON.parse(res.text);
+        for (var i=0, iLen=res.length; i<iLen; i++){
+          if (res[i].swName=="descDocLoc Test Record") wrapper.origId=res[i]._id;
+        }
+        done();
+      });
+    });
+
+    it("Returns test record id: descDocLoc Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1/"+wrapper.origId)
+      .expect(200)
+      .end(function(err, res){
+        expect(res.body).to.have.property("_id");
+        expect(res.body.swName).to.equal("descDocLoc Test Record");
+        expect(res.body.descDocLoc).to.equal("http://www.somehost/some-path/some-file");
+        done();
+      });
+    });
+  });
 
   describe('get id for Test Record2', function() {
     var wrapper = {origId:null};
@@ -340,6 +416,12 @@ describe("app", function() {
       {"type": "GET","res": {"msg": {"releasedVersion": "NEW test version"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"platforms": "NEW test platform"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"platforms": "NEW test platform"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"designDescDocLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"designDescDocLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"designDescDocLoc": "badhostname/some_path/some-file"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
+      {"type": "PUT","req": {"msg": {"descDocLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"descDocLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"descDocLoc": "badurl"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
       {"type": "PUT","req": {"msg": {"auxSw": ["NEW aux sw 1","aux sw 2","aux sw 3"]},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"auxSw": ["NEW aux sw 1","aux sw 2","aux sw 3"]},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"req": {"msg": {"swDescDoc": ["NEW sw desc 1","sw desc 2","sw desc 3"]},"url": "/swdbserv/v1/","type": "PUT", "err": {"status": 200}}},
@@ -579,11 +661,14 @@ describe("app", function() {
           .put(value.req.url+wrapper.origId)
           .send(value.req.msg)
           .set('Cookie', [Cookies])
-          .expect(value.req.err.status)
           .end(function(err,res){
+            if (value.req.err.status){
+              expect(res.status).to.equal(value.req.err.status);
+            }
             if (value.req.err.msgHas) {
               expect2(res.text).toMatch(value.req.err.msgHas);
             }
+
             done();
           });
         });
@@ -594,8 +679,10 @@ describe("app", function() {
           .post(value.req.url)
           .send(value.req.msg)
           .set('Cookie', [Cookies])
-          .expect(value.req.err.status)
           .end(function(err,res){
+            if (value.req.err.status){
+              expect(res.status).to.equal(value.req.err.status);
+            }
             if (value.req.err.msgHas) {
               expect2(res.text).toMatch(value.req.err.msgHas);
             }
@@ -609,8 +696,10 @@ describe("app", function() {
         it(value.res.err.status+" "+JSON.stringify(value.res.msg), function(done) {
           supertest
           .get(value.res.url+wrapper.origId)
-          .expect(value.res.err.status)
           .end(function(err, res) {
+            if (value.res.err.status){
+              expect(res.status).to.equal(value.res.err.status);
+            }
             for (var prop in value.res.msg) {
               expect(res.body).to.have.property(prop);
               // This is to allow sloppy matching on whole objects.
