@@ -350,6 +350,120 @@ describe("app", function() {
     });
   });
 
+  it("Post a new record recertDate Test Record", function(done) {
+    supertest
+    .post("/swdbserv/v1/")
+    .send({swName: "recertDate Test Record", owner: "recertDate Test Owner", recertDate: "April 20, 2016", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
+    .expect(201)
+    .end(done);
+  });
+
+  describe('get id for recertDate Test Record', function() {
+    var wrapper = {origId:null};
+    before("Get ID record id: recertDate Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1")
+      .expect(200)
+      .end(function(err,res){
+        res=JSON.parse(res.text);
+        for (var i=0, iLen=res.length; i<iLen; i++){
+          if (res[i].swName=="recertDate Test Record") wrapper.origId=res[i]._id;
+        }
+        done();
+      });
+    });
+
+    it("Returns test record id: recertDate Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1/"+wrapper.origId)
+      .expect(200)
+      .end(function(err, res){
+        expect(res.body).to.have.property("_id");
+        expect(res.body.swName).to.equal("recertDate Test Record");
+        expect(res.body.recertDate).to.equal("2016-04-20T07:00:00.000Z");
+        done();
+      });
+    });
+  });
+
+  it("Post a new record vvProcLoc Test Record", function(done) {
+    supertest
+    .post("/swdbserv/v1/")
+    .send({swName: "vvProcLoc Test Record", owner: "vvProcLoc Test Owner", vvProcLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
+    .expect(201)
+    .end(done);
+  });
+
+  describe('get id for vvProcLoc Test Record', function() {
+    var wrapper = {origId:null};
+    before("Get ID record id: vvProcLoc Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1")
+      .expect(200)
+      .end(function(err,res){
+        res=JSON.parse(res.text);
+        for (var i=0, iLen=res.length; i<iLen; i++){
+          if (res[i].swName=="vvProcLoc Test Record") wrapper.origId=res[i]._id;
+        }
+        done();
+      });
+    });
+
+    it("Returns test record id: vvProcLoc Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1/"+wrapper.origId)
+      .expect(200)
+      .end(function(err, res){
+        expect(res.body).to.have.property("_id");
+        expect(res.body.swName).to.equal("vvProcLoc Test Record");
+        expect(res.body.vvProcLoc).to.equal("http://www.somehost/some-path/some-file");
+        done();
+      });
+    });
+  });
+
+  it("Post a new record vvResultsLoc Test Record", function(done) {
+    supertest
+    .post("/swdbserv/v1/")
+    .send({swName: "vvResultsLoc Test Record", owner: "vvResultsLoc Test Owner", vvResultsLoc: "http://www.somehost/some-path/some-file2", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
+    .expect(201)
+    .end(done);
+  });
+
+  describe('get id for vvResultsLoc Test Record', function() {
+    var wrapper = {origId:null};
+    before("Get ID record id: vvResultsLoc Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1")
+      .expect(200)
+      .end(function(err,res){
+        res=JSON.parse(res.text);
+        for (var i=0, iLen=res.length; i<iLen; i++){
+          if (res[i].swName=="vvResultsLoc Test Record") wrapper.origId=res[i]._id;
+        }
+        done();
+      });
+    });
+
+    it("Returns test record id: vvResultsLoc Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1/"+wrapper.origId)
+      .expect(200)
+      .end(function(err, res){
+        expect(res.body).to.have.property("_id");
+        expect(res.body.swName).to.equal("vvResultsLoc Test Record");
+        expect(res.body.vvResultsLoc).to.equal("http://www.somehost/some-path/some-file2");
+        done();
+      });
+    });
+  });
+
   describe('get id for Test Record2', function() {
     var wrapper = {origId:null};
     before("Get ID record id:Test Record2", function(done) {
@@ -426,6 +540,12 @@ describe("app", function() {
       {"type": "GET","res": {"msg": {"auxSw": ["NEW aux sw 1","aux sw 2","aux sw 3"]},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"req": {"msg": {"swDescDoc": ["NEW sw desc 1","sw desc 2","sw desc 3"]},"url": "/swdbserv/v1/","type": "PUT", "err": {"status": 200}}},
       {"res": {"msg": {"swDescDoc": ["NEW sw desc 1","sw desc 2","sw desc 3"]},"url": "/swdbserv/v1/", "type": "GET", "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"vvProcLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"vvProcLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"vvProcLoc": "http:some-malformed-url"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
+      {"type": "PUT","req": {"msg": {"vvResultsLoc": "http://www.somehost/some-path/some-file3"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"vvResultsLoc": "http://www.somehost/some-path/some-file3"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"vvResultsLoc": "http:some-malformed-url"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
       {"type": "PUT","req": {"msg": {"validationDoc": [{"doc": "NEW validation doc1","date": "7/7/77"},{"doc": "NEW validation doc 2","date": "7/7/79"}]},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"validationDoc": [{"doc": "NEW validation doc1","date": "1977-07-07"},{"doc": "NEW validation doc 2","date": "1979-07-07"}]},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"verificationDoc": [{"doc": "NEW verification doc1","date": "7/7/77"}, {"doc": "NEW verification doc 2","date": "7/7/79"}]},"url": "/swdbserv/v1/", "err": {"status": 200}}},
@@ -440,6 +560,9 @@ describe("app", function() {
       {"type": "GET","res": {"msg": {"recertFreq": "NEW test recert frequency"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"recertStatus": "NEW test recert status"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"recertStatus": "NEW test recert status"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"recertDate": "April 21, 2017"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"recertDate": "2017-04-21T07:00:00.000Z"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"recertDate": "Not a date"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
       {"type": "PUT","req": {"msg": {"comment": ["NEW test comment"]},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"comment": ["NEW test comment"]},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       // test new swName is required, min, max
