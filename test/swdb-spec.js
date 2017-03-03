@@ -464,6 +464,44 @@ describe("app", function() {
     });
   });
 
+  it("Post a new record branch Test Record", function(done) {
+    supertest
+    .post("/swdbserv/v1/")
+    .send({swName: "branch Test Record", owner: "branch Test Owner", branch: "New branch", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
+    .expect(201)
+    .end(done);
+  });
+
+  describe('get id for branch Test Record', function() {
+    var wrapper = {origId:null};
+    before("Get ID record id: branch Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1")
+      .expect(200)
+      .end(function(err,res){
+        res=JSON.parse(res.text);
+        for (var i=0, iLen=res.length; i<iLen; i++){
+          if (res[i].swName=="branch Test Record") wrapper.origId=res[i]._id;
+        }
+        done();
+      });
+    });
+
+    it("Returns test record id: branch Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1/"+wrapper.origId)
+      .expect(200)
+      .end(function(err, res){
+        expect(res.body).to.have.property("_id");
+        expect(res.body.swName).to.equal("branch Test Record");
+        expect(res.body.branch).to.equal("New branch");
+        done();
+      });
+    });
+  });
+
   describe('get id for Test Record2', function() {
     var wrapper = {origId:null};
     before("Get ID record id:Test Record2", function(done) {
@@ -528,6 +566,9 @@ describe("app", function() {
       {"type": "GET","res": {"msg": {"statusDate": "1977-07-07"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"releasedVersion": "NEW test version"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"releasedVersion": "NEW test version"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"branch": "NEW Branch"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"branch": "NEW Branch"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"branch": "NEW Branch name that is much too long"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
       {"type": "PUT","req": {"msg": {"platforms": "NEW test platform"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"platforms": "NEW test platform"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"designDescDocLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
@@ -538,20 +579,12 @@ describe("app", function() {
       {"type": "PUT","req": {"msg": {"descDocLoc": "badurl"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
       {"type": "PUT","req": {"msg": {"auxSw": ["NEW aux sw 1","aux sw 2","aux sw 3"]},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"auxSw": ["NEW aux sw 1","aux sw 2","aux sw 3"]},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"req": {"msg": {"swDescDoc": ["NEW sw desc 1","sw desc 2","sw desc 3"]},"url": "/swdbserv/v1/","type": "PUT", "err": {"status": 200}}},
-      {"res": {"msg": {"swDescDoc": ["NEW sw desc 1","sw desc 2","sw desc 3"]},"url": "/swdbserv/v1/", "type": "GET", "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"vvProcLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"vvProcLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"vvProcLoc": "http:some-malformed-url"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
       {"type": "PUT","req": {"msg": {"vvResultsLoc": "http://www.somehost/some-path/some-file3"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"vvResultsLoc": "http://www.somehost/some-path/some-file3"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"vvResultsLoc": "http:some-malformed-url"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
-      {"type": "PUT","req": {"msg": {"validationDoc": [{"doc": "NEW validation doc1","date": "7/7/77"},{"doc": "NEW validation doc 2","date": "7/7/79"}]},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"validationDoc": [{"doc": "NEW validation doc1","date": "1977-07-07"},{"doc": "NEW validation doc 2","date": "1979-07-07"}]},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"verificationDoc": [{"doc": "NEW verification doc1","date": "7/7/77"}, {"doc": "NEW verification doc 2","date": "7/7/79"}]},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"verificationDoc": [{"doc": "NEW verification doc1","date": "1977-07-07","_id": /.{24}/},{"doc": "NEW verification doc 2","date": "1979-07-07"}]},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"verificationApprover": "NEW test approver"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"verificationApprover": "NEW test approver"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"revisionControl": "NEW revision control"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"revisionControl": "NEW revision control"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"versionControlLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
@@ -611,38 +644,6 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '"param":"auxSw[0]","msg":"Auxilliary SW field 0 must be 4-30 characters"'}}},
       {"type":"POST", "req": {"msg": {"auxSw": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '"param":"auxSw[2]","msg":"Auxilliary SW field 2 must be 4-30 characters"'}}},
-      // test new swDescDoc
-      {"type":"POST", "req": {"msg": {"swDescDoc": "NEW"}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"swDescDoc","msg":"SW desc doc must be an array of strings 4-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"swDescDoc": ["NE"]}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"swDescDoc[0]","msg":"SW description doc 0 must be 4-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"swDescDoc": ["0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"swDescDoc[0]","msg":"SW description doc 0 must be 4-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"swDescDoc": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"swDescDoc[2]","msg":"SW description doc 2 must be 4-30 characters"'}}},
-      // test new validationDoc
-       {"type":"POST", "req": {"msg": {"validationDoc": ""}, "url": "/swdbserv/v1/",
-       "err": {"status": 400, "msgHas": '"param":"validationDoc","msg":"Validation doc must be an array of strings 4-30 characters and dates"'}}},
-       {"type":"POST", "req": {"msg": {"validationDoc": [{"doc": "NEW validation doc1","date": "trash"}]}, "url": "/swdbserv/v1/",
-       "err": {"status": 400, "msgHas": '"param":"validationDoc[0].date","msg":"Validation doc 0 date must be a date"'}}},
-       {"type":"POST", "req": {"msg": {"validationDoc": [{"doc": "NEW","date": "7/7/77"}]}, "url": "/swdbserv/v1/",
-       "err": {"status": 400, "msgHas": '"param":"validationDoc[0].doc","msg":"Validation doc 0 must be 4-30 characters"'}}},
-       {"type":"POST", "req": {"msg": {"validationDoc": [{"doc": "NEW validation doc1","date": "7/7/77"},{"doc": "NEW validation doc1","date": "trash"}]}, "url": "/swdbserv/v1/",
-       "err": {"status": 400, "msgHas": '"param":"validationDoc[1].date","msg":"Validation doc 1 date must be a date"'}}},
-      // test new verificationDoc
-       {"type":"POST", "req": {"msg": {"verificationDoc": ""}, "url": "/swdbserv/v1/",
-       "err": {"status": 400, "msgHas": '"param":"verificationDoc","msg":"Verification doc must be an array of strings 4-30 characters and dates"'}}},
-       {"type":"POST", "req": {"msg": {"verificationDoc": [{"doc": "NEW verification doc1","date": "trash"}]}, "url": "/swdbserv/v1/",
-       "err": {"status": 400, "msgHas": '"param":"verificationDoc[0].date","msg":"Verification doc 0 date must be a date"'}}},
-       {"type":"POST", "req": {"msg": {"verificationDoc": [{"doc": "NEW","date": "7/7/77"}]}, "url": "/swdbserv/v1/",
-       "err": {"status": 400, "msgHas": '"param":"verificationDoc[0].doc","msg":"Verification doc 0 must be 4-30 characters"'}}},
-       {"type":"POST", "req": {"msg": {"verificationDoc": [{"doc": "NEW verification doc1","date": "7/7/77"},{"doc": "NEW validation doc1","date": "trash"}]}, "url": "/swdbserv/v1/",
-       "err": {"status": 400, "msgHas": '"param":"verificationDoc[1].date","msg":"Verification doc 1 date must be a date"'}}},
-      // test new verificationApprover min, max
-      {"type":"POST", "req": {"msg": {"verificationApprover": "NEW"}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"verificationApprover","msg":"Verification approver must be 4-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"verificationApprover": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"verificationApprover","msg":"Verification approver must be 4-30 characters"'}}},
       // test new revisionControl min, max
       {"type":"POST", "req": {"msg": {"revisionControl": "N"}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '"param":"revisionControl","msg":"Revision control must be 2-30 characters"'}}},
@@ -706,38 +707,6 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '"param":"auxSw[0]","msg":"Auxilliary SW field 0 must be 4-30 characters"'}}},
       {"type":"PUT", "req": {"msg": {"auxSw": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '"param":"auxSw[2]","msg":"Auxilliary SW field 2 must be 4-30 characters"'}}},
-      // test update swDescDoc
-      {"type":"PUT", "req": {"msg": {"swDescDoc": "NEW"}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"swDescDoc","msg":"SW desc doc must be an array of strings 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"swDescDoc": ["NE"]}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"swDescDoc[0]","msg":"SW description doc 0 must be 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"swDescDoc": ["0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"swDescDoc[0]","msg":"SW description doc 0 must be 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"swDescDoc": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"swDescDoc[2]","msg":"SW description doc 2 must be 4-30 characters"'}}},
-      // test update validationDoc
-      {"type":"PUT", "req": {"msg": {"validationDoc": ""}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"validationDoc","msg":"Validation doc must be an array of strings 4-30 characters and dates"'}}},
-      {"type":"PUT", "req": {"msg": {"validationDoc": [{"doc": "NEW validation doc1","date": "trash"}]}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"validationDoc[0].date","msg":"Validation doc 0 date must be a date"'}}},
-      {"type":"PUT", "req": {"msg": {"validationDoc": [{"doc": "NEW","date": "7/7/77"}]}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"validationDoc[0].doc","msg":"Validation doc 0 must be 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"validationDoc": [{"doc": "NEW validation doc1","date": "7/7/77"},{"doc": "NEW validation doc1","date": "trash"}]}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"validationDoc[1].date","msg":"Validation doc 1 date must be a date"'}}},
-      // test update verificationDoc
-      {"type":"PUT", "req": {"msg": {"verificationDoc": ""}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"verificationDoc","msg":"Verification doc must be an array of strings 4-30 characters and dates"'}}},
-      {"type":"PUT", "req": {"msg": {"verificationDoc": [{"doc": "NEW verification doc1","date": "trash"}]}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"verificationDoc[0].date","msg":"Verification doc 0 date must be a date"'}}},
-      {"type":"PUT", "req": {"msg": {"verificationDoc": [{"doc": "NEW","date": "7/7/77"}]}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"verificationDoc[0].doc","msg":"Verification doc 0 must be 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"verificationDoc": [{"doc": "NEW verification doc1","date": "7/7/77"},{"doc": "NEW validation doc1","date": "trash"}]}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"verificationDoc[1].date","msg":"Verification doc 1 date must be a date"'}}},
-      // test update verificationApprover min, max
-      {"type":"PUT", "req": {"msg": {"verificationApprover": "NEW"}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"verificationApprover","msg":"Verification approver must be 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"verificationApprover": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"verificationApprover","msg":"Verification approver must be 4-30 characters"'}}},
       // test update revisionControl min, max
       {"type":"PUT", "req": {"msg": {"revisionControl": "N"}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '"param":"revisionControl","msg":"Revision control must be 2-30 characters"'}}},
