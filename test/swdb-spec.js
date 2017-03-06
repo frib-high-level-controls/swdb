@@ -502,6 +502,44 @@ describe("app", function() {
     });
   });
 
+  it("Post a new record versionControl Test Record", function(done) {
+    supertest
+    .post("/swdbserv/v1/")
+    .send({swName: "versionControl Test Record", owner: "versionControl Test Owner", versionControl: "Git", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
+    .expect(201)
+    .end(done);
+  });
+
+  describe('get id for versionControl Test Record', function() {
+    var wrapper = {origId:null};
+    before("Get ID versionControl id: branch Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1")
+      .expect(200)
+      .end(function(err,res){
+        res=JSON.parse(res.text);
+        for (var i=0, iLen=res.length; i<iLen; i++){
+          if (res[i].swName=="versionControl Test Record") wrapper.origId=res[i]._id;
+        }
+        done();
+      });
+    });
+
+    it("Returns test record id: versionControl Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1/"+wrapper.origId)
+      .expect(200)
+      .end(function(err, res){
+        expect(res.body).to.have.property("_id");
+        expect(res.body.swName).to.equal("versionControl Test Record");
+        expect(res.body.versionControl).to.equal("Git");
+        done();
+      });
+    });
+  });
+
   describe('get id for Test Record2', function() {
     var wrapper = {origId:null};
     before("Get ID record id:Test Record2", function(done) {
@@ -585,8 +623,9 @@ describe("app", function() {
       {"type": "PUT","req": {"msg": {"vvResultsLoc": "http://www.somehost/some-path/some-file3"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"vvResultsLoc": "http://www.somehost/some-path/some-file3"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"vvResultsLoc": "http:some-malformed-url"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
-      {"type": "PUT","req": {"msg": {"revisionControl": "NEW revision control"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"revisionControl": "NEW revision control"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"versionControl": "Git"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"versionControl": "Git"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"versionControl": "Erroneous RCS"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
       {"type": "PUT","req": {"msg": {"versionControlLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"versionControlLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"recertFreq": "NEW test recert frequency"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
@@ -644,11 +683,9 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '"param":"auxSw[0]","msg":"Auxilliary SW field 0 must be 4-30 characters"'}}},
       {"type":"POST", "req": {"msg": {"auxSw": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '"param":"auxSw[2]","msg":"Auxilliary SW field 2 must be 4-30 characters"'}}},
-      // test new revisionControl min, max
-      {"type":"POST", "req": {"msg": {"revisionControl": "N"}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"revisionControl","msg":"Revision control must be 2-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"revisionControl": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"revisionControl","msg":"Revision control must be 2-30 characters"'}}},
+      // test new versionControl min, max
+      {"type":"POST", "req": {"msg": {"versionControl": "Erroneous RCS"}, "url": "/swdbserv/v1/",
+      "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of Git,AssetCentre,Filesystem,Other"'}}},
       // test new recertFreq min, max
       {"type":"POST", "req": {"msg": {"recertFreq": "N"}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '"param":"recertFreq","msg":"Recerification frequency must be 4-30 characters"'}}},
@@ -707,11 +744,9 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '"param":"auxSw[0]","msg":"Auxilliary SW field 0 must be 4-30 characters"'}}},
       {"type":"PUT", "req": {"msg": {"auxSw": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '"param":"auxSw[2]","msg":"Auxilliary SW field 2 must be 4-30 characters"'}}},
-      // test update revisionControl min, max
-      {"type":"PUT", "req": {"msg": {"revisionControl": "N"}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"revisionControl","msg":"Revision control must be 2-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"revisionControl": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"revisionControl","msg":"Revision control must be 2-30 characters"'}}},
+      // test update versionControl min, max
+      {"type":"PUT", "req": {"msg": {"versionControl": "Erroneous RCS"}, "url": "/swdbserv/v1/",
+      "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of Git,AssetCentre,Filesystem,Other"'}}},
       // test update recertFreq min, max
       {"type":"PUT", "req": {"msg": {"recertFreq": "N"}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '"param":"recertFreq","msg":"Recerification frequency must be 4-30 characters"'}}},
