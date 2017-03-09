@@ -540,6 +540,45 @@ describe("app", function() {
     });
   });
 
+  it("Post a new record previous Test Record", function(done) {
+    supertest
+    .post("/swdbserv/v1/")
+    .send({swName: "previous Test Record", owner: "previous Test Owner", previous: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
+    .expect(201)
+    .end(done);
+  });
+
+  describe('get id for previous Test Record', function() {
+    var wrapper = {origId:null};
+    before("Get ID previous id: branch Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1")
+      .expect(200)
+      .end(function(err,res){
+        res=JSON.parse(res.text);
+        for (var i=0, iLen=res.length; i<iLen; i++){
+          if (res[i].swName=="previous Test Record") wrapper.origId=res[i]._id;
+        }
+        done();
+      });
+    });
+
+    it("Returns test record id: previous Test Record", function(done) {
+      supertest
+      .get("/swdbserv/v1/"+wrapper.origId)
+      .expect(200)
+      .end(function(err, res){
+        expect(res.body).to.have.property("_id");
+        expect(res.body.swName).to.equal("previous Test Record");
+        expect(res.body.previous).to.equal("http://www.somehost/some-path/some-file");
+        done();
+      });
+    });
+  });
+
+
   describe('get id for Test Record2', function() {
     var wrapper = {origId:null};
     before("Get ID record id:Test Record2", function(done) {
@@ -635,6 +674,9 @@ describe("app", function() {
       {"type": "PUT","req": {"msg": {"recertDate": "April 21, 2017"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"recertDate": "2017-04-21T07:00:00.000Z"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"recertDate": "Not a date"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
+      {"type": "PUT","req": {"msg": {"previous": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"previous": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"previous": "badurl"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
       {"type": "PUT","req": {"msg": {"comment": ["NEW test comment"]},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"comment": ["NEW test comment"]},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       // test new swName is required, min, max
