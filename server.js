@@ -44,60 +44,6 @@ app.use(expressValidator({
     isOneOf: function(str,arr) {
       return (arr.indexOf(str) > -1);
     },
-    isAuxSw: function(val,req) {
-      if (Array.isArray(val)){
-        val.forEach(function(element, idx, arr){
-          req.checkBody("auxSw["+idx+"]",
-          "Auxilliary SW field "+idx+" must be 4-30 characters")
-          .optional().isAscii().isLength({min:4,max:30});
-        });
-        return true;
-      } else {
-        return false;
-      }
-    },
-    isSwDescDoc: function(val,req) {
-      if (Array.isArray(val)){
-        val.forEach(function(element, idx, arr){
-          req.checkBody("swDescDoc["+idx+"]",
-          "SW description doc "+idx+" must be 4-30 characters")
-          .optional().isAscii().isLength({min:4,max:30});
-        });
-        return true;
-      } else {
-        return false;
-      }
-    },
-    isValidationDoc: function(val,req) {
-      if (Array.isArray(val)){
-        val.forEach(function(element, idx, arr){
-          req.checkBody("validationDoc["+idx+"].doc",
-          "Validation doc "+idx+" must be 4-30 characters")
-          .optional().isAscii().isLength({min:4,max:30});
-          req.checkBody("validationDoc["+idx+"].date",
-          "Validation doc "+idx+" date must be a date")
-          .optional().isDate();
-        });
-        return true;
-      } else {
-        return false;
-      }
-    },
-    isVerificationDoc: function(val,req) {
-      if (Array.isArray(val)){
-        val.forEach(function(element, idx, arr){
-          req.checkBody("verificationDoc["+idx+"].doc",
-          "Verification doc "+idx+" must be 4-30 characters")
-          .optional().isAscii().isLength({min:4,max:30});
-          req.checkBody("verificationDoc["+idx+"].date",
-          "Verification doc "+idx+" date must be a date")
-          .optional().isDate();
-        });
-        return true;
-      } else {
-        return false;
-      }
-    },
     isComment: function(val,req) {
       if (Array.isArray(val)){
         val.forEach(function(element, idx, arr){

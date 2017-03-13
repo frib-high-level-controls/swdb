@@ -1,47 +1,47 @@
 <section>
-  <div class="header swdb-top-div container-fluid">
-    <div class="row">
-      <div class="col-sm-3">
-        <a id="srchBtn" href="#/list/" class="btn btn-info">
-          <span class="glyphicon glyphicon-search"></span>
-          Search
-        </a>
-        <a id="addBtn" href="#/new/" class="btn btn-info">
-          <span class="glyphicon glyphicon-plus"></span>
-          Add New
-        </a>
-      </div>
-      <div class="col-sm-5"></div>
-      <div class="col-sm-4">
-        <a id="usrBtn" ng-click="usrBtnClk()" class="btn btn-primary">
-          <span class="glyphicon glyphicon-user"></span>
-          {{session.username}} {{usrBtnTxt}}
-        </a>
-        <a id="abtBtn" href="#/about/" class="btn btn-info">
-          <span class="glyphicon glyphicon-info-sign"></span>
-          About
-        </a>
-      </div>
+<div class="header swdb-top-div container-fluid">
+  <div class="row">
+    <div class="col-sm-3">
+      <a id="srchBtn" href="#/list/" class="btn btn-info">
+        <span class="glyphicon glyphicon-search"></span>
+        Search
+      </a>
+      <a id="addBtn" href="#/new/" class="btn btn-info">
+        <span class="glyphicon glyphicon-plus"></span>
+        Add New
+      </a>
+    </div>
+    <div class="col-sm-5"></div>
+    <div class="col-sm-4">
+      <a id="usrBtn" ng-click="usrBtnClk()" class="btn btn-primary">
+        <span class="glyphicon glyphicon-user"></span>
+        {{session.username}} {{usrBtnTxt}}
+      </a>
+      <a id="abtBtn" href="#/about/" class="btn btn-info">
+        <span class="glyphicon glyphicon-info-sign"></span>
+        About
+      </a>
     </div>
   </div>
+</div>
 
-  <h2>Add/update</h2> 
-  <div class="container-fluid">
-    <form name="inputForm" class-"form-horizontal" ng-submit="processForm()">
+<h2>Add/update</h2> 
+<div class="container-fluid">
+  <form name="inputForm" class-"form-horizontal" ng-submit="processForm()">
 
-      <!-- NAME -->
-      <div class="row" ng-class="{ 'has-error' : inputForm.swNameInput.$invalid && !inputForm.swNameInput.$pristine }">
-        <div id="swName-group" class="form-group">
-          <label class="col-sm-2 control-label">Software Name*</label>
-          <div class="col-sm-8">
-            <ui-select  ng-model="$parent.selectedItem">
-            <ui-select-match id="swName">
-            <span ng-bind="$select.selected.name"></span>
-            </ui-select-match>
-            <ui-select-choices repeat="item in (itemArray | filter: $select.search) track by item.id">
-            <span ng-bind="item.name"></span>
-            </ui-select-choices>
-            </ui-select>
+    <!-- NAME -->
+    <div class="row" ng-class="{ 'has-error' : inputForm.swNameInput.$invalid && !inputForm.swNameInput.$pristine }">
+      <div id="swName-group" class="form-group">
+        <label class="col-sm-2 control-label">Software Name*</label>
+        <div class="col-sm-8">
+          <ui-select  ng-model="$parent.selectedItem">
+          <ui-select-match id="swName">
+          <span ng-bind="$select.selected.name"></span>
+          </ui-select-match>
+          <ui-select-choices repeat="item in (itemArray | filter: $select.search) track by item.id">
+          <span ng-bind="item.name"></span>
+          </ui-select-choices>
+          </ui-select>
         </div>
         <div class="col-sm-2" id="swNameInputSts" ng-messages="inputForm.swNameInput.$error" ng-if="inputForm.swNameInput.$dirty">
           <div ng-message="required">Name is required</div>
@@ -127,95 +127,95 @@
         <label class="col-sm-2 control-label">Owner*</label>
         <div class="col-sm-8">
           <input id="owner" type="text" name="ownerInput" class="form-control" placeholder="SW owner" ng-model="formData.owner" ng-minlength="2" ng-maxlength="30" required>
-        </input>
-      </div>
-      <div class="col-sm-2" id="ownerInputSts" ng-messages="inputForm.ownerInput.$error" ng-if="inputForm.ownerInput.$dirty">
-        <div ng-message="required">Owner is required</div>
-        <div ng-message="minlength">Owner must exceed 2 characters</div>
-        <div ng-message="maxlength">Owner must not exceed 30 characters</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Engineer -->
-  <div class="row" ng-class="{ 'has-error' : inputForm.engineerInput.$invalid && !inputForm.engineerInput.$pristine }">
-    <div id="engineer-group" class="form-group">
-      <label class="col-sm-2 control-label">Engineer*</label>
-      <div class="col-sm-8">
-        <input id="engineer" type="text" name="engineerInput" class="form-control" placeholder="Engineer" ng-model="formData.engineer" ng-minlength="2" ng-maxlength="30" required>
-        </input>
-      </div>
-      <div class="col-sm-2" id="engineerInputSts" ng-messages="inputForm.engineerInput.$error" ng-if="inputForm.engineerInput.$dirty">
-        <div ng-message="required">engineer is required</div>
-        <div ng-message="minlength">engineer must exceed 2 characters</div>
-        <div ng-message="maxlength">engineer must not exceed 30 characters</div>
+          </input>
+        </div>
+        <div class="col-sm-2" id="ownerInputSts" ng-messages="inputForm.ownerInput.$error" ng-if="inputForm.ownerInput.$dirty">
+          <div ng-message="required">Owner is required</div>
+          <div ng-message="minlength">Owner must exceed 2 characters</div>
+          <div ng-message="maxlength">Owner must not exceed 30 characters</div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- LEVEL OF CARE -->
-  <div class="row" ng-class="{ 'has-error' : inputForm.levelOfCareInput.$invalid && !inputForm.levelOfCareInput.$pristine }">
-    <div id="levelOfCare-group" class="form-group">
-      <label class="col-sm-2 control-label">Level of Care*</label>
-      <div class="col-sm-8">
-        <select id="levelOfCare" ng-model="formData.levelOfCare" ng-options="o for o in levelOfCareEnums track by o"></select>
-      </div>
-      <div class="col-sm-2" id="levelOfCareInputSts" ng-messages="inputForm.levelOfCareInput.$error" ng-if="inputForm.levelOfCareInput.$dirty">
-      </div>
-    </div>
-  </div>
-
-  <!-- STATUS -->
-  <div class="row" ng-class="{ 'has-error' : inputForm.statusInput.$invalid && !inputForm.statusInput.$pristine }">
-    <div id="status-group" class="form-group">
-      <label class="col-sm-2 control-label">Status*</label>
-      <div class="col-sm-10">
-        <select id="status" ng-model="formData.status" ng-options="o for o in statusEnums track by o"></select>
-      </div>
-      <div class="col-sm-2" id="statusInputSts" ng-messages="inputForm.statusInput.$error" ng-if="inputForm.statusInput.$dirty">
+    <!-- Engineer -->
+    <div class="row" ng-class="{ 'has-error' : inputForm.engineerInput.$invalid && !inputForm.engineerInput.$pristine }">
+      <div id="engineer-group" class="form-group">
+        <label class="col-sm-2 control-label">Engineer*</label>
+        <div class="col-sm-8">
+          <input id="engineer" type="text" name="engineerInput" class="form-control" placeholder="Engineer" ng-model="formData.engineer" ng-minlength="2" ng-maxlength="30" required>
+          </input>
+        </div>
+        <div class="col-sm-2" id="engineerInputSts" ng-messages="inputForm.engineerInput.$error" ng-if="inputForm.engineerInput.$dirty">
+          <div ng-message="required">engineer is required</div>
+          <div ng-message="minlength">engineer must exceed 2 characters</div>
+          <div ng-message="maxlength">engineer must not exceed 30 characters</div>
+        </div>
       </div>
     </div>
-  </div>
 
-<!-- STATUS DATE -->
-<div class="row" ng-class="{ 'has-error' : inputForm.statusDateInput.$invalid && !inputForm.statusDateInput.$pristine }">
-  <div id="statusDate-group" class="form-group">
-    <label class="col-sm-2 control-label">Status Date*</label>
-    <div class="col-sm-8">
+    <!-- LEVEL OF CARE -->
+    <div class="row" ng-class="{ 'has-error' : inputForm.levelOfCareInput.$invalid && !inputForm.levelOfCareInput.$pristine }">
+      <div id="levelOfCare-group" class="form-group">
+        <label class="col-sm-2 control-label">Level of Care*</label>
+        <div class="col-sm-8">
+          <select id="levelOfCare" ng-model="formData.levelOfCare" ng-options="o for o in levelOfCareEnums track by o"></select>
+        </div>
+        <div class="col-sm-2" id="levelOfCareInputSts" ng-messages="inputForm.levelOfCareInput.$error" ng-if="inputForm.levelOfCareInput.$dirty">
+        </div>
+      </div>
+    </div>
 
-      <p class="input-group">
-        <input id="statusDate" name="statusDateInput" type="text" class="form-control"
-         uib-datepicker-popup="{{datePicker.format}}" ng-model="formData.statusDate" is-open="datePicker.instances['statusDate']"
-          datepicker-options="datePicker.options" ng-required="true" close-text="Close"
-           alt-input-formats="altInputFormats" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"/>
-        <span class="input-group-btn">
-          <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'statusDate')"><i class="glyphicon glyphicon-calendar"></i></button>
-        </span>
-      </p>
+    <!-- STATUS -->
+    <div class="row" ng-class="{ 'has-error' : inputForm.statusInput.$invalid && !inputForm.statusInput.$pristine }">
+      <div id="status-group" class="form-group">
+        <label class="col-sm-2 control-label">Status*</label>
+        <div class="col-sm-10">
+          <select id="status" ng-model="formData.status" ng-options="o for o in statusEnums track by o"></select>
+        </div>
+        <div class="col-sm-2" id="statusInputSts" ng-messages="inputForm.statusInput.$error" ng-if="inputForm.statusInput.$dirty">
+        </div>
+      </div>
+    </div>
 
-    <!-- </input> -->
-  </div>
-  <div class="col-sm-2" id="statusDateInputSts" ng-messages="inputForm.statusDateInput.$error" ng-if="inputForm.statusDateInput.$dirty">
-    <div ng-message="required">Date is required</div>
-    <div ng-message="pattern">Use date format YYYY/MM/DD</div>
-  </div>
-</div>
-</div>
+    <!-- STATUS DATE -->
+    <div class="row" ng-class="{ 'has-error' : inputForm.statusDateInput.$invalid && !inputForm.statusDateInput.$pristine }">
+      <div id="statusDate-group" class="form-group">
+        <label class="col-sm-2 control-label">Status Date*</label>
+        <div class="col-sm-8">
+
+          <p class="input-group">
+          <input id="statusDate" name="statusDateInput" type="text" class="form-control"
+                                                                    uib-datepicker-popup="{{datePicker.format}}" ng-model="formData.statusDate" is-open="datePicker.instances['statusDate']"
+                                                                                                                                                datepicker-options="datePicker.options" ng-required="true" close-text="Close"
+                                                                                                                                                                                                           alt-input-formats="altInputFormats" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"/>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'statusDate')"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+          </p>
+
+          <!-- </input> -->
+        </div>
+        <div class="col-sm-2" id="statusDateInputSts" ng-messages="inputForm.statusDateInput.$error" ng-if="inputForm.statusDateInput.$dirty">
+          <div ng-message="required">Date is required</div>
+          <div ng-message="pattern">Use date format YYYY/MM/DD</div>
+        </div>
+      </div>
+    </div>
 
 
-<!-- PLATFORM -->
-<div class="row" ng-class="{ 'has-error' : inputForm.platformsInput.$invalid && !inputForm.platformsInput.$pristine }">
-  <div id="platforms-group" class="form-group">
-    <label class="col-sm-2 control-label">Platforms</label>
-    <div class="col-sm-8">
-      <input id="platforms" type="text" name="platformsInput" class="form-control" placeholder="platforms" ng-model="formData.platforms" ng-minlength="4">
-    </input>
-  </div>
-  <div class="col-sm-2" id="platformsInputSts" ng-messages="inputForm.platformsInput.$error" ng-if="inputForm.platformsInput.$dirty">
-    <div ng-message="minlength">Minimum 4 characters</div>
-  </div>
-</div>
-</div>
+    <!-- PLATFORM -->
+    <div class="row" ng-class="{ 'has-error' : inputForm.platformsInput.$invalid && !inputForm.platformsInput.$pristine }">
+      <div id="platforms-group" class="form-group">
+        <label class="col-sm-2 control-label">Platforms</label>
+        <div class="col-sm-8">
+          <input id="platforms" type="text" name="platformsInput" class="form-control" placeholder="platforms" ng-model="formData.platforms" ng-minlength="4">
+          </input>
+        </div>
+        <div class="col-sm-2" id="platformsInputSts" ng-messages="inputForm.platformsInput.$error" ng-if="inputForm.platformsInput.$dirty">
+          <div ng-message="minlength">Minimum 4 characters</div>
+        </div>
+      </div>
+    </div>
 
     <!-- V&V procedure document location-->
     <div class="row" ng-class="{ 'has-error' : inputForm.vvProcLocInput.$invalid && !inputForm.vvProcLocInput.$pristine }">
@@ -245,17 +245,17 @@
       </div>
     </div>
 
-  <!-- Version control -->
-  <div class="row" ng-class="{ 'has-error' : inputForm.versionControlInput.$invalid && !inputForm.versionControlInput.$pristine }">
-    <div id="versionControl-group" class="form-group">
-      <label class="col-sm-2 control-label">Version control</label>
-      <div class="col-sm-8">
-        <select id="versionControl" ng-model="formData.versionControl" ng-options="o for o in levelOfCareEnums track by o"></select>
-      </div>
-      <div class="col-sm-2" id="versionControlInputSts" ng-messages="inputForm.versionControlInput.$error" ng-if="inputForm.versionControlInput.$dirty">
+    <!-- Version control -->
+    <div class="row" ng-class="{ 'has-error' : inputForm.versionControlInput.$invalid && !inputForm.versionControlInput.$pristine }">
+      <div id="versionControl-group" class="form-group">
+        <label class="col-sm-2 control-label">Version control</label>
+        <div class="col-sm-8">
+          <select id="versionControl" ng-model="formData.versionControl" ng-options="o for o in levelOfCareEnums track by o"></select>
+        </div>
+        <div class="col-sm-2" id="versionControlInputSts" ng-messages="inputForm.versionControlInput.$error" ng-if="inputForm.versionControlInput.$dirty">
+        </div>
       </div>
     </div>
-  </div>
 
     <!-- Version control location-->
     <div class="row" ng-class="{ 'has-error' : inputForm.versionControlLocInput.$invalid && !inputForm.versionControlLocInput.$pristine }">
@@ -301,41 +301,43 @@
       </div>
     </div>
 
-<!-- Recertification date -->
-<div class="row" ng-class="{ 'has-error' : inputForm.recertDateInput.$invalid && !inputForm.recertDateInput.$pristine }">
-  <div id="recertDate-group" class="form-group">
-    <label class="col-sm-2 control-label">Recert Date*</label>
-    <div class="col-sm-8">
+    <!-- Recertification date -->
+    <div class="row" ng-class="{ 'has-error' : inputForm.recertDateInput.$invalid && !inputForm.recertDateInput.$pristine }">
+      <div id="recertDate-group" class="form-group">
+        <label class="col-sm-2 control-label">Recert Date*</label>
+        <div class="col-sm-8">
 
-      <p class="input-group">
-        <input id="recertDate" name="recertDateInput" type="text" class="form-control"
-         uib-datepicker-popup="{{datePicker.format}}" ng-model="formData.recertDate" is-open="datePicker.instances['recertDate']"
-          datepicker-options="datePicker.options" ng-required="true" close-text="Close"
-           alt-input-formats="altInputFormats" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"/>
-        <span class="input-group-btn">
-          <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'recertDate')"><i class="glyphicon glyphicon-calendar"></i></button>
-        </span>
-      </p>
+          <p class="input-group">
+          <input id="recertDate" name="recertDateInput" type="text" class="form-control"
+                                                                    uib-datepicker-popup="{{datePicker.format}}" ng-model="formData.recertDate" is-open="datePicker.instances['recertDate']"
+                                                                                                                                                datepicker-options="datePicker.options" ng-required="true" close-text="Close"
+                                                                                                                                                                                                           alt-input-formats="altInputFormats" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"/>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'recertDate')"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+          </p>
 
-    <!-- </input> -->
-  </div>
-  <div class="col-sm-2" id="recertDateInputSts" ng-messages="inputForm.recertDateInput.$error" ng-if="inputForm.recertDateInput.$dirty">
-    <div ng-message="required">Date is required</div>
-    <div ng-message="pattern">Use date format YYYY/MM/DD</div>
-  </div>
-</div>
-</div>
+          <!-- </input> -->
+        </div>
+        <div class="col-sm-2" id="recertDateInputSts" ng-messages="inputForm.recertDateInput.$error" ng-if="inputForm.recertDateInput.$dirty">
+          <div ng-message="required">Date is required</div>
+          <div ng-message="pattern">Use date format YYYY/MM/DD</div>
+        </div>
+      </div>
+    </div>
 
     <!-- Previous revision -->
     <div class="row" ng-class="{ 'has-error' : inputForm.previousInput.$invalid && !inputForm.previousInput.$pristine }">
       <div id="pevious-group" class="form-group">
         <label class="col-sm-2 control-label">Previous version (URL)</label>
         <div class="col-sm-8">
-          <input id="previous" type="text" name="previousInput" class="form-control" placeholder="Previous version location" ng-model="formData.previous" ng-minlength="2">
+          <input id="previous" type="url" name="previousInput" class="form-control" 
+            placeholder="Previous version location" ng-model="formData.previous" ng-minlength="2">
           </input>
         </div>
         <div class="col-sm-2" id="previousInputSts" ng-messages="inputForm.previousInput.$error" ng-if="inputForm.previousInput.$dirty">
           <div ng-message="minlength">Minimum 2 characters</div>
+          <div ng-message="url">Enter a valid URL</div>
         </div>
       </div>
     </div>
@@ -361,170 +363,16 @@
         </div>
       </div>
     </div>
+</div>
+
+<!-- SUBMIT BUTTON -->
+<div id='formStatus' ng-show="swdbParams.formShowStatus" class="alert alert-success form-group col-sm-12"><span class="glyphicon glyphicon-info-sign"></span> {{swdbParams.formStatus}}</div>
+<div id='formError' ng-show="swdbParams.formShowErr" class="alert alert-danger form-group col-sm-12"><span class="glyphicon glyphicon-exclamation-sign"></span> {{swdbParams.formErr}}</div>
+<button id="submitBtn" type="submit" class="btn btn-success">
+  <span class="submit glyphicon glyphicon-ok-sign"></span> Submit!
+</button>
+<a href="#/list" id="cancelBtn" type="submit" class="btn btn-danger"><span class="submit glyphicon glyphicon-backward"></span> Cancel </a>
+<br>
+  </form>
   </div>
-
-<!-- AUX SW -->
-<div class="row">
-  <label class="col-sm-2">
-    <a id="add.auxSw" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)"><span  class="glyphicon glyphicon-plus"></span></a>
-    Auxiliary SW docs</label>
-    <span class="col-sm-10"></span>
-  </div>
-  <div id="auxSw-group" class="form-group">
-    <div ng-repeat="(key, value) in formData.auxSw track by $index">
-      <div class="row" ng-class="{ 'has-error' : inputForm['auxSwInput.'+$index].$invalid && !inputForm['auxSwInput.'+$index].$pristine }">
-        <label class="col-sm-2">
-          &nbsp&nbsp
-          <a id="rm.auxSw.{{$index}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)"><span class="glyphicon glyphicon-remove" ></span></a>
-          aux SW {{key}}</label>
-          <div class="col-sm-8">
-            <input id="auxSw.{{key}}" type="text" name="auxSwInput.{{key}}" class="form-control" ng-model="formData.auxSw[$index]" ng-minlength="4"> </input>
-          </div>
-          <div class="col-sm-2" id="auxSwInputSts.{{key}}" ng-messages="inputForm['auxSwInput.'+$index].$error" ng-if="inputForm['auxSwInput.'+$index].$dirty">
-            <div ng-message="minlength">Minimum 4 characters</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SW DESCRIPTION DOCS -->
-    <div class="row">
-      <label class="col-sm-2">
-        <a id="add.swDescDoc" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)"><span  class="glyphicon glyphicon-plus"></span></a>
-        SW description docs</label>
-        <span class="col-sm-10"></span>
-      </div>
-      <div id="swDescDoc-group" class="form-group">
-        <div ng-repeat="(key, value) in formData.swDescDoc track by $index">
-          <div class="row" ng-class="{ 'has-error' : inputForm['swDescDocInput.'+$index].$invalid && !inputForm['swDescDocInput.'+$index].$pristine }">
-            <label class="col-sm-2">
-              &nbsp&nbsp
-              <a id="rm.swDescDoc.{{$index}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)"><span class="glyphicon glyphicon-remove" ></span></a>
-              SW desc doc {{key}}</label>
-              <div class="col-sm-8">
-                <input id="swDescDoc.{{key}}" type="text" name="swDescDocInput.{{key}}" class="form-control" ng-model="formData.swDescDoc[$index]" ng-minlength="4"> </input>
-              </div>
-              <div class="col-sm-2" id="swDescDocInputSts.{{key}}" ng-messages="inputForm['swDescDocInput.'+$index].$error" ng-if="inputForm['swDescDocInput.'+$index].$dirty">
-                <div ng-message="minlength">Minimum 4 characters</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- VALIDATION DOC -->
-        <div class="row">
-          <label class="col-sm-2">
-            <a id="add.validationDoc" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)"><span  class="glyphicon glyphicon-plus"></span></a>
-            Validation docs</label>
-            <span class="col-sm-10"></span>
-          </div>
-          <div id="validationDoc-group" class="form-group">
-            <div ng-repeat="(key, value) in formData.validationDoc">
-              <div class="row">
-                <label class="col-sm-2">&nbsp&nbsp
-                  <a id="rm.validationDoc.{{key}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)"><span class="glyphicon glyphicon-remove" ></span></a>
-                  Validation doc {{key}}</label> <label class="col-sm-10"> </label>
-                </div>
-                <div class="row" ng-class="{ 'has-error' : inputForm['validationDocInput.'+$index+'.doc'].$invalid && !inputForm['validationDocInput.'+$index+'.doc'].$pristine }">
-                  <label class="col-sm-2">&nbsp&nbsp&nbsp&nbspDoc</label>
-                  <div class="col-sm-8">
-                    <input id="validationDocInput.{{key}}.doc" type="text" name="validationDocInput.{{key}}.doc" class="form-control" ng-model="formData.validationDoc[key]['doc']" ng-minlength="4"> </input>
-                  </div>
-                  <div class="col-sm-2" id="validationDocInputSts.{{key}}.doc" ng-messages="inputForm['validationDocInput.'+$index+'.doc'].$error" ng-if="inputForm['validationDocInput.'+$index+'.doc'].$dirty">
-                    <div ng-message="minlength">Minimum 4 characters</div>
-                  </div>
-                </div>
-                <div class="row" ng-class="{ 'has-error' : inputForm['validationDocInput.'+$index+'.date'].$invalid && !inputForm['validationDocInput.'+$index+'.date'].$pristine }">
-                  <label class="col-sm-2">&nbsp&nbsp&nbsp&nbspDate</label>
-                  <div class="col-sm-8">
-
-                        <p class="input-group">
-                          <input id="validationDocInput.{{key}}.date" name="validationDocInput.{{key}}.date" type="text" class="form-control"
-                          uib-datepicker-popup="{{datePicker.format}}" ng-model="formData.validationDoc[key]['date']" is-open="datePicker.instances['validationDocInput.'+$index+'.date']"
-                          datepicker-options="datePicker.options" ng-required="true" close-text="Close"
-                          alt-input-formats="altInputFormats" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"/>
-                          <span class="input-group-btn">
-                            <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'validationDocInput.'+$index+'.date')"><i class="glyphicon glyphicon-calendar"></i></button>
-                          </span>
-                        </p>
-
-                    <!-- <input id="validationDocInput.{{key}}.date" type="text" placeholder="YYYY/MM/DD" name="validationDocInput.{{key}}.date" class="form-control" ng-model="formData.validationDoc[key]['date']"  ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"> </input> -->
-                  </div>
-                  <div class="col-sm-2" id="validationDocInputSts.{{key}}.date" ng-messages="inputForm['validationDocInput.'+$index+'.date'].$error" ng-if="inputForm['validationDocInput.'+$index+'.date'].$dirty">
-                    <div ng-message="pattern">Use date format YYYY/MM/DD</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- VERIFICATION DOC -->
-            <div class="row">
-              <label class="col-sm-2">
-                <a id="add.verificationDoc" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)"><span  class="glyphicon glyphicon-plus"></span></a>
-                Verification docs</label>
-                <span class="col-sm-10"></span>
-              </div>
-              <div id="verificationDoc-group" class="form-group">
-                <div ng-repeat="(key, value) in formData.verificationDoc">
-                  <div class="row">
-                    <label class="col-sm-2">&nbsp&nbsp
-                      <a id="rm.verificationDoc.{{key}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)"><span class="glyphicon glyphicon-remove" ></span></a>
-                      Verification doc {{key}}</label> <label class="col-sm-10"> </label>
-                    </div>
-                    <div class="row" ng-class="{ 'has-error' : inputForm['verificationDocInput.'+$index+'.doc'].$invalid && !inputForm['verificationDocInput.'+$index+'.doc'].$pristine }">
-                      <label class="col-sm-2">&nbsp&nbsp&nbsp&nbspDoc</label>
-                      <div class="col-sm-8">
-                        <input id="verificationDocInput.{{key}}.doc" type="text" name="verificationDocInput.{{key}}.doc" class="form-control" ng-model="formData.verificationDoc[key]['doc']" ng-minlength="4"> </input>
-                      </div>
-                      <div class="col-sm-2" id="verificationDocInputSts.{{key}}.doc" ng-messages="inputForm['verificationDocInput.'+$index+'.doc'].$error" ng-if="inputForm['verificationDocInput.'+$index+'.doc'].$dirty">
-                        <div ng-message="minlength">Minimum 4 characters</div>
-                      </div>
-                    </div>
-                    <div class="row" ng-class="{ 'has-error' : inputForm['verificationDocInput.'+$index+'.date'].$invalid && !inputForm['verificationDocInput.'+$index+'.date'].$pristine }">
-                      <label class="col-sm-2">&nbsp&nbsp&nbsp&nbspDate</label>
-                      <div class="col-sm-8">
-
-                        <p class="input-group">
-                          <input id="verificationDocInput.{{key}}.date" name="verificationDocInput.{{key}}.date" type="text" class="form-control"
-                          uib-datepicker-popup="{{datePicker.format}}" ng-model="formData.verificationDoc[key]['date']" is-open="datePicker.instances['verificationDocInput.'+$index+'.date']"
-                          datepicker-options="datePicker.options" ng-required="true" close-text="Close"
-                          alt-input-formats="altInputFormats" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"/>
-                          <span class="input-group-btn">
-                            <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'verificationDocInput.'+$index+'.date')"><i class="glyphicon glyphicon-calendar"></i></button>
-                          </span>
-                        </p>
-
-                      </div>
-                      <div class="col-sm-2" id="verificationDocInputSts.{{key}}.date" ng-messages="inputForm['verificationDocInput.'+$index+'.date'].$error" ng-if="inputForm['verificationDocInput.'+$index+'.date'].$dirty">
-                        <div ng-message="pattern" ng-class="{ 'has-error' : inputForm['verificationDocInput.'+$index+'.date'].$invalid && !inputForm['verificationDocInput.'+$index+'.date'].$pristine }"><span class="glyphicon glyphicon-exclamation-sign"></span>Use date format YYYY/MM/DD</div>
-                      </div>
-                    </div>
-                  </div>
-
-
-                  <!-- REVISION CONTROL -->
-                  <div class="row" ng-class="{ 'has-error' : inputForm.revisionControlInput.$invalid && !inputForm.revisionControlInput.$pristine }">
-                    <div id="revisionControl-group" class="form-group">
-                      <label class="col-sm-2 control-label">Revision Control</label>
-                      <div class="col-sm-8">
-                        <input id="revisionControl" type="text" name="revisionControlInput" class="form-control" placeholder="Revision Control" ng-model="formData.revisionControl" ng-minlength="4">
-                        <span class="help-block"></span>
-                      </input>
-                    </div>
-                    <div class="col-sm-2" id="revisionControlInputSts" ng-messages="inputForm.revisionControlInput.$error" ng-if="inputForm.revisionControlInput.$dirty">
-                      <div ng-message="minlength">Minimum 4 characters</div>
-                    </div>
-                  </div>
-                </div>
-
-              <!-- SUBMIT BUTTON -->
-              <div id='formStatus' ng-show="swdbParams.formShowStatus" class="alert alert-success form-group col-sm-12"><span class="glyphicon glyphicon-info-sign"></span> {{swdbParams.formStatus}}</div>
-              <div id='formError' ng-show="swdbParams.formShowErr" class="alert alert-danger form-group col-sm-12"><span class="glyphicon glyphicon-exclamation-sign"></span> {{swdbParams.formErr}}</div>
-              <button id="submitBtn" type="submit" class="btn btn-success">
-                <span class="submit glyphicon glyphicon-ok-sign"></span> Submit!
-              </button>
-              <a href="#/list" id="cancelBtn" type="submit" class="btn btn-danger"><span class="submit glyphicon glyphicon-backward"></span> Cancel </a>
-              <br>
-            </form>
-          </div>
-        </section>
+</section>

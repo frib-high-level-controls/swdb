@@ -654,8 +654,6 @@ describe("app", function() {
       {"type": "PUT","req": {"msg": {"descDocLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"descDocLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"descDocLoc": "badurl"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
-      {"type": "PUT","req": {"msg": {"auxSw": ["NEW aux sw 1","aux sw 2","aux sw 3"]},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"auxSw": ["NEW aux sw 1","aux sw 2","aux sw 3"]},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"vvProcLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"vvProcLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"vvProcLoc": "http:some-malformed-url"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
@@ -716,15 +714,6 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '"param":"platforms","msg":"platforms must be 4-30 characters"'}}},
       {"type":"POST", "req": {"msg": {"platforms": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '"param":"platforms","msg":"platforms must be 4-30 characters"'}}},
-      // test new auxSw
-      {"type":"POST", "req": {"msg": {"auxSw": "NEW"}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"auxSw","msg":"Auxilliary software must be an array of strings 4-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"auxSw": ["NE"]}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"auxSw[0]","msg":"Auxilliary SW field 0 must be 4-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"auxSw": ["0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"auxSw[0]","msg":"Auxilliary SW field 0 must be 4-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"auxSw": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"auxSw[2]","msg":"Auxilliary SW field 2 must be 4-30 characters"'}}},
       // test new versionControl min, max
       {"type":"POST", "req": {"msg": {"versionControl": "Erroneous RCS"}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of Git,AssetCentre,Filesystem,Other"'}}},
@@ -777,15 +766,6 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '"param":"platforms","msg":"platforms must be 4-30 characters"'}}},
       {"type":"PUT", "req": {"msg": {"platforms": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '"param":"platforms","msg":"platforms must be 4-30 characters"'}}},
-      // test update auxSw
-      {"type":"PUT", "req": {"msg": {"auxSw": "NEW"}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"auxSw","msg":"Auxilliary software must be an array of strings 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"auxSw": ["NE"]}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"auxSw[0]","msg":"Auxilliary SW field 0 must be 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"auxSw": ["0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"auxSw[0]","msg":"Auxilliary SW field 0 must be 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"auxSw": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"auxSw[2]","msg":"Auxilliary SW field 2 must be 4-30 characters"'}}},
       // test update versionControl min, max
       {"type":"PUT", "req": {"msg": {"versionControl": "Erroneous RCS"}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of Git,AssetCentre,Filesystem,Other"'}}},
@@ -880,26 +860,6 @@ describe("app", function() {
         });
       }
     });
-    it("Can update a record via PATCH auxSw id:1002", function(done) {
-      supertest
-      .patch("/swdbserv/v1/"+wrapper.origId)
-      .set('Cookie', [Cookies])
-      .send({auxSw: ["aux sw 1","aux sw 2","aux sw 3"]})
-      .expect(200)
-      .end(done);
-    });
-    it("Returns updated test record 1d:1002", function(done) {
-      supertest
-      .get("/swdbserv/v1/"+wrapper.origId)
-      .expect(200)
-      .end(function(err, res){
-        expect(res.body).to.have.property("_id");
-        expect(res.body._id).to.equal(wrapper.origId);
-        expect(res.body.auxSw).to.deep.equal(["aux sw 1","aux sw 2","aux sw 3"]);
-        done();
-      });
-    });
-
     it("Errors on update a nonexistent record via POST swName id:badbeef", function(done) {
       supertest
       .post("/swdbserv/v1/badbeef")

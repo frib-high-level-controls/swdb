@@ -194,38 +194,14 @@ function NewPromiseCtrl($scope, $http, $window, configService, userService) {
 
   $scope.newItem = function(event) {
 		var parts = event.currentTarget.id.split('.');
-		if (parts[1] === 'auxSw'){
-			$scope.formData.auxSw.push("");
-		} else if (parts[1] === 'swDescDoc'){
-			$scope.formData.swDescDoc.push("");
-		} else if (parts[1] === 'validationDoc'){
-			$scope.formData.validationDoc.push( {
-				doc: "",
-				date: ""
-				}
-			);
-		} else if (parts[1] === 'verificationDoc'){
-			$scope.formData.verificationDoc.push( {
-				doc: "",
-				date: ""
-				}
-			);
-		} else if (parts[1] === 'comment'){
+		if (parts[1] === 'comment'){
 			$scope.formData.comment.push("");
 		}
 	};
 
 	$scope.removeItem = function(event) {
 		var parts = event.currentTarget.id.split('.');
-		if (parts[1] === 'auxSw'){
-			$scope.formData.auxSw.splice(parts[2],1);
-		} else if (parts[1] === 'swDescDoc'){
-			$scope.formData.swDescDoc.splice(parts[2],1);
-		} else if (parts[1] === 'validationDoc'){
-			$scope.formData.validationDoc.splice(parts[2],1);
-		} else if (parts[1] === 'verificationDoc'){
-			$scope.formData.verificationDoc.splice(parts[2],1);
-		} else if (parts[1] === 'comment'){
+		if (parts[1] === 'comment'){
 			$scope.formData.comment.splice(parts[2],1);
 		}
 	};
@@ -250,11 +226,6 @@ function NewPromiseCtrl($scope, $http, $window, configService, userService) {
 
 	// initialize this record
 	$scope.formData = {
-		//revisionControl: "",
-		auxSw: [],
-		swDescDoc: [],
-		validationDoc: [],
-		verificationDoc: [],
 		comment: []
 	};
 	$scope.swdbParams = {
