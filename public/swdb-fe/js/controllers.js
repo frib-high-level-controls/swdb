@@ -164,10 +164,10 @@ function NewPromiseCtrl($scope, $http, $window, configService, userService) {
 
 	$scope.processForm = function(){
 		delete $scope.formData.__v;
-    // handle swName
-    $scope.formData.swName = $scope.selectedItem.name;
 
 		if ($scope.inputForm.$valid){
+      // handle swName
+      $scope.formData.swName = $scope.selectedItem.name;
 			$http({
 				method: 'POST',
 				url: $scope.props.apiUrl,
@@ -212,6 +212,9 @@ function NewPromiseCtrl($scope, $http, $window, configService, userService) {
 
 		$scope.statusEnums = $scope.props.statusEnums;
 		$scope.formData.status = "DEVEL";
+
+		$scope.rcsEnums = $scope.props.rcsEnums;
+		$scope.formData.versionControl = "Other";
 	};
 
   $scope.props = configService.getConfig();

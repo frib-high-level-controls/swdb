@@ -14,7 +14,7 @@ const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 const swTable = JSON.parse(fs.readFileSync('./config/swData.json', 'utf8'));
 const testSwNames = JSON.parse(fs.readFileSync('./test/misc/testSwNames.json', 'utf8'));
 
-// mae table of sw names
+// make table of sw names
 var swNames = [];
 for (var i in swTable)
 {

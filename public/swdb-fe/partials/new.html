@@ -34,8 +34,8 @@
       <div id="swName-group" class="form-group">
         <label class="col-sm-2 control-label">Software Name*</label>
         <div class="col-sm-8">
-          <ui-select  ng-model="$parent.selectedItem">
-          <ui-select-match id="swName">
+          <ui-select ng-model="$parent.selectedItem" ng-required="true">
+          <ui-select-match id="swName" >
           <span ng-bind="$select.selected.name"></span>
           </ui-select-match>
           <ui-select-choices repeat="item in (itemArray | filter: $select.search) track by item.id">
@@ -43,7 +43,7 @@
           </ui-select-choices>
           </ui-select>
         </div>
-        <div class="col-sm-2" id="swNameInputSts" ng-messages="inputForm.swNameInput.$error" ng-if="inputForm.swNameInput.$dirty">
+        <div class="col-sm-2" id="swNameInputSts" ng-messages="inputForm.swName.$error" ng-if="inputForm.swName.$dirty">
           <div ng-message="required">Name is required</div>
           <div ng-message="minlength">Name must exceed 2 characters</div>
           <div ng-message="maxlength">Name must not exceed 30 characters</div>
@@ -96,13 +96,14 @@
     <!-- Description document location-->
     <div class="row" ng-class="{ 'has-error' : inputForm.descDocLocInput.$invalid && !inputForm.descDocLocInput.$pristine }">
       <div id="descDocLoc-group" class="form-group">
-        <label class="col-sm-2 control-label">Description Doc</label>
+        <label class="col-sm-2 control-label">Description Doc (DCC URL)</label>
         <div class="col-sm-8">
-          <input id="descDocLoc" type="text" name="descDocLocInput" class="form-control" placeholder="Description document location" ng-model="formData.descDocLoc" ng-minlength="2">
+          <input id="descDocLoc" type="url" name="descDocLocInput" class="form-control" placeholder="Description document location" ng-model="formData.descDocLoc" ng-minlength="2">
           </input>
         </div>
         <div class="col-sm-2" id="descDocLocInputSts" ng-messages="inputForm.descDocLocInput.$error" ng-if="inputForm.descDocLocInput.$dirty">
           <div ng-message="minlength">Minimum 2 characters</div>
+          <div ng-message="url">Enter a valid URL</div>
         </div>
       </div>
     </div>
@@ -110,13 +111,14 @@
     <!-- Design description document location-->
     <div class="row" ng-class="{ 'has-error' : inputForm.designDescDocLocInput.$invalid && !inputForm.designDescDocLocInput.$pristine }">
       <div id="designDescDocLoc-group" class="form-group">
-        <label class="col-sm-2 control-label">Design Description Doc</label>
+        <label class="col-sm-2 control-label">Design Description Doc (DCC URL)</label>
         <div class="col-sm-8">
-          <input id="designDescDocLoc" type="text" name="designDescDocLocInput" class="form-control" placeholder="Design description document location" ng-model="formData.designDescDocLoc" ng-minlength="2">
+          <input id="designDescDocLoc" type="url" name="designDescDocLocInput" class="form-control" placeholder="Design description document location" ng-model="formData.designDescDocLoc" ng-minlength="2">
           </input>
         </div>
         <div class="col-sm-2" id="designDescDocLocInputSts" ng-messages="inputForm.designDescDocLocInput.$error" ng-if="inputForm.designDescDocLocInput.$dirty">
           <div ng-message="minlength">Minimum 2 characters</div>
+          <div ng-message="url">Enter a valid URL</div>
         </div>
       </div>
     </div>
@@ -126,7 +128,8 @@
       <div id="owner-group" class="form-group">
         <label class="col-sm-2 control-label">Owner*</label>
         <div class="col-sm-8">
-          <input id="owner" type="text" name="ownerInput" class="form-control" placeholder="SW owner" ng-model="formData.owner" ng-minlength="2" ng-maxlength="30" required>
+          <input id="owner" type="text" name="ownerInput" class="form-control" placeholder="SW owner" ng-model="formData.owner"
+            ng-minlength="2" ng-maxlength="30" required >
           </input>
         </div>
         <div class="col-sm-2" id="ownerInputSts" ng-messages="inputForm.ownerInput.$error" ng-if="inputForm.ownerInput.$dirty">
@@ -140,9 +143,10 @@
     <!-- Engineer -->
     <div class="row" ng-class="{ 'has-error' : inputForm.engineerInput.$invalid && !inputForm.engineerInput.$pristine }">
       <div id="engineer-group" class="form-group">
-        <label class="col-sm-2 control-label">Engineer*</label>
+        <label class="col-sm-2 control-label">Engineer</label>
         <div class="col-sm-8">
-          <input id="engineer" type="text" name="engineerInput" class="form-control" placeholder="Engineer" ng-model="formData.engineer" ng-minlength="2" ng-maxlength="30" required>
+          <input id="engineer" type="text" name="engineerInput" class="form-control" placeholder="Engineer"
+            ng-model="formData.engineer" ng-minlength="2" ng-maxlength="30">
           </input>
         </div>
         <div class="col-sm-2" id="engineerInputSts" ng-messages="inputForm.engineerInput.$error" ng-if="inputForm.engineerInput.$dirty">
@@ -222,11 +226,12 @@
       <div id="vvProcLoc-group" class="form-group">
         <label class="col-sm-2 control-label">V&V Procedure Doc (DCC URL)</label>
         <div class="col-sm-8">
-          <input id="vvProcLoc" type="text" name="vvProcLocInput" class="form-control" placeholder="V&V procedure document location" ng-model="formData.vvProcLoc" ng-minlength="2">
+          <input id="vvProcLoc" type="url" name="vvProcLocInput" class="form-control" placeholder="V&V procedure document location" ng-model="formData.vvProcLoc" ng-minlength="2">
           </input>
         </div>
         <div class="col-sm-2" id="vvProcLocInputSts" ng-messages="inputForm.vvProcLocInput.$error" ng-if="inputForm.vvProcLocInput.$dirty">
           <div ng-message="minlength">Minimum 2 characters</div>
+          <div ng-message="url">Enter a valid URL</div>
         </div>
       </div>
     </div>
@@ -236,11 +241,12 @@
       <div id="vvResultsLoc-group" class="form-group">
         <label class="col-sm-2 control-label">V&V Results Doc (DCC URL)</label>
         <div class="col-sm-8">
-          <input id="vvResultsLoc" type="text" name="vvResultsLocInput" class="form-control" placeholder="V&V results document location" ng-model="formData.vvResultsLoc" ng-minlength="2">
+          <input id="vvResultsLoc" type="url" name="vvResultsLocInput" class="form-control" placeholder="V&V results document location" ng-model="formData.vvResultsLoc" ng-minlength="2">
           </input>
         </div>
         <div class="col-sm-2" id="vvResultsLocInputSts" ng-messages="inputForm.vvResultsLocInput.$error" ng-if="inputForm.vvResultsLocInput.$dirty">
           <div ng-message="minlength">Minimum 2 characters</div>
+          <div ng-message="url">Enter a valid URL</div>
         </div>
       </div>
     </div>
@@ -250,7 +256,7 @@
       <div id="versionControl-group" class="form-group">
         <label class="col-sm-2 control-label">Version control</label>
         <div class="col-sm-8">
-          <select id="versionControl" ng-model="formData.versionControl" ng-options="o for o in levelOfCareEnums track by o"></select>
+          <select id="versionControl" ng-model="formData.versionControl" ng-options="o for o in rcsEnums track by o"></select>
         </div>
         <div class="col-sm-2" id="versionControlInputSts" ng-messages="inputForm.versionControlInput.$error" ng-if="inputForm.versionControlInput.$dirty">
         </div>
@@ -304,14 +310,14 @@
     <!-- Recertification date -->
     <div class="row" ng-class="{ 'has-error' : inputForm.recertDateInput.$invalid && !inputForm.recertDateInput.$pristine }">
       <div id="recertDate-group" class="form-group">
-        <label class="col-sm-2 control-label">Recert Date*</label>
+        <label class="col-sm-2 control-label">Recert Date</label>
         <div class="col-sm-8">
 
           <p class="input-group">
           <input id="recertDate" name="recertDateInput" type="text" class="form-control"
-                                                                    uib-datepicker-popup="{{datePicker.format}}" ng-model="formData.recertDate" is-open="datePicker.instances['recertDate']"
-                                                                                                                                                datepicker-options="datePicker.options" ng-required="true" close-text="Close"
-                                                                                                                                                                                                           alt-input-formats="altInputFormats" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"/>
+            uib-datepicker-popup="{{datePicker.format}}" ng-model="formData.recertDate" is-open="datePicker.instances['recertDate']"
+            datepicker-options="datePicker.options" ng-required="false" close-text="Close"
+            alt-input-formats="altInputFormats" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"/>
           <span class="input-group-btn">
             <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'recertDate')"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>
@@ -332,7 +338,7 @@
         <label class="col-sm-2 control-label">Previous version (URL)</label>
         <div class="col-sm-8">
           <input id="previous" type="url" name="previousInput" class="form-control" 
-            placeholder="Previous version location" ng-model="formData.previous" ng-minlength="2">
+                                                               placeholder="Previous version location" ng-model="formData.previous" ng-minlength="2">
           </input>
         </div>
         <div class="col-sm-2" id="previousInputSts" ng-messages="inputForm.previousInput.$error" ng-if="inputForm.previousInput.$dirty">
@@ -363,16 +369,15 @@
         </div>
       </div>
     </div>
-</div>
 
-<!-- SUBMIT BUTTON -->
-<div id='formStatus' ng-show="swdbParams.formShowStatus" class="alert alert-success form-group col-sm-12"><span class="glyphicon glyphicon-info-sign"></span> {{swdbParams.formStatus}}</div>
-<div id='formError' ng-show="swdbParams.formShowErr" class="alert alert-danger form-group col-sm-12"><span class="glyphicon glyphicon-exclamation-sign"></span> {{swdbParams.formErr}}</div>
-<button id="submitBtn" type="submit" class="btn btn-success">
-  <span class="submit glyphicon glyphicon-ok-sign"></span> Submit!
-</button>
-<a href="#/list" id="cancelBtn" type="submit" class="btn btn-danger"><span class="submit glyphicon glyphicon-backward"></span> Cancel </a>
-<br>
+    <!-- SUBMIT BUTTON -->
+    <div id='formStatus' ng-show="swdbParams.formShowStatus" class="alert alert-success form-group col-sm-12"><span class="glyphicon glyphicon-info-sign"></span> {{swdbParams.formStatus}}</div>
+    <div id='formError' ng-show="swdbParams.formShowErr" class="alert alert-danger form-group col-sm-12"><span class="glyphicon glyphicon-exclamation-sign"></span> {{swdbParams.formErr}}</div>
+    <button id="submitBtn" type="submit" class="btn btn-success">
+      <span class="submit glyphicon glyphicon-ok-sign"></span> Submit!
+    </button>
+    <a href="#/list" id="cancelBtn" type="submit" class="btn btn-danger"><span class="submit glyphicon glyphicon-backward"></span> Cancel </a>
+    <br>
   </form>
-  </div>
+</div>
 </section>

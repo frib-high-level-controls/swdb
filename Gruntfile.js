@@ -8,7 +8,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     // setup jshint
     jshint: {
-      files: ["*.js", "lib/*.js", "test/*.js", "public/swdb-fe/*.js",
+      files: ["*.js", "lib/*.js", "test/*.js", "test/store/*.js", "public/swdb-fe/*.js",
       "public/swdb-fe/js/*.js"],
       options: {
         esversion: 6,
