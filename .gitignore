@@ -1,0 +1,6 @@
+
+# NPM package installations
+node_modules/
+
+# NPM debub log
+npm-debug.log

@@ -1,0 +1,84 @@
+#!/usr/bin/env node
+
+var http = require('http');
+
+var app = require('../app');
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+};
+
+/**
+ * Initialize the application and start server on completion.
+ */
+app.initialize().then(function (app) {
+
+  /**
+   * Get port from environment or application settings or used default
+   */
+  var port = normalizePort(process.env.PORT || app.get('port') || '3000');
+
+  /**
+   * Create HTTP server.
+   */
+  var server = http.createServer(app);
+
+  /**
+   * Event listener for HTTP server "listening" event.
+   */
+  server.on('listening', function () {
+    var addr = server.address();
+    var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+    console.log('runcheck is listening on ' + bind);
+  });
+
+  /**
+   * Event listener for HTTP server "error" event.
+   */
+  server.on('error', function onError(err) {
+    if (err.syscall !== 'listen') {
+      throw err;
+    }
+
+    var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
+
+    // handle specific listen errors with friendly messages
+    switch (err.code) {
+    case 'EACCES':
+      console.error('Error: ' + bind + ' permission denied');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error('Error: ' + bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      console.error(error);
+      process.exit(1);
+    }
+  });
+
+  /**
+   * Listen on provided port, on all network interfaces.
+   */
+  server.listen(port);
+})
+
+.catch(function (err) {
+  console.error(err);
+});
