@@ -66,7 +66,7 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
 		DTColumnBuilder.newColumn('levelOfCare').withTitle('Level of care'),
 		DTColumnBuilder.newColumn('status').withTitle('Status'),
 		DTColumnBuilder.newColumn('statusDate').withTitle('Status date'),
-		DTColumnBuilder.newColumn('releasedVersion').withTitle('SW version').withOption('defaultContent','')
+		DTColumnBuilder.newColumn('version').withTitle('SW version').withOption('defaultContent','')
 	];
 }
 

@@ -96,7 +96,7 @@ test.describe("SWDB record tests", function() {
     driver.findElement(By.id("levelOfCare")).sendKeys("LOW");
     driver.findElement(By.id("status")).sendKeys("DEVEL");
     driver.findElement(By.id("statusDate")).sendKeys("1978/07/07");
-    driver.findElement(By.id("releasedVersion")).sendKeys("v0.3001");
+    driver.findElement(By.id("version")).sendKeys("v0.3001");
     driver.findElement(By.id("submitBtn")).click();
 
     driver.wait(until.elementTextContains(driver.findElement(By.id("formError")),
@@ -116,7 +116,7 @@ test.describe("SWDB record tests", function() {
     driver.findElement(By.id("levelOfCare")).sendKeys("LOW");
     driver.findElement(By.id("status")).sendKeys("DEVEL");
     driver.findElement(By.id("statusDate")).sendKeys("1978/07/07");
-    driver.findElement(By.id("releasedVersion")).sendKeys("v0.3001");
+    driver.findElement(By.id("version")).sendKeys("v0.3001");
     driver.findElement(By.id("submitBtn")).click();
 
     driver.wait(until.elementTextContains(driver.findElement(By.id("formStatus")),

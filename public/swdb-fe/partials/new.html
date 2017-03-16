@@ -52,14 +52,14 @@
     </div>
 
     <!-- VERSION -->
-    <div class="row" ng-class="{ 'has-error' : inputForm.releasedVersionInput.$invalid && !inputForm.releasedVersionInput.$pristine }">
-      <div id="releasedVersion-group" class="form-group">
+    <div class="row" ng-class="{ 'has-error' : inputForm.versionInput.$invalid && !inputForm.versionInput.$pristine }">
+      <div id="version-group" class="form-group">
         <label class="col-sm-2 control-label">Version</label>
         <div class="col-sm-8">
-          <input id="releasedVersion" type="text" name="releasedVersionInput" class="form-control" placeholder="Version" ng-model="formData.releasedVersion" ng-minlength="2">
+          <input id="version" type="text" name="versionInput" class="form-control" placeholder="Version" ng-model="formData.version" ng-minlength="2">
           </input>
         </div>
-        <div class="col-sm-2" id="releasedVersionInputSts" ng-messages="inputForm.releasedVersionInput.$error" ng-if="inputForm.releasedVersionInput.$dirty">
+        <div class="col-sm-2" id="versionInputSts" ng-messages="inputForm.versionInput.$error" ng-if="inputForm.versionInput.$dirty">
           <div ng-message="minlength">Minimum 2 characters</div>
         </div>
       </div>
