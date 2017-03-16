@@ -543,7 +543,7 @@ describe("app", function() {
   it("Post a new record previous Test Record", function(done) {
     supertest
     .post("/swdbserv/v1/")
-    .send({swName: "previous Test Record", owner: "previous Test Owner", previous: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .send({swName: "previous Test Record", owner: "previous Test Owner", previous: "test-reference", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -572,7 +572,7 @@ describe("app", function() {
       .end(function(err, res){
         expect(res.body).to.have.property("_id");
         expect(res.body.swName).to.equal("previous Test Record");
-        expect(res.body.previous).to.equal("http://www.somehost/some-path/some-file");
+        expect(res.body.previous).to.equal("test-reference");
         done();
       });
     });
@@ -641,8 +641,8 @@ describe("app", function() {
       {"type": "GET","res": {"msg": {"status": "RDY_INSTALL"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"statusDate": "7/7/1977"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"statusDate": "1977-07-07"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"releasedVersion": "NEW test version"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"releasedVersion": "NEW test version"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"version": "NEW test version"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"version": "NEW test version"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"branch": "NEW Branch"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"branch": "NEW Branch"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"branch": "NEW Branch name that is much too long"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
@@ -672,9 +672,9 @@ describe("app", function() {
       {"type": "PUT","req": {"msg": {"recertDate": "April 21, 2017"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"recertDate": "2017-04-21T07:00:00.000Z"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"recertDate": "Not a date"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
-      {"type": "PUT","req": {"msg": {"previous": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"previous": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"previous": "badurl"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
+      {"type": "PUT","req": {"msg": {"previous": "test-reference"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"previous": "test-reference"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"previous": "bad reference is way to long for this"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
       {"type": "PUT","req": {"msg": {"comment": ["NEW test comment"]},"url": "/swdbserv/v1/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"comment": ["NEW test comment"]},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
       // test new swName is required, min, max
@@ -704,11 +704,11 @@ describe("app", function() {
       // test new statusDate with non-date
       {"type":"POST", "req": {"msg": {"swName":"testing","owner":"test owner","levelOfCare":"LOW","status":"DEVEL","statusDate": "non-date"}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '{"param":"statusDate","msg":"Status date must be a date","value":"non-date"}'}}},
-      // test new releasedVersion min, max
-      {"type":"POST", "req": {"msg": {"releasedVersion": ""}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"releasedVersion","msg":"Released version must be 1-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"releasedVersion": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"releasedVersion","msg":"Released version must be 1-30 characters"'}}},
+      // test new version min, max
+      {"type":"POST", "req": {"msg": {"version": ""}, "url": "/swdbserv/v1/",
+      "err": {"status": 400, "msgHas": '"param":"version","msg":"Version must be 1-30 characters"'}}},
+      {"type":"POST", "req": {"msg": {"version": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
+      "err": {"status": 400, "msgHas": '"param":"version","msg":"Version must be 1-30 characters"'}}},
       // test new platforms min, max
       {"type":"POST", "req": {"msg": {"platforms": "NEW"}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '"param":"platforms","msg":"platforms must be 4-30 characters"'}}},
@@ -756,11 +756,11 @@ describe("app", function() {
       // test update statusDate with non-date
       {"type":"PUT", "req": {"msg": {"statusDate": "non-date"}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '{"param":"statusDate","msg":"Status date must be a date","value":"non-date"}'}}},
-      // test update releasedVersion min, max
-      {"type":"PUT", "req": {"msg": {"releasedVersion": ""}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"releasedVersion","msg":"Released version must be 1-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"releasedVersion": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
-      "err": {"status": 400, "msgHas": '"param":"releasedVersion","msg":"Released version must be 1-30 characters"'}}},
+      // test update version min, max
+      {"type":"PUT", "req": {"msg": {"version": ""}, "url": "/swdbserv/v1/",
+      "err": {"status": 400, "msgHas": '"param":"version","msg":"Version must be 1-30 characters"'}}},
+      {"type":"PUT", "req": {"msg": {"version": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
+      "err": {"status": 400, "msgHas": '"param":"version","msg":"Version must be 1-30 characters"'}}},
       // test update platforms min, max
       {"type":"PUT", "req": {"msg": {"platforms": "NEW"}, "url": "/swdbserv/v1/",
       "err": {"status": 400, "msgHas": '"param":"platforms","msg":"platforms must be 4-30 characters"'}}},

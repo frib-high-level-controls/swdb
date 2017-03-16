@@ -51,12 +51,12 @@
       </div>
     </div>
 
-    <!-- RELEASED VERSION -->
+    <!-- VERSION -->
     <div class="row" ng-class="{ 'has-error' : inputForm.releasedVersionInput.$invalid && !inputForm.releasedVersionInput.$pristine }">
       <div id="releasedVersion-group" class="form-group">
-        <label class="col-sm-2 control-label">Released Version</label>
+        <label class="col-sm-2 control-label">Version</label>
         <div class="col-sm-8">
-          <input id="releasedVersion" type="text" name="releasedVersionInput" class="form-control" placeholder="Released version" ng-model="formData.releasedVersion" ng-minlength="2">
+          <input id="releasedVersion" type="text" name="releasedVersionInput" class="form-control" placeholder="Version" ng-model="formData.releasedVersion" ng-minlength="2">
           </input>
         </div>
         <div class="col-sm-2" id="releasedVersionInputSts" ng-messages="inputForm.releasedVersionInput.$error" ng-if="inputForm.releasedVersionInput.$dirty">
@@ -332,7 +332,7 @@
       </div>
     </div>
 
-    <!-- Previous revision -->
+    <!-- Previous revision 
     <div class="row" ng-class="{ 'has-error' : inputForm.previousInput.$invalid && !inputForm.previousInput.$pristine }">
       <div id="pevious-group" class="form-group">
         <label class="col-sm-2 control-label">Previous version (URL)</label>
@@ -346,7 +346,7 @@
           <div ng-message="url">Enter a valid URL</div>
         </div>
       </div>
-    </div>
+      </div> -->
 
     <!-- COMMENTS -->
     <div class="row">
