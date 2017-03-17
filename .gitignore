@@ -4,3 +4,12 @@ node_modules/
 
 # NPM debub log
 npm-debug.log
+
+# Ignore grunt-ts crumb
+src/app/.baseDir.ts
+
+# Ignore build directory
+app/
+
+# Ignore configuration files
+config/app.json

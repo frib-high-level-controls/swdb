@@ -1,0 +1,39 @@
+html
+  head
+    style(type='text/css')
+      | .ok {
+      |   color: green;
+      | }
+      | .error {
+      |   color: red;
+      | }
+      | tr {
+      |  border: 1px solid;
+      | }
+      | td.status {
+      |   text-align: right;
+      |   padding: 5px 5px;
+      | }
+      | td.name {
+      |   padding: 5px 5px;
+      | }
+      | td.message {
+      |   padding: 5px 10px;
+      | }
+  body
+    if status.status === 'OK'
+      h2.ok= 'Status: ' + status.status
+    else
+      h2.error= 'Status: ' + status.status
+    p= 'Uptime: ' + status.uptime + 's'
+    table(style='border-collapse: collapse;')
+      each comp in status.components
+        tr(title='Updated: ' + comp.date)
+          if comp.status === 'OK'
+            td.status.ok= comp.status
+            td.name= comp.name
+            td.message= comp.message
+          else
+            td.status.error= comp.status
+            td.name.error= comp.name
+            td.message.error= comp.message

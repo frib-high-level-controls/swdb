@@ -16,6 +16,9 @@
     "serve-favicon": "^2.3.0"
   },
   "devDependencies": {
-    "grunt": "^1.0.1"
+    "@types/express": "^4.0.35",
+    "grunt": "^1.0.1",
+    "grunt-ts": "^5.5.1",
+    "typescript": "^2.2.1"
   }
 }
