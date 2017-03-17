@@ -1,8 +1,13 @@
 #!/usr/bin/env node
 
+/*
+ * Server launch script
+ */
 var http = require('http');
 
 var app = require('../app');
+
+var srv = null;
 
 /**
  * Normalize a port into a number, string, or false.
@@ -24,61 +29,160 @@ function normalizePort(val) {
 };
 
 /**
- * Initialize the application and start server on completion.
+ * Create a promise that is rejected after the given time limit.
  */
-app.initialize().then(function (app) {
-
-  /**
-   * Get port from environment or application settings or used default
-   */
-  var port = normalizePort(process.env.PORT || app.get('port') || '3000');
-
-  /**
-   * Create HTTP server.
-   */
-  var server = http.createServer(app);
-
-  /**
-   * Event listener for HTTP server "listening" event.
-   */
-  server.on('listening', function () {
-    var addr = server.address();
-    var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-    console.log('runcheck is listening on ' + bind);
+function timeout(limit) {
+  return new Promise(function (resolve, reject) {
+    setTimeout(function () {
+      reject(new Error('Time limit exceeded: ' + limit + 'ms'));
+    }, limit);
   });
+};
 
+/**
+ * Start the application.
+ */
+function start() {
+  return app.start();
+}
+
+/**
+ * Stop the application with timeout.
+ */
+function stop(limit) {
+  return Promise.race([app.stop(), timeout(limit)]);
+}
+
+/**
+ * Create the HTTP server and start listening
+ */
+function listen(handler) {
   /**
-   * Event listener for HTTP server "error" event.
+   * Normalized port from environment or application or default
    */
-  server.on('error', function onError(err) {
-    if (err.syscall !== 'listen') {
-      throw err;
-    }
+  var port = normalizePort(process.env.PORT || handler.get('port') || '3000');
+  /**
+   * Create the HTTP server.
+   */
+  srv = http.createServer(handler);
 
-    var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
-
-    // handle specific listen errors with friendly messages
-    switch (err.code) {
-    case 'EACCES':
-      console.error('Error: ' + bind + ' permission denied');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error('Error: ' + bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      console.error(error);
-      process.exit(1);
+  return new Promise(function (resolve, reject) {
+    /**
+     * Event listener for HTTP server "listening" event.
+     */
+    srv.on('listening', function () {
+      resolve();
+    });
+    /**
+     * Event listener for HTTP server "error" event.
+     */
+    srv.on('error', function onError(err) {
+      if (err.syscall !== 'listen') {
+        reject(err);
+      }
+      switch (err.code) {
+      case 'EACCES':
+        reject(new Error('Listen on port ' + port + ': permission denied'))
+        break;
+      case 'EADDRINUSE':
+        reject(new Error('Listen on port ' + port + ': already in use'))
+        break;
+      default:
+        reject(err);
+        break;
+      }
+    });
+    /**
+     * Listen on provided port, on all network interfaces.
+     */
+    srv.listen(port);
+  })
+  .then(function () {
+    var addr = srv.address();
+    if (typeof addr === 'string') {
+      app.log('Server listening on pipe: ' + addr);
+    } else {
+      app.log('Server listening on port: ' + addr.address + ':' + addr.port);
     }
   });
+};
 
-  /**
-   * Listen on provided port, on all network interfaces.
-   */
-  server.listen(port);
+/**
+ * Stop listening and wait for connections close with timeout.
+ */
+function close(limit) {
+  return Promise.race([
+    new Promise(function (resolve, reject) {
+      if (!srv) {
+        reject(new Error('Server not created'));
+        return;
+      }
+      srv.close(function(err) {
+        if (err) {
+          reject(err);
+        }
+        resolve(true);
+      });
+    }),
+    timeout(2000).catch(function () {
+      // Ignore timeout because it is expected
+      // if 'keep-alive' connections are open.
+      return false;
+    })
+  ])
+  .then(function (closed) {
+    if (closed) {
+      app.log('Server close successful');
+    } else {
+      app.log('Server close timeout');
+    }
+  })
+  .catch(function (err) {
+    // Ignore error so that application
+    // shutdown will continue normally.
+    app.error('Server close failure');
+    app.error(err);
+  })
+};
+
+/**
+ * Wait for the specified shutdown signal(s).
+ */
+function wait(signals) {
+  app.log('Wait for shutdown signal');
+  return new Promise(function (resolve) {
+    for (var idx=0; idx < signals.length; idx++) {
+      process.once(signals[idx], resolve);
+    }
+  })
+  .then(function () {
+    app.log('Shutdown signal received');
+  });
+};
+
+/**
+ * Start the application and wait for shutdown signal
+ */
+start().catch(function (err) {
+  app.error(err);
+  process.exit(1);
 })
-
+.then(function (handler) {
+  return listen(handler);
+})
+.then(function () {
+  return wait(['SIGINT', 'SIGTERM']);
+})
+.then(function () {
+  return close(2000); //  2 second timeout
+})
+.then(function () {
+  return stop(30000); // 30 second timeout
+})
+.then(function () {
+  process.exit(0);
+})
 .catch(function (err) {
-  console.error(err);
+  app.error(err);
+  process.exit(1);
 });
