@@ -2,14 +2,17 @@
 # NPM package installations
 node_modules/
 
-# NPM debub log
+# NPM debug log
 npm-debug.log
+
+# Ignore Typescript cache
+.tscache
 
 # Ignore grunt-ts crumb
 src/app/.baseDir.ts
 
 # Ignore build directory
-app/
+/app/
 
 # Ignore configuration files
-config/app.json
+/config/app.json
