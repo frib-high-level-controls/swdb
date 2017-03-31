@@ -76,7 +76,7 @@ let loadInterval = (10*60*1000) // 10 minutes //
 
 function monitorLoad() {
   let next = process.cpuUsage();
-  let user = (next.system-last.system)/1000;
+  let user = (next.user-last.user)/1000;
   let system = (next.system-last.system)/1000;
   let load = (user+system) / loadInterval;
   last = next;
