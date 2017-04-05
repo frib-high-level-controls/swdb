@@ -12,14 +12,14 @@ import monitor_routes = require('./routes/monitor');
 
 // error interface
 interface StatusError extends Error {
-  status?: number
+  status?: number;
 }
 
 // application configuration
 interface IAppCfg {
-  port?: string,
-  session_life?: number,
-  session_secret?: string
+  port?: string;
+  session_life?: number;
+  session_secret?: string;
 };
 
 // application singleton
@@ -48,13 +48,13 @@ async function start(): Promise<express.Application> {
   if (app) {
     return app;
   }
-  
+
   log('Application starting');
 
   app = express();
-  let env = app.get('env')
+  let env = app.get('env');
 
-  let cfg: IAppCfg = await readConfigFile('app.json')
+  let cfg: IAppCfg = await readConfigFile('app.json');
 
   app.set('port', cfg.port || 3000);
 
@@ -75,7 +75,7 @@ async function start(): Promise<express.Application> {
   });
 
   if (env === 'production') {
-    app.use(morgan('short'))
+    app.use(morgan('short'));
   } else {
     app.use(morgan('dev'));
   }
@@ -83,7 +83,7 @@ async function start(): Promise<express.Application> {
   // body-parser configuration
   app.use(bodyparser.json());
   app.use(bodyparser.urlencoded({
-    extended: false
+    extended: false,
   }));
 
   // session configuration
@@ -95,9 +95,9 @@ async function start(): Promise<express.Application> {
     cookie: {
       maxAge: cfg.session_life || 28800000,
     },
-    logErrors: function (err) {
-      //log.error(err);
-    }
+    logErrors: function(err) {
+      // log.error(err);
+    },
   }));
 
   app.use(express.static(path.resolve(__dirname, '../public')));
@@ -106,7 +106,7 @@ async function start(): Promise<express.Application> {
   app.use('/monitor', monitor_routes);
 
   // catch 404 and forward to error handler
-  app.use(function (req, res, next) {
+  app.use(function(req, res, next) {
     let err: StatusError = new Error('Not Found');
     err.status = 404;
     next(err);
@@ -117,7 +117,7 @@ async function start(): Promise<express.Application> {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
-      error: err
+      error: err,
     });
   });
 

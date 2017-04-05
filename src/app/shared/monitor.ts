@@ -4,22 +4,22 @@
 import process = require('process');
 
 interface ComponentStatus {
-  status: string,
-  date: Date,
-  name: string,
-  message: string
+  status: string;
+  date: Date;
+  name: string;
+  message: string;
 }
 
 interface MonitorStatus {
-  status: string,
-  uptime: number,
-  components: [ComponentStatus]
+  status: string;
+  uptime: number;
+  components: [ComponentStatus];
 }
 
 // Utilities
 
 function toMB(memory: number): string {
-  return Math.round(memory/1048576).toString() + 'MB';
+  return Math.round(memory / 1048576).toString() + 'MB';
 }
 
 function toPCT(load: number): string {
@@ -58,27 +58,27 @@ function updateLoadStatus() {
       status: 'OK',
       date: new Date(),
       name: 'Load',
-      message: toPCT(load) + ' < ' + toPCT(getLoadLimit())
+      message: toPCT(load) + ' < ' + toPCT(getLoadLimit()),
     };
   } else {
     loadStatus = {
       status: 'ERROR',
       date: new Date(),
       name: 'Load',
-      message: toPCT(load) + ' >= ' + toPCT(getLoadLimit())
+      message: toPCT(load) + ' >= ' + toPCT(getLoadLimit()),
     };
   }
 };
 
 let last = process.cpuUsage();
 
-let loadInterval = (10*60*1000) // 10 minutes //
+let loadInterval = (10 * 60 * 1000); // 10 minutes //
 
 function monitorLoad() {
   let next = process.cpuUsage();
-  let user = (next.user-last.user)/1000;
-  let system = (next.system-last.system)/1000;
-  let load = (user+system) / loadInterval;
+  let user = (next.user - last.user) / 1000;
+  let system = (next.system - last.system) / 1000;
+  load = (user + system) / loadInterval;
   last = next;
   updateLoadStatus();
 }
@@ -102,7 +102,7 @@ function getMemoryStatus(): ComponentStatus {
   return memoryStatus;
 }
 
-let memoryLimit = (2*1024*1024*1024); // 2 Gigabyte //
+let memoryLimit = (2 * 1024 * 1024 * 1024); // 2 Gigabyte //
 
 function getMemoryLimit(): number {
   return memoryLimit;
@@ -121,19 +121,19 @@ function updateMemoryStatus() {
       status: 'OK',
       date: new Date(),
       name: 'Memory',
-      message: toMB(memory) + ' < ' + toMB(getMemoryLimit())
+      message: toMB(memory) + ' < ' + toMB(getMemoryLimit()),
     };
   } else {
     memoryStatus = {
       status: 'ERROR',
       date: new Date(),
       name: 'Memory',
-      message: toMB(memory) + " >= " + toMB(getMemoryLimit())
+      message: toMB(memory) + ' >= ' + toMB(getMemoryLimit()),
     };
   }
 };
 
-let memoryInterval = (1*60*1000) // 1 minutes //
+let memoryInterval = (1 * 60 * 1000); // 1 minutes //
 
 function monitorMemory() {
   memory = process.memoryUsage().heapTotal;
@@ -148,7 +148,7 @@ setInterval(monitorMemory, memoryInterval);
 
 // Custom status //
 
-let components = <[ComponentStatus]>[];
+let components = <[ComponentStatus]> [];
 
 function setOk(name: string, message?: string) {
   for (let comp of components) {
@@ -162,7 +162,7 @@ function setOk(name: string, message?: string) {
     status: 'OK',
     date: new Date(),
     name: name,
-    message: message || 'OK'
+    message: message || 'OK',
   });
 }
 
@@ -178,7 +178,7 @@ function setError(name: string, message?: string) {
     status: 'ERROR',
     date: new Date(),
     name: name,
-    message: message || 'ERROR'
+    message: message || 'ERROR',
   });
 }
 
@@ -186,8 +186,8 @@ function getStatus(): MonitorStatus {
   let status = {
     status: 'OK',
     uptime: process.uptime(),
-    components: <[ComponentStatus]>[]
-  }
+    components: <[ComponentStatus]> [],
+  };
 
   status.components.push(memoryStatus);
   if (memoryStatus.status !== 'OK') {
@@ -202,7 +202,7 @@ function getStatus(): MonitorStatus {
   for (let comp of components) {
     status.components.push(comp);
     if (comp.status !== 'OK') {
-      status.status = 'ERROR'
+      status.status = 'ERROR';
     }
   }
 

@@ -10,7 +10,7 @@ let routes = express.Router();
 
 routes.get('/status', function (req: express.Request, res: express.Response) {
   res.status(200).render('status', {
-    status: monitor.getStatus()
+    status: monitor.getStatus(),
   });
 });
 
