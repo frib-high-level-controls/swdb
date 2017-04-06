@@ -62,6 +62,10 @@ function listen(handler) {
    */
   var port = normalizePort(process.env.PORT || handler.get('port') || '3000');
   /**
+   * Initialize the bind address from environment or application or default
+   */
+  var addr = process.env.ADDR || handler.get('addr') || 'localhost';
+  /**
    * Create the HTTP server.
    */
   srv = http.createServer(handler);
@@ -95,7 +99,7 @@ function listen(handler) {
     /**
      * Listen on provided port, on all network interfaces.
      */
-    srv.listen(port);
+    srv.listen(port, addr);
   })
   .then(function () {
     var addr = srv.address();
