@@ -18,6 +18,7 @@ interface StatusError extends Error {
 // application configuration
 interface IAppCfg {
   port?: string;
+  addr?: string;
   session_life?: number;
   session_secret?: string;
 };
@@ -56,7 +57,8 @@ async function start(): Promise<express.Application> {
 
   let cfg: IAppCfg = await readConfigFile('app.json');
 
-  app.set('port', cfg.port || 3000);
+  app.set('port', cfg.port || '3000');
+  app.set('addr', cfg.addr || 'localhost');
 
   // view engine configuration
   app.set('views', path.resolve(__dirname, '../views'));
