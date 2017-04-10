@@ -16,7 +16,7 @@ interface StatusError extends Error {
 }
 
 // application configuration
-interface IAppCfg {
+interface AppCfg {
   port?: string;
   addr?: string;
   session_life?: number;
@@ -55,10 +55,10 @@ async function start(): Promise<express.Application> {
   app = express();
   let env = app.get('env');
 
-  let cfg: IAppCfg = await readConfigFile('app.json');
+  let appCfg: AppCfg = await readConfigFile('app.json');
 
-  app.set('port', cfg.port || '3000');
-  app.set('addr', cfg.addr || 'localhost');
+  app.set('port', appCfg.port || '3000');
+  app.set('addr', appCfg.addr || 'localhost');
 
   // view engine configuration
   app.set('views', path.resolve(__dirname, '../views'));
@@ -93,9 +93,9 @@ async function start(): Promise<express.Application> {
     store: new session.MemoryStore(),
     resave: false,
     saveUninitialized: false,
-    secret: cfg.session_secret || 'secret',
+    secret: appCfg.session_secret || 'secret',
     cookie: {
-      maxAge: cfg.session_life || 28800000,
+      maxAge: appCfg.session_life || 28800000,
     },
     logErrors: function(err) {
       // log.error(err);
