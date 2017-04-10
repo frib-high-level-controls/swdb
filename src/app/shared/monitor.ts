@@ -209,6 +209,48 @@ function getStatus(): MonitorStatus {
   return status;
 };
 
+function getComponent(name: string): ComponentStatus | undefined {
+  for (let comp of components) {
+    if (comp.name === name) {
+      return comp;
+    }
+  }
+};
+
+function setComponentOk(name: string, message?: string): void {
+  for (let comp of components) {
+    if (comp.name === name) {
+      comp.status = 'OK';
+      comp.date = new Date();
+      comp.message = message || 'OK';
+      return;
+    }
+  }
+  components.push({
+    status: 'OK',
+    date: new Date(),
+    name: name,
+    message: message || 'OK',
+  });
+};
+
+function setComponentError(name: string, message?: string): void {
+  for (let comp of components) {
+    if (comp.name === name) {
+      comp.status = 'ERROR';
+      comp.date = new Date();
+      comp.message = message || 'ERROR';
+      return;
+    }
+  }
+  components.push({
+    status: 'ERROR',
+    date: new Date(),
+    name: name,
+    message: message || 'ERROR',
+  });
+};
+
 export {
   getLoad,
   getLoadLimit,
@@ -218,5 +260,8 @@ export {
   getMemoryLimit,
   setMemoryLimit,
   getMemoryStatus,
-  getStatus
+  getStatus,
+  getComponent,
+  setComponentOk,
+  setComponentError
 };
