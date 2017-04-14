@@ -9,7 +9,7 @@ npm-debug.log
 .tscache
 
 # Ignore grunt-ts crumb
-src/app/.baseDir.ts
+.baseDir.ts
 
 # Ignore build directory
 /app/
