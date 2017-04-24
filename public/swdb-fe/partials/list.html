@@ -1,34 +1,37 @@
 <section>
-  <div class="header swdb-top-div container-fluid">
+<div class="header swdb-top-div container-fluid">
     <div class="row">
-      <div class="col-sm-3">
-        <a id="srchBtn" href="#/list/" class="btn btn-info">
-          <span class="glyphicon glyphicon-search"></span>
-          Search
-        </a>
-        <a id="addBtn" href="#/new/" class="btn btn-info">
-          <span class="glyphicon glyphicon-plus"></span>
-          Add New
-        </a>
-      </div>
-      <div class="col-sm-5"></div>
-      <div class="col-sm-4">
-        <a id="usrBtn" ng-click="usrBtnClk()" class="btn btn-primary">
-          <span class="glyphicon glyphicon-user"></span>
-          {{session.username}} {{usrBtnTxt}}
-        </a>
-        <a id="abtBtn" href="#/about/" class="btn btn-info">
-          <span class="glyphicon glyphicon-info-sign"></span>
-          About
-        </a>
-      </div>
+        <div class="col-sm-8">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#/list">Software</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#/new">Installations</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-4">
+            <a id="usrBtn" ng-click="usrBtnClk()" class="btn btn-primary">
+                <span class="glyphicon glyphicon-user"></span>
+                {{session.username}} {{usrBtnTxt}}
+            </a>
+            <a id="abtBtn" href="#/about/" class="btn btn-info">
+                <span class="glyphicon glyphicon-info-sign"></span>
+                About
+            </a>
+        </div>
     </div>
-  </div>
+</div>
 
-  <h2>SWDB Search</h2>
-  <div ng-controller="ListController as showCase">
+<h2>SWDB Search</h2>
+<div ng-controller="ListController as showCase">
     <table id="swdbList" datatable="" dt-options="showCase.dtOptions" dt-columns="showCase.dtColumns" class="row-border hover"></table>
-  </div>
+</div>
+<a id="addBtn" href="#/new/" class="btn btn-info">
+    <span class="glyphicon glyphicon-plus"></span>
+    Add software
+</a>
 </section>
 
 
