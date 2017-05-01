@@ -72,7 +72,7 @@ describe("app", function() {
       done(err);
     });
   });
-  it("Returns all records", function(done) {
+  it("Returns all sw records", function(done) {
     supertest
     .get("/swdbserv/v1")
     .expect(200)
@@ -273,7 +273,7 @@ describe("app", function() {
       });
     });
   });
-  
+
   it("Post a new record designDescDocLoc Test Record", function(done) {
     supertest
     .post("/swdbserv/v1/")

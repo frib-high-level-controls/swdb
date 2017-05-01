@@ -1,6 +1,7 @@
 {
   "levelOfCareEnums": ["NONE","LOW","MEDIUM","HIGH","SAFETY"],
   "statusEnums": ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"],
+  "instStatusEnums": ["DEVEL","MAINT","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","DEPRECATED","STANDBY"],
   "rcsEnums": ["Git","AssetCentre","Filesystem","Other"],
   "apiUrl":"http://swdb-dev:4005/swdbserv/v1/",
   "restPort":"4005",
