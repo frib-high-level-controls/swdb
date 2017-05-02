@@ -32,7 +32,7 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
 
   $scope.usrBtnClk = function(){
     if ($scope.session.username) {
-      // logout if alredy logged in
+      // logout if already logged in
       $http.get($scope.props.webUrl+'logout').success(function(data) {
         $window.location.href = $scope.props.auth.cas+'/logout';
       });
@@ -70,6 +70,57 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
 	];
 }
 
+appController.controller('InstListController', InstListPromiseCtrl);
+function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $cookies, $window, configService, userService) {
+
+    $scope.$watch(function() {
+        return $scope.session;
+    }, function() {
+        // prep for login button
+        if ($scope.session && $scope.session.username) {
+            $scope.usrBtnTxt = "(click to logout)";
+        } else {
+            $scope.usrBtnTxt = '(click to login)';
+        }
+    },true);
+
+    $scope.usrBtnClk = function(){
+        if ($scope.session.username) {
+            // logout if already logged in
+            $http.get($scope.props.webUrl+'logout').success(function(data) {
+                $window.location.href = $scope.props.auth.cas+'/logout';
+            });
+        } else {
+            //login
+            $window.location.href =
+                $scope.props.auth.cas+'/login?service='+
+                encodeURIComponent($scope.props.auth.login_service);
+        }
+    };
+
+    // get initialization info
+    $scope.props = configService.getConfig();
+    $scope.session = userService.getUser();
+    var vm = this;
+    vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
+        var defer = $q.defer();
+        $http.get($scope.props.instApiUrl).then(function(result) {
+            defer.resolve(result.data);
+        });
+        return defer.promise;
+    }).withPaginationType('full_numbers');
+
+    vm.dtColumns = [
+        DTColumnBuilder.newColumn('host').withTitle('host')
+        .renderWith(function(data, type, full, meta) {
+            return '<a href="#/inst/details/'+full._id+'" class="btn btn-default">' +
+                full.swName + '</a>';
+        }),
+        DTColumnBuilder.newColumn('software').withTitle('Software').withOption('defaultContent',''),
+        DTColumnBuilder.newColumn('status').withTitle('Status'),
+        DTColumnBuilder.newColumn('statusDate').withTitle('Status date')
+    ];
+}
 
 
 appController.controller('DetailsController', DetailsPromiseCtrl);
