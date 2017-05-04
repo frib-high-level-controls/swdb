@@ -1,0 +1,180 @@
+<section>
+<div class="header swdb-top-div container-fluid">
+  <div class="row">
+    <div class="col-sm-8">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link active" href="#/list">Software</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#/inst/list">Installations</a>
+        </li>
+    </div>
+    <div class="col-sm-4">
+      <a id="usrBtn" ng-click="usrBtnClk()" class="btn btn-primary">
+        <span class="glyphicon glyphicon-user"></span>
+        {{session.username}} {{usrBtnTxt}}
+      </a>
+      <a id="abtBtn" href="#/about/" class="btn btn-info">
+        <span class="glyphicon glyphicon-info-sign"></span>
+        About
+      </a>
+    </div>
+  </div>
+</div>
+
+<h2>Add/update</h2> 
+<div class="container-fluid">
+  <form name="inputForm" class-"form-horizontal" ng-submit="processForm()">
+
+    <!-- HOST -->
+    <div class="row" ng-class="{ 'has-error' : inputForm.hostInput.$invalid && !inputForm.hostInput.$pristine }">
+      <div id="host-group" class="form-group">
+        <label class="col-sm-2 control-label">Host</label>
+        <div class="col-sm-8">
+          <input id="host" type="text" name="hostInput" class="form-control" placeholder="Host" ng-model="formData.host" ng-minlength="2">
+          </input>
+        </div>
+        <div class="col-sm-2" id="hostInputSts" ng-messages="inputForm.hostInput.$error" ng-if="inputForm.hostInput.$dirty">
+          <div ng-message="minlength">Minimum 2 characters</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AREAS -->
+    <div class="row">
+      <label class="col-sm-2">
+        <a id="add.area" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)"><span  class="glyphicon glyphicon-plus"></span></a>
+        Area</label>
+      <span class="col-sm-10"></span>
+    </div>
+    <div id="area-group" class="form-group">
+      <div ng-repeat="(key, value) in formData.area track by $index">
+        <div class="row" ng-class="{ 'has-error' : inputForm['areaInput.'+$index].$invalid && !inputForm['areaInput.'+$index].$pristine  }">
+          <label class="col-sm-2">
+            &nbsp&nbsp
+            <a id="rm.area.{{$index}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)"><span class="glyphicon glyphicon-remove" ></span></a>
+            area {{key}}</label>
+          <div class="col-sm-8">
+            <input id="area.{{key}}" type="text" name="areaInput.{{key}}" class="form-control" ng-model="formData.area[$index]" ng-minlength="4"> </input>
+          </div>
+          <div class="col-sm-2" id="areaInputSts.{{key}}" ng-messages="inputForm['areaInput.'+$index].$error" ng-if="inputForm['areaInput.'+$index].$dirty">
+            <div ng-message="minlength">Minimum 4 characters</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLOTS -->
+    <div class="row">
+      <label class="col-sm-2">
+        <a id="add.slots" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)"><span  class="glyphicon glyphicon-plus"></span></a>
+        slots</label>
+      <span class="col-sm-10"></span>
+    </div>
+    <div id="slots-group" class="form-group">
+      <div ng-repeat="(key, value) in formData.slots track by $index">
+        <div class="row" ng-class="{ 'has-error' : inputForm['slotsInput.'+$index].$invalid && !inputForm['slotsInput.'+$index].$pristine  }">
+          <label class="col-sm-2">
+            &nbsp&nbsp
+            <a id="rm.slots.{{$index}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)"><span class="glyphicon glyphicon-remove" ></span></a>
+            slots {{key}}</label>
+          <div class="col-sm-8">
+            <input id="slots.{{key}}" type="text" name="slotsInput.{{key}}" class="form-control" ng-model="formData.slots[$index]" ng-minlength="4"> </input>
+          </div>
+          <div class="col-sm-2" id="slotsInputSts.{{key}}" ng-messages="inputForm['slotsInput.'+$index].$error" ng-if="inputForm['slotsInput.'+$index].$dirty">
+            <div ng-message="minlength">Minimum 4 characters</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATUS -->
+    <div class="row" ng-class="{ 'has-error' : inputForm.statusInput.$invalid && !inputForm.statusInput.$pristine }">
+      <div id="status-group" class="form-group">
+        <label class="col-sm-2 control-label">Status*</label>
+        <div class="col-sm-10">
+          <select id="status" ng-model="formData.status" ng-options="o for o in statusEnums track by o"></select>
+        </div>
+        <div class="col-sm-2" id="statusInputSts" ng-messages="inputForm.statusInput.$error" ng-if="inputForm.statusInput.$dirty">
+        </div>
+      </div>
+    </div>
+
+    <!-- STATUS DATE -->
+    <div class="row" ng-class="{ 'has-error' : inputForm.statusDateInput.$invalid && !inputForm.statusDateInput.$pristine }">
+      <div id="statusDate-group" class="form-group">
+        <label class="col-sm-2 control-label">Status Date*</label>
+        <div class="col-sm-8">
+
+          <p class="input-group">
+          <input id="statusDate" name="statusDateInput" type="text" class="form-control"
+                                                                    uib-datepicker-popup="{{datePicker.format}}" ng-model="formData.statusDate" is-open="datePicker.instances['statusDate']"
+                                                                                                                                                datepicker-options="datePicker.options" ng-required="true" close-text="Close"
+                                                                                                                                                                                                           alt-input-formats="altInputFormats" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"/>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'statusDate')"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+          </p>
+
+          <!-- </input> -->
+        </div>
+        <div class="col-sm-2" id="statusDateInputSts" ng-messages="inputForm.statusDateInput.$error" ng-if="inputForm.statusDateInput.$dirty">
+          <div ng-message="required">Date is required</div>
+          <div ng-message="pattern">Use date format YYYY/MM/DD</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- SOFTWARE -->
+    <div class="row" ng-class="{ 'has-error' : inputForm.softwareInput.$invalid && !inputForm.softwareInput.$pristine }">
+      <div id="software-group" class="form-group">
+        <label class="col-sm-2 control-label">Software</label>
+        <div class="col-sm-8">
+          <input id="software" type="text" name="softwareInput" class="form-control" placeholder="Software" ng-model="formData.software" ng-minlength="2">
+          </input>
+        </div>
+        <div class="col-sm-2" id="softwareInputSts" ng-messages="inputForm.softwareInput.$error" ng-if="inputForm.softwareInput.$dirty">
+          <div ng-message="minlength">Minimum 2 characters</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRRs -->
+    <div class="row">
+      <label class="col-sm-2">
+        <a id="add.DRRs" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)"><span  class="glyphicon glyphicon-plus"></span></a>
+        DRRs</label>
+      <span class="col-sm-10"></span>
+    </div>
+    <div id="DRRs-group" class="form-group">
+      <div ng-repeat="(key, value) in formData.DRRs track by $index">
+        <div class="row" ng-class="{ 'has-error' : inputForm['DRRsInput.'+$index].$invalid && !inputForm['DRRsInput.'+$index].$pristine  }">
+          <label class="col-sm-2">
+            &nbsp&nbsp
+            <a id="rm.DRRs.{{$index}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)"><span class="glyphicon glyphicon-remove" ></span></a>
+            DRRs {{key}}</label>
+          <div class="col-sm-8">
+            <input id="DRRs.{{key}}" type="text" name="DRRsInput.{{key}}" class="form-control" ng-model="formData.DRRs[$index]" ng-minlength="4"> </input>
+          </div>
+          <div class="col-sm-2" id="DRRsInputSts.{{key}}" ng-messages="inputForm['DRRsInput.'+$index].$error" ng-if="inputForm['DRRsInput.'+$index].$dirty">
+            <div ng-message="minlength">Minimum 4 characters</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- SUBMIT BUTTON -->
+    <div id='formStatus' ng-show="swdbParams.formShowStatus" class="alert alert-success form-group col-sm-12"><span class="glyphicon glyphicon-info-sign"></span> {{swdbParams.formStatus}}</div>
+    <div id='formError' ng-show="swdbParams.formShowErr" class="alert alert-danger form-group col-sm-12"><span class="glyphicon glyphicon-exclamation-sign"></span> {{swdbParams.formErr}}</div>
+    <button id="submitBtn" type="submit" class="btn btn-success">
+      <span class="submit glyphicon glyphicon-ok-sign"></span> Submit!
+    </button>
+    <a href="#/list" id="cancelBtn" type="submit" class="btn btn-danger"><span class="submit glyphicon glyphicon-backward"></span> Cancel </a>
+    <br>
+  </form>
+</div>
+</section>

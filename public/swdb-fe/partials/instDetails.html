@@ -1,0 +1,150 @@
+<section>
+<div class="header swdb-top-div container-fluid">
+  <div class="row">
+    <div class="col-sm-8">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link" href="#/list">Software</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="#/inst/details">Installations</a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-sm-4">
+      <a id="usrBtn"  ng-click="usrBtnClk()" class="btn btn-primary">
+        <span class="glyphicon glyphicon-user"></span>
+        {{session.username}} {{usrBtnTxt}}
+      </a>
+      <a id="abtBtn" href="#/about/" class="btn btn-info">
+        <span class="glyphicon glyphicon-info-sign"></span>
+        About
+      </a>
+    </div>
+  </div>
+</div>
+
+<h2>Installation Details ({{formData._id}})</h2>
+<div class="container-fluid">
+  <form class-"form-horizontal" ng-submit="processForm()">
+
+    <!-- HOST -->
+    <div class="row">
+      <div id="host-group" class="form-group">
+        <label class="col-sm-2 control-label">Host</label>
+        <div class="col-sm-10">
+          <input id="host" type="text" name="host" class="form-control" placeholder="host" ng-model="formData.host" ng-readonly="true">
+          </input>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOFTWARE -->
+    <div class="row">
+      <div id="software-group" class="form-group">
+        <label class="col-sm-2 control-label">Released Version</label>
+        <div class="col-sm-10">
+          <input id="software" type="text" name="software" class="form-control" placeholder="software" ng-model="formData.software" ng-readonly="true">
+          </input>
+        </div>
+      </div>
+    </div>
+
+    <!-- AREA -->
+    <div class="row">
+      <label class="col-sm-2">
+        Areas</label>
+      <span class="col-sm-10"></span>
+    </div>
+    <div id="area-group" class="form-group">
+      <div ng-repeat="(key, value) in formData.area track by $index">
+        <div class="row">
+          <label class="col-sm-2">
+            &nbsp&nbsp
+            area {{key}}</label>
+          <div class="col-sm-10">
+            <input id="area.{{key}}" type="text" name="area" class="form-control" ng-model="area[$index]" ng-readonly="true"> </input>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLOTS -->
+    <div class="row">
+      <label class="col-sm-2">
+        Slots</label>
+      <span class="col-sm-10"></span>
+    </div>
+    <div id="slots-group" class="form-group">
+      <div ng-repeat="(key, value) in formData.slots track by $index">
+        <div class="row">
+          <label class="col-sm-2">
+            &nbsp&nbsp
+            slot {{key}}</label>
+          <div class="col-sm-10">
+            <input id="slots.{{key}}" type="text" name="slots" class="form-control" ng-model="slots[$index]" ng-readonly="true"> </input>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- STATUS -->
+    <div class="row">
+      <div id="status-group" class="form-group">
+        <label class="col-sm-2 control-label">Status</label>
+        <div class="col-sm-10">
+          <input id="status" type="text" name="Status" class="form-control" placeholder="SW status" ng-model="formData.status" ng-readonly="true">
+          </input>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATUS DATE -->
+    <div class="row">
+      <div id="statusDate-group" class="form-group">
+        <label class="col-sm-2 control-label">Status Date</label>
+        <div class="col-sm-10">
+          <input id="statusDate" type="text" name="statusDate" class="form-control" placeholder="SW status date" ng-model="formData.statusDate" ng-readonly="true">
+          </input>
+        </div>
+      </div>
+    </div>
+
+    <!-- V&V RESULTS DOC LOC -->
+    <div class="row">
+      <div id="vvResultsLoc-group" class="form-group">
+        <label class="col-sm-2 control-label">V&V Results</label>
+        <div class="col-sm-10">
+          <input id="vvResultsLoc" type="text" name="vvResultsLoc" class="form-control" placeholder="SW status date" ng-model="formData.vvResultsLoc" ng-readonly="true">
+          </input>
+        </div>
+      </div>
+    </div>
+
+    <!-- DDRs -->
+    <div class="row">
+      <label class="col-sm-2">
+        DDRs</label>
+      <span class="col-sm-10"></span>
+    </div>
+    <div id="ddrs-group" class="form-group">
+      <div ng-repeat="(key, value) in formData.ddrs track by $index">
+        <div class="row">
+          <label class="col-sm-2">
+            &nbsp&nbsp
+            DDR {{key}}</label>
+          <div class="col-sm-10">
+            <input id="ddrs.{{key}}" type="text" name="ddrs" class="form-control" ng-model="ddrs[$index]" ng-readonly="true"> </input>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <a class="btn btn-success" href="#/inst/list"><span class="glyphicon glyphicon-backward"></span> Back to    search </a>
+    <a class="btn btn-info" href="#/inst/update/{{formData._id}}"><span class="glyphicon glyphicon-edit"></span>      Update this document </a>
+
+  </form>
+</div>
+</section>

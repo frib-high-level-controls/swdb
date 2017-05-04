@@ -83,6 +83,19 @@ app.config(['$routeProvider', function($routeProvider){
                 }
             }
         })
+        .when('/inst/details/:itemId', {
+            templateUrl: 'swdb-fe/partials/instDetails.html',
+            controller: 'InstDetailsController',
+            title: 'Installation Details',
+            resolve:{
+                'configServiceData': function(configService){
+                    return configService.promise;
+                },
+                'userServiceData': function(userService){
+                    return userService.promise;
+                }
+            }
+        })
         .when('/new', {
             templateUrl: 'swdb-fe/partials/new.html',
             controller: 'NewController',
@@ -96,10 +109,36 @@ app.config(['$routeProvider', function($routeProvider){
                 }
             }
         })
+        .when('/inst/new', {
+            templateUrl: 'swdb-fe/partials/instNew.html',
+            controller: 'InstNewController',
+            title: 'New Installation',
+            resolve:{
+                'configServiceData': function(configService){
+                    return configService.promise;
+                },
+                'userServiceData': function(userService){
+                    return userService.promise;
+                }
+            }
+        })
         .when('/update/:itemId', {
             templateUrl: 'swdb-fe/partials/new.html',
             controller: 'UpdateController',
             title: 'Update',
+            resolve:{
+                'configServiceData': function(configService){
+                    return configService.promise;
+                },
+                'userServiceData': function(userService){
+                    return userService.promise;
+                }
+            }
+        })
+        .when('/inst/update/:itemId', {
+            templateUrl: 'swdb-fe/partials/instNew.html',
+            controller: 'InstUpdateController',
+            title: 'Update Installation',
             resolve:{
                 'configServiceData': function(configService){
                     return configService.promise;
