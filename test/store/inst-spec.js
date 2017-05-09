@@ -98,14 +98,14 @@ describe("app", function() {
     .post("/instserv/v1/")
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
-    .send({host: "Test host", status: "DEVEL", statusDate: "date 1000", software: "test sw ref"})
+    .send({host: "Test host", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
     .expect(201)
     .end(done);
   });
   it("Errors posting a bad installation", function(done) {
     supertest
     .post("/instserv/v1/")
-    .send({host: "test host", status: "BADENUM", statusDate: "date 1000", software: "test ref"})
+    .send({host: "test host", status: "BADENUM", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(400)
@@ -117,7 +117,7 @@ describe("app", function() {
   it("Errors posting a duplicate installation record", function(done) {
     supertest
     .post("/instserv/v1/")
-    .send({host: "Test host", status: "DEVEL", statusDate: "date 1000", software: "test sw ref"})
+    .send({host: "Test host", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(500)
@@ -129,7 +129,7 @@ describe("app", function() {
   it("Post a new record installation on a different host", function(done) {
     supertest
     .post("/instserv/v1/")
-    .send({host: "Test host2", status: "DEVEL", statusDate: "date 1000", software: "test sw ref"})
+    .send({host: "Test host2", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -138,7 +138,7 @@ describe("app", function() {
   it("Post a new record installation with different sw ref", function(done) {
     supertest
     .post("/instserv/v1/")
-    .send({host: "Test host", status: "DEVEL", statusDate: "date 1000", software: "test sw ref2"})
+    .send({host: "Test host", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbaa"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -155,7 +155,7 @@ describe("app", function() {
         res=JSON.parse(res.text);
         for (var i=0, iLen=res.length; i<iLen; i++){
           if (res[i].host=="Test host" &&
-            res[i].software=="test sw ref") wrapper.origId=res[i]._id;
+            res[i].software=="badbeefbadbeefbadbeefbad") wrapper.origId=res[i]._id;
         }
         done();
       });

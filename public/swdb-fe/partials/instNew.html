@@ -32,11 +32,14 @@
       <div id="host-group" class="form-group">
         <label class="col-sm-2 control-label">Host</label>
         <div class="col-sm-8">
-          <input id="host" type="text" name="hostInput" class="form-control" placeholder="Host" ng-model="formData.host" ng-minlength="2">
+          <input id="host" type="text" name="hostInput" class="form-control" placeholder="Host" ng-model="formData.host"
+            ng-required="true" ng-minlength="2" ng-maxlength="30">
           </input>
         </div>
         <div class="col-sm-2" id="hostInputSts" ng-messages="inputForm.hostInput.$error" ng-if="inputForm.hostInput.$dirty">
-          <div ng-message="minlength">Minimum 2 characters</div>
+          <div ng-message="required">Host name is required</div>
+          <div ng-message="minlength">Host name must exceed 2 characters</div>
+          <div ng-message="maxlength">Host name must not exceed 30 characters</div>
         </div>
       </div>
     </div>

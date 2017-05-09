@@ -40,7 +40,7 @@ after(function(done) {
   });
 });
 
-test.describe("Installations record tests", function() {
+test.describe("Installations detail screen tests", function() {
   var chromeDriver;
 
   test.before(function() {
@@ -78,7 +78,6 @@ test.describe("Installations record tests", function() {
     "testuser (click to logout)"),5000);
   });
 
-  // find an installation record
   test.it("should find a record", function() {
     this.timeout(8000);
     chromeDriver.get(props.webUrl+"#/inst/list");
@@ -87,6 +86,24 @@ test.describe("Installations record tests", function() {
     .sendKeys("host2");
     chromeDriver.wait(until.elementLocated(By.linkText("host2")),
     8000);
+  });
+
+  test.it("should show the requested installation record title", function() {
+    chromeDriver.findElement(By.linkText("host2")).click();
+    chromeDriver.wait(until.titleIs("SWDB - Installation Details"), 5000);
+  });
+
+  test.it("should show the requested installation record user button", function() {
+    chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
+    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
+    "(click to logout)"),5000);
+  });
+
+  test.it("should show the requested installation record vvResults field", function() {
+    chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc")),5000);
+    chromeDriver.findElement(By.id("vvResultsLoc")).getAttribute("value").then(function(result) {
+      expect(result).to.match(/vvResultsLoc2/);
+    });
 
   });
 });

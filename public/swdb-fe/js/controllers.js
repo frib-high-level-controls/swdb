@@ -116,9 +116,9 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
             return '<a href="#/inst/details/'+full._id+'" class="btn btn-default">' +
                 full.host + '</a>';
         }),
-        DTColumnBuilder.newColumn('software').withTitle('Software').withOption('defaultContent',''),
-        DTColumnBuilder.newColumn('status').withTitle('Status'),
-        DTColumnBuilder.newColumn('statusDate').withTitle('Status date')
+        DTColumnBuilder.newColumn('software').withTitle('Software').withOption('defaultContent','').withClass("center"),
+        DTColumnBuilder.newColumn('area').withTitle('Area'),
+        DTColumnBuilder.newColumn('slots').withTitle('Slots')
     ];
 }
 
@@ -387,7 +387,7 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService) 
         if ($scope.inputForm.$valid){
             $http({
                 method: 'POST',
-                url: $scope.props.apiUrl,
+                url: $scope.props.instApiUrl,
                 data: $scope.formData,
                 headers: { 'Content-Type': 'application/json' }
             })
@@ -417,8 +417,8 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService) 
             $scope.formData.slots.push("");
         } else if (parts[1] === 'vvResultsLoc'){
             $scope.formData.vvResultsLoc.push("");
-        } else if (parts[1] === 'DDRs'){
-            $scope.formData.DDRs.push("");
+        } else if (parts[1] === 'DRRs'){
+            $scope.formData.DRRs.push("");
         }
     };
 
@@ -430,8 +430,8 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService) 
             $scope.formData.slots.splice(parts[2],1);
         } else if (parts[1] === 'vvResultsLoc'){
             $scope.formData.vvResultsLoc.splice(parts[2],1);
-        } else if (parts[1] === 'DDRs'){
-            $scope.formData.DDRs.splice(parts[2],1);
+        } else if (parts[1] === 'DRRs'){
+            $scope.formData.DRRs.splice(parts[2],1);
         }
     };
 
@@ -455,7 +455,7 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService) 
         area: [],
         slots: [],
         vvResultLoc: [],
-        DDRs: []
+        DRRs: []
     };
     $scope.swdbParams = {
         formShowErr: false,
@@ -663,8 +663,8 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, configServi
             $scope.formData.slots.push("");
         } else if (parts[1] === 'vvResultsLoc'){
             $scope.formData.vvResultsLoc.push("");
-        } else if (parts[1] === 'DDRs'){
-            $scope.formData.DDRs.push("");
+        } else if (parts[1] === 'DRRs'){
+            $scope.formData.DRRs.push("");
         }
     };
 
@@ -676,8 +676,8 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, configServi
             $scope.formData.slots.splice(parts[2],1);
         } else if (parts[1] === 'vvResultsLoc'){
             $scope.formData.vvResultsLoc.splice(parts[2],1);
-        } else if (parts[1] === 'DDRs'){
-            $scope.formData.DDRs.splice(parts[2],1);
+        } else if (parts[1] === 'DRRs'){
+            $scope.formData.DRRs.splice(parts[2],1);
         }
     };
 
