@@ -83,6 +83,19 @@ app.use(expressValidator({
         return false;
       }
     },
+    isDRRs: function(val,req) {
+      // Must be an array of URLs
+      if (Array.isArray(val)){
+        val.forEach(function(element, idx, arr){
+          req.checkBody("slots["+idx+"]",
+            "DRR "+idx+" must be a URL")
+            .optional().isURL();
+        });
+        return true;
+      } else {
+        return false;
+      }
+    },
     isDesc: function(val,req) {
       if (Array.isArray(val)){
         val.forEach(function(element, idx, arr){

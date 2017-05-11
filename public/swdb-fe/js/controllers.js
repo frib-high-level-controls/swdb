@@ -417,8 +417,8 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService) 
             $scope.formData.slots.push("");
         } else if (parts[1] === 'vvResultsLoc'){
             $scope.formData.vvResultsLoc.push("");
-        } else if (parts[1] === 'DRRs'){
-            $scope.formData.DRRs.push("");
+        } else if (parts[1] === 'drrs'){
+            $scope.formData.drrs.push("");
         }
     };
 
@@ -430,8 +430,8 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService) 
             $scope.formData.slots.splice(parts[2],1);
         } else if (parts[1] === 'vvResultsLoc'){
             $scope.formData.vvResultsLoc.splice(parts[2],1);
-        } else if (parts[1] === 'DRRs'){
-            $scope.formData.DRRs.splice(parts[2],1);
+        } else if (parts[1] === 'drrs'){
+            $scope.formData.drrs.splice(parts[2],1);
         }
     };
 
@@ -455,7 +455,7 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService) 
         area: [],
         slots: [],
         vvResultLoc: [],
-        DRRs: []
+        drrs: []
     };
     $scope.swdbParams = {
         formShowErr: false,
@@ -663,8 +663,8 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, configServi
             $scope.formData.slots.push("");
         } else if (parts[1] === 'vvResultsLoc'){
             $scope.formData.vvResultsLoc.push("");
-        } else if (parts[1] === 'DRRs'){
-            $scope.formData.DRRs.push("");
+        } else if (parts[1] === 'drrs'){
+            $scope.formData.drrs.push("");
         }
     };
 
@@ -676,8 +676,8 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, configServi
             $scope.formData.slots.splice(parts[2],1);
         } else if (parts[1] === 'vvResultsLoc'){
             $scope.formData.vvResultsLoc.splice(parts[2],1);
-        } else if (parts[1] === 'DRRs'){
-            $scope.formData.DRRs.splice(parts[2],1);
+        } else if (parts[1] === 'drrs'){
+            $scope.formData.drrs.splice(parts[2],1);
         }
     };
 

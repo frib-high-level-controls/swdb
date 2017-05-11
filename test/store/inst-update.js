@@ -16,7 +16,7 @@ const testInstData = JSON.parse(fs.readFileSync('./test/misc/testInstData.json',
 
 
 
-test.describe("Installations add screen tests", function() {
+test.describe("Installations update screen tests", function() {
   var chromeDriver = new webdriver.Builder()
     .forBrowser("chrome")
     .build();
@@ -24,9 +24,6 @@ test.describe("Installations add screen tests", function() {
 
   test.before(function(done) {
     this.timeout(5000);
-    // clear the test collection
-    console.log("Starting inst-new...");
-    //chromeDriver.manage().window().setPosition(200,0);
     console.log("Dropping installation collections...");
     console.log("Inserting test data...");
     instBe.instDoc.db.collections.instCollection.drop(function(err){
@@ -39,7 +36,7 @@ test.describe("Installations add screen tests", function() {
   });
   test.after(function(done) {
     // clear the test collection
-    console.log("Cleaning up (inst-new)...");
+    console.log("Cleaning up (inst-update)...");
     console.log("Dropping installation collections...");
     chromeDriver.quit();
     instBe.instDoc.db.collections.instCollection.drop(function(err){
