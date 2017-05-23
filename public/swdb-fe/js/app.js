@@ -42,6 +42,35 @@ app.service('userService', function($http) {
     };
 });
 
+// Service to get ccdb slots to controllers
+app.service('slotService', function($http) {
+    //$scope.props = configService.getConfig();
+    var slotData = null;
+
+    //var promise = 	$http({url: config.ccdbApiUrl+'slot',method: "GET"}).success(function(data) {
+    var promise = 	$http({
+      url: '/instserv/v1/slot',
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).success(function(data) {
+        slotData = data;
+        //console.log("in service");
+        //console.log("service got:"+JSON.stringify(data));
+    });
+
+    return {
+        promise: promise,
+        setData: function (data) {
+            slotData = data;
+        },
+        getSlot: function () {
+            return slotData;
+        }
+    };
+});
+
 app.config(['$routeProvider', function($routeProvider){
     $routeProvider.
         when('/list', {
@@ -119,6 +148,9 @@ app.config(['$routeProvider', function($routeProvider){
                 },
                 'userServiceData': function(userService){
                     return userService.promise;
+                },
+                'slotServiceData': function(slotService){
+                    return slotService.promise;
                 }
             }
         })

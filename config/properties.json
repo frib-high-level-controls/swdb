@@ -6,6 +6,7 @@
   "areaEnums": ["FE","LS1","FS1","LS2","FS2","LS3","BDS","FS"],
   "apiUrl":"http://swdb-dev:4005/swdbserv/v1/",
   "instApiUrl":"http://swdb-dev:4005/instserv/v1/",
+  "ccdbApiUrl":"http://controls.frib.msu.edu/ccdbapi/",
   "restPort":"4005",
   "webUrl":"http://swdb-dev:4005/",
   "webPort":"4005",

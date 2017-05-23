@@ -211,6 +211,10 @@ app.get('/swdbserv/v1/config', function(req, res, next) {
 });
 
 // for get requests that are not specific return all
+app.get('/instserv/v1/slot', function(req, res, next) {
+  instTools.getSlot(req, res, next);
+});
+// for get requests that are not specific return all
 app.get('/instserv/v1*', function(req, res, next) {
   instBe.getDocs(req, res, next);
 });

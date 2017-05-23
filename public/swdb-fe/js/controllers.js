@@ -1,6 +1,6 @@
 var appController = angular.module('appController', ['datatables','ngAnimate','ngSanitize','ui.bootstrap','ngCookies','ui.select']);
 
-appController.run(['$rootScope','$route','$http','$routeParams','$location','configService', function($rootScope,$route,$http,$routeParams,$location, configService) {
+appController.run(['$rootScope','$route','$http','$routeParams','$location','configService', function($rootScope,$route,$http,$routeParams,$location, configService, slotService) {
 
     $rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute){
         //Change page title, based on Route information
@@ -306,6 +306,7 @@ function NewPromiseCtrl($scope, $http, $window, configService, userService) {
 
     $scope.props = configService.getConfig();
     $scope.session = userService.getUser();
+
     $scope.itemArray = $scope.props.validSwNamesGUIList;
 
     // check our user session and redirect if needed
@@ -329,7 +330,7 @@ function NewPromiseCtrl($scope, $http, $window, configService, userService) {
 
 
 appController.controller('InstNewController', InstNewPromiseCtrl);
-function InstNewPromiseCtrl($scope, $http, $window, configService, userService) {
+function InstNewPromiseCtrl($scope, $http, $window, configService, userService, slotService) {
 
     $scope.$watch(function() {
         return $scope.session;
@@ -442,6 +443,9 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService) 
 
     $scope.props = configService.getConfig();
     $scope.session = userService.getUser();
+    $scope.slots = slotService.getSlot();
+    console.log("slots: "+JSON.stringify($scope.slots));
+
 
     // check our user session and redirect if needed
     if (!$scope.session.username) {
