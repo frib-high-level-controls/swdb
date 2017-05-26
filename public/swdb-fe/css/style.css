@@ -28,3 +28,11 @@ swdb-bottom-div {
   height: 25px !important;
   padding:2px;
 }
+
+.selectedSlotBox {
+  height:120px;
+  width:420px;
+  border:1px solid #ccc;
+  font:16px/26px Georgia, Garamond, Serif;
+  overflow:auto;
+}

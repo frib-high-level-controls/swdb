@@ -91,6 +91,17 @@
       </div>
     </div>
 
+    <div class="row">
+      <input type="text" ng-model="selected"
+        uib-typeahead="slot.name as (slot.name+' (desc:'+slot.description+')') for slot in slots |
+        filter:$viewValue | limitTo:8" class="form-control" 
+        typeahead-on-select='slotSelect($item, $model, $label)'>
+    </div>
+    <!--<div class="row selectedSlotBox" ng-repeat="name in selected">-->
+    <div class="row selectedSlotBox">
+      {{formData.slotsSelected}}
+    </div>
+
     <!-- STATUS -->
     <div class="row" ng-class="{ 'has-error' : inputForm.statusInput.$invalid && !inputForm.statusInput.$pristine }">
       <div id="status-group" class="form-group">

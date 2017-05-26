@@ -332,30 +332,38 @@ function NewPromiseCtrl($scope, $http, $window, configService, userService) {
 appController.controller('InstNewController', InstNewPromiseCtrl);
 function InstNewPromiseCtrl($scope, $http, $window, configService, userService, slotService) {
 
-    $scope.$watch(function() {
-        return $scope.session;
-    }, function() {
-        // prep for login button
-        if ($scope.session && $scope.session.username) {
-            $scope.usrBtnTxt = "(click to logout)";
-        } else {
-            $scope.usrBtnTxt = '(click to login)';
-        }
-    },true);
+  $scope.$watch(function() {
+    return $scope.session;
+  }, function() {
+    // prep for login button
+    if ($scope.session && $scope.session.username) {
+      $scope.usrBtnTxt = "(click to logout)";
+    } else {
+      $scope.usrBtnTxt = '(click to login)';
+    }
+  },true);
 
-    $scope.usrBtnClk = function(){
-        if ($scope.session.username) {
-            // logout if alredy logged in
-            $http.get($scope.props.webUrl+'logout').success(function(data) {
-                $window.location.href = $scope.props.auth.cas+'/logout';
-            });
-        } else {
-            //login
-            $window.location.href =
-                $scope.props.auth.cas+'/login?service='+
-                encodeURIComponent($scope.props.auth.login_service);
-        }
-    };
+  $scope.usrBtnClk = function(){
+    if ($scope.session.username) {
+      // logout if alredy logged in
+      $http.get($scope.props.webUrl+'logout').success(function(data) {
+        $window.location.href = $scope.props.auth.cas+'/logout';
+      });
+    } else {
+      //login
+      $window.location.href =
+        $scope.props.auth.cas+'/login?service='+
+        encodeURIComponent($scope.props.auth.login_service);
+    }
+  };
+
+  $scope.slotSelect=function($item, $model, $label)
+  {
+    console.log("Item:"+$item);
+    console.log("Model:"+$model);
+    console.log("Label:"+$label);
+    $scope.formData.slotsSelected.push($model);
+  };
 
 
     $scope.datePicker = (function () {
@@ -435,7 +443,6 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
             $scope.formData.drrs.splice(parts[2],1);
         }
     };
-
     getEnums = function() {
         $scope.statusEnums = $scope.props.statusEnums;
         $scope.formData.status = "DEVEL";
@@ -458,6 +465,7 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
         //revisionControl: "",
         area: [],
         slots: [],
+        slotsSelected: [],
         vvResultLoc: [],
         drrs: []
     };
