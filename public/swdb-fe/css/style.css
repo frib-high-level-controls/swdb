@@ -29,10 +29,21 @@ swdb-bottom-div {
   padding:2px;
 }
 
+.swdbFormRow {
+  margin:5px;
+}
+
 .selectedSlotBox {
   height:120px;
   width:420px;
   border:1px solid #ccc;
+  /*padding:20px;*/
+  margin-left:25px;
   font:16px/26px Georgia, Garamond, Serif;
   overflow:auto;
+}
+.smCancelBtn {
+  height:22px;
+  width: 22px;
+  font-size: 8;
 }

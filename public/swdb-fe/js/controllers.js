@@ -362,7 +362,23 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
     console.log("Item:"+$item);
     console.log("Model:"+$model);
     console.log("Label:"+$label);
-    $scope.formData.slotsSelected.push($model);
+    var index = $scope.formData.slotsSelected.indexOf($model);
+    console.log("index Item:"+index);
+    if (index == -1){
+      $scope.formData.slotsSelected.push($model);
+    }
+    else {
+      console.log("Duplicate Item:"+$model);
+    }
+  };
+
+  $scope.removeSelectedSlot=function($item)
+  {
+    console.log("Removing Item:"+$item);
+    var index = $scope.formData.slotsSelected.indexOf($item);
+    if (index > -1){
+      $scope.formData.slotsSelected.splice(index,1);
+    }
   };
 
 

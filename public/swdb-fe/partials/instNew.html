@@ -28,7 +28,7 @@
   <form name="inputForm" class-"form-horizontal" ng-submit="processForm()">
 
     <!-- HOST -->
-    <div class="row" ng-class="{ 'has-error' : inputForm.hostInput.$invalid && !inputForm.hostInput.$pristine }">
+    <div class="row swdbFormRow" ng-class="{ 'has-error' : inputForm.hostInput.$invalid && !inputForm.hostInput.$pristine }">
       <div id="host-group" class="form-group">
         <label class="col-sm-2 control-label">Host</label>
         <div class="col-sm-8">
@@ -44,7 +44,7 @@
     </div>
 
     <!-- AREAS -->
-    <div class="row">
+    <div class="row swdbFormRow">
       <label class="col-sm-2">
         <a id="add.area" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)"><span  class="glyphicon glyphicon-plus"></span></a>
         Area</label>
@@ -68,42 +68,36 @@
     </div>
 
     <!-- SLOTS -->
-    <div class="row">
-      <label class="col-sm-2">
-        <a id="add.slots" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)"><span  class="glyphicon glyphicon-plus"></span></a>
-        slots</label>
-      <span class="col-sm-10"></span>
-    </div>
-    <div id="slots-group" class="form-group">
-      <div ng-repeat="(key, value) in formData.slots track by $index">
-        <div class="row" ng-class="{ 'has-error' : inputForm['slotsInput.'+$index].$invalid && !inputForm['slotsInput.'+$index].$pristine  }">
-          <label class="col-sm-2">
-            &nbsp&nbsp
-            <a id="rm.slots.{{$index}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)"><span class="glyphicon glyphicon-remove" ></span></a>
-            slots {{key}}</label>
-          <div class="col-sm-8">
-            <input id="slots.{{key}}" type="text" name="slotsInput.{{key}}" class="form-control" ng-model="formData.slots[$index]" ng-minlength="4"> </input>
-          </div>
-          <div class="col-sm-2" id="slotsInputSts.{{key}}" ng-messages="inputForm['slotsInput.'+$index].$error" ng-if="inputForm['slotsInput.'+$index].$dirty">
-            <div ng-message="minlength">Minimum 4 characters</div>
-          </div>
-        </div>
+    <div class="row swdbFormRow">
+      <label class="col-sm-2"> slots search</label>
+      <div class="col-sm-8">
+        <input type="text" ng-model="selected"
+                           uib-typeahead="slot.name as (slot.name+' (desc:'+slot.description+')') for slot in slots |
+                           filter:$viewValue | limitTo:8" class="form-control" 
+                                                          typeahead-on-select='slotSelect($item, $model, $label)'>
+      </div>
+      <div class="col-sm-2">
       </div>
     </div>
-
-    <div class="row">
-      <input type="text" ng-model="selected"
-        uib-typeahead="slot.name as (slot.name+' (desc:'+slot.description+')') for slot in slots |
-        filter:$viewValue | limitTo:8" class="form-control" 
-        typeahead-on-select='slotSelect($item, $model, $label)'>
-    </div>
-    <!--<div class="row selectedSlotBox" ng-repeat="name in selected">-->
-    <div class="row selectedSlotBox">
-      {{formData.slotsSelected}}
-    </div>
+    <div class="row swdbFormRow">
+      <label class="col-sm-2">&nbspselected slots </label>
+      <!--<div class="col-sm-10 selectedSlotBox">-->
+      <div class="col-sm-8 selectedSlotBox">
+        <div ng-repeat="selectedSlot in formData.slotsSelected">
+          <!--<div uib-popover="{{selectedSlot}} )" popover-trigger="'mouseenter'">-->
+          <span>{{selectedSlot}} </span>
+          <button id="rmSelSlotBtn" ng-click="removeSelectedSlot(selectedSlot)" class="btn btn-xs btn-warning smCancelBtn">
+            <span class="submit glyphicon glyphicon-remove-sign"></span>&nbsp
+          </button>
+          <!--</div>-->
+        </div>
+      </div>
+      <div class="col-sm-2">
+      </div>
+      </div>
 
     <!-- STATUS -->
-    <div class="row" ng-class="{ 'has-error' : inputForm.statusInput.$invalid && !inputForm.statusInput.$pristine }">
+    <div class="row swdbFormRow" ng-class="{ 'has-error' : inputForm.statusInput.$invalid && !inputForm.statusInput.$pristine }">
       <div id="status-group" class="form-group">
         <label class="col-sm-2 control-label">Status*</label>
         <div class="col-sm-10">
@@ -115,7 +109,7 @@
     </div>
 
     <!-- STATUS DATE -->
-    <div class="row" ng-class="{ 'has-error' : inputForm.statusDateInput.$invalid && !inputForm.statusDateInput.$pristine }">
+    <div class="row swdbFormRow" ng-class="{ 'has-error' : inputForm.statusDateInput.$invalid && !inputForm.statusDateInput.$pristine }">
       <div id="statusDate-group" class="form-group">
         <label class="col-sm-2 control-label">Status Date*</label>
         <div class="col-sm-8">
@@ -138,7 +132,7 @@
 
 
     <!-- SOFTWARE -->
-    <div class="row" ng-class="{ 'has-error' : inputForm.softwareInput.$invalid && !inputForm.softwareInput.$pristine }">
+    <div class="row swdbFormRow" ng-class="{ 'has-error' : inputForm.softwareInput.$invalid && !inputForm.softwareInput.$pristine }">
       <div id="software-group" class="form-group">
         <label class="col-sm-2 control-label">Software</label>
         <div class="col-sm-8">
@@ -152,7 +146,7 @@
     </div>
 
     <!-- DRRs -->
-    <div class="row">
+    <div class="row swdbFormRow">
       <label class="col-sm-2">
         <a id="add.drrs" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)"><span  class="glyphicon glyphicon-plus"></span></a>
         DRRs</label>
