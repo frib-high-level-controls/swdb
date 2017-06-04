@@ -366,6 +366,7 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
     console.log("index Item:"+index);
     if (index == -1){
       $scope.formData.slotsSelected.unshift($model);
+      $('#slots').focus();
     }
     else {
       console.log("Duplicate Item:"+$model);

@@ -15,7 +15,6 @@ const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 const testInstData = JSON.parse(fs.readFileSync('./test/misc/testInstData.json', 'utf8'));
 
 
-
 test.describe("Installations add screen tests", function() {
   var chromeDriver = new webdriver.Builder()
     .forBrowser("chrome")
@@ -89,12 +88,35 @@ test.describe("Installations add screen tests", function() {
     input = chromeDriver.findElement(By.id("area.0"));
     input.sendKeys("testArea1");
 
-    chromeDriver.wait(until.elementLocated(By.id("add.slots")), 3000);
-    input = chromeDriver.findElement(By.id("add.slots"));
+    chromeDriver.wait(until.elementLocated(By.id("slots")), 3000);
+    searchInput = chromeDriver.findElement(By.id("slots"));
+    searchInput.sendKeys("FE_LEBT");
+    //chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="typeahead-15-1050-option-1"]/a')), 3000);
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-")]')), 3000);
+    //input = chromeDriver.findElement(By.xpath('//*[@id="typeahead-15-1050-option-1"]/a'));
+
+    input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-1"=substring(@id, string-length(@id)-string-length("option-1")+1)]/a'));
     input.click();
-    chromeDriver.wait(until.elementLocated(By.id("slots.0")), 3000);
-    input = chromeDriver.findElement(By.id("slots.0"));
-    input.sendKeys("testSlot1");
+
+
+    searchInput.clear();
+    searchInput.sendKeys("FE_LEBT");
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-")]')), 3000);
+    input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-2"=substring(@id, string-length(@id)-string-length("option-2")+1)]/a'));
+    input.click();
+
+
+    chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[5]/div[1]/div[1]/span')), 3000);
+    input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[5]/div[1]/div[1]/span'));
+    chromeDriver.wait(until.elementTextIs(input, "FE_LEBT:BD_D0824"),5000);
+
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="rmSelSlotBtn"]')), 3000);
+    input = chromeDriver.findElement(By.xpath('//*[@id="rmSelSlotBtn"]'));
+    input.click();
+
+    chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[5]/div[1]/div/span')), 3000);
+    input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[5]/div[1]/div/span'));
+    chromeDriver.wait(until.elementTextIs(input, "FE_LEBT:AP_D0807"),5000);
 
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
     input = chromeDriver.findElement(By.id("status"));

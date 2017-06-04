@@ -7,6 +7,11 @@
   "apiUrl":"http://swdb-dev:4005/swdbserv/v1/",
   "instApiUrl":"http://swdb-dev:4005/instserv/v1/",
   "ccdbApiUrl":"http://controls.frib.msu.edu/ccdbapi/",
+  "slotsDataSource":{
+    "useSource": "test",
+    "test":"/home/ellisr/swdb/test/misc/slotsTestData.json",
+    "production":"http://controls.frib.msu.edu/ccdbapi/slot"
+  },
   "restPort":"4005",
   "webUrl":"http://swdb-dev:4005/",
   "webPort":"4005",
