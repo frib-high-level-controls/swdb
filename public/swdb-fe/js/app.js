@@ -177,6 +177,9 @@ app.config(['$routeProvider', function($routeProvider){
                 },
                 'userServiceData': function(userService){
                     return userService.promise;
+                },
+                'slotServiceData': function(slotService){
+                    return slotService.promise;
                 }
             }
         })

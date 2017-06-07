@@ -83,7 +83,7 @@
       <label class="col-sm-2">&nbspselected slots </label>
       <!--<div class="col-sm-10 selectedSlotBox">-->
       <div class="col-sm-8 selectedSlotBox">
-        <div ng-repeat="selectedSlot in formData.slotsSelected">
+        <div ng-repeat="selectedSlot in slotsSelected">
           <!--<div uib-popover="{{selectedSlot}} )" popover-trigger="'mouseenter'">-->
           <span>{{selectedSlot}} </span>
           <button id="rmSelSlotBtn" ng-click="removeSelectedSlot(selectedSlot)" class="btn btn-xs btn-warning smCancelBtn">

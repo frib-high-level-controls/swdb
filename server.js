@@ -58,12 +58,12 @@ app.use(expressValidator({
       }
     },
     isAreas: function(val,req) {
-      // Must be an array of URLs
+      // Must be an array of strings
       if (Array.isArray(val)){
         val.forEach(function(element, idx, arr){
           req.checkBody("area["+idx+"]",
-            "Area "+idx+" must be a URL")
-            .optional().isURL();
+            "Area "+idx+" must be a string")
+            .optional().isAscii();
         });
         return true;
       } else {
@@ -71,12 +71,12 @@ app.use(expressValidator({
       }
     },
     isSlots: function(val,req) {
-      // Must be an array of URLs
+      // Must be an array of strings
       if (Array.isArray(val)){
         val.forEach(function(element, idx, arr){
           req.checkBody("slots["+idx+"]",
-            "Slot "+idx+" must be a URL")
-            .optional().isURL();
+            "Slot "+idx+" must be a string")
+            .optional().isAscii();
         });
         return true;
       } else {
@@ -84,12 +84,12 @@ app.use(expressValidator({
       }
     },
     isDRRs: function(val,req) {
-      // Must be an array of URLs
+      // Must be a string
       if (Array.isArray(val)){
         val.forEach(function(element, idx, arr){
           req.checkBody("slots["+idx+"]",
-            "DRR "+idx+" must be a URL")
-            .optional().isURL();
+            "DRR "+idx+" must be a string")
+            .optional().isAscii();
         });
         return true;
       } else {

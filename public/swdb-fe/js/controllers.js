@@ -362,11 +362,12 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
     console.log("Item:"+$item);
     console.log("Model:"+$model);
     console.log("Label:"+$label);
-    var index = $scope.formData.slotsSelected.indexOf($model);
+    var index = $scope.slotsSelected.indexOf($model);
     console.log("index Item:"+index);
     if (index == -1){
-      $scope.formData.slotsSelected.unshift($model);
+      $scope.slotsSelected.unshift($model);
       $('#slots').focus();
+      console.log("slotsSelected now:"+$scope.slotsSelected);
     }
     else {
       console.log("Duplicate Item:"+$model);
@@ -376,9 +377,9 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
   $scope.removeSelectedSlot=function($item)
   {
     console.log("Removing Item:"+$item);
-    var index = $scope.formData.slotsSelected.indexOf($item);
+    var index = $scope.slotsSelected.indexOf($item);
     if (index > -1){
-      $scope.formData.slotsSelected.splice(index,1);
+      $scope.slotsSelected.splice(index,1);
     }
   };
 
@@ -409,6 +410,8 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
 
     $scope.processForm = function(){
         delete $scope.formData.__v;
+        $scope.formData.slots = $scope.slotsSelected;
+        console.log(JSON.stringify($scope.formData));
 
         if ($scope.inputForm.$valid){
             $http({
@@ -482,7 +485,6 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
         //revisionControl: "",
         area: [],
         slots: [],
-        slotsSelected: [],
         vvResultLoc: [],
         drrs: []
     };
@@ -493,6 +495,7 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
         formErr: ""
     };
     getEnums();
+    $scope.slotsSelected = [];
 }
 
 
