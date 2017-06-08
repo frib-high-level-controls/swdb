@@ -3,7 +3,7 @@
   "statusEnums": ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"],
   "instStatusEnums": ["DEVEL","MAINT","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","DEPRECATED","STANDBY"],
   "rcsEnums": ["Git","AssetCentre","Filesystem","Other"],
-  "areaEnums": ["FE","LS1","FS1","LS2","FS2","LS3","BDS","FS"],
+  "areaEnums": ["Global","FE","LS1","FS1","LS2","FS2","LS3","BDS","FS"],
   "apiUrl":"http://swdb-dev:4005/swdbserv/v1/",
   "instApiUrl":"http://swdb-dev:4005/instserv/v1/",
   "ccdbApiUrl":"http://controls.frib.msu.edu/ccdbapi/",

@@ -466,6 +466,8 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
     getEnums = function() {
         $scope.statusEnums = $scope.props.statusEnums;
         $scope.formData.status = "DEVEL";
+        $scope.areaEnums = $scope.props.areaEnums;
+        $scope.formData.area = "Global";
     };
 
     $scope.props = configService.getConfig();
