@@ -121,26 +121,26 @@ describe("app", function() {
       .post("/instserv/v1/")
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
-      .send({host: "Test host", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
+      .send({host: "Test host", area: "Global", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
       .expect(201)
       .end(done);
   });
   it("Errors posting a bad status installation", function(done) {
     supertest
       .post("/instserv/v1/")
-      .send({host: "test host", status: "BADENUM", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
+      .send({host: "test host", area: "Global", status: "BADENUM", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
       .expect(400)
       .end(function(err, res){
-        expect(res.text).to.match(/`BADENUM` is not a valid enum value for path `status`/);
+        expect(res.text).to.match(/Status must be one of DEVEL,MAINT,RDY_INSTALL,RDY_INT_TEST,RDY_BEAM,DEPRECATED,STANDBY/);
         done();
       });
   });
   it("Errors posting a duplicate installation record", function(done) {
     supertest
       .post("/instserv/v1/")
-      .send({host: "Test host", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
+      .send({host: "Test host", area: "Global", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
       .expect(500)
@@ -152,7 +152,7 @@ describe("app", function() {
   it("Post a new record installation on a different host", function(done) {
     supertest
       .post("/instserv/v1/")
-      .send({host: "Test host2", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
+      .send({host: "Test host2", area: "Global", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
       .expect(201)
@@ -161,7 +161,7 @@ describe("app", function() {
   it("Post a new record installation with different sw ref", function(done) {
     supertest
       .post("/instserv/v1/")
-      .send({host: "Test host", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbaa"})
+      .send({host: "Test host", area: "Global", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbaa"})
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
       .expect(201)

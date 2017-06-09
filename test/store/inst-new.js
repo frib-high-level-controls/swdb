@@ -81,12 +81,11 @@ test.describe("Installations add screen tests", function() {
     var input = chromeDriver.findElement(By.id("host"));
     input.sendKeys("testHost1");
 
-    chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
-    input = chromeDriver.findElement(By.id("add.area"));
+    chromeDriver.wait(until.elementLocated(By.id("area")), 3000);
+    input = chromeDriver.findElement(By.id("area"));
     input.click();
-    chromeDriver.wait(until.elementLocated(By.id("area.0")), 3000);
-    input = chromeDriver.findElement(By.id("area.0"));
-    input.sendKeys("testArea1");
+    input.sendKeys("Global");
+
 
     chromeDriver.wait(until.elementLocated(By.id("slots")), 3000);
     searchInput = chromeDriver.findElement(By.id("slots"));
@@ -105,17 +104,16 @@ test.describe("Installations add screen tests", function() {
     input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-2"=substring(@id, string-length(@id)-string-length("option-2")+1)]/a'));
     input.click();
 
-
-    chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[5]/div[1]/div[1]/span')), 3000);
-    input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[5]/div[1]/div[1]/span'));
+    chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[4]/div[1]/div[1]/span')), 3000);
+    input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[4]/div[1]/div[1]/span'));
     chromeDriver.wait(until.elementTextIs(input, "FE_LEBT:BD_D0824"),5000);
 
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="rmSelSlotBtn"]')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[@id="rmSelSlotBtn"]'));
     input.click();
 
-    chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[5]/div[1]/div/span')), 3000);
-    input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[5]/div[1]/div/span'));
+    chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[4]/div[1]/div/span')), 3000);
+    input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[4]/div[1]/div/span'));
     chromeDriver.wait(until.elementTextIs(input, "FE_LEBT:AP_D0807"),5000);
 
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);

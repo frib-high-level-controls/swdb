@@ -30,7 +30,7 @@
     <!-- HOST -->
     <div class="row swdbFormRow" ng-class="{ 'has-error' : inputForm.hostInput.$invalid && !inputForm.hostInput.$pristine }">
       <div id="host-group" class="form-group">
-        <label class="col-sm-2 control-label">Host</label>
+        <label class="col-sm-2 control-label">Host*</label>
         <div class="col-sm-8">
           <input id="host" type="text" name="hostInput" class="form-control" placeholder="Host" ng-model="formData.host" ng-required="true" ng-minlength="2" ng-maxlength="30">
           </input>
@@ -122,9 +122,9 @@
     <!-- SOFTWARE -->
     <div class="row swdbFormRow" ng-class="{ 'has-error' : inputForm.softwareInput.$invalid && !inputForm.softwareInput.$pristine }">
       <div id="software-group" class="form-group">
-        <label class="col-sm-2 control-label">Software</label>
+        <label class="col-sm-2 control-label">Software*</label>
         <div class="col-sm-8">
-          <input id="software" type="text" name="softwareInput" class="form-control" placeholder="Software" ng-model="formData.software" ng-minlength="2">
+          <input id="software" type="text" name="softwareInput" class="form-control" placeholder="Software" ng-required="true" ng-model="formData.software" ng-minlength="2">
           </input>
         </div>
         <div class="col-sm-2" id="softwareInputSts" ng-messages="inputForm.softwareInput.$error" ng-if="inputForm.softwareInput.$dirty">
@@ -138,7 +138,7 @@
       <div id="drr-group" class="form-group">
         <label class="col-sm-2 control-label">DRR</label>
         <div class="col-sm-8">
-          <input id="drr" type="text" name="drrInput" class="form-control" placeholder="DRR" ng-model="formData.drr" ng-required="true" ng-minlength="2" ng-maxlength="30">
+          <input id="drr" type="text" name="drrInput" class="form-control" placeholder="DRR" ng-model="formData.drr" ng-minlength="2" ng-maxlength="30">
           </input>
         </div>
         <div class="col-sm-2" id="drrInputSts" ng-messages="inputForm.drrInput.$error" ng-if="inputForm.drrInput.$dirty">

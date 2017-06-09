@@ -58,6 +58,9 @@ test.describe("SWDB record tests", function() {
     .build();
     driver.manage().window().setPosition(200,0);
   });
+  test.after(function() {
+    driver.quit();
+  });
 
     var allCookies = null;
 
@@ -74,7 +77,7 @@ test.describe("SWDB record tests", function() {
     driver.get(props.webUrl+"testlogin?username=testuser&password=testuserpasswd");
     driver.wait(until.elementLocated(By.id("Test auth success")),3000);
   });
-  
+
   test.it("should show search page with username on logout button", function() {
     this.timeout(8000);
     driver.get(props.webUrl+"#/list");
