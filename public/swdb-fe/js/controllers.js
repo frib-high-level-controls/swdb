@@ -383,6 +383,22 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
     }
   };
 
+  // get sw records from swdb api
+  $scope.getSw = function(val) {
+    return $http.get($scope.props.apiUrl).then(function(response){
+      //console.log("Got sw list:"+JSON.stringify(response.data));
+      return response.data.map(function(item){
+        //console.log("looking at:"+JSON.stringify(item));
+        return item;
+      });
+    });
+  };
+
+  $scope.swSelect=function($item, $model, $label)
+  {
+    $scope.formData.software=$item._id;
+    //console.log("software is now:"+$scope.formData.software);
+  };
 
     $scope.datePicker = (function () {
         var method = {};
@@ -440,27 +456,19 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
 
     $scope.newItem = function(event) {
         var parts = event.currentTarget.id.split('.');
-        if (parts[1] === 'area'){
-            $scope.formData.area.push("");
-        } else if (parts[1] === 'slots'){
+        if (parts[1] === 'slots'){
             $scope.formData.slots.push("");
         } else if (parts[1] === 'vvResultsLoc'){
             $scope.formData.vvResultsLoc.push("");
-        } else if (parts[1] === 'drrs'){
-            $scope.formData.drrs.push("");
         }
     };
 
     $scope.removeItem = function(event) {
         var parts = event.currentTarget.id.split('.');
-        if (parts[1] === 'area'){
-            $scope.formData.area.splice(parts[2],1);
-        } else if (parts[1] === 'slots'){
+        if (parts[1] === 'slots'){
             $scope.formData.slots.splice(parts[2],1);
         } else if (parts[1] === 'vvResultsLoc'){
             $scope.formData.vvResultsLoc.splice(parts[2],1);
-        } else if (parts[1] === 'drrs'){
-            $scope.formData.drrs.splice(parts[2],1);
         }
     };
     getEnums = function() {
@@ -473,7 +481,7 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
     $scope.props = configService.getConfig();
     $scope.session = userService.getUser();
     $scope.slots = slotService.getSlot();
-    console.log("slots: "+JSON.stringify($scope.slots));
+    //console.log("slots: "+JSON.stringify($scope.slots));
 
 
     // check our user session and redirect if needed
@@ -485,10 +493,8 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
     // initialize this record
     $scope.formData = {
         //revisionControl: "",
-        area: [],
         slots: [],
         vvResultLoc: [],
-        drrs: []
     };
     $scope.swdbParams = {
         formShowErr: false,
