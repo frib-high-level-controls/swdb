@@ -162,9 +162,6 @@ async function doStart(): Promise<void> {
     cookie: {
       maxAge: appCfg.session_life || 28800000,
     },
-    logErrors: function(err) {
-      // log.error(err);
-    },
   }));
 
   app.use(express.static(path.resolve(__dirname, '../public')));
@@ -180,7 +177,7 @@ async function doStart(): Promise<void> {
   });
 
   // error handlers
-  app.use(function (err, req, res, next) {
+  app.use(function (err: any, req: express.Request, res: express.Response, next: express.NextFunction) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
