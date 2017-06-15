@@ -13,6 +13,8 @@ var fs = require('fs');
 var path = require('path');
 const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 const testInstData = JSON.parse(fs.readFileSync('./test/misc/testInstData.json', 'utf8'));
+const testSwNames = JSON.parse(fs.readFileSync('./test/misc/testSwNames.json', 'utf8'));
+const testSwData = JSON.parse(fs.readFileSync('./test/misc/swTestData.json', 'utf8'));
 
 
 test.describe("Installations add screen tests", function() {
@@ -27,14 +29,25 @@ test.describe("Installations add screen tests", function() {
     console.log("Starting inst-new...");
     //chromeDriver.manage().window().setPosition(200,0);
     console.log("Dropping installation collections...");
-    console.log("Inserting test data...");
-    instBe.instDoc.db.collections.instCollection.drop(function(err){
-      console.log("inserting testInstData in installations collection:"+JSON.stringify(testInstData,null,2));
-      instBe.instDoc.db.collections.instCollection.insert(testInstData,
+    console.log("Resetting swNames test data...");
+    be.swDoc.db.collections.swNamesProp.drop(function(err){
+      console.log("inserting testSwNames in swNamesProp collection:"+JSON.stringify(testSwNames,null,2));
+      be.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
         function(err, records){
-          done();
         });
     });
+    console.log("Resetting swdb test data...");
+    be.swDoc.db.collections.swdbCollection.drop(function(err){
+      console.log("inserting swData in swdb collection:");
+      be.swDoc.db.collections.swdbCollection.insert(testSwData,
+        function(err, records){
+        });
+    });
+    console.log("inserting testInstData in installations collection:"+JSON.stringify(testInstData,null,2));
+    instBe.instDoc.db.collections.instCollection.insert(testInstData,
+      function(err, records){
+        done();
+      });
   });
   test.after(function(done) {
     // clear the test collection
@@ -81,29 +94,29 @@ test.describe("Installations add screen tests", function() {
     var input = chromeDriver.findElement(By.id("host"));
     input.sendKeys("testHost1");
 
+    // set area
     chromeDriver.wait(until.elementLocated(By.id("area")), 3000);
     input = chromeDriver.findElement(By.id("area"));
     input.click();
     input.sendKeys("Global");
 
-
+    // set slots
     chromeDriver.wait(until.elementLocated(By.id("slots")), 3000);
     searchInput = chromeDriver.findElement(By.id("slots"));
     searchInput.sendKeys("FE_LEBT");
-    //chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="typeahead-15-1050-option-1"]/a')), 3000);
+    // find the second item in that list and add it to the selected list
     chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-")]')), 3000);
-    //input = chromeDriver.findElement(By.xpath('//*[@id="typeahead-15-1050-option-1"]/a'));
-
     input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-1"=substring(@id, string-length(@id)-string-length("option-1")+1)]/a'));
     input.click();
 
-
+    // now search again and add the third item to the selected list
     searchInput.clear();
     searchInput.sendKeys("FE_LEBT");
     chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-")]')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-2"=substring(@id, string-length(@id)-string-length("option-2")+1)]/a'));
     input.click();
 
+    // find one of the selected items and cancel it
     chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[4]/div[1]/div[1]/span')), 3000);
     input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[4]/div[1]/div[1]/span'));
     chromeDriver.wait(until.elementTextIs(input, "FE_LEBT:BD_D0824"),5000);
@@ -112,50 +125,25 @@ test.describe("Installations add screen tests", function() {
     input = chromeDriver.findElement(By.xpath('//*[@id="rmSelSlotBtn"]'));
     input.click();
 
+    // locate the other selected item to make sure we got it
     chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[4]/div[1]/div/span')), 3000);
     input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[4]/div[1]/div/span'));
     chromeDriver.wait(until.elementTextIs(input, "FE_LEBT:AP_D0807"),5000);
 
+    // set the status
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
     input = chromeDriver.findElement(By.id("status"));
     input.click();
     input.sendKeys("RDY_BEAM");
 
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
-  });
 
-  //test.it("Host required", function() {
-  //this.timeout(8000);
-  //chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
-  //var input = chromeDriver.findElement(By.id("host"));
-  //input.sendKeys("1");
-  //input.clear();
-  //var inputSts = chromeDriver.findElement(By.id("hostInputSts"));
-  //chromeDriver.wait(until.elementTextIs(inputSts, "Host is required"),5000);
-  //input.clear();
-  //});
-  //test.it("Host min for field ", function() {
-  //this.timeout(8000);
-  //chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
-  //var input = chromeDriver.findElement(By.id("host"));
-  //input.sendKeys("1");
-  //var inputSts = chromeDriver.findElement(By.id("hostInputSts"));
-  //chromeDriver.wait(until.elementTextIs(inputSts, "Host must exceed 2 characters"),5000);
-  //input.clear();
-  //input.sendKeys("11");
-  //chromeDriver.wait(until.elementTextIs(inputSts, ""),5000);
-  //input.clear();
-  //});
-  //test.it("Host max for field ", function() {
-  //this.timeout(8000);
-  //chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
-  //var input = chromeDriver.findElement(By.id("host"));
-  //input.sendKeys("0123456789012345678901234567891");
-  //var inputSts = chromeDriver.findElement(By.id("hostInputSts"));
-  //chromeDriver.wait(until.elementTextIs(inputSts, "Host must not exceed 30 characters"),5000);
-  //input.clear();
-  //input.sendKeys("012345678901234567890123456789");
-  //chromeDriver.wait(until.elementTextIs(inputSts, ""),5000);
-  //input.clear();
-  //});
+    // set software
+    chromeDriver.wait(until.elementLocated(By.id("software")), 3000);
+    searchInput = chromeDriver.findElement(By.id("software"));
+    searchInput.sendKeys("BEAST");
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-") and "option-4"=substring(@id, string-length(@id)-string-length("option-4")+1)]/a')));
+    input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-4"=substring(@id, string-length(@id)-string-length("option-2")+1)]/a'));
+    input.click();
+  });
 });

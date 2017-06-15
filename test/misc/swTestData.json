@@ -1,0 +1,8 @@
+[
+  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"Test Record","_id":"59422f875d6520123511a537","__v":0,"comment":["EPICS Dictionary server"],"desc":[]},
+  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"Test Record2","_id":"59422f875d6520123511a538","__v":0,"comment":["EPICS Dictionary server"],"desc":[]},
+  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"Test Record3","_id":"59422f875d6520123511a539","__v":0,"comment":["EPICS Dictionary server"],"desc":[]},
+  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"Test Record4","_id":"59422f875d6520123511a53a","__v":0,"comment":["EPICS Dictionary server"],"desc":[]},
+  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","_id":"59422f875d6520123511a53b","__v":0,"comment":["alarm configuration binary"],"desc":[]}
+]
+

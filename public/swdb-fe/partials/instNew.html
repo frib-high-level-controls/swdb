@@ -124,7 +124,7 @@
       <div id="software-group" class="form-group">
         <label class="col-sm-2 control-label">Software*</label>
         <div class="col-sm-8">
-          <input type="text" ng-model="asyncSelected" placeholder="Locations loaded via $http" 
+          <input id="software" type="text" ng-model="asyncSelected" placeholder="Locations loaded via $http" 
           uib-typeahead="sw._id as (sw.swName) for sw in getSw($viewValue)" 
           typeahead-on-select='swSelect($item, $model, $label)'
           typeahead-loading="loadingLocations" typeahead-no-results="noResults" class="form-control">
