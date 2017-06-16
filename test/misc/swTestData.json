@@ -4,6 +4,14 @@
   {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"Test Record3","version":"0.3","branch":"b1","comment":["EPICS Dictionary server"],"desc":[]},
   {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"Test Record4","version":"0.4","branch":"b1","comment":["EPICS Dictionary server"],"desc":[]},
   {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b2","comment":["alarm configuration binary"],"desc":[]},
-  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b3","comment":["alarm configuration binary"],"desc":[]}
+  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b3","comment":["alarm configuration binary"],"desc":[]},
+  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b4","comment":["alarm configuration binary"],"desc":[]},
+  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b5","comment":["alarm configuration binary"],"desc":[]},
+  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b6","comment":["alarm configuration binary"],"desc":[]},
+  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b7","comment":["alarm configuration binary"],"desc":[]},
+  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b8","comment":["alarm configuration binary"],"desc":[]},
+  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b9","comment":["alarm configuration binary"],"desc":[]},
+  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b10","comment":["alarm configuration binary"],"desc":[]},
+  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b11","comment":["alarm configuration binary"],"desc":[]}
 ]
 

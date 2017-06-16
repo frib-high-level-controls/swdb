@@ -52,6 +52,10 @@ test.describe("Installations add screen tests", function() {
   test.after(function(done) {
     // clear the test collection
     console.log("Cleaning up (inst-new)...");
+    console.log("Dropping swNames test data...");
+    be.swDoc.db.collections.swNamesProp.drop(function(err){});
+    console.log("Dropping db test data...");
+    be.swDoc.db.collections.swdbCollection.drop(function(err){});
     console.log("Dropping installation collections...");
     chromeDriver.quit();
     instBe.instDoc.db.collections.instCollection.drop(function(err){
