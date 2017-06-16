@@ -2,6 +2,12 @@
  * A common module for monitoring the status of an application.
  */
 import process = require('process');
+import util = require('util');
+
+import express = require('express');
+
+import handlers = require('./handlers');
+
 
 interface ComponentStatus {
   status: string;
@@ -13,7 +19,7 @@ interface ComponentStatus {
 interface MonitorStatus {
   status: string;
   uptime: number;
-  components: [ComponentStatus];
+  components: ComponentStatus[];
 }
 
 // Utilities
@@ -148,7 +154,7 @@ setInterval(monitorMemory, memoryInterval);
 
 // Custom status //
 
-let components = <[ComponentStatus]> [];
+let components = <ComponentStatus[]> [];
 
 function setOk(name: string, message?: string) {
   for (let comp of components) {
@@ -186,7 +192,7 @@ function getStatus(): MonitorStatus {
   let status = {
     status: 'OK',
     uptime: process.uptime(),
-    components: <[ComponentStatus]> [],
+    components: <ComponentStatus[]> [],
   };
 
   status.components.push(memoryStatus);
@@ -251,6 +257,21 @@ function setComponentError(name: string, message?: string): void {
   });
 };
 
+
+
+const router = express.Router();
+
+router.get('/', handlers.catchAll(async (req: express.Request, res: express.Response) => {
+  res.status(200).render('status', {
+    status: getStatus(),
+  });
+}));
+
+router.get('/json', handlers.catchAll(async (req: express.Request, res: express.Response) => {
+  res.status(200).json(getStatus());
+}));
+
+
 export {
   getLoad,
   getLoadLimit,
@@ -263,5 +284,6 @@ export {
   getStatus,
   getComponent,
   setComponentOk,
-  setComponentError
+  setComponentError,
+  router,
 };

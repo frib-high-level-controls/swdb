@@ -9,9 +9,7 @@ import morgan = require('morgan');
 import session = require('express-session');
 
 import handlers = require('./shared/handlers');
-import monitor = require('./shared/monitor');
-
-import monitor_routes = require('./routes/monitor');
+import status = require('./shared/status');
 
 // error interface
 interface StatusError extends Error {
@@ -44,9 +42,9 @@ let activeStopped = Promise.resolve();
 
 function updateActivityStatus(): void {
   if (activeCount <= activeLimit) {
-    monitor.setComponentOk('Activity', activeCount + ' <= ' + activeLimit);
+    status.setComponentOk('Activity', activeCount + ' <= ' + activeLimit);
   } else {
-    monitor.setComponentError('Activity', activeCount + ' > ' + activeLimit);
+    status.setComponentError('Activity', activeCount + ' > ' + activeLimit);
   }
 };
 
@@ -168,7 +166,7 @@ async function doStart(): Promise<void> {
   app.use(express.static(path.resolve(__dirname, '../public')));
   app.use(express.static(path.resolve(__dirname, '../bower_components')));
 
-  app.use('/monitor', monitor_routes);
+  app.use('/status', status.router);
 
   // catch 404 and forward to error handler
   app.use(function(req, res, next) {
