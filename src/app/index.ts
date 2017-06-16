@@ -8,6 +8,7 @@ import favicon = require('serve-favicon');
 import morgan = require('morgan');
 import session = require('express-session');
 
+import handlers = require('./shared/handlers');
 import monitor = require('./shared/monitor');
 
 import monitor_routes = require('./routes/monitor');
@@ -177,13 +178,7 @@ async function doStart(): Promise<void> {
   });
 
   // error handlers
-  app.use(function (err: any, req: express.Request, res: express.Response, next: express.NextFunction) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err,
-    });
-  });
+  app.use(handlers.requestErrorHandler);
 };
 
 // asynchronously stop the application
