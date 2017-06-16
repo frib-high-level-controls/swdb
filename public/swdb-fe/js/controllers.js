@@ -628,14 +628,16 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, configService, 
 
     //update document fields with existing data
     $http.get($scope.props.apiUrl+$routeParams.itemId).success(function(data) {
+        $scope.itemArray = $scope.props.validSwNamesGUIList;
+        console.log("itemArray is now "+$scope.itemArray);
         $scope.formData = data;
         $scope.whichItem = $routeParams.itemId;
 
         // make a Date object from this string
         $scope.formData.statusDate = new Date($scope.formData.statusDate);
         // set selctor to current swName value
-        $scope.formData.swName = $scope.selectedItem.name;
-        $scope.selectedItem.name = $scope.formData.swName;
+        $scope.selectedItem = {name: $scope.formData.swName};
+        console.log("selectedItem.name is now "+$scope.selectedItem.name);
     });
 
 }

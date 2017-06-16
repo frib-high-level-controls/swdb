@@ -7,7 +7,7 @@
                     <a class="nav-link active" href="#/list">Software</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#/new">Installations</a>
+                    <a class="nav-link" href="#/inst/list">Installations</a>
                 </li>
             </ul>
         </div>i
@@ -39,7 +39,7 @@
             </div> -->
 
             <!-- NAME -->
-            <div class="row">
+            <div class="row swdbFormRow">
                 <div id="swName-group" class="form-group">
                     <label class="col-sm-2 control-label">Software Name</label>
                     <div class="col-sm-10">
@@ -50,7 +50,7 @@
             </div>
 
             <!-- OWNER -->
-            <div class="row">
+            <div class="row swdbFormRow">
                 <div id="owner-group" class="form-group">
                     <label class="col-sm-2 control-label">Owner</label>
                     <div class="col-sm-10">
@@ -61,7 +61,7 @@
             </div>
 
             <!-- LEVEL OF CARE -->
-            <div class="row">
+            <div class="row swdbFormRow">
                 <div id="levelOfCare-group" class="form-group">
                     <label class="col-sm-2 control-label">Level of Care</label>
                     <div class="col-sm-10">
@@ -72,7 +72,7 @@
             </div>
 
             <!-- STATUS -->
-            <div class="row">
+            <div class="row swdbFormRow">
                 <div id="status-group" class="form-group">
                     <label class="col-sm-2 control-label">Status</label>
                     <div class="col-sm-10">
@@ -83,7 +83,7 @@
             </div>
 
             <!-- STATUS DATE -->
-            <div class="row">
+            <div class="row swdbFormRow">
                 <div id="statusDate-group" class="form-group">
                     <label class="col-sm-2 control-label">Status Date</label>
                     <div class="col-sm-10">
@@ -94,18 +94,29 @@
             </div>
 
             <!-- RELEASED VERSION -->
-            <div class="row">
-                <div id="releasedVersion-group" class="form-group">
-                    <label class="col-sm-2 control-label">Released Version</label>
+            <div class="row swdbFormRow">
+                <div id="version-group" class="form-group">
+                    <label class="col-sm-2 control-label">Version</label>
                     <div class="col-sm-10">
-                        <input id="releasedVersion" type="text" name="releasedVersion" class="form-control" placeholder="Released version" ng-model="formData.releasedVersion" ng-readonly="true">
+                        <input id="version" type="text" name="version" class="form-control" placeholder="version" ng-model="formData.version" ng-readonly="true">
+                        </input>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- BRANCH -->
+            <div class="row swdbFormRow">
+                <div id="branch-group" class="form-group">
+                    <label class="col-sm-2 control-label">Branch</label>
+                    <div class="col-sm-10">
+                        <input id="branch" type="text" name="branch" class="form-control" placeholder="branch" ng-model="formData.branch" ng-readonly="true">
                         </input>
                     </div>
                 </div>
             </div>
 
             <!-- PLATFORM -->
-            <div class="row">
+            <div class="row swdbFormRow">
                 <div id="platforms-group" class="form-group">
                     <label class="col-sm-2 control-label">Platforms</label>
                     <div class="col-sm-10">
@@ -116,7 +127,7 @@
             </div>
 
             <!-- AUX SW -->
-            <div class="row">
+            <div class="row swdbFormRow">
                 <label class="col-sm-2">
                     Auxiliary SW docs</label>
                 <span class="col-sm-10"></span>
@@ -135,7 +146,7 @@
             </div>
 
             <!-- SW DESCRIPTION DOCS -->
-            <div class="row">
+            <div class="row swdbFormRow">
                 <label class="col-sm-2">
                     SW description docs</label>
                 <span class="col-sm-10"></span>
@@ -154,7 +165,7 @@
             </div>
 
             <!-- VALIDATION DOC -->
-            <div class="row">
+            <div class="row swdbFormRow">
                 <label class="col-sm-2">
                     Validation docs</label>
                 <span class="col-sm-10"></span>
@@ -177,7 +188,7 @@
             </div>
 
             <!-- VERIFICATION DOC -->
-            <div class="row">
+            <div class="row swdbFormRow">
                 <label class="col-sm-2">
                     Verification docs</label>
                 <span class="col-sm-10"></span>
@@ -201,7 +212,7 @@
 
 
             <!-- REVISION CONTROL -->
-            <div id="revisionControl-group" class="form-group">
+            <div id="revisionControl-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Revision Control</label>
                 <div class="col-sm-10">
                     <input id="revisionControl" type="text" name="revisionControl" class="form-control" placeholder="Revision Control" ng-model="formData.revisionControl" ng-readonly="true">
@@ -211,7 +222,7 @@
             </div>
 
             <!-- RECERTIFICATION FREQUENCY -->
-            <div id="recertFreq-group" class="form-group">
+            <div id="recertFreq-group" class="form-group swdbFormRow">
                 <label class="col-sm-3 control-label">Recertification Frequency</label>
                 <div class="col-sm-9">
                     <input id="recertFreq" type="text" name="recertFreq" class="form-control" placeholder="Recertification frequency" ng-model="formData.recertFreq" ng-readonly="true">
@@ -221,7 +232,7 @@
             </div>
             <!-- RECERTIFICATION STATUS -->
 
-            <div id="recerStatus-group" class="form-group">
+            <div id="recerStatus-group" class="form-group swdbFormRow">
                 <label class="col-sm-3 control-label">Recertification Status</label>
                 <div class="col-sm-9">
                     <input id="recertStatus" type="text" name="recertStatus" class="form-control" placeholder="Recertification status" ng-model="formData.recertStatus" ng-readonly="true">
@@ -231,7 +242,7 @@
             </div>
 
             <!-- COMMENTS -->
-            <div class="row">
+            <div class="row swdbFormRow">
                 <label class="col-sm-2">
                     Comments</label>
                 <span class="col-sm-10"></span>
