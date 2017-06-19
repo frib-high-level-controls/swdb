@@ -62,11 +62,12 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
             return '<a href="#/details/'+full._id+'" class="btn btn-default">' +
                 full.swName + '</a>';
         }),
-        DTColumnBuilder.newColumn('owner').withTitle('Owner'),
-        DTColumnBuilder.newColumn('levelOfCare').withTitle('Level of care'),
-        DTColumnBuilder.newColumn('status').withTitle('Status'),
-        DTColumnBuilder.newColumn('statusDate').withTitle('Status date'),
-        DTColumnBuilder.newColumn('version').withTitle('SW version').withOption('defaultContent','')
+        DTColumnBuilder.newColumn('version').withTitle('SW version').withOption('defaultContent',''),
+        DTColumnBuilder.newColumn('branch').withTitle('SW branch').withOption('defaultContent',''),
+        DTColumnBuilder.newColumn('owner').withTitle('Owner').withOption('defaultContent',""),
+        DTColumnBuilder.newColumn('levelOfCare').withTitle('Level of care').withOption('defaultContent',""),
+        DTColumnBuilder.newColumn('status').withTitle('Status').withOption('defaultContent',""),
+        DTColumnBuilder.newColumn('statusDate').withTitle('Status date').withOption('defaultContent',"")
     ];
 }
 
@@ -359,24 +360,24 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
 
   $scope.slotSelect=function($item, $model, $label)
   {
-    console.log("Item:"+$item);
-    console.log("Model:"+$model);
-    console.log("Label:"+$label);
+    //console.log("Item:"+$item);
+    //console.log("Model:"+$model);
+    //console.log("Label:"+$label);
     var index = $scope.slotsSelected.indexOf($model);
-    console.log("index Item:"+index);
+    //console.log("index Item:"+index);
     if (index == -1){
       $scope.slotsSelected.unshift($model);
       $('#slots').focus();
-      console.log("slotsSelected now:"+$scope.slotsSelected);
+      //console.log("slotsSelected now:"+$scope.slotsSelected);
     }
     else {
-      console.log("Duplicate Item:"+$model);
+      //console.log("Duplicate Item:"+$model);
     }
   };
 
   $scope.removeSelectedSlot=function($item)
   {
-    console.log("Removing Item:"+$item);
+    //console.log("Removing Item:"+$item);
     var index = $scope.slotsSelected.indexOf($item);
     if (index > -1){
       $scope.slotsSelected.splice(index,1);
@@ -645,30 +646,47 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, configService, 
 appController.controller('InstUpdateController', InstUpdatePromiseCtrl);
 function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, configService, userService) {
 
-    $scope.$watch(function() {
-        return $scope.session;
-    }, function() {
-        // prep for login button
-        if ($scope.session && $scope.session.username) {
-            $scope.usrBtnTxt = "(click to logout)";
-        } else {
-            $scope.usrBtnTxt = '(click to login)';
-        }
-    },true);
+  $scope.$watch(function() {
+    return $scope.session;
+  }, function() {
+    // prep for login button
+    if ($scope.session && $scope.session.username) {
+      $scope.usrBtnTxt = "(click to logout)";
+    } else {
+      $scope.usrBtnTxt = '(click to login)';
+    }
+  },true);
 
-    $scope.usrBtnClk = function(){
-        if ($scope.session.username) {
-            // logout if alredy logged in
-            $http.get($scope.props.webUrl+'logout').success(function(data) {
-                $window.location.href = $scope.props.auth.cas+'/logout';
-            });
-        } else {
-            //login
-            $window.location.href =
-                $scope.props.auth.cas+'/login?service='+
-                encodeURIComponent($scope.props.auth.login_service);
-        }
-    };
+  $scope.usrBtnClk = function(){
+    if ($scope.session.username) {
+      // logout if alredy logged in
+      $http.get($scope.props.webUrl+'logout').success(function(data) {
+        $window.location.href = $scope.props.auth.cas+'/logout';
+      });
+    } else {
+      //login
+      $window.location.href =
+        $scope.props.auth.cas+'/login?service='+
+        encodeURIComponent($scope.props.auth.login_service);
+    }
+  };
+
+  // get sw records from swdb api
+  $scope.getSw = function(val) {
+    return $http.get($scope.props.apiUrl).then(function(response){
+      //console.log("Got sw list:"+JSON.stringify(response.data));
+      return response.data.map(function(item){
+        //console.log("looking at:"+JSON.stringify(item));
+        return item;
+      });
+    });
+  };
+
+  $scope.swSelect=function($item, $model, $label)
+  {
+    $scope.formData.software=$item._id;
+    //console.log("software is now:"+$scope.formData.software);
+  };
 
     $scope.processForm = function(){
         if ($scope.inputForm.$valid){
@@ -726,6 +744,7 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, configServi
     getEnums = function() {
         // Set the enumerated values for this scope
         $scope.statusEnums = $scope.props.statusEnums;
+        $scope.areaEnums = $scope.props.areaEnums;
     };
 
     $scope.props = configService.getConfig();
@@ -752,5 +771,6 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, configServi
 
         // make a Date object from this string
         $scope.formData.statusDate = new Date($scope.formData.statusDate);
+        $scope.formData.area.selected = data.area;
     });
 }

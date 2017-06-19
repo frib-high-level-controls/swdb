@@ -1,5 +1,5 @@
 [
-  {"host":"host1","area":"area1","slots":"slot1","status":"DEVEL","statusDate":"9/21/2016","software":"swRef1","vvResultsLoc":"vvResultsLoc1","ddrs":"ddr1"},
-  {"host":"host2","area":"area2","slots":"slot2","status":"DEVEL","statusDate":"9/21/2016","software":"swRef2","vvResultsLoc":"vvResultsLoc2","ddrs":"ddr2"},
-  {"host":"host3","area":"area3","slots":"slot3","status":"DEVEL","statusDate":"9/21/2016","software":"swRef3","vvResultsLoc":"vvResultsLoc3","ddrs":"ddr3"}
+  {"host":"host1","area":"FE","slots":"slot1","status":"DEVEL","statusDate":"9/21/2016","software":"swRef1","vvResultsLoc":"vvResultsLoc1","ddrs":"ddr1"},
+  {"host":"host2","area":"LS1","slots":"slot2","status":"DEVEL","statusDate":"9/21/2016","software":"swRef2","vvResultsLoc":"vvResultsLoc2","ddrs":"ddr2"},
+  {"host":"host3","area":"Global","slots":"slot3","status":"DEVEL","statusDate":"9/21/2016","software":"swRef3","vvResultsLoc":"vvResultsLoc3","ddrs":"ddr3"}
 ]
