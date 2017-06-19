@@ -111,12 +111,16 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
         return defer.promise;
     }).withPaginationType('full_numbers');
 
-    vm.dtColumns = [
-        DTColumnBuilder.newColumn('host').withTitle('host')
-        .renderWith(function(data, type, full, meta) {
-            return '<a href="#/inst/details/'+full._id+'" class="btn btn-default">' +
-                full.host + '</a>';
-        }),
+  vm.dtColumns = [
+    DTColumnBuilder.newColumn('host').withTitle('host')
+    .renderWith(function(data, type, full, meta) {
+      return '<a href="#/inst/details/'+full._id+'" class="btn btn-default">' +
+      full.host + '</a>';
+      //$http.get($scope.props.apiUrl+full.software).success(function(data) {
+        //return '<a href="#/inst/details/'+full._id+'" class="btn btn-default">' +
+          //full.host+data.revision + '</a>';
+     //});
+    }),
         DTColumnBuilder.newColumn('software').withTitle('Software').withOption('defaultContent','').withClass("center"),
         DTColumnBuilder.newColumn('area').withTitle('Area'),
         DTColumnBuilder.newColumn('slots').withTitle('Slots')

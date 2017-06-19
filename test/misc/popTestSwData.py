@@ -1,5 +1,6 @@
 #! /usr/bin/python
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 import json
 from pprint import pprint
 
@@ -9,8 +10,14 @@ with open("../../config/properties.json") as prop_file:
 with open("./swTestData.json") as data_file:
     data = json.load(data_file)
 
-pprint(prop_data)
-pprint(data)
+# pprint(prop_data)
+# pprint(data)
+
+for doc in data:
+    pprint(doc)
+    if "_id" in doc:
+        print "Found "+doc["_id"]
+        doc["_id"] = ObjectId(doc["_id"])
 
 print "WARNING; This program will be monkeying with the DB defined in the"
 print "properties file: "+prop_data["mongodbUrl"]
