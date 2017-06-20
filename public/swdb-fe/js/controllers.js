@@ -72,7 +72,7 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
 }
 
 appController.controller('InstListController', InstListPromiseCtrl);
-function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $cookies, $window, configService, userService) {
+function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $cookies, $window, configService, userService, swService) {
 
     $scope.$watch(function() {
         return $scope.session;
@@ -114,17 +114,23 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
   vm.dtColumns = [
     DTColumnBuilder.newColumn('host').withTitle('host')
     .renderWith(function(data, type, full, meta) {
-      return '<a href="#/inst/details/'+full._id+'" class="btn btn-default">' +
-      full.host + '</a>';
-      //$http.get($scope.props.apiUrl+full.software).success(function(data) {
-        //return '<a href="#/inst/details/'+full._id+'" class="btn btn-default">' +
-          //full.host+data.revision + '</a>';
-     //});
+        return '<a href="#/inst/details/'+full._id+'" class="btn btn-default">' +
+          full.host + '</a>';
     }),
-        DTColumnBuilder.newColumn('software').withTitle('Software').withOption('defaultContent','').withClass("center"),
+
+        DTColumnBuilder.newColumn('software').withTitle('Software').withOption('defaultContent','').withClass("center")
+    .renderWith(function(data, type, full, meta) {
+      // find the sw in the sw list that matches that id
+      var swItem = $scope.swList.find(function(list){
+        return list._id === full.software;
+      });
+      return '<a href="#/details/'+full.software+'" >' + swItem.swName+
+        '/'+swItem.version+'/'+swItem.branch + '</a>';
+    }),
         DTColumnBuilder.newColumn('area').withTitle('Area'),
         DTColumnBuilder.newColumn('slots').withTitle('Slots')
     ];
+  $scope.swList = swService.getSwList();
 }
 
 

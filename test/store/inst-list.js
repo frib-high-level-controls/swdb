@@ -13,6 +13,7 @@ var fs = require('fs');
 var path = require('path');
 const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 const testInstData = JSON.parse(fs.readFileSync('./test/misc/testInstData.json', 'utf8'));
+const testSwData = JSON.parse(fs.readFileSync('./test/misc/swTestData.json', 'utf8'));
 
 
 
@@ -30,8 +31,12 @@ test.describe("Installations record tests", function() {
       console.log("inserting testInstData in installations collection:"+JSON.stringify(testInstData,null,2));
       instBe.instDoc.db.collections.instCollection.insert(testInstData,
         function(err, records){
-          done();
         });
+      console.log("inserting testSwData in installations collection:"+JSON.stringify(testSwData,null,2));
+      be.swDoc.db.collections.swdbCollection.insert(testSwData,
+        function(err, records){
+        });
+      done();
     });
   });
 

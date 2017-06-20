@@ -71,6 +71,22 @@ app.service('slotService', function($http) {
     };
 });
 
+// Service to get sw data to controllers
+app.service('swService', function($http) {
+    var swData = null;
+
+    var promise = 	$http({url: 'http://swdb-dev:4005/swdbserv/v1/',method: "GET"}).success(function(data) {
+        swData = data;
+    });
+
+    return {
+        promise: promise,
+      getSwList: function () {
+            return swData;
+        }
+    };
+});
+
 app.config(['$routeProvider', function($routeProvider){
     $routeProvider.
         when('/list', {
@@ -96,6 +112,9 @@ app.config(['$routeProvider', function($routeProvider){
                 },
                 'userServiceData': function(userService){
                     return userService.promise;
+                },
+                'swServiceData': function(swService){
+                    return swService.promise;
                 },
             }
         })
