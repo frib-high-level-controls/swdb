@@ -9,6 +9,7 @@ var fs = require('fs');
 var path = require('path');
 const exec = require('child_process').exec;
 const testSwNames = JSON.parse(fs.readFileSync('./test/misc/testSwNames.json', 'utf8'));
+//const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 
 var testLogin = function(request, done) {
   console.log('Login start');
@@ -74,7 +75,7 @@ describe("app", function() {
   });
   it("Returns all sw records", function(done) {
     supertest
-    .get("/swdbserv/v1")
+    .get("/api/v1/swdb/")
     .expect(200)
     .end(function(err, res){
       expect(res.text).to.match(/\[*\]/);
@@ -83,7 +84,7 @@ describe("app", function() {
   });
   it("Post a new record", function(done) {
     supertest
-    .post("/swdbserv/v1/")
+    .post("/api/v1/swdb/")
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .send({swName: "Test Record", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
@@ -93,20 +94,20 @@ describe("app", function() {
 
   it("Errors posting a bad swName", function(done) {
     supertest
-    .post("/swdbserv/v1/")
-    .send({swName: "Bogus Test Record", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
-    .set("Accept", "application/json")
-    .set('Cookie', [Cookies])
-    .expect(400)
-    .end(function(err, res){
-      expect(res.text).to.match(/Software Name must be in the sw name list/);
-      done();
-    });
+      .post("/api/v1/swdb/")
+      .send({swName: "Bogus Test Record", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
+      .set("Accept", "application/json")
+      .set('Cookie', [Cookies])
+      .expect(400)
+      .end(function(err, res){
+        expect(res.text).to.match(/Software Name must be in the sw name list/);
+        done();
+      });
   });
 
   it("Errors posting a duplicate new record", function(done) {
     supertest
-    .post("/swdbserv/v1/")
+    .post("/api/v1/swdb/")
     .send({swName: "Test Record", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "1/1/1970"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -119,7 +120,7 @@ describe("app", function() {
 
   it("Post a new record Test Record2", function(done) {
     supertest
-    .post("/swdbserv/v1/")
+    .post("/api/v1/swdb/")
     .send({swName: "Test Record2", owner: "Owner 1002", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -132,7 +133,7 @@ describe("app", function() {
     before("Get ID record id:Test Record", function(done) {
       //var origId = tools.getIdFromSwName("test1000");
       supertest
-      .get("/swdbserv/v1")
+      .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
         res=JSON.parse(res.text);
@@ -145,7 +146,7 @@ describe("app", function() {
 
     it("Returns test record id:Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1/"+wrapper.origId)
+      .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
         expect(res.body).to.have.property("_id");
@@ -159,7 +160,7 @@ describe("app", function() {
 
   it("Post a new record Desc Test Record", function(done) {
     supertest
-    .post("/swdbserv/v1/")
+    .post("/api/v1/swdb/")
     .send({swName: "Desc Test Record", owner: "Owner 1002", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -171,7 +172,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id: Desc Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1")
+      .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
         res=JSON.parse(res.text);
@@ -184,7 +185,7 @@ describe("app", function() {
 
     it("Returns test record id: Desc Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1/"+wrapper.origId)
+      .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
         expect(res.body).to.have.property("_id");
@@ -198,7 +199,7 @@ describe("app", function() {
 
   it("Post a new record Engineer Test Record", function(done) {
     supertest
-    .post("/swdbserv/v1/")
+    .post("/api/v1/swdb/")
     .send({swName: "Engineer Test Record", owner: "Owner 1002", engineer: "Any Engineer",  levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -210,7 +211,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id: Engineer Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1")
+      .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
         res=JSON.parse(res.text);
@@ -223,7 +224,7 @@ describe("app", function() {
 
     it("Returns test record id: Engineer Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1/"+wrapper.origId)
+      .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
         expect(res.body).to.have.property("_id");
@@ -238,7 +239,7 @@ describe("app", function() {
 
   it("Post a new record versionControlLoc Test Record", function(done) {
     supertest
-    .post("/swdbserv/v1/")
+    .post("/api/v1/swdb/")
     .send({swName: "versionControlLoc Test Record", owner: "versioControlLoc Test Owner", versionControlLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -250,7 +251,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id: versionControlLoc Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1")
+      .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
         res=JSON.parse(res.text);
@@ -263,7 +264,7 @@ describe("app", function() {
 
     it("Returns test record id: versionControlLoc Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1/"+wrapper.origId)
+      .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
         expect(res.body).to.have.property("_id");
@@ -276,7 +277,7 @@ describe("app", function() {
 
   it("Post a new record designDescDocLoc Test Record", function(done) {
     supertest
-    .post("/swdbserv/v1/")
+    .post("/api/v1/swdb/")
     .send({swName: "designDescDocLoc Test Record", owner: "designDescDocLoc Test Owner", designDescDocLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -288,7 +289,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id: designDescDocLoc Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1")
+      .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
         res=JSON.parse(res.text);
@@ -301,7 +302,7 @@ describe("app", function() {
 
     it("Returns test record id: designDescDocLoc Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1/"+wrapper.origId)
+      .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
         expect(res.body).to.have.property("_id");
@@ -314,7 +315,7 @@ describe("app", function() {
 
   it("Post a new record descDocLoc Test Record", function(done) {
     supertest
-    .post("/swdbserv/v1/")
+    .post("/api/v1/swdb/")
     .send({swName: "descDocLoc Test Record", owner: "descDocLoc Test Owner", descDocLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -326,7 +327,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id: descDocLoc Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1")
+      .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
         res=JSON.parse(res.text);
@@ -339,7 +340,7 @@ describe("app", function() {
 
     it("Returns test record id: descDocLoc Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1/"+wrapper.origId)
+      .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
         expect(res.body).to.have.property("_id");
@@ -352,7 +353,7 @@ describe("app", function() {
 
   it("Post a new record recertDate Test Record", function(done) {
     supertest
-    .post("/swdbserv/v1/")
+    .post("/api/v1/swdb/")
     .send({swName: "recertDate Test Record", owner: "recertDate Test Owner", recertDate: "April 20, 2016", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -364,7 +365,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id: recertDate Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1")
+      .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
         res=JSON.parse(res.text);
@@ -377,7 +378,7 @@ describe("app", function() {
 
     it("Returns test record id: recertDate Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1/"+wrapper.origId)
+      .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
         expect(res.body).to.have.property("_id");
@@ -390,7 +391,7 @@ describe("app", function() {
 
   it("Post a new record vvProcLoc Test Record", function(done) {
     supertest
-    .post("/swdbserv/v1/")
+    .post("/api/v1/swdb/")
     .send({swName: "vvProcLoc Test Record", owner: "vvProcLoc Test Owner", vvProcLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -402,7 +403,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id: vvProcLoc Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1")
+      .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
         res=JSON.parse(res.text);
@@ -415,7 +416,7 @@ describe("app", function() {
 
     it("Returns test record id: vvProcLoc Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1/"+wrapper.origId)
+      .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
         expect(res.body).to.have.property("_id");
@@ -428,7 +429,7 @@ describe("app", function() {
 
   it("Post a new record vvResultsLoc Test Record", function(done) {
     supertest
-    .post("/swdbserv/v1/")
+    .post("/api/v1/swdb/")
     .send({swName: "vvResultsLoc Test Record", owner: "vvResultsLoc Test Owner", vvResultsLoc: "http://www.somehost/some-path/some-file2", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -440,7 +441,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id: vvResultsLoc Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1")
+      .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
         res=JSON.parse(res.text);
@@ -453,7 +454,7 @@ describe("app", function() {
 
     it("Returns test record id: vvResultsLoc Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1/"+wrapper.origId)
+      .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
         expect(res.body).to.have.property("_id");
@@ -466,7 +467,7 @@ describe("app", function() {
 
   it("Post a new record branch Test Record", function(done) {
     supertest
-    .post("/swdbserv/v1/")
+    .post("/api/v1/swdb/")
     .send({swName: "branch Test Record", owner: "branch Test Owner", branch: "New branch", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -478,7 +479,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id: branch Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1")
+      .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
         res=JSON.parse(res.text);
@@ -491,7 +492,7 @@ describe("app", function() {
 
     it("Returns test record id: branch Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1/"+wrapper.origId)
+      .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
         expect(res.body).to.have.property("_id");
@@ -504,7 +505,7 @@ describe("app", function() {
 
   it("Post a new record versionControl Test Record", function(done) {
     supertest
-    .post("/swdbserv/v1/")
+      .post("/api/v1/swdb/")
     .send({swName: "versionControl Test Record", owner: "versionControl Test Owner", versionControl: "Git", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -516,7 +517,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID versionControl id: branch Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1")
+      .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
         res=JSON.parse(res.text);
@@ -529,7 +530,7 @@ describe("app", function() {
 
     it("Returns test record id: versionControl Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1/"+wrapper.origId)
+      .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
         expect(res.body).to.have.property("_id");
@@ -542,7 +543,7 @@ describe("app", function() {
 
   it("Post a new record previous Test Record", function(done) {
     supertest
-    .post("/swdbserv/v1/")
+    .post("/api/v1/swdb/")
     .send({swName: "previous Test Record", owner: "previous Test Owner", previous: "test-reference", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -554,7 +555,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID previous id: branch Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1")
+      .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
         res=JSON.parse(res.text);
@@ -567,7 +568,7 @@ describe("app", function() {
 
     it("Returns test record id: previous Test Record", function(done) {
       supertest
-      .get("/swdbserv/v1/"+wrapper.origId)
+      .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
         expect(res.body).to.have.property("_id");
@@ -583,7 +584,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id:Test Record2", function(done) {
       supertest
-      .get("/swdbserv/v1")
+      .get("/api/v1/swdb/")
       .expect(200)
       //var origId = tools.getIdFromSwName("test1000");
       .end(function(err,res){
@@ -599,7 +600,7 @@ describe("app", function() {
 
     it("Can update a record via PUT swName id:Test Record3", function(done) {
       supertest
-      .put("/swdbserv/v1/"+wrapper.origId)
+      .put("/api/v1/swdb/"+wrapper.origId)
       .send({swName: "Test Record3"})
     .set('Cookie', [Cookies])
       .expect(200)
@@ -607,7 +608,7 @@ describe("app", function() {
     });
     it("Returns test record 1d:Test Record3", function(done) {
       supertest
-      .get("/swdbserv/v1/"+wrapper.origId)
+      .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
         expect(res.body).to.have.property("_id");
@@ -623,180 +624,180 @@ describe("app", function() {
     //  res:{msg:,url:,type:,err{status:}}
     //  }
     var testUpdateParams = [
-      {"type": "PUT", "req": {"msg": {"swName": "Test Record4"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET", "res": {"msg": {"swName": "Test Record4"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"owner": "New test owner 1002"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"owner": "New test owner 1002"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"engineer": "New Engineer"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"engineer": "New Engineer"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"levelOfCare": "MEDIUM"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"levelOfCare": "MEDIUM"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"levelOfCare": "ERRONEOUS_VALUE"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
-      {"type": "GET","res": {"msg": {"levelOfCare": "MEDIUM"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"levelOfCare": "SAFETY"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"levelOfCare": "SAFETY"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"status": "RDY_INSTALL"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"status": "RDY_INSTALL"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"status": "ERRONEOUS_VALUE"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
-      {"type": "GET","res": {"msg": {"status": "RDY_INSTALL"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"statusDate": "7/7/1977"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"statusDate": "1977-07-07"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"version": "NEW test version"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"version": "NEW test version"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"branch": "NEW Branch"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"branch": "NEW Branch"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"branch": "NEW Branch name that is much too long"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
-      {"type": "PUT","req": {"msg": {"platforms": "NEW test platform"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"platforms": "NEW test platform"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"designDescDocLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"designDescDocLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"designDescDocLoc": "badhostname/some_path/some-file"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
-      {"type": "PUT","req": {"msg": {"descDocLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"descDocLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"descDocLoc": "badurl"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
-      {"type": "PUT","req": {"msg": {"vvProcLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"vvProcLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"vvProcLoc": "http:some-malformed-url"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
-      {"type": "PUT","req": {"msg": {"vvResultsLoc": "http://www.somehost/some-path/some-file3"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"vvResultsLoc": "http://www.somehost/some-path/some-file3"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"vvResultsLoc": "http:some-malformed-url"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
-      {"type": "PUT","req": {"msg": {"versionControl": "Git"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"versionControl": "Git"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"versionControl": "Erroneous RCS"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
-      {"type": "PUT","req": {"msg": {"versionControlLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"versionControlLoc": "http://www.somehost/some-path/some-file"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"recertFreq": "NEW test recert frequency"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"recertFreq": "NEW test recert frequency"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"recertStatus": "NEW test recert status"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"recertStatus": "NEW test recert status"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"recertDate": "April 21, 2017"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"recertDate": "2017-04-21T07:00:00.000Z"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"recertDate": "Not a date"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
-      {"type": "PUT","req": {"msg": {"previous": "test-reference"},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"previous": "test-reference"},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"previous": "bad reference is way to long for this"},"url": "/swdbserv/v1/", "err": {"status": 400}}},
-      {"type": "PUT","req": {"msg": {"comment": ["NEW test comment"]},"url": "/swdbserv/v1/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"comment": ["NEW test comment"]},"url": "/swdbserv/v1/",  "err": {"status": 200}}},
+      {"type": "PUT", "req": {"msg": {"swName": "Test Record4"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET", "res": {"msg": {"swName": "Test Record4"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"owner": "New test owner 1002"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"owner": "New test owner 1002"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"engineer": "New Engineer"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"engineer": "New Engineer"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"levelOfCare": "MEDIUM"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"levelOfCare": "MEDIUM"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"levelOfCare": "ERRONEOUS_VALUE"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
+      {"type": "GET","res": {"msg": {"levelOfCare": "MEDIUM"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"levelOfCare": "SAFETY"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"levelOfCare": "SAFETY"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"status": "RDY_INSTALL"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"status": "RDY_INSTALL"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"status": "ERRONEOUS_VALUE"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
+      {"type": "GET","res": {"msg": {"status": "RDY_INSTALL"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"statusDate": "7/7/1977"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"statusDate": "1977-07-07"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"version": "NEW test version"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"version": "NEW test version"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"branch": "NEW Branch"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"branch": "NEW Branch"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"branch": "NEW Branch name that is much too long"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
+      {"type": "PUT","req": {"msg": {"platforms": "NEW test platform"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"platforms": "NEW test platform"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"designDescDocLoc": "http://www.somehost/some-path/some-file"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"designDescDocLoc": "http://www.somehost/some-path/some-file"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"designDescDocLoc": "badhostname/some_path/some-file"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
+      {"type": "PUT","req": {"msg": {"descDocLoc": "http://www.somehost/some-path/some-file"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"descDocLoc": "http://www.somehost/some-path/some-file"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"descDocLoc": "badurl"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
+      {"type": "PUT","req": {"msg": {"vvProcLoc": "http://www.somehost/some-path/some-file"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"vvProcLoc": "http://www.somehost/some-path/some-file"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"vvProcLoc": "http:some-malformed-url"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
+      {"type": "PUT","req": {"msg": {"vvResultsLoc": "http://www.somehost/some-path/some-file3"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"vvResultsLoc": "http://www.somehost/some-path/some-file3"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"vvResultsLoc": "http:some-malformed-url"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
+      {"type": "PUT","req": {"msg": {"versionControl": "Git"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"versionControl": "Git"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"versionControl": "Erroneous RCS"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
+      {"type": "PUT","req": {"msg": {"versionControlLoc": "http://www.somehost/some-path/some-file"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"versionControlLoc": "http://www.somehost/some-path/some-file"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"recertFreq": "NEW test recert frequency"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"recertFreq": "NEW test recert frequency"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"recertStatus": "NEW test recert status"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"recertStatus": "NEW test recert status"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"recertDate": "April 21, 2017"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"recertDate": "2017-04-21T07:00:00.000Z"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"recertDate": "Not a date"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
+      {"type": "PUT","req": {"msg": {"previous": "test-reference"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"previous": "test-reference"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"previous": "bad reference is way to long for this"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
+      {"type": "PUT","req": {"msg": {"comment": ["NEW test comment"]},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"comment": ["NEW test comment"]},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       // test new swName is required, min, max
-      {"type":"POST", "req": {"msg": {"owner": "test owner"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"owner": "test owner"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"swName","msg":"Software Name is required"}'}}},
-      {"type":"POST", "req": {"msg": {"swName": "t"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"swName": "t"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"swName","msg":"Software Name must be between 2 and 30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"swName": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"swName": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"swName","msg":"Software Name must be between 2 and 30 characters"'}}},
       // test nwe owner required, min, max
-      {"type":"POST", "req": {"msg": {"swName": "NEW Test name"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"swName": "NEW Test name"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"owner","msg":"Owner is required"}'}}},
-      {"type":"POST", "req": {"msg": {"swName": "NEW Test name", "owner": "N"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"swName": "NEW Test name", "owner": "N"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"owner","msg":"Owner must be between 2 and 30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"swName": "NEW Test name","owner": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"swName": "NEW Test name","owner": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"owner","msg":"Owner must be between 2 and 30 characters"'}}},
       // test levelOfCare required, enumerated
-      {"type":"POST", "req": {"msg": {"swName": "NEW Test name", "owner":"NEW OWNER"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"swName": "NEW Test name", "owner":"NEW OWNER"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"levelOfCare","msg":"LevelOfCare is required"}'}}},
-      {"type":"POST", "req": {"msg": {"swName": "NEW Test name", "owner":"NEW OWNER", "levelOfCare": "LOW"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"swName": "NEW Test name", "owner":"NEW OWNER", "levelOfCare": "LOW"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status is required"}'}}},
-      {"type":"POST", "req": {"msg": {"swName": "NEW Test name", "owner":"NEW OWNER", "levelOfCare": "LOW","status":"DEVEL"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"swName": "NEW Test name", "owner":"NEW OWNER", "levelOfCare": "LOW","status":"DEVEL"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"statusDate","msg":"Status date is required"}'}}},
       // test new status enumerated
-      {"type":"POST", "req": {"msg": {"status": "not-enumerated"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"status": "not-enumerated"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_INSTALL,RDY_INT_TEST,RDY_BEAM,RETIRED","value":"not-enumerated"}'}}},
       // test new statusDate with non-date
-      {"type":"POST", "req": {"msg": {"swName":"testing","owner":"test owner","levelOfCare":"LOW","status":"DEVEL","statusDate": "non-date"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"swName":"testing","owner":"test owner","levelOfCare":"LOW","status":"DEVEL","statusDate": "non-date"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"statusDate","msg":"Status date must be a date","value":"non-date"}'}}},
       // test new version min, max
-      {"type":"POST", "req": {"msg": {"version": ""}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"version": ""}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"version","msg":"Version must be 1-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"version": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"version": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"version","msg":"Version must be 1-30 characters"'}}},
       // test new platforms min, max
-      {"type":"POST", "req": {"msg": {"platforms": "NEW"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"platforms": "NEW"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"platforms","msg":"platforms must be 4-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"platforms": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"platforms": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"platforms","msg":"platforms must be 4-30 characters"'}}},
       // test new versionControl min, max
-      {"type":"POST", "req": {"msg": {"versionControl": "Erroneous RCS"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"versionControl": "Erroneous RCS"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of Git,AssetCentre,Filesystem,Other"'}}},
       // test new recertFreq min, max
-      {"type":"POST", "req": {"msg": {"recertFreq": "N"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"recertFreq": "N"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertFreq","msg":"Recerification frequency must be 4-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"recertFreq": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"recertFreq": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertFreq","msg":"Recerification frequency must be 4-30 characters"'}}},
       // test new recertStatus min, max
-      {"type":"POST", "req": {"msg": {"recertStatus": "N"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"recertStatus": "N"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 4-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"recertStatus": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"recertStatus": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 4-30 characters"'}}},
       // test new comment
-      {"type":"POST", "req": {"msg": {"comment": "NEW"}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"comment": "NEW"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"comment","msg":"Comment must an array of strings be 4-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"comment": ["NE"]}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"comment": ["NE"]}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"comment[0]","msg":"Comment 0 must be 4-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"comment": ["0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"comment": ["0123456789012345678901234567890"]}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"comment[0]","msg":"Comment 0 must be 4-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"comment": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
+      {"type":"POST", "req": {"msg": {"comment": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"comment[2]","msg":"Comment 2 must be 4-30 characters"'}}},
 
       // test update swName min, max
-      {"type":"PUT", "req": {"msg": {"swName": "t"}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"swName": "t"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"swName","msg":"Software Name must be between 2 and 30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"swName": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"swName": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"swName","msg":"Software Name must be between 2 and 30 characters"'}}},
       // test update owner min, max
-      {"type":"PUT", "req": {"msg": {"swName": "NEW Test name", "owner": "N"}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"swName": "NEW Test name", "owner": "N"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"owner","msg":"Owner must be between 2 and 30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"swName": "NEW Test name","owner": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"swName": "NEW Test name","owner": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"owner","msg":"Owner must be between 2 and 30 characters"'}}},
       // test update levelOfCare enumerated
-      {"type":"PUT", "req": {"msg": {"levelOfCare": "not-enumerated"}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"levelOfCare": "not-enumerated"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"levelOfCare","msg":"LevelOfCare must be one of NONE,LOW,MEDIUM,HIGH,SAFETY","value":"not-enumerated"}'}}},
       // test update status enumerated
-      {"type":"PUT", "req": {"msg": {"status": "not-enumerated"}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"status": "not-enumerated"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_INSTALL,RDY_INT_TEST,RDY_BEAM,RETIRED","value":"not-enumerated"}'}}},
       // test update statusDate with non-date
-      {"type":"PUT", "req": {"msg": {"statusDate": "non-date"}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"statusDate": "non-date"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"statusDate","msg":"Status date must be a date","value":"non-date"}'}}},
       // test update version min, max
-      {"type":"PUT", "req": {"msg": {"version": ""}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"version": ""}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"version","msg":"Version must be 1-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"version": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"version": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"version","msg":"Version must be 1-30 characters"'}}},
       // test update platforms min, max
-      {"type":"PUT", "req": {"msg": {"platforms": "NEW"}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"platforms": "NEW"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"platforms","msg":"platforms must be 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"platforms": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"platforms": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"platforms","msg":"platforms must be 4-30 characters"'}}},
       // test update versionControl min, max
-      {"type":"PUT", "req": {"msg": {"versionControl": "Erroneous RCS"}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"versionControl": "Erroneous RCS"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of Git,AssetCentre,Filesystem,Other"'}}},
       // test update recertFreq min, max
-      {"type":"PUT", "req": {"msg": {"recertFreq": "N"}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"recertFreq": "N"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertFreq","msg":"Recerification frequency must be 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"recertFreq": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"recertFreq": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertFreq","msg":"Recerification frequency must be 4-30 characters"'}}},
       // test update recertStatus min, max
-      {"type":"PUT", "req": {"msg": {"recertStatus": "N"}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"recertStatus": "N"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"recertStatus": "0123456789012345678901234567890"}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"recertStatus": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 4-30 characters"'}}},
       // test update comment
-      {"type":"PUT", "req": {"msg": {"comment": "NEW"}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"comment": "NEW"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"comment","msg":"Comment must an array of strings be 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"comment": ["NE"]}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"comment": ["NE"]}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"comment[0]","msg":"Comment 0 must be 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"comment": ["0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"comment": ["0123456789012345678901234567890"]}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"comment[0]","msg":"Comment 0 must be 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"comment": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"comment": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"comment[2]","msg":"Comment 2 must be 4-30 characters"'}}},
 
       // test update desc
-      {"type":"PUT", "req": {"msg": {"desc": "NEW"}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"desc": "NEW"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"desc","msg":"Description must an array of strings be 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"desc": ["NE"]}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"desc": ["NE"]}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"desc[0]","msg":"Description 0 must be 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"desc": ["0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"desc": ["0123456789012345678901234567890"]}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"desc[0]","msg":"Description 0 must be 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"desc": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/swdbserv/v1/",
+      {"type":"PUT", "req": {"msg": {"desc": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"desc[2]","msg":"Description 2 must be 4-30 characters"'}}},
     ];
 
@@ -862,16 +863,16 @@ describe("app", function() {
     });
     it("Errors on update a nonexistent record via POST swName id:badbeef", function(done) {
       supertest
-      .post("/swdbserv/v1/badbeef")
+      .post("/api/v1/swdb/badbeef")
       .set('Cookie', [Cookies])
       .send({swName: "Test Record4"})
       .expect(404)
-      .expect('Cannot POST /swdbserv/v1/badbeef\n')
+      .expect('Cannot POST /api/v1/swdb/badbeef\n')
       .end(done);
     });
     it("Errors on update a nonexistent record via PUT swName id:badbeef", function(done) {
       supertest
-      .put("/swdbserv/v1/badbeef")
+      .put("/api/v1/swdb/badbeef")
       .set('Cookie', [Cookies])
       .send({swName: "Test Record4"})
       .expect(500)
@@ -880,7 +881,7 @@ describe("app", function() {
     });
     it("Errors on update a nonexistent record via PATCH swName id:badbeef", function(done) {
       supertest
-      .patch("/swdbserv/v1/badbeef")
+      .patch("/api/v1/swdb/badbeef")
       .set('Cookie', [Cookies])
       .send({swName: "Test Record4"})
       .expect(500)

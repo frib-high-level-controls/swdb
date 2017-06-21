@@ -8,7 +8,7 @@ var app = angular.module('app', [
 app.service('configService', function($http) {
     var configData = null;
 
-    var promise = 	$http({url: '/swdbserv/v1/config',method: "GET"}).success(function(data) {
+    var promise = 	$http({url: '/api/v1/swdb/config',method: "GET"}).success(function(data) {
         configData = data;
     });
 
@@ -27,7 +27,7 @@ app.service('configService', function($http) {
 app.service('userService', function($http) {
     var userData = null;
 
-    var promise = 	$http({url: '/swdbserv/v1/user',method: "GET"}).success(function(data) {
+    var promise = 	$http({url: '/api/v1/swdb/user',method: "GET"}).success(function(data) {
         userData = data;
     });
 
@@ -49,7 +49,7 @@ app.service('slotService', function($http) {
 
     //var promise = 	$http({url: config.ccdbApiUrl+'slot',method: "GET"}).success(function(data) {
     var promise = 	$http({
-      url: '/instserv/v1/slot',
+      url: '/api/v1/swdb/slot',
       method: "GET",
       headers: {
         'Content-Type': 'application/json'
@@ -75,7 +75,7 @@ app.service('slotService', function($http) {
 app.service('swService', function($http) {
     var swData = null;
 
-    var promise = 	$http({url: 'http://swdb-dev:4005/swdbserv/v1/',method: "GET"}).success(function(data) {
+    var promise = 	$http({url: 'http://swdb-dev:4005/api/v1/swdb/',method: "GET"}).success(function(data) {
         swData = data;
     });
 

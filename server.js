@@ -186,12 +186,12 @@ app.get('/logout', function(req,res) {
   res.send('<p id="Logout complete">logout complete</p>');
 });
 // for get requests that are not specific return all
-app.get('/swdbserv/v1/user', function(req, res, next) {
+app.get('/api/v1/swdb/user', function(req, res, next) {
   res.send(JSON.stringify(req.session));
 });
 
 // for get requests that are not specific return all
-app.get('/swdbserv/v1/config', function(req, res, next) {
+app.get('/api/v1/swdb/config', function(req, res, next) {
   // update props and send config
   be.swNamesDoc.find(function(err,docs){
     if (!err) {
@@ -211,20 +211,20 @@ app.get('/swdbserv/v1/config', function(req, res, next) {
 });
 
 // for get requests that are not specific return all
-app.get('/instserv/v1/slot', function(req, res, next) {
+app.get('/api/v1/swdb/slot', function(req, res, next) {
   instTools.getSlot(req, res, next);
 });
 // for get requests that are not specific return all
-app.get('/instserv/v1*', function(req, res, next) {
+app.get('/api/v1/inst/*', function(req, res, next) {
   instBe.getDocs(req, res, next);
 });
 // for get requests that are not specific return all
-app.get('/swdbserv/v1*', function(req, res, next) {
+app.get('/api/v1/swdb/*', function(req, res, next) {
   be.getDocs(req, res, next);
 });
 
 // handle incoming post requests
-app.post('/swdbserv/v1', casAuth.ensureAuthenticated, function(req, res, next) {
+app.post('/api/v1/swdb', casAuth.ensureAuthenticated, function(req, res, next) {
 
   // Do validation for  new records
   be.swNamesDoc.find(function(err,docs){
@@ -250,8 +250,7 @@ app.post('/swdbserv/v1', casAuth.ensureAuthenticated, function(req, res, next) {
   });
 });
 // handle incoming installation post requests
-//app.post('/instserv/v1', casAuth.ensureAuthenticated, function(req, res, next) {
-app.post('/instserv/v1', function(req, res, next) {
+app.post('/api/v1/inst', function(req, res, next) {
 
   // Do validation for  new records
 
@@ -267,7 +266,7 @@ app.post('/instserv/v1', function(req, res, next) {
 });
 
 // handle incoming put requests for update
-app.put('/swdbserv/v1*', casAuth.ensureAuthenticated, function(req, res, next) {
+app.put('/api/v1/swdb*', casAuth.ensureAuthenticated, function(req, res, next) {
 
   // Do validation for updates
   be.swNamesDoc.find(function(err,docs){
@@ -297,8 +296,7 @@ app.put('/swdbserv/v1*', casAuth.ensureAuthenticated, function(req, res, next) {
   });
 });
 // handle incoming put requests for installation update
-//app.put('/instserv/v1*', casAuth.ensureAuthenticated, function(req, res, next) {
-app.put('/instserv/v1*', function(req, res, next) {
+app.put('/api/v1/inst*', function(req, res, next) {
   // Do validation for installation updates
   instTools.updateValidation(req);
   instTools.updateSanitization(req);
@@ -314,7 +312,7 @@ app.put('/instserv/v1*', function(req, res, next) {
 });
 
 // handle incoming patch requests for update
-app.patch('/swdbserv/v1*', casAuth.ensureAuthenticated, function(req,res,next) {
+app.patch('/api/v1/swdb*', casAuth.ensureAuthenticated, function(req,res,next) {
 
   // Do validation for updates
   be.swNamesDoc.find(function(err,docs){
@@ -344,8 +342,7 @@ app.patch('/swdbserv/v1*', casAuth.ensureAuthenticated, function(req,res,next) {
   });
 });
 // handle incoming put requests for installation update
-//app.patch('/instserv/v1*', casAuth.ensureAuthenticated, function(req, res, next) {
-app.patch('/instserv/v1*', function(req, res, next) {
+app.patch('/api/v1/inst*', function(req, res, next) {
   // Do validation for installation updates
   instTools.updateValidation(req);
   instTools.updateSanitization(req);

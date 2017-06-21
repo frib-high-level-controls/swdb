@@ -100,7 +100,7 @@ describe("app", function() {
   });
   it("Returns all sw records", function(done) {
     supertest
-      .get("/swdbserv/v1")
+      .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err, res){
         expect(res.text).to.match(/\[*\]/);
@@ -109,7 +109,7 @@ describe("app", function() {
   });
   it("Returns all installation records", function(done) {
     supertest
-      .get("/instserv/v1")
+      .get("/api/v1/inst/")
       .expect(200)
       .end(function(err, res){
         expect(res.text).to.match(/\[*\]/);
@@ -118,7 +118,7 @@ describe("app", function() {
   });
   it("Post a new installation record", function(done) {
     supertest
-      .post("/instserv/v1/")
+      .post("/api/v1/inst/")
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
       .send({host: "Test host", area: "Global", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
@@ -127,7 +127,7 @@ describe("app", function() {
   });
   it("Errors posting a bad status installation", function(done) {
     supertest
-      .post("/instserv/v1/")
+      .post("/api/v1/inst/")
       .send({host: "test host", area: "Global", status: "BADENUM", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
@@ -139,7 +139,7 @@ describe("app", function() {
   });
   it("Errors posting a duplicate installation record", function(done) {
     supertest
-      .post("/instserv/v1/")
+      .post("/api/v1/inst/")
       .send({host: "Test host", area: "Global", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
@@ -151,7 +151,7 @@ describe("app", function() {
   });
   it("Post a new record installation on a different host", function(done) {
     supertest
-      .post("/instserv/v1/")
+      .post("/api/v1/inst/")
       .send({host: "Test host2", area: "Global", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
@@ -160,7 +160,7 @@ describe("app", function() {
   });
   it("Post a new record installation with different sw ref", function(done) {
     supertest
-      .post("/instserv/v1/")
+      .post("/api/v1/inst/")
       .send({host: "Test host", area: "Global", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbaa"})
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
@@ -172,7 +172,7 @@ describe("app", function() {
     before("Get ID record id:Test host test sw ref", function(done) {
       //var origId = tools.getIdFromSwName("test1000");
       supertest
-        .get("/instserv/v1")
+        .get("/api/v1/inst/")
         .expect(200)
         .end(function(err,res){
           res=JSON.parse(res.text);
@@ -186,7 +186,7 @@ describe("app", function() {
 
     it("Returns test installation record id:Test host test sw ref", function(done) {
       supertest
-        .get("/instserv/v1/"+wrapper.origId)
+        .get("/api/v1/inst/"+wrapper.origId)
         .expect(200)
         .end(function(err, res){
           expect(res.body).to.have.property("_id");
@@ -198,7 +198,7 @@ describe("app", function() {
     });
     it("Can update a record via PUT host id:Test host3", function(done) {
       supertest
-        .put("/instserv/v1/"+wrapper.origId)
+        .put("/api/v1/inst/"+wrapper.origId)
         .send({host: "Test host3"})
         .set('Cookie', [Cookies])
         .expect(200)
@@ -206,7 +206,7 @@ describe("app", function() {
     });
     it("Returns test record 1d:Test host3", function(done) {
       supertest
-        .get("/instserv/v1/"+wrapper.origId)
+        .get("/api/v1/inst/"+wrapper.origId)
         .expect(200)
         .end(function(err, res){
           expect(res.body).to.have.property("_id");
@@ -224,8 +224,8 @@ describe("app", function() {
     //  res:{msg:,url:,type:,err{status:}}
     //  }
     var testUpdateParams = [
-      {"type": "PUT", "req": {"msg": {"host": "Test host4"},"url": "/instserv/v1/", "err": {"status": 200}}},
-      {"type": "GET", "res": {"msg": {"host": "Test host4"},"url": "/instserv/v1/",  "err": {"status": 200}}}
+      {"type": "PUT", "req": {"msg": {"host": "Test host4"},"url": "/api/v1/inst/", "err": {"status": 200}}},
+      {"type": "GET", "res": {"msg": {"host": "Test host4"},"url": "/api/v1/inst/",  "err": {"status": 200}}}
     ];
 
     // go through the table and check the given parameters
@@ -290,16 +290,16 @@ describe("app", function() {
     });
     it("Errors on update a nonexistent record via POST id id:badbeef", function(done) {
       supertest
-        .post("/instserv/v1/badbeef")
+        .post("/api/v1/inst/badbeef")
         .set('Cookie', [Cookies])
         .send({swName: "Test Record5"})
         .expect(404)
-        .expect('Cannot POST /instserv/v1/badbeef\n')
+        .expect('Cannot POST /api/v1/inst/badbeef\n')
         .end(done);
     });
     it("Errors on update a nonexistent record via PUT id:badbeef", function(done) {
       supertest
-        .put("/instserv/v1/badbeef")
+        .put("/api/v1/inst/badbeef")
         .set('Cookie', [Cookies])
         .send({swName: "Test Record5"})
         .expect(500)
@@ -308,7 +308,7 @@ describe("app", function() {
     });
     it("Errors on update a nonexistent record via PATCH id:badbeef", function(done) {
       supertest
-        .patch("/instserv/v1/badbeef")
+        .patch("/api/v1/inst/badbeef")
         .set('Cookie', [Cookies])
         .send({swName: "Test Record5"})
         .expect(500)
