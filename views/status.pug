@@ -20,6 +20,12 @@ html
       | td.message {
       |   padding: 5px 10px;
       | }
+      | div.test {
+      |  padding: 30px 0px; 
+      |  font-weight: bold;
+      |  font-size: large;
+      |  color: red;
+      |}
   body
     if status.status === 'OK'
       h2.ok= 'Status: ' + status.status
@@ -37,3 +43,12 @@ html
             td.status.error= comp.status
             td.name.error= comp.name
             td.message.error= comp.message
+    div.test
+      form(method='POST')
+        span Status Test:&nbsp;
+        if testing
+          input(type='hidden' name='test' value='refresh')
+          button(type='submit') Refresh
+        else
+          input(type='hidden' name='test' value='start')
+          button(type='submit' onclick='return confirm("Start a 30 second status test?");') Start

@@ -8,19 +8,23 @@ import express = require('express');
 
 import handlers = require('./handlers');
 
+type Status = 'ERROR' | 'OK';
 
 interface ComponentStatus {
-  status: string;
+  status: Status;
   date: Date;
   name: string;
   message: string;
 }
 
 interface MonitorStatus {
-  status: string;
+  status: Status;
   uptime: number;
   components: ComponentStatus[];
 }
+
+const catchAll = handlers.catchAll;
+const ensureAccepts = handlers.ensureAccepts;
 
 // Utilities
 
@@ -154,7 +158,7 @@ setInterval(monitorMemory, memoryInterval);
 
 // Custom status //
 
-let components = <ComponentStatus[]> [];
+let components: ComponentStatus[] = [];
 
 function setOk(name: string, message?: string) {
   for (let comp of components) {
@@ -170,7 +174,7 @@ function setOk(name: string, message?: string) {
     name: name,
     message: message || 'OK',
   });
-}
+};
 
 function setError(name: string, message?: string) {
   for (let comp of components) {
@@ -186,14 +190,40 @@ function setError(name: string, message?: string) {
     name: name,
     message: message || 'ERROR',
   });
-}
+};
+
+
+let testingStatus: ComponentStatus = {
+  status: 'OK',
+  date: new Date(),
+  name: 'Status Test',
+  message: 'OK',
+};
+
+function setTestingOk(message?: string) {
+  testingStatus.status = 'OK';
+  testingStatus.date = new Date();
+  testingStatus.message = message || 'OK';
+};
+
+function setTestingError(message?: string) {
+  testingStatus.status = 'ERROR';
+  testingStatus.date = new Date();
+  testingStatus.message = message || 'ERROR';
+};
+
 
 function getStatus(): MonitorStatus {
-  let status = {
+  let status: MonitorStatus = {
     status: 'OK',
     uptime: process.uptime(),
-    components: <ComponentStatus[]> [],
+    components: [],
   };
+
+  if (testingStatus.status !== 'OK') {
+    status.components.push(testingStatus);
+    status.status = 'ERROR';
+  }
 
   status.components.push(memoryStatus);
   if (memoryStatus.status !== 'OK') {
@@ -261,14 +291,46 @@ function setComponentError(name: string, message?: string): void {
 
 const router = express.Router();
 
-router.get('/', handlers.catchAll(async (req: express.Request, res: express.Response) => {
-  res.status(200).render('status', {
-    status: getStatus(),
+function getHttpStatus(status: MonitorStatus): number {
+  if (status.status !== 'OK') {
+    return handlers.HttpStatus.INTERNAL_SERVER_ERROR;
+  }
+  return handlers.HttpStatus.OK;
+};
+
+router.get('/', ensureAccepts('html'), catchAll(async (req: express.Request, res: express.Response) => {
+  let testing = false;
+  if (testingStatus.status !== 'OK') {
+    testing = true;
+  }
+  let status = getStatus();
+  res.status(getHttpStatus(status)).render('status', {
+    testing: testing,
+    status: status,
   });
 }));
 
-router.get('/json', handlers.catchAll(async (req: express.Request, res: express.Response) => {
-  res.status(200).json(getStatus());
+router.post('/', ensureAccepts('html'), catchAll(async (req: express.Request, res: express.Response) => {
+  if (req.body.test === 'start') {
+    if (testingStatus.status === 'OK') {
+      setTestingError('Duration 30s');
+      setTimeout(setTestingOk, 30000);
+    }
+  }
+  let testing = false;
+  if (testingStatus.status !== 'OK') {
+    testing = true;
+  }
+  let status = getStatus();
+  res.status(getHttpStatus(status)).render('status', {
+    testing: testing,
+    status: status,
+  });
+}));
+
+router.get('/json', ensureAccepts('json'), catchAll(async (req: express.Request, res: express.Response) => {
+  let status = getStatus();
+  res.status(getHttpStatus(status)).json(status);
 }));
 
 
