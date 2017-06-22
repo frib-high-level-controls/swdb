@@ -4,7 +4,8 @@ Web Application Template
 Description
 -----------
 This repostiory provides a template for new web application projects
-using NodeJS (runtime), Express (routing) and Pug (templating).
+using [NodeJS](https://nodejs.org) (runtime), [Express](https://expressjs.com/) (routing),
+[Pug](https://pugjs.org) (templating) and [TypeScript](https://www.typescriptlang.org/) (language).
 
 
 Quick Start
@@ -22,3 +23,9 @@ Roadmap
 * An example of using Typescript on client
 * Move some code from 'src/app/shared' to separate library (on NPM?)
 * Refine the project structure (how can it be improved?)
+
+
+Development
+-----------
+The recommended development environment is [VS Code](https://code.visualstudio.com/)
+as it provides very good integration with TypeScript.
