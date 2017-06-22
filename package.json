@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "./bin/app",
-    "grunt": "./node_modules/grunt/bin/grunt"
+    "grunt": "./node_modules/.bin/grunt"
   },
   "dependencies": {
     "body-parser": "^1.15.1",
