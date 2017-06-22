@@ -6,12 +6,12 @@ import express = require('express');
 export import HttpStatus = require('http-status-codes');
 
 export interface RequestPromiseHandler {
-  (req: express.Request, res: express.Response, next?: express.NextFunction): Promise<void>;
+  (req: express.Request, res: express.Response, next?: express.NextFunction): PromiseLike<void>;
 }
 
-export function catchAll<T = never>(handler: RequestPromiseHandler): express.RequestHandler {
+export function catchAll(handler: RequestPromiseHandler): express.RequestHandler {
   return (req, res, next) => {
-    handler(req, res, next).catch((err) => {
+    Promise.resolve(handler(req, res, next)).catch((err) => {
       next(err);
     });
   };
@@ -77,6 +77,18 @@ function isValidStatus(status: number) {
   }
 }
 
+export function ensureAccepts(type: string): express.RequestHandler;
+export function ensureAccepts(type: string[]): express.RequestHandler;
+export function ensureAccepts(...type: string[]): express.RequestHandler;
+export function ensureAccepts(type: any): express.RequestHandler {
+  return (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (!req.accepts(type)) {
+      next(new RequestError(HttpStatus.NOT_ACCEPTABLE, HttpStatus.getStatusText(HttpStatus.NOT_ACCEPTABLE)));
+    }
+    next();
+  };
+};
+
 export function requestErrorHandler(err: any, req: express.Request, res: express.Response, next: express.NextFunction) {
   let status = HttpStatus.INTERNAL_SERVER_ERROR;
   let details: RequestErrorDetails = { message: DEFAULT_ERROR_MESSAGE };
@@ -90,11 +102,10 @@ export function requestErrorHandler(err: any, req: express.Request, res: express
     };
   }
 
-  let accept = req.header('Accept');
-  // TODO: improved content negotiation
-  if (!accept || accept.match(/text\/html|application\/xhtml/)) {
+  let accepts = req.accepts(['html', 'json']);
+  if (accepts === 'html') {
     res.status(status).render('error', details);
-  } else if (accept.match(/(text|application)\/json/)) {
+  } else if (accepts === 'json') {
     res.status(status).json(details);
   } else {
     res.status(status).send(details.message);
