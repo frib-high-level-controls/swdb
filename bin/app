@@ -128,7 +128,7 @@ function close(limit) {
         resolve(true);
       });
     }),
-    timeout(2000).catch(function () {
+    timeout(200).catch(function () {
       // Ignore timeout because it is expected
       // if 'keep-alive' connections are open.
       return false;
