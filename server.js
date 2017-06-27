@@ -210,9 +210,13 @@ app.get('/api/v1/swdb/config', function(req, res, next) {
   });
 });
 
-// for get requests that are not specific return all
+// for get slot requests
 app.get('/api/v1/swdb/slot', function(req, res, next) {
   instTools.getSlot(req, res, next);
+});
+// for get list of records requests
+app.get('/api/v1/swdb/list', function(req, res, next) {
+  be.getList(req, res, next);
 });
 // for get requests that are not specific return all
 app.get('/api/v1/inst/*', function(req, res, next) {
