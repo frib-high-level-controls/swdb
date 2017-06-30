@@ -214,10 +214,6 @@ app.get('/api/v1/swdb/config', function(req, res, next) {
 app.get('/api/v1/swdb/slot', function(req, res, next) {
   instTools.getSlot(req, res, next);
 });
-// for get list of records requests
-app.get('/api/v1/swdb/list', function(req, res, next) {
-  be.getList(req, res, next);
-});
 // for get requests that are not specific return all
 app.get('/api/v1/inst/*', function(req, res, next) {
   instBe.getDocs(req, res, next);
@@ -267,6 +263,10 @@ app.post('/api/v1/inst', function(req, res, next) {
   } else {
     instBe.createDoc(req, res, next);
   }
+});
+// for get list of records requests
+app.post('/api/v1/swdb/list', function(req, res, next) {
+  be.getList(req, res, next);
 });
 
 // handle incoming put requests for update

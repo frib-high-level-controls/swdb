@@ -113,9 +113,9 @@ app.config(['$routeProvider', function($routeProvider){
                 'userServiceData': function(userService){
                     return userService.promise;
                 },
-                'swServiceData': function(swService){
-                    return swService.promise;
-                },
+                //'swServiceData': function(swService){
+                    //return swService.promise;
+                //},
             }
         })
         .when('/details/:itemId', {

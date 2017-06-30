@@ -28,26 +28,41 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
     };
 
     // get initialization info
-    $scope.props = configService.getConfig();
-    $scope.session = userService.getUser();
-    var vm = this;
-    vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
-        var defer = $q.defer();
-        $http.get($scope.props.instApiUrl).then(function(result) {
-            defer.resolve(result.data);
-        });
-        return defer.promise;
-    }).withPaginationType('full_numbers');
+  $scope.props = configService.getConfig();
+  $scope.session = userService.getUser();
+  var vm = this;
+  // set the options. Note that installations promise fires
+  // first then inner promise uses installation data to get
+  // sw metadata. Only after inner promise sets the data is outer
+  // promise resolved.
+  vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
+    var defer = $q.defer();
+    $http.get($scope.props.instApiUrl).then(function(result) {
+      var innerDefer = $q.defer();
+      var swIds = result.data.map(function(r){return r.software;});
+      console.log("swIds now: "+JSON.stringify(swIds));
+      $http({
+        url: $scope.props.apiUrl+"list",
+        method: "POST",
+        data: JSON.stringify(swIds)
+      }).then(function(innerResult) {
+        $scope.swMeta = innerResult.data;
+        console.log("$scope.swMeta now: "+JSON.stringify($scope.swMeta));
+        innerDefer.resolve(innerResult.data);
+        defer.resolve(result.data);
+      });
+    });
+    return defer.promise;
+  }).withPaginationType('full_numbers');
 
   vm.dtColumns = [
         DTColumnBuilder.newColumn('software').withTitle('Software').withOption('defaultContent','').withClass("center")
     .renderWith(function(data, type, full, meta) {
-      // find the sw in the sw list that matches that id
-      var swItem = $scope.swList.find(function(list){
-        return list._id === full.software;
-      });
-      return '<a href="#/details/'+full.software+'" >' + swItem.swName+
-        '/'+swItem.version+'/'+swItem.branch + '</a>';
+      return '<a href="#/details/'+full.software+'" >' +
+        $scope.swMeta[full.software].swName+
+        '/'+$scope.swMeta[full.software].version+
+        '/'+$scope.swMeta[full.software].branch +
+        '</a>';
     }),
     DTColumnBuilder.newColumn('host').withTitle('host')
     .renderWith(function(data, type, full, meta) {
@@ -58,7 +73,7 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
         DTColumnBuilder.newColumn('area').withTitle('Area'),
         DTColumnBuilder.newColumn('slots').withTitle('Slots')
     ];
-  $scope.swList = swService.getSwList();
+  //$scope.swList = swService.getSwList();
 }
 
 
