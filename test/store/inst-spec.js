@@ -9,7 +9,7 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var fs = require('fs');
 var path = require('path');
 const exec = require('child_process').exec;
-const testSwNames = JSON.parse(fs.readFileSync('./test/misc/testSwNames.json', 'utf8'));
+const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/testSwNames.json', 'utf8'));
 
 var testLogin = function(request, done) {
   console.log('Login start');
@@ -57,6 +57,22 @@ describe("app", function() {
   before("setup and login as test user", function(done){
     // clear the test collection
     this.timeout(5000);
+    // before we start loading data, convert _ids to ObjectIDs
+    for (var i in testSwNames){
+      if ("_id" in testSwNames[i]) {
+        testSwNames[i]._id = ObjectId(testSwNames[i]._id);
+      }
+    }
+    //for (var i in testSwData){
+      //if ("_id" in testSwData[i]) {
+        //testSwData[i]._id = ObjectId(testSwData[i]._id);
+      //}
+    //}
+    //for (i in testInstData){
+      //if ("_id" in testInstData[i]) {
+        //testInstData[i]._id = ObjectId(testInstData[i]._id);
+      //}
+    //}
     console.log("Starting inst-spec tests");
     console.log("Dropping collections...");
     instBe.instDoc.db.collections.instCollection.drop();

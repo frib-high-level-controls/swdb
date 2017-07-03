@@ -14,14 +14,14 @@ for nrow in range(1, sheet.nrows):
     row = OrderedDict()
     cols = sheet.row_values(nrow)
     row["swName"] = cols[0]
-    row["comment"] = cols[1]
+    row["desc"] = cols[1]
     row["status"] = cols[2]
     row["version"] = cols[3]
     row["area"] = cols[4]
     row["owner"] = cols[5]
     row["engineer"] = cols[6]
     row["levelOfCare"] = cols[7]
-    row["plaforms"] = cols[8]
+    row["platforms"] = cols[8]
     row["revisionControl"] = cols[9]
     row["revisionControlLoc"] = cols[10]
 

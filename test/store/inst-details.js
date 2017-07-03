@@ -4,6 +4,7 @@ var expect = require("chai").expect;
 chai.use(require("chai-as-promised"));
 var be = require("../../lib/db");
 var instBe = require("../../lib/instDb.js");
+var ObjectId = require('mongodb').ObjectID;
 
 var webdriver = require("../../node_modules/selenium-webdriver"),
   By = webdriver.By,
@@ -12,7 +13,9 @@ var webdriver = require("../../node_modules/selenium-webdriver"),
 var fs = require('fs');
 var path = require('path');
 const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
-const testInstData = JSON.parse(fs.readFileSync('./test/misc/testInstData.json', 'utf8'));
+const testInstData = JSON.parse(fs.readFileSync('./test/misc/datafiles/testInstData.json', 'utf8'));
+const testSwData = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestData.json', 'utf8'));
+const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/testSwNames.json', 'utf8'));
 
 
 
@@ -23,24 +26,66 @@ test.describe("Installations detail screen tests", function() {
   chromeDriver.manage().window().setPosition(200,0);
 
   test.before(function(done) {
-    this.timeout(5000);
     console.log("Starting inst-details");
-    console.log("Dropping installation collections...");
+    this.timeout(5000);
+    console.log("Converting ObjectIds...");
+    // before we start loading data, convert _ids to ObjectIDs
+    for (var i in testSwNames){
+      if ("_id" in testSwNames[i]) {
+        testSwNames[i]._id = ObjectId(testSwNames[i]._id);
+      }
+    }
+    for (var i in testSwData){
+      if ("_id" in testSwData[i]) {
+        testSwData[i]._id = ObjectId(testSwData[i]._id);
+      }
+    }
+    for (i in testInstData){
+      if ("_id" in testInstData[i]) {
+        testInstData[i]._id = ObjectId(testInstData[i]._id);
+      }
+    }
     console.log("Inserting test data...");
+    console.log("Dropping installation collections...");
+    instBe.instDoc.db.collections.instCollection.drop(
+      function(err){
+        console.log("Dropping sw collections...");
+        be.swDoc.db.collections.swdbCollection.drop(
+          function(err){
+            console.log("Dropping swNames collections...");
+            be.swDoc.db.collections.swNamesProp.drop(
+              function(err){
+                console.log("inserting testSwNames in sw collection:"+JSON.stringify(testSwNames,null,2));
+                be.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
+                  function(err, records){
+                    console.log("inserting testSwData in installations collection:"+JSON.stringify(testSwData,null,2));
+                    be.swDoc.db.collections.swdbCollection.insert(testSwData,
+                      function(err, records){
+                        console.log("inserting testInstData in installations collection:"+JSON.stringify(testInstData,null,2));
+                        instBe.instDoc.db.collections.instCollection.insert(testInstData,
+                          function(err, records){
+                            done();
+                          });
+                      });
+                  });
+              });
+          });
+      });
+  });
+
+  test.after(function(done) {
+    // clear the test collection
+    console.log("Cleaning up (inst-list)...");
+    console.log("Dropping installation collections...");
     instBe.instDoc.db.collections.instCollection.drop(function(err){
-      console.log("inserting testInstData in installations collection:"+JSON.stringify(testInstData,null,2));
-      instBe.instDoc.db.collections.instCollection.insert(testInstData,
-        function(err, records){
+      console.log("Dropping swdb collections...");
+      be.swDoc.db.collections.swdbCollection.drop(function(err){
+      console.log("Dropping swdbNames collections...");
+        be.swDoc.db.collections.swNamesProp.drop(function(err){
+          chromeDriver.quit();
           done();
         });
-    });
-  });
-  test.after(function(done) {
-    console.log("Cleaning up (inst-details)...");
-    console.log("Dropping installation collections...");
-    chromeDriver.quit();
-    instBe.instDoc.db.collections.instCollection.drop(function(err){
-      done();
+      });
     });
   });
 

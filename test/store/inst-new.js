@@ -4,6 +4,7 @@ var expect = require("chai").expect;
 chai.use(require("chai-as-promised"));
 var be = require("../../lib/db");
 var instBe = require("../../lib/instDb.js");
+var ObjectId = require('mongodb').ObjectID;
 
 var webdriver = require("../../node_modules/selenium-webdriver"),
   By = webdriver.By,
@@ -12,9 +13,9 @@ var webdriver = require("../../node_modules/selenium-webdriver"),
 var fs = require('fs');
 var path = require('path');
 const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
-const testInstData = JSON.parse(fs.readFileSync('./test/misc/testInstData.json', 'utf8'));
-const testSwNames = JSON.parse(fs.readFileSync('./test/misc/testSwNames.json', 'utf8'));
-const testSwData = JSON.parse(fs.readFileSync('./test/misc/swTestData.json', 'utf8'));
+const testInstData = JSON.parse(fs.readFileSync('./test/misc/datafiles/testInstData.json', 'utf8'));
+const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/testSwNames.json', 'utf8'));
+const testSwData = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestData.json', 'utf8'));
 
 
 test.describe("Installations add screen tests", function() {
@@ -25,6 +26,22 @@ test.describe("Installations add screen tests", function() {
 
   test.before(function(done) {
     this.timeout(5000);
+    // before we start loading data, convert _ids to ObjectIDs
+    for (var i in testSwNames){
+      if ("_id" in testSwNames[i]) {
+        testSwNames[i]._id = ObjectId(testSwNames[i]._id);
+      }
+    }
+    for (var i in testSwData){
+      if ("_id" in testSwData[i]) {
+        testSwData[i]._id = ObjectId(testSwData[i]._id);
+      }
+    }
+    for (i in testInstData){
+      if ("_id" in testInstData[i]) {
+        testInstData[i]._id = ObjectId(testInstData[i]._id);
+      }
+    }
     // clear the test collection
     console.log("Starting inst-new...");
     //chromeDriver.manage().window().setPosition(200,0);

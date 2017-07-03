@@ -11,8 +11,8 @@ test = require("../node_modules/selenium-webdriver/testing");
 var fs = require('fs');
 var path = require('path');
 const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
-const swTable = JSON.parse(fs.readFileSync('./config/swData.json', 'utf8'));
-const testSwNames = JSON.parse(fs.readFileSync('./test/misc/testSwNames.json', 'utf8'));
+const swTable = JSON.parse(fs.readFileSync('./test/misc/datafiles/swData.json', 'utf8'));
+const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/testSwNames.json', 'utf8'));
 
 // make table of sw names
 var swNames = [];
@@ -74,7 +74,7 @@ test.describe("SWDB record tests", function() {
     driver.get(props.webUrl+"testlogin?username=testuser&password=testuserpasswd");
     driver.wait(until.elementLocated(By.id("Test auth success")),3000);
   });
-  
+
   test.it("should show search page with username on logout button", function() {
     this.timeout(8000);
     driver.get(props.webUrl+"#/list");

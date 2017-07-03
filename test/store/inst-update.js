@@ -12,7 +12,7 @@ var webdriver = require("../../node_modules/selenium-webdriver"),
 var fs = require('fs');
 var path = require('path');
 const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
-const testInstData = JSON.parse(fs.readFileSync('./test/misc/testInstData.json', 'utf8'));
+const testInstData = JSON.parse(fs.readFileSync('./test/misc/datafiles/testInstData.json', 'utf8'));
 
 
 
