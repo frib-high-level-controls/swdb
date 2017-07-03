@@ -6,6 +6,7 @@ import rc = require('rc');
 import bodyparser = require('body-parser');
 import express = require('express');
 import favicon = require('serve-favicon');
+import mongoose = require('mongoose');
 import morgan = require('morgan');
 import session = require('express-session');
 
@@ -35,6 +36,12 @@ interface Config {
     addr: {};
     session_life: {};
     session_secret: {};
+  };
+  mongo: {
+    port: {};
+    addr: {};
+    db: {};
+    options: {};
   };
 };
 
@@ -162,6 +169,15 @@ async function doStart(): Promise<void> {
       session_life: 28800000,
       session_secret: 'secret',
     },
+    mongo: {
+      port: '27017',
+      addr: 'localhost',
+      db: 'webapp-dev',
+      options: {
+        // see http://mongoosejs.com/docs/connections.html
+        useMongoClient: true,
+      },
+    },
   };
 
   if (name && (typeof name === 'string')) {
@@ -175,6 +191,30 @@ async function doStart(): Promise<void> {
 
   app.set('port', String(cfg.app.port));
   app.set('addr', String(cfg.app.addr));
+
+   // configure Mongoose (MongoDB)
+  let mongoUrl = 'mongodb://' + cfg.mongo.addr + ':' + cfg.mongo.port + '/' + cfg.mongo.db;
+
+  mongoose.Promise = global.Promise;
+
+  mongoose.connection.on('connected', () => {
+    status.setComponentOk('MongoDB', 'Connected');
+    log('Mongoose default connection opened.');
+  });
+
+  mongoose.connection.on('disconnected', () => {
+    status.setComponentError('MongoDB', 'Disconnected');
+    warn('Mongoose default connection closed');
+  });
+
+  mongoose.connection.on('error', (err) => {
+    status.setComponentError('MongoDB', err.message || 'Unknown Error');
+    error('Mongoose default connection error: %s', err);
+  });
+
+  status.setComponentError('MongoDB', 'Never Connected');
+  log('Mongoose default connection: %s', mongoUrl);
+  mongoose.connect(mongoUrl, cfg.mongo.options);
 
   // view engine configuration
   app.set('views', path.resolve(__dirname, '../views'));

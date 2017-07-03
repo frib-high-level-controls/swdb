@@ -10,5 +10,44 @@
     // >>> import os, base64
     // >>> print base64.b64encode(os.urandom(50)).decode('ascii')
     "session_secret": "secret"
+  },
+  // MongoDB connection configuration using JavaScript client library
+  // (see http://mongodb.github.io/node-mongodb-native/2.0/reference/connecting/connection-settings/)
+  "mongo": {
+    "addr": "localhost",
+    "port": "27017",
+    "db": "webapp-dev",
+    "options": {
+      // See http://mongoosejs.com/docs/connections.html
+      "useMongoClient": true
+
+      // Authentication credentials
+      // "user": "user",
+      // "pass": "pass",
+
+      // Authentication database 
+      // "auth": {
+      //   "authdb": "admin"
+      // },
+
+      // Database configuration
+      // "db": {
+      //   "native_parser": true
+      // },
+
+      // ReplicaSet configuration
+      // replset: foo;
+
+      // Server configuration (SSL)
+      // "server": {
+      //   "ssl": true,
+      //   "sslValidate": true,
+      //   "poolSize": 5,
+      //   "socketOptions": {
+      //     "connectTimeoutMS": 30000,
+      //     "keepAlive": 1
+      //   }
+      // }
+    }
   }
 }
