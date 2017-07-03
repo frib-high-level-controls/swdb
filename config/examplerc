@@ -1,0 +1,14 @@
+{
+  // Example application configuration in pseudo-JSON format.
+  // Comments (// or /* */) will be ignored, but must be within
+  // the JSON data structure (ie not outside of the top level object).
+  "app": {
+    "port": "3000",
+    "addr": "localhost", /* use "0.0.0.0" to bind to all interfaces */
+    "session_life": 28800000,
+    // For production generate a random string using python:
+    // >>> import os, base64
+    // >>> print base64.b64encode(os.urandom(50)).decode('ascii')
+    "session_secret": "secret"
+  }
+}

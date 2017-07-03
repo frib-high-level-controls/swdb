@@ -1,6 +1,0 @@
-{
-  "port": "3003",
-  "addr": "localhost",
-  "session_life": 28800000,
-  "session_secret": "secret"
-}

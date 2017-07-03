@@ -15,4 +15,4 @@ npm-debug.log
 /app/
 
 # Ignore configuration files
-/config/app.json
+/config/
