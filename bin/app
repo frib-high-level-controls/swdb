@@ -60,11 +60,11 @@ function listen(handler) {
   /**
    * Normalized port from environment or application or default
    */
-  var port = normalizePort(process.env.PORT || handler.get('port') || '3000');
+  var port = normalizePort(process.env.NODE_APP_PORT || handler.get('port') || '3000');
   /**
    * Initialize the bind address from environment or application or default
    */
-  var addr = process.env.ADDR || handler.get('addr') || 'localhost';
+  var addr = process.env.NODE_APP_ADDR || handler.get('addr') || 'localhost';
   /**
    * Create the HTTP server.
    */
