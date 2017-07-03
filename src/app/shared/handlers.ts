@@ -83,7 +83,7 @@ export function ensureAccepts(...type: string[]): express.RequestHandler;
 export function ensureAccepts(type: any): express.RequestHandler {
   return (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (!req.accepts(type)) {
-      next(new RequestError(HttpStatus.NOT_ACCEPTABLE, HttpStatus.getStatusText(HttpStatus.NOT_ACCEPTABLE)));
+      next(new RequestError(HttpStatus.getStatusText(HttpStatus.NOT_ACCEPTABLE), HttpStatus.NOT_ACCEPTABLE));
     }
     next();
   };
