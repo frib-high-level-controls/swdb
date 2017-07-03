@@ -253,12 +253,12 @@ function getComponent(name: string): ComponentStatus | undefined {
   }
 };
 
-function setComponentOk(name: string, message?: string): void {
+function setComponentOk(name: string, message?: string, ...param: any[]): void {
   for (let comp of components) {
     if (comp.name === name) {
       comp.status = 'OK';
       comp.date = new Date();
-      comp.message = message || 'OK';
+      comp.message = message ? util.format(message, ...param) : 'OK';
       return;
     }
   }
@@ -266,16 +266,16 @@ function setComponentOk(name: string, message?: string): void {
     status: 'OK',
     date: new Date(),
     name: name,
-    message: message || 'OK',
+    message: message ? util.format(message, ...param) : 'OK',
   });
 };
 
-function setComponentError(name: string, message?: string): void {
+function setComponentError(name: string, message?: string, ...param: any[]): void {
   for (let comp of components) {
     if (comp.name === name) {
       comp.status = 'ERROR';
       comp.date = new Date();
-      comp.message = message || 'ERROR';
+      comp.message = message ? util.format(message, ...param) : 'ERROR';
       return;
     }
   }
@@ -283,7 +283,7 @@ function setComponentError(name: string, message?: string): void {
     status: 'ERROR',
     date: new Date(),
     name: name,
-    message: message || 'ERROR',
+    message: message ? util.format(message, ...param) : 'ERROR',
   });
 };
 
