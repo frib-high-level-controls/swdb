@@ -11,8 +11,9 @@ test = require("../../node_modules/selenium-webdriver/testing");
 var fs = require('fs');
 var path = require('path');
 const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
-const swTable = JSON.parse(fs.readFileSync('./test/misc/datafiles/swData.json', 'utf8'));
-const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/testSwNames.json', 'utf8'));
+//const swTable = JSON.parse(fs.readFileSync('./test/misc/datafiles/swData.json', 'utf8'));
+const swTable = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestDataCombined.json', 'utf8'));
+const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestNames.json', 'utf8'));
 
 // make table of sw names
 var swNames = [];
@@ -30,7 +31,7 @@ before(function(done) {
   console.log("Dropping collections...");
   be.swDoc.db.collections.swdbCollection.drop(function(err){
     be.swDoc.db.collections.swNamesProp.drop(function(err){
-      console.log("inserting testSwNames in swNamesProp collection:"+JSON.stringify(testSwNames,null,2));
+      console.log("inserting testSwNames in swNamesProp collection");
       be.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
           function(err, records){
         done();

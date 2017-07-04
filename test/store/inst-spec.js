@@ -9,7 +9,7 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var fs = require('fs');
 var path = require('path');
 const exec = require('child_process').exec;
-const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/testSwNames.json', 'utf8'));
+const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestNames.json', 'utf8'));
 
 var testLogin = function(request, done) {
   console.log('Login start');
@@ -23,33 +23,6 @@ var testLogin = function(request, done) {
       done();
     });
 };
-
-//clear the test collection before and after tests suite
-//before(function(done) {
-//clear the test collection
-//this.timeout(5000);
-//console.log("Starting inst-spec tests");
-//console.log("Dropping collections...");
-//instBe.instDoc.db.collections.instCollection.drop();
-//be.swDoc.db.collections.swdbCollection.drop(function(err){
-//be.swDoc.db.collections.swNamesProp.drop(function(err){
-//console.log("inserting testSwNames in swNamesProp collection:"+JSON.stringify(testSwNames,null,2));
-//be.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
-//function(err, records){
-//done();
-//});
-//});
-//});
-//});
-
-//after(function(done) {
-//// clear the test collection
-//console.log("Dropping collections (inst-spec)...");
-//be.swDoc.db.collections.swdbCollection.drop();
-//be.swDoc.db.collections.swNamesProp.drop();
-//instBe.instDoc.db.collections.instCollection.drop();
-//done();
-//});
 
 var Cookies;
 //
@@ -78,7 +51,7 @@ describe("app", function() {
     instBe.instDoc.db.collections.instCollection.drop();
     be.swDoc.db.collections.swdbCollection.drop(function(err){
       be.swDoc.db.collections.swNamesProp.drop(function(err){
-        console.log("inserting testSwNames in swNamesProp collection:"+JSON.stringify(testSwNames,null,2));
+        console.log("inserting testSwNames in swNamesProp collection");
         be.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
           function(err, records){
     supertest

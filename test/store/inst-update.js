@@ -12,8 +12,7 @@ var webdriver = require("../../node_modules/selenium-webdriver"),
 var fs = require('fs');
 var path = require('path');
 const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
-const testInstData = JSON.parse(fs.readFileSync('./test/misc/datafiles/testInstData.json', 'utf8'));
-
+const testInstData = JSON.parse(fs.readFileSync('./test/misc/datafiles/instTestDataCombined.json', 'utf8'));
 
 
 test.describe("Installations update screen tests", function() {
@@ -27,7 +26,7 @@ test.describe("Installations update screen tests", function() {
     console.log("Dropping installation collections...");
     console.log("Inserting test data...");
     instBe.instDoc.db.collections.instCollection.drop(function(err){
-      console.log("inserting testInstData in installations collection:"+JSON.stringify(testInstData,null,2));
+      console.log("inserting testInstData in installations collection");
       instBe.instDoc.db.collections.instCollection.insert(testInstData,
         function(err, records){
           done();
@@ -74,24 +73,39 @@ test.describe("Installations update screen tests", function() {
   });
 
   test.it("Add new record", function() {
-    this.timeout(8000);
+    this.timeout(10000);
     chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
     var input = chromeDriver.findElement(By.id("host"));
     input.sendKeys("testHost1");
 
-    chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
-    input = chromeDriver.findElement(By.id("add.area"));
+    // set area
+    chromeDriver.wait(until.elementLocated(By.id("area")), 3000);
+    input = chromeDriver.findElement(By.id("area"));
     input.click();
-    chromeDriver.wait(until.elementLocated(By.id("area.0")), 3000);
-    input = chromeDriver.findElement(By.id("area.0"));
-    input.sendKeys("testArea1");
+    input.sendKeys("Global");
 
-    chromeDriver.wait(until.elementLocated(By.id("add.slots")), 3000);
-    input = chromeDriver.findElement(By.id("add.slots"));
+    // set slots
+    chromeDriver.wait(until.elementLocated(By.id("slots")), 3000);
+    searchInput = chromeDriver.findElement(By.id("slots"));
+    searchInput.sendKeys("FE_LEBT");
+    // find the second item in that list and add it to the selected list
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-")]')), 3000);
+    input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-1"=substring(@id, string-length(@id)-string-length("option-1")+1)]/a'));
     input.click();
-    chromeDriver.wait(until.elementLocated(By.id("slots.0")), 3000);
-    input = chromeDriver.findElement(By.id("slots.0"));
-    input.sendKeys("testSlot1");
+
+    //chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
+    //input = chromeDriver.findElement(By.id("add.area"));
+    //input.click();
+    //chromeDriver.wait(until.elementLocated(By.id("area.0")), 3000);
+    //input = chromeDriver.findElement(By.id("area.0"));
+    //input.sendKeys("testArea1");
+
+    //chromeDriver.wait(until.elementLocated(By.id("add.slots")), 3000);
+    //input = chromeDriver.findElement(By.id("add.slots"));
+    //input.click();
+    //chromeDriver.wait(until.elementLocated(By.id("slots.0")), 3000);
+    //input = chromeDriver.findElement(By.id("slots.0"));
+    //input.sendKeys("testSlot1");
 
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
     input = chromeDriver.findElement(By.id("status"));

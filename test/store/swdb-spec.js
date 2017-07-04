@@ -8,7 +8,7 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var fs = require('fs');
 var path = require('path');
 const exec = require('child_process').exec;
-const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/testSwNames.json', 'utf8'));
+const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestNames.json', 'utf8'));
 //const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 
 var testLogin = function(request, done) {
@@ -31,7 +31,7 @@ before(function(done) {
   console.log("Dropping collections...");
   be.swDoc.db.collections.swdbCollection.drop(function(err){
     be.swDoc.db.collections.swNamesProp.drop(function(err){
-      console.log("inserting testSwNames in swNamesProp collection:"+JSON.stringify(testSwNames,null,2));
+      console.log("inserting testSwNames in swNamesProp collection");
       be.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
           function(err, records){
         done();

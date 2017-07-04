@@ -6,7 +6,7 @@ from pprint import pprint
 with open("../../config/properties.json") as prop_file:
     prop_data = json.load(prop_file)
 
-with open("./datafiles/testSwNames.json") as data_file:
+with open("./datafiles/swTestNames.json") as data_file:
     data = json.load(data_file)
 
 pprint(prop_data)
