@@ -24,7 +24,6 @@ test.describe("Installations record tests", function() {
       .build();
     chromeDriver.manage().window().setPosition(200,0);
 
-
   test.before(function(done) {
     this.timeout(10000);
 
@@ -82,7 +81,6 @@ test.describe("Installations record tests", function() {
       be.swDoc.db.collections.swdbCollection.drop(function(err){
       console.log("Dropping swdbNames collections...");
         be.swDoc.db.collections.swNamesProp.drop(function(err){
-          chromeDriver.close();
           chromeDriver.quit();
           done();
         });
@@ -94,7 +92,7 @@ test.describe("Installations record tests", function() {
 
   test.it("should show search page with login button", function() {
     this.timeout(8000);
-    chromeDriver.get(props.webUrl+"#/inst/list");
+    chromeDriver.get(props.webUrl+"#/list");
     chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
       "(click to login)"),5000);
@@ -108,21 +106,22 @@ test.describe("Installations record tests", function() {
 
   test.it("should show search page with username on logout button", function() {
     this.timeout(8000);
-    chromeDriver.get(props.webUrl+"#/inst/list");
+    chromeDriver.get(props.webUrl+"#/list");
     chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
       "testuser (click to logout)"),5000);
   });
 
-  // find an installation record
-  test.it("should find a record", function() {
+  // find an software record
+  test.it("should find a sw record", function() {
     this.timeout(8000);
-    chromeDriver.get(props.webUrl+"#/inst/list");
+    chromeDriver.get(props.webUrl+"#/list");
     chromeDriver.wait(until.elementLocated(By.id("swdbList_filter")), 8000)
       .findElement(By.tagName("Input"))
-      .sendKeys("host2");
-    chromeDriver.wait(until.elementLocated(By.linkText("host2")),
+      .sendKeys("beast 0.2 b4");
+    chromeDriver.wait(until.elementLocated(By.linkText("BEAST")),
       8000);
-
+    var link = chromeDriver.findElement(By.linkText("BEAST"));
+    expect(Promise.resolve(link.getAttribute("href"))).to.eventually.equal("http://swdb-dev:4005/#/details/5947589458a6aa0face9a554");
   });
 });
