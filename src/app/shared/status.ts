@@ -10,14 +10,14 @@ import handlers = require('./handlers');
 
 type Status = 'ERROR' | 'OK';
 
-interface ComponentStatus {
+export interface ComponentStatus {
   status: Status;
   date: Date;
   name: string;
   message: string;
 }
 
-interface MonitorStatus {
+export interface ApplicationStatus {
   status: Status;
   uptime: number;
   components: ComponentStatus[];
@@ -213,8 +213,8 @@ function setTestingError(message?: string) {
 };
 
 
-function getStatus(): MonitorStatus {
-  let status: MonitorStatus = {
+function getStatus(): ApplicationStatus {
+  let status: ApplicationStatus = {
     status: 'OK',
     uptime: process.uptime(),
     components: [],
@@ -291,7 +291,7 @@ function setComponentError(name: string, message?: string, ...param: any[]): voi
 
 const router = express.Router();
 
-function getHttpStatus(status: MonitorStatus): number {
+function getHttpStatus(status: ApplicationStatus): number {
   if (status.status !== 'OK') {
     return handlers.HttpStatus.INTERNAL_SERVER_ERROR;
   }

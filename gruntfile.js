@@ -4,11 +4,12 @@ module.exports = function(grunt) {
     grunt.initConfig({
         ts: {
             app: {
-                files: [{
-                    src: ['src/app/\*\*/\*.ts', '!src/app/.baseDir.ts'],
-                    dest: './app'
-                }],
+                outDir: './app',
                 tsconfig: 'src/app/tsconfig.json'
+            },
+            apptest: {
+                outDir: './test',
+                tsconfig: 'src/apptest/tsconfig.json'
             }
         },
         tslint: {

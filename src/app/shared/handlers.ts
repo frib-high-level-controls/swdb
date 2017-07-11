@@ -5,6 +5,10 @@ import express = require('express');
 
 export import HttpStatus = require('http-status-codes');
 
+export interface HttpStatusError extends Error {
+  status: number;
+}
+
 export interface RequestPromiseHandler {
   (req: express.Request, res: express.Response, next?: express.NextFunction): PromiseLike<void>;
 }
@@ -24,7 +28,7 @@ export interface RequestErrorDetails {
 const DEFAULT_ERROR_STATUS = HttpStatus.INTERNAL_SERVER_ERROR;
 const DEFAULT_ERROR_MESSAGE = 'Unknown request error';
 
-export class RequestError extends Error {
+export class RequestError extends Error implements HttpStatusError  {
 
   public status = DEFAULT_ERROR_STATUS;
   public details: RequestErrorDetails = { message: DEFAULT_ERROR_MESSAGE };
@@ -88,6 +92,12 @@ export function ensureAccepts(type: any): express.RequestHandler {
     next();
   };
 };
+
+export function notFoundHandler(req: express.Request, res: express.Response, next: express.NextFunction) {
+  let status = HttpStatus.NOT_FOUND;
+  let message = HttpStatus.getStatusText(status);
+  next(new RequestError(message, status));
+}
 
 export function requestErrorHandler(err: any, req: express.Request, res: express.Response, next: express.NextFunction) {
   let status = HttpStatus.INTERNAL_SERVER_ERROR;
