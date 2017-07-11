@@ -5,10 +5,14 @@ module.exports = function(grunt) {
         ts: {
             app: {
                 files: [{
-                    src: ['src/app/\*\*/\*.ts', '!src/app/.baseDir.ts'],
-                    dest: './app'
+                  src: ['src/app/\*\*/\*.ts', '!src/app/.baseDir.ts'],
+                  dest: './app'
                 }],
                 tsconfig: 'src/app/tsconfig.json'
+            },
+            apptest: {
+                outDir: './test',
+                tsconfig: 'src/apptest/tsconfig.json'
             }
         },
         tslint: {
