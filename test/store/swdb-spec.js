@@ -794,11 +794,11 @@ describe("app", function() {
       {"type":"PUT", "req": {"msg": {"desc": "NEW"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"desc","msg":"Description must an array of strings be 4-30 characters"'}}},
       {"type":"PUT", "req": {"msg": {"desc": ["NE"]}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"desc[0]","msg":"Description 0 must be 4-30 characters"'}}},
+      "err": {"status": 200}}},
       {"type":"PUT", "req": {"msg": {"desc": ["0123456789012345678901234567890"]}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"desc[0]","msg":"Description 0 must be 4-30 characters"'}}},
+      "err": {"status": 200}}},
       {"type":"PUT", "req": {"msg": {"desc": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"desc[2]","msg":"Description 2 must be 4-30 characters"'}}},
+      "err": {"status": 200}}},
     ];
 
     // go through the table and check the given parameters

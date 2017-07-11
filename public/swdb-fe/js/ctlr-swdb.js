@@ -231,7 +231,8 @@ function NewPromiseCtrl($scope, $http, $window, configService, userService) {
 
     // initialize this record
     $scope.formData = {
-        comment: []
+        comment: [],
+        desc: []
     };
     $scope.swdbParams = {
         formShowErr: false,
@@ -270,6 +271,28 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, configService, 
                 encodeURIComponent($scope.props.auth.login_service);
         }
     };
+
+    $scope.datePicker = (function () {
+        var method = {};
+        method.instances = [];
+
+        method.open = function ($event, instance) {
+            $event.preventDefault();
+            $event.stopPropagation();
+
+            method.instances[instance] = true;
+        };
+
+        method.options = {
+            'show-weeks': false,
+            startingDay: 0
+        };
+
+        var formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+        method.format = formats[2];
+
+        return method;
+    }());
 
     $scope.processForm = function(){
       $scope.formData.desc = [$scope.formData.desc];
@@ -342,7 +365,13 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, configService, 
     getEnums = function() {
         // Set the enumerated values for this scope
         $scope.levelOfCareEnums = $scope.props.levelOfCareEnums;
+        //$scope.formData.levelOfCare = "NONE";
+
         $scope.statusEnums = $scope.props.statusEnums;
+        //$scope.formData.status = "DEVEL";
+
+        $scope.rcsEnums = $scope.props.rcsEnums;
+        //$scope.formData.versionControl = "Other";
     };
 
     $scope.props = configService.getConfig();
@@ -376,7 +405,6 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, configService, 
         $scope.formData.statusDate = new Date($scope.formData.statusDate);
         // set selctor to current swName value
         $scope.selectedItem = {name: $scope.formData.swName};
-        console.log("selectedItem.name is now "+$scope.selectedItem.name);
     });
 
 }
