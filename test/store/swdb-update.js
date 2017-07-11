@@ -77,14 +77,13 @@ test.describe("Software update screen tests", function() {
   test.after(function(done) {
     // clear the test collection
     console.log("Cleaning up (inst-list)...");
+          chromeDriver.quit();
     console.log("Dropping installation collections...");
     instBe.instDoc.db.collections.instCollection.drop(function(err){
       console.log("Dropping swdb collections...");
       be.swDoc.db.collections.swdbCollection.drop(function(err){
-      console.log("Dropping swdbNames collections...");
+        console.log("Dropping swdbNames collections...");
         be.swDoc.db.collections.swNamesProp.drop(function(err){
-          chromeDriver.close();
-          chromeDriver.quit();
           done();
         });
       });
@@ -122,7 +121,7 @@ test.describe("Software update screen tests", function() {
   });
 
   test.it("Add new record", function() {
-    this.timeout(10000);
+    this.timeout(12000);
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="swName"]/span')), 3000);
     var input = chromeDriver.findElement(By.xpath('//*[@id="swName"]/span'));
     input.click();//*[@id="swName-group"]/div/div/input[1]
@@ -154,13 +153,13 @@ test.describe("Software update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("descDocLoc")), 3000);
     input = chromeDriver.findElement(By.id("descDocLoc"));
     input.click();
-    input.sendKeys("http://Test_descDocLoc");
+    input.sendKeys("http://www.google.com");
 
     // set design description document
     chromeDriver.wait(until.elementLocated(By.id("designDescDocLoc")), 3000);
     input = chromeDriver.findElement(By.id("designDescDocLoc"));
     input.click();
-    input.sendKeys("http://Test_designDescDocLoc");
+    input.sendKeys("http://www.google.com");
 
     // set owner
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
@@ -187,10 +186,12 @@ test.describe("Software update screen tests", function() {
     input.sendKeys("DEVEL");
 
     // set status data
-    chromeDriver.wait(until.elementLocated(By.id("statusDate")), 3000);
-    input = chromeDriver.findElement(By.id("statusDate"));
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')), 3000);
+    input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
     input.click();
-    input.sendKeys("2017/7/7");
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
+    input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
+    input.click();
 
     // set platforms
     chromeDriver.wait(until.elementLocated(By.id("platforms")), 3000);
@@ -202,13 +203,13 @@ test.describe("Software update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("vvProcLoc")), 3000);
     input = chromeDriver.findElement(By.id("vvProcLoc"));
     input.click();
-    input.sendKeys("http://Test_vvProcLoc");
+    input.sendKeys("http://www.google.com");
 
     // set vvResultsLoc
     chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc")), 3000);
     input = chromeDriver.findElement(By.id("vvResultsLoc"));
     input.click();
-    input.sendKeys("http://Test_vvResultsLoc");
+    input.sendKeys("http://www.google.com");
 
     // set version control
     chromeDriver.wait(until.elementLocated(By.id("versionControl")), 3000);
@@ -220,7 +221,7 @@ test.describe("Software update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("versionControlLoc")), 3000);
     input = chromeDriver.findElement(By.id("versionControlLoc"));
     input.click();
-    input.sendKeys("http://Test_version_control_location");
+    input.sendKeys("http://www.google.com");
 
     // set recert freq
     chromeDriver.wait(until.elementLocated(By.id("recertFreq")), 3000);
@@ -237,7 +238,44 @@ test.describe("Software update screen tests", function() {
     // submit and check result
     chromeDriver.findElement(By.id("submitBtn")).click();
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("formStatus")),
-    "Document updates successfully posted"),5000);
+      "Document posted"),5000);
+  });
+
+  // find the created record
+  test.it("should find a record", function() {
+    this.timeout(8000);
+    chromeDriver.get(props.webUrl+"#/list");
+    chromeDriver.wait(until.elementLocated(By.id("swdbList_filter")), 8000)
+      .findElement(By.tagName("Input"))
+      .sendKeys("Test Record3 Test version");
+    chromeDriver.wait(until.elementLocated(By.linkText("Test Record3")),
+      8000);
+  });
+
+  // find the created record and click update
+  test.it("should show record details", function() {
+    this.timeout(8000);
+    chromeDriver.wait(until.elementLocated(By.linkText("Test Record3")),
+      8000).click();
+    chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/a[2]')),
+      8000).click();
+
+  });
+
+  test.it("should show the update title", function() {
+    chromeDriver.wait(until.titleIs("SWDB - Update"), 5000);
+  });
+
+  test.it("should update a record", function() {
+    this.timeout(8000);
+    chromeDriver.wait(until.elementLocated(By.id("desc")), 8000)
+      .clear();
+    chromeDriver.wait(until.elementLocated(By.id("desc")), 8000)
+      .sendKeys("New Test Description");
+    chromeDriver.wait(until.elementLocated(By.id("submitBtn")), 8000)
+      .click();
+    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("formStatus")),
+      "Document updates successfully posted"),5000);
   });
 
 });

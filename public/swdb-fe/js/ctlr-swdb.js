@@ -164,6 +164,7 @@ function NewPromiseCtrl($scope, $http, $window, configService, userService) {
 
     $scope.processForm = function(){
         delete $scope.formData.__v;
+        $scope.formData.desc = [$scope.formData.desc];
 
         if ($scope.inputForm.$valid){
             // handle swName
@@ -271,6 +272,7 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, configService, 
     };
 
     $scope.processForm = function(){
+      $scope.formData.desc = [$scope.formData.desc];
         if ($scope.inputForm.$valid){
             delete $scope.formData.__v;
             $http({
@@ -363,7 +365,10 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, configService, 
     //update document fields with existing data
     $http.get($scope.props.apiUrl+$routeParams.itemId).success(function(data) {
         $scope.itemArray = $scope.props.validSwNamesGUIList;
-        console.log("itemArray is now "+$scope.itemArray);
+        // if the desc field exists, convert from array of strings to a normal string
+        if (data.desc) {
+        data.desc = data.desc.join();
+        }
         $scope.formData = data;
         $scope.whichItem = $routeParams.itemId;
 
