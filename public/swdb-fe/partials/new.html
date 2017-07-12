@@ -29,7 +29,7 @@
 
         <!-- NAME -->
         <div class="row" ng-class="{ 'has-error' : inputForm.swNameInput.$invalid && !inputForm.swNameInput.$pristine }">
-            <div id="swName-group" class="form-group">
+            <div id="swName-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Software Name*</label>
                 <div class="col-sm-8">
                     <ui-select ng-model="$parent.selectedItem" ng-required="true">
@@ -51,7 +51,7 @@
 
         <!-- VERSION -->
         <div class="row" ng-class="{ 'has-error' : inputForm.versionInput.$invalid && !inputForm.versionInput.$pristine }">
-            <div id="version-group" class="form-group">
+            <div id="version-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Version</label>
                 <div class="col-sm-8">
                     <input id="version" type="text" name="versionInput" class="form-control" placeholder="Version" ng-model="formData.version" ng-minlength="2">
@@ -65,7 +65,7 @@
 
         <!-- Branch -->
         <div class="row" ng-class="{ 'has-error' : inputForm.branchInput.$invalid && !inputForm.branchInput.$pristine }">
-            <div id="branch-group" class="form-group">
+            <div id="branch-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Branch</label>
                 <div class="col-sm-8">
                     <input id="branch" type="text" name="branchInput" class="form-control" placeholder="Branch name" ng-model="formData.branch" ng-minlength="2">
@@ -77,23 +77,23 @@
             </div>
         </div>
 
-        <!-- Description -->
+        <!-- DESCRIPTION -->
         <div class="row" ng-class="{ 'has-error' : inputForm.descInput.$invalid && !inputForm.descInput.$pristine }">
-            <div id="desc-group" class="form-group">
+            <div id="comment-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Description</label>
                 <div class="col-sm-8">
-                    <input id="desc" type="text" name="descInput" class="form-control" placeholder="Description" ng-model="formData.desc" ng-minlength="2">
-                    </input>
+                    <textarea placeholder="Description" rows="4" id="desc" type="text" name="descInput" class="form-control" ng-model="formData.desc" ng-minlength="0">
+                    </textarea>
                 </div>
                 <div class="col-sm-2" id="descInputSts" ng-messages="inputForm.descInput.$error" ng-if="inputForm.descInput.$dirty">
-                    <div ng-message="minlength">Minimum 2 characters</div>
+                    <div ng-message="minlength">Minimum 0 characters</div>
                 </div>
             </div>
         </div>
 
         <!-- Description document location-->
         <div class="row" ng-class="{ 'has-error' : inputForm.descDocLocInput.$invalid && !inputForm.descDocLocInput.$pristine }">
-            <div id="descDocLoc-group" class="form-group">
+            <div id="descDocLoc-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Description Doc (DCC URL)</label>
                 <div class="col-sm-8">
                     <input id="descDocLoc" type="url" name="descDocLocInput" class="form-control" placeholder="Description document location" ng-model="formData.descDocLoc" ng-minlength="2">
@@ -108,7 +108,7 @@
 
         <!-- Design description document location-->
         <div class="row" ng-class="{ 'has-error' : inputForm.designDescDocLocInput.$invalid && !inputForm.designDescDocLocInput.$pristine }">
-            <div id="designDescDocLoc-group" class="form-group">
+            <div id="designDescDocLoc-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Design Description Doc (DCC URL)</label>
                 <div class="col-sm-8">
                     <input id="designDescDocLoc" type="url" name="designDescDocLocInput" class="form-control" placeholder="Design description document location" ng-model="formData.designDescDocLoc" ng-minlength="2">
@@ -123,7 +123,7 @@
 
         <!-- OWNER -->
         <div class="row" ng-class="{ 'has-error' : inputForm.ownerInput.$invalid && !inputForm.ownerInput.$pristine }">
-            <div id="owner-group" class="form-group">
+            <div id="owner-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Owner*</label>
                 <div class="col-sm-8">
                     <input id="owner" type="text" name="ownerInput" class="form-control" placeholder="SW owner" ng-model="formData.owner"
@@ -140,7 +140,7 @@
 
         <!-- Engineer -->
         <div class="row" ng-class="{ 'has-error' : inputForm.engineerInput.$invalid && !inputForm.engineerInput.$pristine }">
-            <div id="engineer-group" class="form-group">
+            <div id="engineer-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Engineer</label>
                 <div class="col-sm-8">
                     <input id="engineer" type="text" name="engineerInput" class="form-control" placeholder="Engineer"
@@ -157,7 +157,7 @@
 
         <!-- LEVEL OF CARE -->
         <div class="row" ng-class="{ 'has-error' : inputForm.levelOfCareInput.$invalid && !inputForm.levelOfCareInput.$pristine }">
-            <div id="levelOfCare-group" class="form-group">
+            <div id="levelOfCare-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Level of Care*</label>
                 <div class="col-sm-8">
                     <select id="levelOfCare" ng-model="formData.levelOfCare" ng-options="o for o in levelOfCareEnums track by o"></select>
@@ -169,7 +169,7 @@
 
         <!-- STATUS -->
         <div class="row" ng-class="{ 'has-error' : inputForm.statusInput.$invalid && !inputForm.statusInput.$pristine }">
-            <div id="status-group" class="form-group">
+            <div id="status-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Status*</label>
                 <div class="col-sm-10">
                     <select id="status" ng-model="formData.status" ng-options="o for o in statusEnums track by o"></select>
@@ -181,12 +181,12 @@
 
         <!-- STATUS DATE -->
         <div class="row" ng-class="{ 'has-error' : inputForm.statusDateInput.$invalid && !inputForm.statusDateInput.$pristine }">
-            <div id="statusDate-group" class="form-group">
+            <div id="statusDate-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Status Date*</label>
                 <div class="col-sm-8">
 
                     <p class="input-group">
-                    <input id="statusDate" name="statusDateInput" type="text" class="form-control"
+                    <input id="statusDate" name="statusDateInput" type="text" class="form-control" placeholder="Status Date"
                                                                               uib-datepicker-popup="{{datePicker.format}}" ng-model="formData.statusDate" is-open="datePicker.instances['statusDate']"
                                                                                                                                                           datepicker-options="datePicker.options" ng-required="true" close-text="Close"
                                                                                                                                                                                                                      alt-input-formats="altInputFormats" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"/>
@@ -207,7 +207,7 @@
 
         <!-- PLATFORM -->
         <div class="row" ng-class="{ 'has-error' : inputForm.platformsInput.$invalid && !inputForm.platformsInput.$pristine }">
-            <div id="platforms-group" class="form-group">
+            <div id="platforms-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Platforms</label>
                 <div class="col-sm-8">
                     <input id="platforms" type="text" name="platformsInput" class="form-control" placeholder="platforms" ng-model="formData.platforms" ng-minlength="4">
@@ -221,7 +221,7 @@
 
         <!-- V&V procedure document location-->
         <div class="row" ng-class="{ 'has-error' : inputForm.vvProcLocInput.$invalid && !inputForm.vvProcLocInput.$pristine }">
-            <div id="vvProcLoc-group" class="form-group">
+            <div id="vvProcLoc-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">V&V Procedure Doc (DCC URL)</label>
                 <div class="col-sm-8">
                     <input id="vvProcLoc" type="url" name="vvProcLocInput" class="form-control" placeholder="V&V procedure document location" ng-model="formData.vvProcLoc" ng-minlength="2">
@@ -236,7 +236,7 @@
 
         <!-- V&V results document location-->
         <div class="row" ng-class="{ 'has-error' : inputForm.vvResultsLocInput.$invalid && !inputForm.vvResultsLocInput.$pristine }">
-            <div id="vvResultsLoc-group" class="form-group">
+            <div id="vvResultsLoc-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">V&V Results Doc (DCC URL)</label>
                 <div class="col-sm-8">
                     <input id="vvResultsLoc" type="url" name="vvResultsLocInput" class="form-control" placeholder="V&V results document location" ng-model="formData.vvResultsLoc" ng-minlength="2">
@@ -251,7 +251,7 @@
 
         <!-- Version control -->
         <div class="row" ng-class="{ 'has-error' : inputForm.versionControlInput.$invalid && !inputForm.versionControlInput.$pristine }">
-            <div id="versionControl-group" class="form-group">
+            <div id="versionControl-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Version control</label>
                 <div class="col-sm-8">
                     <select id="versionControl" ng-model="formData.versionControl" ng-options="o for o in rcsEnums track by o"></select>
@@ -263,7 +263,7 @@
 
         <!-- Version control location-->
         <div class="row" ng-class="{ 'has-error' : inputForm.versionControlLocInput.$invalid && !inputForm.versionControlLocInput.$pristine }">
-            <div id="versionControlLoc-group" class="form-group">
+            <div id="versionControlLoc-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Version control location</label>
                 <div class="col-sm-8">
                     <input id="versionControlLoc" type="text" name="versionControlLocInput" class="form-control" placeholder="Version control location" ng-model="formData.versionControlLoc" ng-minlength="2">
@@ -277,7 +277,7 @@
 
         <!-- RECERTIFICATION FREQUENCY -->
         <div class="row" ng-class="{ 'has-error' : inputForm.recertFreqInput.$invalid && !inputForm.recertFreqInput.$pristine }">
-            <div id="recertFreq-group" class="form-group">
+            <div id="recertFreq-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Recert Frequency</label>
                 <div class="col-sm-8">
                     <input id="recertFreq" type="text" name="recertFreqInput" class="form-control" placeholder="Recertification frequency" ng-model="formData.recertFreq" ng-minlength="4">
@@ -292,7 +292,7 @@
         <!-- RECERTIFICATION STATUS -->
         <div class="row" ng-class="{ 'has-error' : inputForm.recertStatusInput.$invalid && !inputForm.recertStatusInput.$pristine }">
 
-            <div id="recerStatus-group" class="form-group">
+            <div id="recerStatus-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Recert Status</label>
                 <div class="col-sm-8">
                     <input id="recertStatus" type="text" name="recertStatusInput" class="form-control" placeholder="Recertification status" ng-model="formData.recertStatus" ng-minlength="4">
@@ -307,15 +307,16 @@
 
         <!-- Recertification date -->
         <div class="row" ng-class="{ 'has-error' : inputForm.recertDateInput.$invalid && !inputForm.recertDateInput.$pristine }">
-            <div id="recertDate-group" class="form-group">
+            <div id="recertDate-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Recert Date</label>
                 <div class="col-sm-8">
 
                     <p class="input-group">
                     <input id="recertDate" name="recertDateInput" type="text" class="form-control"
-                                                                              uib-datepicker-popup="{{datePicker.format}}" ng-model="formData.recertDate" is-open="datePicker.instances['recertDate']"
-                                                                                                                                                          datepicker-options="datePicker.options" ng-required="false" close-text="Close"
-                                                                                                                                                                                                                      alt-input-formats="altInputFormats" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"/>
+                       uib-datepicker-popup="{{datePicker.format}}" ng-model="formData.recertDate"
+                       is-open="datePicker.instances['recertDate']" placeholder="Recertification Date"
+                       datepicker-options="datePicker.options" ng-required="false" close-text="Close"
+                       alt-input-formats="altInputFormats" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"/>
                     <span class="input-group-btn">
                         <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'recertDate')"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
@@ -370,7 +371,7 @@
 
         <!-- Comment -->
         <div class="row" ng-class="{ 'has-error' : inputForm.commentInput.$invalid && !inputForm.commentInput.$pristine }">
-            <div id="comment-group" class="form-group">
+            <div id="comment-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Comment</label>
                 <div class="col-sm-8">
                     <textarea rows="4" id="comment" type="text" name="commentInput" class="form-control" placeholder="Comment" ng-model="formData.comment" ng-minlength="0">
