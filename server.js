@@ -47,11 +47,6 @@ app.use(expressValidator({
     },
     isComment: function(val,req) {
       if (Array.isArray(val)){
-        val.forEach(function(element, idx, arr){
-          req.checkBody("comment["+idx+"]",
-            "Comment "+idx+" must be 4-30 characters")
-            .optional().isAscii().isLength({min:4,max:30});
-        });
         return true;
       } else {
         return false;
@@ -282,7 +277,6 @@ app.put('/api/v1/swdb*', casAuth.ensureAuthenticated, function(req, res, next) {
       }
       props.validSwNames = validSwNames;
     } else {
-      //console.log("Got err:"+JSON.stringify(err));
     }
 
     tools.updateValidation(props.validSwNames,req);
@@ -328,7 +322,6 @@ app.patch('/api/v1/swdb*', casAuth.ensureAuthenticated, function(req,res,next) {
       }
       props.validSwNames = validSwNames;
     } else {
-      //console.log("Got err:"+JSON.stringify(err));
     }
 
     tools.updateValidation(props.validSwNames,req);
@@ -368,7 +361,6 @@ app.patch('/api/v1/inst*', function(req, res, next) {
 
 // handle errors
 app.use(function(err, req, res, next) {
-  //console.error(err.stack);
   if (res.headerSent) {
     return next(err);
   }

@@ -121,7 +121,7 @@ test.describe("Software update screen tests", function() {
   });
 
   test.it("Add new record", function() {
-    this.timeout(12000);
+    this.timeout(14000);
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="swName"]/span')), 3000);
     var input = chromeDriver.findElement(By.xpath('//*[@id="swName"]/span'));
     input.click();//*[@id="swName-group"]/div/div/input[1]

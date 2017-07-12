@@ -12,13 +12,13 @@ const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestName
 //const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 
 var testLogin = function(request, done) {
-  console.log('Login start');
+  //console.log('Login start');
   supertest
   .get("/login?username=testuser&password=testuserpasswd")
   .send(testAcct)
   .expect(200)
   .end(function(err,res){
-    console.log('Login complete');
+    //console.log('Login complete');
     agent.saveCookies(res);
     done();
   });
@@ -57,7 +57,7 @@ describe("app", function() {
     .expect(200)
     .end(function(err,res){
       Cookies = res.headers['set-cookie'].pop().split(';')[0];
-      console.log('Login complete. Cookie: '+Cookies);
+      //console.log('Login complete. Cookie: '+Cookies);
       done();
     });
   });
@@ -728,15 +728,6 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 4-30 characters"'}}},
       {"type":"POST", "req": {"msg": {"recertStatus": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 4-30 characters"'}}},
-      // test new comment
-      {"type":"POST", "req": {"msg": {"comment": "NEW"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"comment","msg":"Comment must an array of strings be 4-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"comment": ["NE"]}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"comment[0]","msg":"Comment 0 must be 4-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"comment": ["0123456789012345678901234567890"]}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"comment[0]","msg":"Comment 0 must be 4-30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"comment": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"comment[2]","msg":"Comment 2 must be 4-30 characters"'}}},
 
       // test update swName min, max
       {"type":"PUT", "req": {"msg": {"swName": "t"}, "url": "/api/v1/swdb/",
@@ -782,13 +773,13 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 4-30 characters"'}}},
       // test update comment
       {"type":"PUT", "req": {"msg": {"comment": "NEW"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"comment","msg":"Comment must an array of strings be 4-30 characters"'}}},
+      "err": {"status": 400, "msgHas": '"param":"comment","msg":"Comment must an array of strings"'}}},
       {"type":"PUT", "req": {"msg": {"comment": ["NE"]}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"comment[0]","msg":"Comment 0 must be 4-30 characters"'}}},
+      "err": {"status": 200}}},
       {"type":"PUT", "req": {"msg": {"comment": ["0123456789012345678901234567890"]}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"comment[0]","msg":"Comment 0 must be 4-30 characters"'}}},
+      "err": {"status": 200}}},
       {"type":"PUT", "req": {"msg": {"comment": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"comment[2]","msg":"Comment 2 must be 4-30 characters"'}}},
+      "err": {"status": 200}}},
 
       // test update desc
       {"type":"PUT", "req": {"msg": {"desc": "NEW"}, "url": "/api/v1/swdb/",

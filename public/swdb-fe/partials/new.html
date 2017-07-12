@@ -346,27 +346,41 @@
             </div>
             </div> -->
 
-            <!-- COMMENTS -->
-            <div class="row">
-                <label class="col-sm-2">
-                    <a id="add.comment" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)"><span  class="glyphicon glyphicon-plus"></span></a>
-                    Comments</label>
-                <span class="col-sm-10"></span>
-            </div>
-            <div id="comments-group" class="form-group">
-                <div ng-repeat="(key, value) in formData.comment track by $index">
-                    <div class="row" ng-class="{ 'has-error' : inputForm['commentInput.'+$index].$invalid && !inputForm['commentInput.'+$index].$pristine }">
-                        <label class="col-sm-2">
-                            &nbsp&nbsp
-                            <a id="rm.comment.{{$index}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)"><span class="glyphicon glyphicon-remove" ></span></a>
-                            Comment {{key}}</label>
-                        <div class="col-sm-8">
-                            <input id="comment.{{key}}" type="text" name="comment" class="form-control" ng-model="formData.comment[$index]"> </input>
-                        </div>
-                        <div class="col-sm-2" id="commentInputSts.{{key}}"></div>
-                    </div>
+            <!--[> COMMENTS <]-->
+            <!--<div class="row">-->
+                <!--<label class="col-sm-2">-->
+                    <!--<a id="add.comment" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)"><span  class="glyphicon glyphicon-plus"></span></a>-->
+                    <!--Comments</label>-->
+                <!--<span class="col-sm-10"></span>-->
+            <!--</div>-->
+            <!--<div id="comments-group" class="form-group">-->
+                <!--<div ng-repeat="(key, value) in formData.comment track by $index">-->
+                    <!--<div class="row" ng-class="{ 'has-error' : inputForm['commentInput.'+$index].$invalid && !inputForm['commentInput.'+$index].$pristine }">-->
+                        <!--<label class="col-sm-2">-->
+                            <!--&nbsp&nbsp-->
+                            <!--<a id="rm.comment.{{$index}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)"><span class="glyphicon glyphicon-remove" ></span></a>-->
+                            <!--Comment {{key}}</label>-->
+                        <!--<div class="col-sm-8">-->
+                            <!--<input id="comment.{{key}}" type="text" name="comment" class="form-control" ng-model="formData.comment[$index]"> </input>-->
+                        <!--</div>-->
+                        <!--<div class="col-sm-2" id="commentInputSts.{{key}}"></div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+        <!-- Comment -->
+        <div class="row" ng-class="{ 'has-error' : inputForm.commentInput.$invalid && !inputForm.commentInput.$pristine }">
+            <div id="comment-group" class="form-group">
+                <label class="col-sm-2 control-label">Comment</label>
+                <div class="col-sm-8">
+                    <textarea rows="4" id="comment" type="text" name="commentInput" class="form-control" placeholder="Comment" ng-model="formData.comment" ng-minlength="0">
+                    </textarea>
+                </div>
+                <div class="col-sm-2" id="commentInputSts" ng-messages="inputForm.commentInput.$error" ng-if="inputForm.commentInput.$dirty">
+                    <div ng-message="minlength">Minimum 0 characters</div>
                 </div>
             </div>
+        </div>
 
             <!-- SUBMIT BUTTON -->
             <div id='formStatus' ng-show="swdbParams.formShowStatus" class="alert alert-success form-group col-sm-12"><span class="glyphicon glyphicon-info-sign"></span> {{swdbParams.formStatus}}</div>

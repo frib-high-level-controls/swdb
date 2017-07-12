@@ -165,6 +165,7 @@ function NewPromiseCtrl($scope, $http, $window, configService, userService) {
     $scope.processForm = function(){
         delete $scope.formData.__v;
         $scope.formData.desc = [$scope.formData.desc];
+        $scope.formData.comment = [$scope.formData.comment];
 
         if ($scope.inputForm.$valid){
             // handle swName
@@ -190,20 +191,6 @@ function NewPromiseCtrl($scope, $http, $window, configService, userService) {
             $scope.swdbParams.formErr="Error: clear errors before submission";
             $scope.swdbParams.formShowStatus=false;
             $scope.swdbParams.formShowErr=true;
-        }
-    };
-
-    $scope.newItem = function(event) {
-        var parts = event.currentTarget.id.split('.');
-        if (parts[1] === 'comment'){
-            $scope.formData.comment.push("");
-        }
-    };
-
-    $scope.removeItem = function(event) {
-        var parts = event.currentTarget.id.split('.');
-        if (parts[1] === 'comment'){
-            $scope.formData.comment.splice(parts[2],1);
         }
     };
 
@@ -296,6 +283,7 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, configService, 
 
     $scope.processForm = function(){
       $scope.formData.desc = [$scope.formData.desc];
+      $scope.formData.comment = [$scope.formData.comment];
         if ($scope.inputForm.$valid){
             delete $scope.formData.__v;
             $http({
@@ -322,45 +310,6 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, configService, 
         }
     };
 
-    $scope.newItem = function(event) {
-        var parts = event.currentTarget.id.split('.');
-        if (parts[1] === 'auxSw'){
-            $scope.formData.auxSw.push("");
-        } else if (parts[1] === 'swDescDoc'){
-            $scope.formData.swDescDoc.push("");
-        } else if (parts[1] === 'validationDoc'){
-            $scope.formData.validationDoc.push( {
-                doc: "",
-                date: ""
-            }
-            );
-        } else if (parts[1] === 'verificationDoc'){
-            $scope.formData.verificationDoc.push( {
-                doc: "",
-                date: ""
-            }
-            );
-        } else if (parts[1] === 'comment'){
-            $scope.formData.comment.push("");
-        }
-    };
-
-
-    $scope.removeItem = function(event) {
-        // handle removal of list items from the display
-        var parts = event.currentTarget.id.split('.');
-        if (parts[1] === 'auxSw'){
-            $scope.formData.auxSw.splice(parts[2],1);
-        } else if (parts[1] === 'swDescDoc'){
-            $scope.formData.swDescDoc.splice(parts[2],1);
-        } else if (parts[1] === 'validationDoc'){
-            $scope.formData.validationDoc.splice(parts[2],1);
-        } else if (parts[1] === 'verificationDoc'){
-            $scope.formData.verificationDoc.splice(parts[2],1);
-        } else if (parts[1] === 'comment'){
-            $scope.formData.comment.splice(parts[2],1);
-        }
-    };
 
     getEnums = function() {
         // Set the enumerated values for this scope
@@ -396,7 +345,10 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, configService, 
         $scope.itemArray = $scope.props.validSwNamesGUIList;
         // if the desc field exists, convert from array of strings to a normal string
         if (data.desc) {
-        data.desc = data.desc.join();
+          data.desc = data.desc.join();
+        }
+        if (data.comment) {
+          data.comment = data.comment.join();
         }
         $scope.formData = data;
         $scope.whichItem = $routeParams.itemId;
