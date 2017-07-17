@@ -286,6 +286,12 @@ async function stop(): Promise<void> {
 
 // asynchronously disconnect the application
 async function doStop(): Promise<void> {
+  // disconnect Mongoose (MongoDB)
+  try {
+    await mongoose.disconnect();
+  } catch (err) {
+    warn('Mongoose disconnect failure: %s', err);
+  }
   return;
 }
 
