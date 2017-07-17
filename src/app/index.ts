@@ -10,6 +10,7 @@ import morgan = require('morgan');
 import session = require('express-session');
 
 import handlers = require('./shared/handlers');
+import logging = require('./shared/logging');
 import status = require('./shared/status');
 
 // package metadata
@@ -37,9 +38,10 @@ interface Config {
 let app: express.Application;
 
 // application logging
-let log = console.log;
-let warn = console.warn;
-let error = console.error;
+let log = logging.log;
+let info = logging.info;
+let warn = logging.warn;
+let error = logging.error;
 
 // application lifecycle
 let state = 'stopped';
@@ -249,4 +251,4 @@ async function doStop(): Promise<void> {
   return;
 }
 
-export { start, stop, log, warn, error };
+export { start, stop, log };
