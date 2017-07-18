@@ -223,13 +223,14 @@ app.post('/api/v1/swdb', casAuth.ensureAuthenticated, function(req, res, next) {
 
     tools.newValidation(props.validSwNames,req);
 
-    var errors = req.validationErrors();
-    if (errors) {
-      res.status(400).send('Validation errors: ' + JSON.stringify(errors));
-      return;
-    } else {
-      be.createDoc(req, res, next);
-    }
+    req.getValidationResult().then(function(result){
+      if (!result.isEmpty()) {
+        res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+        return;
+      } else {
+        be.createDoc(req, res, next);
+      }
+    });
   });
 });
 // handle incoming installation post requests
@@ -239,14 +240,16 @@ app.post('/api/v1/inst', function(req, res, next) {
 
   instTools.newValidation(req);
 
-  var errors = req.validationErrors();
-  if (errors) {
-    res.status(400).send('Validation errors: ' + JSON.stringify(errors));
-    return;
-  } else {
-    instBe.createDoc(req, res, next);
-  }
+  req.getValidationResult().then(function(result){
+    if (!result.isEmpty()) {
+      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+      return;
+    } else {
+      instBe.createDoc(req, res, next);
+    }
+  });
 });
+
 // for get list of records requests
 app.post('/api/v1/swdb/list', function(req, res, next) {
   be.getList(req, res, next);
@@ -270,31 +273,32 @@ app.put('/api/v1/swdb*', casAuth.ensureAuthenticated, function(req, res, next) {
     tools.updateValidation(props.validSwNames,req);
     tools.updateSanitization(req);
 
-    var errors = req.validationErrors();
+    req.getValidationResult().then(function(result){
+      if (!result.isEmpty()) {
+        res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+        return;
+      } else {
+        be.updateDoc(req, res, next);
+      }
 
-    if (errors) {
-      res.status(400).send('Validation errors: ' + JSON.stringify(errors));
-      return;
-    } else {
-      be.updateDoc(req, res, next);
-    }
-
+    });
   });
 });
+
 // handle incoming put requests for installation update
 app.put('/api/v1/inst*', function(req, res, next) {
   // Do validation for installation updates
   instTools.updateValidation(req);
   instTools.updateSanitization(req);
 
-  var errors = req.validationErrors();
-
-  if (errors) {
-    res.status(400).send('Validation errors: ' + JSON.stringify(errors));
-    return;
-  } else {
-    instBe.updateDoc(req, res, next);
-  }
+  req.getValidationResult().then(function(result){
+    if (!result.isEmpty()) {
+      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+      return;
+    } else {
+      instBe.updateDoc(req, res, next);
+    }
+  });
 });
 
 // handle incoming patch requests for update
@@ -315,31 +319,31 @@ app.patch('/api/v1/swdb*', casAuth.ensureAuthenticated, function(req,res,next) {
     tools.updateValidation(props.validSwNames,req);
     tools.updateSanitization(req);
 
-    var errors = req.validationErrors();
-
-    if (errors) {
-      res.status(400).send('Validation errors: ' + JSON.stringify(errors));
-      return;
-    } else {
-      be.updateDoc(req, res, next);
-    }
-
+    req.getValidationResult().then(function(result){
+      if (!result.isEmpty()) {
+        res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+        return;
+      } else {
+        be.updateDoc(req, res, next);
+      }
+    });
   });
 });
+
 // handle incoming put requests for installation update
 app.patch('/api/v1/inst*', function(req, res, next) {
   // Do validation for installation updates
   instTools.updateValidation(req);
   instTools.updateSanitization(req);
 
-  var errors = req.validationErrors();
-
-  if (errors) {
-    res.status(400).send('Validation errors: ' + JSON.stringify(errors));
-    return;
-  } else {
-    instBe.updateDoc(req, res, next);
-  }
+  req.getValidationResult().then(function(result){
+    if (!result.isEmpty()) {
+      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+      return;
+    } else {
+      instBe.updateDoc(req, res, next);
+    }
+  });
 });
 
 // handle incoming delete requests
