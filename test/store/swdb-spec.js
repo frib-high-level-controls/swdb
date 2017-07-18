@@ -772,12 +772,16 @@ describe("app", function() {
       {"type":"PUT", "req": {"msg": {"recertStatus": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 4-30 characters"'}}},
       // test update comment
+      {"type":"PUT", "req": {"msg": {"comment": ["NE"]}, "url": "/api/v1/swdb/",
+      "err": {"status": 400, "msgHas": '"param":"comment","msg":"Comment must be a string"'}}},
       {"type":"PUT", "req": {"msg": {"comment": "NE"}, "url": "/api/v1/swdb/",
       "err": {"status": 200}}},
       {"type":"PUT", "req": {"msg": {"comment": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 200}}},
 
       // test update desc
+      {"type":"PUT", "req": {"msg": {"desc": ["NE"]}, "url": "/api/v1/swdb/",
+      "err": {"status": 400, "msgHas": '"param":"desc","msg":"Description must be a string"'}}},
       {"type":"PUT", "req": {"msg": {"desc": "NE"}, "url": "/api/v1/swdb/",
       "err": {"status": 200}}},
       {"type":"PUT", "req": {"msg": {"desc": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",

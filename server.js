@@ -45,13 +45,6 @@ app.use(expressValidator({
     isOneOf: function(str,arr) {
       return (arr.indexOf(str) > -1);
     },
-    isComment: function(val,req) {
-      if (Array.isArray(val)){
-        return true;
-      } else {
-        return false;
-      }
-    },
     isAreas: function(val,req) {
       // Must be an array of strings
       if (Array.isArray(val)){
@@ -91,25 +84,11 @@ app.use(expressValidator({
         return false;
       }
     },
-    isDesc: function(val,req) {
-      if (Array.isArray(val)){
-        //val.forEach(function(element, idx, arr){
-          //req.checkBody("desc["+idx+"]",
-            //"Description "+idx+" must be 4-30 characters")
-            //.optional().isAscii();
-        //});
+    isString: function(val) {
+      if (typeof val === 'string'){
         return true;
       } else {
         return false;
-      }
-    },
-    isString: function(val) {
-      if (typeof val === 'string'){
-        console.log("true val is: "+JSON.stringify(val));
-        return true;
-      } else {
-        console.log("false val is: "+JSON.stringify(val));
-        return ;
       }
     }
   }
