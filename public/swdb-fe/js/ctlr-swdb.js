@@ -164,8 +164,6 @@ function NewPromiseCtrl($scope, $http, $window, configService, userService) {
 
     $scope.processForm = function(){
         delete $scope.formData.__v;
-        $scope.formData.desc = [$scope.formData.desc];
-        $scope.formData.comment = [$scope.formData.comment];
 
         if ($scope.inputForm.$valid){
             // handle swName
@@ -218,8 +216,6 @@ function NewPromiseCtrl($scope, $http, $window, configService, userService) {
 
     // initialize this record
     $scope.formData = {
-        comment: [],
-        desc: []
     };
     $scope.swdbParams = {
         formShowErr: false,
@@ -282,8 +278,6 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, configService, 
     }());
 
     $scope.processForm = function(){
-      $scope.formData.desc = [$scope.formData.desc];
-      $scope.formData.comment = [$scope.formData.comment];
         if ($scope.inputForm.$valid){
             delete $scope.formData.__v;
             $http({
@@ -343,13 +337,6 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, configService, 
     //update document fields with existing data
     $http.get($scope.props.apiUrl+$routeParams.itemId).success(function(data) {
         $scope.itemArray = $scope.props.validSwNamesGUIList;
-        // if the desc field exists, convert from array of strings to a normal string
-        if (data.desc) {
-          data.desc = data.desc.join();
-        }
-        if (data.comment) {
-          data.comment = data.comment.join();
-        }
         $scope.formData = data;
         $scope.whichItem = $routeParams.itemId;
 
