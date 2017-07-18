@@ -102,6 +102,15 @@ app.use(expressValidator({
       } else {
         return false;
       }
+    },
+    isString: function(val) {
+      if (typeof val === 'string'){
+        console.log("true val is: "+JSON.stringify(val));
+        return true;
+      } else {
+        console.log("false val is: "+JSON.stringify(val));
+        return ;
+      }
     }
   }
 }));

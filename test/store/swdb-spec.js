@@ -676,8 +676,8 @@ describe("app", function() {
       {"type": "PUT","req": {"msg": {"previous": "test-reference"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"previous": "test-reference"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"previous": "bad reference is way to long for this"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
-      {"type": "PUT","req": {"msg": {"comment": ["NEW test comment"]},"url": "/api/v1/swdb/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"comment": ["NEW test comment"]},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"comment": "NEW test comment"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"comment": "NEW test comment"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       // test new swName is required, min, max
       {"type":"POST", "req": {"msg": {"owner": "test owner"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"swName","msg":"Software Name is required"}'}}},
@@ -772,23 +772,15 @@ describe("app", function() {
       {"type":"PUT", "req": {"msg": {"recertStatus": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 4-30 characters"'}}},
       // test update comment
-      {"type":"PUT", "req": {"msg": {"comment": "NEW"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"comment","msg":"Comment must an array of strings"'}}},
-      {"type":"PUT", "req": {"msg": {"comment": ["NE"]}, "url": "/api/v1/swdb/",
+      {"type":"PUT", "req": {"msg": {"comment": "NE"}, "url": "/api/v1/swdb/",
       "err": {"status": 200}}},
-      {"type":"PUT", "req": {"msg": {"comment": ["0123456789012345678901234567890"]}, "url": "/api/v1/swdb/",
-      "err": {"status": 200}}},
-      {"type":"PUT", "req": {"msg": {"comment": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/api/v1/swdb/",
+      {"type":"PUT", "req": {"msg": {"comment": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 200}}},
 
       // test update desc
-      {"type":"PUT", "req": {"msg": {"desc": "NEW"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"desc","msg":"Description must an array of strings be 4-30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"desc": ["NE"]}, "url": "/api/v1/swdb/",
+      {"type":"PUT", "req": {"msg": {"desc": "NE"}, "url": "/api/v1/swdb/",
       "err": {"status": 200}}},
-      {"type":"PUT", "req": {"msg": {"desc": ["0123456789012345678901234567890"]}, "url": "/api/v1/swdb/",
-      "err": {"status": 200}}},
-      {"type":"PUT", "req": {"msg": {"desc": ["this is okay","also okay","0123456789012345678901234567890"]}, "url": "/api/v1/swdb/",
+      {"type":"PUT", "req": {"msg": {"desc": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 200}}},
     ];
 
