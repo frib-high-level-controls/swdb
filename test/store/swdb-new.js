@@ -20,11 +20,7 @@ const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestName
 
 
 test.describe("Software update screen tests", function() {
-  var chromeDriver = new webdriver.Builder()
-    .forBrowser("chrome")
-    .build();
-  chromeDriver.manage().window().setPosition(200,0);
-
+  var chromeDriver;
 
   test.before(function(done) {
     this.timeout(10000);
@@ -95,6 +91,14 @@ test.describe("Software update screen tests", function() {
 
   test.it("should show search page with login button", function() {
     this.timeout(8000);
+
+    chromeDriver = new webdriver.Builder()
+      .forBrowser("chrome")
+      .build();
+    chromeDriver.manage().window().setPosition(200,0);
+  //var window = chromeDriver.getWindowHandle();
+    //chromeDriver.switchTo().window(window);
+
     chromeDriver.get(props.webUrl+"#/list");
     chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),

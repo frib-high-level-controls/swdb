@@ -16,10 +16,7 @@ const testInstData = JSON.parse(fs.readFileSync('./test/misc/datafiles/instTestD
 
 
 test.describe("Installations update screen tests", function() {
-  var chromeDriver = new webdriver.Builder()
-    .forBrowser("chrome")
-    .build();
-  chromeDriver.manage().window().setPosition(200,0);
+  var chromeDriver;
 
   test.before(function(done) {
     this.timeout(5000);
@@ -47,6 +44,12 @@ test.describe("Installations update screen tests", function() {
 
   test.it("should show search page with login button", function() {
     this.timeout(8000);
+
+    chromeDriver = new webdriver.Builder()
+      .forBrowser("chrome")
+      .build();
+    chromeDriver.manage().window().setPosition(200,0);
+
     chromeDriver.get(props.webUrl+"#/inst/list");
     chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
