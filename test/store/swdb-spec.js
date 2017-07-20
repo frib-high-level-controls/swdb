@@ -100,7 +100,7 @@ describe("app", function() {
       .set('Cookie', [Cookies])
       .expect(400)
       .end(function(err, res){
-        expect(res.text).to.match(/Software Name must be in the sw name list/);
+        expect(res.text).to.match(/Software name must be in the software name list/);
         done();
       });
   });
@@ -680,36 +680,28 @@ describe("app", function() {
       {"type": "GET","res": {"msg": {"comment": "NEW test comment"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       // test new swName is required, min, max
       {"type":"POST", "req": {"msg": {"owner": "test owner"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '{"param":"swName","msg":"Software Name is required"}'}}},
-      {"type":"POST", "req": {"msg": {"swName": "t"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"swName","msg":"Software Name must be between 2 and 30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"swName": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"swName","msg":"Software Name must be between 2 and 30 characters"'}}},
+      "err": {"status": 400, "msgHas": '{"param":"swName","msg":"Software name is required."}'}}},
       // test nwe owner required, min, max
       {"type":"POST", "req": {"msg": {"swName": "NEW Test name"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '{"param":"owner","msg":"Owner is required"}'}}},
-      {"type":"POST", "req": {"msg": {"swName": "NEW Test name", "owner": "N"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"owner","msg":"Owner must be between 2 and 30 characters"'}}},
-      {"type":"POST", "req": {"msg": {"swName": "NEW Test name","owner": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"owner","msg":"Owner must be between 2 and 30 characters"'}}},
+      "err": {"status": 400, "msgHas": '{"param":"owner","msg":"Owner is required."}'}}},
       // test levelOfCare required, enumerated
       {"type":"POST", "req": {"msg": {"swName": "NEW Test name", "owner":"NEW OWNER"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '{"param":"levelOfCare","msg":"LevelOfCare is required"}'}}},
+      "err": {"status": 400, "msgHas": '{"param":"levelOfCare","msg":"Level of care is required."}'}}},
       {"type":"POST", "req": {"msg": {"swName": "NEW Test name", "owner":"NEW OWNER", "levelOfCare": "LOW"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status is required"}'}}},
+      "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status is required."}'}}},
       {"type":"POST", "req": {"msg": {"swName": "NEW Test name", "owner":"NEW OWNER", "levelOfCare": "LOW","status":"DEVEL"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '{"param":"statusDate","msg":"Status date is required"}'}}},
+      "err": {"status": 400, "msgHas": '{"param":"statusDate","msg":"Status date is required."}'}}},
       // test new status enumerated
       {"type":"POST", "req": {"msg": {"status": "not-enumerated"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_INSTALL,RDY_INT_TEST,RDY_BEAM,RETIRED","value":"not-enumerated"}'}}},
       // test new statusDate with non-date
       {"type":"POST", "req": {"msg": {"swName":"testing","owner":"test owner","levelOfCare":"LOW","status":"DEVEL","statusDate": "non-date"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '{"param":"statusDate","msg":"Status date must be a date","value":"non-date"}'}}},
+      "err": {"status": 400, "msgHas": '{"param":"statusDate","msg":"Status date must be a date.","value":"non-date"}'}}},
       // test new version min, max
       {"type":"POST", "req": {"msg": {"version": ""}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"version","msg":"Version must be 1-30 characters"'}}},
+      "err": {"status": 400, "msgHas": '"param":"version","msg":"Version must be 1-30 characters."'}}},
       {"type":"POST", "req": {"msg": {"version": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"version","msg":"Version must be 1-30 characters"'}}},
+      "err": {"status": 400, "msgHas": '"param":"version","msg":"Version must be 1-30 characters."'}}},
       // test new platforms min, max
       {"type":"POST", "req": {"msg": {"platforms": "NEW"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"platforms","msg":"Platforms must be 4-30 characters."'}}},
@@ -729,35 +721,30 @@ describe("app", function() {
       {"type":"POST", "req": {"msg": {"recertStatus": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 4-30 characters."'}}},
 
-      // test update swName min, max
-      {"type":"PUT", "req": {"msg": {"swName": "t"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"swName","msg":"Software Name must be between 2 and 30 characters"'}}},
-      {"type":"PUT", "req": {"msg": {"swName": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"swName","msg":"Software Name must be between 2 and 30 characters"'}}},
       // test update owner min, max
       {"type":"PUT", "req": {"msg": {"swName": "NEW Test name", "owner": "N"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"owner","msg":"Owner must be between 2 and 30 characters"'}}},
+      "err": {"status": 400, "msgHas": '"param":"owner","msg":"Owner must be 2-30 characters."'}}},
       {"type":"PUT", "req": {"msg": {"swName": "NEW Test name","owner": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"owner","msg":"Owner must be between 2 and 30 characters"'}}},
+      "err": {"status": 400, "msgHas": '"param":"owner","msg":"Owner must be 2-30 characters."'}}},
       // test update levelOfCare enumerated
       {"type":"PUT", "req": {"msg": {"levelOfCare": "not-enumerated"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '{"param":"levelOfCare","msg":"LevelOfCare must be one of NONE,LOW,MEDIUM,HIGH,SAFETY","value":"not-enumerated"}'}}},
+      "err": {"status": 400, "msgHas": '{"param":"levelOfCare","msg":"Level of care must be one of NONE,LOW,MEDIUM,HIGH,SAFETY","value":"not-enumerated"}'}}},
       // test update status enumerated
       {"type":"PUT", "req": {"msg": {"status": "not-enumerated"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_INSTALL,RDY_INT_TEST,RDY_BEAM,RETIRED","value":"not-enumerated"}'}}},
       // test update statusDate with non-date
       {"type":"PUT", "req": {"msg": {"statusDate": "non-date"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '{"param":"statusDate","msg":"Status date must be a date","value":"non-date"}'}}},
+      "err": {"status": 400, "msgHas": '{"param":"statusDate","msg":"Status date must be a date.","value":"non-date"}'}}},
       // test update version min, max
       {"type":"PUT", "req": {"msg": {"version": ""}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"version","msg":"Version must be 1-30 characters"'}}},
+      "err": {"status": 400, "msgHas": '"param":"version","msg":"Version must be 1-30 characters."'}}},
       {"type":"PUT", "req": {"msg": {"version": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"version","msg":"Version must be 1-30 characters"'}}},
+      "err": {"status": 400, "msgHas": '"param":"version","msg":"Version must be 1-30 characters."'}}},
       // test update platforms min, max
       {"type":"PUT", "req": {"msg": {"platforms": "NEW"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"platforms","msg":"platforms must be 4-30 characters"'}}},
+      "err": {"status": 400, "msgHas": '"param":"platforms","msg":"Platforms must be 4-30 characters."'}}},
       {"type":"PUT", "req": {"msg": {"platforms": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"platforms","msg":"platforms must be 4-30 characters"'}}},
+      "err": {"status": 400, "msgHas": '"param":"platforms","msg":"Platforms must be 4-30 characters."'}}},
       // test update versionControl min, max
       {"type":"PUT", "req": {"msg": {"versionControl": "Erroneous RCS"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of Git,AssetCentre,Filesystem,Other"'}}},
