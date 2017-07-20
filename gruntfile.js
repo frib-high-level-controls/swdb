@@ -4,12 +4,26 @@ module.exports = function(grunt) {
     grunt.initConfig({
         ts: {
             app: {
-                outDir: './app',
-                tsconfig: 'src/app/tsconfig.json'
+                tsconfig: {
+                   tsconfig: './src/app',
+                   passThrough: true,
+                },
+                // The additional flags specified below seems like it should be equivalent
+                // to using the outDir option, but when the outDir option is used then the
+                // Typescript compiler fails for find the source files (grunt-ts v5.5.1).
+                //outDir: './app',
+                options: {
+                    additionalFlags: '--outDir ./app'
+                },
             },
             apptest: {
-                outDir: './test',
-                tsconfig: 'src/apptest/tsconfig.json'
+                tsconfig: {
+                   tsconfig: './src/apptest',
+                   passThrough: true,
+                },
+                options: {
+                    additionalFlags: '--outDir ./test'
+                },
             }
         },
         tslint: {
@@ -32,6 +46,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-tslint");
 
     grunt.registerTask("default", [
-        "ts"
+        "ts:app"
     ]);
 }
