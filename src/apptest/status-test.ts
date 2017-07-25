@@ -1,8 +1,6 @@
 /**
  * Test the application status REST API
  */
-import * as fs from 'fs';
-import * as path from 'path';
 import * as util from 'util';
 
 import { assert } from 'chai';
@@ -28,10 +26,10 @@ describe('Application status API', function() {
       .set('Accept', 'application/json')
       .expect(200)
       .expect('Content-Type', /json/)
-      .expect(jsonschema.checkValid('status'))
+      .expect(jsonschema.checkValid('/status'))
       .expect((res: request.Response) => {
-        let status = <status.ApplicationStatus> res.body;
-        assert.equal(res.body.status, 'OK', 'Expected application status is "OK"');
+        let data = <status.ApplicationStatus> res.body;
+        assert.equal(data.status, 'OK', 'Expected application status is "OK"');
       });
   });
 
@@ -46,7 +44,7 @@ describe('Application status API', function() {
     return request(handler)
       .get('/status/json')
       .set('Accept', 'application/json')
-      .expect(jsonschema.checkValid('status'))
+      .expect(jsonschema.checkValid('/status'))
       .expect((res: request.Response) => {
         let data = <status.ApplicationStatus> res.body;
         assert.equal(data.status, 'OK', 'Expected application status is "OK"');
@@ -73,7 +71,7 @@ describe('Application status API', function() {
     return request(handler)
       .get('/status/json')
       .set('Accept', 'application/json')
-      .expect(jsonschema.checkValid('status'))
+      .expect(jsonschema.checkValid('/status'))
       .expect((res: request.Response) => {
         let data = <status.ApplicationStatus> res.body;
         assert.equal(data.status, 'ERROR', 'Expected application status is "ERROR"');
@@ -100,7 +98,7 @@ describe('Application status API', function() {
     return request(handler)
       .get('/status/json')
       .set('Accept', 'application/json')
-      .expect(jsonschema.checkValid('status'))
+      .expect(jsonschema.checkValid('/status'))
       .expect((res: request.Response) => {
         let data = <status.ApplicationStatus> res.body;
         assert.equal(data.status, 'OK', 'Expected application status is "OK"');
