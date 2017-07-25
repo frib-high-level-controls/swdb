@@ -59,3 +59,14 @@ export function getModel<T extends mongoose.Document>(doc: T): mongoose.Model<T>
 export function getModelName<T extends mongoose.Document>(doc: T): string {
   return getModel(doc).modelName;
 };
+
+/*
+ * Save the list of documents
+ */
+export function saveAll<T extends mongoose.Document>(docs: IterableIterator<T>): Promise<T[]> {
+  let prms = new Array<Promise<T>>();
+  for (let doc of docs) {
+    prms.push(doc.save());
+  }
+  return Promise.all(prms);
+};
