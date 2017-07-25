@@ -10,18 +10,22 @@ import * as supertest from 'supertest';
 
 export const validator = new jsonschema.Validator();
 
-const cache = new Map<string, jsonschema.Schema>();
-
-
-export function validate(instance: any, name: string): jsonschema.ValidatorResult {
-  let cachedSchema = cache.get(name);
-  if (cachedSchema) {
-    return validator.validate(instance, cachedSchema);
+export function validate(instance: any, uri: string): jsonschema.ValidatorResult {
+  let schema = validator.schemas[uri];
+  if (schema) {
+    return validator.validate(instance, schema);
   }
-  let schemaPath = path.resolve(__dirname, '..', 'jsonschema', name + '.json');
-  let schema = <jsonschema.Schema> JSON.parse(fs.readFileSync(schemaPath, 'UTF-8'));
-  cache.set(name, schema);
-  return validator.validate(instance, schema);
+  validator.unresolvedRefs.unshift(uri);
+  while (validator.unresolvedRefs.length > 0) {
+    let ref = validator.unresolvedRefs.shift();
+    if (ref) {
+      let name = ref.replace('/', path.sep) + '.json';
+      let schemaPath = path.join(__dirname, '..', 'jsonschema', name);
+      let schemaData = JSON.parse(fs.readFileSync(schemaPath, 'UTF-8'));
+      validator.addSchema(<jsonschema.Schema> schemaData, ref);
+    }
+  }
+  return validator.validate(instance, validator.schemas[uri]);
 };
 
 
