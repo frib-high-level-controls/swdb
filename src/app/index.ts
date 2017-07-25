@@ -251,4 +251,4 @@ async function doStop(): Promise<void> {
   return;
 }
 
-export { start, stop, log };
+export { start, stop, log, error };
