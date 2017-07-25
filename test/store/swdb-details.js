@@ -18,7 +18,7 @@ const testSwData = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestDataC
 const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestNames.json', 'utf8'));
 
 
-test.describe("Installations record tests", function() {
+test.describe("Preload db record tests", function() {
   var chromeDriver;
 
   test.before(function(done) {
@@ -41,7 +41,7 @@ test.describe("Installations record tests", function() {
       }
     }
 
-    console.log("Starting inst-list...");
+    console.log("Starting swdb-details...");
     console.log("Dropping installation collections...");
     instBe.instDoc.db.collections.instCollection.drop(
       function(err){
@@ -71,7 +71,7 @@ test.describe("Installations record tests", function() {
 
   test.after(function(done) {
     // clear the test collection
-    console.log("Cleaning up (inst-list)...");
+    console.log("Cleaning up (swdb-details)...");
     console.log("Dropping installation collections...");
     instBe.instDoc.db.collections.instCollection.drop(function(err){
       chromeDriver.quit();
@@ -115,20 +115,40 @@ test.describe("Installations record tests", function() {
       "testuser (click to logout)"),5000);
   });
 
-  test.it("should show title", function() {
-    chromeDriver.wait(until.titleIs("SWDB - List"), 5000);
-  });
-
   test.it("should show 'Add software' button", function() {
     chromeDriver.wait(until.elementLocated(By.id("addBtn")),5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("addBtn")),
       "Add software"),5000);
   });
 
+  test.it("should show a known record", function() {
+    this.timeout(8000);
+    chromeDriver.wait(until.elementLocated(By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]')), 8000);
+    var link = chromeDriver.findElement(By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]'));
+    expect(Promise.resolve(link.getText())).to.eventually.equal("BEAST");
+    link.click();
+  });
+
+  test.it("should show details record title", function() {
+    chromeDriver.wait(until.titleIs("SWDB - Details"), 5000);
+  });
+
   test.it("should show 'About' button", function() {
     chromeDriver.wait(until.elementLocated(By.id("abtBtn")),5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("abtBtn")),
       "About"),5000);
+  });
+
+  test.it("should show 'Back' button", function() {
+    chromeDriver.wait(until.elementLocated(By.id("cancelBtn")),5000);
+    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("cancelBtn")),
+      "Back to search"),5000);
+  });
+
+  test.it("should show 'Update' button", function() {
+    chromeDriver.wait(until.elementLocated(By.id("updateBtn")),5000);
+    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("updateBtn")),
+      "Update this document"),5000);
   });
 
   test.it("should show 'Software' tab", function() {
@@ -143,27 +163,16 @@ test.describe("Installations record tests", function() {
       "Installations"),5000);
   });
 
-  test.it("should show a known record", function() {
-    this.timeout(8000);
-    //chromeDriver.wait(until.elementLocated(By.linkText("BEAST")), 8000);
-    //
-    ////*[@id="swdbList"]/tbody/tr[4]/td[1]/a
-    //
-    chromeDriver.wait(until.elementLocated(By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]')), 8000);
-    var link = chromeDriver.findElement(By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]'));
-    expect(Promise.resolve(link.getText())).to.eventually.equal("BEAST");
-  });
-
-  // find an software record
-  test.it("should find a sw record", function() {
-    this.timeout(8000);
-    chromeDriver.get(props.webUrl+"#/list");
-    chromeDriver.wait(until.elementLocated(By.id("swdbList_filter")), 8000)
-      .findElement(By.tagName("Input"))
-      .sendKeys("beast 0.2 b4");
-    chromeDriver.wait(until.elementLocated(By.linkText("BEAST")),
-      8000);
-    var link = chromeDriver.findElement(By.linkText("BEAST"));
-    expect(Promise.resolve(link.getAttribute("href"))).to.eventually.equal("http://swdb-dev:4005/#/details/5947589458a6aa0face9a554");
-  });
+  //// find an software record
+  //test.it("should find a sw record", function() {
+    //this.timeout(8000);
+    //chromeDriver.get(props.webUrl+"#/list");
+    //chromeDriver.wait(until.elementLocated(By.id("swdbList_filter")), 8000)
+      //.findElement(By.tagName("Input"))
+      //.sendKeys("beast 0.2 b4");
+    //chromeDriver.wait(until.elementLocated(By.linkText("BEAST")),
+      //8000);
+    //var link = chromeDriver.findElement(By.linkText("BEAST"));
+    //expect(Promise.resolve(link.getAttribute("href"))).to.eventually.equal("http://swdb-dev:4005/#/details/5947589458a6aa0face9a554");
+  //});
 });

@@ -87,7 +87,7 @@ describe("app", function() {
     .post("/api/v1/swdb/")
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
-    .send({swName: "Test Record", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
+      .send({swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
     .expect(201)
     .end(done);
   });
@@ -95,7 +95,7 @@ describe("app", function() {
   it("Errors posting a bad swName", function(done) {
     supertest
       .post("/api/v1/swdb/")
-      .send({swName: "Bogus Test Record", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
+      .send({swName: "Bogus Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
       .expect(400)
@@ -108,7 +108,7 @@ describe("app", function() {
   it("Errors posting a duplicate new record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "Test Record", owner: "Owner 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "1/1/1970"})
+    .send({swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000",levelOfCare: "LOW", status: "DEVEL", statusDate: "1/1/1970"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(500)
@@ -121,7 +121,7 @@ describe("app", function() {
   it("Post a new record Test Record2", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "Test Record2", owner: "Owner 1002", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
+    .send({swName: "Test Record2", owner: "Owner 1002", engineer: "Engineer 1002",levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -161,7 +161,7 @@ describe("app", function() {
   it("Post a new record Desc Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "Desc Test Record", owner: "Owner 1002", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
+    .send({swName: "Desc Test Record", owner: "Owner 1002", engineer: "Engineer 1002",levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -240,7 +240,7 @@ describe("app", function() {
   it("Post a new record versionControlLoc Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "versionControlLoc Test Record", owner: "versioControlLoc Test Owner", versionControlLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
+    .send({swName: "versionControlLoc Test Record", owner: "versioControlLoc Test Owner", engineer: "Test Engineer", versionControlLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -278,7 +278,7 @@ describe("app", function() {
   it("Post a new record designDescDocLoc Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "designDescDocLoc Test Record", owner: "designDescDocLoc Test Owner", designDescDocLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
+    .send({swName: "designDescDocLoc Test Record", owner: "designDescDocLoc Test Owner", engineer: "Test Engineer", designDescDocLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -316,7 +316,7 @@ describe("app", function() {
   it("Post a new record descDocLoc Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "descDocLoc Test Record", owner: "descDocLoc Test Owner", descDocLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
+    .send({swName: "descDocLoc Test Record", owner: "descDocLoc Test Owner", engineer: "Test Engineer", descDocLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -354,7 +354,7 @@ describe("app", function() {
   it("Post a new record recertDate Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "recertDate Test Record", owner: "recertDate Test Owner", recertDate: "April 20, 2016", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .send({swName: "recertDate Test Record", owner: "recertDate Test Owner", engineer: "Test Engineer", recertDate: "April 20, 2016", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -392,7 +392,7 @@ describe("app", function() {
   it("Post a new record vvProcLoc Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "vvProcLoc Test Record", owner: "vvProcLoc Test Owner", vvProcLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .send({swName: "vvProcLoc Test Record", owner: "vvProcLoc Test Owner", engineer: "Test Engineer", vvProcLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -430,7 +430,7 @@ describe("app", function() {
   it("Post a new record vvResultsLoc Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "vvResultsLoc Test Record", owner: "vvResultsLoc Test Owner", vvResultsLoc: "http://www.somehost/some-path/some-file2", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .send({swName: "vvResultsLoc Test Record", owner: "vvResultsLoc Test Owner", engineer: "Test Engineer", vvResultsLoc: "http://www.somehost/some-path/some-file2", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -468,7 +468,7 @@ describe("app", function() {
   it("Post a new record branch Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "branch Test Record", owner: "branch Test Owner", branch: "New branch", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .send({swName: "branch Test Record", owner: "branch Test Owner", engineer: "Test Engineer", branch: "New branch", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -506,7 +506,7 @@ describe("app", function() {
   it("Post a new record versionControl Test Record", function(done) {
     supertest
       .post("/api/v1/swdb/")
-    .send({swName: "versionControl Test Record", owner: "versionControl Test Owner", versionControl: "Git", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .send({swName: "versionControl Test Record", owner: "versionControl Test Owner", engineer: "Test Engineer", versionControl: "Git", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -544,7 +544,7 @@ describe("app", function() {
   it("Post a new record previous Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "previous Test Record", owner: "previous Test Owner", previous: "test-reference", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .send({swName: "previous Test Record", owner: "previous Test Owner", engineer: "Test Engineer", previous: "test-reference", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)

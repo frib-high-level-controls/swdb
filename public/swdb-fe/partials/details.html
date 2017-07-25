@@ -4,10 +4,10 @@
     <div class="col-sm-8">
       <ul class="nav nav-tabs">
         <li class="nav-item">
-          <a class="nav-link active" href="#/list">Software</a>
+          <a id="swTab" class="nav-link active" href="#/list">Software</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#/inst/list">Installations</a>
+          <a id="instTab" class="nav-link" href="#/inst/list">Installations</a>
         </li>
       </ul>
     </div>i
@@ -234,8 +234,8 @@
       </span>
     </div>
 
-    <a class="btn btn-success" href="#/list"><span class="glyphicon glyphicon-backward"></span> Back to    search </a>
-    <a class="btn btn-info" href="#/update/{{formData._id}}"><span class="glyphicon glyphicon-edit"></span>      Update this document </a>
+    <a id="cancelBtn" class="btn btn-success" href="#/list"><span class="glyphicon glyphicon-backward"></span> Back to    search </a>
+    <a id="updateBtn" class="btn btn-info" href="#/update/{{formData._id}}"><span class="glyphicon glyphicon-edit"></span>      Update this document </a>
 
   </form>
 </div>
