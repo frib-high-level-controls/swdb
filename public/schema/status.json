@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
-  "$id": "http://webapp.com/schema/status.json",
+  "id": "/status",
   "type": "object",
   "properties": {
     "status": {
