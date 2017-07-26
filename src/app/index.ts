@@ -59,6 +59,19 @@ function updateActivityStatus(): void {
   }
 };
 
+// read file with path resolution
+function readFile(...pathSegments: string[]): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    fs.readFile(path.resolve(...pathSegments), (err, data) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(data);
+    });
+  });
+};
+
 // read the application name and version
 async function readNameVersion(): Promise<[string | undefined, string | undefined]> {
   // first look for application name and version in the environment
@@ -67,15 +80,8 @@ async function readNameVersion(): Promise<[string | undefined, string | undefine
   // second look for application name and verison in packge.json
   if (!name || !version) {
     try {
-      let pkg: Package = JSON.parse(await new Promise<string>((resolve, reject) => {
-        fs.readFile(path.resolve(__dirname, '../package.json'), 'UTF-8', (err, data) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-          resolve(data);
-        });
-      }));
+      let data = await readFile(__dirname, '..', 'package.json');
+      let pkg: Package = JSON.parse(data.toString('UTF-8'));
       if (!name && pkg && pkg.name) {
         name = String(pkg.name);
       }
@@ -174,11 +180,11 @@ async function doStart(): Promise<void> {
   app.set('addr', String(cfg.app.addr));
 
   // view engine configuration
-  app.set('views', path.resolve(__dirname, '../views'));
+  app.set('views', path.resolve(__dirname, '..', 'views'));
   app.set('view engine', 'pug');
 
   // favicon configuration
-  app.use(favicon(path.resolve(__dirname, '../public', 'favicon.ico')));
+  app.use(favicon(path.resolve(__dirname, '..', 'public', 'favicon.ico')));
 
   // morgan configuration
   morgan.token('remote-user', function (req) {
@@ -212,8 +218,8 @@ async function doStart(): Promise<void> {
     },
   }));
 
-  app.use(express.static(path.resolve(__dirname, '../public')));
-  app.use(express.static(path.resolve(__dirname, '../bower_components')));
+  app.use(express.static(path.resolve(__dirname, '..', 'public')));
+  app.use(express.static(path.resolve(__dirname, '..', 'bower_components')));
 
   app.use('/status', status.router);
 
