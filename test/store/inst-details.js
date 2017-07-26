@@ -78,11 +78,11 @@ test.describe("Installations detail screen tests", function() {
     console.log("Cleaning up (inst-list)...");
     console.log("Dropping installation collections...");
     instBe.instDoc.db.collections.instCollection.drop(function(err){
+      chromeDriver.quit();
       console.log("Dropping swdb collections...");
       be.swDoc.db.collections.swdbCollection.drop(function(err){
       console.log("Dropping swdbNames collections...");
         be.swDoc.db.collections.swNamesProp.drop(function(err){
-          chromeDriver.quit();
           done();
         });
       });
