@@ -26,7 +26,7 @@ export interface RequestErrorDetails {
 };
 
 const DEFAULT_ERROR_STATUS = HttpStatus.INTERNAL_SERVER_ERROR;
-const DEFAULT_ERROR_MESSAGE = 'Unknown request error';
+const DEFAULT_ERROR_MESSAGE = HttpStatus.getStatusText(DEFAULT_ERROR_STATUS);
 
 export class RequestError extends Error implements HttpStatusError  {
 
@@ -64,7 +64,7 @@ export class RequestError extends Error implements HttpStatusError  {
       this.details = details;
     } else {
       this.details = {
-        message: DEFAULT_ERROR_MESSAGE,
+        message: this.message,
       };
       return;
     }
