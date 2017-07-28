@@ -23,6 +23,11 @@ export interface ApplicationStatus {
   components: ComponentStatus[];
 }
 
+export interface ApiApplicationStatus extends ApplicationStatus {
+  name: string;
+  version: string;
+}
+
 const catchAll = handlers.catchAll;
 const ensureAccepts = handlers.ensureAccepts;
 
@@ -291,6 +296,17 @@ function setComponentError(name: string, message?: string, ...param: any[]): voi
 
 const router = express.Router();
 
+function getApiStatus(app: express.Application): ApiApplicationStatus {
+  let status = getStatus();
+  return {
+    status: status.status,
+    uptime: status.uptime,
+    components: status.components,
+    name: String(app.get('name') || ''),
+    version: String(app.get('version') || ''),
+  };
+};
+
 function getHttpStatus(status: ApplicationStatus): number {
   if (status.status !== 'OK') {
     return handlers.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -303,7 +319,7 @@ router.get('/', ensureAccepts('html'), catchAll(async (req: express.Request, res
   if (testingStatus.status !== 'OK') {
     testing = true;
   }
-  let status = getStatus();
+  let status = getApiStatus(req.app);
   res.status(getHttpStatus(status)).render('status', {
     testing: testing,
     status: status,
@@ -329,7 +345,7 @@ router.post('/', ensureAccepts('html'), catchAll(async (req: express.Request, re
 }));
 
 router.get('/json', ensureAccepts('json'), catchAll(async (req: express.Request, res: express.Response) => {
-  let status = getStatus();
+  let status = getApiStatus(req.app);
   res.status(getHttpStatus(status)).json(status);
 }));
 
