@@ -9,7 +9,7 @@
   "ccdbApiUrl":"http://controls.frib.msu.edu/ccdbapi/",
   "slotsDataSource":{
     "useSource": "test",
-    "test":"/home/ellisr/test/swdb/test/misc/datafiles/slotsTestData.json",
+    "test":"/home/deployer/swdb/test/misc/datafiles/slotsTestData.json",
     "production":"http://controls.frib.msu.edu/ccdbapi/slot"
   },
   "restPort":"4005",
