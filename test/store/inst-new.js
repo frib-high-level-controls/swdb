@@ -113,7 +113,7 @@ test.describe("Installations add screen tests", function() {
   });
 
   test.it("Add new record", function() {
-    this.timeout(10000);
+    this.timeout(12000);
     chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
     var input = chromeDriver.findElement(By.id("host"));
     input.sendKeys("testHost1");

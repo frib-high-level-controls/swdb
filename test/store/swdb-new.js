@@ -23,7 +23,7 @@ test.describe("Software update screen tests", function() {
   var chromeDriver;
 
   test.before(function(done) {
-    this.timeout(10000);
+    this.timeout(15000);
 
     // before we start loading data, convert _ids to ObjectIDs
     for (var i in testSwNames){
@@ -90,7 +90,7 @@ test.describe("Software update screen tests", function() {
   var allCookies = null;
 
   test.it("should show search page with login button", function() {
-    this.timeout(8000);
+    this.timeout(15000);
 
     chromeDriver = new webdriver.Builder()
       .forBrowser("chrome")
@@ -125,7 +125,7 @@ test.describe("Software update screen tests", function() {
   });
 
   test.it("Add new record", function() {
-    this.timeout(14000);
+    this.timeout(16000);
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="swName"]/span')), 3000);
     var input = chromeDriver.findElement(By.xpath('//*[@id="swName"]/span'));
     input.click();//*[@id="swName-group"]/div/div/input[1]
