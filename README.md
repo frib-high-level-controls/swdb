@@ -32,6 +32,12 @@ bower install
 sudo mkdir -p /data/db
 sudo service mongodb restart
 ```
+# Install as a systemd service
+```
+sudo cp ~/swdb/config/swdb.service /etc/systemd/system/swdb.service
+sudo systemctl start swdb
+```
+
 # Unit/API Test Setup
 ``` sh
 # setup for tests

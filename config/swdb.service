@@ -1,0 +1,23 @@
+###### swdb.service ###########
+[Unit]
+Description=swdb software  tracking application
+
+[Service]
+Type=simple
+Environment=NODE=production
+#WorkingDirectory=/home/deployer/swdb
+
+ExecStart=/home/deployer/swdb/bin/swdb
+
+User=deployer
+#Group=nogroup
+
+Restart=always
+
+#SyslogIdentifier=swdb
+#SyslogFacility=local0
+#SyslogLevel=info
+
+[Install]
+WantedBy=multi-user.target
+#############################
