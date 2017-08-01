@@ -202,7 +202,7 @@ async function doStart(): Promise<void> {
   if (cfg.mongo.user) {
     mongoUrl += encodeURIComponent(String(cfg.mongo.user));
     if (cfg.mongo.pass) {
-      mongoUrl += ':' + encodeURIComponent(String(cfg.mongo.user));
+      mongoUrl += ':' + encodeURIComponent(String(cfg.mongo.pass));
     }
     mongoUrl += '@';
   }
