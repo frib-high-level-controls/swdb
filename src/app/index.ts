@@ -227,7 +227,7 @@ async function doStart(): Promise<void> {
 
   status.setComponentError('MongoDB', 'Never Connected');
   log('Mongoose default connection: %s', mongoUrl);
-  mongoose.connect(mongoUrl, cfg.mongo.options);
+  await mongoose.connect(mongoUrl, cfg.mongo.options);
 
   // view engine configuration
   app.set('views', path.resolve(__dirname, '..', 'views'));
