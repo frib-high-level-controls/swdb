@@ -14,6 +14,8 @@
   // MongoDB connection configuration using JavaScript client library
   // (see http://mongodb.github.io/node-mongodb-native/2.0/reference/connecting/connection-settings/)
   "mongo": {
+    // "user": "username",
+    // "pass": "password",
     "addr": "localhost",
     "port": "27017",
     "db": "webapp-dev",
@@ -21,33 +23,29 @@
       // See http://mongoosejs.com/docs/connections.html
       "useMongoClient": true
 
-      // Authentication credentials
-      // "user": "user",
-      // "pass": "pass",
-
       // Authentication database 
-      // "auth": {
-      //   "authdb": "admin"
-      // },
-
-      // Database configuration
-      // "db": {
-      //   "native_parser": true
-      // },
+      // "authSource": "admin",
 
       // ReplicaSet configuration
-      // replset: foo;
+      // "replicaSet": "foo";
 
-      // Server configuration (SSL)
-      // "server": {
-      //   "ssl": true,
-      //   "sslValidate": true,
-      //   "poolSize": 5,
-      //   "socketOptions": {
-      //     "connectTimeoutMS": 30000,
-      //     "keepAlive": 1
-      //   }
-      // }
+      // SSL Configuration
+      // "ssl": true,
+      // "sslValidate": true,
+      // "sslCA": "",
+      // "sslCert": "",
+      // "sslKey": "",
+      // "sslPass": "",
+      // "sslCRL": "",
+
+      // Server configuration
+      // "poolSize": 5,
+      // "socketTimeoutMS": 10000,
+      // "connectTimeoutMS": 30000,
+      // "keepAlive": 1,
+      // "autoReconnect": true,
+      // "reconnectTries": 10,
+      // "reconnectInterval": 1000,
     }
   }
 }

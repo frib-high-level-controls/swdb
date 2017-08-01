@@ -34,6 +34,8 @@ interface Config {
     session_secret: {};
   };
   mongo: {
+    user?: {};
+    pass?: {};
     port: {};
     addr: {};
     db: {};
@@ -195,8 +197,16 @@ async function doStart(): Promise<void> {
   app.set('port', String(cfg.app.port));
   app.set('addr', String(cfg.app.addr));
 
-   // configure Mongoose (MongoDB)
-  let mongoUrl = 'mongodb://' + cfg.mongo.addr + ':' + cfg.mongo.port + '/' + cfg.mongo.db;
+  // configure Mongoose (MongoDB)
+  let mongoUrl = 'mongodb://';
+  if (cfg.mongo.user) {
+    mongoUrl += encodeURIComponent(String(cfg.mongo.user));
+    if (cfg.mongo.pass) {
+      mongoUrl += ':' + encodeURIComponent(String(cfg.mongo.user));
+    }
+    mongoUrl += '@';
+  }
+  mongoUrl += cfg.mongo.addr + ':' + cfg.mongo.port + '/' + cfg.mongo.db;
 
   mongoose.Promise = global.Promise;
 
