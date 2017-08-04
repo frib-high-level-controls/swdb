@@ -12,6 +12,7 @@ var webdriver = require("../../node_modules/selenium-webdriver"),
   test = require("../../node_modules/selenium-webdriver/testing");
 var fs = require('fs');
 var path = require('path');
+const circJSON = require('circular-json');
 const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 const testInstData = JSON.parse(fs.readFileSync('./test/misc/datafiles/instTestDataCombined.json', 'utf8'));
 const testSwData = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestDataCombined.json', 'utf8'));
@@ -154,7 +155,7 @@ test.describe("Installations record tests", function() {
     expect(Promise.resolve(link.getText())).to.eventually.equal("BEAST");
   });
 
-  // find an software record
+  // find a software record
   test.it("should find a sw record", function() {
     this.timeout(8000);
     chromeDriver.get(props.webUrl+"#/list");
@@ -164,6 +165,9 @@ test.describe("Installations record tests", function() {
     chromeDriver.wait(until.elementLocated(By.linkText("BEAST")),
       8000);
     var link = chromeDriver.findElement(By.linkText("BEAST"));
-    expect(Promise.resolve(link.getAttribute("href"))).to.eventually.equal("http://swdb-dev:4005/#/details/5947589458a6aa0face9a554");
+    link.getAttribute("href").then(function(result){
+      console.log("result:"+circJSON.stringify(result));
+      expect(result).to.equal(props.webUrl+"#/details/5947589458a6aa0face9a554");
+    });
   });
 });

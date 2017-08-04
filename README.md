@@ -76,3 +76,7 @@ mocha test/swdb-spec.js
 cd ~/swdb
 mocha
 ```
+# Managing Configuration
+The file config/properties.json is expected to have the data necessary to running in a given environment.
+See the docs directory in the repository for more information on using the properties file to configure the system.
+
