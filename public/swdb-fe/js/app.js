@@ -44,10 +44,8 @@ app.service('userService', function($http) {
 
 // Service to get ccdb slots to controllers
 app.service('slotService', function($http) {
-    //$scope.props = configService.getConfig();
     var slotData = null;
 
-    //var promise = 	$http({url: config.ccdbApiUrl+'slot',method: "GET"}).success(function(data) {
     var promise = 	$http({
       url: '/api/v1/swdb/slot',
       method: "GET",
@@ -56,8 +54,6 @@ app.service('slotService', function($http) {
       }
     }).success(function(data) {
         slotData = data;
-        //console.log("in service");
-        //console.log("service got:"+JSON.stringify(data));
     });
 
     return {
@@ -75,7 +71,7 @@ app.service('slotService', function($http) {
 app.service('swService', function($http) {
     var swData = null;
 
-    var promise = 	$http({url: 'http://swdb-dev:4005/api/v1/swdb/',method: "GET"}).success(function(data) {
+    var promise = 	$http({url: '/api/v1/swdb/',method: "GET"}).success(function(data) {
         swData = data;
     });
 
