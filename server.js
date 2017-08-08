@@ -11,7 +11,8 @@ var path = require('path');
 var FileStreamRotator = require('file-stream-rotator');
 var util = require('util');
 var mongoose = require('mongoose');
-var be = require('./lib/db');
+var Be = require('./lib/db');
+let be = new Be.db();
 var instBe = require('./lib/instDb');
 var expressValidator = require('express-validator');
 var expressSession = require('express-session');
@@ -20,6 +21,7 @@ const circJSON = require('circular-json');
 var props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 
 // get the valid swNames from the db and populate the properties area
+// console.log("be is:"+circJSON.stringify(be));
 be.swNamesDoc.find({}, function(err, docs) {
   var swNames = [];
   var validSwNames = [];
