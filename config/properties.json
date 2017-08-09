@@ -15,7 +15,7 @@
   "restPort":"3000",
   "webUrl":"http://swdb-dev:3000/",
   "webPort":"3000",
-  "mongodbUrl":"mongodb://swdb:ib2oAETvD8oU@mongodb-dev:27017/swdb-dev?authSource=swdb-dev&ssl=true&sslValidate=false",
+  "mongodbUrl":"mongodb://swdb:ib2oAETvD8oU@swdb-dev:27017/swdb-dev?authSource=swdb-dev&ssl=true&sslValidate=false",
   "auth":{
     "cas": "https://cas.nscl.msu.edu",
     "service": "swdb-dev:3000",

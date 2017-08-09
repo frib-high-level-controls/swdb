@@ -11,54 +11,57 @@ export class db {
 // var util = require('util');
 // var ObjectId = require('mongodb').ObjectID;
   props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
-  schema: any;
-  swDoc: any[];
-  swNamesDoc: any[];
-  dbConnect: any[];
-  swNamesSchema: any[];
+  static schema: any;
+  static swDoc: any;
+  static swNamesDoc: any;
+  static dbConnect: any;
+  static swNamesSchema: any;
   constructor() {
-    this.schema = new mongoose.Schema({
-      //id: {type: String, required: true, unique: true},
-      swName: { type: String, required: true },
-      version: String,
-      branch: String,
-      desc: String,
-      owner: { type: String, required: true },
-      engineer: { type: String, required: false },
-      levelOfCare: { type: String, enum: this.props.levelOfCareEnums, required: true },
-      status: { type: String, enum: this.props.statusEnums, required: true },
-      statusDate: { type: Date, required: true },
-      platforms: String,
-      designDescDocLoc: String,
-      descDocLoc: String,
-      vvProcLoc: String,
-      vvResultsLoc: String,
-      versionControl: { type: String, enum: this.props.rcsEnums },
-      versionControlLoc: String,
-      recertFreq: String,
-      recertStatus: String,
-      recertDate: Date,
-      previous: String,
-      comment: String
-    }, { emitIndexErrors: true });
 
-    this.schema.index({ swName: 1, version: 1, branch: 1 }, { unique: true });
+    if (!db.schema) {
+      console.log("No db connection found, making one...");
+      db.schema = new mongoose.Schema({
+        //id: {type: String, required: true, unique: true},
+        swName: { type: String, required: true },
+        version: String,
+        branch: String,
+        desc: String,
+        owner: { type: String, required: true },
+        engineer: { type: String, required: false },
+        levelOfCare: { type: String, enum: this.props.levelOfCareEnums, required: true },
+        status: { type: String, enum: this.props.statusEnums, required: true },
+        statusDate: { type: Date, required: true },
+        platforms: String,
+        designDescDocLoc: String,
+        descDocLoc: String,
+        vvProcLoc: String,
+        vvResultsLoc: String,
+        versionControl: { type: String, enum: this.props.rcsEnums },
+        versionControlLoc: String,
+        recertFreq: String,
+        recertStatus: String,
+        recertDate: Date,
+        previous: String,
+        comment: String
+      }, { emitIndexErrors: true });
 
-    this.swNamesSchema = new mongoose.Schema({
-      swName: String,
-    }, { emitIndexErrors: true });
+      db.schema.index({ swName: 1, version: 1, branch: 1 }, { unique: true });
 
-    this.swDoc = mongoose.model('swdb', this.schema, 'swdbCollection');
-    this.swNamesDoc = mongoose.model('props', this.swNamesSchema, 'swNamesProp');
-
-    this.dbConnect = mongoose.connect(this.props.mongodbUrl, (err, db) => {
-      if (!err) {
-        // console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl);
-        console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl));
-      } else {
-        console.log(err);
-      }
-    });
+      db.swNamesSchema = new mongoose.Schema({
+        swName: String,
+      }, { emitIndexErrors: true });
+      db.swDoc = mongoose.model('swdb', db.schema, 'swdbCollection');
+      db.swNamesDoc = mongoose.model('props', db.swNamesSchema, 'swNamesProp');
+      console.log("Connecting to mongo... " + JSON.stringify(this.props.mongodbUrl));
+      db.dbConnect = mongoose.connect(this.props.mongodbUrl, (err, db) => {
+        if (!err) {
+          // console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl);
+          console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl));
+        } else {
+          console.log("Error: "+err);
+        }
+      });
+    }
   }
 
 // general function to find a request ID in a request and
@@ -90,7 +93,7 @@ findById = function (searchId) {
 // Create a new record in the backend storage
 createDoc = function (req, res, next) {
 
-  var doc = new exports.swDoc(req.body);
+  var doc = new db.swDoc(req.body);
   //console.log(JSON.stringify(req.body,null,2));
   doc.save(function (err) {
     if (err) {
@@ -107,7 +110,7 @@ getDocs = function (req, res, next) {
   var id = this.getReqId(req);
   if (!id) {
     // return all
-    this.swDoc.find({}, function (err, docs) {
+    db.swDoc.find({}, function (err, docs) {
       if (!err) {
         res.send(docs);
       } else {
@@ -116,7 +119,7 @@ getDocs = function (req, res, next) {
     });
   } else {
     // return specified item`
-    this.swDoc.findOne({ '_id': id }, function (err, docs) {
+    db.swDoc.findOne({ '_id': id }, function (err, docs) {
       if (!err) {
         res.send(docs);
       } else {
@@ -129,7 +132,7 @@ getDocs = function (req, res, next) {
 updateDoc = function (req, res, next) {
   var id = this.getReqId(req);
   if (id) {
-    var doc = this.swDoc.findOne({ "_id": id }, function (err, doc) {
+    var doc = db.swDoc.findOne({ "_id": id }, function (err, doc) {
       if (doc) {
         for (var prop in req.body) {
           if (req.body.hasOwnProperty(prop)) {
@@ -161,9 +164,9 @@ updateDoc = function (req, res, next) {
 getList = function (req, res, next) {
   var response = {};
   var obj_ids = req.body.map(function (id) { return id; });
-  this.swDoc.find({}, function (err, docs) {
+  db.swDoc.find({}, function (err, docs) {
   });
-  this.swDoc.find({ _id: { $in: obj_ids } }, function (err, docs) {
+  db.swDoc.find({ _id: { $in: obj_ids } }, function (err, docs) {
     if (err) {
       console.log("err:" + JSON.stringify(err));
       return next(err);
@@ -187,9 +190,9 @@ deleteDoc = function (req, res, next) {
   var id = this.getReqId(req);
 
   // mongoose does not error if deleting something that does not exist
-  this.swDoc.findOne({ "_id": id }, function (err, doc) {
+  db.swDoc.findOne({ "_id": id }, function (err, doc) {
     if (doc) {
-      this.swDoc.remove({ '_id': id }, function (err) {
+      db.swDoc.remove({ '_id': id }, function (err) {
         if (!err) {
           res.end();
         } else {

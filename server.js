@@ -22,7 +22,7 @@ var props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 
 // get the valid swNames from the db and populate the properties area
 // console.log("be is:"+circJSON.stringify(be));
-be.swNamesDoc.find({}, function(err, docs) {
+Be.db.swNamesDoc.find({}, function(err, docs) {
   var swNames = [];
   var validSwNames = [];
   if(!err){
@@ -212,7 +212,7 @@ app.get('/api/v1/swdb/*', function(req, res, next) {
 app.post('/api/v1/swdb', casAuth.ensureAuthenticated, function(req, res, next) {
 
   // Do validation for  new records
-  be.swNamesDoc.find(function(err,docs){
+  Be.db.swNamesDoc.find(function(err,docs){
     if (!err) {
       var validSwNames=[];
       for (var i in docs)
@@ -261,7 +261,7 @@ app.post('/api/v1/swdb/list', function(req, res, next) {
 app.put('/api/v1/swdb*', casAuth.ensureAuthenticated, function(req, res, next) {
 
   // Do validation for updates
-  be.swNamesDoc.find(function(err,docs){
+  Be.db.swNamesDoc.find(function(err,docs){
     if (!err) {
       var validSwNames=[];
       for (var i in docs)
@@ -307,7 +307,7 @@ app.put('/api/v1/inst*', function(req, res, next) {
 app.patch('/api/v1/swdb*', casAuth.ensureAuthenticated, function(req,res,next) {
 
   // Do validation for updates
-  be.swNamesDoc.find(function(err,docs){
+  Be.db.swNamesDoc.find(function(err,docs){
     if (!err) {
       var validSwNames=[];
       for (var i in docs)

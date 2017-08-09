@@ -2,13 +2,16 @@ var app = require("../../server");
 var expect = require("chai").expect;
 var supertest = require("supertest")(app);
 var tools = require("../../lib/swdblib");
-var be = require("../../lib/db");
+// var be = require("../../lib/db");
+var Be = require('../../lib/db');
+let be = new Be.db();
 var expect2 = require("expect");
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var fs = require('fs');
 var path = require('path');
 const exec = require('child_process').exec;
 const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestNames.json', 'utf8'));
+const circJSON = require('circular-json');
 //const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 
 var testLogin = function(request, done) {
@@ -28,23 +31,23 @@ var testLogin = function(request, done) {
 before(function(done) {
   // clear the test collection
   this.timeout(5000);
-  console.log("Dropping collections...");
-  be.swDoc.db.collections.swdbCollection.drop(function(err){
-    be.swDoc.db.collections.swNamesProp.drop(function(err){
+  console.log("Dropping collections before...");
+  Be.db.swDoc.db.collections.swdbCollection.drop(function(err){
+    Be.db.swDoc.db.collections.swNamesProp.drop(function(err){
       console.log("inserting testSwNames in swNamesProp collection");
-      be.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
+      Be.db.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
           function(err, records){
         done();
-      });
+      }); 
     });
   });
 });
 
 after(function(done) {
   // clear the test collection
-  console.log("Dropping collections...");
-  be.swDoc.db.collections.swdbCollection.drop();
-  be.swDoc.db.collections.swNamesProp.drop();
+  console.log("Dropping collections after...");
+  Be.db.swDoc.db.collections.swdbCollection.drop();
+  Be.db.swDoc.db.collections.swNamesProp.drop();
   done();
 });
 
