@@ -11,8 +11,8 @@ var path = require('path');
 var FileStreamRotator = require('file-stream-rotator');
 var util = require('util');
 var mongoose = require('mongoose');
-var Be = require('./lib/db');
-let be = new Be.db();
+var Be = require('./lib/Db');
+let be = new Be.Db();
 var instBe = require('./lib/instDb');
 var expressValidator = require('express-validator');
 var expressSession = require('express-session');
@@ -22,7 +22,7 @@ var props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 
 // get the valid swNames from the db and populate the properties area
 // console.log("be is:"+circJSON.stringify(be));
-Be.db.swNamesDoc.find({}, function(err, docs) {
+Be.Db.swNamesDoc.find({}, function(err, docs) {
   var swNames = [];
   var validSwNames = [];
   if(!err){
@@ -178,7 +178,7 @@ app.get('/api/v1/swdb/user', function(req, res, next) {
 // for get requests that are not specific return all
 app.get('/api/v1/swdb/config', function(req, res, next) {
   // update props and send config
-  Be.db.swNamesDoc.find(function(err,docs){
+  Be.Db.swNamesDoc.find(function(err,docs){
     if (!err) {
       var validSwNames=[];
       var validSwNamesGUIList=[];
@@ -212,7 +212,7 @@ app.get('/api/v1/swdb/*', function(req, res, next) {
 app.post('/api/v1/swdb', casAuth.ensureAuthenticated, function(req, res, next) {
 
   // Do validation for  new records
-  Be.db.swNamesDoc.find(function(err,docs){
+  Be.Db.swNamesDoc.find(function(err,docs){
     if (!err) {
       var validSwNames=[];
       for (var i in docs)
@@ -261,7 +261,7 @@ app.post('/api/v1/swdb/list', function(req, res, next) {
 app.put('/api/v1/swdb*', casAuth.ensureAuthenticated, function(req, res, next) {
 
   // Do validation for updates
-  Be.db.swNamesDoc.find(function(err,docs){
+  Be.Db.swNamesDoc.find(function(err,docs){
     if (!err) {
       var validSwNames=[];
       for (var i in docs)
@@ -307,7 +307,7 @@ app.put('/api/v1/inst*', function(req, res, next) {
 app.patch('/api/v1/swdb*', casAuth.ensureAuthenticated, function(req,res,next) {
 
   // Do validation for updates
-  Be.db.swNamesDoc.find(function(err,docs){
+  Be.Db.swNamesDoc.find(function(err,docs){
     if (!err) {
       var validSwNames=[];
       for (var i in docs)

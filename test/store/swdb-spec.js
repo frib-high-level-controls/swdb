@@ -2,9 +2,8 @@ var app = require("../../server");
 var expect = require("chai").expect;
 var supertest = require("supertest")(app);
 var tools = require("../../lib/swdblib");
-// var be = require("../../lib/db");
-var Be = require('../../lib/db');
-let be = new Be.db();
+var Be = require('../../lib/Db');
+let be = new Be.Db();
 var expect2 = require("expect");
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var fs = require('fs');
@@ -32,10 +31,10 @@ before(function(done) {
   // clear the test collection
   this.timeout(5000);
   console.log("Dropping collections before...");
-  Be.db.swDoc.db.collections.swdbCollection.drop(function(err){
-    Be.db.swDoc.db.collections.swNamesProp.drop(function(err){
+  Be.Db.swDoc.db.collections.swdbCollection.drop(function(err){
+    Be.Db.swDoc.db.collections.swNamesProp.drop(function(err){
       console.log("inserting testSwNames in swNamesProp collection");
-      Be.db.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
+      Be.Db.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
           function(err, records){
         done();
       }); 
@@ -46,8 +45,8 @@ before(function(done) {
 after(function(done) {
   // clear the test collection
   console.log("Dropping collections after...");
-  Be.db.swDoc.db.collections.swdbCollection.drop();
-  Be.db.swDoc.db.collections.swNamesProp.drop();
+  Be.Db.swDoc.db.collections.swdbCollection.drop();
+  Be.Db.swDoc.db.collections.swNamesProp.drop();
   done();
 });
 

@@ -9,6 +9,6 @@
         ]
     },
     "files": [
-      "lib/db.ts"
+      "lib/Db.ts"
     ]
 }
