@@ -178,7 +178,7 @@ app.get('/api/v1/swdb/user', function(req, res, next) {
 // for get requests that are not specific return all
 app.get('/api/v1/swdb/config', function(req, res, next) {
   // update props and send config
-  be.swNamesDoc.find(function(err,docs){
+  Be.db.swNamesDoc.find(function(err,docs){
     if (!err) {
       var validSwNames=[];
       var validSwNamesGUIList=[];
