@@ -2,7 +2,8 @@ var app = require("../../server");
 var chai = require("chai");
 var expect = require("chai").expect;
 chai.use(require("chai-as-promised"));
-var be = require("../../lib/db");
+var Be = require('../../lib/db');
+let be = new Be.db();
 var instBe = require("../../lib/instDb.js");
 var ObjectId = require('mongodb').ObjectID;
 
@@ -42,21 +43,21 @@ test.describe("Software update screen tests", function() {
       }
     }
 
-    console.log("Starting inst-list...");
+    console.log("Starting inst-new...");
     console.log("Dropping installation collections...");
     instBe.instDoc.db.collections.instCollection.drop(
       function(err){
         console.log("Dropping sw collections...");
-        be.swDoc.db.collections.swdbCollection.drop(
+        Be.db.swDoc.db.collections.swdbCollection.drop(
           function(err){
             console.log("Dropping swNames collections...");
-            be.swDoc.db.collections.swNamesProp.drop(
+            Be.db.swDoc.db.collections.swNamesProp.drop(
               function(err){
                 console.log("inserting testSwNames in sw collection");
-                be.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
+                Be.db.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
                   function(err, records){
                     console.log("inserting testSwData in installations collection");
-                    be.swDoc.db.collections.swdbCollection.insert(testSwData,
+                    Be.db.swDoc.db.collections.swdbCollection.insert(testSwData,
                       function(err, records){
                         console.log("inserting testInstData in installations collection");
                         instBe.instDoc.db.collections.instCollection.insert(testInstData,
@@ -72,14 +73,14 @@ test.describe("Software update screen tests", function() {
 
   test.after(function(done) {
     // clear the test collection
-    console.log("Cleaning up (inst-list)...");
+    console.log("Cleaning up (inst-new)...");
     chromeDriver.quit();
     console.log("Dropping installation collections...");
     instBe.instDoc.db.collections.instCollection.drop(function(err){
       console.log("Dropping swdb collections...");
-      be.swDoc.db.collections.swdbCollection.drop(function(err){
+      Be.db.swDoc.db.collections.swdbCollection.drop(function(err){
         console.log("Dropping swdbNames collections...");
-        be.swDoc.db.collections.swNamesProp.drop(function(err){
+        Be.db.swDoc.db.collections.swNamesProp.drop(function(err){
           done();
         });
       });
