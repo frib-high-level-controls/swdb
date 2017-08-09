@@ -5,6 +5,36 @@ import mongoose = require('mongoose');
 
 export type ObjectId = mongoose.Types.ObjectId;
 
+/**
+ * Escape Regular Expression special characters in the given string.
+ */
+export function escapeRegExp(value: string): string {
+  // This snippet for escaping regex special characters is copied from MDN
+  // See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
+/**
+ * Construct a RegExp that matches the given value for the entire input.
+ */
+export function matchAll(value: string, flags?: string): RegExp {
+  return new RegExp('^' + escapeRegExp(value) + '$', flags);
+};
+
+/**
+ * Construct a RegExp that matches the given value at the start of the input.
+ */
+export function matchStart(value: string, flags?: string): RegExp {
+  return new RegExp('^' + escapeRegExp(value), flags);
+};
+
+/**
+ * Construct a RegExp that matches the given value at the end of the input.
+ */
+export function matchEnd(value: string, flags?: string): RegExp {
+  return new RegExp(escapeRegExp(value) + '$', flags);
+};
+
 /*
  * Map array of documents by IDs
  */
