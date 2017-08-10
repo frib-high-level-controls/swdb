@@ -2,7 +2,8 @@ var app = require("../../server");
 var expect = require("chai").expect;
 var supertest = require("supertest")(app);
 var tools = require("../../lib/swdblib");
-var be = require("../../lib/db");
+var Be = require('../../lib/Db');
+let be = new Be.Db();
 var instBe = require("../../lib/instDb");
 var expect2 = require("expect");
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
@@ -49,10 +50,10 @@ describe("app", function() {
     console.log("Starting inst-spec tests");
     console.log("Dropping collections...");
     instBe.instDoc.db.collections.instCollection.drop();
-    be.swDoc.db.collections.swdbCollection.drop(function(err){
-      be.swDoc.db.collections.swNamesProp.drop(function(err){
+    Be.Db.swDoc.db.collections.swdbCollection.drop(function(err){
+      Be.Db.swDoc.db.collections.swNamesProp.drop(function(err){
         console.log("inserting testSwNames in swNamesProp collection");
-        be.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
+        Be.Db.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
           function(err, records){
     supertest
       .get("/testlogin?username=testuser&password=testuserpasswd")
@@ -70,8 +71,8 @@ describe("app", function() {
   after(function(done) {
     // clear the test collection
     console.log("Dropping collections (inst-spec)...");
-    be.swDoc.db.collections.swdbCollection.drop();
-    be.swDoc.db.collections.swNamesProp.drop();
+    Be.Db.swDoc.db.collections.swdbCollection.drop();
+    Be.Db.swDoc.db.collections.swNamesProp.drop();
     instBe.instDoc.db.collections.instCollection.drop();
     done();
   });

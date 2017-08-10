@@ -2,7 +2,8 @@ var app = require("../../server");
 var chai = require("chai");
 var expect = require("chai").expect;
 chai.use(require("chai-as-promised"));
-var be = require("../../lib/db");
+var Be = require('../../lib/Db');
+let be = new Be.Db();
 var instBe = require("../../lib/instDb.js");
 
 var webdriver = require("../../node_modules/selenium-webdriver"),

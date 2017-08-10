@@ -160,7 +160,7 @@ export class Db {
     var obj_ids = req.body.map(function (id) { return id; });
     Db.swDoc.find({}, function (err, docs) {
     });
-    Db.swDoc.find({ _id: { $in: obj_ids } }, function (err, docs) {
+    Db.swDoc.find({ _id: { $in: obj_ids } }, (err, docs) => {
       if (err) {
         console.log("err:" + JSON.stringify(err));
         return next(err);

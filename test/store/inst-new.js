@@ -2,7 +2,8 @@ var app = require("../../server");
 var chai = require("chai");
 var expect = require("chai").expect;
 chai.use(require("chai-as-promised"));
-var be = require("../../lib/db");
+var Be = require('../../lib/Db');
+let be = new Be.Db();
 var instBe = require("../../lib/instDb.js");
 var ObjectId = require('mongodb').ObjectID;
 
@@ -44,16 +45,16 @@ test.describe("Installations add screen tests", function() {
     //chromeDriver.manage().window().setPosition(200,0);
     console.log("Dropping installation collections...");
     console.log("Resetting swNames test data...");
-    be.swDoc.db.collections.swNamesProp.drop(function(err){
+    Be.Db.swDoc.db.collections.swNamesProp.drop(function(err){
       console.log("inserting testSwNames in swNamesProp collection");
-      be.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
+      Be.Db.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
         function(err, records){
         });
     });
     console.log("Resetting swdb test data...");
-    be.swDoc.db.collections.swdbCollection.drop(function(err){
+    Be.Db.swDoc.db.collections.swdbCollection.drop(function(err){
       console.log("inserting swData in swdb collection:");
-      be.swDoc.db.collections.swdbCollection.insert(testSwData,
+      Be.Db.swDoc.db.collections.swdbCollection.insert(testSwData,
         function(err, records){
         });
     });
@@ -67,10 +68,10 @@ test.describe("Installations add screen tests", function() {
     // clear the test collection
     console.log("Cleaning up (inst-new)...");
     console.log("Dropping swNames test data...");
-    be.swDoc.db.collections.swNamesProp.drop(function(err){});
+    Be.Db.swDoc.db.collections.swNamesProp.drop(function(err){});
     chromeDriver.quit();
     console.log("Dropping db test data...");
-    be.swDoc.db.collections.swdbCollection.drop(function(err){});
+    Be.Db.swDoc.db.collections.swdbCollection.drop(function(err){});
     console.log("Dropping installation collections...");
     instBe.instDoc.db.collections.instCollection.drop(function(err){
       done();
