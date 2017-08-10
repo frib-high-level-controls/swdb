@@ -9,6 +9,7 @@
         ]
     },
     "files": [
-      "lib/Db.ts"
+      "lib/Db.ts",
+      "test/store/TestTools.ts"
     ]
 }

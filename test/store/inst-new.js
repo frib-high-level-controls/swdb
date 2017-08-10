@@ -7,6 +7,9 @@ let be = new Be.Db();
 var instBe = require("../../lib/instDb.js");
 var ObjectId = require('mongodb').ObjectID;
 
+let TestTools = require('./TestTools');
+let testTools = new TestTools.TestTools();
+
 var webdriver = require("../../node_modules/selenium-webdriver"),
   By = webdriver.By,
   until = webdriver.until,
@@ -14,68 +17,19 @@ var webdriver = require("../../node_modules/selenium-webdriver"),
 var fs = require('fs');
 var path = require('path');
 const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
-const testInstData = JSON.parse(fs.readFileSync('./test/misc/datafiles/instTestDataCombined.json', 'utf8'));
-const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestNames.json', 'utf8'));
-const testSwData = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestDataCombined.json', 'utf8'));
-
 
 test.describe("Installations add screen tests", function() {
   var chromeDriver;
 
   test.before(function(done) {
+    console.log("Starting inst-new");
     this.timeout(5000);
-    // before we start loading data, convert _ids to ObjectIDs
-    for (var i in testSwNames){
-      if ("_id" in testSwNames[i]) {
-        testSwNames[i]._id = ObjectId(testSwNames[i]._id);
-      }
-    }
-    for (i in testSwData){
-      if ("_id" in testSwData[i]) {
-        testSwData[i]._id = ObjectId(testSwData[i]._id);
-      }
-    }
-    for (i in testInstData){
-      if ("_id" in testInstData[i]) {
-        testInstData[i]._id = ObjectId(testInstData[i]._id);
-      }
-    }
-    // clear the test collection
-    console.log("Starting inst-new...");
-    //chromeDriver.manage().window().setPosition(200,0);
-    console.log("Dropping installation collections...");
-    console.log("Resetting swNames test data...");
-    Be.Db.swDoc.db.collections.swNamesProp.drop(function(err){
-      console.log("inserting testSwNames in swNamesProp collection");
-      Be.Db.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
-        function(err, records){
-        });
-    });
-    console.log("Resetting swdb test data...");
-    Be.Db.swDoc.db.collections.swdbCollection.drop(function(err){
-      console.log("inserting swData in swdb collection:");
-      Be.Db.swDoc.db.collections.swdbCollection.insert(testSwData,
-        function(err, records){
-        });
-    });
-    console.log("inserting testInstData in installations collection");
-    instBe.instDoc.db.collections.instCollection.insert(testInstData,
-      function(err, records){
-        done();
-      });
+    testTools.loadTestCollectionsStandard(done);
   });
   test.after(function(done) {
     // clear the test collection
-    console.log("Cleaning up (inst-new)...");
-    console.log("Dropping swNames test data...");
-    Be.Db.swDoc.db.collections.swNamesProp.drop(function(err){});
     chromeDriver.quit();
-    console.log("Dropping db test data...");
-    Be.Db.swDoc.db.collections.swdbCollection.drop(function(err){});
-    console.log("Dropping installation collections...");
-    instBe.instDoc.db.collections.instCollection.drop(function(err){
-      done();
-    });
+    testTools.clearTestCollections(done);
   });
 
   var allCookies = null;

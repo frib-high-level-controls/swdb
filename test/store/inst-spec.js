@@ -8,9 +8,16 @@ var instBe = require("../../lib/instDb");
 var expect2 = require("expect");
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var fs = require('fs');
+
+let TestTools = require('./TestTools');
+let testTools = new TestTools.TestTools();
+
+var webdriver = require("../../node_modules/selenium-webdriver"),
+  By = webdriver.By,
+  until = webdriver.until,
+  test = require("../../node_modules/selenium-webdriver/testing");
 var path = require('path');
 const exec = require('child_process').exec;
-const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestNames.json', 'utf8'));
 
 var testLogin = function(request, done) {
   console.log('Login start');
@@ -28,53 +35,15 @@ var testLogin = function(request, done) {
 var Cookies;
 //
 describe("app", function() {
-  before("setup and login as test user", function(done){
-    // clear the test collection
+  var chromeDriver;
+  before("setup", function(done){
+    console.log("Starting inst-spec");
     this.timeout(5000);
-    // before we start loading data, convert _ids to ObjectIDs
-    for (var i in testSwNames){
-      if ("_id" in testSwNames[i]) {
-        testSwNames[i]._id = ObjectId(testSwNames[i]._id);
-      }
-    }
-    //for (var i in testSwData){
-      //if ("_id" in testSwData[i]) {
-        //testSwData[i]._id = ObjectId(testSwData[i]._id);
-      //}
-    //}
-    //for (i in testInstData){
-      //if ("_id" in testInstData[i]) {
-        //testInstData[i]._id = ObjectId(testInstData[i]._id);
-      //}
-    //}
-    console.log("Starting inst-spec tests");
-    console.log("Dropping collections...");
-    instBe.instDoc.db.collections.instCollection.drop();
-    Be.Db.swDoc.db.collections.swdbCollection.drop(function(err){
-      Be.Db.swDoc.db.collections.swNamesProp.drop(function(err){
-        console.log("inserting testSwNames in swNamesProp collection");
-        Be.Db.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
-          function(err, records){
-    supertest
-      .get("/testlogin?username=testuser&password=testuserpasswd")
-      .expect(200)
-      .end(function(err,res){
-        Cookies = res.headers['set-cookie'].pop().split(';')[0];
-        console.log('Login complete. Cookie: '+Cookies);
-        //done();
-      });
-            done();
-          });
-      });
+    testTools.loadTestCollectionsStandard(done);
     });
-  });
   after(function(done) {
     // clear the test collection
-    console.log("Dropping collections (inst-spec)...");
-    Be.Db.swDoc.db.collections.swdbCollection.drop();
-    Be.Db.swDoc.db.collections.swNamesProp.drop();
-    instBe.instDoc.db.collections.instCollection.drop();
-    done();
+    testTools.clearTestCollections(done);
   });
 
   // web facing tests

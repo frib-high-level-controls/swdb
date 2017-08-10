@@ -4,14 +4,16 @@ var supertest = require("supertest")(app);
 var tools = require("../../lib/swdblib");
 var Be = require('../../lib/Db');
 let be = new Be.Db();
+
+let TestTools = require('./TestTools');
+let testTools = new TestTools.TestTools();
+
 var expect2 = require("expect");
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var fs = require('fs');
 var path = require('path');
 const exec = require('child_process').exec;
-const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestNames.json', 'utf8'));
 const circJSON = require('circular-json');
-//const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 
 var testLogin = function(request, done) {
   //console.log('Login start');
@@ -28,26 +30,14 @@ var testLogin = function(request, done) {
 
 // clear the test collection before and after tests suite
 before(function(done) {
-  // clear the test collection
-  this.timeout(5000);
-  console.log("Dropping collections before...");
-  Be.Db.swDoc.db.collections.swdbCollection.drop(function(err){
-    Be.Db.swDoc.db.collections.swNamesProp.drop(function(err){
-      console.log("inserting testSwNames in swNamesProp collection");
-      Be.Db.swNamesDoc.db.collections.swNamesProp.insert(testSwNames,
-          function(err, records){
-        done();
-      }); 
-    });
-  });
+    console.log("Starting swdb-spec");
+    this.timeout(5000);
+    testTools.loadTestCollectionsStandard(done);
 });
 
 after(function(done) {
-  // clear the test collection
-  console.log("Dropping collections after...");
-  Be.Db.swDoc.db.collections.swdbCollection.drop();
-  Be.Db.swDoc.db.collections.swNamesProp.drop();
-  done();
+    // clear the test collection
+    testTools.clearTestCollections(done);
 });
 
 var Cookies;
