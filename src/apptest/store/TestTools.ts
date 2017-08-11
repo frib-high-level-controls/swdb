@@ -1,15 +1,15 @@
-var Be = require('../../lib/Db');
+var Be = require('../../app/lib/Db');
 let be = new Be.Db();
-var instBe = require("../../lib/instDb.js");
-var ObjectId = require('mongodb').ObjectID;
-var CommonTools = require('../../lib/CommonTools');
+var instBe = require("../../app/lib/instDb.js");
+var ObjectId = require('../../../node_modules/mongodb').ObjectID;
+var CommonTools = require('../../app/lib/CommonTools');
 let tools = new CommonTools.CommonTools();
 const props = tools.getConfiguration();
 
 var fs = require('fs');
-const testInstData = JSON.parse(fs.readFileSync('./test/misc/datafiles/instTestDataCombined.json', 'utf8'));
-const testSwData = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestDataCombined.json', 'utf8'));
-const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestNames.json', 'utf8'));
+const testInstData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/instTestDataCombined.json', 'utf8'));
+const testSwData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/swTestDataCombined.json', 'utf8'));
+const testSwNames = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/swTestNames.json', 'utf8'));
 
 export class TestTools {
   constructor() {

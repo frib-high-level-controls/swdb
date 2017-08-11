@@ -1,23 +1,23 @@
-var app = require("../../server");
-var chai = require("chai");
-var expect = require("chai").expect;
-chai.use(require("chai-as-promised"));
-var Be = require('../../lib/Db');
+var app = require("../../app/server");
+var chai = require("../../../node_modules/chai");
+var expect = require("../../../node_modules/chai").expect;
+chai.use(require("../../../node_modules/chai-as-promised"));
+var Be = require('../../app/lib/Db');
 let be = new Be.Db();
-var instBe = require("../../lib/instDb.js");
-var ObjectId = require('mongodb').ObjectID;
+var instBe = require("../../app/lib/instDb.js");
+var ObjectId = require('../../../node_modules/mongodb').ObjectID;
 
 let TestTools = require('./TestTools');
 let testTools = new TestTools.TestTools();
 
-var webdriver = require("../../node_modules/selenium-webdriver"),
+var webdriver = require("../../../node_modules/selenium-webdriver"),
   By = webdriver.By,
   until = webdriver.until,
-  test = require("../../node_modules/selenium-webdriver/testing");
+  test = require("../../../node_modules/selenium-webdriver/testing");
 var fs = require('fs');
 var path = require('path');
 
-let CommonTools = require('../../lib/CommonTools');
+let CommonTools = require('../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
 let props = {};
 props = ctools.getConfiguration();

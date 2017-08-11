@@ -7,9 +7,9 @@ export class CommonTools {
   getConfiguration = function () {
     // acquire configuration
     let props = {};
-    if (fs.existsSync('./config/swdbrc')) {
+    if (fs.existsSync('/home/deployer/swdb/config/swdbrc')) {
       let stripJSON = require('strip-json-comments');
-      props = JSON.parse(stripJSON(fs.readFileSync('./config/swdbrc', 'utf8')));
+      props = JSON.parse(stripJSON(fs.readFileSync('/home/deployer/swdb/config/swdbrc', 'utf8')));
     }
     let rcw = rc("swdb", props);
     return rcw;

@@ -1,26 +1,26 @@
-var app = require("../../server");
-var expect = require("chai").expect;
-var supertest = require("supertest")(app);
-var tools = require("../../lib/swdblib");
-var Be = require('../../lib/Db');
+var app = require("../../app/server");
+var expect = require("../../../node_modules/chai").expect;
+var supertest = require("../../../node_modules/supertest")(app);
+var tools = require("../../app/lib/swdblib");
+var Be = require('../../app/lib/Db');
 let be = new Be.Db();
-var instBe = require("../../lib/instDb");
-var expect2 = require("expect");
-var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+var instBe = require("../../app/lib/instDb");
+var expect2 = require("../../../node_modules/expect");
+var XMLHttpRequest = require("../../../node_modules/xmlhttprequest").XMLHttpRequest;
 var fs = require('fs');
 let TestTools = require('./TestTools');
 let testTools = new TestTools.TestTools();
 
-let CommonTools = require('../../lib/CommonTools');
+let CommonTools = require('../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
 let props = {};
 props = ctools.getConfiguration();
 
 
-var webdriver = require("../../node_modules/selenium-webdriver"),
+var webdriver = require("../../../node_modules/selenium-webdriver"),
   By = webdriver.By,
   until = webdriver.until,
-  test = require("../../node_modules/selenium-webdriver/testing");
+  test = require("../../../node_modules/selenium-webdriver/testing");
 var path = require('path');
 const exec = require('child_process').exec;
 

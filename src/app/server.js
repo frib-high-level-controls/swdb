@@ -23,7 +23,6 @@ let CommonTools = require('./lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
 let props = {};
 props = ctools.getConfiguration();
-console.log("Using config: "+JSON.stringify(props));
 
 // get the valid swNames from the db and populate the properties area
 // console.log("be is:"+circJSON.stringify(be));
@@ -41,8 +40,8 @@ Be.Db.swNamesDoc.find({}, function(err, docs) {
 });
 
 //allow access to static files
-app.use(express.static(__dirname + '/public'));
-
+app.use(express.static(__dirname + '/../../public'));
+// console.log("using "+__dirname+"/../../public");
 // use JSON for data
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -143,7 +142,7 @@ var auth = function(req, res, next) {
 
 // handle incoming get requests
 app.get('/', function(req,res) {
-  res.sendFile('index.html', {root: path.join(__dirname, '/public/swdb-fe/')});
+  res.sendFile('index.html', {root: path.join(__dirname, '../../public/swdb-fe/')});
 });
 
 // login

@@ -15,21 +15,6 @@ let ctools = new CommonTools.CommonTools();
 let props = {};
 props = ctools.getConfiguration();
 
-
-// exports.getConfiguration = function() {
-//   // acquire configuration
-//   let props = {};
-//   if (fs.existsSync('./config/swdbrc')) {
-//     let stripJSON = require('strip-json-comments');
-//     props = JSON.parse(stripJSON(fs.readFileSync('./config/swdbrc', 'utf8')));
-//   }
-//   let rc = new require('rc')("swdb", props);
-//   return rc;
-// }
-// let props = exports.getConfiguration();
-
-
-
   /* This process conforms to the FRIB development process
    * see Configuration Management Plan for FRIB
    * Controls Software (FRIB-T10500-PL-000240-R001)

@@ -1,23 +1,23 @@
-var app = require("../../server");
-var chai = require("chai");
-var expect = require("chai").expect;
-chai.use(require("chai-as-promised"));
-var Be = require('../../lib/Db');
+var app = require("../../app/server");
+var chai = require("../../../node_modules/chai");
+var expect = require("../../../node_modules/chai").expect;
+chai.use(require("../../../node_modules/chai-as-promised"));
+var Be = require('../../app/lib/Db');
 let be = new Be.Db();
-var instBe = require("../../lib/instDb.js");
-var ObjectId = require('mongodb').ObjectID;
+var instBe = require("../../app/lib/instDb.js");
+var ObjectId = require('../../../node_modules/mongodb').ObjectID;
 
 let TestTools = require('./TestTools');
 let testTools = new TestTools.TestTools();
 
-var webdriver = require("../../node_modules/selenium-webdriver"),
+var webdriver = require("../../../node_modules/selenium-webdriver"),
   By = webdriver.By,
   until = webdriver.until,
-  test = require("../../node_modules/selenium-webdriver/testing");
+  test = require("../../../node_modules/selenium-webdriver/testing");
 var fs = require('fs');
 var path = require('path');
 
-let CommonTools = require('../../lib/CommonTools');
+let CommonTools = require('../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
 let props = {};
 props = ctools.getConfiguration();
@@ -25,9 +25,8 @@ props = ctools.getConfiguration();
 
 test.describe("Software update screen tests", function() {
   var chromeDriver;
-
   test.before(function(done) {
-    console.log("Starting swdb-new");
+    console.log("Starting swdb-update");
     this.timeout(5000);
     testTools.loadTestCollectionsStandard(done);
   });
@@ -42,14 +41,12 @@ test.describe("Software update screen tests", function() {
   var allCookies = null;
 
   test.it("should show search page with login button", function() {
-    this.timeout(15000);
+    this.timeout(8000);
 
     chromeDriver = new webdriver.Builder()
       .forBrowser("chrome")
       .build();
     chromeDriver.manage().window().setPosition(200,0);
-  //var window = chromeDriver.getWindowHandle();
-    //chromeDriver.switchTo().window(window);
 
     chromeDriver.get(props.webUrl+"#/list");
     chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
@@ -72,7 +69,7 @@ test.describe("Software update screen tests", function() {
   });
 
 
-  test.it("should show the requested record title", function() {
+  test.it("should show the requested installation record title", function() {
     chromeDriver.wait(until.titleIs("SWDB - New"), 5000);
   });
 
@@ -186,15 +183,52 @@ test.describe("Software update screen tests", function() {
     input.sendKeys("Test recertification frequency");
 
     // set recert date
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="recertDate-group"]/div/p/span/button/i')), 3000);
-    input = chromeDriver.findElement(By.xpath('//*[@id="recertDate-group"]/div/p/span/button/i'));
-   input.click();
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="recertDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
-    input = chromeDriver.findElement(By.xpath('//*[@id="recertDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
+    chromeDriver.wait(until.elementLocated(By.id("recertDate")), 3000);
+    input = chromeDriver.findElement(By.id("recertDate"));
     input.click();
+    input.sendKeys("2017/7/7");
+
+    // submit and check result
     chromeDriver.findElement(By.id("submitBtn")).click();
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("formStatus")),
       "Document posted"),5000);
+  });
+
+  // find the created record
+  test.it("should find a record", function() {
+    this.timeout(8000);
+    chromeDriver.get(props.webUrl+"#/list");
+    chromeDriver.wait(until.elementLocated(By.id("swdbList_filter")), 8000)
+      .findElement(By.tagName("Input"))
+      .sendKeys("Test Record3 Test version");
+    chromeDriver.wait(until.elementLocated(By.linkText("Test Record3")),
+      8000);
+  });
+
+  // find the created record and click update
+  test.it("should show record details", function() {
+    this.timeout(8000);
+    chromeDriver.wait(until.elementLocated(By.linkText("Test Record3")),
+      8000).click();
+    chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/a[2]')),
+      8000).click();
+
+  });
+
+  test.it("should show the update title", function() {
+    chromeDriver.wait(until.titleIs("SWDB - Update"), 5000);
+  });
+
+  test.it("should update a record", function() {
+    this.timeout(8000);
+    chromeDriver.wait(until.elementLocated(By.id("desc")), 8000)
+      .clear();
+    chromeDriver.wait(until.elementLocated(By.id("desc")), 8000)
+      .sendKeys("New Test Description");
+    chromeDriver.wait(until.elementLocated(By.id("submitBtn")), 8000)
+      .click();
+    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("formStatus")),
+      "Document updates successfully posted"),5000);
   });
 
 });

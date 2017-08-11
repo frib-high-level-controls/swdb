@@ -1,3 +1,3 @@
 #! /usr/bin/env bash
 cd /home/deployer/swdb
-/usr/bin/env node server.js --config ./config/properties.json
+/usr/bin/env node src/app/server.js --config ./config/swdbrc

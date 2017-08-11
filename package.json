@@ -4,7 +4,9 @@
   "description": "SW DB",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "./bin/app",
+    "grunt": "./node_modules/.bin/grunt",
+    "mocha": "./node_modules/.bin/mocha"
   },
   "author": "",
   "license": "ISC",

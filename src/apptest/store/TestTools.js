@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Be = require('../../lib/Db');
+var Be = require('../../app/lib/Db');
 var be = new Be.Db();
-var instBe = require("../../lib/instDb.js");
-var ObjectId = require('mongodb').ObjectID;
-var CommonTools = require('../../lib/CommonTools');
+var instBe = require("../../app/lib/instDb.js");
+var ObjectId = require('../../../node_modules/mongodb').ObjectID;
+var CommonTools = require('../../app/lib/CommonTools');
 var tools = new CommonTools.CommonTools();
 var props = tools.getConfiguration();
 var fs = require('fs');
-var testInstData = JSON.parse(fs.readFileSync('./test/misc/datafiles/instTestDataCombined.json', 'utf8'));
-var testSwData = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestDataCombined.json', 'utf8'));
-var testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestNames.json', 'utf8'));
+var testInstData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/instTestDataCombined.json', 'utf8'));
+var testSwData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/swTestDataCombined.json', 'utf8'));
+var testSwNames = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/swTestNames.json', 'utf8'));
 var TestTools = (function () {
     function TestTools() {
     }

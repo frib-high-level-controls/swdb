@@ -1,33 +1,33 @@
-var app = require("../../server");
-var chai = require("chai");
-var expect = require("chai").expect;
-chai.use(require("chai-as-promised"));
-var Be = require('../../lib/Db');
+var app = require("../../app/server");
+var chai = require("../../../node_modules/chai");
+var expect = require("../../../node_modules/chai").expect;
+chai.use(require("../../../node_modules/chai-as-promised"));
+var Be = require('../../app/lib/Db');
 let be = new Be.Db();
-var instBe = require("../../lib/instDb.js");
-var ObjectId = require('mongodb').ObjectID;
-let rc = require("rc");
+var instBe = require("../../app/lib/instDb.js");
+
 let TestTools = require('./TestTools');
 let testTools = new TestTools.TestTools();
 
-var webdriver = require("../../node_modules/selenium-webdriver"),
+var webdriver = require("../../../node_modules/selenium-webdriver"),
   By = webdriver.By,
   until = webdriver.until,
-  test = require("../../node_modules/selenium-webdriver/testing");
+  test = require("../../../node_modules/selenium-webdriver/testing");
 var fs = require('fs');
 var path = require('path');
 
-let CommonTools = require('../../lib/CommonTools');
+let CommonTools = require('../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
 let props = {};
 props = ctools.getConfiguration();
 
 
-test.describe("Installations add screen tests", function() {
+
+test.describe("Installations update screen tests", function() {
   var chromeDriver;
 
   test.before(function(done) {
-    console.log("Starting inst-new");
+    console.log("Starting inst-update");
     this.timeout(5000);
     testTools.loadTestCollectionsStandard(done);
   });
@@ -73,7 +73,7 @@ test.describe("Installations add screen tests", function() {
   });
 
   test.it("Add new record", function() {
-    this.timeout(12000);
+    this.timeout(10000);
     chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
     var input = chromeDriver.findElement(By.id("host"));
     input.sendKeys("testHost1");
@@ -93,41 +93,60 @@ test.describe("Installations add screen tests", function() {
     input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-1"=substring(@id, string-length(@id)-string-length("option-1")+1)]/a'));
     input.click();
 
-    // now search again and add the third item to the selected list
-    searchInput.clear();
-    searchInput.sendKeys("FE_LEBT");
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-")]')), 3000);
-    input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-2"=substring(@id, string-length(@id)-string-length("option-2")+1)]/a'));
-    input.click();
+    //chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
+    //input = chromeDriver.findElement(By.id("add.area"));
+    //input.click();
+    //chromeDriver.wait(until.elementLocated(By.id("area.0")), 3000);
+    //input = chromeDriver.findElement(By.id("area.0"));
+    //input.sendKeys("testArea1");
 
-    // find one of the selected items and cancel it
-    chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[4]/div[1]/div[1]/span')), 3000);
-    input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[4]/div[1]/div[1]/span'));
-    chromeDriver.wait(until.elementTextIs(input, "FE_LEBT:BD_D0824"),5000);
+    //chromeDriver.wait(until.elementLocated(By.id("add.slots")), 3000);
+    //input = chromeDriver.findElement(By.id("add.slots"));
+    //input.click();
+    //chromeDriver.wait(until.elementLocated(By.id("slots.0")), 3000);
+    //input = chromeDriver.findElement(By.id("slots.0"));
+    //input.sendKeys("testSlot1");
 
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="rmSelSlotBtn"]')), 3000);
-    input = chromeDriver.findElement(By.xpath('//*[@id="rmSelSlotBtn"]'));
-    input.click();
-
-    // locate the other selected item to make sure we got it
-    chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[4]/div[1]/div/span')), 3000);
-    input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[4]/div[1]/div/span'));
-    chromeDriver.wait(until.elementTextIs(input, "FE_LEBT:AP_D0807"),5000);
-
-    // set the status
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
     input = chromeDriver.findElement(By.id("status"));
     input.click();
     input.sendKeys("RDY_BEAM");
 
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
-
-    // set software
-    chromeDriver.wait(until.elementLocated(By.id("software")), 3000);
-    searchInput = chromeDriver.findElement(By.id("software"));
-    searchInput.sendKeys("BEAST");
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-") and "option-4"=substring(@id, string-length(@id)-string-length("option-4")+1)]/a')));
-    input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-4"=substring(@id, string-length(@id)-string-length("option-2")+1)]/a'));
-    input.click();
   });
+
+  //test.it("Host required", function() {
+  //this.timeout(8000);
+  //chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
+  //var input = chromeDriver.findElement(By.id("host"));
+  //input.sendKeys("1");
+  //input.clear();
+  //var inputSts = chromeDriver.findElement(By.id("hostInputSts"));
+  //chromeDriver.wait(until.elementTextIs(inputSts, "Host is required"),5000);
+  //input.clear();
+  //});
+  //test.it("Host min for field ", function() {
+  //this.timeout(8000);
+  //chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
+  //var input = chromeDriver.findElement(By.id("host"));
+  //input.sendKeys("1");
+  //var inputSts = chromeDriver.findElement(By.id("hostInputSts"));
+  //chromeDriver.wait(until.elementTextIs(inputSts, "Host must exceed 2 characters"),5000);
+  //input.clear();
+  //input.sendKeys("11");
+  //chromeDriver.wait(until.elementTextIs(inputSts, ""),5000);
+  //input.clear();
+  //});
+  //test.it("Host max for field ", function() {
+  //this.timeout(8000);
+  //chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
+  //var input = chromeDriver.findElement(By.id("host"));
+  //input.sendKeys("0123456789012345678901234567891");
+  //var inputSts = chromeDriver.findElement(By.id("hostInputSts"));
+  //chromeDriver.wait(until.elementTextIs(inputSts, "Host must not exceed 30 characters"),5000);
+  //input.clear();
+  //input.sendKeys("012345678901234567890123456789");
+  //chromeDriver.wait(until.elementTextIs(inputSts, ""),5000);
+  //input.clear();
+  //});
 });
