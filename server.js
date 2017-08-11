@@ -18,7 +18,12 @@ var expressValidator = require('express-validator');
 var expressSession = require('express-session');
 var casAuth = require('./lib/auth');
 const circJSON = require('circular-json');
-var props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
+
+let CommonTools = require('./lib/CommonTools');
+let ctools = new CommonTools.CommonTools();
+let props = {};
+props = ctools.getConfiguration();
+console.log("Using config: "+JSON.stringify(props));
 
 // get the valid swNames from the db and populate the properties area
 // console.log("be is:"+circJSON.stringify(be));

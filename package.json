@@ -21,7 +21,9 @@
     "file-stream-rotator": "0.0.7",
     "mongoose": "4.7.2",
     "morgan": "1.7.0",
+    "rc": "^1.2.1",
     "request": "^2.81.0",
+    "strip-json-comments": "^2.0.1",
     "superagent": "2.3.0",
     "xmlhttprequest": "1.8.0"
   },

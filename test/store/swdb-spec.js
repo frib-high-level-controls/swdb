@@ -15,6 +15,11 @@ var path = require('path');
 const exec = require('child_process').exec;
 const circJSON = require('circular-json');
 
+let CommonTools = require('../../lib/CommonTools');
+let ctools = new CommonTools.CommonTools();
+let props = {};
+props = ctools.getConfiguration();
+
 var testLogin = function(request, done) {
   //console.log('Login start');
   supertest

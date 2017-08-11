@@ -17,7 +17,11 @@ var webdriver = require("../../node_modules/selenium-webdriver"),
 var fs = require('fs');
 var path = require('path');
 const circJSON = require('circular-json');
-const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
+
+let CommonTools = require('../../lib/CommonTools');
+let ctools = new CommonTools.CommonTools();
+let props = {};
+props = ctools.getConfiguration();
 
 test.describe("Installations record tests", function() {
   var chromeDriver;

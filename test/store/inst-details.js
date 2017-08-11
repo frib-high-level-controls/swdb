@@ -15,14 +15,15 @@ var webdriver = require("../../node_modules/selenium-webdriver"),
   until = webdriver.until,
   test = require("../../node_modules/selenium-webdriver/testing");
 var fs = require('fs');
-const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
+
+let CommonTools = require('../../lib/CommonTools');
+let ctools = new CommonTools.CommonTools();
+let props = {};
+props = ctools.getConfiguration();
+
 
 test.describe("Installations detail screen tests", function() {
-  var chromeDriver = new webdriver.Builder()
-    .forBrowser("chrome")
-    .build();
-  chromeDriver.manage().window().setPosition(200,0);
-
+  var chromeDriver = null;
   test.before(function(done) {
     console.log("Starting inst-details");
     this.timeout(5000);
@@ -37,6 +38,11 @@ test.describe("Installations detail screen tests", function() {
   var allCookies = null;
 
   test.it("should show search page with login button", function() {
+    chromeDriver = new webdriver.Builder()
+      .forBrowser("chrome")
+      .build();
+    chromeDriver.manage().window().setPosition(200, 0);
+
     this.timeout(8000);
     chromeDriver.get(props.webUrl+"#/inst/list");
     chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);

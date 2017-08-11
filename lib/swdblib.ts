@@ -10,23 +10,17 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var swdb = []; // storage
 var reqLog = []; // log of change requests
 
-let CommonTools = require('./CommonTools');
-let ctools = new CommonTools.CommonTools();
-let props = {};
-props = ctools.getConfiguration();
-
-
-// exports.getConfiguration = function() {
-//   // acquire configuration
-//   let props = {};
-//   if (fs.existsSync('./config/swdbrc')) {
-//     let stripJSON = require('strip-json-comments');
-//     props = JSON.parse(stripJSON(fs.readFileSync('./config/swdbrc', 'utf8')));
-//   }
-//   let rc = new require('rc')("swdb", props);
-//   return rc;
-// }
-// let props = exports.getConfiguration();
+exports.getConfiguration = function() {
+  // acquire configuration
+  let props = {};
+  if (fs.existsSync('./config/swdbrc')) {
+    let stripJSON = require('strip-json-comments');
+    props = JSON.parse(stripJSON(fs.readFileSync('./config/swdbrc', 'utf8')));
+  }
+  let rc = new require('rc')("swdb", props);
+  return rc;
+}
+let props = exports.getConfiguration();
 
 
 

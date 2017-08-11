@@ -1,17 +1,19 @@
-
+import swdbTools = require('./CommonTools');
 import mongoose = require('mongoose');
 import fs = require('fs');
 import util = require('util');
 import mongodb = require('mongodb');
 export class Db {
-  props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
+  //  props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
   static schema: any;
   static swDoc: any;
   static swNamesDoc: any;
   static dbConnect: any;
   static swNamesSchema: any;
   constructor() {
-
+    let tools = new swdbTools.CommonTools();
+    var props: any = {};
+    props = tools.getConfiguration();
     if (!Db.schema) {
       console.log("No db connection found, making one...");
       Db.schema = new mongoose.Schema({
@@ -22,15 +24,15 @@ export class Db {
         desc: String,
         owner: { type: String, required: true },
         engineer: { type: String, required: false },
-        levelOfCare: { type: String, enum: this.props.levelOfCareEnums, required: true },
-        status: { type: String, enum: this.props.statusEnums, required: true },
+        levelOfCare: { type: String, enum: props.levelOfCareEnums, required: true },
+        status: { type: String, enum: props.statusEnums, required: true },
         statusDate: { type: Date, required: true },
         platforms: String,
         designDescDocLoc: String,
         descDocLoc: String,
         vvProcLoc: String,
         vvResultsLoc: String,
-        versionControl: { type: String, enum: this.props.rcsEnums },
+        versionControl: { type: String, enum: props.rcsEnums },
         versionControlLoc: String,
         recertFreq: String,
         recertStatus: String,
@@ -46,11 +48,11 @@ export class Db {
       }, { emitIndexErrors: true });
       Db.swDoc = mongoose.model('swdb', Db.schema, 'swdbCollection');
       Db.swNamesDoc = mongoose.model('props', Db.swNamesSchema, 'swNamesProp');
-      console.log("Connecting to mongo... " + JSON.stringify(this.props.mongodbUrl));
-      Db.dbConnect = mongoose.connect(this.props.mongodbUrl, (err, db) => {
+      console.log("Connecting to mongo... " + JSON.stringify(props.mongodbUrl));
+      Db.dbConnect = mongoose.connect(props.mongodbUrl, (err, db) => {
         if (!err) {
           // console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl);
-          console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl));
+          console.log("connected to mongo... " + JSON.stringify(props.mongodbUrl));
         } else {
           console.log("Error: " + err);
         }

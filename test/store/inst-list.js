@@ -16,7 +16,12 @@ let TestTools = require('./TestTools');
 let testTools = new TestTools.TestTools();
 
 var fs = require('fs');
-const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
+
+let CommonTools = require('../../lib/CommonTools');
+let ctools = new CommonTools.CommonTools();
+let props = {};
+props = ctools.getConfiguration();
+
 
 
 test.describe("Installations record tests", function() {

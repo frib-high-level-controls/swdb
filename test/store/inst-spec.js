@@ -8,9 +8,14 @@ var instBe = require("../../lib/instDb");
 var expect2 = require("expect");
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var fs = require('fs');
-
 let TestTools = require('./TestTools');
 let testTools = new TestTools.TestTools();
+
+let CommonTools = require('../../lib/CommonTools');
+let ctools = new CommonTools.CommonTools();
+let props = {};
+props = ctools.getConfiguration();
+
 
 var webdriver = require("../../node_modules/selenium-webdriver"),
   By = webdriver.By,

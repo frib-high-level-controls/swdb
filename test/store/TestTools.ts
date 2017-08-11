@@ -2,9 +2,11 @@ var Be = require('../../lib/Db');
 let be = new Be.Db();
 var instBe = require("../../lib/instDb.js");
 var ObjectId = require('mongodb').ObjectID;
+var CommonTools = require('../../lib/CommonTools');
+let tools = new CommonTools.CommonTools();
+const props = tools.getConfiguration();
 
 var fs = require('fs');
-const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
 const testInstData = JSON.parse(fs.readFileSync('./test/misc/datafiles/instTestDataCombined.json', 'utf8'));
 const testSwData = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestDataCombined.json', 'utf8'));
 const testSwNames = JSON.parse(fs.readFileSync('./test/misc/datafiles/swTestNames.json', 'utf8'));

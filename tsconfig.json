@@ -6,10 +6,12 @@
         "types": [
           "node",
           "mocha"
-        ]
+        ],
+        "allowJs": false
     },
     "files": [
       "lib/Db.ts",
+      "lib/CommonTools.ts",
       "test/store/TestTools.ts"
     ]
 }

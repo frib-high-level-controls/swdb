@@ -16,7 +16,12 @@ var webdriver = require("../../node_modules/selenium-webdriver"),
   test = require("../../node_modules/selenium-webdriver/testing");
 var fs = require('fs');
 var path = require('path');
-const props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
+
+let CommonTools = require('../../lib/CommonTools');
+let ctools = new CommonTools.CommonTools();
+let props = {};
+props = ctools.getConfiguration();
+
 
 test.describe("Software update screen tests", function() {
   var chromeDriver;

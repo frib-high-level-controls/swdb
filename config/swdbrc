@@ -1,0 +1,27 @@
+// This file configures SWDB
+// See the docs directory for more information.
+//
+{
+  "levelOfCareEnums": ["NONE","LOW","MEDIUM","HIGH","SAFETY"],
+  "statusEnums": ["DEVEL","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","RETIRED"],
+  "instStatusEnums": ["DEVEL","MAINT","RDY_INSTALL","RDY_INT_TEST","RDY_BEAM","DEPRECATED","STANDBY"],
+  "rcsEnums": ["Git","AssetCentre","Filesystem","Other"],
+  "areaEnums": ["Global","FE","LS1","FS1","LS2","FS2","LS3","BDS","FS"],
+  "apiUrl":"http://swdb-dev:3000/api/v1/swdb/",
+  "instApiUrl":"http://swdb-dev:3000/api/v1/inst/",
+  "ccdbApiUrl":"http://controls.frib.msu.edu/ccdbapi/",
+  "slotsDataSource":{
+    "useSource": "test",
+    "test":"/home/deployer/swdb/test/misc/datafiles/slotsTestData.json",
+    "production":"http://controls.frib.msu.edu/ccdbapi/slot"
+  },
+  "restPort":"3000",
+  "webUrl":"http://swdb-dev:3000/",
+  "webPort":"3000",
+  "mongodbUrl":"mongodb://swdb:ib2oAETvD8oU@swdb-dev:27017/swdb-dev?authSource=swdb-dev&ssl=true&sslValidate=false",
+  "auth":{
+    "cas": "https://cas.nscl.msu.edu",
+    "service": "swdb-dev:3000",
+    "login_service": "http://swdb-dev:3000/caslogin"
+  }
+}
