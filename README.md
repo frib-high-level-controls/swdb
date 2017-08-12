@@ -2,9 +2,11 @@
 This ia a prototype web application for storing meta-information on software.
 #Installation Overview
 This install has been tested on Debin Jessie.
-To start with, make sure you have Node.js, MogoDB, Git, sudo, and curl
+To start with, make sure you have Node.js, MongoDB, Git, sudo, and curl. 
+Have your working mongodb location and credentials handy.
 ```sh
 sudo apt-get install curl sudo git mongodb
+sudo npm install -g bower
 ```
 ``` sh
 #Get Node
@@ -19,23 +21,7 @@ and test harness.
 # install swdb
 git clone http://github.com/rellis6022/swdb
 cd swdb
-npm install
-
-#install the swdb front end
-cd public/swdb-fe
-sudo npm install -g bower
-bower install
-```
-# MongoDB Setup
-``` sh
-# prep mongodb
-sudo mkdir -p /data/db
-sudo service mongodb restart
-```
-# Install as a systemd service
-```
-sudo cp ~/swdb/config/swdb.service /etc/systemd/system/swdb.service
-sudo systemctl start swdb
+npm install-swdb
 ```
 
 # Unit/API Test Setup
@@ -44,11 +30,8 @@ sudo systemctl start swdb
 sudo npm install -g mocha
 sudo npm install -g chai
 npm install selenium-webdriver
-
-# do initial  non-browser tests
-cd ~/swdb
-mocha test/swdb-spec.js
 ```
+
 # Web Tests (Selenium)
 ```sh
 # Setting up for Chrome tests
@@ -74,7 +57,7 @@ mocha test/swdb-spec.js
 # NOTE: swdb/tests/swdb-firefox.js instructs geckodriver as to which firefox it should use. Update the firefox path here if necessary.
 # to run all tests
 cd ~/swdb
-mocha
+npm run-script test-all
 ```
 # Managing Configuration
 The file config/properties.json is expected to have the data necessary to running in a given environment.

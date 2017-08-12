@@ -2,5 +2,5 @@ node_modules
 log
 public/swdb-fe/bower_components
 *.pyc
-config/properties.json
+config/swdbrc
 

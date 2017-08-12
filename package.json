@@ -6,7 +6,9 @@
   "scripts": {
     "start": "./bin/app",
     "grunt": "./node_modules/.bin/grunt",
-    "mocha": "./node_modules/.bin/mocha"
+    "mocha": "./node_modules/.bin/mocha",
+    "test-all": "cd ./src/app && mocha ../apptest",
+    "install-swdb": "npm install; cd ./public/swdb-fe; bower install; sudo cp ../../config/swdb.service /etc/systemd/system/swdb.service"
   },
   "author": "",
   "license": "ISC",
