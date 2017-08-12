@@ -13,15 +13,13 @@ sudo npm install -g bower
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 sudo apt-get install -y nodejs
 ```
-The first steps are to install the SWDB server and front end followed by the MongoDB backend 
-and test harness.
 
 # SWDB Installation
 ``` bash
 # install swdb
 git clone http://github.com/rellis6022/swdb
 cd swdb
-npm install-swdb
+npm run-script install-swdb
 ```
 
 # Unit/API Test Setup
@@ -57,6 +55,8 @@ npm install selenium-webdriver
 # NOTE: swdb/tests/swdb-firefox.js instructs geckodriver as to which firefox it should use. Update the firefox path here if necessary.
 # to run all tests
 cd ~/swdb
+# WARNING! This testing will clear ALL collection in the db listed in the swdbrc file.
+# Make sure the db listed is safe for this operation!!
 npm run-script test-all
 ```
 # Managing Configuration
