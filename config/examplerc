@@ -20,9 +20,6 @@
     "port": "27017",
     "db": "webapp-dev",
     "options": {
-      // See http://mongoosejs.com/docs/connections.html
-      "useMongoClient": true
-
       // Authentication database 
       // "authSource": "admin",
 
@@ -46,6 +43,9 @@
       // "autoReconnect": true,
       // "reconnectTries": 10,
       // "reconnectInterval": 1000,
+
+      // See http://mongoosejs.com/docs/connections.html
+      "useMongoClient": true
     }
   }
 }
