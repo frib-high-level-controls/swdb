@@ -32,6 +32,7 @@
     "xmlhttprequest": "1.8.0"
   },
   "devDependencies": {
+    "@types/mocha": "^2.2.41",
     "chai": "3.5.0",
     "chai-as-promised": "6.0.0",
     "grunt": "1.0.1",

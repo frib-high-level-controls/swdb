@@ -30,7 +30,6 @@ var Db = (function () {
         // Create a new record in the backend storage
         this.createDoc = function (req, res, next) {
             var doc = new Db.swDoc(req.body);
-            //console.log(JSON.stringify(req.body,null,2));
             doc.save(function (err) {
                 if (err) {
                     next(err);
@@ -81,7 +80,6 @@ var Db = (function () {
                                 doc[prop] = req.body[prop];
                             }
                         }
-                        //console.log(JSON.stringify(req.body,null,2));
                         doc.save(function (err) {
                             if (err) {
                                 return next(err);
@@ -114,7 +112,6 @@ var Db = (function () {
                 }
                 else {
                     var results = {};
-                    //console.log("found docs:"+ JSON.stringify(docs));
                     for (var idx = 0; idx < docs.length; idx++) {
                         _this.rec = docs[idx];
                         results[_this.rec.id] = {
@@ -151,7 +148,6 @@ var Db = (function () {
         if (!Db.schema) {
             console.log("No db connection found, making one...");
             Db.schema = new mongoose.Schema({
-                //id: {type: String, required: true, unique: true},
                 swName: { type: String, required: true },
                 version: String,
                 branch: String,

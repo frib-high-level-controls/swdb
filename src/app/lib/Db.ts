@@ -5,11 +5,11 @@ import util = require('util');
 import mongodb = require('mongodb');
 export class Db {
   //  props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
-  static schema: any;
-  static swDoc: any;
-  static swNamesDoc: any;
-  static dbConnect: any;
-  static swNamesSchema: any;
+  private static schema: any;
+  private static swDoc: any;
+  private static swNamesDoc: any;
+  private static dbConnect: any;
+  private static swNamesSchema: any;
   constructor() {
     let tools = new swdbTools.CommonTools();
     var props: any = {};
@@ -17,7 +17,6 @@ export class Db {
     if (!Db.schema) {
       console.log("No db connection found, making one...");
       Db.schema = new mongoose.Schema({
-        //id: {type: String, required: true, unique: true},
         swName: { type: String, required: true },
         version: String,
         branch: String,
@@ -62,7 +61,7 @@ export class Db {
 
   // general function to find a request ID in a request and
   // return it, if available
-  getReqId = function (req) {
+  public getReqId = function (req) {
     var id = null;
     if (req.url.match(/[^v][\da-fA-F]+$/) !== null) {
       var urlParts = req.url.split("/");
@@ -73,24 +72,22 @@ export class Db {
     }
   };
 
-  findByName = function (searchName) {
+  public findByName = function (searchName) {
     exports.swDoc.findOne({ swName: searchName }, function (err, doc) {
       return (doc);
     });
   };
 
-  findById = function (searchId) {
+  public findById = function (searchId) {
     exports.swDoc.findOne({ _id: searchId }, function (err, doc) {
       return (doc);
     });
   };
 
-
   // Create a new record in the backend storage
-  createDoc = function (req, res, next) {
+  public createDoc = function (req, res, next) {
 
     var doc = new Db.swDoc(req.body);
-    //console.log(JSON.stringify(req.body,null,2));
     doc.save(function (err) {
       if (err) {
         next(err);
@@ -102,7 +99,7 @@ export class Db {
     });
   };
 
-  getDocs = function (req, res, next) {
+  public getDocs = function (req, res, next) {
     var id = this.getReqId(req);
     if (!id) {
       // return all
@@ -125,7 +122,7 @@ export class Db {
     }
   };
 
-  updateDoc = function (req, res, next) {
+  public updateDoc = function (req, res, next) {
     var id = this.getReqId(req);
     if (id) {
       var doc = Db.swDoc.findOne({ "_id": id }, function (err, doc) {
@@ -139,7 +136,6 @@ export class Db {
               doc[prop] = req.body[prop];
             }
           }
-          //console.log(JSON.stringify(req.body,null,2));
           doc.save(function (err) {
             if (err) {
               return next(err);
@@ -157,7 +153,7 @@ export class Db {
   };
 
   // return array of records given an array of ids
-  getList = function (req, res, next) {
+  public getList = function (req, res, next) {
     var response = {};
     var obj_ids = req.body.map(function (id) { return id; });
     Db.swDoc.find({}, function (err, docs) {
@@ -168,7 +164,6 @@ export class Db {
         return next(err);
       } else {
         var results = {};
-        //console.log("found docs:"+ JSON.stringify(docs));
         for (var idx = 0; idx < docs.length; idx++) {
           this.rec = docs[idx];
           results[this.rec.id] = {
@@ -182,7 +177,7 @@ export class Db {
     });
   };
 
-  deleteDoc = function (req, res, next) {
+  public deleteDoc = function (req, res, next) {
     var id = this.getReqId(req);
 
     // mongoose does not error if deleting something that does not exist
@@ -196,7 +191,6 @@ export class Db {
         });
       } else {
         return next(err);
-
       }
     });
   };
