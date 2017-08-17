@@ -7,7 +7,7 @@
           "node",
           "mocha"
         ],
-        "allowJs": false
+        "allowJs": true
     },
     "files": [
       "lib/Db.ts",
