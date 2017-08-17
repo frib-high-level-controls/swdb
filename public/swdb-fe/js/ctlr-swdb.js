@@ -24,9 +24,9 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
     }, function() {
         // prep for login button
         if ($scope.session && $scope.session.username) {
-            $scope.usrBtnTxt = "(click to logout)";
+            $scope.usrBtnTxt = "Log out";
         } else {
-            $scope.usrBtnTxt = '(click to login)';
+            $scope.usrBtnTxt = 'Log in';
         }
     },true);
 
@@ -65,7 +65,7 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
         DTColumnBuilder.newColumn('version').withTitle('SW version').withOption('defaultContent',''),
         DTColumnBuilder.newColumn('branch').withTitle('SW branch').withOption('defaultContent',''),
         DTColumnBuilder.newColumn('owner').withTitle('Owner').withOption('defaultContent',""),
-        DTColumnBuilder.newColumn('levelOfCare').withTitle('Level of care').withOption('defaultContent',""),
+        DTColumnBuilder.newColumn('engineer').withTitle('Engineer').withOption('defaultContent',""),
         DTColumnBuilder.newColumn('status').withTitle('Status').withOption('defaultContent',""),
         DTColumnBuilder.newColumn('statusDate').withTitle('Status date').withOption('defaultContent',"")
     ];
@@ -79,9 +79,9 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService,
     }, function() {
         // prep for login button
         if ($scope.session && $scope.session.username) {
-            $scope.usrBtnTxt = "(click to logout)";
+            $scope.usrBtnTxt = "Log out";
         } else {
-            $scope.usrBtnTxt = '(click to login)';
+            $scope.usrBtnTxt = 'Log in';
         }
     },true);
 
@@ -117,9 +117,9 @@ function NewPromiseCtrl($scope, $http, $window, configService, userService) {
     }, function() {
         // prep for login button
         if ($scope.session && $scope.session.username) {
-            $scope.usrBtnTxt = "(click to logout)";
+            $scope.usrBtnTxt = "Log out";
         } else {
-            $scope.usrBtnTxt = '(click to login)';
+            $scope.usrBtnTxt = 'Log in';
         }
     },true);
 
@@ -235,9 +235,9 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, configService, 
     }, function() {
         // prep for login button
         if ($scope.session && $scope.session.username) {
-            $scope.usrBtnTxt = "(click to logout)";
+            $scope.usrBtnTxt = "Log out";
         } else {
-            $scope.usrBtnTxt = '(click to login)';
+            $scope.usrBtnTxt = 'Log in';
         }
     },true);
 

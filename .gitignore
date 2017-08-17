@@ -1,5 +1,6 @@
 node_modules
 log
+*.log
 public/swdb-fe/bower_components
 *.pyc
 config/swdbrc

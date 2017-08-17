@@ -6,6 +6,27 @@ swdb-bottom-div {
   padding: 10px;
 }
 
+.swdbTitle {
+  height:40px;
+  width:75px;
+  /* border:1px solid #ccc; */
+  /* padding:10px; */
+  /* margin-left:5px; */
+  /* text-align:center; */
+  font:24px/26px Georgia, Garamond, Serif;
+  /* overflow:auto; */
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
+}
+.swdbTable {
+  padding:5px;
+  /* margin-left:5px; */
+  /* text-align:center; */
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
+}
 .btn-sq-lg {
   width: 150px !important;
   height: 150px !important;
