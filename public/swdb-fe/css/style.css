@@ -27,6 +27,11 @@ swdb-bottom-div {
   justify-content: center; /* align horizontal */
   align-items: center; /* align vertical */
 }
+.swdbSection {
+  padding-top: 20px;
+  font-size: 20px;
+  font-weight: bold;
+}
 .btn-sq-lg {
   width: 150px !important;
   height: 150px !important;

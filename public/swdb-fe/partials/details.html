@@ -3,6 +3,9 @@
   <div class="row">
     <div class="col-sm-8">
       <ul class="nav nav-tabs">
+        <li>
+          <div class="swdbTitle">SWDB</div>
+        </li>
         <li class="nav-item">
           <a id="swTab" class="nav-link active" href="#/list">Software</a>
         </li>
@@ -12,19 +15,14 @@
       </ul>
     </div>i
     <div class="col-sm-4">
-      <a id="usrBtn"  ng-click="usrBtnClk()" class="btn btn-primary">
-        <span class="glyphicon glyphicon-user"></span>
+      <a id="usrBtn" ng-click="usrBtnClk()" class="btn btn-primary" style="float:right">
+        <span class="glyphicon glyphicon-user" style="font-size: 1.5em" ></span>
         {{session.username}} {{usrBtnTxt}}
-      </a>
-      <a id="abtBtn" href="#/about/" class="btn btn-info">
-        <span class="glyphicon glyphicon-info-sign"></span>
-        About
       </a>
     </div>
   </div>
 </div>
 
-<h2>Details ({{formData._id}})</h2>
 <div class="container-fluid">
   <form class-"form-horizontal" ng-submit="processForm()">
 
@@ -70,24 +68,6 @@
       </span>
     </div>
 
-    <!-- DESCRIPTION DOC LOC -->
-    <div class="row swdbFormRow form-group">
-      <label class="col-sm-2">
-        Description Doc Loc</label>
-      <span class="col-sm-10">
-            <input id="desc" type="text" name="descDocLoc" class="form-control" ng-model="formData.descDocLoc" ng-readonly="true"> </input>
-      </span>
-    </div>
-
-    <!-- DESIGN DESCRIPTION DOC LOC -->
-    <div class="row swdbFormRow form-group">
-      <label class="col-sm-2">
-        Design Description Doc Loc</label>
-      <span class="col-sm-10">
-            <input id="desc" type="text" name="designDescDocLoc" class="form-control" ng-model="formData.designDescDocLoc" ng-readonly="true"> </input>
-      </span>
-    </div>
-
     <!-- OWNER -->
     <div class="row swdbFormRow">
       <div id="owner-group" class="form-group">
@@ -106,6 +86,17 @@
       <span class="col-sm-10">
             <input id="engineer" type="text" name="engineer" class="form-control" ng-model="formData.engineer" ng-readonly="true"> </input>
       </span>
+    </div>
+
+    <!-- PLATFORM -->
+    <div class="row swdbFormRow">
+      <div id="platforms-group" class="form-group">
+        <label class="col-sm-2 control-label">Platforms</label>
+        <div class="col-sm-10">
+          <input id="platforms" type="text" name="platforms" class="form-control" placeholder="platforms" ng-model="formData.platforms" ng-readonly="true">
+          </input>
+        </div>
+      </div>
     </div>
 
     <!-- LEVEL OF CARE -->
@@ -141,40 +132,24 @@
       </div>
     </div>
 
-
-    <!-- PLATFORM -->
+    <!-- COMMENTS -->
     <div class="row swdbFormRow">
-      <div id="platforms-group" class="form-group">
-        <label class="col-sm-2 control-label">Platforms</label>
-        <div class="col-sm-10">
-          <input id="platforms" type="text" name="platforms" class="form-control" placeholder="platforms" ng-model="formData.platforms" ng-readonly="true">
-          </input>
-        </div>
-      </div>
-    </div>
-
-    <!-- VV PROCEDURE DOC LOC -->
-    <div class="row swdbFormRow form-group">
       <label class="col-sm-2">
-        V&V Procedure Loc</label>
+        Comments</label>
       <span class="col-sm-10">
-            <input id="vvProcLoc" type="text" name="vvProcLoc" class="form-control" ng-model="formData.vvProcLoc" ng-readonly="true"> </input>
+            <textarea rows="4" id="comment" type="text" name="comment" class="form-control" ng-model="formData.comment" ng-readonly="true"> </textarea>
       </span>
     </div>
 
-    <!-- VV RESULTS DOC LOC -->
-    <div class="row swdbFormRow form-group">
-      <label class="col-sm-2">
-        V&V  Results Loc</label>
-      <span class="col-sm-10">
-            <input id="vvResultsLoc" type="text" name="vvResultsLoc" class="form-control" ng-model="formData.vvResultsLoc" ng-readonly="true"> </input>
-      </span>
+    <div class="swdbSection">
+      Version Control
     </div>
+    <hr>
 
     <!-- VERSION CONTROL -->
     <div class="row swdbFormRow">
       <div id="status-group" class="form-group">
-        <label class="col-sm-2 control-label">Version Control</label>
+        <label class="col-sm-2 control-label">System</label>
         <div class="col-sm-10">
           <input id="versionControl" type="text" name="versionControl" class="form-control" ng-model="formData.versionControl" ng-readonly="true">
           </input>
@@ -185,13 +160,61 @@
     <!-- VERSION CONTROL LOC-->
     <div class="row swdbFormRow">
       <div id="status-group" class="form-group">
-        <label class="col-sm-2 control-label">Version Control Loc</label>
+        <label class="col-sm-2 control-label">Location</label>
         <div class="col-sm-10">
           <input id="versionControlLoc" type="text" name="versionControlLoc" class="form-control" ng-model="formData.versionControlLoc" ng-readonly="true">
           </input>
         </div>
       </div>
     </div>
+
+    <label class="swdbSection">
+      Documentation
+    </label>
+    <hr>
+
+
+    <!-- DESCRIPTION DOC LOC -->
+    <div class="row swdbFormRow form-group">
+      <label class="col-sm-2">
+        Description</label>
+      <span class="col-sm-10">
+            <input id="desc" type="text" name="descDocLoc" class="form-control" ng-model="formData.descDocLoc" ng-readonly="true"> </input>
+      </span>
+    </div>
+
+    <!-- DESIGN DESCRIPTION DOC LOC -->
+    <div class="row swdbFormRow form-group">
+      <label class="col-sm-2">
+        Design</label>
+      <span class="col-sm-10">
+            <input id="desc" type="text" name="designDescDocLoc" class="form-control" ng-model="formData.designDescDocLoc" ng-readonly="true"> </input>
+      </span>
+    </div>
+
+
+    <!-- VV PROCEDURE DOC LOC -->
+    <div class="row swdbFormRow form-group">
+      <label class="col-sm-2">
+        V&V Procedure</label>
+      <span class="col-sm-10">
+            <input id="vvProcLoc" type="text" name="vvProcLoc" class="form-control" ng-model="formData.vvProcLoc" ng-readonly="true"> </input>
+      </span>
+    </div>
+
+    <!-- VV RESULTS DOC LOC -->
+    <div class="row swdbFormRow form-group">
+      <label class="col-sm-2">
+        V&V Results</label>
+      <span class="col-sm-10">
+            <input id="vvResultsLoc" type="text" name="vvResultsLoc" class="form-control" ng-model="formData.vvResultsLoc" ng-readonly="true"> </input>
+      </span>
+    </div>
+
+    <label class="swdbSection">
+      Certification
+    </label>
+    <hr>
 
     <!-- RECERT FREQ -->
     <div class="row swdbFormRow">
@@ -224,14 +247,6 @@
           </input>
         </div>
       </div>
-    </div>
-    <!-- COMMENTS -->
-    <div class="row swdbFormRow">
-      <label class="col-sm-2">
-        Comments</label>
-      <span class="col-sm-10">
-            <textarea rows="4" id="comment" type="text" name="comment" class="form-control" ng-model="formData.comment" ng-readonly="true"> </textarea>
-      </span>
     </div>
 
     <a id="cancelBtn" class="btn btn-success" href="#/list"><span class="glyphicon glyphicon-backward"></span> Back to    search </a>

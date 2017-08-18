@@ -85,12 +85,6 @@ test.describe("Preload db record tests", function() {
     chromeDriver.wait(until.titleIs("SWDB - Details"), 5000);
   });
 
-  test.it("should show 'About' button", function() {
-    chromeDriver.wait(until.elementLocated(By.id("abtBtn")),5000);
-    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("abtBtn")),
-      "About"),5000);
-  });
-
   test.it("should show 'Back' button", function() {
     chromeDriver.wait(until.elementLocated(By.id("cancelBtn")),5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("cancelBtn")),

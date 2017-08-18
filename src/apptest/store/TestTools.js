@@ -1,9 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// import ObjectId from '../../../node_modules/mongodb';
 var ObjectId = require('../../../node_modules/mongodb').ObjectID;
-// import mongo = require('../../../node_modules/mongodb');
-// const ObjectId = mongo.ObjectId(any);
 var CommonTools = require("../../app/lib/CommonTools");
 var Be = require("../../app/lib/Db");
 var be = new Be.Db();

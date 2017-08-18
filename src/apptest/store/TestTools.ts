@@ -1,7 +1,4 @@
-// import ObjectId from '../../../node_modules/mongodb';
 const ObjectId = require('../../../node_modules/mongodb').ObjectID;
-// import mongo = require('../../../node_modules/mongodb');
-// const ObjectId = mongo.ObjectId(any);
 import CommonTools = require('../../app/lib/CommonTools');
 import Be = require('../../app/lib/Db');
 const be = new Be.Db();
