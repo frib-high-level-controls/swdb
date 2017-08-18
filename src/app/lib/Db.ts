@@ -5,9 +5,9 @@ import util = require("util");
 import swdbTools = require("./CommonTools");
 export class Db {
   //  props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
+  public static swDoc: any;
+  public  static swNamesDoc: any;
   private static schema: any;
-  private static swDoc: any;
-  private static swNamesDoc: any;
   private static dbConnect: any;
   private static swNamesSchema: any;
   constructor() {
