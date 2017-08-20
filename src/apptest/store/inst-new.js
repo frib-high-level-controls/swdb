@@ -50,7 +50,7 @@ test.describe("Installations add screen tests", function() {
     chromeDriver.get(props.webUrl+"#/inst/list");
     chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
-      "(click to login)"),5000);
+      "Log in"),5000);
   });
 
   test.it("should login", function() {
@@ -64,7 +64,7 @@ test.describe("Installations add screen tests", function() {
     chromeDriver.get(props.webUrl+"#/inst/new");
     chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
-      "testuser (click to logout)"),5000);
+      "testuser"),5000);
   });
 
 

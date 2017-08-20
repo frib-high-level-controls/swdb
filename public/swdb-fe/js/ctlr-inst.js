@@ -7,9 +7,9 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
     }, function() {
         // prep for login button
         if ($scope.session && $scope.session.username) {
-            $scope.usrBtnTxt = "(click to logout)";
+            $scope.usrBtnTxt = 'Log out';
         } else {
-            $scope.usrBtnTxt = '(click to login)';
+            $scope.usrBtnTxt = 'Log in';
         }
     },true);
 
@@ -56,6 +56,11 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
   }).withPaginationType('full_numbers');
 
   vm.dtColumns = [
+    DTColumnBuilder.newColumn('host').withTitle('Host')
+    .renderWith(function(data, type, full, meta) {
+        return '<a href="#/inst/details/'+full._id+'">' +
+          full.host + '</a>';
+    }),
         DTColumnBuilder.newColumn('software').withTitle('Software').withOption('defaultContent','').withClass("center")
     .renderWith(function(data, type, full, meta) {
       return '<a href="#/details/'+full.software+'" >' +
@@ -64,14 +69,8 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
         '/'+$scope.swMeta[full.software].branch +
         '</a>';
     }),
-    DTColumnBuilder.newColumn('host').withTitle('host')
-    .renderWith(function(data, type, full, meta) {
-        return '<a href="#/inst/details/'+full._id+'">' +
-          full.host + '</a>';
-    }),
-
         DTColumnBuilder.newColumn('area').withTitle('Area'),
-        DTColumnBuilder.newColumn('slots').withTitle('Slots')
+        DTColumnBuilder.newColumn('statusDate').withTitle('Status Date')
     ];
   //$scope.swList = swService.getSwList();
 }
@@ -84,9 +83,9 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configServ
     }, function() {
         // prep for login button
         if ($scope.session && $scope.session.username) {
-            $scope.usrBtnTxt = "(click to logout)";
+            $scope.usrBtnTxt = 'Log out';
         } else {
-            $scope.usrBtnTxt = '(click to login)';
+            $scope.usrBtnTxt = 'Log in';
         }
     },true);
 
@@ -122,9 +121,9 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
   }, function() {
     // prep for login button
     if ($scope.session && $scope.session.username) {
-      $scope.usrBtnTxt = "(click to logout)";
+      $scope.usrBtnTxt = "Log out";
     } else {
-      $scope.usrBtnTxt = '(click to login)';
+      $scope.usrBtnTxt = 'Log in';
     }
   },true);
 
@@ -300,9 +299,9 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, configServi
   }, function() {
     // prep for login button
     if ($scope.session && $scope.session.username) {
-      $scope.usrBtnTxt = "(click to logout)";
+      $scope.usrBtnTxt = 'Log out';
     } else {
-      $scope.usrBtnTxt = '(click to login)';
+      $scope.usrBtnTxt = 'Log in';
     }
   },true);
 

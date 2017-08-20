@@ -47,7 +47,7 @@ test.describe("Installations detail screen tests", function() {
     chromeDriver.get(props.webUrl+"#/inst/list");
     chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
-      "(click to login)"),5000);
+      "Log in"),5000);
   });
 
   test.it("should login", function() {
@@ -61,7 +61,7 @@ test.describe("Installations detail screen tests", function() {
     chromeDriver.get(props.webUrl+"#/inst/list");
     chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
-      "testuser (click to logout)"),5000);
+      "testuser"),5000);
   });
 
   test.it("should find a record", function() {
@@ -82,7 +82,7 @@ test.describe("Installations detail screen tests", function() {
   test.it("should show the requested installation record user button", function() {
     chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
-      "(click to logout)"),5000);
+      "testuser"),5000);
   });
 
   test.it("should show the requested installation record vvResults field", function() {
