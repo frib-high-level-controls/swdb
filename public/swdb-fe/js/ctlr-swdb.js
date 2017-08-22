@@ -24,7 +24,7 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
     }, function() {
         // prep for login button
         if ($scope.session && $scope.session.username) {
-            $scope.usrBtnTxt = "Log out";
+            $scope.usrBtnTxt = "";
         } else {
             $scope.usrBtnTxt = 'Log in';
         }
@@ -79,7 +79,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService,
     }, function() {
         // prep for login button
         if ($scope.session && $scope.session.username) {
-            $scope.usrBtnTxt = "Log out";
+            $scope.usrBtnTxt = "";
         } else {
             $scope.usrBtnTxt = 'Log in';
         }
@@ -117,7 +117,7 @@ function NewPromiseCtrl($scope, $http, $window, configService, userService) {
     }, function() {
         // prep for login button
         if ($scope.session && $scope.session.username) {
-            $scope.usrBtnTxt = "Log out";
+            $scope.usrBtnTxt = "";
         } else {
             $scope.usrBtnTxt = 'Log in';
         }
@@ -235,7 +235,7 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, configService, 
     }, function() {
         // prep for login button
         if ($scope.session && $scope.session.username) {
-            $scope.usrBtnTxt = "Log out";
+            $scope.usrBtnTxt = "";
         } else {
             $scope.usrBtnTxt = 'Log in';
         }
