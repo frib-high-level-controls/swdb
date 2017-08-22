@@ -3,6 +3,9 @@
     <div class="row">
         <div class="col-sm-8">
             <ul class="nav nav-tabs">
+                <li>
+                    <div class="swdbTitle">SWDB</div>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="#/list">Software</a>
                 </li>
@@ -11,19 +14,14 @@
                 </li>
         </div>
         <div class="col-sm-4">
-            <a id="usrBtn" ng-click="usrBtnClk()" class="btn btn-primary">
-                <span class="glyphicon glyphicon-user"></span>
+            <a id="usrBtn" ng-click="usrBtnClk()" class="btn btn-primary" style="float:right">
+                <span class="glyphicon glyphicon-user" style="font-size: 1.5em"></span>
                 {{session.username}} {{usrBtnTxt}}
-            </a>
-            <a id="abtBtn" href="#/about/" class="btn btn-info">
-                <span class="glyphicon glyphicon-info-sign"></span>
-                About
             </a>
         </div>
     </div>
 </div>
 
-<h2>Add/update</h2> 
 <div class="container-fluid">
     <form name="inputForm" class-"form-horizontal" ng-submit="processForm()">
 
