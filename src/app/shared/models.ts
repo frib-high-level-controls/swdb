@@ -38,11 +38,37 @@ export function matchEnd(value: string, flags?: string): RegExp {
 /*
  * Map array of documents by IDs
  */
-export function MapById<T extends mongoose.Document>(docs: T[]): Map<string, T> {
+export function mapById<T extends mongoose.Document>(docs: T[]): Map<string, T>;
+export function mapById<T extends mongoose.Document>(docs: Promise<T[]>): Promise<Map<string, T>>;
+export function mapById<T extends mongoose.Document>(docs: T[] | Promise<T[]>):
+    Map<string, T> | Promise<Map<string, T>> {
+  if (!Array.isArray(docs)) {
+    return docs.then((ds) => mapById(ds));
+  }
   let m = new Map<string, T>();
   for (let d of docs) {
     if (d.id) {
       m.set(d.id, d);
+    }
+  }
+  return m;
+}
+
+/*
+ * Map array of document path. If path has falsy value then the document is ignored.
+ */
+export function mapByPath<T extends mongoose.Document>(path: string, docs: T[]): Map<string, T>;
+export function mapByPath<T extends mongoose.Document>(path: string, docs: Promise<T[]>): Promise<Map<string, T>>;
+export function mapByPath<T extends mongoose.Document>(path: string, docs: T[] | Promise<T[]>):
+    Map<string, T> | Promise<Map<string, T>> {
+  if (!Array.isArray(docs)) {
+    return docs.then((ds) => mapByPath(path, ds));
+  }
+  let m = new Map<string, T>();
+  for (let d of docs) {
+    const v = d.get(path);
+    if (v) {
+      m.set(String(v), d);
     }
   }
   return m;
