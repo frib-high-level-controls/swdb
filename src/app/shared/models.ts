@@ -3,6 +3,8 @@
  */
 import mongoose = require('mongoose');
 
+import * as history from './history';
+
 export type ObjectId = mongoose.Types.ObjectId;
 
 /**
@@ -123,6 +125,17 @@ export function saveAll<T extends mongoose.Document>(docs: IterableIterator<T>):
   let prms = new Array<Promise<T>>();
   for (let doc of docs) {
     prms.push(doc.save());
+  }
+  return Promise.all(prms);
+};
+
+/*
+ * Save the list of documents with history
+ */
+export function saveWithHistoryAll<T extends history.Document<T>>(by: string, docs: IterableIterator<T>): Promise<T[]> {
+  let prms = new Array<Promise<T>>();
+  for (let doc of docs) {
+    prms.push(doc.saveWithHistory(by));
   }
   return Promise.all(prms);
 };

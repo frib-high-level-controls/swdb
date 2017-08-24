@@ -21,7 +21,7 @@ interface IModel extends history.IHistory {
   };
 };
 
-interface Model extends IModel, history.DocumentWithHistory<Model> {}
+interface Model extends IModel, history.Document<Model> {}
 
 const embeddedSchema = new mongoose.Schema({
   x: {

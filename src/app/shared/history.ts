@@ -11,9 +11,7 @@ import * as mongoose from 'mongoose';
 import * as log from './logging';
 import * as models from './models';
 
-type Model<T extends Document> = mongoose.Model<T>;
 type Schema = mongoose.Schema;
-type Document = mongoose.Document;
 type ObjectId = mongoose.Types.ObjectId;
 
 export interface IPath {
@@ -37,13 +35,13 @@ export interface IHistory {
   };
 }
 
-export type Update = IUpdate & Document;
+export type Update = IUpdate & mongoose.Document;
 
-export interface DocumentWithHistory<T extends DocumentWithHistory<T>> extends Document, IHistory {
+export interface Document<T extends Document<T>> extends mongoose.Document, IHistory {
   saveWithHistory(by: string): Promise<T>;
 }
 
-export interface ModelWithHistory<T extends DocumentWithHistory<T>> extends Model<T> {
+export interface Model<T extends Document<T>> extends mongoose.Model<T> {
   findWithHistoryById(id: string | number | ObjectId): Promise<T | null>;
 }
 
@@ -127,8 +125,7 @@ const historySchema = new Schema({
  *
  * Note: the SchemaType.schama property is not officially supported.
  */
-export function model<T extends DocumentWithHistory<T>>(name: string, schema: Schema, collection?: string):
-    ModelWithHistory<T> {
+export function model<T extends Document<T>>(name: string, schema: Schema, collection?: string): Model<T> {
   const type = schema.path('history');
   if (!type) {
     debug('Path \'history\' not found, adding history support now');
@@ -136,7 +133,7 @@ export function model<T extends DocumentWithHistory<T>>(name: string, schema: Sc
   } else if ((<any> type).schema !== historySchema) {
     throw new Error('Path \'history\' does not have the expected schema');
   }
-  return <ModelWithHistory<T>> mongoose.model<T>(name, schema, collection);
+  return <Model<T>> mongoose.model<T>(name, schema, collection);
 };
 
 /**
@@ -144,7 +141,7 @@ export function model<T extends DocumentWithHistory<T>>(name: string, schema: Sc
  *
  * This method provides type safety for the options unlike Schema@plugin() method.
  */
-export function addHistory<T extends DocumentWithHistory<T>>(schema: Schema, options?: HistoryOptions) {
+export function addHistory<T extends Document<T>>(schema: Schema, options?: HistoryOptions) {
   const opts: any = {
     deduplicate: true,
   };
@@ -164,7 +161,7 @@ export function addHistory<T extends DocumentWithHistory<T>>(schema: Schema, opt
  * @param {Schema} schema
  * @param {Object} options
  */
-export function historyPlugin<T extends DocumentWithHistory<T>>(schema: Schema, options?: HistoryOptions) {
+export function historyPlugin<T extends Document<T>>(schema: Schema, options?: HistoryOptions) {
   const pathsToIgnore = ['_id', 'history'];
   const pathsToWatch: string[] = [];
 
