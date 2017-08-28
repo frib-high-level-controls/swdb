@@ -105,9 +105,12 @@ test.describe("Installations record tests", function() {
   test.it("should find a sw record", function() {
     this.timeout(8000);
     chromeDriver.get(props.webUrl+"#/list");
-    chromeDriver.wait(until.elementLocated(By.id("swdbList_filter")), 8000)
-      .findElement(By.tagName("Input"))
-      .sendKeys("beast 0.2 b4");
+    chromeDriver.wait(until.elementLocated(By.id("swNameSrch")), 8000)
+      .sendKeys("beast");
+    chromeDriver.wait(until.elementLocated(By.id("versionSrch")), 8000)
+      .sendKeys("0.2");
+    chromeDriver.wait(until.elementLocated(By.id("branchSrch")), 8000)
+      .sendKeys("b4");
     chromeDriver.wait(until.elementLocated(By.linkText("BEAST")),
       8000);
     var link = chromeDriver.findElement(By.linkText("BEAST"));

@@ -74,7 +74,7 @@ test.describe("Software update screen tests", function() {
   });
 
   test.it("Add new record", function() {
-    this.timeout(16000);
+    this.timeout(18000);
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="swName"]/span')), 3000);
     var input = chromeDriver.findElement(By.xpath('//*[@id="swName"]/span'));
     input.click();//*[@id="swName-group"]/div/div/input[1]
@@ -198,9 +198,10 @@ test.describe("Software update screen tests", function() {
   test.it("should find a record", function() {
     this.timeout(8000);
     chromeDriver.get(props.webUrl+"#/list");
-    chromeDriver.wait(until.elementLocated(By.id("swdbList_filter")), 8000)
-      .findElement(By.tagName("Input"))
-      .sendKeys("Test Record3 Test version");
+    chromeDriver.wait(until.elementLocated(By.id("swNameSrch")), 8000)
+      .sendKeys("Record3");
+    chromeDriver.wait(until.elementLocated(By.id("versionSrch")), 8000)
+      .sendKeys("Test version");
     chromeDriver.wait(until.elementLocated(By.linkText("Test Record3")),
       8000);
   });
@@ -210,9 +211,8 @@ test.describe("Software update screen tests", function() {
     this.timeout(8000);
     chromeDriver.wait(until.elementLocated(By.linkText("Test Record3")),
       8000).click();
-    chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/a[2]')),
+    chromeDriver.wait(until.elementLocated(By.id("updateBtn")),
       8000).click();
-
   });
 
   test.it("should show the update title", function() {

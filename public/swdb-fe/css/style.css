@@ -19,6 +19,19 @@ swdb-bottom-div {
   justify-content: center; /* align horizontal */
   align-items: center; /* align vertical */
 }
+.swdbTableHeader {
+  padding:3px;
+  justify-content: left; /* align horizontal */
+  align-items: center; /* align vertical */
+}
+.swdbTableHeaderSearch {
+  padding:0px;
+  display: flex;
+  justify-content: left; /* align horizontal */
+  align-items: center; /* align vertical */
+  min-width: 3em;
+  width: 80%;
+}
 .swdbTable {
   padding:5px;
   /* margin-left:5px; */

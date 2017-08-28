@@ -1,4 +1,4 @@
-var appController = angular.module('appController', ['datatables','ngAnimate','ngSanitize','ui.bootstrap','ngCookies','ui.select']);
+var appController = angular.module('appController', ['datatables','datatables.columnfilter','ngAnimate','ngSanitize','ui.bootstrap','ngCookies','ui.select']);
 
 appController.run(['$rootScope','$route','$http','$routeParams','$location','configService', function($rootScope,$route,$http,$routeParams,$location, configService, slotService) {
 
@@ -54,21 +54,60 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
             defer.resolve(result.data);
         });
         return defer.promise;
-    }).withPaginationType('full_numbers');
+    })
+    .withPaginationType('full_numbers')
+    .withColumnFilter(
+      {
+        sPlaceHolder: "head: before",
+        aoColumns: [{ type: "text"}, null,null,null,null,null,null]
+      })
+      .withDOM(
+        '<"row"<"col-sm-8"l><"col-sm-4"B>>rtip');
 
     vm.dtColumns = [
-        DTColumnBuilder.newColumn('swName').withTitle('Software name')
+        DTColumnBuilder.newColumn('swName')
+          .withTitle('<div class="swdbTableHeader">Software name</div>'+'<input id="swNameSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search name" />')
         .renderWith(function(data, type, full, meta) {
             return '<a href="#/details/'+full._id+'">' +
                 full.swName + '</a>';
         }),
-        DTColumnBuilder.newColumn('version').withTitle('SW version').withOption('defaultContent',''),
-        DTColumnBuilder.newColumn('branch').withTitle('SW branch').withOption('defaultContent',''),
-        DTColumnBuilder.newColumn('owner').withTitle('Owner').withOption('defaultContent',""),
-        DTColumnBuilder.newColumn('engineer').withTitle('Engineer').withOption('defaultContent',""),
-        DTColumnBuilder.newColumn('status').withTitle('Status').withOption('defaultContent',""),
-        DTColumnBuilder.newColumn('statusDate').withTitle('Status date').withOption('defaultContent',"")
+        DTColumnBuilder.newColumn('version')
+          .withTitle('<div class="swdbTableHeader">SW version</div>'+'<input id="versionSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search SW version" />').withOption('defaultContent',''),
+        DTColumnBuilder.newColumn('branch')
+          .withTitle('<div class="swdbTableHeader">SW branch</div>'+'<input id="branchSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search branch" />').withOption('defaultContent',''),
+        DTColumnBuilder.newColumn('owner')
+          .withTitle('<div class="swdbTableHeader">Owner</div>'+'<input id="ownerSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search owner" />').withOption('defaultContent',""),
+        DTColumnBuilder.newColumn('engineer')
+          .withTitle('<div class="swdbTableHeader">Engineer</div>'+'<input id="engineerSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search engineer" />').withOption('defaultContent',""),
+        DTColumnBuilder.newColumn('status')
+          .withTitle('<div class="swdbTableHeader">Status</div>'+'<input id=statusSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search status" />').withOption('defaultContent',""),
+        DTColumnBuilder.newColumn('statusDate')
+          .withTitle('<div class="swdbTableHeader">Status date</div>'+'<input id="statusDateSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search date" />').withOption('defaultContent',"")
     ];
+    
+    angular.element('#swdbList').on('init.dt', function(event, loadedDT) {
+    // Setup - add a text input to each footer cell
+    var id = '#' + event.target.id;
+    console.log("got id"+id);
+    // $(id + ' tfoot th').each(function () {
+    //   var title = $(id + ' thead th').eq($(this).index()).text();
+    //   console.log("Setting "+id+" "+title);
+    //   $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+    // });
+
+    var table = $(id).DataTable();
+    // var table = loadedDT.DataTable;
+    // Apply the search
+    table.columns().eq(0).each(function (colIdx) {
+      $('input', table.column(colIdx).header()).on('keyup change', function () {
+        console.log("searching column "+colIdx);
+        table
+          .column(colIdx)
+          .search(this.value)
+          .draw();
+      });
+    });
+   })
 }
 
 
