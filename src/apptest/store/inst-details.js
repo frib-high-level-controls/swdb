@@ -67,14 +67,14 @@ test.describe("Installations detail screen tests", function() {
   test.it("should find a record", function() {
     this.timeout(8000);
     chromeDriver.get(props.webUrl+"#/inst/list");
-    chromeDriver.wait(until.elementLocated(By.id("swdbList_filter")), 8000)
-      .findElement(By.tagName("Input"))
+    chromeDriver.wait(until.elementLocated(By.id("hostSrch")), 8000)
       .sendKeys("host2");
     chromeDriver.wait(until.elementLocated(By.linkText("host2")),
       8000);
   });
 
   test.it("should show the requested installation record title", function() {
+    chromeDriver.findElement(By.linkText("host2")).click();
     chromeDriver.findElement(By.linkText("host2")).click();
     chromeDriver.wait(until.titleIs("SWDB - Installation Details"), 5000);
   });

@@ -40,39 +40,62 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
     $http.get($scope.props.instApiUrl).then(function(result) {
       var innerDefer = $q.defer();
       var swIds = result.data.map(function(r){return r.software;});
-      console.log("swIds now: "+JSON.stringify(swIds));
       $http({
         url: $scope.props.apiUrl+"list",
         method: "POST",
         data: JSON.stringify(swIds)
       }).then(function(innerResult) {
         $scope.swMeta = innerResult.data;
-        console.log("$scope.swMeta now: "+JSON.stringify($scope.swMeta));
         innerDefer.resolve(innerResult.data);
         defer.resolve(result.data);
       });
     });
     return defer.promise;
-  }).withPaginationType('full_numbers');
+  })
+    .withPaginationType('full_numbers')
+    .withDOM('<"row"<"col-sm-8"l><"col-sm-4"B>>rtip');
 
+    // Build the column specs 
+    // Set the titles to include search input field
+    // later attach to search actions
   vm.dtColumns = [
-    DTColumnBuilder.newColumn('host').withTitle('Host')
+    DTColumnBuilder.newColumn('host')
+    .withTitle('<div class="swdbTableHeader">Host</div>' +'<input id="hostSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search host" />').withOption('defaultContent','').withClass("center")
     .renderWith(function(data, type, full, meta) {
-        return '<a href="#/inst/details/'+full._id+'">' +
-          full.host + '</a>';
+        return '<a href="#/inst/details/'+full._id+'">' + full.host + '</a>';
     }),
-        DTColumnBuilder.newColumn('software').withTitle('Software').withOption('defaultContent','').withClass("center")
-    .renderWith(function(data, type, full, meta) {
-      return '<a href="#/details/'+full.software+'" >' +
-        $scope.swMeta[full.software].swName+
-        '/'+$scope.swMeta[full.software].version+
-        '/'+$scope.swMeta[full.software].branch +
-        '</a>';
-    }),
-        DTColumnBuilder.newColumn('area').withTitle('Area'),
-        DTColumnBuilder.newColumn('statusDate').withTitle('Status Date')
-    ];
-  //$scope.swList = swService.getSwList();
+    DTColumnBuilder.newColumn('software')
+      .withTitle('<div class="swdbTableHeader">Software</div>' + '<input id="softwareSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search software" />').withOption('defaultContent', '').withClass("center")
+      .renderWith(function (data, type, full, meta) {
+        return '<a href="#/details/' + full.software + '" >' +
+          $scope.swMeta[full.software].swName +
+          '/' + $scope.swMeta[full.software].version +
+          '/' + $scope.swMeta[full.software].branch +
+          '</a>';
+      }),
+    DTColumnBuilder.newColumn('area')
+      .withTitle('<div class="swdbTableHeader">Area</div>' + '<input id="areaSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search area" />').withOption('defaultContent', '').withClass("center"),
+    DTColumnBuilder.newColumn('statusDate')
+      .withTitle('<div class="swdbTableHeader">Status Date</div>' + '<input id="statusDateSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search status date" />').withOption('defaultContent', '').withClass("center"),
+  ];
+
+  angular.element('#swdbList').on('init.dt', function (event, loadedDT) {
+    // wait for the init event from the datatable
+    // (then it is done loading)
+    // Now apply filter routines to each column
+    var id = '#' + event.target.id;
+    var table = $(id).DataTable();
+    // Apply the search
+    table.columns().eq(0).each(function (colIdx) {
+      $('input', table.column(colIdx).header()).on('keyup change', function () {
+        console.log("searching column "+colIdx);
+        table
+          .column(colIdx)
+          .search(this.value)
+          .draw();
+      });
+    });
+  });
 }
 
 
@@ -143,24 +166,17 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
 
   $scope.slotSelect=function($item, $model, $label)
   {
-    //console.log("Item:"+$item);
-    //console.log("Model:"+$model);
-    //console.log("Label:"+$label);
     var index = $scope.slotsSelected.indexOf($model);
-    //console.log("index Item:"+index);
     if (index == -1){
       $scope.slotsSelected.unshift($model);
       $('#slots').focus();
-      //console.log("slotsSelected now:"+$scope.slotsSelected);
     }
     else {
-      //console.log("Duplicate Item:"+$model);
     }
   };
 
   $scope.removeSelectedSlot=function($item)
   {
-    //console.log("Removing Item:"+$item);
     var index = $scope.slotsSelected.indexOf($item);
     if (index > -1){
       $scope.slotsSelected.splice(index,1);

@@ -211,6 +211,9 @@ test.describe("Software update screen tests", function() {
     this.timeout(8000);
     chromeDriver.wait(until.elementLocated(By.linkText("Test Record3")),
       8000).click();
+    chromeDriver.wait(until.elementLocated(By.linkText("Test Record3")),
+      8000).click();
+    chromeDriver.wait(until.titleIs("SWDB - Details"), 5000);
     chromeDriver.wait(until.elementLocated(By.id("updateBtn")),
       8000).click();
   });

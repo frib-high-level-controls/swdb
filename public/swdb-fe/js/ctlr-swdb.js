@@ -86,17 +86,11 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
     ];
     
     angular.element('#swdbList').on('init.dt', function(event, loadedDT) {
-    // Setup - add a text input to each footer cell
+    // wait for the init event from the datatable
+    // (then it is done loading)
+    // Now apply filter routines to each column
     var id = '#' + event.target.id;
-    console.log("got id"+id);
-    // $(id + ' tfoot th').each(function () {
-    //   var title = $(id + ' thead th').eq($(this).index()).text();
-    //   console.log("Setting "+id+" "+title);
-    //   $(this).html('<input type="text" placeholder="Search ' + title + '" />');
-    // });
-
     var table = $(id).DataTable();
-    // var table = loadedDT.DataTable;
     // Apply the search
     table.columns().eq(0).each(function (colIdx) {
       $('input', table.column(colIdx).header()).on('keyup change', function () {
@@ -107,7 +101,7 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
           .draw();
       });
     });
-   })
+   });
 }
 
 

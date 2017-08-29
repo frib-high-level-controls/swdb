@@ -73,8 +73,7 @@ test.describe("Installations record tests", function() {
   test.it("should find a record", function() {
     this.timeout(8000);
     chromeDriver.get(props.webUrl+"#/inst/list");
-    chromeDriver.wait(until.elementLocated(By.id("swdbList_filter")), 8000)
-      .findElement(By.tagName("Input"))
+    chromeDriver.wait(until.elementLocated(By.id("hostSrch")), 8000)
       .sendKeys("host2");
     chromeDriver.wait(until.elementLocated(By.linkText("host2")),
       8000);
