@@ -44,6 +44,14 @@ app.use(express.static(__dirname + '/../../public'));
 // console.log("using "+__dirname+"/../../public");
 // use JSON for data
 app.use(bodyParser.json());
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", props.CORS.origin);
+  res.header("Access-Control-Allow-Methods", props.CORS.methods);
+  res.header("Access-Control-Allow-Headers", props.CORS.headers);
+  next();
+});
+
 app.use(cookieParser());
 app.use(expressSession({secret: '1234567890'}));
 app.use(expressValidator({

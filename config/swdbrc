@@ -23,5 +23,11 @@
     "cas": "https://cas.nscl.msu.edu",
     "service": "swdb-dev:3000",
     "login_service": "http://swdb-dev:3000/caslogin"
+  },
+  "CORS": {
+    // set CORS headers
+    "origin": "*",
+    "methods": "POST, GET, PUT, DELETE, OPTIONS, PATCH",
+    "headers": "Origin, X-Requested-With, Content-Type, Accept"
   }
 }
