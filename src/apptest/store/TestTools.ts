@@ -2,7 +2,8 @@ const ObjectId = require('../../../node_modules/mongodb').ObjectID;
 import CommonTools = require('../../app/lib/CommonTools');
 import Be = require('../../app/lib/Db');
 const be = new Be.Db();
-import instBe = require('../../app/lib/instDb.js');
+import InstBe = require('../../app/lib/instDb.js');
+const instBe = new InstBe.InstDb();
 const tools = new CommonTools.CommonTools();
 const props = tools.getConfiguration();
 
@@ -33,7 +34,7 @@ export class TestTools {
     }
 
     // console.log("Dropping installation collections...");
-    instBe.instDoc.db.collections.instCollection.drop(
+    InstBe.InstDb.instDoc.db.collections.instCollection.drop(
       (err) => {
         // console.log("Dropping sw collections...");
         Be.Db.swDoc.db.collections.swdbCollection.drop(
@@ -48,7 +49,7 @@ export class TestTools {
                     Be.Db.swDoc.db.collections.swdbCollection.insert(testSwData,
                       (swDocInsertErr, swDocRecords) => {
                         // console.log("inserting testInstData in installations collection");
-                        instBe.instDoc.db.collections.instCollection.insert(testInstData,
+                        InstBe.InstDb.instDoc.db.collections.instCollection.insert(testInstData,
                           (instInsertErr, instRecords) => {
                             done();
                           });
@@ -62,7 +63,7 @@ export class TestTools {
   public clearTestCollections(done) {
     // console.log("Cleaning up...");
     // console.log("Dropping installation collections...");
-    instBe.instDoc.db.collections.instCollection.drop((err) => {
+    InstBe.InstDb.instDoc.db.collections.instCollection.drop((err) => {
       // chromeDriver.quit();
       // console.log("Dropping swdb collections...");
       Be.Db.swDoc.db.collections.swdbCollection.drop((swDocDropErr) => {

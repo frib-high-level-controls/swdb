@@ -11,6 +11,7 @@
     },
     "files": [
       "lib/Db.ts",
+      "lib/instDb.ts",
       "lib/CommonTools.ts",
       "../apptest/store/TestTools.ts"
     ]

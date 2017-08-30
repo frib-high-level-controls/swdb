@@ -4,7 +4,8 @@ var ObjectId = require('../../../node_modules/mongodb').ObjectID;
 var CommonTools = require("../../app/lib/CommonTools");
 var Be = require("../../app/lib/Db");
 var be = new Be.Db();
-var instBe = require("../../app/lib/instDb.js");
+var InstBe = require("../../app/lib/instDb.js");
+var instBe = new InstBe.InstDb();
 var tools = new CommonTools.CommonTools();
 var props = tools.getConfiguration();
 var fs = require("fs");
@@ -34,7 +35,7 @@ var TestTools = (function () {
             }
         }
         // console.log("Dropping installation collections...");
-        instBe.instDoc.db.collections.instCollection.drop(function (err) {
+        InstBe.InstDb.instDoc.db.collections.instCollection.drop(function (err) {
             // console.log("Dropping sw collections...");
             Be.Db.swDoc.db.collections.swdbCollection.drop(function (swDocDropErr) {
                 // console.log("Dropping swNames collections...");
@@ -44,7 +45,7 @@ var TestTools = (function () {
                         // console.log("inserting testSwData in installations collection");
                         Be.Db.swDoc.db.collections.swdbCollection.insert(testSwData, function (swDocInsertErr, swDocRecords) {
                             // console.log("inserting testInstData in installations collection");
-                            instBe.instDoc.db.collections.instCollection.insert(testInstData, function (instInsertErr, instRecords) {
+                            InstBe.InstDb.instDoc.db.collections.instCollection.insert(testInstData, function (instInsertErr, instRecords) {
                                 done();
                             });
                         });
@@ -56,7 +57,7 @@ var TestTools = (function () {
     TestTools.prototype.clearTestCollections = function (done) {
         // console.log("Cleaning up...");
         // console.log("Dropping installation collections...");
-        instBe.instDoc.db.collections.instCollection.drop(function (err) {
+        InstBe.InstDb.instDoc.db.collections.instCollection.drop(function (err) {
             // chromeDriver.quit();
             // console.log("Dropping swdb collections...");
             Be.Db.swDoc.db.collections.swdbCollection.drop(function (swDocDropErr) {

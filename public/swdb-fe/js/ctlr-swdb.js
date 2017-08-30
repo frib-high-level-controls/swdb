@@ -1,4 +1,4 @@
-var appController = angular.module('appController', ['datatables','datatables.columnfilter','ngAnimate','ngSanitize','ui.bootstrap','ngCookies','ui.select']);
+var appController = angular.module('appController', ['datatables','ngAnimate','ngSanitize','ui.bootstrap','ngCookies','ui.select']);
 
 appController.run(['$rootScope','$route','$http','$routeParams','$location','configService', function($rootScope,$route,$http,$routeParams,$location, configService, slotService) {
 
@@ -56,13 +56,8 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
         return defer.promise;
     })
     .withPaginationType('full_numbers')
-    .withColumnFilter(
-      {
-        sPlaceHolder: "head: before",
-        aoColumns: [{ type: "text"}, null,null,null,null,null,null]
-      })
-      .withDOM(
-        '<"row"<"col-sm-8"l><"col-sm-4"B>>rtip');
+    .withDOM(
+      '<"row"<"col-sm-8"l><"col-sm-4"B>>rtip');
 
     vm.dtColumns = [
         DTColumnBuilder.newColumn('swName')
