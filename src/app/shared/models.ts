@@ -37,6 +37,24 @@ export function matchEnd(value: string, flags?: string): RegExp {
   return new RegExp(escapeRegExp(value) + '$', flags);
 };
 
+/**
+ * Check is string represents a wildcard pattern
+ */
+export function isPattern(value: string): boolean {
+  return Boolean(value.match(/\*/));
+};
+
+/**
+ * Construct a RegExp that matches the given pattern
+ *
+ * Wildcard: * - match anything
+ */
+export function matchPattern(pattern: string, flags?: string): RegExp {
+  pattern = escapeRegExp(pattern);
+  pattern = pattern.replace(/\\\*/g, '(.*)');
+  return new RegExp('^' + pattern + '$', flags);
+};
+
 /*
  * Map array of documents by IDs
  */
