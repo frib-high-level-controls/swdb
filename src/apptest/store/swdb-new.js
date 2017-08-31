@@ -23,16 +23,16 @@ let props = {};
 props = ctools.getConfiguration();
 
 
-test.describe("Software update screen tests", function() {
+test.describe("Software update screen tests", function () {
   var chromeDriver;
 
-  test.before(function(done) {
+  test.before(function (done) {
     console.log("Starting swdb-new");
     this.timeout(5000);
     testTools.loadTestCollectionsStandard(done);
   });
 
-  test.after(function(done) {
+  test.after(function (done) {
     // clear the test collection
     chromeDriver.quit();
     testTools.clearTestCollections(done);
@@ -41,51 +41,45 @@ test.describe("Software update screen tests", function() {
 
   var allCookies = null;
 
-  test.it("should show search page with login button", function() {
+  test.it("should show search page with login button", function () {
     this.timeout(15000);
 
     chromeDriver = new webdriver.Builder()
       .forBrowser("chrome")
       .build();
-    chromeDriver.manage().window().setPosition(200,0);
-  //var window = chromeDriver.getWindowHandle();
+    chromeDriver.manage().window().setPosition(200, 0);
+    //var window = chromeDriver.getWindowHandle();
     //chromeDriver.switchTo().window(window);
 
-    chromeDriver.get(props.webUrl+"#/list");
-    chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
+    chromeDriver.get(props.webUrl + "#/list");
+    chromeDriver.wait(until.elementLocated(By.id("usrBtn")), 5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
-      "Log in"),5000);
+      "Log in"), 5000);
   });
 
-  test.it("should login", function() {
+  test.it("should login", function () {
     // get test authentication
-    chromeDriver.get(props.webUrl+"testlogin?username=testuser&password=testuserpasswd");
-    chromeDriver.wait(until.elementLocated(By.id("Test auth success")),3000);
+    chromeDriver.get(props.webUrl + "testlogin?username=testuser&password=testuserpasswd");
+    chromeDriver.wait(until.elementLocated(By.id("Test auth success")), 3000);
   });
 
-  test.it("should show search page with username on logout button", function() {
+  test.it("should show search page with username on logout button", function () {
     this.timeout(8000);
-    chromeDriver.get(props.webUrl+"#/new");
-    chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
+    chromeDriver.get(props.webUrl + "#/new");
+    chromeDriver.wait(until.elementLocated(By.id("usrBtn")), 5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
-      "testuser"),5000);
+      "testuser"), 5000);
   });
 
 
-  test.it("should show the requested record title", function() {
+  test.it("should show the requested record title", function () {
     chromeDriver.wait(until.titleIs("SWDB - New"), 5000);
   });
 
-  test.it("Add new record", function() {
+  test.it("Add new record", function () {
     this.timeout(16000);
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="swName"]/span')), 3000);
-    var input = chromeDriver.findElement(By.xpath('//*[@id="swName"]/span'));
-    input.click();//*[@id="swName-group"]/div/div/input[1]
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="swName-group"]/div/div/input[1]')), 3000);
-    input = chromeDriver.findElement(By.xpath('//*[@id="swName-group"]/div/div/input[1]'));
-    input.sendKeys("Test Record3");
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-0-0"]/span/span')));
-    chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-0"]/span/span')).click();
+    chromeDriver.wait(until.elementLocated(By.id('swName')), 3000);
+    var input = chromeDriver.findElement(By.id('swName')).sendKeys("Test Record3");
 
     // set version
     chromeDriver.wait(until.elementLocated(By.id("version")), 3000);
@@ -188,13 +182,13 @@ test.describe("Software update screen tests", function() {
     // set recert date
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="recertDate-group"]/div/p/span/button/i')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[@id="recertDate-group"]/div/p/span/button/i'));
-   input.click();
+    input.click();
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="recertDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[@id="recertDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
     input.click();
     chromeDriver.findElement(By.id("submitBtn")).click();
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("formStatus")),
-      "Document posted"),5000);
+      "Document posted"), 5000);
   });
 
 });

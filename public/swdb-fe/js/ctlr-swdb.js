@@ -194,8 +194,6 @@ function NewPromiseCtrl($scope, $http, $window, configService, userService) {
         delete $scope.formData.__v;
 
         if ($scope.inputForm.$valid){
-            // handle swName
-            $scope.formData.swName = $scope.selectedItem.name;
             $http({
                 method: 'POST',
                 url: $scope.props.apiUrl,

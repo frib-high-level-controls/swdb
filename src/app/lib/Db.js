@@ -9,7 +9,7 @@ var Db = (function () {
         this.getReqId = function (req) {
             var id = null;
             if (req.url.match(/[^v][\da-fA-F]+$/) !== null) {
-                var urlParts = req.url.split("/");
+                var urlParts = req.url.split('/');
                 id = urlParts[urlParts.length - 1];
                 return id;
             }
@@ -35,7 +35,7 @@ var Db = (function () {
                     next(err);
                 }
                 else {
-                    res.location("/swdb/v1/" + req.body._id);
+                    res.location('/swdb/v1/' + req.body._id);
                     res.status(201);
                     res.send();
                 }
@@ -74,7 +74,7 @@ var Db = (function () {
                         for (var prop in req.body) {
                             if (req.body.hasOwnProperty(prop)) {
                                 // overwrite the record property with this, but not id
-                                if (prop === "_id") {
+                                if (prop === '_id') {
                                     continue;
                                 }
                                 doc[prop] = req.body[prop];
@@ -90,12 +90,12 @@ var Db = (function () {
                         });
                     }
                     else {
-                        return next(new Error("Record not found"));
+                        return next(new Error('Record not found'));
                     }
                 });
             }
             else {
-                next(new Error("Record not found"));
+                next(new Error('Record not found'));
             }
         };
         // return array of records given an array of ids
@@ -168,11 +168,7 @@ var Db = (function () {
                 comment: String,
             }, { emitIndexErrors: true });
             Db.schema.index({ swName: 1, version: 1, branch: 1 }, { unique: true });
-            Db.swNamesSchema = new mongoose.Schema({
-                swName: String,
-            }, { emitIndexErrors: true });
-            Db.swDoc = mongoose.model("swdb", Db.schema, "swdbCollection");
-            Db.swNamesDoc = mongoose.model("props", Db.swNamesSchema, "swNamesProp");
+            Db.swDoc = mongoose.model('swdb', Db.schema, 'swdbCollection');
             // console.log("Connecting to mongo... " + JSON.stringify(props.mongodbUrl));
             Db.dbConnect = mongoose.connect(props.mongodbUrl, function (err, db) {
                 if (!err) {

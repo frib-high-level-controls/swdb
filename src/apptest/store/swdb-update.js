@@ -75,14 +75,8 @@ test.describe("Software update screen tests", function() {
 
   test.it("Add new record", function() {
     this.timeout(18000);
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="swName"]/span')), 3000);
-    var input = chromeDriver.findElement(By.xpath('//*[@id="swName"]/span'));
-    input.click();//*[@id="swName-group"]/div/div/input[1]
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="swName-group"]/div/div/input[1]')), 3000);
-    input = chromeDriver.findElement(By.xpath('//*[@id="swName-group"]/div/div/input[1]'));
-    input.sendKeys("Test Record3");
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-0-0"]/span/span')));
-    chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-0"]/span/span')).click();
+    chromeDriver.wait(until.elementLocated(By.id('swName')), 3000);
+    var input = chromeDriver.findElement(By.id('swName')).sendKeys("Test Record3");
 
     // set version
     chromeDriver.wait(until.elementLocated(By.id("version")), 3000);

@@ -1,15 +1,13 @@
-import fs = require("fs");
-import mongodb = require("mongodb");
-import mongoose = require("mongoose");
-import util = require("util");
-import swdbTools = require("./CommonTools");
+import fs = require('fs');
+import mongodb = require('mongodb');
+import mongoose = require('mongoose');
+import util = require('util');
+import swdbTools = require('./CommonTools');
 export class Db {
   //  props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
   public static swDoc: any;
-  public  static swNamesDoc: any;
   private static schema: any;
   private static dbConnect: any;
-  private static swNamesSchema: any;
   constructor() {
     const tools = new swdbTools.CommonTools();
     let props: any = {};
@@ -42,11 +40,7 @@ export class Db {
 
       Db.schema.index({ swName: 1, version: 1, branch: 1 }, { unique: true });
 
-      Db.swNamesSchema = new mongoose.Schema({
-        swName: String,
-      }, { emitIndexErrors: true });
-      Db.swDoc = mongoose.model("swdb", Db.schema, "swdbCollection");
-      Db.swNamesDoc = mongoose.model("props", Db.swNamesSchema, "swNamesProp");
+      Db.swDoc = mongoose.model('swdb', Db.schema, 'swdbCollection');
       // console.log("Connecting to mongo... " + JSON.stringify(props.mongodbUrl));
       Db.dbConnect = mongoose.connect(props.mongodbUrl, (err, db) => {
         if (!err) {
@@ -64,7 +58,7 @@ export class Db {
   public getReqId = (req) => {
     let id = null;
     if (req.url.match(/[^v][\da-fA-F]+$/) !== null) {
-      const urlParts = req.url.split("/");
+      const urlParts = req.url.split('/');
       id = urlParts[urlParts.length - 1];
       return id;
     } else {
@@ -92,7 +86,7 @@ export class Db {
       if (err) {
         next(err);
       } else {
-        res.location("/swdb/v1/" + req.body._id);
+        res.location('/swdb/v1/' + req.body._id);
         res.status(201);
         res.send();
       }
@@ -130,7 +124,7 @@ export class Db {
           for (const prop in req.body) {
             if (req.body.hasOwnProperty(prop)) {
               // overwrite the record property with this, but not id
-              if (prop === "_id") {
+              if (prop === '_id') {
                 continue;
               }
               doc[prop] = req.body[prop];
@@ -144,11 +138,11 @@ export class Db {
             }
           });
         } else {
-          return next(new Error("Record not found"));
+          return next(new Error('Record not found'));
         }
       });
     } else {
-      next(new Error("Record not found"));
+      next(new Error('Record not found'));
     }
   };
 

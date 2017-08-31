@@ -7,11 +7,11 @@ var CommonTools = (function () {
         this.getConfiguration = function () {
             // acquire configuration
             var props = null;
-            if (fs.existsSync("/home/deployer/swdb/config/swdbrc")) {
-                var stripJSON = require("strip-json-comments");
-                props = JSON.parse(stripJSON(fs.readFileSync("/home/deployer/swdb/config/swdbrc", "utf8")));
+            if (fs.existsSync('/home/deployer/swdb/config/swdbrc')) {
+                var stripJSON = require('strip-json-comments');
+                props = JSON.parse(stripJSON(fs.readFileSync('/home/deployer/swdb/config/swdbrc', 'utf8')));
             }
-            var rcw = rc("swdb", props);
+            var rcw = rc('swdb', props);
             return rcw;
         };
     }

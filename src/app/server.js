@@ -25,27 +25,13 @@ let ctools = new CommonTools.CommonTools();
 let props = {};
 props = ctools.getConfiguration();
 
-// get the valid swNames from the db and populate the properties area
-// console.log("be is:"+circJSON.stringify(be));
-Be.Db.swNamesDoc.find({}, function(err, docs) {
-  var swNames = [];
-  var validSwNames = [];
-  if(!err){
-    for (var i in docs) {
-      swNames.push({id: i, "name": docs[i].swName});
-      validSwNames.push(docs[i].swName);
-    }
-  }
-  props.swNames = swNames;
-  props.validSwNames = validSwNames;
-});
-
 //allow access to static files
 app.use(express.static(__dirname + '/../../public'));
 // console.log("using "+__dirname+"/../../public");
 // use JSON for data
 app.use(bodyParser.json());
 
+// Get the CORS params from rc and add to stack
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", props.CORS.origin);
   res.header("Access-Control-Allow-Methods", props.CORS.methods);
@@ -189,23 +175,9 @@ app.get('/api/v1/swdb/user', function(req, res, next) {
 });
 
 // for get requests that are not specific return all
-app.get('/api/v1/swdb/config', function(req, res, next) {
+app.get('/api/v1/swdb/config', function (req, res, next) {
   // update props and send config
-  Be.Db.swNamesDoc.find(function(err,docs){
-    if (!err) {
-      var validSwNames=[];
-      var validSwNamesGUIList=[];
-      for (var i in docs)
-      {
-        validSwNames.push(docs[i].swName);
-        validSwNamesGUIList.push({"id":i,"name":docs[i].swName});
-      }
-      props.validSwNames = validSwNames;
-      props.validSwNamesGUIList = validSwNamesGUIList;
-      res.send(JSON.stringify(props));
-    } else {
-    }
-  });
+  res.send(JSON.stringify(props));
 });
 
 // for get slot requests
@@ -222,37 +194,26 @@ app.get('/api/v1/swdb/*', function(req, res, next) {
 });
 
 // handle incoming post requests
-app.post('/api/v1/swdb', casAuth.ensureAuthenticated, function(req, res, next) {
+app.post('/api/v1/swdb', casAuth.ensureAuthenticated, function (req, res, next) {
 
   // Do validation for  new records
-  Be.Db.swNamesDoc.find(function(err,docs){
-    if (!err) {
-      var validSwNames=[];
-      for (var i in docs)
-      {
-        validSwNames.push(docs[i].swName);
-      }
-      props.validSwNames = validSwNames;
+
+  tools.newValidation(req);
+
+  req.getValidationResult().then(function (result) {
+    if (!result.isEmpty()) {
+      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+      return;
     } else {
+      be.createDoc(req, res, next);
     }
-
-    tools.newValidation(props.validSwNames,req);
-
-    req.getValidationResult().then(function(result){
-      if (!result.isEmpty()) {
-        res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-        return;
-      } else {
-        be.createDoc(req, res, next);
-      }
-    });
   });
 });
+
 // handle incoming installation post requests
 app.post('/api/v1/inst', function(req, res, next) {
 
   // Do validation for  new records
-
   instTools.newValidation(req);
 
   req.getValidationResult().then(function(result){
@@ -271,32 +232,18 @@ app.post('/api/v1/swdb/list', function(req, res, next) {
 });
 
 // handle incoming put requests for update
-app.put('/api/v1/swdb*', casAuth.ensureAuthenticated, function(req, res, next) {
+app.put('/api/v1/swdb*', casAuth.ensureAuthenticated, function (req, res, next) {
 
-  // Do validation for updates
-  Be.Db.swNamesDoc.find(function(err,docs){
-    if (!err) {
-      var validSwNames=[];
-      for (var i in docs)
-      {
-        validSwNames.push(docs[i].swName);
-      }
-      props.validSwNames = validSwNames;
+  tools.updateValidation(req);
+  tools.updateSanitization(req);
+
+  req.getValidationResult().then(function (result) {
+    if (!result.isEmpty()) {
+      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+      return;
     } else {
+      be.updateDoc(req, res, next);
     }
-
-    tools.updateValidation(props.validSwNames,req);
-    tools.updateSanitization(req);
-
-    req.getValidationResult().then(function(result){
-      if (!result.isEmpty()) {
-        res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-        return;
-      } else {
-        be.updateDoc(req, res, next);
-      }
-
-    });
   });
 });
 
@@ -317,31 +264,18 @@ app.put('/api/v1/inst*', function(req, res, next) {
 });
 
 // handle incoming patch requests for update
-app.patch('/api/v1/swdb*', casAuth.ensureAuthenticated, function(req,res,next) {
+app.patch('/api/v1/swdb*', casAuth.ensureAuthenticated, function (req, res, next) {
 
-  // Do validation for updates
-  Be.Db.swNamesDoc.find(function(err,docs){
-    if (!err) {
-      var validSwNames=[];
-      for (var i in docs)
-      {
-        validSwNames.push(docs[i].swName);
-      }
-      props.validSwNames = validSwNames;
+  tools.updateValidation(req);
+  tools.updateSanitization(req);
+
+  req.getValidationResult().then(function (result) {
+    if (!result.isEmpty()) {
+      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+      return;
     } else {
+      be.updateDoc(req, res, next);
     }
-
-    tools.updateValidation(props.validSwNames,req);
-    tools.updateSanitization(req);
-
-    req.getValidationResult().then(function(result){
-      if (!result.isEmpty()) {
-        res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-        return;
-      } else {
-        be.updateDoc(req, res, next);
-      }
-    });
   });
 });
 

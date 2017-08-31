@@ -30,19 +30,13 @@
             <div id="swName-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">Software Name*</label>
                 <div class="col-sm-8">
-                    <ui-select ng-model="$parent.selectedItem" ng-required="true">
-                    <ui-select-match id="swName" >
-                    <span ng-bind="$select.selected.name"></span>
-                    </ui-select-match>
-                    <ui-select-choices repeat="item in (itemArray | filter: $select.search) track by item.id">
-                    <span ng-bind="item.name"></span>
-                    </ui-select-choices>
-                    </ui-select>
+                    <input id="swName" type="text" name="swNameInput" class="form-control" placeholder="SW name" ng-model="formData.swName" ng-minlength="2" ng0-maxlength="40">
+                    </input>
                 </div>
                 <div class="col-sm-2" id="swNameInputSts" ng-messages="inputForm.swName.$error" ng-if="inputForm.swName.$dirty">
                     <div ng-message="required">Name is required</div>
                     <div ng-message="minlength">Name must exceed 2 characters</div>
-                    <div ng-message="maxlength">Name must not exceed 30 characters</div>
+                    <div ng-message="maxlength">Name must not exceed 40 characters</div>
                 </div>
             </div>
         </div>
