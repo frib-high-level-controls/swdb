@@ -237,7 +237,7 @@ describe('Model History Tests', function () {
     assert.deepEqual((<any> c.paths[0].value).x, <any> 'XX');
   });
 
-  it('Find with history and modify', async function () {
+  it('Find by ID with history and modify', async function () {
     let m = await assertIsFound(Model.findOne().exec());
 
     m = await assertIsFound(Model.findByIdWithHistory(m._id));
@@ -266,5 +266,34 @@ describe('Model History Tests', function () {
 
     assert.deepEqual(c.paths[0].name, 's');
     assert.deepEqual(c.paths[0].value, <any> 'Value3');
+  });
+
+  it('Find one with history and modify', async function () {
+    let m = await assertIsFound(Model.findOneWithHistory());
+
+    if (m.history.updates) {
+      assert.lengthOf(m.history.updates, 7);
+    } else {
+      throw new AssertionError({ message: 'Updates are undefined'});
+    }
+
+    m.s = 'Value4';
+
+    try {
+      await m.saveWithHistory('test7');
+    } catch (err) {
+      throw new AssertionError({ message: String(err) });
+    }
+
+    assert.lengthOf(m.history.updateIds, 8);
+    assert.lengthOf(m.history.updates, 8);
+
+    let c = m.history.updates[7];
+
+    assert.deepEqual(c.by, 'test7');
+    assert.lengthOf(c.paths, 1);
+
+    assert.deepEqual(c.paths[0].name, 's');
+    assert.deepEqual(c.paths[0].value, <any> 'Value4');
   });
 });

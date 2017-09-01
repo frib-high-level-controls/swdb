@@ -43,6 +43,7 @@ export interface Document<T extends Document<T>> extends mongoose.Document, IHis
 
 export interface Model<T extends Document<T>> extends mongoose.Model<T> {
   findByIdWithHistory(id: string | number | ObjectId): Promise<T | null>;
+  findOneWithHistory(conditions?: object): Promise<T | null>;
 }
 
 export interface HistoryOptions {
@@ -274,6 +275,21 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
         t.history.updates = models.pickById(updates, t.history.updateIds);
       }
       return t;
+    });
+  });
+
+  /**
+   * Find one document and its history. NOTE This method requires TWO database queries!
+   */
+  schema.static('findOneWithHistory', function (this: Model<T>, conditions?: object): Promise<T | null> {
+    return this.findOne(conditions).exec().then((t) => {
+      if (!t) {
+        return Promise.resolve(null);
+      }
+      return Update.find({ ref: this.modelName, rid: t._id }).exec().then((updates) => {
+        t.history.updates = models.pickById(updates, t.history.updateIds);
+        return t;
+      });
     });
   });
 
