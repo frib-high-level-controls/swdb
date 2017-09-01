@@ -42,7 +42,7 @@ export interface Document<T extends Document<T>> extends mongoose.Document, IHis
 }
 
 export interface Model<T extends Document<T>> extends mongoose.Model<T> {
-  findWithHistoryById(id: string | number | ObjectId): Promise<T | null>;
+  findByIdWithHistory(id: string | number | ObjectId): Promise<T | null>;
 }
 
 export interface HistoryOptions {
@@ -261,7 +261,7 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
   /**
    * Find document and its history by ID. This method does both concurrently.
    */
-  schema.static('findWithHistoryById', function (this: Model<T>, id: string | number | ObjectId): Promise<T | null> {
+  schema.static('findByIdWithHistory', function (this: Model<T>, id: string | number | ObjectId): Promise<T | null> {
     if (typeof id === 'string' || typeof id === 'number')  {
       id = mongoose.Types.ObjectId(id);
     }

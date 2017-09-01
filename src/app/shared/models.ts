@@ -150,7 +150,7 @@ export function saveAll<T extends mongoose.Document>(docs: IterableIterator<T>):
 /*
  * Save the list of documents with history
  */
-export function saveWithHistoryAll<T extends history.Document<T>>(by: string, docs: IterableIterator<T>): Promise<T[]> {
+export function saveAllWithHistory<T extends history.Document<T>>(by: string, docs: IterableIterator<T>): Promise<T[]> {
   let prms = new Array<Promise<T>>();
   for (let doc of docs) {
     prms.push(doc.saveWithHistory(by));

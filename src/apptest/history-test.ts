@@ -240,7 +240,7 @@ describe('Model History Tests', function () {
   it('Find with history and modify', async function () {
     let m = await assertIsFound(Model.findOne().exec());
 
-    m = await assertIsFound(Model.findWithHistoryById(m._id));
+    m = await assertIsFound(Model.findByIdWithHistory(m._id));
 
     if (m.history.updates) {
       assert.lengthOf(m.history.updates, 6);
