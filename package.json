@@ -9,7 +9,9 @@
     "mocha": "./node_modules/.bin/mocha",
     "make": "cd ./src/app; tsc",
     "test-all": "cd ./src/app && mocha ../apptest",
-    "install-swdb": "npm install; cd ./public/swdb-fe; npm install; sudo cp ../../config/swdb.service /etc/systemd/system/swdb.service"
+    "install-swdb": "npm install; cd ./public/swdb-fe; npm install; sudo cp ../../config/swdb.service /etc/systemd/system/swdb.service",
+    "load-db-test": "cd ./src/app;node -e 'let myTestTools = require(\"/home/deployer/swdb/src/apptest/store/TestTools.js\");a = new myTestTools.TestTools();a.loadTestCollectionsStandard(()=>{});'",
+    "clear-db-test": "cd ./src/app;node -e 'let myTestTools = require(\"/home/deployer/swdb/src/apptest/store/TestTools.js\");a = new myTestTools.TestTools();a.clearTestCollections(()=>{});'"
   },
   "author": "",
   "license": "ISC",

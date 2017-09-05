@@ -1,26 +1,23 @@
 <section>
-<div class="header swdb-top-div container-fluid">
+  <div class="header swdb-top-div container-fluid">
     <div class="row">
-        <div class="col-sm-8">
-            <ul class="nav nav-tabs">
-                <li>
-                    <div class="swdbTitle">SWDB</div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="#/list">Software</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#/inst/list">Installations</a>
-                </li>
-        </div>
-        <div class="col-sm-4">
-            <a id="usrBtn" ng-click="usrBtnClk()" class="btn btn-primary" style="float:right">
-                <span class="glyphicon glyphicon-user" style="font-size: 1.5em"></span>
+      <ul class="nav nav-tabs">
+        <li>
+          <div class="swdbTitle">SWDB</div>
+        </li>
+        <li class="active">
+          <a id="swTab" class="nav-link active" href="#/list">Software</a>
+        </li>
+        <li class="nav-item">
+          <a id="instTab" class="nav-link" href="#/inst/list">Installations</a>
+        </li>
+        <a id="usrBtn" ng-click="usrBtnClk()" class="btn btn-primary" style="float:right">
+                <span class="glyphicon glyphicon-user" style="font-size: 1.5em" ></span>
                 {{session.username}} {{usrBtnTxt}}
             </a>
-        </div>
+      </ul>
     </div>
-</div>
+  </div>
 
 <div class="container-fluid">
     <form name="inputForm" class-"form-horizontal" ng-submit="processForm()">

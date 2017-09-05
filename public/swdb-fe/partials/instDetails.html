@@ -1,27 +1,23 @@
 <section>
-<div class="header swdb-top-div container-fluid">
-  <div class="row">
-    <div class="col-sm-8">
+  <div class="header swdb-top-div container-fluid">
+    <div class="row">
       <ul class="nav nav-tabs">
         <li>
-           <div class="swdbTitle">SWDB</div>
+          <div class="swdbTitle">SWDB</div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#/list">Software</a>
+          <a id="swTab" class="nav-link" href="#/list">Software</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="#/inst/details">Installations</a>
+        <li class="active">
+          <a id="instTab" class="nav-link" href="#/inst/list">Installations</a>
         </li>
+        <a id="usrBtn" ng-click="usrBtnClk()" class="btn btn-primary" style="float:right">
+                <span class="glyphicon glyphicon-user" style="font-size: 1.5em" ></span>
+                {{session.username}} {{usrBtnTxt}}
+            </a>
       </ul>
     </div>
-    <div class="col-sm-4">
-      <a id="usrBtn"  ng-click="usrBtnClk()" class="btn btn-primary" style="float:right">
-        <span class="glyphicon glyphicon-user" style="font-size: 1.5em"></span>
-        {{session.username}} {{usrBtnTxt}}
-      </a>
-    </div>
   </div>
-</div>
 
 <div class="container-fluid" style="padding-left:50px; padding-right:50px">
   <form class-"form-horizontal" ng-submit="processForm()">

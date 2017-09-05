@@ -1,31 +1,27 @@
 <section>
-<div class="header swdb-top-div container-fluid">
+  <div class="header swdb-top-div container-fluid">
     <div class="row">
-        <div class="col-sm-8">
-            <ul class="nav nav-tabs">
-                <li>
-                    <div class="swdbTitle">SWDB</div>
-                </li>
-                <li class="nav-item">
-                    <a id="swTab" class="nav-link active" href="#/list">Software</a>
-                </li>
-                <li class="nav-item">
-                    <a id="instTab" class="nav-link" href="#/inst/list">Installations</a>
-                </li>
-            </ul>
-        </div>
-        <div class="col-sm-4">
-            <a id="usrBtn" ng-click="usrBtnClk()" class="btn btn-primary" style="float:right">
+      <ul class="nav nav-tabs">
+        <li>
+          <div class="swdbTitle">SWDB</div>
+        </li>
+        <li class="active">
+          <a id="swTab" class="nav-link active" href="#/list">Software</a>
+        </li>
+        <li class="nav-item">
+          <a id="instTab" class="nav-link" href="#/inst/list">Installations</a>
+        </li>
+        <a id="usrBtn" ng-click="usrBtnClk()" class="btn btn-primary" style="float:right">
                 <span class="glyphicon glyphicon-user" style="font-size: 1.5em" ></span>
                 {{session.username}} {{usrBtnTxt}}
             </a>
-        </div>
+      </ul>
     </div>
-<a id="addBtn" href="#/new/" class="btn btn-info">
-    <span class="glyphicon glyphicon-plus"></span>
-    Add software
-</a>
-</div>
+    <a id="addBtn" href="#/new/" class="btn btn-info">
+      <span class="glyphicon glyphicon-plus"></span>
+      Add software
+    </a>
+  </div>
 
 <!-- <div ng-controller="ListController as showCase" class="swdbTable"> -->
 <div ng-controller="ListController as showCase" style="padding-left:50px; padding-right:50px">
