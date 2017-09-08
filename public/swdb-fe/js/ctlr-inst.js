@@ -2,32 +2,32 @@
 appController.controller('InstListController', InstListPromiseCtrl);
 function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $cookies, $window, configService, userService, swService) {
 
-    $scope.$watch(function() {
-        return $scope.session;
-    }, function() {
-        // prep for login button
-        if ($scope.session && $scope.session.username) {
-            $scope.usrBtnTxt = '';
-        } else {
-            $scope.usrBtnTxt = 'Log in';
-        }
-    },true);
+  $scope.$watch(function () {
+    return $scope.session;
+  }, function () {
+    // prep for login button
+    if ($scope.session && $scope.session.username) {
+      $scope.usrBtnTxt = '';
+    } else {
+      $scope.usrBtnTxt = 'Log in';
+    }
+  }, true);
 
-    $scope.usrBtnClk = function(){
-        if ($scope.session.username) {
-            // logout if already logged in
-            $http.get($scope.props.webUrl+'logout').success(function(data) {
-                $window.location.href = $scope.props.auth.cas+'/logout';
-            });
-        } else {
-            //login
-            $window.location.href =
-                $scope.props.auth.cas+'/login?service='+
-                encodeURIComponent($scope.props.auth.login_service);
-        }
-    };
+  $scope.usrBtnClk = function () {
+    if ($scope.session.username) {
+      // logout if already logged in
+      $http.get($scope.props.webUrl + 'logout').success(function (data) {
+        $window.location.href = $scope.props.auth.cas + '/logout';
+      });
+    } else {
+      //login
+      $window.location.href =
+        $scope.props.auth.cas + '/login?service=' +
+        encodeURIComponent($scope.props.auth.login_service);
+    }
+  };
 
-    // get initialization info
+  // get initialization info
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
   var vm = this;
@@ -35,16 +35,16 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
   // first then inner promise uses installation data to get
   // sw metadata. Only after inner promise sets the data is outer
   // promise resolved.
-  vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
+  vm.dtOptions = DTOptionsBuilder.fromFnPromise(function () {
     var defer = $q.defer();
-    $http.get($scope.props.instApiUrl).then(function(result) {
+    $http.get($scope.props.instApiUrl).then(function (result) {
       var innerDefer = $q.defer();
-      var swIds = result.data.map(function(r){return r.software;});
+      var swIds = result.data.map(function (r) { return r.software; });
       $http({
-        url: $scope.props.apiUrl+"list",
+        url: $scope.props.apiUrl + "list",
         method: "POST",
         data: JSON.stringify(swIds)
-      }).then(function(innerResult) {
+      }).then(function (innerResult) {
         $scope.swMeta = innerResult.data;
         innerDefer.resolve(innerResult.data);
         defer.resolve(result.data);
@@ -54,18 +54,19 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
   })
     .withPaginationType('full_numbers')
     .withDOM('<"row"<"col-sm-8"l><"col-sm-4"B>>rtip');
+  vm.dtOptions.searching = true;
 
-    // Build the column specs 
-    // Set the titles to include search input field
-    // later attach to search actions
+  // Build the column specs 
+  // Set the titles to include search input field
+  // later attach to search actions
   vm.dtColumns = [
     DTColumnBuilder.newColumn('host')
-    .withTitle('<div class="swdbTableHeader">Host</div>' +'<input id="hostSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search host" />').withOption('defaultContent','').withClass("center")
-    .renderWith(function(data, type, full, meta) {
-        return '<a href="#/inst/details/'+full._id+'">' + full.host + '</a>';
-    }),
+      .withTitle('Host').withOption('defaultContent', '')
+      .renderWith(function (data, type, full, meta) {
+        return '<a href="#/inst/details/' + full._id + '">' + full.host + '</a>';
+      }),
     DTColumnBuilder.newColumn('software')
-      .withTitle('<div class="swdbTableHeader">Software</div>' + '<input id="softwareSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search software" />').withOption('defaultContent', '').withClass("center")
+      .withTitle('Software').withOption('defaultContent', '')
       .renderWith(function (data, type, full, meta) {
         return '<a href="#/details/' + full.software + '" >' +
           $scope.swMeta[full.software].swName +
@@ -74,27 +75,47 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
           '</a>';
       }),
     DTColumnBuilder.newColumn('area')
-      .withTitle('<div class="swdbTableHeader">Area</div>' + '<input id="areaSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search area" />').withOption('defaultContent', '').withClass("center"),
+      .withTitle('Area').withOption('defaultContent', ''),
     DTColumnBuilder.newColumn('statusDate')
-      .withTitle('<div class="swdbTableHeader">Status Date</div>' + '<input id="statusDateSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search status date" />').withOption('defaultContent', '').withClass("center"),
+      .withTitle('Status Date').withOption('defaultContent', '')
   ];
 
   angular.element('#swdbList').on('init.dt', function (event, loadedDT) {
     // wait for the init event from the datatable
     // (then it is done loading)
-    // Now apply filter routines to each column
-    var id = '#' + event.target.id;
-    var table = $(id).DataTable();
-    // Apply the search
-    table.columns().eq(0).each(function (colIdx) {
-      $('input', table.column(colIdx).header()).on('keyup change', function () {
-        console.log("searching column "+colIdx);
-        table
-          .column(colIdx)
-          .search(this.value)
-          .draw();
+    // Handle multiple init notifications
+    let id = '#' + event.target.id;
+    let num = $(id).find('thead').find('tr').length;
+    if (num == 1) {
+      var table = $(id).DataTable();
+      let tr = $('<tr/>').appendTo($(id).find('thead'));
+
+      // Apply the search
+      table.columns().eq(0).each(function (colIdx) {
+        let th = $('<th></th>').appendTo(tr);
+        // if (table.column(colIdx).searching) {
+          // append column search with id derived from column init data
+          th.append('<input id="' + table.settings().init().aoColumns[colIdx].mData + "Srch"+'" type="text" placeholder="' + (table.column(colIdx).placeholder || '')
+          // th.append('<input type="text" placeholder="' + (table.column(colIdx).placeholder || '')
+            + '" style="width:80%;" autocomplete="off">');
+          th.on('keyup', 'input', function () {
+            let elem = this; // aids type inference to avoid cast
+            if (elem instanceof HTMLInputElement) {
+              table.column(colIdx).search(elem.value).draw();
+            }
+          });
+
+          // Now apply filter routines to each column
+          $('input', table.column(colIdx).header()).on('keyup change', function () {
+            console.log("searching column " + colIdx);
+            table
+              .column(colIdx)
+              .search(this.value)
+              .draw();
+          });
+        // }
       });
-    });
+    }
   });
 }
 

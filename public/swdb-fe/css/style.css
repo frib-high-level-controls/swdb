@@ -40,6 +40,20 @@ swdb-bottom-div {
   justify-content: center; /* align horizontal */
   align-items: center; /* align vertical */
 }
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:after {
+  position: absolute;
+  bottom: 0px;
+  right: 10px;
+  display: block;
+  font-family: 'Glyphicons Halflings';
+  opacity: 0.5;
+}
+
 .swdbSection {
   padding-top: 20px;
   font-size: 20px;

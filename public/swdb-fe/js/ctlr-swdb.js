@@ -48,7 +48,8 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
     $scope.props = configService.getConfig();
     $scope.session = userService.getUser();
     var vm = this;
-    vm.dtOptions = DTOptionsBuilder.fromFnPromise(function() {
+    vm.dtOptions = DTOptionsBuilder
+    .fromFnPromise(function() {
         var defer = $q.defer();
         $http.get($scope.props.apiUrl).then(function(result) {
             defer.resolve(result.data);
@@ -61,41 +62,61 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
 
     vm.dtColumns = [
         DTColumnBuilder.newColumn('swName')
-          .withTitle('<div class="swdbTableHeader">Software name</div>'+'<input id="swNameSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search name" />')
+          .withTitle('Software name')
         .renderWith(function(data, type, full, meta) {
             return '<a href="#/details/'+full._id+'">' +
                 full.swName + '</a>';
         }),
         DTColumnBuilder.newColumn('version')
-          .withTitle('<div class="swdbTableHeader">SW version</div>'+'<input id="versionSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search SW version" />').withOption('defaultContent',''),
+          .withTitle('SW version').withOption('searchable',true),
         DTColumnBuilder.newColumn('branch')
-          .withTitle('<div class="swdbTableHeader">SW branch</div>'+'<input id="branchSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search branch" />').withOption('defaultContent',''),
+          .withTitle('SW branch').withOption('defaultContent',''),
         DTColumnBuilder.newColumn('owner')
-          .withTitle('<div class="swdbTableHeader">Owner</div>'+'<input id="ownerSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search owner" />').withOption('defaultContent',""),
+          .withTitle('Owner').withOption('defaultContent',""),
         DTColumnBuilder.newColumn('engineer')
-          .withTitle('<div class="swdbTableHeader">Engineer</div>'+'<input id="engineerSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search engineer" />').withOption('defaultContent',""),
+          .withTitle('Engineer').withOption('defaultContent',""),
         DTColumnBuilder.newColumn('status')
-          .withTitle('<div class="swdbTableHeader">Status</div>'+'<input id=statusSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search status" />').withOption('defaultContent',""),
+          .withTitle('Status').withOption('defaultContent',""),
         DTColumnBuilder.newColumn('statusDate')
-          .withTitle('<div class="swdbTableHeader">Status date</div>'+'<input id="statusDateSrch" class="swdbTableHeaderSearch" type="text" placeholder="Search date" />').withOption('defaultContent',"")
+          .withTitle('Status date').withOption('defaultContent',"")
     ];
     
     angular.element('#swdbList').on('init.dt', function(event, loadedDT) {
     // wait for the init event from the datatable
     // (then it is done loading)
-    // Now apply filter routines to each column
-    var id = '#' + event.target.id;
-    var table = $(id).DataTable();
-    // Apply the search
-    table.columns().eq(0).each(function (colIdx) {
-      $('input', table.column(colIdx).header()).on('keyup change', function () {
-        console.log("searching column "+colIdx);
-        table
-          .column(colIdx)
-          .search(this.value)
-          .draw();
+    // Handle multiple init notifications
+    let id = '#' + event.target.id;
+    let num = $(id).find('thead').find('tr').length;
+    if (num == 1) {
+      var table = $(id).DataTable();
+      let tr = $('<tr/>').appendTo($(id).find('thead'));
+
+      // Apply the search
+      table.columns().eq(0).each(function (colIdx) {
+        let th = $('<th></th>').appendTo(tr);
+        // if (table.column(colIdx).searchable) {
+        if (true) {
+          // append column search with id derived from column init data
+          th.append('<input id="' + table.settings().init().aoColumns[colIdx].mData + "Srch"+'" type="text" placeholder="' + (table.column(colIdx).placeholder || '')
+            + '" style="width:80%;" autocomplete="off">');
+          th.on('keyup', 'input', function () {
+            let elem = this; // aids type inference to avoid cast
+            if (elem instanceof HTMLInputElement) {
+              table.column(colIdx).search(elem.value).draw();
+            }
+          });
+
+          // Now apply filter routines to each column
+          $('input', table.column(colIdx).header()).on('keyup change', function () {
+            console.log("searching column " + colIdx);
+            table
+              .column(colIdx)
+              .search(this.value)
+              .draw();
+          });
+        }
       });
-    });
+    }
    });
 }
 

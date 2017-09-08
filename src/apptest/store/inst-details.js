@@ -72,7 +72,6 @@ test.describe("Installations detail screen tests", function() {
 
   test.it("should show the requested installation record title", function() {
     chromeDriver.findElement(By.linkText("host2")).click();
-    chromeDriver.findElement(By.linkText("host2")).click();
     chromeDriver.wait(until.titleIs("SWDB - Installation Details"), 5000);
   });
 
