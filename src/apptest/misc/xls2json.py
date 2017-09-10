@@ -3,31 +3,51 @@
 import xlrd
 from collections import OrderedDict
 import simplejson as json
+import time
 
 # Open the workbook and select the worksheet
-wb = xlrd.open_workbook('/home/rellis/Software_Configuration_Management_DRR01-02.xlsx')
-sheet = wb.sheet_by_index(1)
+wb = xlrd.open_workbook('/home/deployer/Downloads/Software_Configuration_DRR01-03.xlsx')
+sheet = wb.sheet_by_index(2)
 array = []
+instArray = []
 
 for nrow in range(1, sheet.nrows):
+  row = OrderedDict()
+  cols = sheet.row_values(nrow)
+  if cols[0] != "":
     #print "looking at ,".join(sheet.row_values(nrow))
-    row = OrderedDict()
-    cols = sheet.row_values(nrow)
-    row["swName"] = cols[0]
+    row["swName"] = cols[2]
     row["desc"] = cols[1]
-    row["status"] = cols[2]
-    row["version"] = cols[3]
-    row["area"] = cols[4]
-    row["owner"] = cols[5]
-    row["engineer"] = cols[6]
-    row["levelOfCare"] = cols[7]
-    row["platforms"] = cols[8]
-    row["revisionControl"] = cols[9]
-    row["revisionControlLoc"] = cols[10]
+    row["status"] = cols[4]
+    row["version"] = str(cols[5])
+    row["area"] = cols[6]
+    row["owner"] = cols[7]
+    row["engineer"] = cols[8]
+    row["levelOfCare"] = cols[9]
+    row["platforms"] = cols[10]
+    row["revisionControl"] = cols[11]
+    row["revisionControlLoc"] = cols[12]
+    row["_id"] = format(nrow, "024x")
 
-    if cols[0] != "":
-        array.append(row)
+    # print "Adding sw row "+json.dumps(row);
+    array.append(row)
 
+    for host in cols[3].split(','):
+      instRow = OrderedDict()
+      instRow["host"] = host
+      instRow["area"] = cols[6]
+      instRow["status"] = cols[4]
+      instRow["statusDate"] = time.strftime("%m/%d/%Y")
+      instRow["software"] = format(nrow,"024x")
+
+      # print "  Adding inst row "+json.dumps(instRow);
+      instArray.append(instRow)
+    
 json_data = json.dumps(array, indent=2)
-with open('/home/rellis/out.json', 'w') as jfile:
+inst_json_data = json.dumps(instArray, indent=2)
+# print inst_json_data
+with open('/home/deployer/swOut.json', 'w') as jfile:
     jfile.write(json_data)
+
+with open('/home/deployer/instOut.json', 'w') as jfile:
+    jfile.write(inst_json_data)

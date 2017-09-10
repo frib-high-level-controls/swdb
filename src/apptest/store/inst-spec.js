@@ -44,7 +44,7 @@ describe("app", function() {
   before("setup", function(done){
     console.log("Starting inst-spec");
     this.timeout(5000);
-    testTools.loadTestCollectionsStandard(done);
+    testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
     });
   after(function(done) {
     // clear the test collection

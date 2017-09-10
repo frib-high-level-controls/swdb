@@ -29,7 +29,7 @@ test.describe("Software update screen tests", function () {
   test.before(function (done) {
     console.log("Starting swdb-new");
     this.timeout(5000);
-    testTools.loadTestCollectionsStandard(done);
+    testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
   });
 
   test.after(function (done) {

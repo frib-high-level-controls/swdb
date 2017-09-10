@@ -9,12 +9,14 @@ var instBe = new InstBe.InstDb();
 var tools = new CommonTools.CommonTools();
 var props = tools.getConfiguration();
 var fs = require("fs");
-var testInstData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/instTestDataCombined.json', 'utf8'));
-var testSwData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/swTestDataCombined.json', 'utf8'));
+// const testInstData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/instTestDataCombined.json', 'utf8'));
+// const testSwData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/swTestDataCombined.json', 'utf8'));
 var TestTools = (function () {
     function TestTools() {
     }
-    TestTools.prototype.loadTestCollectionsStandard = function (done) {
+    TestTools.prototype.loadTestCollectionsStandard = function (done, swFile, instFile) {
+        var testInstData = JSON.parse(fs.readFileSync(instFile, 'utf-8'));
+        var testSwData = JSON.parse(fs.readFileSync(swFile, 'utf8'));
         // console.log("Starting standard test db clear and reload...");
         // before we start loading data, convert _ids to ObjectIDs
         // console.log("Converting ObjectIds...");

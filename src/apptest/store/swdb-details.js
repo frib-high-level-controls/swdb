@@ -28,7 +28,7 @@ test.describe("Preload db record tests", function() {
   test.before(function(done) {
     console.log("Starting swdb-details");
     this.timeout(5000);
-    testTools.loadTestCollectionsStandard(done);
+    testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
   });
 
   test.after(function(done) {

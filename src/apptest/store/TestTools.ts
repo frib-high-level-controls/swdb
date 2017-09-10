@@ -8,11 +8,13 @@ const tools = new CommonTools.CommonTools();
 const props = tools.getConfiguration();
 
 import fs = require('fs');
-const testInstData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/instTestDataCombined.json', 'utf8'));
-const testSwData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/swTestDataCombined.json', 'utf8'));
+// const testInstData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/instTestDataCombined.json', 'utf8'));
+// const testSwData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/swTestDataCombined.json', 'utf8'));
 
 export class TestTools {
-  public loadTestCollectionsStandard(done) {
+  public loadTestCollectionsStandard(done, swFile: string, instFile: string) {
+    const testInstData = JSON.parse(fs.readFileSync(instFile, 'utf-8'));
+    const testSwData = JSON.parse(fs.readFileSync(swFile, 'utf8'));
     // console.log("Starting standard test db clear and reload...");
     // before we start loading data, convert _ids to ObjectIDs
     // console.log("Converting ObjectIds...");
