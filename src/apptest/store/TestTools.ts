@@ -41,6 +41,9 @@ export class TestTools {
                 // console.log("inserting testInstData in installations collection");
                 InstBe.InstDb.instDoc.db.collections.instCollection.insert(testInstData,
                   (instInsertErr, instRecords) => {
+                    if (instInsertErr) {
+                      console.log(instInsertErr);
+                    }
                     done();
                   });
               });

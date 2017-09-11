@@ -72,7 +72,7 @@
   {
     "swName": "GTS MASTER IOC",
     "desc": "Global Timing System event generator IOC",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for Beam",
     "version": "4cc4e0b9474",
     "area": "Global",
     "owner": "High Level Systems Group Leader",
@@ -352,7 +352,7 @@
   {
     "swName": "PMAC STPC IOC",
     "desc": "LEBT stepper motor controller IOC (05)",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for Beam",
     "version": "57944683491.0",
     "area": "FE",
     "owner": "Electronic Instrumentation Group Leader",
@@ -366,7 +366,7 @@
   {
     "swName": "PM Scan IOC",
     "desc": "LEBT flapper profile monitor IOC (856X)",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for Beam",
     "version": "917f88197b1",
     "area": "FE",
     "owner": "Electronic Instrumentation Group Leader",
@@ -408,7 +408,7 @@
   {
     "swName": "OPI Diagnostics",
     "desc": "Operator screens for diagnostics",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for Beam",
     "version": "88cef9359e8",
     "area": "Global",
     "owner": "Electronic Instrumentation Group Leader",
@@ -422,7 +422,7 @@
   {
     "swName": "OPI GTS",
     "desc": "Operator screens for Global Timing System",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for Beam",
     "version": "02d365e4bf2",
     "area": "Global",
     "owner": "High Level Systems Group Leader",
@@ -492,7 +492,7 @@
   {
     "swName": "FPS IOC",
     "desc": "Fast Protection System IOC",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for Beam",
     "version": "b83493ff00f",
     "area": "Global",
     "owner": "Controls Department Manager",
@@ -506,7 +506,7 @@
   {
     "swName": "FPS FW",
     "desc": "Firmware for Fast Protection System master node.",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for Beam",
     "version": "dbd6bc3af72",
     "area": "FE",
     "owner": "Controls Department Manager",

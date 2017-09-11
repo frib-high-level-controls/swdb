@@ -38,6 +38,9 @@ var TestTools = (function () {
                 Be.Db.swDoc.db.collections.swdbCollection.insert(testSwData, function (swDocInsertErr, swDocRecords) {
                     // console.log("inserting testInstData in installations collection");
                     InstBe.InstDb.instDoc.db.collections.instCollection.insert(testInstData, function (instInsertErr, instRecords) {
+                        if (instInsertErr) {
+                            console.log(instInsertErr);
+                        }
                         done();
                     });
                 });
