@@ -31,10 +31,10 @@
     "headers": "Origin, X-Requested-With, Content-Type, Accept"
   },
   "test": {
-    "swTestDataFile": "/home/deployer/swdb/src/apptest/misc/datafiles/swTestDataDemo2.json",
-    "instTestDataFile": "/home/deployer/swdb/src/apptest/misc/datafiles/instTestDataDemo2.json"
-    //"swTestDataFile": "/home/deployer/swdb/src/apptest/misc/datafiles/swTestDataCombined.json",
-    //"instTestDataFile": "/home/deployer/swdb/src/apptest/misc/datafiles/instTestDataCombined.json"
+    //"swTestDataFile": "/home/deployer/swdb/src/apptest/misc/datafiles/swTestDataDemo2.json",
+    //"instTestDataFile": "/home/deployer/swdb/src/apptest/misc/datafiles/instTestDataDemo2.json"
+    "swTestDataFile": "/home/deployer/swdb/src/apptest/misc/datafiles/swTestDataCombined.json",
+    "instTestDataFile": "/home/deployer/swdb/src/apptest/misc/datafiles/instTestDataCombined.json"
 // const testInstData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/instTestDataCombined.json', 'utf8'));
 // const testSwData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/swTestDataCombined.json', 'utf8'));
   }
