@@ -26,6 +26,7 @@ for nrow in range(1, sheet.nrows):
       row["swName"] = cols[2]
       row["desc"] = cols[1]
       row["status"] = "Ready for Beam"
+      row["statusDate"] = time.strftime("%m/%d/%Y")
       row["version"] = str(cols[5])
       row["area"] = cols[6]
       row["owner"] = cols[7]
@@ -35,8 +36,8 @@ for nrow in range(1, sheet.nrows):
       row["revisionControl"] = cols[11]
       row["revisionControlLoc"] = cols[12]
       row["_id"] = format(nrow, "024x")
- 
-      print str(nrow)+":Adding sw row "+json.dumps(row);
+
+      print str(nrow)+":Adding sw row "+json.dumps(row)
       array.append(row)
     else:
       print "Found existing swName:" + cols[2] + " version:" + str(cols[5]) + " skipping."
@@ -50,20 +51,20 @@ for nrow in range(1, sheet.nrows):
         instRow["host"] = host
         instRow["area"] = cols[6]
         instRow["status"] = cols[4]
-        instRow["statusDate"] = time.strftime("%m/%d/%Y")
+        instRow["statusDate"] = time.strftime("%m/%d/%Y", cols[15])
         instRow["vvResultsLoc"] = cols[14]
         instRow["software"] = swKeyList[keyStr]
 
-        print "  "+str(nrow)+":Adding inst row "+json.dumps(instRow);
+        print "  "+str(nrow)+":Adding inst row "+json.dumps(instRow)
         instArray.append(instRow)
       else:
-       print "Found existing installation host:" + host + " sw:" + swKeyList[keyStr] + " skipping."
-    
+        print "Found existing installation host:" + host + " sw:" + swKeyList[keyStr] + " skipping."
+
 json_data = json.dumps(array, indent=2)
 inst_json_data = json.dumps(instArray, indent=2)
 
 with open('/home/deployer/swOut.json', 'w') as jfile:
-    jfile.write(json_data)
+  jfile.write(json_data)
 
 with open('/home/deployer/instOut.json', 'w') as jfile:
-    jfile.write(inst_json_data)
+  jfile.write(inst_json_data)
