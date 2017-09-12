@@ -80,7 +80,7 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
       .withTitle('Status Date').withOption('defaultContent', '')
   ];
 
-  angular.element('#swdbList').on('init.dt', function (event, loadedDT) {
+  angular.element('#instList').on('init.dt', function (event, loadedDT) {
     // wait for the init event from the datatable
     // (then it is done loading)
     // Handle multiple init notifications
@@ -118,7 +118,6 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
     }
   });
 }
-
 
 appController.controller('InstDetailsController', InstDetailsPromiseCtrl);
 function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configService, userService) {
