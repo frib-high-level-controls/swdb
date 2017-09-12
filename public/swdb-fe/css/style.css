@@ -10,22 +10,23 @@ swdb-bottom-div {
   height:40px;
   width:75px;
   /* border:1px solid #ccc; */
-  /* padding:10px; */
+  padding:2px;
   /* margin-left:5px; */
   /* text-align:center; */
-  font:24px/26px Georgia, Garamond, Serif;
+  font:24px/26px Liberation Sans, Georgia, Garamond, Serif;
   /* overflow:auto; */
   display: flex;
   justify-content: center; /* align horizontal */
   align-items: center; /* align vertical */
 }
 .swdbTableHeader {
-  padding:3px;
+  padding:5px;
   justify-content: left; /* align horizontal */
   align-items: center; /* align vertical */
 }
 .swdbTableHeaderSearch {
-  padding:0px;
+  padding:1px;
+  margin:0px;
   display: flex;
   justify-content: left; /* align horizontal */
   align-items: center; /* align vertical */
@@ -33,9 +34,7 @@ swdb-bottom-div {
   width: 80%;
 }
 .swdbTable {
-  padding:5px;
-  /* margin-left:5px; */
-  /* text-align:center; */
+  padding:1px;
   display: flex;
   justify-content: center; /* align horizontal */
   align-items: center; /* align vertical */

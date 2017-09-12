@@ -57,8 +57,8 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
         return defer.promise;
     })
     .withPaginationType('full_numbers')
-    .withDOM(
-      '<"row"<"col-sm-8"l><"col-sm-4"B>>rtip');
+    .withOption('hasBootstrap', true)
+    .withDOM('<"row"<"col-sm-8"l><"col-sm-4"B>>rtip');
 
     vm.dtColumns = [
         DTColumnBuilder.newColumn('swName')
@@ -97,7 +97,7 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
         // if (table.column(colIdx).searchable) {
         if (true) {
           // append column search with id derived from column init data
-          th.append('<input id="' + table.settings().init().aoColumns[colIdx].mData + "Srch"+'" type="text" placeholder="' + (table.column(colIdx).placeholder || '')
+          th.append('<input class="swdbTableHeaderSearch" id="' + table.settings().init().aoColumns[colIdx].mData + "Srch"+'" type="text" placeholder="' + (table.column(colIdx).placeholder || '')
             + '" style="width:80%;" autocomplete="off">');
           th.on('keyup', 'input', function () {
             let elem = this; // aids type inference to avoid cast
