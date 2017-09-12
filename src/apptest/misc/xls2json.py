@@ -2,6 +2,7 @@
 
 from collections import OrderedDict
 import time
+import datetime
 import xlrd
 import simplejson as json
 
@@ -51,7 +52,14 @@ for nrow in range(1, sheet.nrows):
         instRow["host"] = host
         instRow["area"] = cols[6]
         instRow["status"] = cols[4]
-        instRow["statusDate"] = time.strftime("%m/%d/%Y", cols[15])
+        # instRow["statusDate"] = time.strftime("%m/%d/%Y", cols[15])
+        vvDate = sheet.cell_value(nrow, 15)
+        if vvDate:
+          # instRow["statusDate"] = time.strftime("%m/%d/%Y", cols[15])
+          vvDatetime = datetime.datetime(*xlrd.xldate_as_tuple(sheet.cell_value(nrow, 15), wb.datemode))
+          # print "DATE TEST: %s" % vvDatetime
+          instRow["statusDate"] = vvDatetime.strftime("%m/%d/%Y")
+
         instRow["vvResultsLoc"] = cols[14]
         instRow["software"] = swKeyList[keyStr]
 
