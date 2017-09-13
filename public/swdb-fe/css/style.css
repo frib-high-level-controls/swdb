@@ -40,7 +40,7 @@ swdb-bottom-div {
   align-items: center; /* align vertical */
 }
 
-table.dataTable thead .sorting:after,
+/* table.dataTable thead .sorting:after,
 table.dataTable thead .sorting_asc:after,
 table.dataTable thead .sorting_desc:after,
 table.dataTable thead .sorting_asc_disabled:after,
@@ -51,7 +51,7 @@ table.dataTable thead .sorting_desc_disabled:after {
   display: block;
   font-family: 'Glyphicons Halflings';
   opacity: 0.5;
-}
+} */
 
 .swdbSection {
   padding-top: 20px;

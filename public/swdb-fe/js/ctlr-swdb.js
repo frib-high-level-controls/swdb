@@ -57,7 +57,6 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
         return defer.promise;
     })
     .withPaginationType('full_numbers')
-    .withOption('hasBootstrap', true)
     .withDOM('<"row"<"col-sm-8"l><"col-sm-4"B>>rtip');
 
     vm.dtColumns = [
