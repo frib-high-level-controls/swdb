@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose = require("mongoose");
 var instTools = require("./instLib.js");
 var CommonTools = require("./CommonTools");
-var InstDb = (function () {
+var InstDb = /** @class */ (function () {
     function InstDb() {
         this.findByName = function (searchName) {
             InstDb.instDoc.findOne({ swName: searchName }, function (err, doc) {

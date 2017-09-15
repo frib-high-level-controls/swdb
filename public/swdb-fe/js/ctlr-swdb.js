@@ -66,10 +66,10 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
             return '<a href="#/details/'+full._id+'">' +
                 full.swName + '</a>';
         }),
-        DTColumnBuilder.newColumn('version')
-          .withTitle('SW version').withOption('searchable',true),
         DTColumnBuilder.newColumn('branch')
-          .withTitle('SW branch').withOption('defaultContent',''),
+          .withTitle('Branch').withOption('defaultContent',''),
+        DTColumnBuilder.newColumn('version')
+          .withTitle('Version').withOption('searchable',true),
         DTColumnBuilder.newColumn('owner')
           .withTitle('Owner').withOption('defaultContent',""),
         DTColumnBuilder.newColumn('engineer')
@@ -158,7 +158,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService,
 
 
 appController.controller('NewController', NewPromiseCtrl);
-function NewPromiseCtrl($scope, $http, $window, configService, userService) {
+function NewPromiseCtrl($scope, $http, $window, $location, configService, userService) {
 
     $scope.$watch(function() {
         return $scope.session;
@@ -210,32 +210,39 @@ function NewPromiseCtrl($scope, $http, $window, configService, userService) {
 
 
 
-    $scope.processForm = function(){
-        delete $scope.formData.__v;
-
-        if ($scope.inputForm.$valid){
-            $http({
-                method: 'POST',
-                url: $scope.props.apiUrl,
-                data: $scope.formData,
-                headers: { 'Content-Type': 'application/json' }
-            })
-                .success(function(data){
-                    $scope.swdbParams.formStatus="Document posted";
-                    $scope.swdbParams.formShowErr=false;
-                    $scope.swdbParams.formShowStatus=true;
-                })
-                .error(function(error, status){
-                    $scope.swdbParams.error = {message: error, status: status};
-                    $scope.swdbParams.formErr="Error: "+$scope.swdbParams.error.message+"("+status+")";
-                    $scope.swdbParams.formShowStatus=false;
-                    $scope.swdbParams.formShowErr=true;
-                });
-        } else {
-            $scope.swdbParams.formErr="Error: clear errors before submission";
-            $scope.swdbParams.formShowStatus=false;
-            $scope.swdbParams.formShowErr=true;
-        }
+    $scope.processForm = function () {
+      delete $scope.formData.__v;
+      if (!$scope.formData.version){
+        // $scope.formData.version="";
+      }
+      if ($scope.inputForm.$valid) {
+        $http({
+          method: 'POST',
+          url: $scope.props.apiUrl,
+          data: $scope.formData,
+          headers: { 'Content-Type': 'application/json' }
+        })
+          .then(function success(response) {
+            let headers = response.headers();
+            $scope.swdbParams.formStatus = "Document posted";
+            $scope.swdbParams.formShowErr = false;
+            $scope.swdbParams.formShowStatus = true;
+            if (headers.location){
+              let id = headers.location.split('/').pop();
+              $location.path('/details/' + id);
+            }
+          }, function error(response) {
+            let headers = response.headers();
+            $scope.swdbParams.error = { message: response.statusText + response.data, status: response.status };
+            $scope.swdbParams.formErr = "Error: " + $scope.swdbParams.error.message + "(" + response.status + ")";
+            $scope.swdbParams.formShowStatus = false;
+            $scope.swdbParams.formShowErr = true;
+          });
+      } else {
+        $scope.swdbParams.formErr = "Error: clear errors before submission";
+        $scope.swdbParams.formShowStatus = false;
+        $scope.swdbParams.formShowErr = true;
+      }
     };
 
     getEnums = function() {

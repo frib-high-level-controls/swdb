@@ -11,7 +11,7 @@ var props = tools.getConfiguration();
 var fs = require("fs");
 // const testInstData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/instTestDataCombined.json', 'utf8'));
 // const testSwData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/swTestDataCombined.json', 'utf8'));
-var TestTools = (function () {
+var TestTools = /** @class */ (function () {
     function TestTools() {
     }
     TestTools.prototype.loadTestCollectionsStandard = function (done, swFile, instFile) {

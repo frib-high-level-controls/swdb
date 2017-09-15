@@ -8,10 +8,11 @@ export class Db {
   public static swDoc: any;
   private static schema: any;
   private static dbConnect: any;
+  private props: any;
   constructor() {
     const tools = new swdbTools.CommonTools();
-    let props: any = {};
-    props = tools.getConfiguration();
+    // let props: any = {};
+    this.props = tools.getConfiguration();
     if (!Db.schema) {
       // console.log("No db connection found, making one...");
       Db.schema = new mongoose.Schema({
@@ -21,15 +22,15 @@ export class Db {
         desc: String,
         owner: { type: String, required: true },
         engineer: { type: String, required: false },
-        levelOfCare: { type: String, enum: props.levelOfCareEnums, required: true },
-        status: { type: String, enum: props.statusEnums, required: true },
+        levelOfCare: { type: String, enum: this.props.levelOfCareEnums, required: true },
+        status: { type: String, enum: this.props.statusEnums, required: true },
         statusDate: { type: Date, required: true },
         platforms: String,
         designDescDocLoc: String,
         descDocLoc: String,
         vvProcLoc: String,
         vvResultsLoc: String,
-        versionControl: { type: String, enum: props.rcsEnums },
+        versionControl: { type: String, enum: this.props.rcsEnums },
         versionControlLoc: String,
         recertFreq: String,
         recertStatus: String,
@@ -42,7 +43,7 @@ export class Db {
 
       Db.swDoc = mongoose.model('swdb', Db.schema, 'swdbCollection');
       // console.log("Connecting to mongo... " + JSON.stringify(props.mongodbUrl));
-      Db.dbConnect = mongoose.connect(props.mongodbUrl, (err, db) => {
+      Db.dbConnect = mongoose.connect(this.props.mongodbUrl, (err, db) => {
         if (!err) {
           // console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl);
           // console.log("connected to mongo... " + JSON.stringify(props.mongodbUrl));
@@ -86,7 +87,8 @@ export class Db {
       if (err) {
         next(err);
       } else {
-        res.location('/swdb/v1/' + req.body._id);
+        // console.log('saved: ' + JSON.stringify(doc));
+        res.location(this.props.apiUrl + doc._id);
         res.status(201);
         res.send();
       }
@@ -134,6 +136,7 @@ export class Db {
             if (saveerr) {
               return next(saveerr);
             } else {
+              res.location(this.props.apiUrl + doc._id);
               res.end();
             }
           });

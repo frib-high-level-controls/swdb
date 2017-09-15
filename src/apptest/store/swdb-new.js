@@ -187,8 +187,20 @@ test.describe("Software update screen tests", function () {
     input = chromeDriver.findElement(By.xpath('//*[@id="recertDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
     input.click();
     chromeDriver.findElement(By.id("submitBtn")).click();
-    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("formStatus")),
-      "Document posted"), 5000);
+    // chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("formStatus")),
+    //   "Document posted"), 5000);
+  });
+
+  test.it("should show the details record", function () {
+    chromeDriver.wait(until.titleIs("SWDB - Details"), 5000);
+  });
+
+  test.it("should show the correct software name in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("swName")), 3000);
+    chromeDriver.findElement(By.id("swName")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Test Record3");
+      });
   });
 
 });

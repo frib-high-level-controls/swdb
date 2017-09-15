@@ -116,13 +116,13 @@
                 <label class="col-sm-2 control-label">Owner*</label>
                 <div class="col-sm-8">
                     <input id="owner" type="text" name="ownerInput" class="form-control" placeholder="SW owner" ng-model="formData.owner"
-                                                                                                                ng-minlength="2" ng-maxlength="30" required >
+                      ng-minlength="2" ng-maxlength="80" required >
                     </input>
                 </div>
                 <div class="col-sm-2" id="ownerInputSts" ng-messages="inputForm.ownerInput.$error" ng-if="inputForm.ownerInput.$dirty">
                     <div ng-message="required">Owner is required</div>
                     <div ng-message="minlength">Owner must exceed 2 characters</div>
-                    <div ng-message="maxlength">Owner must not exceed 30 characters</div>
+                    <div ng-message="maxlength">Owner must not exceed 80 characters</div>
                 </div>
             </div>
         </div>

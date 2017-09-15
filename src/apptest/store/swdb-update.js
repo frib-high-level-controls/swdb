@@ -184,8 +184,20 @@ test.describe("Software update screen tests", function() {
 
     // submit and check result
     chromeDriver.findElement(By.id("submitBtn")).click();
-    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("formStatus")),
-      "Document posted"),5000);
+    // chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("formStatus")),
+    //   "Document posted"),5000);
+  });
+
+  test.it("should show the details record", function () {
+    chromeDriver.wait(until.titleIs("SWDB - Details"), 5000);
+  });
+
+  test.it("should show the correct software name in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("swName")), 3000);
+    chromeDriver.findElement(By.id("swName")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Test Record3");
+      });
   });
 
   // find the created record

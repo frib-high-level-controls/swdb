@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs");
 var rc = require("rc");
-var CommonTools = (function () {
+var CommonTools = /** @class */ (function () {
     function CommonTools() {
         this.getConfiguration = function () {
             // acquire configuration

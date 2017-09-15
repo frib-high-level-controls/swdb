@@ -2,8 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose = require("mongoose");
 var swdbTools = require("./CommonTools");
-var Db = (function () {
+var Db = /** @class */ (function () {
     function Db() {
+        var _this = this;
         // general function to find a request ID in a request and
         // return it, if available
         this.getReqId = function (req) {
@@ -35,7 +36,8 @@ var Db = (function () {
                     next(err);
                 }
                 else {
-                    res.location('/swdb/v1/' + req.body._id);
+                    // console.log('saved: ' + JSON.stringify(doc));
+                    res.location(_this.props.apiUrl + doc._id);
                     res.status(201);
                     res.send();
                 }
@@ -67,6 +69,7 @@ var Db = (function () {
             }
         };
         this.updateDoc = function (req, res, next) {
+            var _this = this;
             var id = this.getReqId(req);
             if (id) {
                 Db.swDoc.findOne({ _id: id }, function (err, doc) {
@@ -85,6 +88,7 @@ var Db = (function () {
                                 return next(saveerr);
                             }
                             else {
+                                res.location(_this.props.apiUrl + doc._id);
                                 res.end();
                             }
                         });
@@ -140,8 +144,8 @@ var Db = (function () {
             });
         };
         var tools = new swdbTools.CommonTools();
-        var props = {};
-        props = tools.getConfiguration();
+        // let props: any = {};
+        this.props = tools.getConfiguration();
         if (!Db.schema) {
             // console.log("No db connection found, making one...");
             Db.schema = new mongoose.Schema({
@@ -151,15 +155,15 @@ var Db = (function () {
                 desc: String,
                 owner: { type: String, required: true },
                 engineer: { type: String, required: false },
-                levelOfCare: { type: String, enum: props.levelOfCareEnums, required: true },
-                status: { type: String, enum: props.statusEnums, required: true },
+                levelOfCare: { type: String, enum: this.props.levelOfCareEnums, required: true },
+                status: { type: String, enum: this.props.statusEnums, required: true },
                 statusDate: { type: Date, required: true },
                 platforms: String,
                 designDescDocLoc: String,
                 descDocLoc: String,
                 vvProcLoc: String,
                 vvResultsLoc: String,
-                versionControl: { type: String, enum: props.rcsEnums },
+                versionControl: { type: String, enum: this.props.rcsEnums },
                 versionControlLoc: String,
                 recertFreq: String,
                 recertStatus: String,
@@ -170,7 +174,7 @@ var Db = (function () {
             Db.schema.index({ swName: 1, version: 1, branch: 1 }, { unique: true });
             Db.swDoc = mongoose.model('swdb', Db.schema, 'swdbCollection');
             // console.log("Connecting to mongo... " + JSON.stringify(props.mongodbUrl));
-            Db.dbConnect = mongoose.connect(props.mongodbUrl, function (err, db) {
+            Db.dbConnect = mongoose.connect(this.props.mongodbUrl, function (err, db) {
                 if (!err) {
                     // console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl);
                     // console.log("connected to mongo... " + JSON.stringify(props.mongodbUrl));
