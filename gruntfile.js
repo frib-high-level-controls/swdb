@@ -39,11 +39,16 @@ module.exports = function(grunt) {
                     "src/app/**/*.ts"
                 ]
             }
+        },
+        clean: {
+            app: [ './app' ],
+            test: [ './test' ],
         }
     });
 
     grunt.loadNpmTasks("grunt-ts");
     grunt.loadNpmTasks("grunt-tslint");
+    grunt.loadNpmTasks("grunt-contrib-clean");
 
     grunt.registerTask("default", [
         "ts:app"

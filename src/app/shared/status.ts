@@ -8,7 +8,7 @@ import express = require('express');
 
 import handlers = require('./handlers');
 
-type Status = 'ERROR' | 'OK';
+export type Status = 'ERROR' | 'OK';
 
 export interface ComponentStatus {
   status: Status;

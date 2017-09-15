@@ -12,7 +12,7 @@ Quick Start
 -----------
 ```
 $ npm install        # Download and install dependencies (including Typescript)
-$ npm run grunt ts   # Compile the Typescript files to regular Javascript
+$ npm run grunt      # Compile the Typescript files to regular Javascript
 $ ./bin/app          # Run the application with default configuration
 $ ./bin/app --config ./config/examplerc   # Run the application with custom configuration
 ```
