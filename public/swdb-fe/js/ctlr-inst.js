@@ -68,16 +68,23 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
     DTColumnBuilder.newColumn('software')
       .withTitle('Software').withOption('defaultContent', '')
       .renderWith(function (data, type, full, meta) {
+        if (!$scope.swMeta[full.software].branch){
+          $scope.swMeta[full.software].branch = "";
+        }
         return '<a href="#/details/' + full.software + '" >' +
           $scope.swMeta[full.software].swName +
-          '/' + $scope.swMeta[full.software].version +
-          '/' + $scope.swMeta[full.software].branch +
+          ' / ' + $scope.swMeta[full.software].branch +
+          ' / ' + $scope.swMeta[full.software].version +
           '</a>';
       }),
     DTColumnBuilder.newColumn('area')
       .withTitle('Area').withOption('defaultContent', ''),
+    DTColumnBuilder.newColumn('status')
+      .withTitle('Status').withOption('defaultContent', ''),
     DTColumnBuilder.newColumn('statusDate')
-      .withTitle('Status Date').withOption('defaultContent', '')
+      .withTitle('Status Date').withOption('defaultContent', ''),
+    DTColumnBuilder.newColumn('vvResultsLoc')
+      .withTitle('V&V Results').withOption('defaultContent', '')
   ];
 
   angular.element('#instList').on('init.dt', function (event, loadedDT) {
