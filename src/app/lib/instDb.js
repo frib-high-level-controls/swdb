@@ -5,6 +5,7 @@ var instTools = require("./instLib.js");
 var CommonTools = require("./CommonTools");
 var InstDb = /** @class */ (function () {
     function InstDb() {
+        var _this = this;
         this.findByName = function (searchName) {
             InstDb.instDoc.findOne({ swName: searchName }, function (err, doc) {
                 return (doc);
@@ -23,7 +24,7 @@ var InstDb = /** @class */ (function () {
                     next(err);
                 }
                 else {
-                    res.location('/inst/details/' + req.body._id);
+                    res.location(_this.props.instApiUrl + doc._id);
                     res.status(201);
                     res.send();
                 }
@@ -73,6 +74,7 @@ var InstDb = /** @class */ (function () {
                                 return next(saveerr);
                             }
                             else {
+                                res.location(_this.props.instApiUrl + founddoc._id);
                                 res.end();
                             }
                         });
@@ -106,14 +108,13 @@ var InstDb = /** @class */ (function () {
             });
         };
         var ctools = new CommonTools.CommonTools();
-        var props = {};
-        props = ctools.getConfiguration();
+        this.props = ctools.getConfiguration();
         if (!InstDb.instSchema) {
             InstDb.instSchema = new mongoose.Schema({
                 host: { type: String, required: true },
-                area: { type: String, enum: props.areaEnums, required: true },
+                area: { type: String, enum: this.props.areaEnums, required: true },
                 slots: [String],
-                status: { type: String, enum: props.instStatusEnums, required: true },
+                status: { type: String, enum: this.props.instStatusEnums, required: true },
                 statusDate: { type: Date, required: true },
                 software: { type: String, required: true },
                 vvResultsLoc: String,
@@ -121,7 +122,7 @@ var InstDb = /** @class */ (function () {
             }, { emitIndexErrors: true });
             InstDb.instSchema.index({ host: 1, software: 1 }, { unique: true });
             InstDb.instDoc = mongoose.model('inst', InstDb.instSchema, 'instCollection');
-            InstDb.dbConnect = mongoose.connect(props.mongodbUrl, function (err, db) {
+            InstDb.dbConnect = mongoose.connect(this.props.mongodbUrl, function (err, db) {
                 if (!err) {
                     // console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl);
                     // console.log("connected to mongo... " + JSON.stringify(props.mongodbUrl));

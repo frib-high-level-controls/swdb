@@ -157,7 +157,7 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configServ
 
 
 appController.controller('InstNewController', InstNewPromiseCtrl);
-function InstNewPromiseCtrl($scope, $http, $window, configService, userService, slotService) {
+function InstNewPromiseCtrl($scope, $http, $window, $location, configService, userService, slotService) {
 
   $scope.$watch(function() {
     return $scope.session;
@@ -256,17 +256,23 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
                 data: $scope.formData,
                 headers: { 'Content-Type': 'application/json' }
             })
-                .success(function(data){
-                    $scope.swdbParams.formStatus="Document posted";
-                    $scope.swdbParams.formShowErr=false;
-                    $scope.swdbParams.formShowStatus=true;
-                })
-                .error(function(error, status){
-                    $scope.swdbParams.error = {message: error, status: status};
-                    $scope.swdbParams.formErr="Error: "+$scope.swdbParams.error.message+"("+status+")";
-                    $scope.swdbParams.formShowStatus=false;
-                    $scope.swdbParams.formShowErr=true;
-                });
+              .then(function success(response) {
+                $scope.swdbParams.formStatus = "Document posted";
+                $scope.swdbParams.formShowErr = false;
+                $scope.swdbParams.formShowStatus = true;
+                let headers = response.headers();
+                if (headers.location) {
+                  // if location header is present extract the id
+                  let id = headers.location.split('/').pop();
+                  console.log("going to: /inst/details/"+id);
+                  $location.path('/inst/details/' + id);
+                }
+              }, function error(response) {
+                $scope.swdbParams.error = { message: response.statusText + response.data, status: response.status };
+                $scope.swdbParams.formErr = "Error: " + $scope.swdbParams.error.message + "(" + response.status + ")";
+                $scope.swdbParams.formShowStatus = false;
+                $scope.swdbParams.formShowErr = true;
+              });
         } else {
             $scope.swdbParams.formErr="Error: clear errors before submission";
             $scope.swdbParams.formShowStatus=false;
@@ -328,7 +334,7 @@ function InstNewPromiseCtrl($scope, $http, $window, configService, userService, 
 
 
 appController.controller('InstUpdateController', InstUpdatePromiseCtrl);
-function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, configService, userService) {
+function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService) {
 
   $scope.$watch(function() {
     return $scope.session;
@@ -381,17 +387,23 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, configServi
                 data: $scope.formData,
                 headers: { 'Content-Type': 'application/json' }
             })
-                .success(function(data){
-                    $scope.swdbParams.formStatus="Document updates successfully posted";
-                    $scope.swdbParams.formShowErr=false;
-                    $scope.swdbParams.formShowStatus=true;
-                })
-                .error(function(error, status){
-                    $scope.swdbParams.error = {message: error, status: status};
-                    $scope.swdbParams.formErr="Error: "+$scope.swdbParams.error.message+"("+status+")";
-                    $scope.swdbParams.formShowStatus=false;
-                    $scope.swdbParams.formShowErr=true;
-                });
+            .then(function success(response) {
+              $scope.swdbParams.formStatus = "Document updates successfully posted";
+              $scope.swdbParams.formShowErr = false;
+              $scope.swdbParams.formShowStatus = true;
+              let headers = response.headers();
+              if (headers.location) {
+                // if location header is present extract the id
+                console.log('Got header.location: ' + headers.location);
+                let id = headers.location.split('/').pop();
+                $location.path('/inst/details/' + id);
+              }
+              }, function error(response) {
+                $scope.swdbParams.error = { message: response.statusText + response.data, status: response.status };
+                $scope.swdbParams.formErr = "Error: " + $scope.swdbParams.error.message + "(" + response.status + ")";
+                $scope.swdbParams.formShowStatus = false;
+                $scope.swdbParams.formShowErr = true;
+              });
         } else {
             $scope.swdbParams.formErr="Error: clear errors before submission";
             $scope.swdbParams.formShowStatus=false;

@@ -10,17 +10,17 @@ export class InstDb {
   public static instDoc: any;
   private static instSchema: any;
   private static dbConnect: any;
+  private props: any;
 
   constructor() {
     const ctools = new CommonTools.CommonTools();
-    let props: any = {};
-    props = ctools.getConfiguration();
+    this.props = ctools.getConfiguration();
     if (!InstDb.instSchema) {
       InstDb.instSchema = new mongoose.Schema({
         host: { type: String, required: true },
-        area: { type: String, enum: props.areaEnums, required: true },
+        area: { type: String, enum: this.props.areaEnums, required: true },
         slots: [String],
-        status: { type: String, enum: props.instStatusEnums, required: true },
+        status: { type: String, enum: this.props.instStatusEnums, required: true },
         statusDate: { type: Date, required: true },
         software: { type: String, required: true },
         vvResultsLoc: String,
@@ -30,7 +30,7 @@ export class InstDb {
       InstDb.instSchema.index({ host: 1, software: 1 }, { unique: true });
       InstDb.instDoc = mongoose.model('inst', InstDb.instSchema, 'instCollection');
 
-      InstDb.dbConnect = mongoose.connect(props.mongodbUrl, (err, db) => {
+      InstDb.dbConnect = mongoose.connect(this.props.mongodbUrl, (err, db) => {
         if (!err) {
           // console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl);
           // console.log("connected to mongo... " + JSON.stringify(props.mongodbUrl));
@@ -55,19 +55,18 @@ export class InstDb {
 
 
   // Create a new record in the backend storage
-  public createDoc = function(req, res, next) {
-
+  public createDoc = (req, res, next) => {
     const doc = new InstDb.instDoc(req.body);
-    doc.save(function(err) {
+    doc.save((err) => {
       if (err) {
         next(err);
       } else {
-        res.location('/inst/details/' + req.body._id);
+        res.location(this.props.instApiUrl + doc._id);
         res.status(201);
         res.send();
       }
     });
-  };
+  }
 
   public getDocs = function(req, res, next) {
     const id = instTools.getReqId(req);
@@ -92,10 +91,10 @@ export class InstDb {
     }
   };
 
-  public updateDoc = function(req, res, next) {
+  public updateDoc = (req, res, next) => {
     const id = instTools.getReqId(req);
     if (id) {
-      const doc = InstDb.instDoc.findOne({ _id: id }, function(err, founddoc) {
+      const doc = InstDb.instDoc.findOne({ _id: id }, (err, founddoc) => {
         if (founddoc) {
           for (const prop in req.body) {
             if (req.body.hasOwnProperty(prop)) {
@@ -106,10 +105,11 @@ export class InstDb {
               founddoc[prop] = req.body[prop];
             }
           }
-          founddoc.save(function(saveerr) {
+          founddoc.save((saveerr) => {
             if (saveerr) {
               return next(saveerr);
             } else {
+              res.location(this.props.instApiUrl + founddoc._id);
               res.end();
             }
           });
@@ -120,7 +120,7 @@ export class InstDb {
     } else {
       next(new Error('Record not found'));
     }
-  };
+  }
 
   public deleteDoc = function(req, res, next) {
     const id = instTools.getReqId(req);

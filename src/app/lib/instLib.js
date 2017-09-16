@@ -132,9 +132,15 @@ exports.newValidation = function(req) {
     },
     'vvResultsLoc': {
       optional: true,
-      isURL: {
-        errorMessage: "V&V results location must be a URL."
+      isString: {
+        errorMessage: "V&V results must be a string."
       },
+      isAscii: {
+        errorMessage: "V&V results must be ASCII characters."
+      },
+      // isURL: {
+      //   errorMessage: "V&V results location must be a URL."
+      // },
     },
     'DRRs': {
       optional: true,
@@ -204,9 +210,15 @@ exports.updateValidation = function(req) {
     },
     'vvResultsLoc': {
       optional: true,
-      isURL: {
-        errorMessage: "V&V results location must be a URL."
+      isString: {
+        errorMessage: "V&V results must be a string."
       },
+      isAscii: {
+        errorMessage: "V&V results must be ASCII characters."
+      },
+      // isURL: {
+      //   errorMessage: "V&V results location must be a URL."
+      // },
     },
     'DRRs': {
       optional: true,
