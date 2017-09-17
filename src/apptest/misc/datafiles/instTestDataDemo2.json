@@ -1,11 +1,749 @@
 [
   {
+    "host": " fe-isrc1.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "09/21/2016",
+    "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002315-R001.pdf",
+    "software": "000000000000000000000001",
+    "drrs": "DRR01-01"
+  },
+  {
+    "host": " fe-isrc1.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "09/21/2016",
+    "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002315-R001.pdf",
+    "software": "000000000000000000000002",
+    "drrs": "DRR01-01"
+  },
+  {
+    "host": " fe-isrc1.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "09/21/2016",
+    "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002315-R001.pdf",
+    "software": "000000000000000000000003",
+    "drrs": "DRR01-01"
+  },
+  {
+    "host": " fe-isrc1.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "09/21/2016",
+    "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002315-R001.pdf",
+    "software": "000000000000000000000004",
+    "drrs": "DRR01-01"
+  },
+  {
+    "host": " fe-isrc1.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "09/21/2016",
+    "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002315-R001.pdf",
+    "software": "000000000000000000000005",
+    "drrs": "DRR01-01"
+  },
+  {
+    "host": " fe-isrc1.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "09/21/2016",
+    "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002315-R001.pdf",
+    "software": "000000000000000000000006",
+    "drrs": "DRR01-01"
+  },
+  {
+    "host": "PLC1002",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "09/21/2016",
+    "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002315-R001.pdf",
+    "software": "000000000000000000000008",
+    "drrs": "DRR01-01"
+  },
+  {
+    "host": "FE_ISRC1:PSOL_D0682",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "09/15/2016",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57d86a13edcde899062fa7e7/",
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-01"
+  },
+  {
+    "host": "FE_ISRC1:PSOL_D0685",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "09/15/2016",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57d86a90edcde899062fa7e9/",
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-01"
+  },
+  {
+    "host": "FE_ISRC1:HVP_D0698",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57d86a9dedcde899062fa7ec/",
+    "software": "00000000000000000000000c",
+    "drrs": "DRR01-01"
+  },
+  {
+    "host": "FE_ISRC1:RFA_D0679",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "09/21/2016",
+    "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002315-R001.pdf",
+    "software": "00000000000000000000000e",
+    "drrs": "DRR01-01"
+  },
+  {
+    "host": "scan-artemis-b.ftc",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/forms/58c9a4fbf893ca0b35b7ff08/",
+    "software": "00000000000000000000000f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "fe-ulebt.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R001.pdf",
+    "software": "000000000000000000000011",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "fe-ulebt.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R001.pdf",
+    "software": "000000000000000000000012",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "fe-ulebt.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R001.pdf",
+    "software": "000000000000000000000013",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "fe-scs1.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R001.pdf",
+    "software": "000000000000000000000014",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "fe-scs1.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R001.pdf",
+    "software": "000000000000000000000015",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "fe-scs1.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R001.pdf",
+    "software": "000000000000000000000016",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "gts-chopper.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "000000000000000000000018",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "hlcfe.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "00000000000000000000001a",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "diag-scan.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "00000000000000000000001c",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "diag-cam.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "00000000000000000000001e",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "diag-stpc.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "000000000000000000000021",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "fe-mtca01-cpu-n0101.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "000000000000000000000024",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "fe-mtca01-cpu-n0101.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "000000000000000000000025",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "diag-ulebt-scan.ioc.ftc",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "000000000000000000000026",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "DIAG_MTCA01:PICO3",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "00000000000000000000002c",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "DIAG_MTCA01:PICO4",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "00000000000000000000002c",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "DIAG_MTCA01:PICO5",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "00000000000000000000002c",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "DIAG_MTCA01:PICO6",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "00000000000000000000002c",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "DIAG_MTCA01:PICO7",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "00000000000000000000002c",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "DIAG_MTCA01:PICO8",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "00000000000000000000002c",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "DIAG_MTCA01:PICO9",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "00000000000000000000002c",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "DIAG MTCA01:EVR",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "000000000000000000000033",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_ISRC1:PSOL_D0690",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57f55cc8edcde899062fb7f4/",
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_ISRC1:PSC1_D0695",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/58b0606df893ca0b35b7f0c0/",
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_ISRC1:PSC2_D0695",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/58b0612cf893ca0b35b7f0c5/",
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_ISRC1:PSEL_D0698",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/58584636626b6883125e1dc7/",
+    "software": "000000000000000000000038",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_SCS1:PSOL_D0704",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe45e0edcde899062fbed3/",
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_SCS1:PSC1_D0709",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe4203edcde899062fbebf/",
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_SCS1:PSC2_D0709",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe4384edcde899062fbec7/",
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_SCS1:PSD_D0717",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe44a3edcde899062fbecf/",
+    "software": "00000000000000000000003c",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_SCS1:PSC1_D0723",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe4266edcde899062fbec3/",
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_SCS1:PSC2_D0723",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe4421edcde899062fbecb/",
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_SCS1:PSQ1_D0726",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe468aedcde899062fbed7/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_SCS1:PSQ2_D0726",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe4a5dedcde899062fbef1/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_SCS1:PSQ1_D0730",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe47b4edcde899062fbedb/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_SCS1:PSQ2_D0730",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe4ad3edcde899062fbef5/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_SCS1:PSQ1_D0733",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe4828edcde899062fbedf/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_SCS1:PSQ2_D0733",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe4b86edcde899062fbef9/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_SCS1:PSQ1_D0743",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe48a3edcde899062fbee3/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_SCS1:PSQ2_D0743",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe4c07edcde899062fbefd/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_SCS1:PSQ1_D0746",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe491eedcde899062fbee7/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_SCS1:PSQ2_D0746",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe4c93edcde899062fbf01/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_SCS1:PSQ1_D0749",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe49d6edcde899062fbeeb/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_SCS1:PSQ2_D0749",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe4d4fedcde899062fbf05/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "PS-MPOD-CRATE-1",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; interface for iseg power supply modules",
+    "software": "00000000000000000000004b",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "PS-MPOD-CRATE-2",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; interface for iseg power supply modules",
+    "software": "00000000000000000000004b",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "PS-MPOD-CRATE-5",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; interface for iseg power supply modules",
+    "software": "00000000000000000000004b",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "PS-MPOD-CRATE-6",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; interface for iseg power supply modules",
+    "software": "00000000000000000000004b",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSD_D0759",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd2a28edcde899062fbdb0/",
+    "software": "00000000000000000000004f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSQ1_D0767",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd305fedcde899062fbdcc/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSQ2_D0767",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd3cafedcde899062fbde5/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSQ1_D0770",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd34e7edcde899062fbdd9/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSQ2_D0770",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd3d62edcde899062fbde9/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSC1_D0773",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57e43778edcde899062faf5b/",
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSC2_D0773",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ed64e7edcde899062fb3ee/",
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSQ1_D0776",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd35abedcde899062fbddd/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSQ2_D0776",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd3ddcedcde899062fbded/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSQ1_D0780",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd3623edcde899062fbde1/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSQ2_D0780",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd3e52edcde899062fbdf2/",
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSOL_D0787",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd2aa5edcde899062fbdb4/",
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSC1_D0790",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57e43851edcde899062faf5e/",
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSC2_D0790",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ed65c7edcde899062fb3f2/",
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSCH1_D0792",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ed7602edcde899062fb441/",
+    "software": "000000000000000000000038",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSCH2_D0792",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ed769bedcde899062fb445/",
+    "software": "000000000000000000000038",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSOL_D0802",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd2b08edcde899062fbdb9/",
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSC1_D0805",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57e43a17edcde899062faf63/",
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSC2_D0805",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ed67b2edcde899062fb3f6/",
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSOL_D0818",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd2eebedcde899062fbdc3/",
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSC1_D0821",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57e92c8fedcde899062fb102/",
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "FE_LEBT:PSC2_D0821",
+    "area": "FE",
+    "status": "Ready for Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ed68a5edcde899062fb3fa/",
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-02"
+  },
+  {
     "host": "work-ftc-r1632-01.ftc",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/593838a90da80d305500e1f6/",
-    "software": "000000000000000000000001"
+    "software": "000000000000000000000065",
+    "drrs": "DRR01-03"
   },
   {
     "host": " work-ftc-r1632-02.ftc",
@@ -13,7 +751,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/593838a90da80d305500e1f6/",
-    "software": "000000000000000000000001"
+    "software": "000000000000000000000065",
+    "drrs": "DRR01-03"
   },
   {
     "host": " work-ftc-r1632-03.ftc",
@@ -21,7 +760,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/593838a90da80d305500e1f6/",
-    "software": "000000000000000000000001"
+    "software": "000000000000000000000065",
+    "drrs": "DRR01-03"
   },
   {
     "host": " work-ftc-r1632-04.ftc",
@@ -29,7 +769,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/593838a90da80d305500e1f6/",
-    "software": "000000000000000000000001"
+    "software": "000000000000000000000065",
+    "drrs": "DRR01-03"
   },
   {
     "host": " work-ftc-r1632-05.ftc",
@@ -37,7 +778,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/593838a90da80d305500e1f6/",
-    "software": "000000000000000000000001"
+    "software": "000000000000000000000065",
+    "drrs": "DRR01-03"
   },
   {
     "host": " work-ftc-r1632-06.ftc",
@@ -45,7 +787,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/593838a90da80d305500e1f6/",
-    "software": "000000000000000000000001"
+    "software": "000000000000000000000065",
+    "drrs": "DRR01-03"
   },
   {
     "host": " work-ftc-r1632-07.ftc",
@@ -53,7 +796,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/593838a90da80d305500e1f6/",
-    "software": "000000000000000000000001"
+    "software": "000000000000000000000065",
+    "drrs": "DRR01-03"
   },
   {
     "host": " work-ftc-r1632-08.ftc",
@@ -61,7 +805,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/593838a90da80d305500e1f6/",
-    "software": "000000000000000000000001"
+    "software": "000000000000000000000065",
+    "drrs": "DRR01-03"
   },
   {
     "host": " ftc-laptop01.ftc",
@@ -69,7 +814,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/593838a90da80d305500e1f6/",
-    "software": "000000000000000000000001"
+    "software": "000000000000000000000065",
+    "drrs": "DRR01-03"
   },
   {
     "host": " ftc-laptop02.ftc",
@@ -77,7 +823,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/593838a90da80d305500e1f6/",
-    "software": "000000000000000000000001"
+    "software": "000000000000000000000065",
+    "drrs": "DRR01-03"
   },
   {
     "host": " ftc-laptop03.ftc",
@@ -85,7 +832,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/593838a90da80d305500e1f6/",
-    "software": "000000000000000000000001"
+    "software": "000000000000000000000065",
+    "drrs": "DRR01-03"
   },
   {
     "host": " ftc-laptop05.ftc",
@@ -93,7 +841,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/593838a90da80d305500e1f6/",
-    "software": "000000000000000000000001"
+    "software": "000000000000000000000065",
+    "drrs": "DRR01-03"
   },
   {
     "host": " ftc-laptop06.ftc",
@@ -101,7 +850,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/593838a90da80d305500e1f6/",
-    "software": "000000000000000000000001"
+    "software": "000000000000000000000065",
+    "drrs": "DRR01-03"
   },
   {
     "host": " ftc-laptop07.ftc",
@@ -109,7 +859,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/593838a90da80d305500e1f6/",
-    "software": "000000000000000000000001"
+    "software": "000000000000000000000065",
+    "drrs": "DRR01-03"
   },
   {
     "host": " ftc-laptop08.ftc",
@@ -117,7 +868,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/593838a90da80d305500e1f6/",
-    "software": "000000000000000000000001"
+    "software": "000000000000000000000065",
+    "drrs": "DRR01-03"
   },
   {
     "host": " ftc-laptop09.ftc",
@@ -125,7 +877,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/593838a90da80d305500e1f6/",
-    "software": "000000000000000000000001"
+    "software": "000000000000000000000065",
+    "drrs": "DRR01-03"
   },
   {
     "host": " ftc-laptop10.ftc",
@@ -133,7 +886,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/593838a90da80d305500e1f6/",
-    "software": "000000000000000000000001"
+    "software": "000000000000000000000065",
+    "drrs": "DRR01-03"
   },
   {
     "host": "glassfish01.ftc",
@@ -141,7 +895,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/forms/58ac961bf893ca0b35b7ec9b/",
-    "software": "000000000000000000000003"
+    "software": "000000000000000000000067",
+    "drrs": "DRR01-03"
   },
   {
     "host": "epicsarchiver0.ftc",
@@ -149,7 +904,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/forms/58aca65cf893ca0b35b7eca2/",
-    "software": "000000000000000000000004"
+    "software": "000000000000000000000068",
+    "drrs": "DRR01-03"
   },
   {
     "host": "alarm-fe.ftc",
@@ -157,14 +913,16 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/forms/58aca7d9f893ca0b35b7eca3/",
-    "software": "000000000000000000000005"
+    "software": "000000000000000000000069",
+    "drrs": "DRR01-03"
   },
   {
     "host": "fpsioc.ioc.ftc",
     "area": "Global",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "000000000000000000000007"
+    "software": "00000000000000000000006b",
+    "drrs": "DRR01-03"
   },
   {
     "host": "gts-evg-ioc.ftc",
@@ -172,7 +930,8 @@
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "NA; to be completed with beam",
-    "software": "000000000000000000000009"
+    "software": "00000000000000000000006d",
+    "drrs": "DRR01-03"
   },
   {
     "host": "fe-lebt.ioc.ftc",
@@ -180,7 +939,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R002.pdf",
-    "software": "00000000000000000000000b"
+    "software": "00000000000000000000006f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "fe-lebt.ioc.ftc",
@@ -188,7 +948,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R002.pdf",
-    "software": "00000000000000000000000c"
+    "software": "000000000000000000000070",
+    "drrs": "DRR01-03"
   },
   {
     "host": "fe-lebt.ioc.ftc",
@@ -196,7 +957,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R002.pdf",
-    "software": "00000000000000000000000d"
+    "software": "000000000000000000000071",
+    "drrs": "DRR01-03"
   },
   {
     "host": "fe-mebt.ioc.ftc",
@@ -204,7 +966,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R002.pdf",
-    "software": "00000000000000000000000e"
+    "software": "000000000000000000000072",
+    "drrs": "DRR01-03"
   },
   {
     "host": "fe-mebt.ioc.ftc",
@@ -212,7 +975,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R002.pdf",
-    "software": "00000000000000000000000f"
+    "software": "000000000000000000000073",
+    "drrs": "DRR01-03"
   },
   {
     "host": "fe-mebt.ioc.ftc",
@@ -220,7 +984,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R002.pdf",
-    "software": "000000000000000000000010"
+    "software": "000000000000000000000074",
+    "drrs": "DRR01-03"
   },
   {
     "host": "fe-rfq.ioc.ftc",
@@ -228,7 +993,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R002.pdf",
-    "software": "000000000000000000000011"
+    "software": "000000000000000000000075",
+    "drrs": "DRR01-03"
   },
   {
     "host": "fe-rfq.ioc.ftc",
@@ -236,7 +1002,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R002.pdf",
-    "software": "000000000000000000000012"
+    "software": "000000000000000000000076",
+    "drrs": "DRR01-03"
   },
   {
     "host": "fe-rfq.ioc.ftc",
@@ -244,7 +1011,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R002.pdf",
-    "software": "000000000000000000000013"
+    "software": "000000000000000000000077",
+    "drrs": "DRR01-03"
   },
   {
     "host": "PLC1006",
@@ -252,7 +1020,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R002.pdf",
-    "software": "000000000000000000000015"
+    "software": "000000000000000000000079",
+    "drrs": "DRR01-03"
   },
   {
     "host": "PLC1008",
@@ -260,154 +1029,176 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R002.pdf",
-    "software": "000000000000000000000016"
+    "software": "00000000000000000000007a",
+    "drrs": "DRR01-03"
   },
   {
     "host": "fe-lebt.ioc.ftc",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "000000000000000000000018"
+    "software": "00000000000000000000007c",
+    "drrs": "DRR01-03"
   },
   {
     "host": "fe-mebt.ioc.ftc",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "000000000000000000000019"
+    "software": "00000000000000000000007d",
+    "drrs": "DRR01-03"
   },
   {
     "host": "fe-mebt.ioc.ftc",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "00000000000000000000001a"
+    "software": "00000000000000000000007e",
+    "drrs": "DRR01-03"
   },
   {
     "host": "fe-rfq.ioc.ftc",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "00000000000000000000001b"
+    "software": "00000000000000000000007f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "fe-rfq.ioc.ftc",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "00000000000000000000001c"
+    "software": "000000000000000000000080",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:RFC1_D0987",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "00000000000000000000001d"
+    "software": "000000000000000000000081",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:RFC2_D0987",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "00000000000000000000001d"
+    "software": "000000000000000000000081",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:RFC3_D0987",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "00000000000000000000001d"
+    "software": "000000000000000000000081",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:RFC_D0999",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "00000000000000000000001d"
+    "software": "000000000000000000000081",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_RFQ:RFC_D1005",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "00000000000000000000001d"
+    "software": "000000000000000000000081",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:RFC_D1066",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "00000000000000000000001d"
+    "software": "000000000000000000000081",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:RFC_D1107",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "00000000000000000000001d"
+    "software": "000000000000000000000081",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:RFC1_D0987",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "000000000000000000000024"
+    "software": "000000000000000000000088",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:RFC2_D0987",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "000000000000000000000024"
+    "software": "000000000000000000000088",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:RFC3_D0987",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "000000000000000000000024"
+    "software": "000000000000000000000088",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:RFC_D0999",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "000000000000000000000024"
+    "software": "000000000000000000000088",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_RFQ:RFC_D1005",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "000000000000000000000024"
+    "software": "000000000000000000000088",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:RFC_D1066",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "000000000000000000000024"
+    "software": "000000000000000000000088",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:RFC_D1107",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "000000000000000000000024"
+    "software": "000000000000000000000088",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_RFQ:DCU_N0001",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "00000000000000000000002b"
+    "software": "00000000000000000000008f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:DCU_N0001",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "00000000000000000000002b"
+    "software": "00000000000000000000008f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "diag-flapper.ioc.ftc",
@@ -415,7 +1206,8 @@
     "status": "Ready for Verification with Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "NA; to be completed with beam",
-    "software": "00000000000000000000002e"
+    "software": "000000000000000000000092",
+    "drrs": "DRR01-03"
   },
   {
     "host": "diag-mebt-stpc.ioc.ftc",
@@ -423,7 +1215,8 @@
     "status": "Ready for Verification with Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "NA; to be completed with beam",
-    "software": "00000000000000000000002e"
+    "software": "000000000000000000000092",
+    "drrs": "DRR01-03"
   },
   {
     "host": "diag-flapper-scan.ioc.ftc",
@@ -431,7 +1224,8 @@
     "status": "Ready for Verification with Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "NA; to be completed with beam",
-    "software": "000000000000000000000030"
+    "software": "000000000000000000000026",
+    "drrs": "DRR01-03"
   },
   {
     "host": "controlsweb01.ftc",
@@ -439,7 +1233,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R001.pdf",
-    "software": "000000000000000000000037"
+    "software": "00000000000000000000009b",
+    "drrs": "DRR01-03"
   },
   {
     "host": " controlsweb02.ftc",
@@ -447,7 +1242,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R001.pdf",
-    "software": "000000000000000000000037"
+    "software": "00000000000000000000009b",
+    "drrs": "DRR01-03"
   },
   {
     "host": "controlsweb01.ftc",
@@ -455,7 +1251,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R001.pdf",
-    "software": "000000000000000000000038"
+    "software": "00000000000000000000009c",
+    "drrs": "DRR01-03"
   },
   {
     "host": " controlsweb02.ftc",
@@ -463,7 +1260,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30506-RC-002608-R001.pdf",
-    "software": "000000000000000000000038"
+    "software": "00000000000000000000009c",
+    "drrs": "DRR01-03"
   },
   {
     "host": "controlsweb01.ftc",
@@ -471,7 +1269,8 @@
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "NA; to be completed with beam",
-    "software": "000000000000000000000039"
+    "software": "00000000000000000000009d",
+    "drrs": "DRR01-03"
   },
   {
     "host": " controlsweb02.ftc",
@@ -479,7 +1278,8 @@
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "NA; to be completed with beam",
-    "software": "000000000000000000000039"
+    "software": "00000000000000000000009d",
+    "drrs": "DRR01-03"
   },
   {
     "host": "controlsweb01.ftc",
@@ -487,7 +1287,8 @@
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "NA; to be completed with beam",
-    "software": "00000000000000000000003a"
+    "software": "00000000000000000000009e",
+    "drrs": "DRR01-03"
   },
   {
     "host": " controlsweb02.ftc",
@@ -495,7 +1296,8 @@
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "NA; to be completed with beam",
-    "software": "00000000000000000000003a"
+    "software": "00000000000000000000009e",
+    "drrs": "DRR01-03"
   },
   {
     "host": "controlsweb01.ftc",
@@ -503,7 +1305,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30400-TR-000065-R001.pdf",
-    "software": "00000000000000000000003b"
+    "software": "00000000000000000000009f",
+    "drrs": "DRR01-03"
   },
   {
     "host": " controlsweb02.ftc",
@@ -511,21 +1314,24 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30400-TR-000065-R001.pdf",
-    "software": "00000000000000000000003b"
+    "software": "00000000000000000000009f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "controlsweb01.ftc",
     "area": "Global",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "00000000000000000000003c"
+    "software": "0000000000000000000000a0",
+    "drrs": "DRR01-03"
   },
   {
     "host": " controlsweb02.ftc",
     "area": "Global",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
-    "software": "00000000000000000000003c"
+    "software": "0000000000000000000000a0",
+    "drrs": "DRR01-03"
   },
   {
     "host": "controlsweb01.ftc",
@@ -533,7 +1339,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/forms/58ac961bf893ca0b35b7ec9b/",
-    "software": "00000000000000000000003d"
+    "software": "0000000000000000000000a1",
+    "drrs": "DRR01-03"
   },
   {
     "host": " controlsweb02.ftc",
@@ -541,7 +1348,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/forms/58ac961bf893ca0b35b7ec9b/",
-    "software": "00000000000000000000003d"
+    "software": "0000000000000000000000a1",
+    "drrs": "DRR01-03"
   },
   {
     "host": "alarm-fe.ftc",
@@ -549,7 +1357,8 @@
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/595e54cd53bb3c84631a807c/",
-    "software": "00000000000000000000003f"
+    "software": "0000000000000000000000a3",
+    "drrs": "DRR01-03"
   },
   {
     "host": "fpsioc.ioc.ftc",
@@ -557,7 +1366,8 @@
     "status": "Ready for Verification with Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30400-TR-000065-R001.pdf",
-    "software": "000000000000000000000041"
+    "software": "0000000000000000000000a5",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FPS-MASTER",
@@ -565,7 +1375,8 @@
     "status": "Ready for Verification with Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30400-TR-000065-R001.pdf",
-    "software": "000000000000000000000043"
+    "software": "0000000000000000000000a7",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FPS-SLAVE-1",
@@ -573,7 +1384,8 @@
     "status": "Ready for Verification with Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30400-TR-000065-R001.pdf",
-    "software": "000000000000000000000043"
+    "software": "0000000000000000000000a7",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FPS-SLAVE-2",
@@ -581,7 +1393,8 @@
     "status": "Ready for Verification with Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30400-TR-000065-R001.pdf",
-    "software": "000000000000000000000043"
+    "software": "0000000000000000000000a7",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSD1_D0833",
@@ -589,7 +1402,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57f7b944edcde899062fbb67/",
-    "software": "000000000000000000000047"
+    "software": "0000000000000000000000ab",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSD2_D0833",
@@ -597,7 +1411,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd28d5edcde899062fbda8/",
-    "software": "000000000000000000000047"
+    "software": "0000000000000000000000ab",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSC1_D0840",
@@ -605,7 +1420,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57e92d24edcde899062fb106/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSC2_D0840",
@@ -613,7 +1429,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ed6978edcde899062fb3fe/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ1_D0844",
@@ -621,7 +1438,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd4a76edcde899062fbe48/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ2_D0844",
@@ -629,7 +1447,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd3ec8edcde899062fbdf6/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ1_D0848",
@@ -637,7 +1456,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd4b80edcde899062fbe4c/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ2_D0848",
@@ -645,7 +1465,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd3f48edcde899062fbe06/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ1_D0851",
@@ -653,7 +1474,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd4c73edcde899062fbe50/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ2_D0851",
@@ -661,7 +1483,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd3fefedcde899062fbe0e/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSC1_D0868",
@@ -669,7 +1492,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57e92ee5edcde899062fb10a/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSC2_D0868",
@@ -677,7 +1501,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ed6a41edcde899062fb402/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ1_D0871",
@@ -685,7 +1510,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd4cd7edcde899062fbe54/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ2_D0871",
@@ -693,7 +1519,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd434bedcde899062fbe17/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ1_D0874",
@@ -701,7 +1528,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe3b8eedcde899062fbe9f/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ2_D0874",
@@ -709,7 +1537,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd43abedcde899062fbe1b/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ1_D0878",
@@ -717,7 +1546,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe3c2cedcde899062fbea3/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ2_D0878",
@@ -725,7 +1555,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd4450edcde899062fbe1f/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSC1_D0880",
@@ -733,7 +1564,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57e92ffeedcde899062fb10e/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSC2_D0880",
@@ -741,7 +1573,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ed6b82edcde899062fb406/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ1_D0891",
@@ -749,7 +1582,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe3d6fedcde899062fbea7/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ2_D0891",
@@ -757,7 +1591,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd4548edcde899062fbe23/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ1_D0895",
@@ -765,7 +1600,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe3dcfedcde899062fbeab/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ2_D0895",
@@ -773,7 +1609,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd45dcedcde899062fbe27/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ1_D0898",
@@ -781,7 +1618,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe3ee1edcde899062fbeaf/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ2_D0898",
@@ -789,7 +1627,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd4641edcde899062fbe2b/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSC1_D0901",
@@ -797,7 +1636,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57e930e9edcde899062fb112/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSC2_D0901",
@@ -805,7 +1645,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ed6ce9edcde899062fb40a/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ1_D0918",
@@ -813,7 +1654,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe3f62edcde899062fbeb3/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ2_D0918",
@@ -821,7 +1663,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffe2c1edcde899062fc0a2/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ1_D0921",
@@ -829,7 +1672,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe40b3edcde899062fbeb7/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ2_D0921",
@@ -837,7 +1681,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffe328edcde899062fc0a6/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ1_D0924",
@@ -845,7 +1690,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fe411aedcde899062fbebb/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSQ2_D0924",
@@ -853,7 +1699,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffe380edcde899062fc0aa/",
-    "software": "00000000000000000000004b"
+    "software": "00000000000000000000003f",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSC1_D0929",
@@ -861,7 +1708,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57e9326dedcde899062fb116/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSC2_D0929",
@@ -869,7 +1717,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ed6ddeedcde899062fb40e/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSD1_D0936",
@@ -877,7 +1726,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57f7ba07edcde899062fbb74/",
-    "software": "000000000000000000000047"
+    "software": "0000000000000000000000ab",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSD2_D0936",
@@ -885,7 +1735,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd2974edcde899062fbdac/",
-    "software": "000000000000000000000047"
+    "software": "0000000000000000000000ab",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSC1_D0948",
@@ -893,7 +1744,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57e93355edcde899062fb11a/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSC2_D0948",
@@ -901,7 +1753,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ed6fc2edcde899062fb412/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSOL_D0951",
@@ -909,7 +1762,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd2f8fedcde899062fbdc6/",
-    "software": "00000000000000000000006f"
+    "software": "0000000000000000000000d3",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSC1_D0964",
@@ -917,7 +1771,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57e93425edcde899062fb11e/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSC2_D0964",
@@ -925,7 +1780,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ed711eedcde899062fb416/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSOL_D0967",
@@ -933,7 +1789,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd2fd4edcde899062fbdc9/",
-    "software": "00000000000000000000006f"
+    "software": "0000000000000000000000d3",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSC1_D0979",
@@ -941,7 +1798,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57e93774edcde899062fb122/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSC2_D0979",
@@ -949,7 +1807,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ed7253edcde899062fb427/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSOL_D0982",
@@ -957,7 +1816,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd30ededcde899062fbdd0/",
-    "software": "00000000000000000000006f"
+    "software": "0000000000000000000000d3",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSC1_D0992",
@@ -965,7 +1825,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57e93859edcde899062fb126/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSC2_D0992",
@@ -973,7 +1834,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ed72ecedcde899062fb42f/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_LEBT:PSOL_D0995",
@@ -981,7 +1843,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57fd3154edcde899062fbdd3/",
-    "software": "000000000000000000000078"
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSQ_D1057",
@@ -989,7 +1852,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffe74cedcde899062fc0d3/",
-    "software": "000000000000000000000078"
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSQ_D1060",
@@ -997,7 +1861,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffe9d1edcde899062fc0e2/",
-    "software": "000000000000000000000078"
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSQ_D1062",
@@ -1005,7 +1870,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffea4dedcde899062fc0e5/",
-    "software": "00000000000000000000006f"
+    "software": "0000000000000000000000d3",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSC1_D1062",
@@ -1013,7 +1879,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffe3d0edcde899062fc0ae/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSC2_D1062",
@@ -1021,7 +1888,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffe40fedcde899062fc0b2/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSQ_D1074",
@@ -1029,7 +1897,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffea89edcde899062fc0e8/",
-    "software": "000000000000000000000078"
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSQ_D1076",
@@ -1037,7 +1906,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffeabeedcde899062fc0eb/",
-    "software": "000000000000000000000078"
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSQ_D1078",
@@ -1045,7 +1915,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffeaf9edcde899062fc0ee/",
-    "software": "000000000000000000000078"
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSC1_D1078",
@@ -1053,7 +1924,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffe46eedcde899062fc0b6/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSC2_D1078",
@@ -1061,7 +1933,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffe597edcde899062fc0b9/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSD_D1086",
@@ -1069,7 +1942,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffe713edcde899062fc0cf/",
-    "software": "000000000000000000000083"
+    "software": "0000000000000000000000e7",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSQ_D1095",
@@ -1077,7 +1951,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffeb32edcde899062fc0f1/",
-    "software": "000000000000000000000078"
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSQ_D1098",
@@ -1085,7 +1960,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffeb82edcde899062fc0f4/",
-    "software": "000000000000000000000078"
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSQ_D1100",
@@ -1093,7 +1969,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffebccedcde899062fc0f7/",
-    "software": "000000000000000000000078"
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSC1_D1100",
@@ -1101,7 +1978,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffe5eaedcde899062fc0be/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSC2_D1100",
@@ -1109,7 +1987,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffe647edcde899062fc0c3/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSQ_D1113",
@@ -1117,7 +1996,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffebfcedcde899062fc0fa/",
-    "software": "000000000000000000000078"
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSQ_D1115",
@@ -1125,7 +2005,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffec38edcde899062fc0fd/",
-    "software": "000000000000000000000078"
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSQ_D1117",
@@ -1133,7 +2014,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffec73edcde899062fc100/",
-    "software": "000000000000000000000078"
+    "software": "00000000000000000000000a",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSC1_D1117",
@@ -1141,7 +2023,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffe688edcde899062fc0c7/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "FE_MEBT:PSC2_D1117",
@@ -1149,7 +2032,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57ffe6c4edcde899062fc0cb/",
-    "software": "000000000000000000000049"
+    "software": "000000000000000000000036",
+    "drrs": "DRR01-03"
   },
   {
     "host": "PS-MPOD-CRATE-3",
@@ -1157,7 +2041,8 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "NA; interface for iseg power supply modules",
-    "software": "00000000000000000000008e"
+    "software": "00000000000000000000004b",
+    "drrs": "DRR01-03"
   },
   {
     "host": "PS-MPOD-CRATE-4",
@@ -1165,6 +2050,7 @@
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
     "vvResultsLoc": "NA; interface for iseg power supply modules",
-    "software": "00000000000000000000008e"
+    "software": "00000000000000000000004b",
+    "drrs": "DRR01-03"
   }
 ]
