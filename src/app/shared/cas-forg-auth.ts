@@ -88,18 +88,11 @@ export class CasForgProvider extends auth.AbstractProvider {
       this.deserializeUser(id, done);
     });
 
-    const init = passport.initialize();
-    const session = passport.session();
-
-    return (req, res, next) => {
-      init(req, res, (err: any) => {
-        if (err) {
-          next(err);
-          return;
-        }
-        session(req, res, next);
-      });
-    };
+    const router = express.Router();
+    router.use(passport.initialize());
+    router.use(passport.session());
+    router.use(this.locals());
+    return router;
   };
 
   public getCasLogoutUrl(service?: boolean): string {

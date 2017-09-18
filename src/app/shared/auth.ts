@@ -98,6 +98,23 @@ export abstract class AbstractProvider implements IProvider {
     }
     return false;
   };
+
+  protected locals(): RequestHandler {
+    return (req: Request, res: Response, next: NextFunction) => {
+      debug('Add \'auth\' to response locals');
+      res.locals.auth = {
+        user: this.getUser(req),
+        username: this.getUsername(req),
+        hasRole: (role: string | string[]): boolean => {
+          return this.hasRole(req, role);
+        },
+        hasAnyRole: (role: string | string[]): boolean => {
+          return this.hasAnyRole(req, role);
+        },
+      };
+      next();
+    };
+  };
 };
 
 
