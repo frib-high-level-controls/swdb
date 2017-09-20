@@ -83,6 +83,34 @@ app.service('swService', function($http) {
     };
 });
 
+app.filter('swFilt', function () {
+  // custom filter for sw records  
+  return function (swIn, srchTxt) {
+    swOut = [];
+    if (typeof srchTxt === 'string' || srchTxt instanceof String) {
+      // make sure we have a real search string
+      let re = new RegExp(srchTxt, 'gi'); // precompile regex first
+      swIn.forEach((element) => {
+        if (!element.branch) {
+          // set branch to empty string if it does not exist
+          element.branch = "";
+        }
+        if (element.swName.match(re) || element.branch.match(re) || element.version.match(re)) {
+          // console.log("Match " + JSON.stringify(element) + " " + srchTxt);
+          swOut.push(element);
+        } else {
+          // console.log("No match " + JSON.stringify(element) + " " + srchTxt);
+          return false;
+        }
+      });
+      return swOut;
+    }
+    else {
+      return srchTxt;
+    }
+  }
+});
+
 app.config(['$routeProvider', function($routeProvider){
     $routeProvider.
         when('/list', {
@@ -163,6 +191,9 @@ app.config(['$routeProvider', function($routeProvider){
                 },
                 'userServiceData': function(userService){
                     return userService.promise;
+                },
+                'swServiceData': function(swService){
+                    return swService.promise;
                 },
                 'slotServiceData': function(slotService){
                     return slotService.promise;

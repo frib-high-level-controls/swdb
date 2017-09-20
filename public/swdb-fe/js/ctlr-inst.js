@@ -83,6 +83,8 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
       .withTitle('Status').withOption('defaultContent', ''),
     DTColumnBuilder.newColumn('statusDate')
       .withTitle('Status Date').withOption('defaultContent', ''),
+    DTColumnBuilder.newColumn('drrs')
+      .withTitle('DRRs').withOption('defaultContent', ''),
     DTColumnBuilder.newColumn('vvResultsLoc')
       .withTitle('V&V Results').withOption('defaultContent', '')
   ];
@@ -164,7 +166,7 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configServ
 
 
 appController.controller('InstNewController', InstNewPromiseCtrl);
-function InstNewPromiseCtrl($scope, $http, $window, $location, configService, userService, slotService) {
+function InstNewPromiseCtrl($scope, $http, $window, $location, configService, userService, slotService, swService) {
 
   $scope.$watch(function() {
     return $scope.session;
@@ -314,7 +316,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     $scope.props = configService.getConfig();
     $scope.session = userService.getUser();
     $scope.slots = slotService.getSlot();
-    //console.log("slots: "+JSON.stringify($scope.slots));
+    $scope.swList = swService.getSwList();
 
 
     // check our user session and redirect if needed
