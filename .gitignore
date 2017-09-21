@@ -4,4 +4,6 @@ log
 public/swdb-fe/bower_components
 *.pyc
 config/swdbrc
+config/server.key
+config/server.crt
 

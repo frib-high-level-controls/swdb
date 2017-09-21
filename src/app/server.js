@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var morgan = require('morgan');
 var app = express();
+var https = require('https');
 var tools = require('./lib/swdblib.js');
 var instTools = require('./lib/instLib.js');
 var fs = require('fs');
@@ -24,6 +25,9 @@ let CommonTools = require('./lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
 let props = {};
 props = ctools.getConfiguration();
+let privateKey  = fs.readFileSync(props.sslKey, 'utf8');
+let certificate = fs.readFileSync(props.sslCrt, 'utf8');
+let credentials = {key: privateKey, cert: certificate};
 
 //allow access to static files
 app.use(express.static(__dirname + '/../../public'));
@@ -122,8 +126,13 @@ app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:htt
 ));
 
 // start the server
-app.listen(props.webPort, function() {
-  console.log('listening on port '+props.webPort);
+// app.listen(props.webPort, function() {
+//   console.log('listening on port '+props.webPort);
+// });
+
+let httpsPort = Number(props.webPort);
+var httpsSrv = https.createServer(credentials, app).listen(httpsPort, function() {
+    console.log('Https listening on '+httpsPort);
 });
 
 // auth middleware

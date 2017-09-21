@@ -108,7 +108,7 @@ app.filter('swFilt', function () {
     else {
       return srchTxt;
     }
-  }
+  };
 });
 
 app.config(['$routeProvider', function($routeProvider){

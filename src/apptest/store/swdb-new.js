@@ -77,7 +77,7 @@ test.describe("Software update screen tests", function () {
   });
 
   test.it("Add new record", function () {
-    this.timeout(16000);
+    this.timeout(20000);
     chromeDriver.wait(until.elementLocated(By.id('swName')), 3000);
     var input = chromeDriver.findElement(By.id('swName')).sendKeys("Test Record3");
 
