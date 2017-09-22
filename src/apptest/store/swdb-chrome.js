@@ -287,14 +287,14 @@ test.describe("SWDB record tests", function() {
   });
 
   // versionControl
-  test.it("revisionControl", function() {
+  test.it("versionControl", function() {
     this.timeout(8000);
     driver.get(props.webUrl+"#/new");
-    driver.wait(until.elementLocated(By.id("revisionControl")), 3000);
-    input = driver.findElement(By.id("revisionControl"));
+    driver.wait(until.elementLocated(By.id("versionControl")), 3000);
+    input = driver.findElement(By.id("versionControl"));
     input.sendKeys("7");
-    driver.wait(until.elementLocated(By.id("revisionControlInputSts")), 3000);
-    var inputSts = driver.findElement(By.id("revisionControlInputSts"));
+    driver.wait(until.elementLocated(By.id("versionControlInputSts")), 3000);
+    var inputSts = driver.findElement(By.id("versionControlInputSts"));
     driver.wait(until.elementTextIs(inputSts, "Minimum 4 characters"),5000);
     input.clear();
     input.sendKeys("0123456789012345678901234567890");

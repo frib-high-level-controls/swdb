@@ -24,8 +24,8 @@
     "engineer": "Berryman",
     "levelOfCare": "Medium",
     "platforms": "Linux (x86_64)",
-    "revisionControl": "Debian",
-    "revisionControlLoc": "http://ci.frib.msu.edu/debian/pool/fc1/c/cs-studio"
+    "versionControl": "Debian",
+    "versionControlLoc": "http://ci.frib.msu.edu/debian/pool/fc1/c/cs-studio"
   },
   {
     "swName": "Operations Log Server",
@@ -37,8 +37,8 @@
     "engineer": "Berryman",
     "levelOfCare": "Low",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Debian",
-    "revisionControlLoc": "http://ci.frib.msu.edu/debian/pool/fc1/o/olog-service"
+    "versionControl": "Debian",
+    "versionControlLoc": "http://ci.frib.msu.edu/debian/pool/fc1/o/olog-service"
   },
   {
     "swName": "Archive Appliance",
@@ -50,8 +50,8 @@
     "engineer": "Berryman",
     "levelOfCare": "Low",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Archive",
-    "revisionControlLoc": "http://ci.frib.msu.edu/archive/archappl"
+    "versionControl": "Archive",
+    "versionControlLoc": "http://ci.frib.msu.edu/archive/archappl"
   },
   {
     "swName": "Alarm Server",
@@ -63,8 +63,8 @@
     "engineer": "Berryman",
     "levelOfCare": "Low",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Debian",
-    "revisionControlLoc": "http://ci.frib.msu.edu/debian/pool/fc1/b/beast"
+    "versionControl": "Debian",
+    "versionControlLoc": "http://ci.frib.msu.edu/debian/pool/fc1/b/beast"
   },
   {
     "swName": "Scan Server",
@@ -76,8 +76,8 @@
     "engineer": "Berryman",
     "levelOfCare": "Medium",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Debian",
-    "revisionControlLoc": "http://ci.frib.msu.edu/debian/pool/fc1/s/scanserver"
+    "versionControl": "Debian",
+    "versionControlLoc": "http://ci.frib.msu.edu/debian/pool/fc1/s/scanserver"
   },
   {
     "swName": "ULEBT PS",
@@ -89,8 +89,8 @@
     "engineer": "Priller",
     "levelOfCare": "Medium",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/FEIOC/repos/lebt-ps"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/FEIOC/repos/lebt-ps"
   },
   {
     "swName": "ULEBT VAC",
@@ -102,8 +102,8 @@
     "engineer": "Priller",
     "levelOfCare": "Medium",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/FEIOC/repos/lebt-vac"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/FEIOC/repos/lebt-vac"
   },
   {
     "swName": "ULEBT PLC",
@@ -115,8 +115,8 @@
     "engineer": "Priller",
     "levelOfCare": "Medium",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/FEIOC/repos/lebt-plc"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/FEIOC/repos/lebt-plc"
   },
   {
     "swName": "SCS1 PS",
@@ -128,8 +128,8 @@
     "engineer": "Priller",
     "levelOfCare": "Medium",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/FEIOC/repos/scs1-ps"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/FEIOC/repos/scs1-ps"
   },
   {
     "swName": "SCS1 VAC",
@@ -141,8 +141,8 @@
     "engineer": "Priller",
     "levelOfCare": "Medium",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/FEIOC/repos/scs1-vac"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/FEIOC/repos/scs1-vac"
   },
   {
     "swName": "SCS1 PLC",
@@ -154,8 +154,8 @@
     "engineer": "Priller",
     "levelOfCare": "Medium",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/FEIOC/repos/scs1-plc"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/FEIOC/repos/scs1-plc"
   },
   {
     "swName": "GTS MASTER",
@@ -167,8 +167,8 @@
     "engineer": "Konrad",
     "levelOfCare": "Medium",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/GTS/repos/masterioc"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/GTS/repos/masterioc"
   },
   {
     "swName": "GTS CHOPPER",
@@ -180,8 +180,8 @@
     "engineer": "Konrad",
     "levelOfCare": "Medium",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/GTS/repos/evrioc"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/GTS/repos/evrioc"
   },
   {
     "swName": "ECR Scan IOC",
@@ -193,8 +193,8 @@
     "engineer": "Berryman",
     "levelOfCare": "Medium",
     "platforms": "Linux (x86_64)",
-    "revisionControl": "Debian",
-    "revisionControlLoc": "http://ci.frib.msu.edu/debian/pool/fc1/h/hlc-fe/"
+    "versionControl": "Debian",
+    "versionControlLoc": "http://ci.frib.msu.edu/debian/pool/fc1/h/hlc-fe/"
   },
   {
     "swName": "SRS1 EMS IOC",
@@ -206,8 +206,8 @@
     "engineer": "Omitto",
     "levelOfCare": "Low",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/DIAG/repos/scan02"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/DIAG/repos/scan02"
   },
   {
     "swName": "SRS1 EMS2 IOC",
@@ -219,8 +219,8 @@
     "engineer": "Omitto",
     "levelOfCare": "Low",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/DIAG/repos/scan02"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/DIAG/repos/scan02"
   },
   {
     "swName": "SCS1 VD IOC",
@@ -232,8 +232,8 @@
     "engineer": "Omitto",
     "levelOfCare": "Low",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/DIAG/repos/ndwarp"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/DIAG/repos/ndwarp"
   },
   {
     "swName": "LEBT VD D0812 IOC",
@@ -245,8 +245,8 @@
     "engineer": "Omitto",
     "levelOfCare": "Low",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/DIAG/repos/ndwarp"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/DIAG/repos/ndwarp"
   },
   {
     "swName": "LEBT EMS D0811 IOC",
@@ -258,8 +258,8 @@
     "engineer": "Omitto",
     "levelOfCare": "Low",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/DIAG/repos/ndwarp"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/DIAG/repos/ndwarp"
   },
   {
     "swName": "SCS1 STPC01 IOC",
@@ -271,8 +271,8 @@
     "engineer": "Omitto",
     "levelOfCare": "Low",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/DIAG/repos/tpmacioc"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/DIAG/repos/tpmacioc"
   },
   {
     "swName": "LEBT STPC03 IOC",
@@ -284,8 +284,8 @@
     "engineer": "Omitto",
     "levelOfCare": "Low",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/DIAG/repos/tpmacioc"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/DIAG/repos/tpmacioc"
   },
   {
     "swName": "LEBT STPC04 IOC",
@@ -297,8 +297,8 @@
     "engineer": "Omitto",
     "levelOfCare": "Low",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/DIAG/repos/tpmacioc"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/DIAG/repos/tpmacioc"
   },
   {
     "swName": "FE PICO8 IOC",
@@ -310,8 +310,8 @@
     "engineer": "Omitto",
     "levelOfCare": "Medium",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/BCM/repos/caen-blm-software"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/BCM/repos/caen-blm-software"
   },
   {
     "swName": "DIAG EVR IOC",
@@ -323,8 +323,8 @@
     "engineer": "Omitto",
     "levelOfCare": "Low",
     "platforms": "Linux  (x86_64)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/GTS/repos/mrfioc2"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/GTS/repos/mrfioc2"
   },
   {
     "swName": "DIAG_MTCA01:PICO3 Firmware",
@@ -336,8 +336,8 @@
     "engineer": "Cogan",
     "levelOfCare": "Medium",
     "platforms": "CAEN PICO8 (DAMC-FMC25)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/BCM/repos/caen-blm-firmware"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/BCM/repos/caen-blm-firmware"
   },
   {
     "swName": "DIAG_MTCA01:PICO4 Firmware",
@@ -349,8 +349,8 @@
     "engineer": "Cogan",
     "levelOfCare": "Medium",
     "platforms": "CAEN PICO8 (DAMC-FMC25)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/BCM/repos/caen-blm-firmware"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/BCM/repos/caen-blm-firmware"
   },
   {
     "swName": "DIAG_MTCA01:PICO5 Firmware",
@@ -362,8 +362,8 @@
     "engineer": "Cogan",
     "levelOfCare": "Medium",
     "platforms": "CAEN PICO8 (DAMC-FMC25)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/BCM/repos/caen-blm-firmware"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/BCM/repos/caen-blm-firmware"
   },
   {
     "swName": "DIAG_MTCA01:PICO6 Firmware",
@@ -375,8 +375,8 @@
     "engineer": "Cogan",
     "levelOfCare": "Medium",
     "platforms": "CAEN PICO8 (DAMC-FMC25)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/BCM/repos/caen-blm-firmware"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/BCM/repos/caen-blm-firmware"
   },
   {
     "swName": "DIAG_MTCA01:PICO7 Firmware",
@@ -388,8 +388,8 @@
     "engineer": "Cogan",
     "levelOfCare": "Medium",
     "platforms": "CAEN PICO8 (DAMC-FMC25)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/BCM/repos/caen-blm-firmware"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/BCM/repos/caen-blm-firmware"
   },
   {
     "swName": "DIAG_MTCA01:PICO8 Firmware",
@@ -401,8 +401,8 @@
     "engineer": "Cogan",
     "levelOfCare": "Medium",
     "platforms": "CAEN PICO8 (DAMC-FMC25)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/BCM/repos/caen-blm-firmware"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/BCM/repos/caen-blm-firmware"
   },
   {
     "swName": "DIAG_MTCA01:PICO9 Firmware",
@@ -414,8 +414,8 @@
     "engineer": "Cogan",
     "levelOfCare": "Medium",
     "platforms": "CAEN PICO8 (DAMC-FMC25)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/BCM/repos/caen-blm-firmware"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/BCM/repos/caen-blm-firmware"
   },
   {
     "swName": "DIAG MTCA01:EVR Firmware",
@@ -427,8 +427,8 @@
     "engineer": "Cogan",
     "levelOfCare": "Low",
     "platforms": "FRIB FGPDB Rev 04",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/BCM/repos/fgpdb-evr-firmware"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/BCM/repos/fgpdb-evr-firmware"
   },
   {
     "swName": "ULEBT PLC",
@@ -440,8 +440,8 @@
     "engineer": "Hodges",
     "levelOfCare": "Medium",
     "platforms": "AB ControlLogix 5572 (v28.11)",
-    "revisionControl": "AssetCentre",
-    "revisionControlLoc": "PLC1006"
+    "versionControl": "AssetCentre",
+    "versionControlLoc": "PLC1006"
   },
   {
     "swName": "OPI FE",
@@ -453,8 +453,8 @@
     "engineer": "Summers",
     "levelOfCare": "Medium",
     "platforms": "CS Studio",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/CSSTUD/repos/fe"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/CSSTUD/repos/fe"
   },
   {
     "swName": "OPI Common",
@@ -466,8 +466,8 @@
     "engineer": "Summers",
     "levelOfCare": "Medium",
     "platforms": "CS Studio",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/CSSTUD/repos/common"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/CSSTUD/repos/common"
   },
   {
     "swName": "OPI Diagnostics",
@@ -479,8 +479,8 @@
     "engineer": "Omitto",
     "levelOfCare": "Low",
     "platforms": "CS Studio",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/CSSTUD/repos/diag"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/CSSTUD/repos/diag"
   },
   {
     "swName": "OPI GTS",
@@ -492,8 +492,8 @@
     "engineer": "Konrad",
     "levelOfCare": "Medium",
     "platforms": "CS Studio",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/CSSTUD/repos/gts"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/CSSTUD/repos/gts"
   },
   {
     "swName": "Operations Log Web",
@@ -505,8 +505,8 @@
     "engineer": "Berryman",
     "levelOfCare": "Low",
     "platforms": "Web Browser (Firefox)",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/OLOG/repos/logbook"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/OLOG/repos/logbook"
   },
   {
     "swName": "FE Alarms",
@@ -518,8 +518,8 @@
     "engineer": "Berryman",
     "levelOfCare": "Low",
     "platforms": "BEAST",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/ALARM/repos/alarm_fe"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/ALARM/repos/alarm_fe"
   },
   {
     "swName": "FE_ISRC1:PSOL_D0690 Firmware",
@@ -531,8 +531,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_ISRC1:PSC1_D0695 Firmware",
@@ -544,8 +544,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_ISRC1:PSC2_D0695 Firmware",
@@ -557,8 +557,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_ISRC1:PSEL_D0698 Firmware",
@@ -570,8 +570,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_SCS1:PSOL_D0704 Firmware",
@@ -583,8 +583,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_SCS1:PSC1_D0709 Firmware",
@@ -596,8 +596,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_SCS1:PSC2_D0709 Firmware",
@@ -609,8 +609,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_SCS1:PSD_D0717 Firmware",
@@ -622,8 +622,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_SCS1:PSC1_D0723 Firmware",
@@ -635,8 +635,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_SCS1:PSC2_D0723 Firmware",
@@ -648,8 +648,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_SCS1:PSQ1_D0726 Firmware",
@@ -661,8 +661,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_SCS1:PSQ2_D0726 Firmware",
@@ -674,8 +674,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_SCS1:PSQ1_D0730 Firmware",
@@ -687,8 +687,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_SCS1:PSQ2_D0730 Firmware",
@@ -700,8 +700,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_SCS1:PSQ1_D0733 Firmware",
@@ -713,8 +713,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_SCS1:PSQ2_D0733 Firmware",
@@ -726,8 +726,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_SCS1:PSQ1_D0743 Firmware",
@@ -739,8 +739,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_SCS1:PSQ2_D0743 Firmware",
@@ -752,8 +752,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_SCS1:PSQ1_D0746 Firmware",
@@ -765,8 +765,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_SCS1:PSQ2_D0746 Firmware",
@@ -778,8 +778,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_SCS1:PSQ1_D0749 Firmware",
@@ -791,8 +791,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_SCS1:PSQ2_D0749 Firmware",
@@ -804,8 +804,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "PS MPOD Crate #1 Firmware",
@@ -817,8 +817,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "PS MPOD Crate #2 Firmware",
@@ -830,8 +830,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "PS MPOD Crate #5 Firmware",
@@ -843,8 +843,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "PS MPOD Crate #6 Firmware",
@@ -856,8 +856,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSD_D0759 Firmware",
@@ -869,8 +869,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSQ1_D0767 Firmware",
@@ -882,8 +882,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSQ2_D0767 Firmware",
@@ -895,8 +895,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSQ1_D0770 Firmware",
@@ -908,8 +908,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSQ2_D0770 Firmware",
@@ -921,8 +921,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSC1_D0773 Firmware",
@@ -934,8 +934,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSC2_D0773 Firmware",
@@ -947,8 +947,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSQ1_D0776 Firmware",
@@ -960,8 +960,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSQ2_D0776 Firmware",
@@ -973,8 +973,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSQ1_D0780 Firmware",
@@ -986,8 +986,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSQ2_D0780 Firmware",
@@ -999,8 +999,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSOL_D0787 Firmware",
@@ -1012,8 +1012,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSC1_D0790 Firmware",
@@ -1025,8 +1025,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSC2_D0790 Firmware",
@@ -1038,8 +1038,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSCH1_D0792 Firmware",
@@ -1051,8 +1051,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSCH2_D0792 Firmware",
@@ -1064,8 +1064,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSOL_D0802 Firmware",
@@ -1077,8 +1077,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSC1_D0805 Firmware",
@@ -1090,8 +1090,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSC2_D0805 Firmware",
@@ -1103,8 +1103,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSOL_D0818 Firmware",
@@ -1116,8 +1116,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSC1_D0821 Firmware",
@@ -1129,8 +1129,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
   {
     "swName": "FE_LEBT:PSC2_D0821 Firmware",
@@ -1142,8 +1142,8 @@
     "engineer": "Bliton",
     "levelOfCare": "Medium",
     "platforms": "Intelligent PS",
-    "revisionControl": "Git",
-    "revisionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
+    "versionControl": "Git",
+    "versionControlLoc": "https://stash.frib.msu.edu/projects/PS/repos/frib-ps-firmware/"
   },
 
   {

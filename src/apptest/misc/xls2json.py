@@ -39,8 +39,8 @@ for sheet in wb.sheets():
         row["engineer"] = cols[8]
         row["levelOfCare"] = cols[9]
         row["platforms"] = cols[10]
-        row["revisionControl"] = cols[11]
-        row["revisionControlLoc"] = cols[12]
+        row["versionControl"] = cols[11]
+        row["versionControlLoc"] = cols[12]
         row["_id"] = format(id, "024x")
 
         print "\n" + str(nrow)+":Adding sw row "+json.dumps(row)

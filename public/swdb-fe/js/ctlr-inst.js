@@ -327,7 +327,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
 
     // initialize this record
     $scope.formData = {
-        //revisionControl: "",
+        //versionControl: "",
         slots: [],
         vvResultLoc: [],
     };
