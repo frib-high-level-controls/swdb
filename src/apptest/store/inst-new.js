@@ -98,8 +98,8 @@ test.describe("Installations add screen tests", function() {
     input.click();
 
     // find one of the selected items and cancel it
-    chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[4]/div[1]/div[1]/span')), 3000);
-    input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[4]/div[1]/div[1]/span'));
+    chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[9]/div[1]/div[1]/span')), 3000);
+    input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[9]/div[1]/div[1]/span'));
     chromeDriver.wait(until.elementTextIs(input, "FE_LEBT:BD_D0824"),5000);
 
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="rmSelSlotBtn"]')), 3000);
@@ -107,8 +107,8 @@ test.describe("Installations add screen tests", function() {
     input.click();
 
     // locate the other selected item to make sure we got it
-    chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[4]/div[1]/div/span')), 3000);
-    input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[4]/div[1]/div/span'));
+    chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[9]/div[1]/div/span')), 3000);
+    input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[9]/div[1]/div/span'));
     chromeDriver.wait(until.elementTextIs(input, "FE_LEBT:AP_D0807"),5000);
 
     // set the status

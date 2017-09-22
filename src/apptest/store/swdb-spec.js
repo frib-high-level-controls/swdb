@@ -707,9 +707,9 @@ describe("app", function() {
 
       // test update owner min, max
       {"type":"PUT", "req": {"msg": {"swName": "NEW Test name", "owner": "N"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"owner","msg":"Owner must be 2-30 characters."'}}},
-      {"type":"PUT", "req": {"msg": {"swName": "NEW Test name","owner": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"owner","msg":"Owner must be 2-30 characters."'}}},
+      "err": {"status": 400, "msgHas": '"param":"owner","msg":"Owner must be 2-80 characters."'}}},
+      {"type":"PUT", "req": {"msg": {"swName": "NEW Test name","owner": "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"}, "url": "/api/v1/swdb/",
+      "err": {"status": 400, "msgHas": '"param":"owner","msg":"Owner must be 2-80 characters."'}}},
       // test update levelOfCare enumerated
       {"type":"PUT", "req": {"msg": {"levelOfCare": "not-enumerated"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"levelOfCare","msg":"Level of care must be one of NONE,LOW,MEDIUM,HIGH,SAFETY","value":"not-enumerated"}'}}},

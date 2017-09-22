@@ -306,8 +306,8 @@ exports.updateValidation = function(req) {
         errorMessage: "Owner must be ASCII characters.",
       },
       isLength: {
-        options: [{min: 2, max: 30}],
-        errorMessage: "Owner must be 2-30 characters.",
+        options: [{min: 2, max: 80}],
+        errorMessage: "Owner must be 2-80 characters.",
       },
     },
     "engineer": {
