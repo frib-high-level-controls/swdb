@@ -1,17 +1,17 @@
-var app = require("../../app/server");
-var chai = require("../../../node_modules/chai");
-var expect = require("../../../node_modules/chai").expect;
+let app = require("../../app/server");
+let chai = require("../../../node_modules/chai");
+let expect = require("../../../node_modules/chai").expect;
 chai.use(require("../../../node_modules/chai-as-promised"));
-var ObjectId = require('../../../node_modules/mongodb').ObjectID;
+let ObjectId = require('../../../node_modules/mongodb').ObjectID;
 
 let TestTools = require('./TestTools');
 let testTools = new TestTools.TestTools();
 
-var webdriver = require("../../../node_modules/selenium-webdriver"),
+let webdriver = require("../../../node_modules/selenium-webdriver"),
   By = webdriver.By,
   until = webdriver.until,
   test = require("../../../node_modules/selenium-webdriver/testing");
-var fs = require('fs');
+let fs = require('fs');
 
 let CommonTools = require('../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
@@ -20,7 +20,7 @@ props = ctools.getConfiguration();
 
 
 test.describe("Installations detail screen tests", function() {
-  var chromeDriver = null;
+  let chromeDriver = null;
   test.before(function(done) {
     console.log("Starting inst-details");
     this.timeout(5000);
@@ -32,7 +32,7 @@ test.describe("Installations detail screen tests", function() {
     testTools.clearTestCollections(done);
   });
 
-  var allCookies = null;
+  let allCookies = null;
 
   test.it("should show search page with login button", function() {
     chromeDriver = new webdriver.Builder()
@@ -81,11 +81,52 @@ test.describe("Installations detail screen tests", function() {
       "testuser"),5000);
   });
 
+  test.it("should show the requested installation record host field", function() {
+    chromeDriver.wait(until.elementLocated(By.id("host")),5000);
+    chromeDriver.findElement(By.id("host")).getAttribute("value").then(function(result) {
+      expect(result).to.match(/host2/);
+    });
+  });
+
+  test.it("should show the requested installation record software field", function() {
+    chromeDriver.wait(until.elementLocated(By.id("software")),5000);
+    chromeDriver.findElement(By.id("software")).getAttribute("value").then(function(result) {
+      expect(result).to.match(/^[0-9a-fA-F]{24}$/);
+    });
+  });
+
+  test.it("should show the requested installation record area field", function() {
+    chromeDriver.wait(until.elementLocated(By.id("area")),5000);
+    chromeDriver.findElement(By.id("area")).getAttribute("value").then(function(result) {
+      expect(result).to.match(/LS1/);
+    });
+  });
+
+  test.it("should show the requested installation record status field", function() {
+    chromeDriver.wait(until.elementLocated(By.id("status")),5000);
+    chromeDriver.findElement(By.id("status")).getAttribute("value").then(function(result) {
+      expect(result).to.match(/DEVEL/);
+    });
+  });
+
+  test.it("should show the requested installation record status date field", function() {
+    chromeDriver.wait(until.elementLocated(By.id("statusDate")),5000);
+    chromeDriver.findElement(By.id("statusDate")).getAttribute("value").then(function(result) {
+      expect(result).to.match(/2016-09-21T07:00:00.000Z/);
+    });
+  });
+
   test.it("should show the requested installation record vvResults field", function() {
     chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc")),5000);
     chromeDriver.findElement(By.id("vvResultsLoc")).getAttribute("value").then(function(result) {
       expect(result).to.match(/vvResultsLoc2/);
     });
+  });
 
+  test.it("should show the requested installation record drrs field", function() {
+    chromeDriver.wait(until.elementLocated(By.id("drrs")),5000);
+    chromeDriver.findElement(By.id("drrs")).getAttribute("value").then(function(result) {
+      expect(result).to.match(/^$/);
+    });
   });
 });
