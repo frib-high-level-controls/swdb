@@ -71,15 +71,15 @@
       </div>
 
       <!-- DRRs -->
-      <div class="row swdbFormRow" ng-class="{ 'has-error' : inputForm.drrInput.$invalid && !inputForm.drrInput.$pristine }">
-        <div id="drr-group" class="form-group">
+      <div class="row swdbFormRow" ng-class="{ 'has-error' : inputForm.drrsInput.$invalid && !inputForm.drrsInput.$pristine }">
+        <div id="drrs-group" class="form-group">
           <label class="col-sm-2 control-label">DRR</label>
           <div class="col-sm-8">
-            <input id="drr" type="text" name="drrInput" class="form-control" placeholder="DRR" ng-model="formData.drr" ng-minlength="2"
+            <input id="drrs" type="text" name="drrsInput" class="form-control" placeholder="DRR" ng-model="formData.drrs" ng-minlength="2"
               ng-maxlength="30">
             </input>
           </div>
-          <div class="col-sm-2" id="drrInputSts" ng-messages="inputForm.drrInput.$error" ng-if="inputForm.drrInput.$dirty">
+          <div class="col-sm-2" id="drrsInputSts" ng-messages="inputForm.drrsInput.$error" ng-if="inputForm.drrsInput.$dirty">
             <div ng-message="required">DRR is required</div>
             <div ng-message="minlength">DRR must exceed 2 characters</div>
             <div ng-message="maxlength">DRR must not exceed 30 characters</div>
