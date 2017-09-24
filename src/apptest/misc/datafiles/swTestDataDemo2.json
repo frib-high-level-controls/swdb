@@ -93,7 +93,7 @@
     "swName": "ArtemisB PLC",
     "desc": "ArtemisB Programmable Logic controller",
     "status": "Ready for Installation",
-    "version": "31??",
+    "version": "31.0",
     "area": "FE",
     "owner": "Controls Department Manager",
     "engineer": "Hodges",
@@ -748,7 +748,7 @@
     "statusDate": "06/05/2017"
   },
   {
-    "swName": "LEBT LLRF IOC",
+    "swName": "LLRF IOC",
     "desc": "Lower LEBT low-level RF control IOC",
     "status": "Ready for Installation",
     "version": "63c1b768e7d",
@@ -762,21 +762,7 @@
     "_id": "00000000000000000000007c"
   },
   {
-    "swName": "MEBT LLRF IOC",
-    "desc": "MEBT low-level RF control IOC",
-    "status": "Ready for Installation",
-    "version": "63c1b768e7d",
-    "area": "FE",
-    "owner": "High Level Systems Group Leader",
-    "engineer": "Konrad",
-    "levelOfCare": "Medium",
-    "platforms": "Linux (x86_64)",
-    "versionControl": "Git",
-    "versionControlLoc": "https://stash.frib.msu.edu/projects/RF/repos/llrfioc",
-    "_id": "00000000000000000000007d"
-  },
-  {
-    "swName": "MEBT HPRF IOC",
+    "swName": "HPRF IOC",
     "desc": "MEBT high power RF control IOC",
     "status": "Ready for Installation",
     "version": "ce3a5c3e1ba",
@@ -788,34 +774,6 @@
     "versionControl": "Git",
     "versionControlLoc": "https://stash.frib.msu.edu/projects/RF/repos/hprfioc",
     "_id": "00000000000000000000007e"
-  },
-  {
-    "swName": "RFQ LLRF IOC",
-    "desc": "RFQ low-level RF control IOC",
-    "status": "Ready for Installation",
-    "version": "63c1b768e7d",
-    "area": "FE",
-    "owner": "High Level Systems Group Leader",
-    "engineer": "Konrad",
-    "levelOfCare": "Medium",
-    "platforms": "Linux (x86_64)",
-    "versionControl": "Git",
-    "versionControlLoc": "https://stash.frib.msu.edu/projects/RF/repos/llrfioc",
-    "_id": "00000000000000000000007f"
-  },
-  {
-    "swName": "RFQ HPRF IOC",
-    "desc": "RFQ high power RF control IOC",
-    "status": "Ready for Installation",
-    "version": "ce3a5c3e1ba",
-    "area": "FE",
-    "owner": "High Level Systems Group Leader",
-    "engineer": "Konrad",
-    "levelOfCare": "Medium",
-    "platforms": "Linux (x86_64)",
-    "versionControl": "Git",
-    "versionControlLoc": "https://stash.frib.msu.edu/projects/RF/repos/hprfioc",
-    "_id": "000000000000000000000080"
   },
   {
     "swName": "LLRF FPGA FW",

@@ -7,7 +7,7 @@ import xlrd
 import simplejson as json
 
 # Open the workbook and select the worksheet
-wb = xlrd.open_workbook('/home/deployer/Downloads/Software_Configuration_DRR01-03.xlsx')
+wb = xlrd.open_workbook('/home/deployer/Downloads/Software_Configuration_DRR01-03 (2).xlsx')
 sheet = wb.sheet_by_index(2)
 array = []
 instArray = []
