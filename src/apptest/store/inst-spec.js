@@ -97,7 +97,8 @@ describe("app", function() {
       .set('Cookie', [Cookies])
       .expect(400)
       .end(function(err, res){
-        expect(res.text).to.match(/Status must be one of DEVEL,MAINT,RDY_INSTALL,RDY_INT_TEST,RDY_BEAM,DEPRECATED,STANDBY/);
+        // expect(res.text).to.match(/Status must be one of DEVEL,MAINT,RDY_INSTALL,RDY_INT_TEST,RDY_BEAM,DEPRECATED,STANDBY/);
+        expect(res.text).to.match(/Status must be one of {\\"0\\":\\"DEVEL\\",\\"1\\":\\"MAINT\\",\\"2\\":\\"RDY_INSTALL\\",\\"3\\":\\"RDY_INT_TEST\\",\\"4\\":\\"RDY_BEAM\\",\\"5\\":\\"DEPRECATED\\",\\"DEVEL\\":0,\\"MAINT\\":1,\\"RDY_INSTALL\\":2,\\"RDY_INT_TEST\\":3,\\"RDY_BEAM\\":4,\\"DEPRECATED\\":5}","value":"BADENUM"}/);
         done();
       });
   });

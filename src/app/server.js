@@ -50,6 +50,13 @@ app.use(expressValidator({
     isOneOf: function(str,arr) {
       return (arr.indexOf(str) > -1);
     },
+    isInEnum: function(str,e) {
+      if (str in e) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     isAreas: function(val,req) {
       // Must be an array of strings
       if (Array.isArray(val)){

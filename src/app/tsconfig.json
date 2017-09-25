@@ -10,8 +10,10 @@
         "allowJs": true
     },
     "files": [
+      "../../config/swdbEnums.ts",
       "lib/Db.ts",
       "lib/instDb.ts",
+      "lib/instLib.ts",
       "lib/CommonTools.ts",
       "../apptest/store/TestTools.ts"
     ]
