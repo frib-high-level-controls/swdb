@@ -84,14 +84,14 @@ test.describe("Installations update screen tests", function() {
     input.click();
     input.sendKeys("Global");
 
-    // set slots
-    chromeDriver.wait(until.elementLocated(By.id("slots")), 3000);
-    searchInput = chromeDriver.findElement(By.id("slots"));
-    searchInput.sendKeys("FE_LEBT");
-    // find the second item in that list and add it to the selected list
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-")]')), 3000);
-    input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-1"=substring(@id, string-length(@id)-string-length("option-1")+1)]/a'));
-    input.click();
+    // // set slots
+    // chromeDriver.wait(until.elementLocated(By.id("slots")), 3000);
+    // searchInput = chromeDriver.findElement(By.id("slots"));
+    // searchInput.sendKeys("FE_LEBT");
+    // // find the second item in that list and add it to the selected list
+    // chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-")]')), 3000);
+    // input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-1"=substring(@id, string-length(@id)-string-length("option-1")+1)]/a'));
+    // input.click();
 
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
     input = chromeDriver.findElement(By.id("status"));

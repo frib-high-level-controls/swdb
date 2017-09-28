@@ -117,35 +117,35 @@ test.describe("Installations add screen tests", function() {
     input.click();
     input.sendKeys("http://www.google.com");
 
-    // set slots
-    chromeDriver.wait(until.elementLocated(By.id("slots")), 3000);
-    searchInput = chromeDriver.findElement(By.id("slots"));
-    searchInput.sendKeys("FE_LEBT");
-    // find the second item in that list and add it to the selected list
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-")]')), 3000);
-    input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-1"=substring(@id, string-length(@id)-string-length("option-1")+1)]/a'));
-    input.click();
+    // // set slots
+    // chromeDriver.wait(until.elementLocated(By.id("slots")), 3000);
+    // searchInput = chromeDriver.findElement(By.id("slots"));
+    // searchInput.sendKeys("FE_LEBT");
+    // // find the second item in that list and add it to the selected list
+    // chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-")]')), 3000);
+    // input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-1"=substring(@id, string-length(@id)-string-length("option-1")+1)]/a'));
+    // input.click();
 
-    // now search again and add the third item to the selected list
-    searchInput.clear();
-    searchInput.sendKeys("FE_LEBT");
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-")]')), 3000);
-    input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-2"=substring(@id, string-length(@id)-string-length("option-2")+1)]/a'));
-    input.click();
+    // // now search again and add the third item to the selected list
+    // searchInput.clear();
+    // searchInput.sendKeys("FE_LEBT");
+    // chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-")]')), 3000);
+    // input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-2"=substring(@id, string-length(@id)-string-length("option-2")+1)]/a'));
+    // input.click();
 
-    // find one of the selected items and cancel it
-    chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[9]/div[1]/div[1]/span')), 3000);
-    input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[9]/div[1]/div[1]/span'));
-    chromeDriver.wait(until.elementTextIs(input, "FE_LEBT:BD_D0824"),5000);
+    // // find one of the selected items and cancel it
+    // chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[9]/div[1]/div[1]/span')), 3000);
+    // input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[9]/div[1]/div[1]/span'));
+    // chromeDriver.wait(until.elementTextIs(input, "FE_LEBT:BD_D0824"),5000);
 
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="rmSelSlotBtn"]')), 3000);
-    input = chromeDriver.findElement(By.xpath('//*[@id="rmSelSlotBtn"]'));
-    input.click();
+    // chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="rmSelSlotBtn"]')), 3000);
+    // input = chromeDriver.findElement(By.xpath('//*[@id="rmSelSlotBtn"]'));
+    // input.click();
 
-    // locate the other selected item to make sure we got it
-    chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[9]/div[1]/div/span')), 3000);
-    input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[9]/div[1]/div/span'));
-    chromeDriver.wait(until.elementTextIs(input, "FE_LEBT:AP_D0807"),5000);
+    // // locate the other selected item to make sure we got it
+    // chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[9]/div[1]/div/span')), 3000);
+    // input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[9]/div[1]/div/span'));
+    // chromeDriver.wait(until.elementTextIs(input, "FE_LEBT:AP_D0807"),5000);
 
     // submit the record
     chromeDriver.findElement(By.id("submitBtn")).click();

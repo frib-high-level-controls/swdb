@@ -341,7 +341,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
 
 
 appController.controller('InstUpdateController', InstUpdatePromiseCtrl);
-function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService) {
+function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService, swService) {
 
   $scope.$watch(function() {
     return $scope.session;
@@ -452,6 +452,8 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
 
     $scope.props = configService.getConfig();
     $scope.session = userService.getUser();
+    $scope.swList = swService.getSwList();
+
     // check our user session and redirect if needed
     if (!$scope.session.username) {
         //go to cas
@@ -471,6 +473,7 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     $http.get($scope.props.instApiUrl+$routeParams.itemId).success(function(data) {
         $scope.formData = data;
         $scope.whichItem = $routeParams.itemId;
+        $scope.swSelected = data.software;
 
         // make a Date object from this string
         $scope.formData.statusDate = new Date($scope.formData.statusDate);

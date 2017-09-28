@@ -139,7 +139,7 @@
 
 
       <!-- SLOTS -->
-      <div class="row swdbFormRow">
+      <!-- <div class="row swdbFormRow">
         <label class="col-sm-2"> slots search</label>
         <div class="col-sm-8">
           <input id="slots" type="text" ng-model="selected" uib-typeahead="slot.name as (slot.name+' (desc:'+slot.description+')') for slot in slots |
@@ -150,20 +150,17 @@
       </div>
       <div class="row swdbFormRow">
         <label class="col-sm-2">&nbspselected slots </label>
-        <!--<div class="col-sm-10 selectedSlotBox">-->
         <div class="col-sm-8 selectedSlotBox">
           <div ng-repeat="selectedSlot in slotsSelected">
-            <!--<div uib-popover="{{selectedSlot}} )" popover-trigger="'mouseenter'">-->
             <span>{{selectedSlot}} </span>
             <button id="rmSelSlotBtn" ng-click="removeSelectedSlot(selectedSlot)" class="btn btn-xs btn-warning smCancelBtn">
             <span class="submit glyphicon glyphicon-remove-sign"></span>&nbsp
           </button>
-            <!--</div>-->
           </div>
         </div>
         <div class="col-sm-2">
         </div>
-      </div>
+      </div> -->
 
       <!-- SUBMIT BUTTON -->
       <div id='formStatus' ng-show="swdbParams.formShowStatus" class="alert alert-success form-group col-sm-12"><span class="glyphicon glyphicon-info-sign"></span> {{swdbParams.formStatus}}</div>
