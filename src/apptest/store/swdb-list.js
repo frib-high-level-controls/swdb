@@ -90,6 +90,55 @@ test.describe("Installations record tests", function() {
       "Installations"),5000);
   });
 
+  test.it("should show SW name columns names in proper order", function() {
+    let xpath = '//*[@id="swdbList"]/thead/tr[1]/th[1]';
+    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
+    var field = chromeDriver.findElement(By.xpath(xpath));
+    return expect(Promise.resolve(field.getText())).to.eventually.equal("Software name");
+  });
+
+  test.it("should show Status column names in proper order", function() {
+    xpath = '//*[@id="swdbList"]/thead/tr[1]/th[2]';
+    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
+    var field = chromeDriver.findElement(By.xpath(xpath));
+    return expect(Promise.resolve(field.getText())).to.eventually.equal("Branch");
+  });
+
+  test.it("should show Version column names in proper order", function() {
+    xpath = '//*[@id="swdbList"]/thead/tr[1]/th[3]';
+    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
+    var field = chromeDriver.findElement(By.xpath(xpath));
+    return expect(Promise.resolve(field.getText())).to.eventually.equal("Version");
+  });
+
+  test.it("should show Owner column names in proper order", function() {
+    xpath = '//*[@id="swdbList"]/thead/tr[1]/th[4]';
+    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
+    var field = chromeDriver.findElement(By.xpath(xpath));
+    return expect(Promise.resolve(field.getText())).to.eventually.equal("Owner");
+  });
+
+  test.it("should show Engineer column names in proper order", function() {
+    xpath = '//*[@id="swdbList"]/thead/tr[1]/th[5]';
+    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
+    var field = chromeDriver.findElement(By.xpath(xpath));
+    return expect(Promise.resolve(field.getText())).to.eventually.equal("Engineer");
+  });
+
+  test.it("should show Status column names in proper order", function() {
+    xpath = '//*[@id="swdbList"]/thead/tr[1]/th[6]';
+    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
+    var field = chromeDriver.findElement(By.xpath(xpath));
+    return expect(Promise.resolve(field.getText())).to.eventually.equal("Status");
+  });
+
+  test.it("should show Status date column names in proper order", function() {
+    xpath = '//*[@id="swdbList"]/thead/tr[1]/th[7]';
+    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
+    var field = chromeDriver.findElement(By.xpath(xpath));
+    return expect(Promise.resolve(field.getText())).to.eventually.equal("Status date");
+  });
+
   test.it("should show a known record", function() {
     this.timeout(8000);
     //chromeDriver.wait(until.elementLocated(By.linkText("BEAST")), 8000);
@@ -98,7 +147,7 @@ test.describe("Installations record tests", function() {
     //
     chromeDriver.wait(until.elementLocated(By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]')), 8000);
     var link = chromeDriver.findElement(By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]'));
-    expect(Promise.resolve(link.getText())).to.eventually.equal("BEAST");
+    return expect(Promise.resolve(link.getText())).to.eventually.equal("BEAST");
   });
 
   // find a software record

@@ -65,6 +65,55 @@ test.describe("Installations record tests", function() {
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
       "testuser"),5000);
   });
+//*[@id="instList"]/thead/tr[1]/th[1]
+  test.it("should show Host column names in proper order", function() {
+    let xpath = '//*[@id="instList"]/thead/tr[1]/th[1]';
+    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
+    var field = chromeDriver.findElement(By.xpath(xpath));
+    return expect(Promise.resolve(field.getText())).to.eventually.equal("Host");
+  });
+
+  test.it("should show Software column names in proper order", function() {
+    xpath = '//*[@id="instList"]/thead/tr[1]/th[2]';
+    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
+    var field = chromeDriver.findElement(By.xpath(xpath));
+    return expect(Promise.resolve(field.getText())).to.eventually.equal("Software");
+  });
+
+  test.it("should show Area column names in proper order", function() {
+    xpath = '//*[@id="instList"]/thead/tr[1]/th[3]';
+    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
+    var field = chromeDriver.findElement(By.xpath(xpath));
+    return expect(Promise.resolve(field.getText())).to.eventually.equal("Area");
+  });
+
+  test.it("should show Status column names in proper order", function() {
+    xpath = '//*[@id="instList"]/thead/tr[1]/th[4]';
+    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
+    var field = chromeDriver.findElement(By.xpath(xpath));
+    return expect(Promise.resolve(field.getText())).to.eventually.equal("Status");
+  });
+
+  test.it("should show Status date column names in proper order", function() {
+    xpath = '//*[@id="instList"]/thead/tr[1]/th[5]';
+    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
+    var field = chromeDriver.findElement(By.xpath(xpath));
+    return expect(Promise.resolve(field.getText())).to.eventually.equal("Status Date");
+  });
+
+  test.it("should show DRRs column names in proper order", function() {
+    xpath = '//*[@id="instList"]/thead/tr[1]/th[6]';
+    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
+    var field = chromeDriver.findElement(By.xpath(xpath));
+    return expect(Promise.resolve(field.getText())).to.eventually.equal("DRRs");
+  });
+
+  test.it("should show V&V column names in proper order", function() {
+    xpath = '//*[@id="instList"]/thead/tr[1]/th[7]';
+    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
+    var field = chromeDriver.findElement(By.xpath(xpath));
+    return expect(Promise.resolve(field.getText())).to.eventually.equal("V&V Results");
+  });
 
   // find an installation record
   test.it("should find a record", function() {
