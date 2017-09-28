@@ -133,14 +133,14 @@ app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:htt
 ));
 
 // start the server
-// app.listen(props.webPort, function() {
-//   console.log('listening on port '+props.webPort);
-// });
-
-let httpsPort = Number(props.webPort);
-var httpsSrv = https.createServer(credentials, app).listen(httpsPort, function() {
-    console.log('Https listening on '+httpsPort);
+app.listen(props.webPort, function() {
+  console.log('listening on port '+props.webPort);
 });
+
+// let httpsPort = Number(props.webPort);
+// var httpsSrv = https.createServer(credentials, app).listen(httpsPort, function() {
+//     console.log('Https listening on '+httpsPort);
+// });
 
 // auth middleware
 var auth = function(req, res, next) {
