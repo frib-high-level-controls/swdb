@@ -87,32 +87,25 @@ test.describe("Installations record tests", function() {
     return expect(Promise.resolve(field.getText())).to.eventually.equal("Area");
   });
 
-  test.it("should show Status column names in proper order", function() {
+  test.it("should show DRR column names in proper order", function() {
     xpath = '//*[@id="instList"]/thead/tr[1]/th[4]';
+    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
+    var field = chromeDriver.findElement(By.xpath(xpath));
+    return expect(Promise.resolve(field.getText())).to.eventually.equal("DRR");
+  });
+
+  test.it("should show Status column names in proper order", function() {
+    xpath = '//*[@id="instList"]/thead/tr[1]/th[5]';
     chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
     var field = chromeDriver.findElement(By.xpath(xpath));
     return expect(Promise.resolve(field.getText())).to.eventually.equal("Status");
   });
 
   test.it("should show Status date column names in proper order", function() {
-    xpath = '//*[@id="instList"]/thead/tr[1]/th[5]';
-    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    var field = chromeDriver.findElement(By.xpath(xpath));
-    return expect(Promise.resolve(field.getText())).to.eventually.equal("Status Date");
-  });
-
-  test.it("should show DRRs column names in proper order", function() {
     xpath = '//*[@id="instList"]/thead/tr[1]/th[6]';
     chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
     var field = chromeDriver.findElement(By.xpath(xpath));
-    return expect(Promise.resolve(field.getText())).to.eventually.equal("DRRs");
-  });
-
-  test.it("should show V&V column names in proper order", function() {
-    xpath = '//*[@id="instList"]/thead/tr[1]/th[7]';
-    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    var field = chromeDriver.findElement(By.xpath(xpath));
-    return expect(Promise.resolve(field.getText())).to.eventually.equal("V&V Results");
+    return expect(Promise.resolve(field.getText())).to.eventually.equal("Status Date");
   });
 
   // find an installation record

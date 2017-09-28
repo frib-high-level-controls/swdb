@@ -79,14 +79,12 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
       }),
     DTColumnBuilder.newColumn('area')
       .withTitle('Area').withOption('defaultContent', ''),
+    DTColumnBuilder.newColumn('drrs')
+      .withTitle('DRR').withOption('defaultContent', ''),
     DTColumnBuilder.newColumn('status')
       .withTitle('Status').withOption('defaultContent', ''),
     DTColumnBuilder.newColumn('statusDate')
-      .withTitle('Status Date').withOption('defaultContent', ''),
-    DTColumnBuilder.newColumn('drrs')
-      .withTitle('DRRs').withOption('defaultContent', ''),
-    DTColumnBuilder.newColumn('vvResultsLoc')
-      .withTitle('V&V Results').withOption('defaultContent', '')
+      .withTitle('Status Date').withOption('defaultContent', '')
   ];
 
   angular.element('#instList').on('init.dt', function (event, loadedDT) {
