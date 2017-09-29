@@ -1,19 +1,30 @@
 /*
  * Shared Express request handlers.
  */
-import express = require('express');
+import * as express from 'express';
 
-export import HttpStatus = require('http-status-codes');
+import * as HttpStatusCodes from 'http-status-codes';
+
+import * as log from './logging';
+
+
+type Request = express.Request;
+type Response = express.Response;
+type NextFunction = express.NextFunction;
+type RequestHandler = express.RequestHandler;
+
+export const HttpStatus = HttpStatusCodes;
+
 
 export interface HttpStatusError extends Error {
   status: number;
 };
 
 export interface RequestPromiseHandler {
-  (req: express.Request, res: express.Response, next?: express.NextFunction): PromiseLike<void>;
+  (req: Request, res: Response, next?: NextFunction): PromiseLike<void>;
 };
 
-export function catchAll(handler: RequestPromiseHandler): express.RequestHandler {
+export function catchAll(handler: RequestPromiseHandler): RequestHandler {
   return (req, res, next) => {
     try {
       Promise.resolve(handler(req, res, next)).catch(next);
@@ -26,7 +37,7 @@ export function catchAll(handler: RequestPromiseHandler): express.RequestHandler
 // Wrap the Express format() method to support promises.
 // (For more details: http://expressjs.com/en/api.html#res.format)
 // In addition, this method provides more specific typings than the original.
-export function format(res: express.Response, cbs: { [key: string]: () => Promise<void> | void }): Promise<void> {
+export function format(res: Response, cbs: { [key: string]: () => Promise<void> | void }): Promise<void> {
 
   return new Promise((resolve, reject) => {
     const wrapper = (cb: () => Promise<void> | void) => {
@@ -111,11 +122,11 @@ function isValidStatus(status: number) {
   }
 };
 
-export function ensureAccepts(type: string): express.RequestHandler;
-export function ensureAccepts(type: string[]): express.RequestHandler;
-export function ensureAccepts(...type: string[]): express.RequestHandler;
-export function ensureAccepts(type: any): express.RequestHandler {
-  return (req: express.Request, res: express.Response, next: express.NextFunction) => {
+export function ensureAccepts(type: string): RequestHandler;
+export function ensureAccepts(type: string[]): RequestHandler;
+export function ensureAccepts(...type: string[]): RequestHandler;
+export function ensureAccepts(type: any): RequestHandler {
+  return (req: Request, res: Response, next: NextFunction) => {
     if (!req.accepts(type)) {
       next(new RequestError(HttpStatus.getStatusText(HttpStatus.NOT_ACCEPTABLE), HttpStatus.NOT_ACCEPTABLE));
     }
@@ -123,23 +134,28 @@ export function ensureAccepts(type: any): express.RequestHandler {
   };
 };
 
-export function notFoundHandler(req: express.Request, res: express.Response, next: express.NextFunction) {
+export function notFoundHandler(req: Request, res: Response, next: NextFunction) {
   let status = HttpStatus.NOT_FOUND;
   let message = HttpStatus.getStatusText(status);
   next(new RequestError(message, status));
 };
 
-export function requestErrorHandler(err: any, req: express.Request, res: express.Response, next: express.NextFunction) {
+export function requestErrorHandler(err: any, req: Request, res: Response, next: NextFunction) {
+  let message = DEFAULT_ERROR_MESSAGE;
   let status = HttpStatus.INTERNAL_SERVER_ERROR;
-  let details: RequestErrorDetails = { message: DEFAULT_ERROR_MESSAGE };
+  let details: RequestErrorDetails = { message: message };
 
   if (err instanceof RequestError) {
+    message = err.message;
     status = err.status;
     details = err.details;
   } else if (err instanceof Error) {
-    details = {
-      message: err.message,
-    };
+    message = err.message;
+    details = { message: message };
+  }
+
+  if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
+    log.error('%s: %s', message, JSON.stringify(details));
   }
 
   format(res, {
