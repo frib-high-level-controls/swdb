@@ -39,12 +39,13 @@ export type Update = IUpdate & mongoose.Document;
 
 export interface Document<T extends Document<T>> extends mongoose.Document, IHistory {
   saveWithHistory(by: string): Promise<T>;
-}
+  populateUpdates(): Promise<void>;
+};
 
 export interface Model<T extends Document<T>> extends mongoose.Model<T> {
   findByIdWithHistory(id: string | number | ObjectId): Promise<T | null>;
   findOneWithHistory(conditions?: object): Promise<T | null>;
-}
+};
 
 export interface HistoryOptions {
   watchAll?: boolean;
@@ -256,6 +257,24 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
         this.history.updates.push(update);
       }
       return this.save();
+    });
+  });
+
+  /**
+   * Populate the updates for this document.
+   */
+  schema.method('populateUpdates', function (this: T): Promise<void> {
+    return Update.find({ target: { $in: this.history.updateIds }}).exec().then((updates) => {
+      const ordered: Update[] = [];
+      for (let id of this.history.updateIds) {
+        for (let update of updates) {
+          if (id.equals(update._id)) {
+            ordered.push(update);
+            continue;
+          }
+        }
+      }
+      this.history.updates = ordered;
     });
   });
 
