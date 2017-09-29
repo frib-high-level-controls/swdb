@@ -239,7 +239,8 @@ test.describe("Software update screen tests", function() {
   });
 
   test.it("should show the details record", function () {
-    chromeDriver.wait(until.titleIs("SWDB - Details"), 5000);
+    this.timeout(20000);
+    chromeDriver.wait(until.titleIs("SWDB - Details"), 20000);
   });
 
   test.it("should show the correct description in details", function () {

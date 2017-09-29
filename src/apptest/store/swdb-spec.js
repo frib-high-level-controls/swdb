@@ -662,6 +662,9 @@ describe("app", function() {
       {"type": "PUT","req": {"msg": {"previous": "bad reference is way to long for this"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
       {"type": "PUT","req": {"msg": {"comment": "NEW test comment"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"comment": "NEW test comment"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      // test new record basic only required items
+      {"type":"POST", "req": {"msg": {"swName": "NEW-test-name-1", "status": "RDY_BEAM", "statusDate": "1/1/1997", "owner": "test owner", "levelOfCare": "MEDIUM"}, "url": "/api/v1/swdb/",
+      "err": {"status": 201, "msgHas": ''}}},
       // test new swName is required, min, max
       {"type":"POST", "req": {"msg": {"owner": "test owner"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"swName","msg":"Software name is required."}'}}},
@@ -700,10 +703,10 @@ describe("app", function() {
       {"type":"POST", "req": {"msg": {"recertFreq": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertFreq","msg":"Recertification frequency must be 4-30 characters."'}}},
       // test new recertStatus min, max
-      {"type":"POST", "req": {"msg": {"recertStatus": "N"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 4-30 characters."'}}},
+      // {"type":"POST", "req": {"msg": {"recertStatus": "N"}, "url": "/api/v1/swdb/",
+      // "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 4-30 characters."'}}},
       {"type":"POST", "req": {"msg": {"recertStatus": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 4-30 characters."'}}},
+      "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 0-30 characters."'}}},
 
       // test update owner min, max
       {"type":"PUT", "req": {"msg": {"swName": "NEW Test name", "owner": "N"}, "url": "/api/v1/swdb/",
@@ -738,10 +741,10 @@ describe("app", function() {
       {"type":"PUT", "req": {"msg": {"recertFreq": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertFreq","msg":"Recertification frequency must be 4-30 characters."'}}},
       // test update recertStatus min, max
-      {"type":"PUT", "req": {"msg": {"recertStatus": "N"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 4-30 characters."'}}},
+      // {"type":"PUT", "req": {"msg": {"recertStatus": "N"}, "url": "/api/v1/swdb/",
+      // "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 4-30 characters."'}}},
       {"type":"PUT", "req": {"msg": {"recertStatus": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 4-30 characters."'}}},
+      "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 0-30 characters."'}}},
       // test update comment
       {"type":"PUT", "req": {"msg": {"comment": ["NE"]}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"comment","msg":"Comment must be a string"'}}},

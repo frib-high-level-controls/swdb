@@ -206,8 +206,8 @@ exports.newValidation = function(req) {
         errorMessage: "Recertification status must be ASCII characters.",
       },
       isLength: {
-        options: [{min: 4, max: 30}],
-        errorMessage: "Recertification status must be 4-30 characters.",
+        options: [{min: 0, max: 30}],
+        errorMessage: "Recertification status must be 0-30 characters.",
       },
     },
     "recertDate": {
@@ -222,8 +222,8 @@ exports.newValidation = function(req) {
         errorMessage: "Previous must be ASCII characters.",
       },
       isLength: {
-        options: [{min: 1, max: 30}],
-        errorMessage: "Previous must be 1-30 characters.",
+        options: [{min: 0, max: 30}],
+        errorMessage: "Previous must be 0-30 characters.",
       },
     },
     "comment": {
@@ -235,7 +235,7 @@ exports.newValidation = function(req) {
         errorMessage: "Comment must be ASCII characters.",
       },
       isLength: {
-        options: [{min: 1, max: 2048}],
+        options: [{min: 0, max: 2048}],
         errorMessage: "Comment must be 0-2048 characters.",
       },
     },
@@ -411,12 +411,9 @@ exports.updateValidation = function(req) {
       isString: {
         errorMessage: "Recertification status must be a string.",
       },
-      isAscii: {
-        errorMessage: "Recertification status must be ASCII characters.",
-      },
       isLength: {
-        options: [{min: 4, max: 30}],
-        errorMessage: "Recertification status must be 4-30 characters.",
+        options: [{min: 0, max: 30}],
+        errorMessage: "Recertification status must be 0-30 characters.",
       },
     },
     "recertDate": {
@@ -427,12 +424,9 @@ exports.updateValidation = function(req) {
     },
     "previous": {
       optional: true,
-      isAscii: {
-        errorMessage: "Previous must be ASCII characters",
-      },
       isLength: {
-        options: [{min: 1, max: 30}],
-        errorMessage: "Previous must be 1-30 characters",
+        options: [{min: 0, max: 30}],
+        errorMessage: "Previous must be 0-30 characters",
       },
     },
     "comment": {
@@ -440,11 +434,8 @@ exports.updateValidation = function(req) {
       isString: {
         errorMessage: "Comment must be a string",
       },
-      isAscii: {
-        errorMessage: "Comment must be ASCII characters",
-      },
       isLength: {
-        options: [{min: 1, max: 2048}],
+        options: [{min: 0, max: 2048}],
         errorMessage: "Comment must be 0-2048 characters",
       },
     },
