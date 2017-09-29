@@ -26,7 +26,7 @@ export function catchAll(handler: RequestPromiseHandler): express.RequestHandler
 // Wrap the Express format() method to support promises.
 // (For more details: http://expressjs.com/en/api.html#res.format)
 // In addition, this method provides more specific typings than the original.
-function format(res: express.Response, cbs: { [key: string]: () => Promise<void> | void }): Promise<void> {
+export function format(res: express.Response, cbs: { [key: string]: () => Promise<void> | void }): Promise<void> {
 
   return new Promise((resolve, reject) => {
     const wrapper = (cb: () => Promise<void> | void) => {
