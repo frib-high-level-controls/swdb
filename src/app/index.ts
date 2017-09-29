@@ -232,6 +232,7 @@ async function doStart(): Promise<void> {
   // view engine configuration
   app.set('views', path.resolve(__dirname, '..', 'views'));
   app.set('view engine', 'pug');
+  app.set('view cache', (env === 'production') ? true : false);
 
   // favicon configuration
   app.use(favicon(path.resolve(__dirname, '..', 'public', 'favicon.ico')));

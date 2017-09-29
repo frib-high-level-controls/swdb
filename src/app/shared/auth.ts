@@ -1,9 +1,9 @@
 /**
  * Shared authentication and authorization utilities.
  */
-import * as dbg from 'debug';
 import * as util from 'util';
 
+import * as dbg from 'debug';
 import * as express from 'express';
 
 import * as handlers from './handlers';
@@ -33,6 +33,8 @@ export interface IProvider {
 
   getRoles(req: Request): string[] | undefined;
 
+  hasUsername(req: Request, username: string | string[]): boolean;
+
   hasRole(req: Request, role: string | string[]): boolean;
 
   hasAnyRole(req: Request, role: string | string[]): boolean;
@@ -52,6 +54,24 @@ export abstract class AbstractProvider implements IProvider {
   public abstract getUsername(req: Request): string | undefined;
 
   public abstract getRoles(req: Request): string[] | undefined;
+
+  public hasUsername(req: Request, username: string | string[]): boolean {
+    const name = this.getUsername(req);
+    if (!name) {
+      return false;
+    }
+
+    const usernames = new Set<string>();
+    if (Array.isArray(username)) {
+      for (let u of username) {
+        usernames.add(u.toUpperCase());
+      }
+    } else {
+      usernames.add(username.toUpperCase());
+    }
+
+    return usernames.has(name.toUpperCase());
+  };
 
   public hasRole(req: Request, role: string | string[]): boolean {
     const userRoles = this.getRoles(req);
@@ -76,7 +96,7 @@ export abstract class AbstractProvider implements IProvider {
     return true;
   };
 
-  public hasAnyRole(req: express.Request, role: string | string[]): boolean {
+  public hasAnyRole(req: Request, role: string | string[]): boolean {
     const userRoles = this.getRoles(req);
     if (!userRoles) {
       return false;
@@ -120,7 +140,7 @@ export abstract class AbstractProvider implements IProvider {
 
 class NullProvider extends AbstractProvider {
 
-  public authenticate(options: object): express.RequestHandler {
+  public authenticate(options: object): RequestHandler {
     return (req: Request, res: Response, next: NextFunction) => {
       res.status(handlers.HttpStatus.FORBIDDEN);
       res.send('not authorized');
@@ -172,6 +192,10 @@ export function getUsername(req: Request): string | undefined {
   return getProvider().getUsername(req);
 };
 
+export function hasUsername(req: Request, username: string | string[]): boolean {
+  return getProvider().hasUsername(req, username);
+};
+
 export function hasRole(req: Request, role: string | string[]): boolean {
   return getProvider().hasRole(req, role);
 };
@@ -190,6 +214,18 @@ export function ensureAuthenticated(req: Request, res: Response, next: NextFunct
     return;
   }
   next();
+};
+
+export function ensureHasUsername(username: string | string[]): RequestHandler {
+  return (req, res, next) => {
+    ensureAuthenticated(req, res, (err: any) => {
+      if (!hasUsername(req, username)) {
+        sendForbidden(req, res);
+        return;
+      }
+      next();
+    });
+  };
 };
 
 export function ensureHasRole(role: string | string[]): RequestHandler {
