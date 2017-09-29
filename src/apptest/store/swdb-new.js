@@ -77,7 +77,7 @@ test.describe("Software update screen tests", function () {
   });
 
   test.it("Add new record", function () {
-    this.timeout(20000);
+    this.timeout(25000);
     chromeDriver.wait(until.elementLocated(By.id('swName')), 3000);
     var input = chromeDriver.findElement(By.id('swName')).sendKeys("Test Record3");
 
@@ -135,7 +135,7 @@ test.describe("Software update screen tests", function () {
     input.click();
     input.sendKeys("DEVEL");
 
-    // set status data
+    // set status date
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
     input.click();
@@ -200,6 +200,142 @@ test.describe("Software update screen tests", function () {
     chromeDriver.findElement(By.id("swName")).getAttribute("value").then(
       function (text) {
         expect(text).to.equal("Test Record3");
+      });
+  });
+
+  test.it("should show the correct version in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("version")), 3000);
+    chromeDriver.findElement(By.id("version")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Test Version");
+      });
+  });
+
+  test.it("should show the correct branch in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("branch")), 3000);
+    chromeDriver.findElement(By.id("branch")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Test branch");
+      });
+  });
+
+  test.it("should show the correct descption in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("desc")), 3000);
+    chromeDriver.findElement(By.id("desc")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Test description");
+      });
+  });
+
+  test.it("should show the correct descption doc location in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("descDocLoc")), 3000);
+    chromeDriver.findElement(By.id("descDocLoc")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("http://www.google.com");
+      });
+  });
+
+  test.it("should show the correct design descption doc location in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("designDescDocLoc")), 3000);
+    chromeDriver.findElement(By.id("designDescDocLoc")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("http://www.google.com");
+      });
+  });
+
+  test.it("should show the correct owner in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
+    chromeDriver.findElement(By.id("owner")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Test owner");
+      });
+  });
+
+  test.it("should show the correct engineer in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
+    chromeDriver.findElement(By.id("engineer")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Test engineer");
+      });
+  });
+
+  test.it("should show the correct level of care in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("levelOfCare")), 3000);
+    chromeDriver.findElement(By.id("levelOfCare")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("LOW");
+      });
+  });
+
+  test.it("should show the correct status in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
+    chromeDriver.findElement(By.id("status")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("DEVEL");
+      });
+  });
+
+  test.it("should show the correct status date in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("statusDate")), 3000);
+    chromeDriver.findElement(By.id("statusDate")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("2017-09-28T07:00:00.000Z");
+      });
+  });
+
+  test.it("should show the correct platforms in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("platforms")), 3000);
+    chromeDriver.findElement(By.id("platforms")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Test platform");
+      });
+  });
+
+  test.it("should show the correct vvProcLoc in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("vvProcLoc")), 3000);
+    chromeDriver.findElement(By.id("vvProcLoc")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("http://www.google.com");
+      });
+  });
+
+  test.it("should show the correct vvResultsLoc in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc")), 3000);
+    chromeDriver.findElement(By.id("vvResultsLoc")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("http://www.google.com");
+      });
+  });
+
+  test.it("should show the correct version control location in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("versionControl")), 3000);
+    chromeDriver.findElement(By.id("versionControl")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Git");
+      });
+  });
+
+  test.it("should show the correct version control location in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("versionControlLoc")), 3000);
+    chromeDriver.findElement(By.id("versionControlLoc")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("http://www.google.com");
+      });
+  });
+
+  test.it("should show the correct recert freq in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("recertFreq")), 3000);
+    chromeDriver.findElement(By.id("recertFreq")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Test recertification frequency");
+      });
+  });
+
+  test.it("should show the correct recert date in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("recertDate")), 3000);
+    chromeDriver.findElement(By.id("recertDate")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("2017-09-28T07:00:00.000Z");
       });
   });
 
