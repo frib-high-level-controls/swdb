@@ -15,9 +15,11 @@ export interface RequestPromiseHandler {
 
 export function catchAll(handler: RequestPromiseHandler): express.RequestHandler {
   return (req, res, next) => {
-    Promise.resolve(handler(req, res, next)).catch((err) => {
+    try {
+      Promise.resolve(handler(req, res, next)).catch(next);
+    } catch (err) {
       next(err);
-    });
+    }
   };
 };
 
