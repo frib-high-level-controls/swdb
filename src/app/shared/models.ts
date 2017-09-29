@@ -5,7 +5,37 @@ import mongoose = require('mongoose');
 
 import * as history from './history';
 
+/**
+ * For convenience re-export the ObjectId
+ */
 export type ObjectId = mongoose.Types.ObjectId;
+
+/**
+ * For convenience re-export the isValid function
+ */
+export const isValidId = mongoose.Types.ObjectId.isValid;
+
+/**
+ * Convert the given object to an Object ID or throw an exception.
+ * This method differs from mongoose.Types.ObjectId in that it
+ * will not generate a new random ObjectID if the object is undefined.
+ * (See the generateId() function for generating IDs)
+ */
+export function ObjectId(s: any) {
+  if (!s || !isValidId(s)) {
+    throw new TypeError('Value is not a valid ObjectId');
+  }
+  return mongoose.Types.ObjectId(s);
+};
+
+/**
+ * Generate a new random Object ID.
+ * This method wraps the mongoose.Types.ObjectId() method with
+ * the sigular purpose to generate new random ObjectIDs.
+ */
+export function generateId(): ObjectId {
+  return mongoose.Types.ObjectId();
+};
 
 /**
  * Escape Regular Expression special characters in the given string.
