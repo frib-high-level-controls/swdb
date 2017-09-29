@@ -7,11 +7,11 @@ export import HttpStatus = require('http-status-codes');
 
 export interface HttpStatusError extends Error {
   status: number;
-}
+};
 
 export interface RequestPromiseHandler {
   (req: express.Request, res: express.Response, next?: express.NextFunction): PromiseLike<void>;
-}
+};
 
 export function catchAll(handler: RequestPromiseHandler): express.RequestHandler {
   return (req, res, next) => {
@@ -22,6 +22,38 @@ export function catchAll(handler: RequestPromiseHandler): express.RequestHandler
     }
   };
 };
+
+// Wrap the Express format() method to support promises.
+// (For more details: http://expressjs.com/en/api.html#res.format)
+// In addition, this method provides more specific typings than the original.
+function format(res: express.Response, cbs: { [key: string]: () => Promise<void> | void }): Promise<void> {
+
+  return new Promise((resolve, reject) => {
+    const wrapper = (cb: () => Promise<void> | void) => {
+      return () => {
+        try {
+          Promise.resolve(cb()).then(resolve, reject);
+        } catch (err) {
+          reject(err);
+        }
+      };
+    };
+
+    let fcbs: { [key: string]: () => void } = {};
+    for (let cb in cbs) {
+      if (cbs.hasOwnProperty(cb)) {
+        fcbs[cb] = wrapper(cbs[cb]);
+      }
+    }
+    if (!fcbs.default) {
+      fcbs.default = wrapper(() => {
+        throw new RequestError(HttpStatus.NOT_ACCEPTABLE);
+      });
+    }
+    res.format(fcbs);
+  });
+};
+
 
 export interface RequestErrorDetails {
   message?: string;
@@ -71,7 +103,7 @@ export class RequestError extends Error implements HttpStatusError  {
       return;
     }
   }
-}
+};
 
 function isValidStatus(status: number) {
   for (let k in HttpStatus) {
@@ -81,7 +113,7 @@ function isValidStatus(status: number) {
       }
     }
   }
-}
+};
 
 export function ensureAccepts(type: string): express.RequestHandler;
 export function ensureAccepts(type: string[]): express.RequestHandler;
@@ -99,7 +131,7 @@ export function notFoundHandler(req: express.Request, res: express.Response, nex
   let status = HttpStatus.NOT_FOUND;
   let message = HttpStatus.getStatusText(status);
   next(new RequestError(message, status));
-}
+};
 
 export function requestErrorHandler(err: any, req: express.Request, res: express.Response, next: express.NextFunction) {
   let status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -114,12 +146,15 @@ export function requestErrorHandler(err: any, req: express.Request, res: express
     };
   }
 
-  let accepts = req.accepts(['html', 'json']);
-  if (accepts === 'html') {
-    res.status(status).render('error', details);
-  } else if (accepts === 'json') {
-    res.status(status).json(details);
-  } else {
-    res.status(status).send(details.message);
-  }
-}
+  format(res, {
+    'text/html': () => {
+      res.status(status).render('error', details);
+    },
+    'application/json': () => {
+      res.status(status).json(details);
+    },
+    'default': () => {
+      res.status(status).send(details.message);
+    },
+  }).catch(next);
+};
