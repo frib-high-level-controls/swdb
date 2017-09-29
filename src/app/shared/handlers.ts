@@ -77,12 +77,8 @@ export class RequestError extends Error implements HttpStatusError  {
     if (typeof msg === 'number') {
       if (isValidStatus(msg)) {
         this.status = msg;
+        this.message = HttpStatus.getStatusText(msg);
       }
-    } else if (typeof msg === 'object') {
-      this.details = {
-        message: this.message,
-      };
-      return;
     }
 
     if (typeof status === 'number') {
