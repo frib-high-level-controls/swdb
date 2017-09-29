@@ -141,16 +141,21 @@ export function notFoundHandler(req: Request, res: Response, next: NextFunction)
 };
 
 export function requestErrorHandler(err: any, req: Request, res: Response, next: NextFunction) {
+  let message = DEFAULT_ERROR_MESSAGE;
   let status = HttpStatus.INTERNAL_SERVER_ERROR;
-  let details: RequestErrorDetails = { message: DEFAULT_ERROR_MESSAGE };
+  let details: RequestErrorDetails = { message: message };
 
   if (err instanceof RequestError) {
+    message = err.message;
     status = err.status;
     details = err.details;
   } else if (err instanceof Error) {
-    details = {
-      message: err.message,
-    };
+    message = err.message;
+    details = { message: message };
+  }
+
+  if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
+    log.error('%s: %s', message, JSON.stringify(details));
   }
 
   format(res, {
