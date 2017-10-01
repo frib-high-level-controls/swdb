@@ -207,7 +207,7 @@ test.describe("Installations add screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("statusDate")), 3000);
     chromeDriver.findElement(By.id("statusDate")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("2017-09-28T07:00:00.000Z");
+        expect(text).to.equal("2017-09-30T07:00:00.000Z");
       });
   });
 
