@@ -112,15 +112,16 @@ var InstDb = /** @class */ (function () {
         if (!InstDb.instSchema) {
             InstDb.instSchema = new mongoose.Schema({
                 host: { type: String, required: true },
+                name: { type: String, default: '' },
                 area: { type: String, enum: this.props.areaEnums, required: true },
                 slots: [String],
                 status: { type: String, enum: this.props.instStatusEnums, required: true },
                 statusDate: { type: Date, required: true },
                 software: { type: String, required: true },
-                vvResultsLoc: String,
-                drrs: String,
+                vvResultsLoc: { type: String, default: '' },
+                drrs: { type: String, default: '' },
             }, { emitIndexErrors: true });
-            InstDb.instSchema.index({ host: 1, software: 1 }, { unique: true });
+            InstDb.instSchema.index({ host: 1, name: 1, software: 1 }, { unique: true });
             InstDb.instDoc = mongoose.model('inst', InstDb.instSchema, 'instCollection');
             InstDb.dbConnect = mongoose.connect(this.props.mongodbUrl, function (err, db) {
                 if (!err) {

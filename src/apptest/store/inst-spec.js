@@ -85,14 +85,14 @@ describe("app", function() {
       .post("/api/v1/inst/")
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
-      .send({host: "Test host", area: "Global", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
+      .send({host: "Test host", name: "Test name", area: "Global", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
       .expect(201)
       .end(done);
   });
   it("Errors posting a bad status installation", function(done) {
     supertest
       .post("/api/v1/inst/")
-      .send({host: "test host", area: "Global", status: "BADENUM", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
+      .send({host: "test host", name: "Test name", area: "Global", status: "BADENUM", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
       .expect(400)
@@ -105,7 +105,7 @@ describe("app", function() {
   it("Errors posting a duplicate installation record", function(done) {
     supertest
       .post("/api/v1/inst/")
-      .send({host: "Test host", area: "Global", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
+      .send({host: "Test host", name: "Test name", area: "Global", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
       .expect(500)
@@ -117,7 +117,7 @@ describe("app", function() {
   it("Post a new record installation on a different host", function(done) {
     supertest
       .post("/api/v1/inst/")
-      .send({host: "Test host2", area: "Global", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
+      .send({host: "Test host2", name: "Test name", area: "Global", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
       .expect(201)
@@ -126,7 +126,7 @@ describe("app", function() {
   it("Post a new record installation with different sw ref", function(done) {
     supertest
       .post("/api/v1/inst/")
-      .send({host: "Test host", area: "Global", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbaa"})
+      .send({host: "Test host", name: "Test name", area: "Global", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbaa"})
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
       .expect(201)
@@ -190,7 +190,21 @@ describe("app", function() {
     //  }
     var testUpdateParams = [
       {"type": "PUT", "req": {"msg": {"host": "Test host4"},"url": "/api/v1/inst/", "err": {"status": 200}}},
-      {"type": "GET", "res": {"msg": {"host": "Test host4"},"url": "/api/v1/inst/",  "err": {"status": 200}}}
+      {"type": "GET", "res": {"msg": {"host": "Test host4"},"url": "/api/v1/inst/",  "err": {"status": 200}}},
+      {"type": "PUT", "req": {"msg": {"name": "Test name4"},"url": "/api/v1/inst/", "err": {"status": 200}}},
+      {"type": "GET", "res": {"msg": {"name": "Test name4"},"url": "/api/v1/inst/",  "err": {"status": 200}}},
+      {"type": "PUT", "req": {"msg": {"software": "badbeefbadbeefbadbeefbad"},"url": "/api/v1/inst/", "err": {"status": 200}}},
+      {"type": "GET", "res": {"msg": {"software": "badbeefbadbeefbadbeefbad"},"url": "/api/v1/inst/",  "err": {"status": 200}}},
+      {"type": "PUT", "req": {"msg": {"area": "FE"},"url": "/api/v1/inst/", "err": {"status": 200}}},
+      {"type": "GET", "res": {"msg": {"area": "FE"},"url": "/api/v1/inst/", "err": {"status": 200}}},
+      {"type": "PUT", "req": {"msg": {"drrs": "Test DRR"},"url": "/api/v1/inst/", "err": {"status": 200}}},
+      {"type": "GET", "res": {"msg": {"drrs": "Test DRR"},"url": "/api/v1/inst/", "err": {"status": 200}}},
+      {"type": "PUT", "req": {"msg": {"status": "RDY_BEAM"},"url": "/api/v1/inst/", "err": {"status": 200}}},
+      {"type": "GET", "res": {"msg": {"status": "RDY_BEAM"},"url": "/api/v1/inst/", "err": {"status": 200}}},
+      {"type": "PUT", "req": {"msg": {"statusDate": "1997-01-01T08:00:00.000Z"},"url": "/api/v1/inst/", "err": {"status": 200}}},
+      {"type": "GET", "res": {"msg": {"statusDate": "1997-01-01T08:00:00.000Z"},"url": "/api/v1/inst/",  "err": {"status": 200}}},
+      {"type": "PUT", "req": {"msg": {"vvResultsLoc": "http://www.google.com"},"url": "/api/v1/inst/", "err": {"status": 200}}},
+      {"type": "GET", "res": {"msg": {"vvResultsLoc": "http://www.google.com"},"url": "/api/v1/inst/",  "err": {"status": 200}}},
     ];
 
     // go through the table and check the given parameters

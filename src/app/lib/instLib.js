@@ -124,9 +124,6 @@ exports.newValidation = function (req) {
             isString: {
                 errorMessage: 'V&V results must be a string.',
             },
-            isAscii: {
-                errorMessage: 'V&V results must be ASCII characters.',
-            },
         },
         DRRs: {
             optional: true,
@@ -196,9 +193,6 @@ exports.updateValidation = function (req) {
             optional: true,
             isString: {
                 errorMessage: 'V&V results must be a string.',
-            },
-            isAscii: {
-                errorMessage: 'V&V results must be ASCII characters.',
             },
         },
         DRRs: {
