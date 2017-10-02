@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 
 from collections import OrderedDict
-import time
 import datetime
 import xlrd
 import simplejson as json
@@ -15,19 +14,19 @@ instArray = []
 swKeyList = {}
 instKeyList = {}
 
-id = 0
+lineId = 0
 
 for sheet in wb.sheets():
   print "looking at sheet " + sheet.name
   for nrow in range(1, sheet.nrows):
-    id=id+1
+    lineId = lineId + 1
     row = OrderedDict()
     cols = sheet.row_values(nrow)
     if cols[0] != "":
       keyStr = cols[2]+"-"+str(cols[5])
       if not swKeyList.get(keyStr):
         # store the _id for this key for future lookups
-        swKeyList[keyStr] = format(id, "024x")
+        swKeyList[keyStr] = format(lineId, "024x")
         row["swName"] = cols[2]
         row["desc"] = cols[1]
         row["status"] = "Ready for Installation"
@@ -41,27 +40,29 @@ for sheet in wb.sheets():
         row["platforms"] = cols[10]
         row["versionControl"] = cols[11]
         row["versionControlLoc"] = cols[12]
-        row["_id"] = format(id, "024x")
+        row["_id"] = format(lineId, "024x")
 
         print "\n" + str(nrow)+":Adding sw row "+json.dumps(row)
         array.append(row)
       else:
-        print "Found existing swName:" + cols[2] + " version:" + str(cols[5]) + " skipping."
+        print "Found existing swName:" + cols[2] + " version:" + str(cols[5]) + " skipping add sw."
 
       for host in cols[3].split(','):
-        instKeyStr = host+"-"+swKeyList[keyStr]
+        instKeyStr = host+"-"+cols[0]+"-"+swKeyList[keyStr]
         # check that this installation is not already present
         if not instKeyList.get(instKeyStr):
           instKeyList[instKeyStr] = True
           instRow = OrderedDict()
           instRow["host"] = host
+          instRow["name"] = cols[0]
           instRow["area"] = cols[6]
           instRow["status"] = cols[4]
           # instRow["statusDate"] = time.strftime("%m/%d/%Y", cols[15])
           vvDate = sheet.cell_value(nrow, 15)
           if vvDate:
             # instRow["statusDate"] = time.strftime("%m/%d/%Y", cols[15])
-            vvDatetime = datetime.datetime(*xlrd.xldate_as_tuple(sheet.cell_value(nrow, 15), wb.datemode))
+            vvDatetime = datetime.datetime(
+                *xlrd.xldate_as_tuple(sheet.cell_value(nrow, 15), wb.datemode))
             # print "DATE TEST: %s" % vvDatetime
             instRow["statusDate"] = vvDatetime.strftime("%m/%d/%Y")
 
@@ -75,7 +76,7 @@ for sheet in wb.sheets():
           print "  "+str(nrow)+":Adding inst row "+json.dumps(instRow)
           instArray.append(instRow)
         else:
-          print "Found existing installation host:" + host + " sw:" + swKeyList[keyStr] + " skipping."
+          print "Found existing installation:" + instKeyStr + " skipping add inst."
 
 json_data = json.dumps(array, indent=2)
 inst_json_data = json.dumps(instArray, indent=2)

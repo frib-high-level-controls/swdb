@@ -1,6 +1,7 @@
 [
   {
     "host": " fe-isrc1.ioc.ftc",
+    "name": "ISRC1 MC IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "09/21/2016",
@@ -10,6 +11,7 @@
   },
   {
     "host": " fe-isrc1.ioc.ftc",
+    "name": "ISRC1 PLC IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "09/21/2016",
@@ -19,6 +21,7 @@
   },
   {
     "host": " fe-isrc1.ioc.ftc",
+    "name": "ISRC1 PS IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "09/21/2016",
@@ -28,6 +31,7 @@
   },
   {
     "host": " fe-isrc1.ioc.ftc",
+    "name": "ISRC1 Microwave IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "09/21/2016",
@@ -37,6 +41,7 @@
   },
   {
     "host": " fe-isrc1.ioc.ftc",
+    "name": "ISRC1 X-Ray IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "09/21/2016",
@@ -46,6 +51,7 @@
   },
   {
     "host": " fe-isrc1.ioc.ftc",
+    "name": "ISRC1 BCM IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "09/21/2016",
@@ -55,6 +61,7 @@
   },
   {
     "host": "PLC1002",
+    "name": "ArtemisB PLC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "09/21/2016",
@@ -64,6 +71,7 @@
   },
   {
     "host": "FE_ISRC1:PSOL_D0682",
+    "name": "FE_ISRC1:PSOL_D0682 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "09/15/2016",
@@ -73,6 +81,7 @@
   },
   {
     "host": "FE_ISRC1:PSOL_D0685",
+    "name": "FE_ISRC1:PSOL_D0685 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "09/15/2016",
@@ -82,6 +91,7 @@
   },
   {
     "host": "FE_ISRC1:HVP_D0698",
+    "name": "FE_ISRC1:HVP_D0698 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "http://traveler.nscl.msu.edu/travelers/57d86a9dedcde899062fa7ec/",
@@ -90,6 +100,7 @@
   },
   {
     "host": "FE_ISRC1:RFA_D0679",
+    "name": "FE_ISRC1:RFA_D0679 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "09/21/2016",
@@ -99,6 +110,7 @@
   },
   {
     "host": "scan-artemis-b.ftc",
+    "name": "Scan Server",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -108,6 +120,7 @@
   },
   {
     "host": "fe-ulebt.ioc.ftc",
+    "name": "ULEBT PS IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -117,6 +130,7 @@
   },
   {
     "host": "fe-ulebt.ioc.ftc",
+    "name": "ULEBT VAC IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -126,6 +140,7 @@
   },
   {
     "host": "fe-ulebt.ioc.ftc",
+    "name": "ULEBT PLC IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -135,6 +150,7 @@
   },
   {
     "host": "fe-scs1.ioc.ftc",
+    "name": "SCS1 PS IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -144,6 +160,7 @@
   },
   {
     "host": "fe-scs1.ioc.ftc",
+    "name": "SCS1 VAC IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -153,6 +170,7 @@
   },
   {
     "host": "fe-scs1.ioc.ftc",
+    "name": "SCS1 PLC IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -162,6 +180,7 @@
   },
   {
     "host": "gts-chopper.ioc.ftc",
+    "name": "GTS CHOPPER IOC",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -171,6 +190,7 @@
   },
   {
     "host": "hlcfe.ioc.ftc",
+    "name": "ECR Scan IOC",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -180,6 +200,17 @@
   },
   {
     "host": "diag-scan.ioc.ftc",
+    "name": "SRS1 EMS IOC",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "00000000000000000000001c",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "diag-scan.ioc.ftc",
+    "name": "SRS1 EMS2 IOC",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -189,6 +220,27 @@
   },
   {
     "host": "diag-cam.ioc.ftc",
+    "name": "SCS1 VD IOC",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "00000000000000000000001e",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "diag-cam.ioc.ftc",
+    "name": "LEBT VD D0812 IOC",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "00000000000000000000001e",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "diag-cam.ioc.ftc",
+    "name": "LEBT EMS D0811 IOC",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -198,6 +250,27 @@
   },
   {
     "host": "diag-stpc.ioc.ftc",
+    "name": "SCS1 STPC01 IOC",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "000000000000000000000021",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "diag-stpc.ioc.ftc",
+    "name": "LEBT STPC03 IOC",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "000000000000000000000021",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "diag-stpc.ioc.ftc",
+    "name": "LEBT STPC04 IOC",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -207,6 +280,7 @@
   },
   {
     "host": "fe-mtca01-cpu-n0101.ioc.ftc",
+    "name": "FE PICO8 IOC",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -216,6 +290,7 @@
   },
   {
     "host": "fe-mtca01-cpu-n0101.ioc.ftc",
+    "name": "DIAG EVR IOC",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -225,6 +300,57 @@
   },
   {
     "host": "diag-ulebt-scan.ioc.ftc",
+    "name": "ULEBT PM783L1 IOC",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "000000000000000000000026",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "diag-ulebt-scan.ioc.ftc",
+    "name": "ULEBT PM783L2 IOC",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "000000000000000000000026",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "diag-ulebt-scan.ioc.ftc",
+    "name": "ULEBT PM807L1 IOC",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "000000000000000000000026",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "diag-ulebt-scan.ioc.ftc",
+    "name": "ULEBT PM807L2 IOC",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "000000000000000000000026",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "diag-ulebt-scan.ioc.ftc",
+    "name": "ULEBT PM824L1 IOC",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "03/30/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "000000000000000000000026",
+    "drrs": "DRR01-02"
+  },
+  {
+    "host": "diag-ulebt-scan.ioc.ftc",
+    "name": "ULEBT PM824L2 IOC",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -234,6 +360,7 @@
   },
   {
     "host": "DIAG_MTCA01:PICO3",
+    "name": "DIAG_MTCA01:PICO3 Firmware",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -243,6 +370,7 @@
   },
   {
     "host": "DIAG_MTCA01:PICO4",
+    "name": "DIAG_MTCA01:PICO4 Firmware",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -252,6 +380,7 @@
   },
   {
     "host": "DIAG_MTCA01:PICO5",
+    "name": "DIAG_MTCA01:PICO5 Firmware",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -261,6 +390,7 @@
   },
   {
     "host": "DIAG_MTCA01:PICO6",
+    "name": "DIAG_MTCA01:PICO6 Firmware",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -270,6 +400,7 @@
   },
   {
     "host": "DIAG_MTCA01:PICO7",
+    "name": "DIAG_MTCA01:PICO7 Firmware",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -279,6 +410,7 @@
   },
   {
     "host": "DIAG_MTCA01:PICO8",
+    "name": "DIAG_MTCA01:PICO8 Firmware",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -288,6 +420,7 @@
   },
   {
     "host": "DIAG_MTCA01:PICO9",
+    "name": "DIAG_MTCA01:PICO9 Firmware",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -297,6 +430,7 @@
   },
   {
     "host": "DIAG MTCA01:EVR",
+    "name": "DIAG MTCA01:EVR Firmware",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -306,6 +440,7 @@
   },
   {
     "host": "FE_ISRC1:PSOL_D0690",
+    "name": "FE_ISRC1:PSOL_D0690 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -315,6 +450,7 @@
   },
   {
     "host": "FE_ISRC1:PSC1_D0695",
+    "name": "FE_ISRC1:PSC1_D0695 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -324,6 +460,7 @@
   },
   {
     "host": "FE_ISRC1:PSC2_D0695",
+    "name": "FE_ISRC1:PSC2_D0695 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -333,6 +470,7 @@
   },
   {
     "host": "FE_ISRC1:PSEL_D0698",
+    "name": "FE_ISRC1:PSEL_D0698 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -342,6 +480,7 @@
   },
   {
     "host": "FE_SCS1:PSOL_D0704",
+    "name": "FE_SCS1:PSOL_D0704 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -351,6 +490,7 @@
   },
   {
     "host": "FE_SCS1:PSC1_D0709",
+    "name": "FE_SCS1:PSC1_D0709 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -360,6 +500,7 @@
   },
   {
     "host": "FE_SCS1:PSC2_D0709",
+    "name": "FE_SCS1:PSC2_D0709 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -369,6 +510,7 @@
   },
   {
     "host": "FE_SCS1:PSD_D0717",
+    "name": "FE_SCS1:PSD_D0717 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -378,6 +520,7 @@
   },
   {
     "host": "FE_SCS1:PSC1_D0723",
+    "name": "FE_SCS1:PSC1_D0723 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -387,6 +530,7 @@
   },
   {
     "host": "FE_SCS1:PSC2_D0723",
+    "name": "FE_SCS1:PSC2_D0723 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -396,6 +540,7 @@
   },
   {
     "host": "FE_SCS1:PSQ1_D0726",
+    "name": "FE_SCS1:PSQ1_D0726 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -405,6 +550,7 @@
   },
   {
     "host": "FE_SCS1:PSQ2_D0726",
+    "name": "FE_SCS1:PSQ2_D0726 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -414,6 +560,7 @@
   },
   {
     "host": "FE_SCS1:PSQ1_D0730",
+    "name": "FE_SCS1:PSQ1_D0730 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -423,6 +570,7 @@
   },
   {
     "host": "FE_SCS1:PSQ2_D0730",
+    "name": "FE_SCS1:PSQ2_D0730 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -432,6 +580,7 @@
   },
   {
     "host": "FE_SCS1:PSQ1_D0733",
+    "name": "FE_SCS1:PSQ1_D0733 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -441,6 +590,7 @@
   },
   {
     "host": "FE_SCS1:PSQ2_D0733",
+    "name": "FE_SCS1:PSQ2_D0733 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -450,6 +600,7 @@
   },
   {
     "host": "FE_SCS1:PSQ1_D0743",
+    "name": "FE_SCS1:PSQ1_D0743 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -459,6 +610,7 @@
   },
   {
     "host": "FE_SCS1:PSQ2_D0743",
+    "name": "FE_SCS1:PSQ2_D0743 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -468,6 +620,7 @@
   },
   {
     "host": "FE_SCS1:PSQ1_D0746",
+    "name": "FE_SCS1:PSQ1_D0746 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -477,6 +630,7 @@
   },
   {
     "host": "FE_SCS1:PSQ2_D0746",
+    "name": "FE_SCS1:PSQ2_D0746 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -486,6 +640,7 @@
   },
   {
     "host": "FE_SCS1:PSQ1_D0749",
+    "name": "FE_SCS1:PSQ1_D0749 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -495,6 +650,7 @@
   },
   {
     "host": "FE_SCS1:PSQ2_D0749",
+    "name": "FE_SCS1:PSQ2_D0749 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -504,6 +660,7 @@
   },
   {
     "host": "PS-MPOD-CRATE-1",
+    "name": "PS MPOD Crate #1 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -513,6 +670,7 @@
   },
   {
     "host": "PS-MPOD-CRATE-2",
+    "name": "PS MPOD Crate #2 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -522,6 +680,7 @@
   },
   {
     "host": "PS-MPOD-CRATE-5",
+    "name": "PS MPOD Crate #5 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -531,6 +690,7 @@
   },
   {
     "host": "PS-MPOD-CRATE-6",
+    "name": "PS MPOD Crate #6 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -540,6 +700,7 @@
   },
   {
     "host": "FE_LEBT:PSD_D0759",
+    "name": "FE_LEBT:PSD_D0759 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -549,6 +710,7 @@
   },
   {
     "host": "FE_LEBT:PSQ1_D0767",
+    "name": "FE_LEBT:PSQ1_D0767 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -558,6 +720,7 @@
   },
   {
     "host": "FE_LEBT:PSQ2_D0767",
+    "name": "FE_LEBT:PSQ2_D0767 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -567,6 +730,7 @@
   },
   {
     "host": "FE_LEBT:PSQ1_D0770",
+    "name": "FE_LEBT:PSQ1_D0770 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -576,6 +740,7 @@
   },
   {
     "host": "FE_LEBT:PSQ2_D0770",
+    "name": "FE_LEBT:PSQ2_D0770 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -585,6 +750,7 @@
   },
   {
     "host": "FE_LEBT:PSC1_D0773",
+    "name": "FE_LEBT:PSC1_D0773 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -594,6 +760,7 @@
   },
   {
     "host": "FE_LEBT:PSC2_D0773",
+    "name": "FE_LEBT:PSC2_D0773 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -603,6 +770,7 @@
   },
   {
     "host": "FE_LEBT:PSQ1_D0776",
+    "name": "FE_LEBT:PSQ1_D0776 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -612,6 +780,7 @@
   },
   {
     "host": "FE_LEBT:PSQ2_D0776",
+    "name": "FE_LEBT:PSQ2_D0776 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -621,6 +790,7 @@
   },
   {
     "host": "FE_LEBT:PSQ1_D0780",
+    "name": "FE_LEBT:PSQ1_D0780 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -630,6 +800,7 @@
   },
   {
     "host": "FE_LEBT:PSQ2_D0780",
+    "name": "FE_LEBT:PSQ2_D0780 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -639,6 +810,7 @@
   },
   {
     "host": "FE_LEBT:PSOL_D0787",
+    "name": "FE_LEBT:PSOL_D0787 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -648,6 +820,7 @@
   },
   {
     "host": "FE_LEBT:PSC1_D0790",
+    "name": "FE_LEBT:PSC1_D0790 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -657,6 +830,7 @@
   },
   {
     "host": "FE_LEBT:PSC2_D0790",
+    "name": "FE_LEBT:PSC2_D0790 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -666,6 +840,7 @@
   },
   {
     "host": "FE_LEBT:PSCH1_D0792",
+    "name": "FE_LEBT:PSCH1_D0792 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -675,6 +850,7 @@
   },
   {
     "host": "FE_LEBT:PSCH2_D0792",
+    "name": "FE_LEBT:PSCH2_D0792 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -684,6 +860,7 @@
   },
   {
     "host": "FE_LEBT:PSOL_D0802",
+    "name": "FE_LEBT:PSOL_D0802 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -693,6 +870,7 @@
   },
   {
     "host": "FE_LEBT:PSC1_D0805",
+    "name": "FE_LEBT:PSC1_D0805 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -702,6 +880,7 @@
   },
   {
     "host": "FE_LEBT:PSC2_D0805",
+    "name": "FE_LEBT:PSC2_D0805 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -711,6 +890,7 @@
   },
   {
     "host": "FE_LEBT:PSOL_D0818",
+    "name": "FE_LEBT:PSOL_D0818 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -720,6 +900,7 @@
   },
   {
     "host": "FE_LEBT:PSC1_D0821",
+    "name": "FE_LEBT:PSC1_D0821 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -729,6 +910,7 @@
   },
   {
     "host": "FE_LEBT:PSC2_D0821",
+    "name": "FE_LEBT:PSC2_D0821 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -738,6 +920,7 @@
   },
   {
     "host": "work-ftc-r1632-01.ftc",
+    "name": "Control System Studio",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -747,6 +930,7 @@
   },
   {
     "host": " work-ftc-r1632-02.ftc",
+    "name": "Control System Studio",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -756,6 +940,7 @@
   },
   {
     "host": " work-ftc-r1632-03.ftc",
+    "name": "Control System Studio",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -765,6 +950,7 @@
   },
   {
     "host": " work-ftc-r1632-04.ftc",
+    "name": "Control System Studio",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -774,6 +960,7 @@
   },
   {
     "host": " work-ftc-r1632-05.ftc",
+    "name": "Control System Studio",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -783,6 +970,7 @@
   },
   {
     "host": " work-ftc-r1632-06.ftc",
+    "name": "Control System Studio",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -792,6 +980,7 @@
   },
   {
     "host": " work-ftc-r1632-07.ftc",
+    "name": "Control System Studio",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -801,6 +990,7 @@
   },
   {
     "host": " work-ftc-r1632-08.ftc",
+    "name": "Control System Studio",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -810,6 +1000,7 @@
   },
   {
     "host": " ftc-laptop01.ftc",
+    "name": "Control System Studio",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -819,6 +1010,7 @@
   },
   {
     "host": " ftc-laptop02.ftc",
+    "name": "Control System Studio",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -828,6 +1020,7 @@
   },
   {
     "host": " ftc-laptop03.ftc",
+    "name": "Control System Studio",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -837,6 +1030,7 @@
   },
   {
     "host": " ftc-laptop05.ftc",
+    "name": "Control System Studio",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -846,6 +1040,7 @@
   },
   {
     "host": " ftc-laptop06.ftc",
+    "name": "Control System Studio",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -855,6 +1050,7 @@
   },
   {
     "host": " ftc-laptop07.ftc",
+    "name": "Control System Studio",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -864,6 +1060,7 @@
   },
   {
     "host": " ftc-laptop08.ftc",
+    "name": "Control System Studio",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -873,6 +1070,7 @@
   },
   {
     "host": " ftc-laptop09.ftc",
+    "name": "Control System Studio",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -882,6 +1080,7 @@
   },
   {
     "host": " ftc-laptop10.ftc",
+    "name": "Control System Studio",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -891,6 +1090,7 @@
   },
   {
     "host": "glassfish01.ftc",
+    "name": "Operations Log Server",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -900,6 +1100,7 @@
   },
   {
     "host": "epicsarchiver0.ftc",
+    "name": "Archive Appliance",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -909,6 +1110,7 @@
   },
   {
     "host": "alarm-fe.ftc",
+    "name": "Alarm Server",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -918,6 +1120,7 @@
   },
   {
     "host": "fpsioc.ioc.ftc",
+    "name": "RPS IOC",
     "area": "Global",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -926,6 +1129,7 @@
   },
   {
     "host": "gts-evg-ioc.ftc",
+    "name": "GTS MASTER IOC",
     "area": "Global",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -935,6 +1139,7 @@
   },
   {
     "host": "fe-lebt.ioc.ftc",
+    "name": "LEBT PS IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -944,6 +1149,7 @@
   },
   {
     "host": "fe-lebt.ioc.ftc",
+    "name": "LEBT VAC IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -953,6 +1159,7 @@
   },
   {
     "host": "fe-lebt.ioc.ftc",
+    "name": "LEBT PLC IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -962,6 +1169,7 @@
   },
   {
     "host": "fe-mebt.ioc.ftc",
+    "name": "MEBT PS IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -971,6 +1179,7 @@
   },
   {
     "host": "fe-mebt.ioc.ftc",
+    "name": "MEBT VAC IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -980,6 +1189,7 @@
   },
   {
     "host": "fe-mebt.ioc.ftc",
+    "name": "MEBT PLC IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -989,6 +1199,7 @@
   },
   {
     "host": "fe-rfq.ioc.ftc",
+    "name": "RFQ VAC IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -998,6 +1209,7 @@
   },
   {
     "host": "fe-rfq.ioc.ftc",
+    "name": "RFQ PLC IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1007,6 +1219,7 @@
   },
   {
     "host": "fe-rfq.ioc.ftc",
+    "name": "RFQ XMON IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1016,6 +1229,7 @@
   },
   {
     "host": "PLC1006",
+    "name": "FE PLC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1025,6 +1239,7 @@
   },
   {
     "host": "PLC1008",
+    "name": "RFQ PLC",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1034,6 +1249,7 @@
   },
   {
     "host": "fe-lebt.ioc.ftc",
+    "name": "LEBT LLRF IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1042,6 +1258,7 @@
   },
   {
     "host": "fe-mebt.ioc.ftc",
+    "name": "MEBT LLRF IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1050,6 +1267,7 @@
   },
   {
     "host": "fe-mebt.ioc.ftc",
+    "name": "MEBT HPRF IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1058,6 +1276,7 @@
   },
   {
     "host": "fe-rfq.ioc.ftc",
+    "name": "RFQ LLRF IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1066,6 +1285,7 @@
   },
   {
     "host": "fe-rfq.ioc.ftc",
+    "name": "RFQ HPRF IOC",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1074,6 +1294,7 @@
   },
   {
     "host": "FE_LEBT:RFC1_D0987",
+    "name": "FE_LEBT:RFC1_D0987 FPGA FW",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1082,6 +1303,7 @@
   },
   {
     "host": "FE_LEBT:RFC2_D0987",
+    "name": "FE_LEBT:RFC2_D0987 FPGA FW",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1090,6 +1312,7 @@
   },
   {
     "host": "FE_LEBT:RFC3_D0987",
+    "name": "FE_LEBT:RFC3_D0987 FPGA FW",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1098,6 +1321,7 @@
   },
   {
     "host": "FE_LEBT:RFC_D0999",
+    "name": "FE_LEBT:RFC_D0999 FPGA FW",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1106,6 +1330,7 @@
   },
   {
     "host": "FE_RFQ:RFC_D1005",
+    "name": "FE_RFQ:RFC_D1005 FPGA FW",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1114,6 +1339,7 @@
   },
   {
     "host": "FE_MEBT:RFC_D1066",
+    "name": "FE_MEBT:RFC_D1066 FPGA FW",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1122,6 +1348,7 @@
   },
   {
     "host": "FE_MEBT:RFC_D1107",
+    "name": "FE_MEBT:RFC_D1107 FPGA FW",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1130,6 +1357,7 @@
   },
   {
     "host": "FE_LEBT:RFC1_D0987",
+    "name": "FE_LEBT:RFC1_D0987 MicroBlaze FW",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1138,6 +1366,7 @@
   },
   {
     "host": "FE_LEBT:RFC2_D0987",
+    "name": "FE_LEBT:RFC2_D0987 MicroBlaze FW",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1146,6 +1375,7 @@
   },
   {
     "host": "FE_LEBT:RFC3_D0987",
+    "name": "FE_LEBT:RFC3_D0987 MicroBlaze FW",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1154,6 +1384,7 @@
   },
   {
     "host": "FE_LEBT:RFC_D0999",
+    "name": "FE_LEBT:RFC_D0999 MicroBlaze FW",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1162,6 +1393,7 @@
   },
   {
     "host": "FE_RFQ:RFC_D1005",
+    "name": "FE_RFQ:RFC_D1005 MicroBlaze FW",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1170,6 +1402,7 @@
   },
   {
     "host": "FE_MEBT:RFC_D1066",
+    "name": "FE_MEBT:RFC_D1066 MicroBlaze FW",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1178,6 +1411,7 @@
   },
   {
     "host": "FE_MEBT:RFC_D1107",
+    "name": "FE_MEBT:RFC_D1107 MicroBlaze FW",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1186,6 +1420,7 @@
   },
   {
     "host": "FE_RFQ:DCU_N0001",
+    "name": "FE_RFQ:DCU_N0001 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1194,6 +1429,7 @@
   },
   {
     "host": "FE_MEBT:DCU_N0001",
+    "name": "FE_MEBT:DCU_N0001 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1202,6 +1438,7 @@
   },
   {
     "host": "diag-flapper.ioc.ftc",
+    "name": "LEBT STPC05 IOC",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "06/05/2017",
@@ -1211,6 +1448,7 @@
   },
   {
     "host": "diag-mebt-stpc.ioc.ftc",
+    "name": "LEBT STPC06 IOC",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "06/05/2017",
@@ -1220,6 +1458,57 @@
   },
   {
     "host": "diag-flapper-scan.ioc.ftc",
+    "name": "LEBT PM856X IOC",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "06/05/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "000000000000000000000026",
+    "drrs": "DRR01-03"
+  },
+  {
+    "host": "diag-flapper-scan.ioc.ftc",
+    "name": "LEBT PM856Y IOC",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "06/05/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "000000000000000000000026",
+    "drrs": "DRR01-03"
+  },
+  {
+    "host": "diag-flapper-scan.ioc.ftc",
+    "name": "LEBT PM884X IOC",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "06/05/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "000000000000000000000026",
+    "drrs": "DRR01-03"
+  },
+  {
+    "host": "diag-flapper-scan.ioc.ftc",
+    "name": "LEBT PM884Y IOC",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "06/05/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "000000000000000000000026",
+    "drrs": "DRR01-03"
+  },
+  {
+    "host": "diag-flapper-scan.ioc.ftc",
+    "name": "LEBT PM913X IOC",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "06/05/2017",
+    "vvResultsLoc": "NA; to be completed with beam",
+    "software": "000000000000000000000026",
+    "drrs": "DRR01-03"
+  },
+  {
+    "host": "diag-flapper-scan.ioc.ftc",
+    "name": "LEBT PM913Y IOC",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "06/05/2017",
@@ -1229,6 +1518,7 @@
   },
   {
     "host": "controlsweb01.ftc",
+    "name": "OPI FE",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -1238,6 +1528,7 @@
   },
   {
     "host": " controlsweb02.ftc",
+    "name": "OPI FE",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -1247,6 +1538,7 @@
   },
   {
     "host": "controlsweb01.ftc",
+    "name": "OPI Common",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -1256,6 +1548,7 @@
   },
   {
     "host": " controlsweb02.ftc",
+    "name": "OPI Common",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -1265,6 +1558,7 @@
   },
   {
     "host": "controlsweb01.ftc",
+    "name": "OPI Diagnostics",
     "area": "Global",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -1274,6 +1568,7 @@
   },
   {
     "host": " controlsweb02.ftc",
+    "name": "OPI Diagnostics",
     "area": "Global",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -1283,6 +1578,7 @@
   },
   {
     "host": "controlsweb01.ftc",
+    "name": "OPI GTS",
     "area": "Global",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -1292,6 +1588,7 @@
   },
   {
     "host": " controlsweb02.ftc",
+    "name": "OPI GTS",
     "area": "Global",
     "status": "Ready for Verification with Beam",
     "statusDate": "03/30/2017",
@@ -1301,6 +1598,7 @@
   },
   {
     "host": "controlsweb01.ftc",
+    "name": "OPI MPS",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1310,6 +1608,7 @@
   },
   {
     "host": " controlsweb02.ftc",
+    "name": "OPI MPS",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1319,6 +1618,7 @@
   },
   {
     "host": "controlsweb01.ftc",
+    "name": "OPI RF",
     "area": "Global",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1327,6 +1627,7 @@
   },
   {
     "host": " controlsweb02.ftc",
+    "name": "OPI RF",
     "area": "Global",
     "status": "Ready for Beam",
     "vvResultsLoc": "",
@@ -1335,6 +1636,7 @@
   },
   {
     "host": "controlsweb01.ftc",
+    "name": "Operations Log Web",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -1344,6 +1646,7 @@
   },
   {
     "host": " controlsweb02.ftc",
+    "name": "Operations Log Web",
     "area": "Global",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -1353,6 +1656,7 @@
   },
   {
     "host": "alarm-fe.ftc",
+    "name": "FE Alarms",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "03/30/2017",
@@ -1362,6 +1666,7 @@
   },
   {
     "host": "fpsioc.ioc.ftc",
+    "name": "FPS MASTER IOC",
     "area": "Global",
     "status": "Ready for Verification with Beam",
     "statusDate": "06/05/2017",
@@ -1370,7 +1675,18 @@
     "drrs": "DRR01-03"
   },
   {
+    "host": "fpsioc.ioc.ftc",
+    "name": "LEBT FPS SLAVE IOC",
+    "area": "FE",
+    "status": "Ready for Verification with Beam",
+    "statusDate": "06/05/2017",
+    "vvResultsLoc": "https://portal.frib.msu.edu/dcc/DCC%20Released%20Documents/T30400-TR-000065-R001.pdf",
+    "software": "0000000000000000000000a5",
+    "drrs": "DRR01-03"
+  },
+  {
     "host": "FPS-MASTER",
+    "name": "FPS Master",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "06/05/2017",
@@ -1380,6 +1696,7 @@
   },
   {
     "host": "FPS-SLAVE-1",
+    "name": "FPS Slave 1",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "06/05/2017",
@@ -1389,6 +1706,7 @@
   },
   {
     "host": "FPS-SLAVE-2",
+    "name": "FPS Slave 2",
     "area": "FE",
     "status": "Ready for Verification with Beam",
     "statusDate": "06/05/2017",
@@ -1398,6 +1716,7 @@
   },
   {
     "host": "FE_LEBT:PSD1_D0833",
+    "name": "FE_LEBT:PSD1_D0833 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1407,6 +1726,7 @@
   },
   {
     "host": "FE_LEBT:PSD2_D0833",
+    "name": "FE_LEBT:PSD2_D0833 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1416,6 +1736,7 @@
   },
   {
     "host": "FE_LEBT:PSC1_D0840",
+    "name": "FE_LEBT:PSC1_D0840 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1425,6 +1746,7 @@
   },
   {
     "host": "FE_LEBT:PSC2_D0840",
+    "name": "FE_LEBT:PSC2_D0840 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1434,6 +1756,7 @@
   },
   {
     "host": "FE_LEBT:PSQ1_D0844",
+    "name": "FE_LEBT:PSQ1_D0844 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1443,6 +1766,7 @@
   },
   {
     "host": "FE_LEBT:PSQ2_D0844",
+    "name": "FE_LEBT:PSQ2_D0844 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1452,6 +1776,7 @@
   },
   {
     "host": "FE_LEBT:PSQ1_D0848",
+    "name": "FE_LEBT:PSQ1_D0848 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1461,6 +1786,7 @@
   },
   {
     "host": "FE_LEBT:PSQ2_D0848",
+    "name": "FE_LEBT:PSQ2_D0848 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1470,6 +1796,7 @@
   },
   {
     "host": "FE_LEBT:PSQ1_D0851",
+    "name": "FE_LEBT:PSQ1_D0851 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1479,6 +1806,7 @@
   },
   {
     "host": "FE_LEBT:PSQ2_D0851",
+    "name": "FE_LEBT:PSQ2_D0851 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1488,6 +1816,7 @@
   },
   {
     "host": "FE_LEBT:PSC1_D0868",
+    "name": "FE_LEBT:PSC1_D0868 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1497,6 +1826,7 @@
   },
   {
     "host": "FE_LEBT:PSC2_D0868",
+    "name": "FE_LEBT:PSC2_D0868 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1506,6 +1836,7 @@
   },
   {
     "host": "FE_LEBT:PSQ1_D0871",
+    "name": "FE_LEBT:PSQ1_D0871 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1515,6 +1846,7 @@
   },
   {
     "host": "FE_LEBT:PSQ2_D0871",
+    "name": "FE_LEBT:PSQ2_D0871 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1524,6 +1856,7 @@
   },
   {
     "host": "FE_LEBT:PSQ1_D0874",
+    "name": "FE_LEBT:PSQ1_D0874 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1533,6 +1866,7 @@
   },
   {
     "host": "FE_LEBT:PSQ2_D0874",
+    "name": "FE_LEBT:PSQ2_D0874 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1542,6 +1876,7 @@
   },
   {
     "host": "FE_LEBT:PSQ1_D0878",
+    "name": "FE_LEBT:PSQ1_D0878 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1551,6 +1886,7 @@
   },
   {
     "host": "FE_LEBT:PSQ2_D0878",
+    "name": "FE_LEBT:PSQ2_D0878 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1560,6 +1896,7 @@
   },
   {
     "host": "FE_LEBT:PSC1_D0880",
+    "name": "FE_LEBT:PSC1_D0880 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1569,6 +1906,7 @@
   },
   {
     "host": "FE_LEBT:PSC2_D0880",
+    "name": "FE_LEBT:PSC2_D0880 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1578,6 +1916,7 @@
   },
   {
     "host": "FE_LEBT:PSQ1_D0891",
+    "name": "FE_LEBT:PSQ1_D0891 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1587,6 +1926,7 @@
   },
   {
     "host": "FE_LEBT:PSQ2_D0891",
+    "name": "FE_LEBT:PSQ2_D0891 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1596,6 +1936,7 @@
   },
   {
     "host": "FE_LEBT:PSQ1_D0895",
+    "name": "FE_LEBT:PSQ1_D0895 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1605,6 +1946,7 @@
   },
   {
     "host": "FE_LEBT:PSQ2_D0895",
+    "name": "FE_LEBT:PSQ2_D0895 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1614,6 +1956,7 @@
   },
   {
     "host": "FE_LEBT:PSQ1_D0898",
+    "name": "FE_LEBT:PSQ1_D0898 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1623,6 +1966,7 @@
   },
   {
     "host": "FE_LEBT:PSQ2_D0898",
+    "name": "FE_LEBT:PSQ2_D0898 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1632,6 +1976,7 @@
   },
   {
     "host": "FE_LEBT:PSC1_D0901",
+    "name": "FE_LEBT:PSC1_D0901 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1641,6 +1986,7 @@
   },
   {
     "host": "FE_LEBT:PSC2_D0901",
+    "name": "FE_LEBT:PSC2_D0901 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1650,6 +1996,7 @@
   },
   {
     "host": "FE_LEBT:PSQ1_D0918",
+    "name": "FE_LEBT:PSQ1_D0918 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1659,6 +2006,7 @@
   },
   {
     "host": "FE_LEBT:PSQ2_D0918",
+    "name": "FE_LEBT:PSQ2_D0918 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1668,6 +2016,7 @@
   },
   {
     "host": "FE_LEBT:PSQ1_D0921",
+    "name": "FE_LEBT:PSQ1_D0921 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1677,6 +2026,7 @@
   },
   {
     "host": "FE_LEBT:PSQ2_D0921",
+    "name": "FE_LEBT:PSQ2_D0921 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1686,6 +2036,7 @@
   },
   {
     "host": "FE_LEBT:PSQ1_D0924",
+    "name": "FE_LEBT:PSQ1_D0924 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1695,6 +2046,7 @@
   },
   {
     "host": "FE_LEBT:PSQ2_D0924",
+    "name": "FE_LEBT:PSQ2_D0924 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1704,6 +2056,7 @@
   },
   {
     "host": "FE_LEBT:PSC1_D0929",
+    "name": "FE_LEBT:PSC1_D0929 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1713,6 +2066,7 @@
   },
   {
     "host": "FE_LEBT:PSC2_D0929",
+    "name": "FE_LEBT:PSC2_D0929 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1722,6 +2076,7 @@
   },
   {
     "host": "FE_LEBT:PSD1_D0936",
+    "name": "FE_LEBT:PSD1_D0936 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1731,6 +2086,7 @@
   },
   {
     "host": "FE_LEBT:PSD2_D0936",
+    "name": "FE_LEBT:PSD2_D0936 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1740,6 +2096,7 @@
   },
   {
     "host": "FE_LEBT:PSC1_D0948",
+    "name": "FE_LEBT:PSC1_D0948 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1749,6 +2106,7 @@
   },
   {
     "host": "FE_LEBT:PSC2_D0948",
+    "name": "FE_LEBT:PSC2_D0948 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1758,6 +2116,7 @@
   },
   {
     "host": "FE_LEBT:PSOL_D0951",
+    "name": "FE_LEBT:PSOL_D0951 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1767,6 +2126,7 @@
   },
   {
     "host": "FE_LEBT:PSC1_D0964",
+    "name": "FE_LEBT:PSC1_D0964 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1776,6 +2136,7 @@
   },
   {
     "host": "FE_LEBT:PSC2_D0964",
+    "name": "FE_LEBT:PSC2_D0964 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1785,6 +2146,7 @@
   },
   {
     "host": "FE_LEBT:PSOL_D0967",
+    "name": "FE_LEBT:PSOL_D0967 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1794,6 +2156,7 @@
   },
   {
     "host": "FE_LEBT:PSC1_D0979",
+    "name": "FE_LEBT:PSC1_D0979 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1803,6 +2166,7 @@
   },
   {
     "host": "FE_LEBT:PSC2_D0979",
+    "name": "FE_LEBT:PSC2_D0979 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1812,6 +2176,7 @@
   },
   {
     "host": "FE_LEBT:PSOL_D0982",
+    "name": "FE_LEBT:PSOL_D0982 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1821,6 +2186,7 @@
   },
   {
     "host": "FE_LEBT:PSC1_D0992",
+    "name": "FE_LEBT:PSC1_D0992 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1830,6 +2196,7 @@
   },
   {
     "host": "FE_LEBT:PSC2_D0992",
+    "name": "FE_LEBT:PSC2_D0992 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1839,6 +2206,7 @@
   },
   {
     "host": "FE_LEBT:PSOL_D0995",
+    "name": "FE_LEBT:PSOL_D0995 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1848,6 +2216,7 @@
   },
   {
     "host": "FE_MEBT:PSQ_D1057",
+    "name": "FE_MEBT:PSQ_D1057 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1857,6 +2226,7 @@
   },
   {
     "host": "FE_MEBT:PSQ_D1060",
+    "name": "FE_MEBT:PSQ_D1060 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1866,6 +2236,7 @@
   },
   {
     "host": "FE_MEBT:PSQ_D1062",
+    "name": "FE_MEBT:PSQ_D1062 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1875,6 +2246,7 @@
   },
   {
     "host": "FE_MEBT:PSC1_D1062",
+    "name": "FE_MEBT:PSC1_D1062 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1884,6 +2256,7 @@
   },
   {
     "host": "FE_MEBT:PSC2_D1062",
+    "name": "FE_MEBT:PSC2_D1062 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1893,6 +2266,7 @@
   },
   {
     "host": "FE_MEBT:PSQ_D1074",
+    "name": "FE_MEBT:PSQ_D1074 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1902,6 +2276,7 @@
   },
   {
     "host": "FE_MEBT:PSQ_D1076",
+    "name": "FE_MEBT:PSQ_D1076 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1911,6 +2286,7 @@
   },
   {
     "host": "FE_MEBT:PSQ_D1078",
+    "name": "FE_MEBT:PSQ_D1078 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1920,6 +2296,7 @@
   },
   {
     "host": "FE_MEBT:PSC1_D1078",
+    "name": "FE_MEBT:PSC1_D1078 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1929,6 +2306,7 @@
   },
   {
     "host": "FE_MEBT:PSC2_D1078",
+    "name": "FE_MEBT:PSC2_D1078 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1938,6 +2316,7 @@
   },
   {
     "host": "FE_MEBT:PSD_D1086",
+    "name": "FE_MEBT:PSD_D1086 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1947,6 +2326,7 @@
   },
   {
     "host": "FE_MEBT:PSQ_D1095",
+    "name": "FE_MEBT:PSQ_D1095 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1956,6 +2336,7 @@
   },
   {
     "host": "FE_MEBT:PSQ_D1098",
+    "name": "FE_MEBT:PSQ_D1098 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1965,6 +2346,7 @@
   },
   {
     "host": "FE_MEBT:PSQ_D1100",
+    "name": "FE_MEBT:PSQ_D1100 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1974,6 +2356,7 @@
   },
   {
     "host": "FE_MEBT:PSC1_D1100",
+    "name": "FE_MEBT:PSC1_D1100 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1983,6 +2366,7 @@
   },
   {
     "host": "FE_MEBT:PSC2_D1100",
+    "name": "FE_MEBT:PSC2_D1100 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -1992,6 +2376,7 @@
   },
   {
     "host": "FE_MEBT:PSQ_D1113",
+    "name": "FE_MEBT:PSQ_D1113 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -2001,6 +2386,7 @@
   },
   {
     "host": "FE_MEBT:PSQ_D1115",
+    "name": "FE_MEBT:PSQ_D1115 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -2010,6 +2396,7 @@
   },
   {
     "host": "FE_MEBT:PSQ_D1117",
+    "name": "FE_MEBT:PSQ_D1117 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -2019,6 +2406,7 @@
   },
   {
     "host": "FE_MEBT:PSC1_D1117",
+    "name": "FE_MEBT:PSC1_D1117 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -2028,6 +2416,7 @@
   },
   {
     "host": "FE_MEBT:PSC2_D1117",
+    "name": "FE_MEBT:PSC2_D1117 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -2037,6 +2426,7 @@
   },
   {
     "host": "PS-MPOD-CRATE-3",
+    "name": "PS MPOD Crate #3 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
@@ -2046,6 +2436,7 @@
   },
   {
     "host": "PS-MPOD-CRATE-4",
+    "name": "PS MPOD Crate #4 Firmware",
     "area": "FE",
     "status": "Ready for Beam",
     "statusDate": "06/05/2017",
