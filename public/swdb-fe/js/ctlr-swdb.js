@@ -69,7 +69,7 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
         DTColumnBuilder.newColumn('branch')
           .withTitle('Branch').withOption('defaultContent',''),
         DTColumnBuilder.newColumn('version')
-          .withTitle('Version').withOption('searchable',true),
+          .withTitle('Version').withOption('defaultContent',''),
         DTColumnBuilder.newColumn('owner')
           .withTitle('Owner').withOption('defaultContent',""),
         DTColumnBuilder.newColumn('engineer')

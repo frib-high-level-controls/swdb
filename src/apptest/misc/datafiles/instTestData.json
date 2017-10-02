@@ -1,5 +1,5 @@
 [
-  {"host":"host1","area":"FE","slots":"slot1","status":"DEVEL","statusDate":"9/21/2016","software":"5947589458a6aa0face9a553","vvResultsLoc":"vvResultsLoc1","ddrs":"ddr1"},
-  {"host":"host2","area":"LS1","slots":"slot2","status":"DEVEL","statusDate":"9/21/2016","software":"5947589458a6aa0face9a554","vvResultsLoc":"vvResultsLoc2","ddrs":"ddr2"},
-  {"host":"host3","area":"Global","slots":"slot3","status":"DEVEL","statusDate":"9/21/2016","software":"5947589458a6aa0face9a555","vvResultsLoc":"vvResultsLoc3","ddrs":"ddr3"}
+  {"host":"host1", "name": "Installation name1", "area":"FE","slots":"slot1","status":"DEVEL","statusDate":"9/21/2016","software":"5947589458a6aa0face9a553","vvResultsLoc":"vvResultsLoc1","ddrs":"ddr1"},
+  {"host":"host2", "name": "Installation name2", "area":"LS1","slots":"slot2","status":"DEVEL","statusDate":"9/21/2016","software":"5947589458a6aa0face9a554","vvResultsLoc":"vvResultsLoc2","ddrs":"ddr2"},
+  {"host":"host3", "name": "Installation name3", "area":"Global","slots":"slot3","status":"DEVEL","statusDate":"9/21/2016","software":"5947589458a6aa0face9a555","vvResultsLoc":"vvResultsLoc3","ddrs":"ddr3"}
 ]

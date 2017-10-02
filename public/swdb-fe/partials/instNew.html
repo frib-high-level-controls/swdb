@@ -39,6 +39,23 @@
         </div>
       </div>
 
+      <!-- NAME -->
+      <div class="row swdbFormRow" ng-class="{ 'has-error' : inputForm.nameInput.$invalid && !inputForm.nameInput.$pristine }">
+        <div id="name-group" class="form-group">
+          <label class="col-sm-2 control-label">Name</label>
+          <div class="col-sm-8">
+            <input id="name" type="text" name="nameInput" class="form-control" placeholder="name" ng-model="formData.name" ng-required="false"
+              ng-minlength="0" ng-maxlength="30">
+            </input>
+          </div>
+          <div class="col-sm-2" id="nameInputSts" ng-messages="inputForm.nameInput.$error" ng-if="inputForm.nameInput.$dirty">
+            <div ng-message="required">Name  is required</div>
+            <div ng-message="minlength">Name must exceed 2 characters</div>
+            <div ng-message="maxlength">Name must not exceed 30 characters</div>
+          </div>
+        </div>
+      </div>
+
       <!-- SOFTWARE -->
       <div class="row swdbFormRow" ng-class="{ 'has-error' : inputForm.softwareInput.$invalid && !inputForm.softwareInput.$pristine }">
         <div id="software-group" class="form-group">

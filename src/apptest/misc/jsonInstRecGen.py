@@ -10,6 +10,7 @@ for nrow in range(1, 1000):
     row = OrderedDict()
     numStr = "{0:05d}".format(nrow)
     row["host"] = "host"+numStr
+    row["name"] = "name"+numStr
     row["area"] =   "Global"
     row["slots"] =  "slot"+numStr
     row["status"] = "DEVEL"
@@ -24,5 +25,5 @@ for nrow in range(1, 1000):
 
 json_data = json.dumps(array, indent=2)
 #print json_data
-with open('/home/rellis/instRecGenOut.json', 'w') as jfile:
+with open('/home/deployer/instTestData1000.json', 'w') as jfile:
     jfile.write(json_data)

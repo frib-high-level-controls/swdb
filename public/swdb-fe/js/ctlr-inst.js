@@ -65,6 +65,8 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
       .renderWith(function (data, type, full, meta) {
         return '<a href="#/inst/details/' + full._id + '">' + full.host + '</a>';
       }),
+    DTColumnBuilder.newColumn('name')
+      .withTitle('Name').withOption('defaultContent', ''),
     DTColumnBuilder.newColumn('software')
       .withTitle('Software').withOption('defaultContent', '')
       .renderWith(function (data, type, full, meta) {

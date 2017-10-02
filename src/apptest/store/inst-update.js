@@ -78,6 +78,12 @@ test.describe("Installations update screen tests", function() {
     var input = chromeDriver.findElement(By.id("host"));
     input.sendKeys("testHost1");
 
+    // set name
+    chromeDriver.wait(until.elementLocated(By.id("name")), 3000);
+    input = chromeDriver.findElement(By.id("name"));
+    input.click();
+    input.sendKeys("Test name");
+
     // set area
     chromeDriver.wait(until.elementLocated(By.id("area")), 3000);
     input = chromeDriver.findElement(By.id("area"));

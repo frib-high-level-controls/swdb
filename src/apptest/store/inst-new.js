@@ -83,6 +83,12 @@ test.describe("Installations add screen tests", function() {
     input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-4"=substring(@id, string-length(@id)-string-length("option-2")+1)]/a'));
     input.click();
 
+    // set name
+    chromeDriver.wait(until.elementLocated(By.id("name")), 3000);
+    input = chromeDriver.findElement(By.id("name"));
+    input.click();
+    input.sendKeys("Test name");
+
     // set area
     chromeDriver.wait(until.elementLocated(By.id("area")), 3000);
     input = chromeDriver.findElement(By.id("area"));
@@ -163,6 +169,15 @@ test.describe("Installations add screen tests", function() {
     chromeDriver.findElement(By.id("host")).getAttribute("value").then(
       function (text) {
         expect(text).to.equal("testHost1");
+      });
+  });
+
+  test.it("should show the correct installtion name in details", function () {
+    this.timeout(8000);
+    chromeDriver.wait(until.elementLocated(By.id("name")), 3000);
+    chromeDriver.findElement(By.id("name")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Test name");
       });
   });
 

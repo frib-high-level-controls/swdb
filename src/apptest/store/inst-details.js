@@ -88,6 +88,13 @@ test.describe("Installations detail screen tests", function() {
     });
   });
 
+  test.it("should show the requested installation record name field", function() {
+    chromeDriver.wait(until.elementLocated(By.id("name")),5000);
+    chromeDriver.findElement(By.id("name")).getAttribute("value").then(function(result) {
+      expect(result).to.equal("Installation name2");
+    });
+  });
+
   test.it("should show the requested installation record software field", function() {
     chromeDriver.wait(until.elementLocated(By.id("software")),5000);
     chromeDriver.findElement(By.id("software")).getAttribute("value").then(function(result) {
