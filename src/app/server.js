@@ -25,9 +25,11 @@ let CommonTools = require('./lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
 let props = {};
 props = ctools.getConfiguration();
-let privateKey  = fs.readFileSync(props.sslKey, 'utf8');
-let certificate = fs.readFileSync(props.sslCrt, 'utf8');
-let credentials = {key: privateKey, cert: certificate};
+
+// // for https functionality
+// let privateKey  = fs.readFileSync(props.sslKey, 'utf8');
+// let certificate = fs.readFileSync(props.sslCrt, 'utf8');
+// let credentials = {key: privateKey, cert: certificate};
 
 //allow access to static files
 app.use(express.static(__dirname + '/../../public'));
