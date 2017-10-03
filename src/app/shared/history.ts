@@ -106,7 +106,7 @@ const updateSchema = new Schema({
 });
 
 // Note the collection name is explicitly specified for this model.
-export const Update = mongoose.model<Update>('Update', updateSchema, 'History');
+export const Update = mongoose.model<Update>('Update', updateSchema, 'history');
 
 const historySchema = new Schema({
   updated: {
