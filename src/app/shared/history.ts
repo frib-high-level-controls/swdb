@@ -264,7 +264,10 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
    * Populate the updates for this document.
    */
   schema.method('populateUpdates', function (this: T): Promise<void> {
-    return Update.find({ target: { $in: this.history.updateIds }}).exec().then((updates) => {
+    if (debug.enabled) {
+      debug('Populate update IDs: [%s]', this.history.updateIds.join(', '));
+    }
+    return Update.find({ _id: { $in: this.history.updateIds }}).exec().then((updates) => {
       const ordered: Update[] = [];
       for (let id of this.history.updateIds) {
         for (let update of updates) {
@@ -274,6 +277,7 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
           }
         }
       }
+      debug('Populate updates: %s', ordered.length);
       this.history.updates = ordered;
     });
   });
