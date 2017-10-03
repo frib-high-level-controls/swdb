@@ -29,8 +29,9 @@ export interface IUpdate {
 
 export interface IHistory {
   history: {
-    updated: Date;
     updates?: Update[];
+    updatedAt: Date;
+    updatedBy: string;
     updateIds: ObjectId[];
   };
 }
@@ -109,8 +110,12 @@ const updateSchema = new Schema({
 export const Update = mongoose.model<Update>('Update', updateSchema, 'history');
 
 const historySchema = new Schema({
-  updated: {
+  updatedAt: {
     type: Date,
+    required: true,
+  },
+  updatedBy: {
+    type: String,
     required: true,
   },
   updateIds: [{
@@ -187,10 +192,7 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
   schema.add({
     history: {
       type: historySchema,
-      default: {
-        updated: new Date(0),
-        updateIds: [],
-      },
+      required: false,
     },
   });
 
@@ -202,9 +204,13 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
    *
    * @param  {String}  userid the user making this update
    */
-  schema.method('saveWithHistory', function (this: T, by: string): Promise<T> {
+  schema.method('saveWithHistory', function (this: T, updatedBy: string): Promise<T> {
+    if (!updatedBy) {
+      return Promise.reject(new Error('UpdatedBy argument is required'));
+    }
 
     if (!this.isModified()) {
+      debug('Document not modified, so just save the document');
       return this.save();
     }
 
@@ -232,11 +238,11 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
       return this.save();
     }
 
-    const updated = new Date();
+    const updatedAt = new Date();
 
     const doc: IUpdate = {
-      at: updated,
-      by: by,
+      at: updatedAt,
+      by: updatedBy,
       ref: models.getModelName(this),
       rid: this._id,
       paths: paths,
@@ -245,11 +251,13 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
     return Update.create(doc).then((update) => {
       debug('Update saved ID: %s', update.id);
       if (this.history) {
-        this.history.updated = updated;
+        this.history.updatedAt = updatedAt;
+        this.history.updatedBy = updatedBy;
         this.history.updateIds.push(update._id);
       } else {
         this.history = {
-          updated: updated,
+          updatedAt: updatedAt,
+          updatedBy: updatedBy,
           updateIds: [ update._id ],
         };
       }
