@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require("fs");
 var rc = require("rc");
+var swdbEnums_1 = require("../../../config/swdbEnums");
+var swdbEnums_2 = require("../../../config/swdbEnums");
 var CommonTools = /** @class */ (function () {
     function CommonTools() {
         this.getConfiguration = function () {
@@ -12,6 +14,8 @@ var CommonTools = /** @class */ (function () {
                 props = JSON.parse(stripJSON(fs.readFileSync('/home/deployer/swdb/config/swdbrc', 'utf8')));
             }
             var rcw = rc('swdb', props);
+            rcw.InstStatusEnum = swdbEnums_1.InstStatusEnum;
+            rcw.AreaEnum = swdbEnums_2.AreaEnum;
             return rcw;
         };
     }

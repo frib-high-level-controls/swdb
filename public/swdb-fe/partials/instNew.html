@@ -80,7 +80,7 @@
         <div id="area-group" class="form-group">
           <label class="col-sm-2 control-label">Area*</label>
           <div class="col-sm-10">
-            <select id="area" ng-model="formData.area" ng-options="o for o in areaEnums track by o"></select>
+            <select id="area" ng-model="formData.area" ng-options="o for o in areaLabels track by o"></select>
           </div>
           <div class="col-sm-2" id="areaInputSts" ng-messages="inputForm.areaInput.$error" ng-if="inputForm.areaInput.$dirty">
           </div>
@@ -109,7 +109,7 @@
         <div id="status-group" class="form-group">
           <label class="col-sm-2 control-label">Status*</label>
           <div class="col-sm-10">
-            <select id="status" ng-model="formData.status" ng-options="o for o in statusEnums track by o"></select>
+            <select id="status" ng-model="formData.status" ng-options="o for o in statusLabels track by o"></select>
           </div>
           <div class="col-sm-2" id="statusInputSts" ng-messages="inputForm.statusInput.$error" ng-if="inputForm.statusInput.$dirty">
           </div>
