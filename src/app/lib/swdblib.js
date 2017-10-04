@@ -19,10 +19,10 @@ props = ctools.getConfiguration();
    * for more information.
    */
 
-class levelOfCareEnum extends enumify.Enum {}
-levelOfCareEnum.initEnum(props.levelOfCareEnums);
-class swStatus extends enumify.Enum {}
-swStatus.initEnum(props.statusEnums);
+// class levelOfCareEnum extends enumify.Enum {}
+// levelOfCareEnum.initEnum(props.levelOfCareEnums);
+// class swStatus extends enumify.Enum {}
+// swStatus.initEnum(props.statusEnums);
 
 exports.newValidation = function(req) {
   req.checkBody({
@@ -113,8 +113,8 @@ exports.newValidation = function(req) {
         errorMessage: "Level of care is required.",
       },
       isOneOf: {
-        options: [props.levelOfCareEnums],
-        errorMessage: "Status must be one of " + props.levelOfCareEnums,
+        options: [props.levelOfCareLabels],
+        errorMessage: "Status must be one of " + props.levelOfCareLabels,
       },
     },
     "status": {
@@ -122,8 +122,8 @@ exports.newValidation = function(req) {
         errorMessage: "Status is required.",
       },
       isOneOf: {
-        options: [props.statusEnums],
-        errorMessage: "Status must be one of " + props.statusEnums,
+        options: [props.statusLabels],
+        errorMessage: "Status must be one of " + props.statusLabels,
       },
     },
     "statusDate": {
@@ -174,8 +174,8 @@ exports.newValidation = function(req) {
     "versionControl": {
       optional: true,
       isOneOf: {
-        options: [props.rcsEnums],
-        errorMessage: "Revision control must be one of " + props.rcsEnums,
+        options: [props.rcsLabels],
+        errorMessage: "Revision control must be one of " + props.rcsLabels,
       },
     },
     "versionControlLoc": {
@@ -326,15 +326,15 @@ exports.updateValidation = function(req) {
     "levelOfCare": {
       optional: true,
       isOneOf: {
-        options: [props.levelOfCareEnums],
-        errorMessage: "Level of care must be one of " + props.levelOfCareEnums,
+        options: [props.levelOfCareLabels],
+        errorMessage: "Level of care must be one of " + props.levelOfCareLabels,
       },
     },
     "status": {
       optional: true,
       isOneOf: {
-        options: [props.statusEnums],
-        errorMessage: "Status must be one of " + props.statusEnums,
+        options: [props.statusLabels],
+        errorMessage: "Status must be one of " + props.statusLabels,
       },
     },
     "statusDate": {
@@ -383,8 +383,8 @@ exports.updateValidation = function(req) {
     "versionControl": {
       optional: true,
       isOneOf: {
-        options: [props.rcsEnums],
-        errorMessage: "Revision control must be one of " + props.rcsEnums,
+        options: [props.rcsLabels],
+        errorMessage: "Revision control must be one of " + props.rcsLabels,
       },
     },
     "versionControlLoc": {

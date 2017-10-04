@@ -163,4 +163,67 @@ test.describe("Installations update screen tests", function() {
         expect(text).to.equal("testHost2");
       });
   });
+
+  test.it("should show the correct installtion name in details", function () {
+    this.timeout(8000);
+    chromeDriver.wait(until.elementLocated(By.id("name")), 3000);
+    chromeDriver.findElement(By.id("name")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Test name");
+      });
+  });
+
+  test.it("should show the correct installtion software in details", function () {
+    this.timeout(8000);
+    chromeDriver.wait(until.elementLocated(By.id("software")), 3000);
+    chromeDriver.findElement(By.id("software")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("5947589458a6aa0face9a556");
+      });
+  });
+
+  test.it("should show the correct installtion area in details", function () {
+    this.timeout(8000);
+    chromeDriver.wait(until.elementLocated(By.id("area")), 3000);
+    chromeDriver.findElement(By.id("area")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Global");
+      });
+  });
+
+  test.it("should show the correct installtion DRR in details", function () {
+    this.timeout(8000);
+    chromeDriver.wait(until.elementLocated(By.id("drrs")), 3000);
+    chromeDriver.findElement(By.id("drrs")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("");
+      });
+  });
+
+  test.it("should show the correct installtion status in details", function () {
+    this.timeout(8000);
+    chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
+    chromeDriver.findElement(By.id("status")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("RDY_BEAM");
+      });
+  });
+  // need date test
+  // test.it("should show the correct installtion status date in details", function () {
+  //   this.timeout(8000);
+  //   chromeDriver.wait(until.elementLocated(By.id("statusDate")), 3000);
+  //   chromeDriver.findElement(By.id("statusDate")).getAttribute("value").then(
+  //     function (text) {
+  //       expect(text).to.equal("2017-09-30T07:00:00.000Z");
+  //     });
+  // });
+
+  test.it("should show the correct installtion V&V results in details", function () {
+    this.timeout(8000);
+    chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc")), 3000);
+    chromeDriver.findElement(By.id("vvResultsLoc")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("");
+      });
+  });
 });

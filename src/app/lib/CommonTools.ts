@@ -18,7 +18,7 @@ export class CommonTools {
     const rcw = rc('swdb', props);
 
     // Add the enums
-    rcw.LevelOfCare = LevelOfCareEnum;
+    rcw.LevelOfCareEnum = LevelOfCareEnum;
     rcw.StatusEnum = StatusEnum;
     rcw.InstStatusEnum = InstStatusEnum;
     rcw.RcsEnum = RcsEnum;

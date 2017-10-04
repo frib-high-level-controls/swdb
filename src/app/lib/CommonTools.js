@@ -18,7 +18,7 @@ var CommonTools = /** @class */ (function () {
             }
             var rcw = rc('swdb', props);
             // Add the enums
-            rcw.LevelOfCare = swdbEnums_1.LevelOfCareEnum;
+            rcw.LevelOfCareEnum = swdbEnums_1.LevelOfCareEnum;
             rcw.StatusEnum = swdbEnums_2.StatusEnum;
             rcw.InstStatusEnum = swdbEnums_3.InstStatusEnum;
             rcw.RcsEnum = swdbEnums_4.RcsEnum;

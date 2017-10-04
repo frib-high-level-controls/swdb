@@ -247,13 +247,8 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     };
 
     getEnums = function() {
-        $scope.levelOfCareEnums = $scope.props.levelOfCareEnums;
         $scope.formData.levelOfCare = "NONE";
-
-        $scope.statusEnums = $scope.props.statusEnums;
         $scope.formData.status = "DEVEL";
-
-        $scope.rcsEnums = $scope.props.rcsEnums;
         $scope.formData.versionControl = "Other";
     };
 
@@ -365,18 +360,6 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     };
 
 
-    getEnums = function() {
-        // Set the enumerated values for this scope
-        $scope.levelOfCareEnums = $scope.props.levelOfCareEnums;
-        //$scope.formData.levelOfCare = "NONE";
-
-        $scope.statusEnums = $scope.props.statusEnums;
-        //$scope.formData.status = "DEVEL";
-
-        $scope.rcsEnums = $scope.props.rcsEnums;
-        //$scope.formData.versionControl = "Other";
-    };
-
     $scope.props = configService.getConfig();
     $scope.session = userService.getUser();
     // check our user session and redirect if needed
@@ -391,8 +374,6 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
         formStatus: "",
         formErr: ""
     };
-
-    getEnums();
 
     //update document fields with existing data
     $http.get($scope.props.apiUrl+$routeParams.itemId).success(function(data) {
