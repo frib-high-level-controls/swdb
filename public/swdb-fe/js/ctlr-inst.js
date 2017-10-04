@@ -308,24 +308,8 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     };
 
     getEnums = function() {
-        $scope.statusEnums = $scope.props.statusEnums;
         $scope.formData.status = "DEVEL";
-        $scope.areaEnums = $scope.props.areaEnums;
         $scope.formData.area = "Global";
-
-        $scope.statusLabels = [];
-        // Go through the enums and filter names for the select labels
-        for (let key in $scope.props.InstStatusEnum) {
-          if (!key.match(/^\d+/)) {
-            $scope.statusLabels.push(key);
-          };
-        };
-        $scope.areaLabels = [];
-        for (let key in $scope.props.AreaEnum) {
-          if (!key.match(/^\d+/)) {
-            $scope.areaLabels.push(key);
-          };
-        };
     };
 
     $scope.props = configService.getConfig();
@@ -462,26 +446,6 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
         }
     };
 
-    getEnums = function() {
-        // Set the enumerated values for this scope
-        $scope.statusEnums = $scope.props.statusEnums;
-        $scope.areaEnums = $scope.props.areaEnums;
-
-        $scope.statusLabels = [];
-        // Go through the enums and filter names for the select labels
-        for (let key in $scope.props.InstStatusEnum) {
-          if (!key.match(/^\d+/)) {
-            $scope.statusLabels.push(key);
-          };
-        };
-        $scope.areaLabels = [];
-        for (let key in $scope.props.AreaEnum) {
-          if (!key.match(/^\d+/)) {
-            $scope.areaLabels.push(key);
-          };
-        };
-    };
-
     $scope.props = configService.getConfig();
     $scope.session = userService.getUser();
     $scope.swList = swService.getSwList();
@@ -498,8 +462,6 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
         formStatus: "",
         formErr: ""
     };
-
-    getEnums();
 
     //update document fields with existing data
     $http.get($scope.props.instApiUrl+$routeParams.itemId).success(function(data) {

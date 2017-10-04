@@ -19,9 +19,9 @@ export class InstDb {
       InstDb.instSchema = new mongoose.Schema({
         host: { type: String, required: true },
         name: { type: String , default: '' },
-        area: { type: String, enum: this.props.areaEnums, required: true },
+        area: { type: String, enum: this.props.areaLabels, required: true },
         slots: [String],
-        status: { type: String, enum: this.props.instStatusEnums, required: true },
+        status: { type: String, enum: this.props.instStatusLabels, required: true },
         statusDate: { type: Date, required: true },
         software: { type: String, required: true },
         vvResultsLoc: { type: String, default: '' },
