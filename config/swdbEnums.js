@@ -30,7 +30,8 @@ var RcsEnum;
     RcsEnum[RcsEnum["Git"] = 0] = "Git";
     RcsEnum[RcsEnum["AssetCentre"] = 1] = "AssetCentre";
     RcsEnum[RcsEnum["Filesystem"] = 2] = "Filesystem";
-    RcsEnum[RcsEnum["Other"] = 3] = "Other";
+    RcsEnum[RcsEnum["Debian"] = 3] = "Debian";
+    RcsEnum[RcsEnum["Other"] = 4] = "Other";
 })(RcsEnum = exports.RcsEnum || (exports.RcsEnum = {}));
 var AreaEnum;
 (function (AreaEnum) {

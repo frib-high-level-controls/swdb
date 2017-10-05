@@ -696,7 +696,7 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '"param":"platforms","msg":"Platforms must be 4-30 characters."'}}},
       // test new versionControl min, max
       {"type":"POST", "req": {"msg": {"versionControl": "Erroneous RCS"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of Git,AssetCentre,Filesystem,Other"'}}},
+      "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of Git,AssetCentre,Filesystem,Debian,Other"'}}},
       // test new recertFreq min, max
       {"type":"POST", "req": {"msg": {"recertFreq": "N"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertFreq","msg":"Recertification frequency must be 4-30 characters."'}}},
@@ -734,7 +734,7 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '"param":"platforms","msg":"Platforms must be 4-30 characters."'}}},
       // test update versionControl min, max
       {"type":"PUT", "req": {"msg": {"versionControl": "Erroneous RCS"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of Git,AssetCentre,Filesystem,Other"'}}},
+      "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of Git,AssetCentre,Filesystem,Debian,Other"'}}},
       // test update recertFreq min, max
       {"type":"PUT", "req": {"msg": {"recertFreq": "N"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertFreq","msg":"Recertification frequency must be 4-30 characters."'}}},
