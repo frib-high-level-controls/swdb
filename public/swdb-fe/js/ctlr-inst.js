@@ -26,7 +26,7 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
         encodeURIComponent($scope.props.auth.login_service);
     }
   };
-
+  
   // get initialization info
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
@@ -72,6 +72,9 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
       .renderWith(function (data, type, full, meta) {
         if (!$scope.swMeta[full.software].branch){
           $scope.swMeta[full.software].branch = "";
+        }
+        if (!$scope.swMeta[full.software].version){
+          $scope.swMeta[full.software].version = "";
         }
         return '<a href="#/details/' + full.software + '" >' +
           $scope.swMeta[full.software].swName +
@@ -312,11 +315,15 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
         $scope.formData.area = "Global";
     };
 
+    $scope.refreshSw = () => {
+      $scope.swList = swService.getSwList();
+    }
+
     $scope.props = configService.getConfig();
     $scope.session = userService.getUser();
     $scope.slots = slotService.getSlot();
-    $scope.swList = swService.getSwList();
-
+    // $scope.swList = swService.getSwList();
+    $scope.refreshSw();
 
     // check our user session and redirect if needed
     if (!$scope.session.username) {
