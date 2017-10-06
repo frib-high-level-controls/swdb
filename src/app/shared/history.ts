@@ -11,6 +11,7 @@ import * as mongoose from 'mongoose';
 import * as log from './logging';
 import * as models from './models';
 
+type QR<T> = T[] | T | null; // ie QueryResult<T>
 type Schema = mongoose.Schema;
 type ObjectId = mongoose.Types.ObjectId;
 
@@ -30,13 +31,15 @@ export interface IUpdate {
 export interface IHistory {
   history: {
     updates?: Update[];
-    updatedAt: Date;
-    updatedBy: string;
+    updatedAt?: Date;
+    updatedBy?: string;
     updateIds: ObjectId[];
   };
 }
 
 export type Update = IUpdate & mongoose.Document;
+
+export type DocumentQuery<T, DocType extends Document<DocType>> = mongoose.DocumentQuery<T, DocType>;
 
 export interface Document<T extends Document<T>> extends mongoose.Document, IHistory {
   saveWithHistory(by: string): Promise<T>;
@@ -46,6 +49,9 @@ export interface Document<T extends Document<T>> extends mongoose.Document, IHis
 export interface Model<T extends Document<T>> extends mongoose.Model<T> {
   findByIdWithHistory(id: string | number | ObjectId): Promise<T | null>;
   findOneWithHistory(conditions?: object): Promise<T | null>;
+  findWithHistory(conditions?: object): Promise<T[]>;
+  execWithHistory<T extends Document<T>>(this: Model<T>, query: mongoose.DocumentQuery<T | null, T>): Promise<T | null>;
+  execWithHistory<T extends Document<T>>(this: Model<T>, query: mongoose.DocumentQuery<T[], T>): Promise<T[]>;
 };
 
 export interface HistoryOptions {
@@ -112,11 +118,11 @@ export const Update = mongoose.model<Update>('Update', updateSchema, 'history');
 const historySchema = new Schema({
   updatedAt: {
     type: Date,
-    required: true,
+    required: false,
   },
   updatedBy: {
     type: String,
-    required: true,
+    required: false,
   },
   updateIds: [{
     type: ObjectId,
@@ -192,7 +198,7 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
   schema.add({
     history: {
       type: historySchema,
-      required: false,
+      default: { updateIds: [] },
     },
   });
 
@@ -272,54 +278,69 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
    * Populate the updates for this document.
    */
   schema.method('populateUpdates', function (this: T): Promise<void> {
-    if (debug.enabled) {
-      debug('Populate update IDs: [%s]', this.history.updateIds.join(', '));
-    }
     return Update.find({ _id: { $in: this.history.updateIds }}).exec().then((updates) => {
-      const ordered: Update[] = [];
-      for (let id of this.history.updateIds) {
-        for (let update of updates) {
-          if (id.equals(update._id)) {
-            ordered.push(update);
-            continue;
-          }
-        }
-      }
-      debug('Populate updates: %s', ordered.length);
-      this.history.updates = ordered;
+      this.history.updates = models.pickById(updates, this.history.updateIds);
     });
   });
 
   /**
-   * Find document and its history by ID. This method does both concurrently.
+   * Find document and its history by ID. This method does both concurrently!
    */
   schema.static('findByIdWithHistory', function (this: Model<T>, id: string | number | ObjectId): Promise<T | null> {
-    if (typeof id === 'string' || typeof id === 'number')  {
-      id = mongoose.Types.ObjectId(id);
-    }
     return Promise.all([
       this.findById(id).exec(),
       Update.find({ ref: this.modelName, rid: id }).exec(),
     ])
-    .then(([t, updates]) => {
-      if (t && t.history && t.history.updateIds && updates) {
-        t.history.updates = models.pickById(updates, t.history.updateIds);
+    .then(([doc, updates]) => {
+      if (doc && doc.history && doc.history.updateIds && updates) {
+        doc.history.updates = models.pickById(updates, doc.history.updateIds);
       }
-      return t;
+      return doc;
     });
   });
 
   /**
-   * Find one document and its history. NOTE This method requires TWO database queries!
+   * Find document and its history. NOTE This method requires TWO database queries!
    */
   schema.static('findOneWithHistory', function (this: Model<T>, conditions?: object): Promise<T | null> {
-    return this.findOne(conditions).exec().then((t) => {
-      if (!t) {
-        return Promise.resolve(null);
+    return this.execWithHistory(this.findOne(conditions));
+  });
+
+  /**
+   * Find documents and their history. NOTE This method requires TWO database queries!
+   */
+  schema.static('findWithHistory', function (this: Model<T>, conditions?: object): Promise<T[]> {
+    return this.execWithHistory(this.find(conditions || {}));
+  });
+
+  /**
+   * Execute the query and then the document history. NOTE This method requires TWO database queries!
+   */
+  schema.static('execWithHistory', function (this: Model<T>, query: DocumentQuery<QR<T>, T>): Promise<QR<T>> {
+    return query.exec().then((docs) => {
+      if (!docs) {
+        return null;
       }
-      return Update.find({ ref: this.modelName, rid: t._id }).exec().then((updates) => {
-        t.history.updates = models.pickById(updates, t.history.updateIds);
-        return t;
+      let ids: ObjectId[] = [];
+      if (Array.isArray(docs)) {
+        for (let doc of docs) {
+          ids = ids.concat(doc.history.updateIds);
+        }
+      } else {
+        ids = ids.concat(docs.history.updateIds);
+      }
+      return Update.find({_id: { $in: ids }}).exec().then((updates) => {
+        if (!docs) {
+          return null;
+        }
+        if (Array.isArray(docs)) {
+          for (let doc of docs) {
+            doc.history.updates = models.pickById(updates, doc.history.updateIds);
+          }
+        } else {
+          docs.history.updates = models.pickById(updates, docs.history.updateIds);
+        }
+        return docs;
       });
     });
   });
