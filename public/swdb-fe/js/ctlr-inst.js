@@ -322,7 +322,6 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     $scope.props = configService.getConfig();
     $scope.session = userService.getUser();
     $scope.slots = slotService.getSlot();
-    // $scope.swList = swService.getSwList();
     $scope.refreshSw();
 
     // check our user session and redirect if needed
@@ -330,6 +329,9 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
         //go to cas
         $window.location.href = $scope.props.auth.cas+'/login?service='+encodeURIComponent($scope.props.auth.login_service);
     }
+
+    // sw just updated, refresh the service list
+    swService.refreshSwList();
 
     // initialize this record
     $scope.formData = {
@@ -452,6 +454,9 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
             $scope.formData.drrs.splice(parts[2],1);
         }
     };
+
+    // refresh the service list
+    swService.refreshSwList();
 
     $scope.props = configService.getConfig();
     $scope.session = userService.getUser();

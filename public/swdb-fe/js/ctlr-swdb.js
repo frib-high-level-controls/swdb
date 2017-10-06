@@ -158,7 +158,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService,
 
 
 appController.controller('NewController', NewPromiseCtrl);
-function NewPromiseCtrl($scope, $http, $window, $location, configService, userService) {
+function NewPromiseCtrl($scope, $http, $window, $location, configService, userService, swService) {
 
     $scope.$watch(function() {
         return $scope.session;
@@ -227,6 +227,8 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
             $scope.swdbParams.formShowErr = false;
             $scope.swdbParams.formShowStatus = true;
             let headers = response.headers();
+            // sw just updated, refresh the service list
+            swService.refreshSwList();
             if (headers.location){
               // if location header is present extract the id
               let id = headers.location.split('/').pop();
@@ -277,7 +279,7 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
 
 
 appController.controller('UpdateController', UpdatePromiseCtrl);
-function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService) {
+function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService, swService) {
 
     $scope.$watch(function() {
         return $scope.session;
@@ -339,6 +341,8 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
                     $scope.swdbParams.formStatus="Document updates successfully posted";
                     $scope.swdbParams.formShowErr=false;
                     $scope.swdbParams.formShowStatus=true;
+                    // sw just updated, refresh the service list
+                    swService.refreshSwList();
                     let headers = response.headers();
                     if (headers.location) {
                       // if location header is present extract the id

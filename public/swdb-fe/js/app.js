@@ -79,6 +79,11 @@ app.service('swService', function($http) {
         promise: promise,
       getSwList: function () {
             return swData;
+        },
+      refreshSwList: function () {
+          var promise = $http({ url: '/api/v1/swdb/', method: "GET" }).success(function (data) {
+             swData = data;
+           });
         }
     };
 });
