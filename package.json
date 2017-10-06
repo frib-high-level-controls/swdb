@@ -8,7 +8,7 @@
     "grunt": "./node_modules/.bin/grunt",
     "mocha": "./node_modules/.bin/mocha",
     "make": "cd ./src/app; tsc",
-    "test-all": "cd ./src/app && mocha ../apptest",
+    "test-all": "cd ./src/app && mocha ../apptest --config ../../config/swdbrc",
     "install-swdb": "npm install; cd ./public/swdb-fe; npm install; sudo cp ../../config/swdb.service /etc/systemd/system/swdb.service",
     "load-db-test": "cd ./src/app;node -e 'let myTestTools = require(\"/home/deployer/swdb/src/apptest/store/TestTools.js\");a = new myTestTools.TestTools();a.loadTestCollectionsStandard(()=>{},\"/home/deployer/swdb/src/apptest/misc/datafiles/swTestDataCombined.json\",\"/home/deployer/swdb/src/apptest/misc/datafiles/instTestDataCombined.json\");'",
     "clear-db-test": "cd ./src/app;node -e 'let myTestTools = require(\"/home/deployer/swdb/src/apptest/store/TestTools.js\");a = new myTestTools.TestTools();a.clearTestCollections(()=>{});'"

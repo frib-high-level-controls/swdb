@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var fs = require("fs");
 var rc = require("rc");
 var swdbEnums_1 = require("../../../config/swdbEnums");
 var swdbEnums_2 = require("../../../config/swdbEnums");
@@ -10,13 +9,19 @@ var swdbEnums_5 = require("../../../config/swdbEnums");
 var CommonTools = /** @class */ (function () {
     function CommonTools() {
         this.getConfiguration = function () {
+            return CommonTools.props;
+        };
+        // Only populate props the first time we instantiate.
+        // Other times just return the values we already have
+        if (!CommonTools.props) {
             // acquire configuration
-            var props = null;
-            if (fs.existsSync('/home/deployer/swdb/config/swdbrc')) {
-                var stripJSON = require('strip-json-comments');
-                props = JSON.parse(stripJSON(fs.readFileSync('/home/deployer/swdb/config/swdbrc', 'utf8')));
+            var rcw = rc('swdb', CommonTools.props);
+            // rc module holds the requested --config file in .config
+            // and the loaded files in array .configs. Make sure the 
+            // requested file loaded or error
+            if (!rcw.configs || (rcw.config !== rcw.configs[0])) {
+                throw new Error('Config file ' + rcw.config + ' not loaded...');
             }
-            var rcw = rc('swdb', props);
             // Add the enums
             rcw.LevelOfCareEnum = swdbEnums_1.LevelOfCareEnum;
             rcw.StatusEnum = swdbEnums_2.StatusEnum;
@@ -57,8 +62,11 @@ var CommonTools = /** @class */ (function () {
                     rcw.areaLabels.push(key);
                 }
             }
-            return rcw;
-        };
+            CommonTools.props = rcw;
+        }
+        else {
+            // we already have props loaded.
+        }
     }
     return CommonTools;
 }());
