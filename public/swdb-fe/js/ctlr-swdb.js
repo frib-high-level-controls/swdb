@@ -51,7 +51,10 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
     vm.dtOptions = DTOptionsBuilder
     .fromFnPromise(function() {
         var defer = $q.defer();
-        $http.get($scope.props.apiUrl).then(function(result) {
+        let url = $window.location.origin;
+        url = url + "/api/v1/swdb/";
+        // $http.get($scope.props.apiUrl).then(function(result) {
+        $http.get(url).then(function(result) {
             defer.resolve(result.data);
         });
         return defer.promise;
@@ -150,7 +153,11 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService,
     $scope.props = configService.getConfig();
     $scope.session = userService.getUser();
     //update document fields with existing data
-    $http.get($scope.props.apiUrl+$routeParams.itemId).success(function(data) {
+    let url = $window.location.origin;
+    url = url + "/api/v1/swdb/" + $routeParams.itemId;
+
+    // $http.get($scope.props.apiUrl+$routeParams.itemId).success(function(data) {
+    $http.get(url).success(function(data) {
         $scope.formData = data;
         $scope.whichItem = $routeParams.itemId;
     });
@@ -216,9 +223,12 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
         // $scope.formData.version="";
       }
       if ($scope.inputForm.$valid) {
+        let url = $window.location.origin;
+        url = url + "/api/v1/swdb/";
         $http({
           method: 'POST',
-          url: $scope.props.apiUrl,
+          // url: $scope.props.apiUrl,
+          url: url,
           data: $scope.formData,
           headers: { 'Content-Type': 'application/json' }
         })
@@ -331,9 +341,12 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     $scope.processForm = function(){
         if ($scope.inputForm.$valid){
             delete $scope.formData.__v;
+            let url = $window.location.origin;
+            url = url + "/api/v1/swdb/" + $scope.formData._id;
             $http({
                 method: 'PUT',
-                url: $scope.props.apiUrl+$scope.formData._id,
+                // url: $scope.props.apiUrl+$scope.formData._id,
+                url: url,
                 data: $scope.formData,
                 headers: { 'Content-Type': 'application/json' }
             })
@@ -380,7 +393,11 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     };
 
     //update document fields with existing data
-    $http.get($scope.props.apiUrl+$routeParams.itemId).success(function(data) {
+    let url = $window.location.origin;
+    url = url + "/api/v1/swdb/" + $routeParams.itemId;
+
+    // $http.get($scope.props.apiUrl+$routeParams.itemId).success(function(data) {
+    $http.get(url).success(function(data) {
         $scope.itemArray = $scope.props.validSwNamesGUIList;
         $scope.formData = data;
         $scope.whichItem = $routeParams.itemId;

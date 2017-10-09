@@ -76,13 +76,13 @@ app.service('swService', function($http) {
     });
 
     return {
-        promise: promise,
+      promise: promise,
       getSwList: function () {
-            return swData;
+          return swData;
         },
       refreshSwList: function () {
-          var promise = $http({ url: '/api/v1/swdb/', method: "GET" }).success(function (data) {
-             swData = data;
+        $http({ url: '/api/v1/swdb/', method: "GET" }).success(function (data) {
+           swData = data;
            });
         }
     };
