@@ -37,7 +37,10 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
   // promise resolved.
   vm.dtOptions = DTOptionsBuilder.fromFnPromise(function () {
     var defer = $q.defer();
-    $http.get($scope.props.instApiUrl).then(function (result) {
+    let url = $window.location.origin;
+    url = url + "/api/v1/inst/";
+    // $http.get($scope.props.instApiUrl).then(function (result) {
+    $http.get(url).then(function (result) {
       var innerDefer = $q.defer();
       var swIds = result.data.map(function (r) { return r.software; });
       let url = $window.location.origin;
@@ -164,7 +167,10 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configServ
     $scope.props = configService.getConfig();
     $scope.session = userService.getUser();
     //update document fields with existing data
-    $http.get($scope.props.instApiUrl+$routeParams.itemId).success(function(data) {
+    let url = $window.location.origin;
+    url = url + "/api/v1/inst/" + $routeParams.itemId;
+    // $http.get($scope.props.instApiUrl+$routeParams.itemId).success(function(data) {
+    $http.get(url).success(function(data) {
         $scope.formData = data;
         $scope.whichItem = $routeParams.itemId;
     });
@@ -269,9 +275,12 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
         console.log(JSON.stringify($scope.formData));
 
         if ($scope.inputForm.$valid){
+          let url = $window.location.origin;
+          url = url + "/api/v1/inst/";
             $http({
                 method: 'POST',
-                url: $scope.props.instApiUrl,
+                url: url,
+                // url: $scope.props.instApiUrl,
                 data: $scope.formData,
                 headers: { 'Content-Type': 'application/json' }
             })
@@ -283,7 +292,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
                 if (headers.location) {
                   // if location header is present extract the id
                   let id = headers.location.split('/').pop();
-                  console.log("going to: /inst/details/"+id);
+                  // console.log("going to: /inst/details/"+id);
                   $location.path('/inst/details/' + id);
                 }
               }, function error(response) {
@@ -387,10 +396,9 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
   };
 
   // get sw records from swdb api
-  let url = $window.location.origin;
-  url = url + "/api/v1/swdb/";
-
   $scope.getSw = function(val) {
+    let url = $window.location.origin;
+    url = url + "/api/v1/swdb/";
     return $http.get(url).then(function(response){
     // return $http.get($scope.props.apiUrl).then(function(response){
       //console.log("Got sw list:"+JSON.stringify(response.data));
@@ -410,9 +418,13 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     $scope.processForm = function(){
         if ($scope.inputForm.$valid){
             delete $scope.formData.__v;
+            let url = $window.location.origin;
+            url = url + "/api/v1/inst/" + $scope.formData._id;
+
             $http({
                 method: 'PUT',
-                url: $scope.props.instApiUrl+$scope.formData._id,
+                // url: $scope.props.instApiUrl+$scope.formData._id,
+                url: url,
                 data: $scope.formData,
                 headers: { 'Content-Type': 'application/json' }
             })
@@ -487,7 +499,10 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     };
 
     //update document fields with existing data
-    $http.get($scope.props.instApiUrl+$routeParams.itemId).success(function(data) {
+    let url = $window.location.origin;
+    url = url + "/api/v1/inst/" + $routeParams.itemId;
+    // $http.get($scope.props.instApiUrl+$routeParams.itemId).success(function(data) {
+    $http.get(url).success(function(data) {
         $scope.formData = data;
         $scope.whichItem = $routeParams.itemId;
         $scope.swSelected = data.software;
