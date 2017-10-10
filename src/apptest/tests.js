@@ -8,3 +8,4 @@ require('./store/inst-list.js');
 require('./store/inst-details.js');
 require('./store/inst-new.js');
 require('./store/inst-update.js');
+require('./store/user-flow');
