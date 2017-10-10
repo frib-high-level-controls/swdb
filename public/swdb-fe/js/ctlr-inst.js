@@ -15,8 +15,10 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
 
   $scope.usrBtnClk = function () {
     if ($scope.session.username) {
+      let url = $window.location.origin;
+      url = url + "/logout";
       // logout if already logged in
-      $http.get($scope.props.webUrl + 'logout').success(function (data) {
+      $http.get(url).success(function (data) {
         $window.location.href = $scope.props.auth.cas + '/logout';
       });
     } else {
@@ -150,18 +152,20 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configServ
         }
     },true);
 
-    $scope.usrBtnClk = function(){
-        if ($scope.session.username) {
-            // logout if already logged in
-            $http.get($scope.props.webUrl+'logout').success(function(data) {
-                $window.location.href = $scope.props.auth.cas+'/logout';
-            });
-        } else {
-            //login
-            $window.location.href =
-                $scope.props.auth.cas+'/login?service='+
-                encodeURIComponent($scope.props.auth.login_service);
-        }
+    $scope.usrBtnClk = function () {
+      if ($scope.session.username) {
+        let url = $window.location.origin;
+        url = url + "/logout";
+        // logout if already logged in
+        $http.get(url).success(function (data) {
+          $window.location.href = $scope.props.auth.cas + '/logout';
+        });
+      } else {
+        //login
+        $window.location.href =
+          $scope.props.auth.cas + '/login?service=' +
+          encodeURIComponent($scope.props.auth.login_service);
+      }
     };
 
     $scope.props = configService.getConfig();
@@ -193,8 +197,10 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
 
   $scope.usrBtnClk = function(){
     if ($scope.session.username) {
+      let url = $window.location.origin;
+      url = url + "/logout";
       // logout if alredy logged in
-      $http.get($scope.props.webUrl+'logout').success(function(data) {
+      $http.get(url).success(function(data) {
         $window.location.href = $scope.props.auth.cas+'/logout';
       });
     } else {
@@ -333,7 +339,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
 
     $scope.refreshSw = () => {
       $scope.swList = swService.getSwList();
-    }
+    };
 
     $scope.props = configService.getConfig();
     $scope.session = userService.getUser();
@@ -383,8 +389,10 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
 
   $scope.usrBtnClk = function(){
     if ($scope.session.username) {
+      let url = $window.location.origin;
+      url = url + "/logout";
       // logout if alredy logged in
-      $http.get($scope.props.webUrl+'logout').success(function(data) {
+      $http.get(url).success(function(data) {
         $window.location.href = $scope.props.auth.cas+'/logout';
       });
     } else {

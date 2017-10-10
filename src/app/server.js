@@ -173,7 +173,7 @@ app.get('/testlogin', function(req,res) {
 app.get('/caslogin', casAuth.ensureAuthenticated, function(req,res) {
   if (req.session.username) {
     // cas has a username
-    res.redirect(props.webUrl);
+    res.redirect(props.webUrlProxy);
 
   } else {
     res.send('<p id="CAS auth failed">CAS auth failed</p>');
@@ -187,6 +187,7 @@ app.get('/logout', function(req,res) {
   res.clearCookie('connect.sid',{path: '/'});
   res.send('<p id="Logout complete">logout complete</p>');
 });
+
 // for get requests that are not specific return all
 app.get('/api/v1/swdb/user', function(req, res, next) {
   res.send(JSON.stringify(req.session));

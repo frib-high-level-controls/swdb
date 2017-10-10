@@ -19,71 +19,73 @@ appController.factory('StatusService', function() {
 appController.controller('ListController', ListPromiseCtrl);
 function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $cookies, $window, configService, userService) {
 
-    $scope.$watch(function() {
-        return $scope.session;
-    }, function() {
-        // prep for login button
-        if ($scope.session && $scope.session.username) {
-            $scope.usrBtnTxt = "";
-        } else {
-            $scope.usrBtnTxt = 'Log in';
-        }
-    },true);
+  $scope.$watch(function () {
+    return $scope.session;
+  }, function () {
+    // prep for login button
+    if ($scope.session && $scope.session.username) {
+      $scope.usrBtnTxt = "";
+    } else {
+      $scope.usrBtnTxt = 'Log in';
+    }
+  }, true);
 
-    $scope.usrBtnClk = function(){
-        if ($scope.session.username) {
-            // logout if already logged in
-            $http.get($scope.props.webUrl+'logout').success(function(data) {
-                $window.location.href = $scope.props.auth.cas+'/logout';
-            });
-        } else {
-            //login
-            $window.location.href =
-                $scope.props.auth.cas+'/login?service='+
-                encodeURIComponent($scope.props.auth.login_service);
-        }
-    };
+  $scope.usrBtnClk = function () {
+    if ($scope.session.username) {
+      let url = $window.location.origin;
+      url = url + "/logout";
+      // logout if already logged in
+      $http.get(url).success(function (data) {
+        $window.location.href = $scope.props.auth.cas + '/logout';
+      });
+    } else {
+      //login
+      $window.location.href =
+        $scope.props.auth.cas + '/login?service=' +
+        encodeURIComponent($scope.props.auth.login_service);
+    }
+  };
 
-    // get intitialization info
-    $scope.props = configService.getConfig();
-    $scope.session = userService.getUser();
-    var vm = this;
-    vm.dtOptions = DTOptionsBuilder
-    .fromFnPromise(function() {
-        var defer = $q.defer();
-        let url = $window.location.origin;
-        url = url + "/api/v1/swdb/";
-        // $http.get($scope.props.apiUrl).then(function(result) {
-        $http.get(url).then(function(result) {
-            defer.resolve(result.data);
-        });
-        return defer.promise;
+  // get intitialization info
+  $scope.props = configService.getConfig();
+  $scope.session = userService.getUser();
+  var vm = this;
+  vm.dtOptions = DTOptionsBuilder
+    .fromFnPromise(function () {
+      var defer = $q.defer();
+      let url = $window.location.origin;
+      url = url + "/api/v1/swdb/";
+      // $http.get($scope.props.apiUrl).then(function(result) {
+      $http.get(url).then(function (result) {
+        defer.resolve(result.data);
+      });
+      return defer.promise;
     })
     .withPaginationType('full_numbers')
     .withDOM('<"row"<"col-sm-8"l><"col-sm-4"B>>rtip');
 
-    vm.dtColumns = [
-        DTColumnBuilder.newColumn('swName')
-          .withTitle('Software name')
-        .renderWith(function(data, type, full, meta) {
-            return '<a href="#/details/'+full._id+'">' +
-                full.swName + '</a>';
-        }),
-        DTColumnBuilder.newColumn('branch')
-          .withTitle('Branch').withOption('defaultContent',''),
-        DTColumnBuilder.newColumn('version')
-          .withTitle('Version').withOption('defaultContent',''),
-        DTColumnBuilder.newColumn('owner')
-          .withTitle('Owner').withOption('defaultContent',""),
-        DTColumnBuilder.newColumn('engineer')
-          .withTitle('Engineer').withOption('defaultContent',""),
-        DTColumnBuilder.newColumn('status')
-          .withTitle('Status').withOption('defaultContent',""),
-        DTColumnBuilder.newColumn('statusDate')
-          .withTitle('Status date').withOption('defaultContent',"")
-    ];
-    
-    angular.element('#swdbList').on('init.dt', function(event, loadedDT) {
+  vm.dtColumns = [
+    DTColumnBuilder.newColumn('swName')
+      .withTitle('Software name')
+      .renderWith(function (data, type, full, meta) {
+        return '<a href="#/details/' + full._id + '">' +
+          full.swName + '</a>';
+      }),
+    DTColumnBuilder.newColumn('branch')
+      .withTitle('Branch').withOption('defaultContent', ''),
+    DTColumnBuilder.newColumn('version')
+      .withTitle('Version').withOption('defaultContent', ''),
+    DTColumnBuilder.newColumn('owner')
+      .withTitle('Owner').withOption('defaultContent', ""),
+    DTColumnBuilder.newColumn('engineer')
+      .withTitle('Engineer').withOption('defaultContent', ""),
+    DTColumnBuilder.newColumn('status')
+      .withTitle('Status').withOption('defaultContent', ""),
+    DTColumnBuilder.newColumn('statusDate')
+      .withTitle('Status date').withOption('defaultContent', "")
+  ];
+
+  angular.element('#swdbList').on('init.dt', function (event, loadedDT) {
     // wait for the init event from the datatable
     // (then it is done loading)
     // Handle multiple init notifications
@@ -99,7 +101,7 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
         // if (table.column(colIdx).searchable) {
         if (true) {
           // append column search with id derived from column init data
-          th.append('<input class="swdbTableHeaderSearch" id="' + table.settings().init().aoColumns[colIdx].mData + "Srch"+'" type="text" placeholder="' + (table.column(colIdx).placeholder || '')
+          th.append('<input class="swdbTableHeaderSearch" id="' + table.settings().init().aoColumns[colIdx].mData + "Srch" + '" type="text" placeholder="' + (table.column(colIdx).placeholder || '')
             + '" style="width:80%;" autocomplete="off">');
           th.on('keyup', 'input', function () {
             let elem = this; // aids type inference to avoid cast
@@ -119,7 +121,7 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
         }
       });
     }
-   });
+  });
 }
 
 
@@ -138,8 +140,10 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService,
 
     $scope.usrBtnClk = function(){
         if ($scope.session.username) {
+          let url = $window.location.origin;
+          url = url + "/logout";
             // logout if alredy logged in
-            $http.get($scope.props.webUrl+'logout').success(function(data) {
+            $http.get(url).success(function(data) {
                 $window.location.href = $scope.props.auth.cas+'/logout';
             });
         } else {
@@ -180,8 +184,10 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
 
     $scope.usrBtnClk = function(){
         if ($scope.session.username) {
+          let url = $window.location.origin;
+          url = url + "/logout";
             // logout if alredy logged in
-            $http.get($scope.props.webUrl+'logout').success(function(data) {
+            $http.get(url).success(function(data) {
                 $window.location.href = $scope.props.auth.cas+'/logout';
             });
         } else {
@@ -303,17 +309,19 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     },true);
 
     $scope.usrBtnClk = function(){
-        if ($scope.session.username) {
-            // logout if alredy logged in
-            $http.get($scope.props.webUrl+'logout').success(function(data) {
-                $window.location.href = $scope.props.auth.cas+'/logout';
-            });
-        } else {
-            //login
-            $window.location.href =
-                $scope.props.auth.cas+'/login?service='+
-                encodeURIComponent($scope.props.auth.login_service);
-        }
+      if ($scope.session.username) {
+        let url = $window.location.origin;
+        url = url + "/logout";
+        // logout if alredy logged in
+        $http.get(url).success(function (data) {
+          $window.location.href = $scope.props.auth.cas + '/logout';
+        });
+      } else {
+        //login
+        $window.location.href =
+          $scope.props.auth.cas + '/login?service=' +
+          encodeURIComponent($scope.props.auth.login_service);
+      }
     };
 
     $scope.datePicker = (function () {
