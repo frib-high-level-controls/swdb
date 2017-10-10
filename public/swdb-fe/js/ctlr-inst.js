@@ -195,6 +195,11 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     }
   },true);
 
+    $scope.bckBtnClk = function(){
+      // Go back to details
+      $location.path("/inst/list");
+    };
+
   $scope.usrBtnClk = function(){
     if ($scope.session.username) {
       let url = $window.location.origin;
@@ -386,6 +391,11 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
       $scope.usrBtnTxt = 'Log in';
     }
   },true);
+
+    $scope.bckBtnClk = function(){
+      // Go back to details
+      $location.path("/inst/details/"+$scope.formData._id);
+    };
 
   $scope.usrBtnClk = function(){
     if ($scope.session.username) {

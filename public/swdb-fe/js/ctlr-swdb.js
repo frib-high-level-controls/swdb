@@ -182,6 +182,10 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
         }
     },true);
 
+    $scope.bckBtnClk = function(){
+      $location.path("/list");
+    };
+
     $scope.usrBtnClk = function(){
         if ($scope.session.username) {
           let url = $window.location.origin;
@@ -307,6 +311,11 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
             $scope.usrBtnTxt = 'Log in';
         }
     },true);
+
+    $scope.bckBtnClk = function(){
+      // Go back to details
+      $location.path("/details/"+$scope.formData._id);
+    };
 
     $scope.usrBtnClk = function(){
       if ($scope.session.username) {

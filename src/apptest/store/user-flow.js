@@ -23,10 +23,9 @@ let props = {};
 props = ctools.getConfiguration();
 
 
-test.describe("Software update screen tests", function() {
+test.describe("User flow tests", function() {
   var chromeDriver;
   test.before(function(done) {
-    console.log("Starting swdb-update");
     this.timeout(5000);
     testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
   });
@@ -200,10 +199,8 @@ test.describe("Software update screen tests", function() {
       function (text) {
         expect(text).to.equal("Test UserRecord");
       });
-    let url = chromeDriver.getCurrentUrl().then( (currUrl) => {
-      console.log("url: " + currUrl);
+    let url = chromeDriver.getCurrentUrl().then((currUrl) => {
       id = currUrl.split('/').pop();
-      console.log("id: " + id);
     });
   });
 
@@ -542,5 +539,116 @@ test.it("should show search page with username on logout button", function() {
       function (text) {
         expect(text).to.equal("http://www.google.com");
       });
+  });
+
+
+
+  test.describe("Cancel from new sw goes back to list", function () {
+    // test cancel from new sw record foes back to the mail search screen
+    test.it("should show new page with username on logout button", function () {
+      this.timeout(8000);
+      chromeDriver.get(props.webUrl + "#/new");
+      chromeDriver.wait(until.elementLocated(By.id("usrBtn")), 5000);
+      chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
+        "testuser"), 5000);
+    });
+
+    test.it("should show the new sw record title and click cancel", function () {
+      chromeDriver.wait(until.titleIs("SWDB - New"), 5000);
+      chromeDriver.wait(until.elementLocated(By.id("cancelBtn")), 5000);
+      chromeDriver.findElement(By.id("cancelBtn")).click();
+    });
+
+    test.it("should show list page", function () {
+      chromeDriver.wait(until.titleIs("SWDB - List"), 5000);
+    });
+  });
+
+  test.describe("Cancel from sw update goes back to details", function () {
+    // Test cancel from sw update goes back to the appropriate detauils screen
+    // find the created record
+    test.it("should find a record", function () {
+      this.timeout(8000);
+      chromeDriver.get(props.webUrl + "#/list");
+      chromeDriver.wait(until.elementLocated(By.id("swNameSrch")), 8000)
+        .sendKeys("UserRecord");
+      chromeDriver.wait(until.elementLocated(By.id("versionSrch")), 8000)
+        .sendKeys("Test version");
+      chromeDriver.wait(until.elementLocated(By.linkText("Test UserRecord")),
+        8000);
+    });
+
+    // find the created record and click update-cancel and back to details
+    test.it("should show record details after cancel update", function () {
+      this.timeout(10000);
+      chromeDriver.wait(until.elementLocated(By.linkText("Test UserRecord")),
+        8000).click();
+      chromeDriver.wait(until.titleIs("SWDB - Details"), 5000);
+      chromeDriver.wait(until.elementLocated(By.id("updateBtn")),
+        8000).click();
+      chromeDriver.wait(until.titleIs("SWDB - Update"), 5000);
+      chromeDriver.wait(until.elementLocated(By.id("cancelBtn")),
+        8000).click();
+      chromeDriver.wait(until.titleIs("SWDB - Details"), 5000);
+      let newurl = chromeDriver.getCurrentUrl().then((currUrl) => {
+        let newid = currUrl.split('/').pop();
+        expect(newid).to.equal(id);
+      });
+    });
+  });
+
+
+
+  test.describe("Cancel from new installation goes back to list", function () {
+    // test cancel from new sw record foes back to the mail search screen
+    test.it("should show new installation page with username on logout button", function () {
+      this.timeout(8000);
+      chromeDriver.get(props.webUrl + "#/inst/new");
+      chromeDriver.wait(until.elementLocated(By.id("usrBtn")), 5000);
+      chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
+        "testuser"), 5000);
+    });
+
+    test.it("should show the new sw record title and click cancel", function () {
+      chromeDriver.wait(until.titleIs("SWDB - New Installation"), 5000);
+      chromeDriver.wait(until.elementLocated(By.id("cancelBtn")), 5000);
+      chromeDriver.findElement(By.id("cancelBtn")).click();
+    });
+
+    test.it("should show list page", function () {
+      chromeDriver.wait(until.titleIs("SWDB - Installations List"), 5000);
+    });
+  });
+
+  test.describe("Cancel from installation update goes back to details", function () {
+    // Test cancel from sw update goes back to the appropriate detauils screen
+    // find the created record
+    test.it("should find installation record", function () {
+      this.timeout(8000);
+      chromeDriver.get(props.webUrl + "#/inst/list");
+      chromeDriver.wait(until.elementLocated(By.id("hostSrch")), 8000)
+        .sendKeys("testHost1");
+    });
+
+    // find the created record and click update-cancel and back to details
+    test.it("should show record details after cancel update", function () {
+      this.timeout(10000);
+      chromeDriver.wait(until.elementLocated(By.linkText("testHost1")),
+        8000).click();
+      chromeDriver.wait(until.titleIs("SWDB - Installation Details"), 5000);
+      let url = chromeDriver.getCurrentUrl().then((currUrl) => {
+        id = currUrl.split('/').pop();
+      });
+      chromeDriver.wait(until.elementLocated(By.id("updateBtn")),
+        8000).click();
+      chromeDriver.wait(until.titleIs("SWDB - Update Installation"), 5000);
+      chromeDriver.wait(until.elementLocated(By.id("cancelBtn")),
+        8000).click();
+      chromeDriver.wait(until.titleIs("SWDB - Installation Details"), 5000);
+      let newurl = chromeDriver.getCurrentUrl().then((currUrl) => {
+        let newid = currUrl.split('/').pop();
+        expect(newid).to.equal(id);
+      });
+    });
   });
 });
