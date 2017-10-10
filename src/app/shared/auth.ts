@@ -1,6 +1,7 @@
 /**
  * Shared authentication and authorization utilities.
  */
+import * as URI from 'uri-js';
 import * as util from 'util';
 
 import * as dbg from 'debug';
@@ -250,4 +251,53 @@ export function ensureHasAnyRole(role: string | string[]): RequestHandler {
       next();
     });
   };
+};
+
+
+type RoleScheme = 'USR' | 'GRP' | 'VAR' | 'SYS' | 'ADM';
+
+type RoleComponents = { scheme: RoleScheme, identifier: string, qualifier?: string };
+
+export function equalRole(role1: string, role2: string): boolean {
+  if (!role1 || !role2) {
+    return false;
+  }
+  return (role1.toUpperCase() === role2.toUpperCase());
+};
+
+export function parseRole(role: string): RoleComponents | undefined {
+  const uri = URI.parse(role);
+  const scheme = uri.scheme ? uri.scheme.toUpperCase() : '';
+  switch (scheme) {
+    case 'USR':
+    case 'GRP':
+    case 'VAR':
+    case 'SYS':
+    case 'ADM':
+       break;
+    default:
+      return;
+  }
+  return {
+    scheme: scheme,
+    identifier: uri.path ? uri.path.toUpperCase() : '',
+    qualifier: uri.fragment ? uri.fragment.toUpperCase() : undefined,
+  };
+};
+
+export function formatRole(role: RoleComponents): string;
+export function formatRole(scheme: RoleScheme, identifier: string, qualifier?: string): string;
+export function formatRole(scheme: RoleScheme | RoleComponents, identifier?: string, qualifier?: string): string {
+  if (typeof scheme === 'string') {
+    scheme = {
+      scheme: scheme,
+      identifier: identifier || '',
+      qualifier: qualifier,
+    };
+  }
+  return URI.serialize({
+    scheme: scheme.scheme,
+    path: scheme.identifier,
+    fragment: scheme.qualifier,
+  }).toUpperCase();
 };
