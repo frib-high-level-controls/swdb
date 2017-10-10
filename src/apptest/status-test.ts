@@ -12,13 +12,14 @@ import * as jsonschema from './jsonschema';
 
 import * as status from '../app/shared/status';
 
-let handler: express.Application;
-
-before(async function() {
-  handler = await app.start();
-});
 
 describe('Application status API', function() {
+
+  let handler: express.Application;
+
+  before(async function() {
+    handler = await app.start();
+  });
 
   it('Get application status', function() {
     return request(handler)
