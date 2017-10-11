@@ -201,7 +201,7 @@ app.get('/api/v1/swdb/config', function (req, res, next) {
 
 // for get slot requests
 app.get('/api/v1/swdb/slot', function(req, res, next) {
-  instTools.getSlot(req, res, next);
+  instTools.InstLib.getSlot(req, res, next);
 });
 // for get requests that are not specific return all
 app.get('/api/v1/inst/*', function(req, res, next) {
@@ -233,7 +233,7 @@ app.post('/api/v1/swdb', casAuth.ensureAuthenticated, function (req, res, next) 
 app.post('/api/v1/inst', function(req, res, next) {
 
   // Do validation for  new records
-  instTools.newValidation(req);
+  instTools.InstLib.newValidation(req);
 
   req.getValidationResult().then(function(result){
     if (!result.isEmpty()) {
@@ -269,8 +269,8 @@ app.put('/api/v1/swdb*', casAuth.ensureAuthenticated, function (req, res, next) 
 // handle incoming put requests for installation update
 app.put('/api/v1/inst*', function(req, res, next) {
   // Do validation for installation updates
-  instTools.updateValidation(req);
-  instTools.updateSanitization(req);
+  instTools.InstLib.updateValidation(req);
+  instTools.InstLib.updateSanitization(req);
 
   req.getValidationResult().then(function(result){
     if (!result.isEmpty()) {
@@ -301,8 +301,8 @@ app.patch('/api/v1/swdb*', casAuth.ensureAuthenticated, function (req, res, next
 // handle incoming put requests for installation update
 app.patch('/api/v1/inst*', function(req, res, next) {
   // Do validation for installation updates
-  instTools.updateValidation(req);
-  instTools.updateSanitization(req);
+  instTools.InstLib.updateValidation(req);
+  instTools.InstLib.updateSanitization(req);
 
   req.getValidationResult().then(function(result){
     if (!result.isEmpty()) {

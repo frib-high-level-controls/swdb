@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose = require("mongoose");
-var instTools = require("./instLib.js");
+var instTools = require("./instLib");
 var CommonTools = require("./CommonTools");
 var InstDb = /** @class */ (function () {
     function InstDb() {
@@ -31,7 +31,7 @@ var InstDb = /** @class */ (function () {
             });
         };
         this.getDocs = function (req, res, next) {
-            var id = instTools.getReqId(req);
+            var id = instTools.InstLib.getReqId(req);
             if (!id) {
                 // return all
                 InstDb.instDoc.find({}, function (err, docs) {
@@ -56,7 +56,7 @@ var InstDb = /** @class */ (function () {
             }
         };
         this.updateDoc = function (req, res, next) {
-            var id = instTools.getReqId(req);
+            var id = instTools.InstLib.getReqId(req);
             if (id) {
                 var doc = InstDb.instDoc.findOne({ _id: id }, function (err, founddoc) {
                     if (founddoc) {
@@ -89,7 +89,7 @@ var InstDb = /** @class */ (function () {
             }
         };
         this.deleteDoc = function (req, res, next) {
-            var id = instTools.getReqId(req);
+            var id = instTools.InstLib.getReqId(req);
             // mongoose does not error if deleting something that does not exist
             InstDb.instDoc.findOne({ _id: id }, function (err, doc) {
                 if (doc) {

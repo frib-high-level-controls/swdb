@@ -1,8 +1,8 @@
 import fs = require('fs');
 import mongoose = require('mongoose');
 import util = require('util');
-import instTools = require('./instLib.js');
-import swdbTools = require('./swdblib.js');
+import instTools = require('./instLib');
+import swdbTools = require('./swdblib');
 
 import CommonTools = require('./CommonTools');
 
@@ -70,7 +70,7 @@ export class InstDb {
   }
 
   public getDocs = function(req, res, next) {
-    const id = instTools.getReqId(req);
+    const id = instTools.InstLib.getReqId(req);
     if (!id) {
       // return all
       InstDb.instDoc.find({}, function(err, docs) {
@@ -93,7 +93,7 @@ export class InstDb {
   };
 
   public updateDoc = (req, res, next) => {
-    const id = instTools.getReqId(req);
+    const id = instTools.InstLib.getReqId(req);
     if (id) {
       const doc = InstDb.instDoc.findOne({ _id: id }, (err, founddoc) => {
         if (founddoc) {
@@ -124,7 +124,7 @@ export class InstDb {
   }
 
   public deleteDoc = function(req, res, next) {
-    const id = instTools.getReqId(req);
+    const id = instTools.InstLib.getReqId(req);
 
     // mongoose does not error if deleting something that does not exist
     InstDb.instDoc.findOne({ _id: id }, function(err, doc) {
