@@ -2,7 +2,8 @@ import fs = require('fs');
 import mongodb = require('mongodb');
 import mongoose = require('mongoose');
 import util = require('util');
-import swdbTools = require('./CommonTools');
+import commonTools = require('./CommonTools');
+import swdbTools = require('./swdblib');
 export class Db {
   //  props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
   public static swDoc: any;
@@ -10,7 +11,7 @@ export class Db {
   private static dbConnect: any;
   private props: any;
   constructor() {
-    const tools = new swdbTools.CommonTools();
+    const tools = new commonTools.CommonTools();
     // let props: any = {};
     this.props = tools.getConfiguration();
     if (!Db.schema) {
@@ -54,31 +55,6 @@ export class Db {
     }
   }
 
-  // general function to find a request ID in a request and
-  // return it, if available
-  public getReqId = (req) => {
-    let id = null;
-    if (req.url.match(/[^v][\da-fA-F]+$/) !== null) {
-      const urlParts = req.url.split('/');
-      id = urlParts[urlParts.length - 1];
-      return id;
-    } else {
-      return null;
-    }
-  }
-
-  public findByName = (searchName) => {
-    exports.swDoc.findOne({ swName: searchName }, (err, doc) => {
-      return (doc);
-    });
-  }
-
-  public findById = (searchId) => {
-    exports.swDoc.findOne({ _id: searchId }, (err, doc) => {
-      return (doc);
-    });
-  }
-
   // Create a new record in the backend storage
   public createDoc = (req, res, next) => {
 
@@ -96,7 +72,7 @@ export class Db {
   }
 
   public getDocs = function(req, res, next) {
-    const id = this.getReqId(req);
+    const id = swdbTools.SwdbLib.getReqId(req);
     if (!id) {
       // return all
       Db.swDoc.find({}, (err, docs) => {
@@ -119,7 +95,7 @@ export class Db {
   };
 
   public updateDoc = function(req, res, next) {
-    const id = this.getReqId(req);
+    const id = swdbTools.SwdbLib.getReqId(req);
     if (id) {
       Db.swDoc.findOne({ _id: id }, (err, doc) => {
         if (doc) {
@@ -173,7 +149,7 @@ export class Db {
   };
 
   public deleteDoc = function(req, res, next) {
-    const id = this.getReqId(req);
+    const id = swdbTools.SwdbLib.getReqId(req);
 
     // mongoose does not error if deleting something that does not exist
     Db.swDoc.findOne({ _id: id }, (err, doc) => {

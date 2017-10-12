@@ -17,6 +17,29 @@ var props = ctools.getConfiguration();
 var SwdbLib = /** @class */ (function () {
     function SwdbLib() {
     }
+    SwdbLib.findByName = function (searchName) {
+        exports.swDoc.findOne({ swName: searchName }, function (err, doc) {
+            return (doc);
+        });
+    };
+    SwdbLib.findById = function (searchId) {
+        exports.swDoc.findOne({ _id: searchId }, function (err, doc) {
+            return (doc);
+        });
+    };
+    // general function to find a request ID in a request and
+    // return it, if available
+    SwdbLib.getReqId = function (req) {
+        var id = null;
+        if (req.url.match(/[^v][\da-fA-F]+$/) !== null) {
+            var urlParts = req.url.split('/');
+            id = urlParts[urlParts.length - 1];
+            return id;
+        }
+        else {
+            return null;
+        }
+    };
     SwdbLib.newValidation = function (req) {
         req.checkBody({
             swName: {

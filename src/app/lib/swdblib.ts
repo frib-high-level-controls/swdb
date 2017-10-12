@@ -23,6 +23,33 @@ const props = ctools.getConfiguration();
 // class swStatus extends enumify.Enum {}
 // swStatus.initEnum(props.statusEnums);
 export class SwdbLib {
+
+  public static findByName = (searchName) => {
+    exports.swDoc.findOne({ swName: searchName }, (err, doc) => {
+      return (doc);
+    });
+  }
+
+  public static findById = (searchId) => {
+    exports.swDoc.findOne({ _id: searchId }, (err, doc) => {
+      return (doc);
+    });
+  }
+
+
+  // general function to find a request ID in a request and
+  // return it, if available
+  public static getReqId = (req) => {
+    let id = null;
+    if (req.url.match(/[^v][\da-fA-F]+$/) !== null) {
+      const urlParts = req.url.split('/');
+      id = urlParts[urlParts.length - 1];
+      return id;
+    } else {
+      return null;
+    }
+  }
+
   public static newValidation = function(req) {
     req.checkBody({
       swName: {

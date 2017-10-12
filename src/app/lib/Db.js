@@ -1,33 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose = require("mongoose");
-var swdbTools = require("./CommonTools");
+var commonTools = require("./CommonTools");
+var swdbTools = require("./swdblib");
 var Db = /** @class */ (function () {
     function Db() {
         var _this = this;
-        // general function to find a request ID in a request and
-        // return it, if available
-        this.getReqId = function (req) {
-            var id = null;
-            if (req.url.match(/[^v][\da-fA-F]+$/) !== null) {
-                var urlParts = req.url.split('/');
-                id = urlParts[urlParts.length - 1];
-                return id;
-            }
-            else {
-                return null;
-            }
-        };
-        this.findByName = function (searchName) {
-            exports.swDoc.findOne({ swName: searchName }, function (err, doc) {
-                return (doc);
-            });
-        };
-        this.findById = function (searchId) {
-            exports.swDoc.findOne({ _id: searchId }, function (err, doc) {
-                return (doc);
-            });
-        };
         // Create a new record in the backend storage
         this.createDoc = function (req, res, next) {
             var doc = new Db.swDoc(req.body);
@@ -44,7 +22,7 @@ var Db = /** @class */ (function () {
             });
         };
         this.getDocs = function (req, res, next) {
-            var id = this.getReqId(req);
+            var id = swdbTools.SwdbLib.getReqId(req);
             if (!id) {
                 // return all
                 Db.swDoc.find({}, function (err, docs) {
@@ -70,7 +48,7 @@ var Db = /** @class */ (function () {
         };
         this.updateDoc = function (req, res, next) {
             var _this = this;
-            var id = this.getReqId(req);
+            var id = swdbTools.SwdbLib.getReqId(req);
             if (id) {
                 Db.swDoc.findOne({ _id: id }, function (err, doc) {
                     if (doc) {
@@ -128,7 +106,7 @@ var Db = /** @class */ (function () {
             });
         };
         this.deleteDoc = function (req, res, next) {
-            var id = this.getReqId(req);
+            var id = swdbTools.SwdbLib.getReqId(req);
             // mongoose does not error if deleting something that does not exist
             Db.swDoc.findOne({ _id: id }, function (err, doc) {
                 if (doc) {
@@ -143,7 +121,7 @@ var Db = /** @class */ (function () {
                 }
             });
         };
-        var tools = new swdbTools.CommonTools();
+        var tools = new commonTools.CommonTools();
         // let props: any = {};
         this.props = tools.getConfiguration();
         if (!Db.schema) {
