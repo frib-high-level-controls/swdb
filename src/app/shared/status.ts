@@ -296,6 +296,8 @@ function setComponentError(name: string, message?: string, ...param: any[]): voi
 
 const router = express.Router();
 
+let statusTestTimer: NodeJS.Timer | undefined;
+
 function getApiStatus(app: express.Application): ApiApplicationStatus {
   let status = getStatus();
   return {
@@ -314,15 +316,21 @@ function getHttpStatus(status: ApplicationStatus): number {
   return handlers.HttpStatus.OK;
 };
 
-router.get('/', ensureAccepts('html'), catchAll(async (req: express.Request, res: express.Response) => {
-  let testing = false;
-  if (testingStatus.status !== 'OK') {
-    testing = true;
-  }
+router.get('/', catchAll(async (req: express.Request, res: express.Response) => {
   let status = getApiStatus(req.app);
-  res.status(getHttpStatus(status)).render('status', {
-    testing: testing,
-    status: status,
+  handlers.format(res, {
+    'text/html': () => {
+      res.status(getHttpStatus(status)).render('status', {
+        testing: (testingStatus.status !== 'OK'),
+        status: status,
+      });
+    },
+    'application/json': () => {
+      res.status(getHttpStatus(status)).json(status);
+    },
+    'default': () => {
+      res.status(getHttpStatus(status)).send(status.status);
+    },
   });
 }));
 
@@ -330,23 +338,13 @@ router.post('/', ensureAccepts('html'), catchAll(async (req: express.Request, re
   if (req.body.test === 'start') {
     if (testingStatus.status === 'OK') {
       setTestingError('Duration 30s');
-      setTimeout(setTestingOk, 30000);
+      statusTestTimer = setTimeout(setTestingOk, 30000);
     }
+  } else {
+    setTestingOk();
+    if (statusTestTimer) { clearTimeout(statusTestTimer); }
   }
-  let testing = false;
-  if (testingStatus.status !== 'OK') {
-    testing = true;
-  }
-  let status = getStatus();
-  res.status(getHttpStatus(status)).render('status', {
-    testing: testing,
-    status: status,
-  });
-}));
-
-router.get('/json', ensureAccepts('json'), catchAll(async (req: express.Request, res: express.Response) => {
-  let status = getApiStatus(req.app);
-  res.status(getHttpStatus(status)).json(status);
+  res.redirect(req.originalUrl);
 }));
 
 
