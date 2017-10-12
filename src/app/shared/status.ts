@@ -314,15 +314,25 @@ function getHttpStatus(status: ApplicationStatus): number {
   return handlers.HttpStatus.OK;
 };
 
-router.get('/', ensureAccepts('html'), catchAll(async (req: express.Request, res: express.Response) => {
+router.get('/', catchAll(async (req: express.Request, res: express.Response) => {
   let testing = false;
   if (testingStatus.status !== 'OK') {
     testing = true;
   }
   let status = getApiStatus(req.app);
-  res.status(getHttpStatus(status)).render('status', {
-    testing: testing,
-    status: status,
+  handlers.format(res, {
+    'text/html': () => {
+      res.status(getHttpStatus(status)).render('status', {
+        testing: testing,
+        status: status,
+      });
+    },
+    'application/json': () => {
+      res.status(getHttpStatus(status)).json(status);
+    },
+    'default': () => {
+      res.status(getHttpStatus(status)).send(status.status);
+    },
   });
 }));
 
@@ -342,11 +352,6 @@ router.post('/', ensureAccepts('html'), catchAll(async (req: express.Request, re
     testing: testing,
     status: status,
   });
-}));
-
-router.get('/json', ensureAccepts('json'), catchAll(async (req: express.Request, res: express.Response) => {
-  let status = getApiStatus(req.app);
-  res.status(getHttpStatus(status)).json(status);
 }));
 
 

@@ -23,7 +23,7 @@ describe('Application status API', function() {
 
   it('Get application status', function() {
     return request(handler)
-      .get('/status/json')
+      .get('/status')
       .set('Accept', 'application/json')
       .expect(200)
       .expect('Content-Type', /json/)
@@ -43,7 +43,7 @@ describe('Application status API', function() {
     status.setComponentOk(COMP_NAME, COMP_MFORMAT, COMP_MPARAM1);
 
     return request(handler)
-      .get('/status/json')
+      .get('/status')
       .set('Accept', 'application/json')
       .expect(jsonschema.checkValid('/status'))
       .expect((res: request.Response) => {
@@ -70,7 +70,7 @@ describe('Application status API', function() {
     status.setComponentError(COMP_NAME, COMP_MFORMAT, COMP_MPARAM1);
 
     return request(handler)
-      .get('/status/json')
+      .get('/status')
       .set('Accept', 'application/json')
       .expect(jsonschema.checkValid('/status'))
       .expect((res: request.Response) => {
@@ -97,7 +97,7 @@ describe('Application status API', function() {
     status.setComponentOk(COMP_NAME, COMP_MFORMAT, COMP_MPARAM1);
 
     return request(handler)
-      .get('/status/json')
+      .get('/status')
       .set('Accept', 'application/json')
       .expect(jsonschema.checkValid('/status'))
       .expect((res: request.Response) => {
