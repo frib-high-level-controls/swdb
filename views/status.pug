@@ -52,8 +52,8 @@ html
       form(method='POST')
         span Status Test:&nbsp;
         if testing
-          input(type='hidden' name='test' value='refresh')
-          button(type='submit') Refresh
+          input(type='hidden' name='test' value='stop')
+          button(type='submit') Stop
         else
           input(type='hidden' name='test' value='start')
           button(type='submit' onclick='return confirm("Start a 30 second status test?");') Start
