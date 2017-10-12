@@ -65,37 +65,52 @@ export function format(res: Response, cbs: { [key: string]: () => Promise<void> 
   });
 };
 
-
-export interface RequestErrorDetails {
-  message?: string;
-};
+type RequestErrorDetails = webapi.PkgError;
 
 const DEFAULT_ERROR_STATUS = HttpStatus.INTERNAL_SERVER_ERROR;
 const DEFAULT_ERROR_MESSAGE = HttpStatus.getStatusText(DEFAULT_ERROR_STATUS);
 
 export class RequestError extends Error implements HttpStatusError  {
 
+  protected static getHttpStatusText(status: number): string {
+    try {
+      return HttpStatus.getStatusText(status);
+    } catch (err) {
+      return HttpStatus.getStatusText(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   public status = DEFAULT_ERROR_STATUS;
-  public details: RequestErrorDetails = { message: DEFAULT_ERROR_MESSAGE };
+
+  public details: RequestErrorDetails = {
+    code: DEFAULT_ERROR_STATUS,
+    message: DEFAULT_ERROR_MESSAGE,
+  };
 
   constructor()
   constructor(msg: string, details?: RequestErrorDetails)
   constructor(status: number, details?: RequestErrorDetails);
   constructor(msg: string, status: number, details?: RequestErrorDetails);
   constructor(msg?: string | number, status?: number | RequestErrorDetails, details?: RequestErrorDetails) {
-    super(typeof msg === 'string' ? msg : DEFAULT_ERROR_MESSAGE);
+    super(DEFAULT_ERROR_MESSAGE);
 
-    if (typeof msg === 'number') {
-      if (isValidStatus(msg)) {
-        this.status = msg;
-        this.message = HttpStatus.getStatusText(msg);
+    if (typeof msg === 'string') {
+      this.message = msg;
+      this.details.message = this.message;
+    } else if (typeof msg === 'number') {
+      this.status = msg;
+      this.message = RequestError.getHttpStatusText(this.status);
+      this.details.code = this.status;
+      this.details.message = this.message;
+      if (typeof status === 'object') {
+        this.details = status;
       }
+      return;
     }
 
     if (typeof status === 'number') {
-      if (isValidStatus(status)) {
-        this.status = status;
-      }
+      this.status = status;
+      this.details.code = this.status;
     } else if (typeof status === 'object') {
       this.details = status;
       return;
@@ -103,24 +118,10 @@ export class RequestError extends Error implements HttpStatusError  {
 
     if (typeof details === 'object') {
       this.details = details;
-    } else {
-      this.details = {
-        message: this.message,
-      };
-      return;
     }
   }
 };
 
-function isValidStatus(status: number) {
-  for (let k in HttpStatus) {
-    if (HttpStatus.hasOwnProperty(k)) {
-      if ((<any> HttpStatus)[k] === status) {
-        return true;
-      }
-    }
-  }
-};
 
 export function ensureAccepts(type: string): RequestHandler;
 export function ensureAccepts(type: string[]): RequestHandler;
@@ -141,9 +142,12 @@ export function notFoundHandler(req: Request, res: Response, next: NextFunction)
 };
 
 export function requestErrorHandler(err: any, req: Request, res: Response, next: NextFunction) {
+  let status = DEFAULT_ERROR_STATUS;
   let message = DEFAULT_ERROR_MESSAGE;
-  let status = HttpStatus.INTERNAL_SERVER_ERROR;
-  let details: RequestErrorDetails = { message: message };
+  let details: RequestErrorDetails = {
+    code: status,
+    message: message,
+  };
 
   if (err instanceof RequestError) {
     message = err.message;
@@ -151,7 +155,7 @@ export function requestErrorHandler(err: any, req: Request, res: Response, next:
     details = err.details;
   } else if (err instanceof Error) {
     message = err.message;
-    details = { message: message };
+    details.message = message;
   }
 
   if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
@@ -160,10 +164,21 @@ export function requestErrorHandler(err: any, req: Request, res: Response, next:
 
   format(res, {
     'text/html': () => {
-      res.status(status).render('error', details);
+      const env = req.app.get('env');
+      const context = {
+        code: details.code,
+        message: details.message,
+        errors: details.errors,
+        cause: (env === 'development') ? err : undefined,
+      };
+      res.status(status).render('error', context);
     },
     'application/json': () => {
-      res.status(status).json(details);
+      const pkg: webapi.Pkg<undefined> = {
+        data: undefined,
+        error: details,
+      };
+      res.status(status).json(pkg);
     },
     'default': () => {
       res.status(status).send(details.message);
