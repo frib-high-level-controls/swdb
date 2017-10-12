@@ -217,7 +217,7 @@ app.post('/api/v1/swdb', casAuth.ensureAuthenticated, function (req, res, next) 
 
   // Do validation for  new records
 
-  tools.newValidation(req);
+  tools.SwdbLib.newValidation(req);
 
   req.getValidationResult().then(function (result) {
     if (!result.isEmpty()) {
@@ -253,8 +253,8 @@ app.post('/api/v1/swdb/list', function(req, res, next) {
 // handle incoming put requests for update
 app.put('/api/v1/swdb*', casAuth.ensureAuthenticated, function (req, res, next) {
 
-  tools.updateValidation(req);
-  tools.updateSanitization(req);
+  tools.SwdbLib.updateValidation(req);
+  tools.SwdbLib.updateSanitization(req);
 
   req.getValidationResult().then(function (result) {
     if (!result.isEmpty()) {
@@ -285,8 +285,8 @@ app.put('/api/v1/inst*', function(req, res, next) {
 // handle incoming patch requests for update
 app.patch('/api/v1/swdb*', casAuth.ensureAuthenticated, function (req, res, next) {
 
-  tools.updateValidation(req);
-  tools.updateSanitization(req);
+  tools.SwdbLib.updateValidation(req);
+  tools.SwdbLib.updateSanitization(req);
 
   req.getValidationResult().then(function (result) {
     if (!result.isEmpty()) {
