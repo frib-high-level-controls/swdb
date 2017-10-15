@@ -1,337 +1,308 @@
-"use strict";
-var express = require('express');
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
-var morgan = require('morgan');
+'use strict';
+Object.defineProperty(exports, "__esModule", { value: true });
+var bodyParser = require("body-parser");
+// import circJSON = require('circular-json');
+var cookieParser = require("cookie-parser");
+var express = require("express");
+var expressSession = require("express-session");
+var expressValidator = require("express-validator");
+var FileStreamRotator = require("file-stream-rotator");
+var fs = require("fs");
+var morgan = require("morgan");
+var path = require("path");
+var casAuth = require("./lib/auth");
+var CommonTools = require("./lib/CommonTools");
+var Be = require("./lib/Db");
+var InstBe = require("./lib/instDb");
+var instTools = require("./lib/instLib");
+var tools = require("./lib/swdblib");
 var app = express();
-var https = require('https');
-var tools = require('./lib/swdblib.js');
-var instTools = require('./lib/instLib.js');
-var fs = require('fs');
-var path = require('path');
-var FileStreamRotator = require('file-stream-rotator');
-var util = require('util');
-var mongoose = require('mongoose');
-var Be = require('./lib/Db');
-let be = new Be.Db();
-var InstBe = require('./lib/instDb');
-let instBe = new InstBe.InstDb();
-var expressValidator = require('express-validator');
-var expressSession = require('express-session');
-var casAuth = require('./lib/auth');
-const circJSON = require('circular-json');
-
-let CommonTools = require('./lib/CommonTools');
-let ctools = new CommonTools.CommonTools();
-let props = {};
+var be = new Be.Db();
+var instBe = new InstBe.InstDb();
+var ctools = new CommonTools.CommonTools();
+var props = {};
 props = ctools.getConfiguration();
-
 // // for https functionality
 // let privateKey  = fs.readFileSync(props.sslKey, 'utf8');
 // let certificate = fs.readFileSync(props.sslCrt, 'utf8');
 // let credentials = {key: privateKey, cert: certificate};
-
-//allow access to static files
+// allow access to static files
 app.use(express.static(__dirname + '/../../public'));
 // console.log("using "+__dirname+"/../../public");
 // use JSON for data
 app.use(bodyParser.json());
-
 // Get the CORS params from rc and add to stack
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", props.CORS.origin);
-  res.header("Access-Control-Allow-Methods", props.CORS.methods);
-  res.header("Access-Control-Allow-Headers", props.CORS.headers);
-  next();
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', props.CORS.origin);
+    res.header('Access-Control-Allow-Methods', props.CORS.methods);
+    res.header('Access-Control-Allow-Headers', props.CORS.headers);
+    next();
 });
-
 app.use(cookieParser());
-app.use(expressSession({secret: '1234567890'}));
+app.use(expressSession({ secret: '1234567890' }));
 app.use(expressValidator({
-  customValidators: {
-    isOneOf: function(str,arr) {
-      return (arr.indexOf(str) > -1);
+    customValidators: {
+        isOneOf: function (str, arr) {
+            return (arr.indexOf(str) > -1);
+        },
+        isInEnum: function (str, e) {
+            if (str in e) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        },
+        isAreas: function (val, req) {
+            // Must be an array of strings
+            if (Array.isArray(val)) {
+                val.forEach(function (element, idx, arr) {
+                    req.checkBody('area[' + idx + ']', 'Area ' + idx + ' must be a string')
+                        .optional().isAscii();
+                });
+                return true;
+            }
+            else {
+                return false;
+            }
+        },
+        isSlots: function (val, req) {
+            // Must be an array of strings
+            if (Array.isArray(val)) {
+                val.forEach(function (element, idx, arr) {
+                    req.checkBody('slots[' + idx + ']', 'Slot ' + idx + ' must be a string')
+                        .optional().isAscii();
+                });
+                return true;
+            }
+            else {
+                return false;
+            }
+        },
+        isDRRs: function (val, req) {
+            // Must be a string
+            if (Array.isArray(val)) {
+                val.forEach(function (element, idx, arr) {
+                    req.checkBody('slots[' + idx + ']', 'DRR ' + idx + ' must be a string')
+                        .optional().isAscii();
+                });
+                return true;
+            }
+            else {
+                return false;
+            }
+        },
+        isString: function (val) {
+            if (typeof val === 'string') {
+                return true;
+            }
+            else {
+                return false;
+            }
+        },
     },
-    isInEnum: function(str,e) {
-      if (str in e) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-    isAreas: function(val,req) {
-      // Must be an array of strings
-      if (Array.isArray(val)){
-        val.forEach(function(element, idx, arr){
-          req.checkBody("area["+idx+"]",
-            "Area "+idx+" must be a string")
-            .optional().isAscii();
-        });
-        return true;
-      } else {
-        return false;
-      }
-    },
-    isSlots: function(val,req) {
-      // Must be an array of strings
-      if (Array.isArray(val)){
-        val.forEach(function(element, idx, arr){
-          req.checkBody("slots["+idx+"]",
-            "Slot "+idx+" must be a string")
-            .optional().isAscii();
-        });
-        return true;
-      } else {
-        return false;
-      }
-    },
-    isDRRs: function(val,req) {
-      // Must be a string
-      if (Array.isArray(val)){
-        val.forEach(function(element, idx, arr){
-          req.checkBody("slots["+idx+"]",
-            "DRR "+idx+" must be a string")
-            .optional().isAscii();
-        });
-        return true;
-      } else {
-        return false;
-      }
-    },
-    isString: function(val) {
-      if (typeof val === 'string'){
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }
 }));
-
 // look for the logging directory, make it if necessary
 // logging
 var logDir = path.join(__dirname, 'log');
 if (!fs.existsSync(logDir)) {
-  fs.mkdirSync(logDir);
+    fs.mkdirSync(logDir);
 }
 var writeLogStream = FileStreamRotator.getStream({
-  date_format: 'YYYYMMDD',
-  filename: path.join(logDir, 'write_%DATE%.log'),
-  frequency: 'daily',
-  verbose: false
+    date_format: 'YYYYMMDD',
+    filename: path.join(logDir, 'write_%DATE%.log'),
+    frequency: 'daily',
+    verbose: false,
 });
 // make a new token to expose the request body
-morgan.token('reqBody', function getReqBody (req) {
-  return JSON.stringify(req.body);
+morgan.token('reqBody', function getReqBody(req) {
+    return JSON.stringify(req.body);
 });
 // insert the logging into the chain
 // add a skip filter to ignore logging GETs
-app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" :reqBody',
-  { skip: function (req, res) {
-    return req.method == "GET";
-  },
-    stream: writeLogStream
-  }
-));
-
+app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status ' +
+    ':res[content-length] ":referrer" ":user-agent" :reqBody', { skip: function (req, res) {
+        return req.method === 'GET';
+    },
+    stream: writeLogStream,
+}));
 // start the server
-app.listen(props.webPort, function() {
-  console.log('listening on port '+props.webPort);
+app.listen(props.webPort, function () {
+    console.log('listening on port ' + props.webPort);
 });
-
 // let httpsPort = Number(props.webPort);
 // var httpsSrv = https.createServer(credentials, app).listen(httpsPort, function() {
 //     console.log('Https listening on '+httpsPort);
 // });
-
 // auth middleware
-var auth = function(req, res, next) {
-  if (req.session && req.session.username === "testuser" && req.session.admin){
-    return next();
-  } else {
-    return res.status(401).send('Not authorized');
-  }
+var auth = function (req, res, next) {
+    if (req.session && req.session.username === 'testuser' && req.session.admin) {
+        return next();
+    }
+    else {
+        return res.status(401).send('Not authorized');
+    }
 };
-
 // handle incoming get requests
-app.get('/', function(req,res) {
-  res.sendFile('index.html', {root: path.join(__dirname, '../../public/swdb-fe/')});
+app.get('/', function (req, res) {
+    res.sendFile('index.html', { root: path.join(__dirname, '../../public/swdb-fe/') });
 });
-
 // login
-app.get('/testlogin', function(req,res) {
-  if (!req.query.username || !req.query.password ) {
-    res.send('<p id="Test auth failed">Test auth failed</p>');
-  } else if(req.query.username === 'testuser' &&
-    req.query.password === 'testuserpasswd') {
-    req.session.username = "testuser";
-    req.session.admin = true;
-    res.send('<p id="Test auth success">Test auth success</p>');
-  }
+app.get('/testlogin', function (req, res) {
+    if (!req.query.username || !req.query.password) {
+        res.send('<p id="Test auth failed">Test auth failed</p>');
+    }
+    else if (req.query.username === 'testuser' &&
+        req.query.password === 'testuserpasswd') {
+        req.session.username = 'testuser';
+        req.session.admin = true;
+        res.send('<p id="Test auth success">Test auth success</p>');
+    }
 });
-
-app.get('/caslogin', casAuth.ensureAuthenticated, function(req,res) {
-  if (req.session.username) {
-    // cas has a username
-    res.redirect(props.webUrlProxy);
-
-  } else {
-    res.send('<p id="CAS auth failed">CAS auth failed</p>');
-  }
+app.get('/caslogin', casAuth.ensureAuthenticated, function (req, res) {
+    if (req.session.username) {
+        // cas has a username
+        res.redirect(props.webUrlProxy);
+    }
+    else {
+        res.send('<p id="CAS auth failed">CAS auth failed</p>');
+    }
 });
-
 // logoff
-app.get('/logout', function(req,res) {
-  req.session.destroy();
-  delete req.query.ticket;
-  res.clearCookie('connect.sid',{path: '/'});
-  res.send('<p id="Logout complete">logout complete</p>');
+app.get('/logout', function (req, res, next) {
+    req.session.destroy(function (err) { next(err); });
+    delete req.query.ticket;
+    res.clearCookie('connect.sid', { path: '/' });
+    res.send('<p id="Logout complete">logout complete</p>');
 });
-
 // for get requests that are not specific return all
-app.get('/api/v1/swdb/user', function(req, res, next) {
-  res.send(JSON.stringify(req.session));
+app.get('/api/v1/swdb/user', function (req, res, next) {
+    res.send(JSON.stringify(req.session));
 });
-
 // for get requests that are not specific return all
 app.get('/api/v1/swdb/config', function (req, res, next) {
-  // update props and send config
-  res.send(JSON.stringify(props));
+    // update props and send config
+    res.send(JSON.stringify(props));
 });
-
 // for get slot requests
-app.get('/api/v1/swdb/slot', function(req, res, next) {
-  instTools.InstLib.getSlot(req, res, next);
+app.get('/api/v1/swdb/slot', function (req, res, next) {
+    instTools.InstLib.getSlot(req, res, next);
 });
 // for get requests that are not specific return all
-app.get('/api/v1/inst/*', function(req, res, next) {
-  instBe.getDocs(req, res, next);
+app.get('/api/v1/inst/*', function (req, res, next) {
+    instBe.getDocs(req, res, next);
 });
 // for get requests that are not specific return all
-app.get('/api/v1/swdb/*', function(req, res, next) {
-  be.getDocs(req, res, next);
+app.get('/api/v1/swdb/*', function (req, res, next) {
+    be.getDocs(req, res, next);
 });
-
 // handle incoming post requests
 app.post('/api/v1/swdb', casAuth.ensureAuthenticated, function (req, res, next) {
-
-  // Do validation for  new records
-
-  tools.SwdbLib.newValidation(req);
-
-  req.getValidationResult().then(function (result) {
-    if (!result.isEmpty()) {
-      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-      return;
-    } else {
-      be.createDoc(req, res, next);
-    }
-  });
+    // Do validation for  new records
+    tools.SwdbLib.newValidation(req);
+    req.getValidationResult().then(function (result) {
+        if (!result.isEmpty()) {
+            res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+            return;
+        }
+        else {
+            be.createDoc(req, res, next);
+        }
+    });
 });
-
 // handle incoming installation post requests
-app.post('/api/v1/inst', function(req, res, next) {
-
-  // Do validation for  new records
-  instTools.InstLib.newValidation(req);
-
-  req.getValidationResult().then(function(result){
-    if (!result.isEmpty()) {
-      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-      return;
-    } else {
-      instBe.createDoc(req, res, next);
-    }
-  });
+app.post('/api/v1/inst', function (req, res, next) {
+    // Do validation for  new records
+    instTools.InstLib.newValidation(req);
+    req.getValidationResult().then(function (result) {
+        if (!result.isEmpty()) {
+            res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+            return;
+        }
+        else {
+            instBe.createDoc(req, res, next);
+        }
+    });
 });
-
 // for get list of records requests
-app.post('/api/v1/swdb/list', function(req, res, next) {
-  be.getList(req, res, next);
+app.post('/api/v1/swdb/list', function (req, res, next) {
+    be.getList(req, res, next);
 });
-
 // handle incoming put requests for update
 app.put('/api/v1/swdb*', casAuth.ensureAuthenticated, function (req, res, next) {
-
-  tools.SwdbLib.updateValidation(req);
-  tools.SwdbLib.updateSanitization(req);
-
-  req.getValidationResult().then(function (result) {
-    if (!result.isEmpty()) {
-      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-      return;
-    } else {
-      be.updateDoc(req, res, next);
-    }
-  });
+    tools.SwdbLib.updateValidation(req);
+    tools.SwdbLib.updateSanitization(req);
+    req.getValidationResult().then(function (result) {
+        if (!result.isEmpty()) {
+            res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+            return;
+        }
+        else {
+            be.updateDoc(req, res, next);
+        }
+    });
 });
-
 // handle incoming put requests for installation update
-app.put('/api/v1/inst*', function(req, res, next) {
-  // Do validation for installation updates
-  instTools.InstLib.updateValidation(req);
-  instTools.InstLib.updateSanitization(req);
-
-  req.getValidationResult().then(function(result){
-    if (!result.isEmpty()) {
-      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-      return;
-    } else {
-      instBe.updateDoc(req, res, next);
-    }
-  });
+app.put('/api/v1/inst*', function (req, res, next) {
+    // Do validation for installation updates
+    instTools.InstLib.updateValidation(req);
+    instTools.InstLib.updateSanitization(req);
+    req.getValidationResult().then(function (result) {
+        if (!result.isEmpty()) {
+            res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+            return;
+        }
+        else {
+            instBe.updateDoc(req, res, next);
+        }
+    });
 });
-
 // handle incoming patch requests for update
 app.patch('/api/v1/swdb*', casAuth.ensureAuthenticated, function (req, res, next) {
-
-  tools.SwdbLib.updateValidation(req);
-  tools.SwdbLib.updateSanitization(req);
-
-  req.getValidationResult().then(function (result) {
-    if (!result.isEmpty()) {
-      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-      return;
-    } else {
-      be.updateDoc(req, res, next);
-    }
-  });
+    tools.SwdbLib.updateValidation(req);
+    tools.SwdbLib.updateSanitization(req);
+    req.getValidationResult().then(function (result) {
+        if (!result.isEmpty()) {
+            res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+            return;
+        }
+        else {
+            be.updateDoc(req, res, next);
+        }
+    });
 });
-
 // handle incoming put requests for installation update
-app.patch('/api/v1/inst*', function(req, res, next) {
-  // Do validation for installation updates
-  instTools.InstLib.updateValidation(req);
-  instTools.InstLib.updateSanitization(req);
-
-  req.getValidationResult().then(function(result){
-    if (!result.isEmpty()) {
-      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-      return;
-    } else {
-      instBe.updateDoc(req, res, next);
-    }
-  });
+app.patch('/api/v1/inst*', function (req, res, next) {
+    // Do validation for installation updates
+    instTools.InstLib.updateValidation(req);
+    instTools.InstLib.updateSanitization(req);
+    req.getValidationResult().then(function (result) {
+        if (!result.isEmpty()) {
+            res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+            return;
+        }
+        else {
+            instBe.updateDoc(req, res, next);
+        }
+    });
 });
-
 // handle incoming delete requests
 // app.delete('/swdbserv/v1*', function(req, res, next) {
 //   be.deleteDoc(req, res, next);
 // });
-
 // handle errors
-app.use(function(err, req, res, next) {
-  if (res.headerSent) {
-    return next(err);
-  }
-  if (err.name === 'ValidationError') {
-    // catch mongo validation errors
-    res.status(400);
-    res.send(err);
-  } else {
-    res.status(err.status || 500);
-    res.send(err.message || 'An error ocurred');
-  }
+app.use(function (err, req, res, next) {
+    if (res.headersSent) {
+        return next(err);
+    }
+    if (err.name === 'ValidationError') {
+        // catch mongo validation errors
+        res.status(400);
+        res.send(err);
+    }
+    else {
+        res.status(err.status || 500);
+        res.send(err.message || 'An error ocurred');
+    }
 });
-
 module.exports = app;

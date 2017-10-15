@@ -16,6 +16,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/express-session": "^1.15.3",
+    "@types/morgan": "^1.7.33",
     "body-parser": "1.15.2",
     "cas.js": "^0.1.0",
     "circular-json": "^0.3.1",

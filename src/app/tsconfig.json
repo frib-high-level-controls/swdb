@@ -11,10 +11,15 @@
     },
     "files": [
       "../../config/swdbEnums.ts",
+      "server.ts",
       "lib/Db.ts",
+      "lib/swdblib.ts",
       "lib/instDb.ts",
       "lib/instLib.ts",
       "lib/CommonTools.ts",
       "../apptest/store/TestTools.ts"
+    ],
+    "Exclude": [
+      "lib/auth.js"
     ]
 }
