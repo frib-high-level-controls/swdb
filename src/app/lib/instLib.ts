@@ -2,6 +2,8 @@
 'use strict';
 import circJSON = require('circular-json');
 import enumify = require('enumify');
+import express = require('express');
+import expressValidator = require('express-validator');
 import fs = require('fs');
 import request = require('request');
 import util = require('util');
@@ -27,7 +29,8 @@ props = ctools.getConfiguration();
 // general function to find a request ID in a request and
 // return it, if available
 export class InstLib {
-  public static getReqId = function(req) {
+
+  public static getReqId = function(req: express.Request) {
     let id = null;
     if (req.url.match(/[^v][\da-fA-F]+$/) !== null) {
       const urlParts = req.url.split('/');
@@ -39,7 +42,7 @@ export class InstLib {
   };
 
   // go get ccdb slot info on behalf of browsers
-  public static getSlot = function (req, res, next) {
+  public static getSlot = function(req: express.Request, res: express.Response, next: express.NextFunction) {
     // Prepare the source location by looking at the properties useSource
     const source = props.slotsDataSource[props.slotsDataSource.useSource];
     // if the location is http:// then open the URL
@@ -52,7 +55,7 @@ export class InstLib {
           'DISCS-Authorization': 'key:pass',
         },
         timeout: 5 * 1000,
-      }, function (error, response, body) {
+      }, function(error, response, body) {
         if (error) {
           next(error);
         } else {
@@ -63,7 +66,7 @@ export class InstLib {
       });
     } else {
       // try to open the slot source as a file
-      fs.readFile(source, { encoding: 'utf-8' }, function (err, data) {
+      fs.readFile(source, { encoding: 'utf-8' }, function(err, data) {
         if (!err) {
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.write(data);
@@ -76,7 +79,7 @@ export class InstLib {
     }
   };
 
-  public static newValidation = function (req) {
+  public static newValidation = function(req: express.Request) {
     req.checkBody({
       host: {
         notEmpty: {
@@ -158,7 +161,7 @@ export class InstLib {
     });
   };
 
-  public static updateValidation = function (req) {
+  public static updateValidation = function(req) {
     req.checkBody({
       host: {
         optional: true,
@@ -236,7 +239,7 @@ export class InstLib {
   };
 
 
-  public static updateSanitization = function (req) {
+  public static updateSanitization = function(req){
   };
 
 }

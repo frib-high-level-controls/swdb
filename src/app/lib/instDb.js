@@ -6,16 +6,6 @@ var CommonTools = require("./CommonTools");
 var InstDb = /** @class */ (function () {
     function InstDb() {
         var _this = this;
-        this.findByName = function (searchName) {
-            InstDb.instDoc.findOne({ swName: searchName }, function (err, doc) {
-                return (doc);
-            });
-        };
-        this.findById = function (searchId) {
-            InstDb.instDoc.findOne({ _id: searchId }, function (err, doc) {
-                return (doc);
-            });
-        };
         // Create a new record in the backend storage
         this.createDoc = function (req, res, next) {
             var doc = new InstDb.instDoc(req.body);

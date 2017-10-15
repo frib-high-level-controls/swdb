@@ -24,19 +24,6 @@ const props = ctools.getConfiguration();
 // swStatus.initEnum(props.statusEnums);
 export class SwdbLib {
 
-  public static findByName = (searchName) => {
-    exports.swDoc.findOne({ swName: searchName }, (err, doc) => {
-      return (doc);
-    });
-  }
-
-  public static findById = (searchId) => {
-    exports.swDoc.findOne({ _id: searchId }, (err, doc) => {
-      return (doc);
-    });
-  }
-
-
   // general function to find a request ID in a request and
   // return it, if available
   public static getReqId = (req) => {

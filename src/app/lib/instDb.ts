@@ -1,15 +1,29 @@
+import express = require('express');
 import fs = require('fs');
 import mongoose = require('mongoose');
 import util = require('util');
+import swdbEnums = require('../../../config/swdbEnums');
 import instTools = require('./instLib');
 import swdbTools = require('./swdblib');
 
 import CommonTools = require('./CommonTools');
 
+interface InstSchema extends mongoose.Document {
+  host: string;
+  name?: string;
+  area: swdbEnums.AreaEnum;
+  slots?: string;
+  status: swdbEnums.InstStatusEnum;
+  statusDate: Date;
+  software: string;
+  vvResultLoc?: string;
+  drrs?: string;
+}
+
 export class InstDb {
-  public static instDoc: any;
-  private static instSchema: any;
-  private static dbConnect: any;
+  public static instDoc: mongoose.Document;
+  private static instSchema: mongoose.Schema;
+  private static dbConnect: mongoose.db;
   private props: any;
 
   constructor() {
@@ -29,9 +43,9 @@ export class InstDb {
       }, { emitIndexErrors: true });
 
       InstDb.instSchema.index({ host: 1, name: 1, software: 1 }, { unique: true });
-      InstDb.instDoc = mongoose.model('inst', InstDb.instSchema, 'instCollection');
+      InstDb.instDoc = mongoose.model<InstSchema>('inst', InstDb.instSchema, 'instCollection');
 
-      InstDb.dbConnect = mongoose.connect(this.props.mongodbUrl, (err, db) => {
+      InstDb.dbConnect = mongoose.connect(this.props.mongodbUrl, (err: mongoose.Error, db) => {
         if (!err) {
           // console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl);
           // console.log("connected to mongo... " + JSON.stringify(props.mongodbUrl));
@@ -42,23 +56,10 @@ export class InstDb {
     }
   }
 
-  public findByName = function(searchName) {
-    InstDb.instDoc.findOne({ swName: searchName }, function(err, doc) {
-      return (doc);
-    });
-  };
-
-  public findById = function(searchId) {
-    InstDb.instDoc.findOne({ _id: searchId }, function(err, doc) {
-      return (doc);
-    });
-  };
-
-
   // Create a new record in the backend storage
-  public createDoc = (req, res, next) => {
+  public createDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const doc = new InstDb.instDoc(req.body);
-    doc.save((err) => {
+    doc.save((err: mongoose.Error) => {
       if (err) {
         next(err);
       } else {
@@ -69,11 +70,11 @@ export class InstDb {
     });
   }
 
-  public getDocs = function(req, res, next) {
+  public getDocs = function(req: express.Request, res: express.Response, next: express.NextFunction) {
     const id = instTools.InstLib.getReqId(req);
     if (!id) {
       // return all
-      InstDb.instDoc.find({}, function(err, docs) {
+      InstDb.instDoc.find({}, function(err: Error, docs: mongoose.Document[]) {
         if (!err) {
           res.send(docs);
         } else {
@@ -82,7 +83,7 @@ export class InstDb {
       });
     } else {
       // return specified item`
-      InstDb.instDoc.findOne({ _id: id }, function(err, docs) {
+      InstDb.instDoc.findOne({ _id: id }, function(err: Error, docs: mongoose.Document[]) {
         if (!err) {
           res.send(docs);
         } else {
@@ -92,10 +93,10 @@ export class InstDb {
     }
   };
 
-  public updateDoc = (req, res, next) => {
+  public updateDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const id = instTools.InstLib.getReqId(req);
     if (id) {
-      const doc = InstDb.instDoc.findOne({ _id: id }, (err, founddoc) => {
+      const doc = InstDb.instDoc.findOne({ _id: id }, (err: Error, founddoc: mongoose.Document) => {
         if (founddoc) {
           for (const prop in req.body) {
             if (req.body.hasOwnProperty(prop)) {
@@ -106,7 +107,7 @@ export class InstDb {
               founddoc[prop] = req.body[prop];
             }
           }
-          founddoc.save((saveerr) => {
+          founddoc.save((saveerr: Error) => {
             if (saveerr) {
               return next(saveerr);
             } else {
@@ -123,13 +124,13 @@ export class InstDb {
     }
   }
 
-  public deleteDoc = function(req, res, next) {
+  public deleteDoc = function(req: express.Request, res: express.Response, next: express.NextFunction) {
     const id = instTools.InstLib.getReqId(req);
 
     // mongoose does not error if deleting something that does not exist
-    InstDb.instDoc.findOne({ _id: id }, function(err, doc) {
+    InstDb.instDoc.findOne({ _id: id }, function(err: Error, doc: mongoose.Document) {
       if (doc) {
-        exports.instDoc.remove({ _id: id }, function(rmerr) {
+        exports.instDoc.remove({ _id: id }, function(rmerr: Error) {
           if (!rmerr) {
             res.end();
           } else {
