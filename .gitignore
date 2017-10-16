@@ -1,3 +1,9 @@
+src/app/server.js
+src/app/lib/CommonTools.js
+src/app/lib/Db.js
+src/app/lib/swdblib.js
+src/app/lib/instDb.js
+src/app/lib/instLib.js
 node_modules
 log
 *.log
