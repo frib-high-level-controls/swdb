@@ -79,6 +79,97 @@ describe("app", function() {
       done();
     });
   });
+
+  it("Returns location header posing new record", function(done) {
+    supertest
+    .post("/api/v1/swdb/")
+    .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
+      .send({swName: "Header Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
+    .expect(201)
+    .end((err, result) => {
+      if (err) done(err);
+      else {
+        if (result.headers.location.match(/^.*\/api\/v1\/swdb\/[0-9a-fA-F]{24}$/g)) {
+          done();
+        } else {
+          done(new Error("Location header is not set" + JSON.stringify(result.headers.location)));
+        }
+      }
+    });
+  });
+
+  describe('Check location headers', function() {
+    var wrapper = {origId:null};
+    before("Get ID record id:Test Record", function(done) {
+      //var origId = tools.getIdFromSwName("test1000");
+      supertest
+      .get("/api/v1/swdb/")
+      .expect(200)
+      .end(function(err,res){
+        res=JSON.parse(res.text);
+        for (var i=0, iLen=res.length; i<iLen; i++){
+          if (res[i].swName=="Header Test Record") wrapper.origId=res[i]._id;
+        }
+        done();
+      });
+    });
+
+    it("Returns test record id:Header Test Record", function(done) {
+      supertest
+      .get("/api/v1/swdb/"+wrapper.origId)
+      .expect(200)
+      .end(function(err, res){
+        expect(res.body).to.have.property("_id");
+        expect(res.body.swName).to.equal("Header Test Record");
+        expect(res.body._id).to.match(/.{24}/);
+        expect(res.body.__v).to.match(/\d+/);
+        done();
+      });
+    });
+  
+    it("Returns the correct location header PUT existing record", function (done) {
+      supertest
+        .put("/api/v1/swdb/" + wrapper.origId)
+        .set("Accept", "application/json")
+        .set('Cookie', [Cookies])
+        .send({ owner: "Header owner" })
+        .expect(200)
+        .end((err, result) => {
+          if (err) done(err);
+          else {
+            let re = new RegExp('^.*/api/v1/swdb/' + wrapper.origId + '$');
+            if (result.headers.location.match(re)) {
+              done();
+            } else {
+              done(new Error("Location header is not set" + JSON.stringify(result.headers.location)));
+            }
+          }
+        });
+    });
+
+    it("Returns the correct location header PATCH existing record", function (done) {
+      supertest
+        .patch("/api/v1/swdb/" + wrapper.origId)
+        .set("Accept", "application/json")
+        .set('Cookie', [Cookies])
+        .send({ owner: "Header owner2" })
+        .expect(200)
+        .end((err, result) => {
+          if (err) done(err);
+          else {
+            let re = new RegExp('^.*/api/v1/swdb/' + wrapper.origId + '$');
+            if (result.headers.location.match(re)) {
+              done();
+            } else {
+              done(new Error("Location header is not set" + JSON.stringify(result.headers.location)));
+            }
+          }
+        });
+    });
+  });
+
+
   it("Post a new record", function(done) {
     supertest
     .post("/api/v1/swdb/")
@@ -86,13 +177,7 @@ describe("app", function() {
     .set('Cookie', [Cookies])
       .send({swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
     .expect(201)
-    .end((err, result) => {
-      if (result.headers.location.match(/^.*\/api\/v1\/swdb\/[0-9a-fA-F]{24}$/g)) {
-        done();
-      } else {
-        done(new Error("Location header is not set" + JSON.stringify(result.headers.location)));
-      }
-    });
+    .end(done);
   });
 
   it("Errors posting a duplicate new record", function(done) {
@@ -119,13 +204,7 @@ describe("app", function() {
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end((err, result) => {
-      if (result.headers.location.match(/^.*\/api\/v1\/swdb\/[0-9a-fA-F]{24}$/g)) {
-        done();
-      } else {
-        done(new Error("Location header is not set: " + JSON.stringify(result.headers.location)));
-      }
-    });
+    .end(done);
   });
 
   describe('get id for Test Record', function() {
