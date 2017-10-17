@@ -89,6 +89,89 @@ describe("app", function() {
       .expect(201)
       .end(done);
   });
+
+  it("Post a new header installation record", function (done) {
+    supertest
+      .post("/api/v1/inst/")
+      .set("Accept", "application/json")
+      .set('Cookie', [Cookies])
+      .send({ host: "Header Test host", name: "Header Test name", area: "Global", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad" })
+      .expect(201)
+      .end(done);
+  });
+
+  describe('Check location headers', function () {
+    var wrapper = { origId: null };
+    before("Get ID record id:Test Record", function (done) {
+      //var origId = tools.getIdFromSwName("test1000");
+      supertest
+        .get("/api/v1/inst/")
+        .expect(200)
+        .end(function (err, res) {
+          res = JSON.parse(res.text);
+          for (var i = 0, iLen = res.length; i < iLen; i++) {
+            if (res[i].host == "Header Test host") {
+              console.log("Record: " + JSON.stringify(res[i]));
+              wrapper.origId = res[i]._id;
+            }
+          }
+          done();
+        });
+    });
+
+    it("Returns test record id:Header Test Record", function (done) {
+      supertest
+        .get("/api/v1/inst/" + wrapper.origId)
+        .expect(200)
+        .end(function (err, res) {
+          expect(res.body).to.have.property("_id");
+          expect(res.body.host).to.equal("Header Test host");
+          expect(res.body._id).to.match(/.{24}/);
+          expect(res.body.__v).to.match(/\d+/);
+          done();
+        });
+    });
+
+    it("Returns the correct location header PUT existing record", function (done) {
+      supertest
+        .put("/api/v1/inst/" + wrapper.origId)
+        .set("Accept", "application/json")
+        .set('Cookie', [Cookies])
+        .send({ owner: "Header owner" })
+        .expect(200)
+        .end((err, result) => {
+          if (err) done(err);
+          else {
+            let re = new RegExp('^.*/api/v1/inst/' + wrapper.origId + '$');
+            if (result.headers.location.match(re)) {
+              done();
+            } else {
+              done(new Error("Location header is not set" + JSON.stringify(result.headers.location)));
+            }
+          }
+        });
+    });
+
+    it("Returns the correct location header PATCH existing record", function (done) {
+      supertest
+        .patch("/api/v1/inst/" + wrapper.origId)
+        .set("Accept", "application/json")
+        .set('Cookie', [Cookies])
+        .send({ owner: "Header owner2" })
+        .expect(200)
+        .end((err, result) => {
+          if (err) done(err);
+          else {
+            let re = new RegExp('^.*/api/v1/inst/' + wrapper.origId + '$');
+            if (result.headers.location.match(re)) {
+              done();
+            } else {
+              done(new Error("Location header is not set" + JSON.stringify(result.headers.location)));
+            }
+          }
+        });
+    });
+  });
   it("Errors posting a bad status installation", function(done) {
     supertest
       .post("/api/v1/inst/")
