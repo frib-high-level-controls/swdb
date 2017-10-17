@@ -86,7 +86,13 @@ describe("app", function() {
     .set('Cookie', [Cookies])
       .send({swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
     .expect(201)
-    .end(done);
+    .end((err, result) => {
+      if (result.headers.location.match(/^.*\/api\/v1\/swdb\/[0-9a-fA-F]{24}$/g)) {
+        done();
+      } else {
+        done(new Error("Location header is not set" + JSON.stringify(result.headers.location)));
+      }
+    });
   });
 
   it("Errors posting a duplicate new record", function(done) {
@@ -97,8 +103,12 @@ describe("app", function() {
     .set('Cookie', [Cookies])
     .expect(500)
     .expect('There was a duplicate key error')
-    .end(function(err,res) {
-      done();
+    .end((err, result) => {
+      if (result.headers.location.match(/^.*\/api\/v1\/swdb\/[0-9a-fA-F]{24}$/g)) {
+        done();
+      } else {
+        done(new Error("Location header is not set: " + JSON.stringify(result.headers.location)));
+      }
     });
   });
 
@@ -109,7 +119,13 @@ describe("app", function() {
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end(done);
+    .end((err, result) => {
+      if (result.headers.location.match(/^.*\/api\/v1\/swdb\/[0-9a-fA-F]{24}$/g)) {
+        done();
+      } else {
+        done(new Error("Location header is not set: " + JSON.stringify(result.headers.location)));
+      }
+    });
   });
 
   describe('get id for Test Record', function() {
