@@ -392,10 +392,32 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     }
   },true);
 
-    $scope.bckBtnClk = function(){
-      // Go back to details
-      $location.path("/inst/details/"+$scope.formData._id);
+  $scope.datePicker = (function () {
+    var method = {};
+    method.instances = [];
+
+    method.open = function ($event, instance) {
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      method.instances[instance] = true;
     };
+
+    method.options = {
+      'show-weeks': false,
+      startingDay: 0
+    };
+
+    var formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+    method.format = formats[2];
+
+    return method;
+  }());
+
+  $scope.bckBtnClk = function () {
+    // Go back to details
+    $location.path("/inst/details/" + $scope.formData._id);
+  };
 
   $scope.usrBtnClk = function(){
     if ($scope.session.username) {
