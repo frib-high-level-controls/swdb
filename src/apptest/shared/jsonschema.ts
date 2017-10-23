@@ -20,7 +20,7 @@ export function validate(instance: any, uri: string): jsonschema.ValidatorResult
     let ref = validator.unresolvedRefs.shift();
     if (ref) {
       let name = ref.replace('/', path.sep) + '.json';
-      let schemaPath = path.join(__dirname, '..', '..', 'public', 'schema', name);
+      let schemaPath = path.join(__dirname, '..', '..', '..', 'public', 'schema', name);
       let schemaData = JSON.parse(fs.readFileSync(schemaPath, 'UTF-8'));
       validator.addSchema(<jsonschema.Schema> schemaData, ref);
     }
