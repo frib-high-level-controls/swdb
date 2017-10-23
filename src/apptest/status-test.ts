@@ -8,7 +8,7 @@ import * as express from 'express';
 import * as request from 'supertest';
 
 import * as app from './app';
-import * as jsonschema from './jsonschema';
+import * as jsonschema from './shared/jsonschema';
 
 import * as status from '../app/shared/status';
 
