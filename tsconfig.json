@@ -10,16 +10,16 @@
         "allowJs": true
     },
     "files": [
-      "../../config/swdbEnums.ts",
-      "server.ts",
-      "lib/Db.ts",
-      "lib/swdblib.ts",
-      "lib/instDb.ts",
-      "lib/instLib.ts",
-      "lib/CommonTools.ts",
-      "../apptest/store/TestTools.ts"
+      "config/swdbEnums.ts",
+      "src/app/server.ts",
+      "src/app/lib/Db.ts",
+      "src/app/lib/swdblib.ts",
+      "src/app/lib/instDb.ts",
+      "src/app/lib/instLib.ts",
+      "src/app/lib/CommonTools.ts",
+      "src/apptest/store/TestTools.ts"
     ],
     "Exclude": [
-      "lib/auth.js"
+      "src/app/lib/auth.js"
     ]
 }
