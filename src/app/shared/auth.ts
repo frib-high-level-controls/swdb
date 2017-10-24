@@ -15,7 +15,7 @@ type NextFunction = express.NextFunction;
 type RequestHandler = express.RequestHandler;
 
 export interface IUser {
-  [key: string]: {};
+  [key: string]: {} | undefined;
 };
 
 /**
