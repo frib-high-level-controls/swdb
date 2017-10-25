@@ -10,8 +10,8 @@
         "allowJs": true
     },
     "files": [
-      "config/swdbEnums.ts",
       "src/app/server.ts",
+      "src/app/lib/swdbEnums.ts",
       "src/app/lib/Db.ts",
       "src/app/lib/swdblib.ts",
       "src/app/lib/instDb.ts",

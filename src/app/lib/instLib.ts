@@ -12,9 +12,9 @@ import XMLHttpRequest =  require('xmlhttprequest');
 import instBe = require('./instDb.js');
 import swdbTools = require('./swdblib');
 
-import {InstStatusEnum} from '../../../config/swdbEnums';
-import {AreaEnum} from '../../../config/swdbEnums';
 import CommonTools = require('./CommonTools');
+import {InstStatusEnum} from './swdbEnums';
+import {AreaEnum} from './swdbEnums';
 const ctools = new CommonTools.CommonTools();
 let props: any = {};
 props = ctools.getConfiguration();

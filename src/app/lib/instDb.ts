@@ -2,8 +2,8 @@ import express = require('express');
 import fs = require('fs');
 import mongoose = require('mongoose');
 import util = require('util');
-import swdbEnums = require('../../../config/swdbEnums');
 import instTools = require('./instLib');
+import swdbEnums = require('./swdbEnums');
 import swdbTools = require('./swdblib');
 
 import CommonTools = require('./CommonTools');

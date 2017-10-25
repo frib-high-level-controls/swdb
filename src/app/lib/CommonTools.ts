@@ -1,10 +1,10 @@
 import fs = require('fs');
 import rc = require('rc');
-import {LevelOfCareEnum} from '../../../config/swdbEnums';
-import {StatusEnum} from '../../../config/swdbEnums';
-import {InstStatusEnum} from '../../../config/swdbEnums';
-import {RcsEnum} from '../../../config/swdbEnums';
-import {AreaEnum} from '../../../config/swdbEnums';
+import {LevelOfCareEnum} from './swdbEnums';
+import {StatusEnum} from './swdbEnums';
+import {InstStatusEnum} from './swdbEnums';
+import {RcsEnum} from './swdbEnums';
+import {AreaEnum} from './swdbEnums';
 
 export class CommonTools {
   private static props;
