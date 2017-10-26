@@ -169,39 +169,6 @@ let memoryMonitorTask = new tasks.IntervalTask(memoryInterval, () => {
 
 let components: ComponentStatus[] = [];
 
-function setOk(name: string, message?: string) {
-  for (let comp of components) {
-    if (name === comp.name) {
-      comp.status = 'OK';
-      comp.message = message || 'OK';
-      return;
-    }
-  }
-  components.push({
-    status: 'OK',
-    date: new Date(),
-    name: name,
-    message: message || 'OK',
-  });
-};
-
-function setError(name: string, message?: string) {
-  for (let comp of components) {
-    if (name === comp.name) {
-      comp.status = 'ERROR';
-      comp.message = message || 'ERROR';
-      return;
-    }
-  }
-  components.push({
-    status: 'ERROR',
-    date: new Date(),
-    name: name,
-    message: message || 'ERROR',
-  });
-};
-
-
 let testingStatus: ComponentStatus = {
   status: 'OK',
   date: new Date(),
