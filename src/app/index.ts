@@ -197,6 +197,10 @@ async function doStart(): Promise<void> {
   app.set('port', String(cfg.app.port));
   app.set('addr', String(cfg.app.addr));
 
+  // Status monitor start
+  await status.monitor.start();
+  info('Status monitor started');
+
   // configure Mongoose (MongoDB)
   let mongoUrl = 'mongodb://';
   if (cfg.mongo.user) {
@@ -305,12 +309,21 @@ async function stop(): Promise<void> {
 
 // asynchronously disconnect the application
 async function doStop(): Promise<void> {
+  try {
+    await status.monitor.stop();
+    info('Status monitor stopped');
+  } catch (err) {
+    warn('Status monitor stop failure: %s', err);
+  }
+
   // disconnect Mongoose (MongoDB)
   try {
     await mongoose.disconnect();
+    info('Mongoose disconnected');
   } catch (err) {
     warn('Mongoose disconnect failure: %s', err);
   }
+
   return;
 }
 

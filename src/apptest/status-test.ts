@@ -21,6 +21,10 @@ describe('Application status API', function() {
     handler = await app.start();
   });
 
+  after(async function() {
+    await app.stop();
+  });
+
   it('Get application status', function() {
     return request(handler)
       .get('/status')

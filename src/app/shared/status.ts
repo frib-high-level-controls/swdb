@@ -1,12 +1,19 @@
 /*
  * A common module for monitoring the status of an application.
  */
-import process = require('process');
-import util = require('util');
+import * as process from 'process';
+import * as util from 'util';
 
-import express = require('express');
+import * as express from 'express';
 
-import handlers = require('./handlers');
+import {
+  catchAll,
+  ensureAccepts,
+  format,
+  HttpStatus,
+} from './handlers';
+
+import * as tasks from './tasks';
 
 export type Status = 'ERROR' | 'OK';
 
@@ -28,9 +35,6 @@ export interface ApiApplicationStatus extends ApplicationStatus {
   version: string;
 }
 
-const catchAll = handlers.catchAll;
-const ensureAccepts = handlers.ensureAccepts;
-
 // Utilities
 
 function toMB(memory: number): string {
@@ -44,30 +48,35 @@ function toPCT(load: number): string {
 // Monitor process CPU load //
 let load = 0.0;
 
-function getLoad(): number {
+export function getLoad(): number {
   return load;
 }
 
-let loadStatus: ComponentStatus;
+let loadStatus: ComponentStatus = {
+  status: 'ERROR',
+  date: new Date(),
+  name: 'Load',
+  message: 'Never updated',
+};
 
-function getLoadStatus(): ComponentStatus {
+export function getLoadStatus(): ComponentStatus {
   return loadStatus;
-}
+};
 
 let loadLimit = 0.5;
 
-function getLoadLimit(): number {
+export function getLoadLimit(): number {
   return loadLimit;
 };
 
-function setLoadLimit(limit: number) {
+export function setLoadLimit(limit: number) {
   if (limit > 0.0) {
     loadLimit = limit;
     updateLoadStatus();
   }
 };
 
-function updateLoadStatus() {
+export function updateLoadStatus() {
    if (load < getLoadLimit()) {
     loadStatus = {
       status: 'OK',
@@ -89,41 +98,41 @@ let last = process.cpuUsage();
 
 let loadInterval = (10 * 60 * 1000); // 10 minutes //
 
-function monitorLoad() {
+let loadMonitorTask = new tasks.IntervalTask(loadInterval, () => {
   let next = process.cpuUsage();
   let user = (next.user - last.user) / 1000;
   let system = (next.system - last.system) / 1000;
   load = (user + system) / loadInterval;
   last = next;
   updateLoadStatus();
-}
+});
 
-// Initialize load status //
-updateLoadStatus();
-
-// TODO: should clear interval //
-setInterval(monitorLoad, loadInterval);
 
 // Monitor application memory //
 let memory = process.memoryUsage().heapTotal;
 
-function getMemory(): number {
+export function getMemory(): number {
   return memory;
 }
 
-let memoryStatus: ComponentStatus;
+let memoryStatus: ComponentStatus = {
+  status: 'ERROR',
+  date: new Date(),
+  name: 'Memory',
+  message: 'Never updated',
+};
 
-function getMemoryStatus(): ComponentStatus {
+export function getMemoryStatus(): ComponentStatus {
   return memoryStatus;
-}
+};
 
 let memoryLimit = (2 * 1024 * 1024 * 1024); // 2 Gigabyte //
 
-function getMemoryLimit(): number {
+export function getMemoryLimit(): number {
   return memoryLimit;
 };
 
-function setMemoryLimit(limit: number) {
+export function setMemoryLimit(limit: number) {
   if (limit > 0.0) {
     memoryLimit = limit;
     updateMemoryStatus();
@@ -150,53 +159,15 @@ function updateMemoryStatus() {
 
 let memoryInterval = (1 * 60 * 1000); // 1 minutes //
 
-function monitorMemory() {
+// Interval timer for memory monitor //
+let memoryMonitorTask = new tasks.IntervalTask(memoryInterval, () => {
   memory = process.memoryUsage().heapTotal;
   updateMemoryStatus();
-};
-
-// Initialize memory status //
-updateMemoryStatus();
-
-// TODO: should clear interval
-setInterval(monitorMemory, memoryInterval);
+});
 
 // Custom status //
 
 let components: ComponentStatus[] = [];
-
-function setOk(name: string, message?: string) {
-  for (let comp of components) {
-    if (name === comp.name) {
-      comp.status = 'OK';
-      comp.message = message || 'OK';
-      return;
-    }
-  }
-  components.push({
-    status: 'OK',
-    date: new Date(),
-    name: name,
-    message: message || 'OK',
-  });
-};
-
-function setError(name: string, message?: string) {
-  for (let comp of components) {
-    if (name === comp.name) {
-      comp.status = 'ERROR';
-      comp.message = message || 'ERROR';
-      return;
-    }
-  }
-  components.push({
-    status: 'ERROR',
-    date: new Date(),
-    name: name,
-    message: message || 'ERROR',
-  });
-};
-
 
 let testingStatus: ComponentStatus = {
   status: 'OK',
@@ -218,7 +189,7 @@ function setTestingError(message?: string) {
 };
 
 
-function getStatus(): ApplicationStatus {
+export function getStatus(): ApplicationStatus {
   let status: ApplicationStatus = {
     status: 'OK',
     uptime: process.uptime(),
@@ -250,7 +221,7 @@ function getStatus(): ApplicationStatus {
   return status;
 };
 
-function getComponent(name: string): ComponentStatus | undefined {
+export function getComponent(name: string): ComponentStatus | undefined {
   for (let comp of components) {
     if (comp.name === name) {
       return comp;
@@ -258,7 +229,7 @@ function getComponent(name: string): ComponentStatus | undefined {
   }
 };
 
-function setComponentOk(name: string, message?: string, ...param: any[]): void {
+export function setComponentOk(name: string, message?: string, ...param: any[]): void {
   for (let comp of components) {
     if (comp.name === name) {
       comp.status = 'OK';
@@ -275,7 +246,7 @@ function setComponentOk(name: string, message?: string, ...param: any[]): void {
   });
 };
 
-function setComponentError(name: string, message?: string, ...param: any[]): void {
+export function setComponentError(name: string, message?: string, ...param: any[]): void {
   for (let comp of components) {
     if (comp.name === name) {
       comp.status = 'ERROR';
@@ -293,8 +264,23 @@ function setComponentError(name: string, message?: string, ...param: any[]): voi
 };
 
 
+export const monitor = new tasks.StandardTask<void>(
+  async () => {
+    await Promise.all([
+      loadMonitorTask.start(),
+      memoryMonitorTask.start(),
+    ]);
+  },
+  async () => {
+    await Promise.all([
+      loadMonitorTask.stop(),
+      memoryMonitorTask.stop(),
+    ]);
+  },
+);
 
-const router = express.Router();
+
+export const router = express.Router();
 
 let statusTestTimer: NodeJS.Timer | undefined;
 
@@ -311,14 +297,14 @@ function getApiStatus(app: express.Application): ApiApplicationStatus {
 
 function getHttpStatus(status: ApplicationStatus): number {
   if (status.status !== 'OK') {
-    return handlers.HttpStatus.INTERNAL_SERVER_ERROR;
+    return HttpStatus.INTERNAL_SERVER_ERROR;
   }
-  return handlers.HttpStatus.OK;
+  return HttpStatus.OK;
 };
 
 router.get('/', catchAll(async (req: express.Request, res: express.Response) => {
   let status = getApiStatus(req.app);
-  handlers.format(res, {
+  format(res, {
     'text/html': () => {
       res.status(getHttpStatus(status)).render('status', {
         testing: (testingStatus.status !== 'OK'),
@@ -346,20 +332,3 @@ router.post('/', ensureAccepts('html'), catchAll(async (req: express.Request, re
   }
   res.redirect(req.originalUrl);
 }));
-
-
-export {
-  getLoad,
-  getLoadLimit,
-  setLoadLimit,
-  getLoadStatus,
-  getMemory,
-  getMemoryLimit,
-  setMemoryLimit,
-  getMemoryStatus,
-  getStatus,
-  getComponent,
-  setComponentOk,
-  setComponentError,
-  router,
-};
