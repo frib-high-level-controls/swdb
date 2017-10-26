@@ -79,6 +79,10 @@ describe('Model History Tests', function () {
     await mongoose.connection.db.dropDatabase();
   });
 
+  after(async function() {
+    await mongoose.disconnect();
+  });
+
   it('Create new Model', async function () {
 
     const m = new Model(<IModel> {
