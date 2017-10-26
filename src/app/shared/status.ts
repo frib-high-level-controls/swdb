@@ -7,6 +7,7 @@ import util = require('util');
 import express = require('express');
 
 import handlers = require('./handlers');
+import tasks = require('./tasks');
 
 export type Status = 'ERROR' | 'OK';
 
@@ -48,11 +49,16 @@ function getLoad(): number {
   return load;
 }
 
-let loadStatus: ComponentStatus;
+let loadStatus: ComponentStatus = {
+  status: 'ERROR',
+  date: new Date(),
+  name: 'Load',
+  message: 'Never updated',
+};
 
 function getLoadStatus(): ComponentStatus {
   return loadStatus;
-}
+};
 
 let loadLimit = 0.5;
 
@@ -89,20 +95,15 @@ let last = process.cpuUsage();
 
 let loadInterval = (10 * 60 * 1000); // 10 minutes //
 
-function monitorLoad() {
+let loadMonitorTask = new tasks.IntervalTask(loadInterval, () => {
   let next = process.cpuUsage();
   let user = (next.user - last.user) / 1000;
   let system = (next.system - last.system) / 1000;
   load = (user + system) / loadInterval;
   last = next;
   updateLoadStatus();
-}
+});
 
-// Initialize load status //
-updateLoadStatus();
-
-// TODO: should clear interval //
-setInterval(monitorLoad, loadInterval);
 
 // Monitor application memory //
 let memory = process.memoryUsage().heapTotal;
@@ -111,11 +112,16 @@ function getMemory(): number {
   return memory;
 }
 
-let memoryStatus: ComponentStatus;
+let memoryStatus: ComponentStatus = {
+  status: 'ERROR',
+  date: new Date(),
+  name: 'Memory',
+  message: 'Never updated',
+};
 
 function getMemoryStatus(): ComponentStatus {
   return memoryStatus;
-}
+};
 
 let memoryLimit = (2 * 1024 * 1024 * 1024); // 2 Gigabyte //
 
@@ -150,16 +156,11 @@ function updateMemoryStatus() {
 
 let memoryInterval = (1 * 60 * 1000); // 1 minutes //
 
-function monitorMemory() {
+// Interval timer for memory monitor //
+let memoryMonitorTask = new tasks.IntervalTask(memoryInterval, () => {
   memory = process.memoryUsage().heapTotal;
   updateMemoryStatus();
-};
-
-// Initialize memory status //
-updateMemoryStatus();
-
-// TODO: should clear interval
-setInterval(monitorMemory, memoryInterval);
+});
 
 // Custom status //
 
@@ -293,6 +294,21 @@ function setComponentError(name: string, message?: string, ...param: any[]): voi
 };
 
 
+let monitor = new tasks.StandardTask<void>(
+  async () => {
+    await Promise.all([
+      loadMonitorTask.start(),
+      memoryMonitorTask.start(),
+    ]);
+  },
+  async () => {
+    await Promise.all([
+      loadMonitorTask.stop(),
+      memoryMonitorTask.stop(),
+    ]);
+  },
+);
+
 
 const router = express.Router();
 
@@ -361,5 +377,6 @@ export {
   getComponent,
   setComponentOk,
   setComponentError,
+  monitor,
   router,
 };

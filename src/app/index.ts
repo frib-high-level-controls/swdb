@@ -179,6 +179,10 @@ async function doStart(): Promise<void> {
   app.set('port', String(cfg.app.port));
   app.set('addr', String(cfg.app.addr));
 
+  // Status monitor start
+  await status.monitor.start();
+  info('Status monitor started');
+
   // view engine configuration
   app.set('views', path.resolve(__dirname, '..', 'views'));
   app.set('view engine', 'pug');
@@ -255,6 +259,13 @@ async function stop(): Promise<void> {
 
 // asynchronously disconnect the application
 async function doStop(): Promise<void> {
+  try {
+    await status.monitor.stop();
+    info('Status monitor stopped');
+  } catch (err) {
+    warn('Status monitor stop failure: %s', err);
+  }
+
   return;
 }
 

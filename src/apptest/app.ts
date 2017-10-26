@@ -14,13 +14,16 @@ import * as status from '../app/shared/status';
 let app: express.Application;
 
 // application logging
-export let log = console.log;
+export let info = console.log;
 export let warn = console.warn;
 export let error = console.error;
 
 // start the test application
 export async function start(): Promise<express.Application> {
   app = express();
+
+  // status monitor start
+  await status.monitor.start();
 
   app.use(bodyparser.json());
   app.use(bodyparser.urlencoded({
@@ -51,3 +54,14 @@ export async function start(): Promise<express.Application> {
 
   return app;
 }
+
+// stop the test application
+export async function stop(): Promise<void> {
+  try {
+    await status.monitor.stop();
+  } catch (err) {
+    warn('Status monitor stop failure: %s', err);
+  }
+
+  return;
+};
