@@ -199,7 +199,7 @@ async function doStart(): Promise<express.Application> {
 
   mongoose.connection.on('connected', () => {
     status.setComponentOk('MongoDB', 'Connected');
-    log('Mongoose default connection opened.');
+    info('Mongoose default connection opened.');
   });
 
   mongoose.connection.on('disconnected', () => {
@@ -213,7 +213,7 @@ async function doStart(): Promise<express.Application> {
   });
 
   status.setComponentError('MongoDB', 'Never Connected');
-  log('Mongoose default connection: %s', mongoUrl);
+  info('Mongoose default connection: %s', mongoUrl);
   await mongoose.connect(mongoUrl, cfg.mongo.options);
 
   // view engine configuration
