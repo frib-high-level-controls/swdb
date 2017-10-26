@@ -104,9 +104,9 @@ function listen(handler) {
   .then(function () {
     var addr = srv.address();
     if (typeof addr === 'string') {
-      app.log('Server listening on pipe: ' + addr);
+      app.info('Server listening on pipe: ' + addr);
     } else {
-      app.log('Server listening on port: ' + addr.address + ':' + addr.port);
+      app.info('Server listening on port: ' + addr.address + ':' + addr.port);
     }
   });
 };
@@ -136,9 +136,9 @@ function close(limit) {
   ])
   .then(function (closed) {
     if (closed) {
-      app.log('Server close successful');
+      app.info('Server close successful');
     } else {
-      app.log('Server close timeout');
+      app.info('Server close timeout');
     }
   })
   .catch(function (err) {
@@ -153,14 +153,14 @@ function close(limit) {
  * Wait for the specified shutdown signal(s).
  */
 function wait(signals) {
-  app.log('Wait for shutdown signal');
+  app.info('Wait for shutdown signal');
   return new Promise(function (resolve) {
     for (var idx=0; idx < signals.length; idx++) {
       process.once(signals[idx], resolve);
     }
   })
   .then(function () {
-    app.log('Shutdown signal received');
+    app.info('Shutdown signal received');
   });
 };
 
