@@ -16,6 +16,11 @@ export type ObjectId = mongoose.Types.ObjectId;
 export const isValidId = mongoose.Types.ObjectId.isValid;
 
 /**
+ * Regular expression representing valid Object ID in hex format.
+ */
+export const OBJECTID_REGEXP = '^[a-fA-F\\d]{24}$';
+
+/**
  * Convert the given object to an Object ID or throw an exception.
  * This method differs from mongoose.Types.ObjectId in that it
  * will not generate a new random ObjectID if the object is undefined.
