@@ -7,7 +7,8 @@
           "node",
           "mocha"
         ],
-        "allowJs": true
+        "allowJs": true,
+        "outDir": "/home/deployer/swdb-built"
     },
     "files": [
       "src/app/server.ts",
@@ -17,9 +18,7 @@
       "src/app/lib/instDb.ts",
       "src/app/lib/instLib.ts",
       "src/app/lib/CommonTools.ts",
-      "src/apptest/store/TestTools.ts"
-    ],
-    "Exclude": [
-      "src/app/lib/auth.js"
+      "src/apptest/store/TestTools.ts",
+      "src/apptest/tests.js"
     ]
 }

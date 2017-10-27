@@ -111,7 +111,7 @@ describe("app", function() {
           res = JSON.parse(res.text);
           for (var i = 0, iLen = res.length; i < iLen; i++) {
             if (res[i].host == "Header Test host") {
-              console.log("Record: " + JSON.stringify(res[i]));
+              // console.log("Record: " + JSON.stringify(res[i]));
               wrapper.origId = res[i]._id;
             }
           }
