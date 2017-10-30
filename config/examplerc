@@ -64,7 +64,7 @@
   "forgapi": {
     // The base URL for the FORG API
     "url": "https://example.com/"
-    // Options passed to the unlying request agent
+    // Options passed to the underlying request agent
     //"agentOptions": {
     //  // Useful for testing with self-signed certs
     //  "rejectUnauthorized": true
