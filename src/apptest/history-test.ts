@@ -5,11 +5,11 @@ import { AssertionError } from 'assert';
 
 import { assert } from 'chai';
 import * as dbg from 'debug';
-// Unable to assign hrclient when imported using new ES6 syntax.
-// See: https://github.com/Microsoft/TypeScript/issues/6751
-import mongoose = require('mongoose');
+import * as mongoose from 'mongoose';
 
 import * as history from '../app/shared/history';
+
+import * as app from './app';
 
 interface IModel extends history.IHistory {
   s: string;
@@ -70,17 +70,13 @@ async function assertIsFound<T>(p: Promise<T | null>): Promise<T> {
 describe('Model History Tests', function () {
 
   before(async function() {
-    let mongoUrl = 'mongodb://localhost:27017/webapp-test';
-    let mongoOptions: mongoose.ConnectionOptions = { useMongoClient: true };
-    mongoose.Promise = global.Promise;
-    await mongoose.connect(mongoUrl, mongoOptions);
-
-    // clear the database
-    await mongoose.connection.db.dropDatabase();
+    await app.start();
+    // clear the collection
+    await Model.collection.drop();
   });
 
   after(async function() {
-    await mongoose.disconnect();
+    await app.stop();
   });
 
   it('Create new Model', async function () {
