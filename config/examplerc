@@ -9,6 +9,9 @@
     // For production generate a random string using python:
     // >>> import os, base64
     // >>> print base64.b64encode(os.urandom(50)).decode('ascii')
+    // Or using JavaScript (NodeJS)
+    // > var crypto = require('crypto');
+    // > console.log(crypto.randomBytes(50).toString('base64'));
     "session_secret": "secret"
   },
   "cas": {
