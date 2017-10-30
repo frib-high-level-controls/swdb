@@ -37,6 +37,9 @@ interface Config {
   };
 };
 
+// application states (same as tasks.State, but avoids the dependency)
+type State = 'STARTING' | 'STARTED' | 'STOPPING' | 'STOPPED';
+
 // application singleton
 let app: express.Application;
 
@@ -95,6 +98,11 @@ async function readNameVersion(): Promise<[string | undefined, string | undefine
     }
   }
   return [name, version];
+};
+
+// get the application state
+function getState(): State {
+  return task.getState();
 };
 
 // asynchronously start the application
@@ -245,4 +253,4 @@ async function doStop(): Promise<void> {
   info('Application stopped');
 };
 
-export { start, stop, info, warn, error };
+export { start, stop, getState, State, info, warn, error };
