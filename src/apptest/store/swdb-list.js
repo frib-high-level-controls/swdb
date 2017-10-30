@@ -1,10 +1,10 @@
-var app = require("../../app/server");
+var app = require("../../../app/server");
 var chai = require("chai");
 var expect = require("chai").expect;
 chai.use(require("../../../node_modules/chai-as-promised"));
-var Be = require('../../app/lib/Db');
+var Be = require('../../../app/lib/Db');
 let be = new Be.Db();
-var instBe = require("../../app/lib/instDb.js");
+var instBe = require("../../../app/lib/instDb.js");
 var ObjectId = require('../../../node_modules/mongodb').ObjectID;
 
 let TestTools = require('./TestTools');
@@ -18,7 +18,7 @@ var fs = require('fs');
 var path = require('path');
 const circJSON = require('../../../node_modules/circular-json');
 
-let CommonTools = require('../../app/lib/CommonTools');
+let CommonTools = require('../../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
 let props = {};
 props = ctools.getConfiguration();

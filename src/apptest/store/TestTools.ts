@@ -1,8 +1,8 @@
-const ObjectId = require('../../../node_modules/mongodb').ObjectID;
-import CommonTools = require('../../app/lib/CommonTools');
-import Be = require('../../app/lib/Db');
+const ObjectId = require('mongodb').ObjectID;
+import CommonTools = require('../../../app/lib/CommonTools');
+import Be = require('../../../app/lib/Db');
 const be = new Be.Db();
-import InstBe = require('../../app/lib/instDb.js');
+import InstBe = require('../../../app/lib/instDb.js');
 const instBe = new InstBe.InstDb();
 const tools = new CommonTools.CommonTools();
 const props = tools.getConfiguration();

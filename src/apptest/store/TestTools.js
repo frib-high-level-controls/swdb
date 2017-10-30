@@ -1,10 +1,10 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var ObjectId = require('../../../node_modules/mongodb').ObjectID;
-var CommonTools = require("../../app/lib/CommonTools");
-var Be = require("../../app/lib/Db");
+exports.__esModule = true;
+var ObjectId = require('mongodb').ObjectID;
+var CommonTools = require("../../../app/lib/CommonTools");
+var Be = require("../../../app/lib/Db");
 var be = new Be.Db();
-var InstBe = require("../../app/lib/instDb.js");
+var InstBe = require("../../../app/lib/instDb.js");
 var instBe = new InstBe.InstDb();
 var tools = new CommonTools.CommonTools();
 var props = tools.getConfiguration();

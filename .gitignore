@@ -1,10 +1,3 @@
-src/app/server.js
-src/app/lib/CommonTools.js
-src/app/lib/Db.js
-src/app/lib/swdblib.js
-src/app/lib/instDb.js
-src/app/lib/instLib.js
-src/app/lib/swdbEnums.js
 node_modules
 log
 *.log
@@ -13,4 +6,6 @@ public/swdb-fe/bower_components
 config/swdbrc
 config/server.key
 config/server.crt
-
+.tscache
+swdb/app
+swdb/apptest

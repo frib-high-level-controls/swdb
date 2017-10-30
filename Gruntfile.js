@@ -17,9 +17,42 @@ module.exports = function(grunt) {
           jQuery: true
         }
       }
-    }
+    },
+    ts: {
+      app: {
+          tsconfig: {
+             tsconfig: './src/app',
+             passThrough: true,
+          },
+          // The additional flags specified below seems like it should be equivalent
+          // to using the outDir option, but when the outDir option is used then the
+          // Typescript compiler fails for find the source files (grunt-ts v5.5.1).
+          //outDir: './app',
+          options: {
+              additionalFlags: '--outDir ./app --listEmittedFiles'
+          },
+      },
+      // apptest: {
+      //     tsconfig: {
+      //        tsconfig: './src/apptest',
+      //        passThrough: true,
+      //     },
+      //     options: {
+      //         additionalFlags: '--outDir ./test --listEmittedFiles'
+      //     },
+      // }
+  },
+  clean: {
+    app: [ './app' ],
+    test: [ './test' ],
+  }
+
+
   });
 
+  grunt.loadNpmTasks("grunt-ts");
   grunt.loadNpmTasks("grunt-contrib-jshint");
+  grunt.loadNpmTasks("grunt-tslint");
+  grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.registerTask("default", ["jshint"]);
 };

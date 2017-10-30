@@ -1,4 +1,4 @@
-var app = require("../../app/server");
+var app = require("../../../app/server");
 var chai = require("../../../node_modules/chai");
 var expect = require("../../../node_modules/chai").expect;
 chai.use(require("../../../node_modules/chai-as-promised"));
@@ -14,7 +14,7 @@ let testTools = new TestTools.TestTools();
 
 var fs = require('fs');
 
-let CommonTools = require('../../app/lib/CommonTools');
+let CommonTools = require('../../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
 let props = {};
 props = ctools.getConfiguration();

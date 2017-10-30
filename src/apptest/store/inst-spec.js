@@ -1,17 +1,17 @@
-var app = require("../../app/server");
+var app = require("../../../app/server");
 var expect = require("../../../node_modules/chai").expect;
 var supertest = require("../../../node_modules/supertest")(app);
-var tools = require("../../app/lib/swdblib");
-var Be = require('../../app/lib/Db');
+var tools = require("../../../app/lib/swdblib");
+var Be = require('../../../app/lib/Db');
 let be = new Be.Db();
-var instBe = require("../../app/lib/instDb");
+var instBe = require("../../../app/lib/instDb");
 var expect2 = require("../../../node_modules/expect");
 var XMLHttpRequest = require("../../../node_modules/xmlhttprequest").XMLHttpRequest;
 var fs = require('fs');
 let TestTools = require('./TestTools');
 let testTools = new TestTools.TestTools();
 
-let CommonTools = require('../../app/lib/CommonTools');
+let CommonTools = require('../../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
 let props = {};
 props = ctools.getConfiguration();
@@ -111,7 +111,7 @@ describe("app", function() {
           res = JSON.parse(res.text);
           for (var i = 0, iLen = res.length; i < iLen; i++) {
             if (res[i].host == "Header Test host") {
-              console.log("Record: " + JSON.stringify(res[i]));
+              // console.log("Record: " + JSON.stringify(res[i]));
               wrapper.origId = res[i]._id;
             }
           }

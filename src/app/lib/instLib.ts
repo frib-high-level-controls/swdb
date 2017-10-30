@@ -1,6 +1,6 @@
 /* jslint node: true */
 'use strict';
-import circJSON = require('circular-json');
+// import circJSON = require('circular-json');
 import enumify = require('enumify');
 import express = require('express');
 import expressValidator = require('express-validator');

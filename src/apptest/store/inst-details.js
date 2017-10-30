@@ -1,4 +1,4 @@
-let app = require("../../app/server");
+let app = require("../../../app/server");
 let chai = require("../../../node_modules/chai");
 let expect = require("../../../node_modules/chai").expect;
 chai.use(require("../../../node_modules/chai-as-promised"));
@@ -13,7 +13,7 @@ let webdriver = require("../../../node_modules/selenium-webdriver"),
   test = require("../../../node_modules/selenium-webdriver/testing");
 let fs = require('fs');
 
-let CommonTools = require('../../app/lib/CommonTools');
+let CommonTools = require('../../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
 let props = {};
 props = ctools.getConfiguration();

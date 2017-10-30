@@ -18,6 +18,7 @@ import Be = require('./lib/Db');
 import InstBe = require('./lib/instDb');
 import instTools = require('./lib/instLib');
 import tools = require('./lib/swdblib');
+// import casAuth = require('/home/deployer/template-webapp/src/app/shared/auth');
 
 const app: any = express();
 const be = new Be.Db();
@@ -32,8 +33,8 @@ props = ctools.getConfiguration();
 // let credentials = {key: privateKey, cert: certificate};
 
 // allow access to static files
-app.use(express.static(__dirname + '/../../public'));
-// console.log("using "+__dirname+"/../../public");
+app.use(express.static(__dirname + '/../public'));
+console.log("using " + __dirname + "/../public");
 // use JSON for data
 app.use(bodyParser.json());
 
@@ -157,7 +158,7 @@ const auth = function(req: express.Request, res: express.Response, next: express
 
 // handle incoming get requests
 app.get('/', function(req: express.Request, res: express.Response) {
-  res.sendFile('index.html', {root: path.join(__dirname, '../../public/swdb-fe/')});
+  res.sendFile('index.html', {root: path.join(__dirname, '../public/swdb-fe/')});
 });
 
 // login
@@ -237,7 +238,7 @@ app.post('/api/v1/inst', function(req: express.Request, res: express.Response, n
   // Do validation for  new records
   instTools.InstLib.newValidation(req);
 
-  req.getValidationResult().then(function(result){
+  req.getValidationResult().then(function(result) {
     if (!result.isEmpty()) {
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
@@ -275,7 +276,7 @@ app.put('/api/v1/inst*', function(req: express.Request, res: express.Response, n
   instTools.InstLib.updateValidation(req);
   instTools.InstLib.updateSanitization(req);
 
-  req.getValidationResult().then(function(result){
+  req.getValidationResult().then(function(result) {
     if (!result.isEmpty()) {
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
@@ -308,7 +309,7 @@ app.patch('/api/v1/inst*', function(req: express.Request, res: express.Response,
   instTools.InstLib.updateValidation(req);
   instTools.InstLib.updateSanitization(req);
 
-  req.getValidationResult().then(function(result){
+  req.getValidationResult().then(function(result) {
     if (!result.isEmpty()) {
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
