@@ -19,7 +19,8 @@ sudo apt-get install -y nodejs
 # install swdb
 git clone https://github.com/rellis6022/swdb
 cd swdb
-npm run-script install-swdb
+npm install
+npm run make
 ```
 
 # Unit/API Test Setup
@@ -57,7 +58,7 @@ npm install selenium-webdriver
 cd ~/swdb
 # WARNING! This testing will clear ALL collection in the db listed in the swdbrc file.
 # Make sure the db listed is safe for this operation!!
-npm run-script test-all
+npm run test-all
 ```
 # Managing Configuration
 The file config/properties.json is expected to have the data necessary to running in a given environment.
