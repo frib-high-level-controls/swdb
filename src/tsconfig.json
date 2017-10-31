@@ -9,5 +9,12 @@
         ],
         "allowJs": true
         // "outDir": "built"
-    }
+    },
+      "include": [
+          "app",
+          "apptest"
+      ],
+      "exclude": [
+      "node_modules"
+      ]
 }

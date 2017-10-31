@@ -1,21 +1,21 @@
-var app = require("../../../app/server");
+var app = require("../../app/server");
 var expect = require("chai").expect;
-var supertest = require("../../../node_modules/supertest")(app);
-var tools = require("../../../app/lib/swdblib");
-var Be = require('../../../app/lib/Db');
+var supertest = require("supertest")(app);
+var tools = require("../../app/lib/swdblib");
+var Be = require('../../app/lib/Db');
 let be = new Be.Db();
 
 let TestTools = require('./TestTools');
 let testTools = new TestTools.TestTools();
 
-var expect2 = require("../../../node_modules/expect");
-var XMLHttpRequest = require("../../../node_modules/xmlhttprequest").XMLHttpRequest;
+var expect2 = require("expect");
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var fs = require('fs');
 var path = require('path');
 const exec = require('child_process').exec;
-const circJSON = require('../../../node_modules/circular-json');
+// const circJSON = require('circular-json');
 
-let CommonTools = require('../../../app/lib/CommonTools');
+let CommonTools = require('../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
 let props = {};
 props = ctools.getConfiguration();

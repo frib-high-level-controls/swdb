@@ -1,20 +1,20 @@
-let app = require("../../../app/server");
-let chai = require("../../../node_modules/chai");
-let expect = require("../../../node_modules/chai").expect;
-chai.use(require("../../../node_modules/chai-as-promised"));
-let ObjectId = require('../../../node_modules/mongodb').ObjectID;
-let rc = require("../../../node_modules/rc");
+let app = require("../../app/server");
+let chai = require("chai");
+let expect = require("chai").expect;
+chai.use(require("chai-as-promised"));
+let ObjectId = require('mongodb').ObjectID;
+let rc = require("rc");
 let TestTools = require('./TestTools');
 let testTools = new TestTools.TestTools();
 
-let webdriver = require("../../../node_modules/selenium-webdriver"),
+let webdriver = require("selenium-webdriver"),
   By = webdriver.By,
   until = webdriver.until,
-  test = require("../../../node_modules/selenium-webdriver/testing");
+  test = require("selenium-webdriver/testing");
 let fs = require('fs');
 let path = require('path');
 
-let CommonTools = require('../../../app/lib/CommonTools');
+let CommonTools = require('../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
 let props = {};
 props = ctools.getConfiguration();
