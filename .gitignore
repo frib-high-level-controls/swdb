@@ -7,6 +7,6 @@ config/swdbrc
 config/server.key
 config/server.crt
 .tscache
-app
-test
-public
+/app
+/test
+/public
