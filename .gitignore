@@ -1,10 +1,12 @@
 node_modules
+src/public/swdb-fe/node_modules
 log
 *.log
-public/swdb-fe/bower_components
 *.pyc
 config/swdbrc
 config/server.key
 config/server.crt
 .tscache
-built
+app
+test
+public

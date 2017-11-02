@@ -2,6 +2,7 @@
 import bodyParser = require('body-parser');
 // import circJSON = require('circular-json');
 import cookieParser = require('cookie-parser');
+import debug = require('debug');
 import express = require('express');
 import expressSession = require('express-session');
 import expressValidator = require('express-validator');
@@ -33,8 +34,8 @@ props = ctools.getConfiguration();
 // let credentials = {key: privateKey, cert: certificate};
 
 // allow access to static files
-app.use(express.static(__dirname + '/../public'));
-console.log("using " + __dirname + "/../public");
+app.use(express.static(__dirname + '/../../public'));
+debug.log('using ' + __dirname + '/../../public');
 // use JSON for data
 app.use(bodyParser.json());
 
@@ -158,7 +159,7 @@ const auth = function(req: express.Request, res: express.Response, next: express
 
 // handle incoming get requests
 app.get('/', function(req: express.Request, res: express.Response) {
-  res.sendFile('index.html', {root: path.join(__dirname, '../public/swdb-fe/')});
+  res.sendFile('index.html', {root: path.join(__dirname, '../../public/swdb-fe/')});
 });
 
 // login

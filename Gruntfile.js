@@ -38,28 +38,20 @@ module.exports = function(grunt) {
              passThrough: true,
           },
           options: {
-              additionalFlags: '--outDir ./apptest --listEmittedFiles'
+              additionalFlags: '--outDir ./test --listEmittedFiles'
           },
-      },
-      built: {
-          tsconfig: {
-             tsconfig: './src',
-             passThrough: true,
-          },
-          options: {
-              additionalFlags: '--outDir ./built --listEmittedFiles'
-          },
-
       },
   },
   clean: {
-    app: [ './built' ]
+    app: [ './app' ],
+    apptest: [ './test' ],
+    public: [ './public' ]
   },
   copy: {
     files: {
       cwd: 'src/public',  // set working folder / root to copy
       src: '**/*',           // copy all files and subfolders
-      dest: 'built/public',    // destination folder
+      dest: 'public',    // destination folder
       expand: true           // required when using cwd
     }
   }
@@ -72,5 +64,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.registerTask("default", ["jshint"]);
-  grunt.registerTask("build", ["ts:built", "copy"]);
+  grunt.registerTask("build", ["ts:app","ts:apptest", "copy"]);
 };
