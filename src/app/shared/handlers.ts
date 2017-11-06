@@ -163,8 +163,9 @@ export function requestErrorHandler(): ErrorRequestHandler {
       details.message = message;
     }
 
-    if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
-      log.error('%s: %s', message, JSON.stringify(details));
+    if (status >= 500) {
+      setComponentError('Handlers', '(%s) %s', status, message);
+      log.error(err);
     }
 
     format(res, {
