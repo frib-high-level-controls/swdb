@@ -6,12 +6,14 @@ import * as express from 'express';
 import * as HttpStatusCodes from 'http-status-codes';
 
 import * as log from './logging';
+import { setComponentError } from './status';
 
 
 type Request = express.Request;
 type Response = express.Response;
 type NextFunction = express.NextFunction;
 type RequestHandler = express.RequestHandler;
+type ErrorRequestHandler = express.ErrorRequestHandler;
 
 export const HttpStatus = HttpStatusCodes;
 
@@ -135,53 +137,58 @@ export function ensureAccepts(type: any): RequestHandler {
   };
 };
 
-export function notFoundHandler(req: Request, res: Response, next: NextFunction) {
-  let status = HttpStatus.NOT_FOUND;
-  let message = HttpStatus.getStatusText(status);
-  next(new RequestError(message, status));
+export function notFoundHandler(): RequestHandler {
+  return (req: Request, res: Response, next: NextFunction) => {
+    let status = HttpStatus.NOT_FOUND;
+    let message = HttpStatus.getStatusText(status);
+    next(new RequestError(message, status));
+  };
 };
 
-export function requestErrorHandler(err: any, req: Request, res: Response, next: NextFunction) {
-  let status = DEFAULT_ERROR_STATUS;
-  let message = DEFAULT_ERROR_MESSAGE;
-  let details: RequestErrorDetails = {
-    code: status,
-    message: message,
+export function requestErrorHandler(): ErrorRequestHandler {
+  return (err: any, req: Request, res: Response, next: NextFunction) => {
+    let status = DEFAULT_ERROR_STATUS;
+    let message = DEFAULT_ERROR_MESSAGE;
+    let details: RequestErrorDetails = {
+      code: status,
+      message: message,
+    };
+
+    if (err instanceof RequestError) {
+      message = err.message;
+      status = err.status;
+      details = err.details;
+    } else if (err instanceof Error) {
+      message = err.message;
+      details.message = message;
+    }
+
+    if (status >= 500) {
+      setComponentError('Handlers', '(%s) %s', status, message);
+      log.error(err);
+    }
+
+    format(res, {
+      'text/html': () => {
+        const env = req.app.get('env');
+        const context = {
+          code: details.code,
+          message: details.message,
+          errors: details.errors,
+          cause: (env === 'development') ? err : undefined,
+        };
+        res.status(status).render('error', context);
+      },
+      'application/json': () => {
+        const pkg: webapi.Pkg<undefined> = {
+          data: undefined,
+          error: details,
+        };
+        res.status(status).json(pkg);
+      },
+      'default': () => {
+        res.status(status).send(details.message);
+      },
+    }).catch(next);
   };
-
-  if (err instanceof RequestError) {
-    message = err.message;
-    status = err.status;
-    details = err.details;
-  } else if (err instanceof Error) {
-    message = err.message;
-    details.message = message;
-  }
-
-  if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
-    log.error('%s: %s', message, JSON.stringify(details));
-  }
-
-  format(res, {
-    'text/html': () => {
-      const env = req.app.get('env');
-      const context = {
-        code: details.code,
-        message: details.message,
-        errors: details.errors,
-        cause: (env === 'development') ? err : undefined,
-      };
-      res.status(status).render('error', context);
-    },
-    'application/json': () => {
-      const pkg: webapi.Pkg<undefined> = {
-        data: undefined,
-        error: details,
-      };
-      res.status(status).json(pkg);
-    },
-    'default': () => {
-      res.status(status).send(details.message);
-    },
-  }).catch(next);
 };

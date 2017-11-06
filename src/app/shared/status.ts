@@ -5,13 +5,7 @@ import * as process from 'process';
 import * as util from 'util';
 
 import * as express from 'express';
-
-import {
-  catchAll,
-  ensureAccepts,
-  format,
-  HttpStatus,
-} from './handlers';
+import * as HttpStatus from 'http-status-codes';
 
 import * as tasks from './tasks';
 
@@ -302,9 +296,9 @@ function getHttpStatus(status: ApplicationStatus): number {
   return HttpStatus.OK;
 };
 
-router.get('/', catchAll(async (req: express.Request, res: express.Response) => {
+router.get('/', (req: express.Request, res: express.Response) => {
   let status = getApiStatus(req.app);
-  format(res, {
+  res.format({
     'text/html': () => {
       res.status(getHttpStatus(status)).render('status', {
         testing: (testingStatus.status !== 'OK'),
@@ -318,17 +312,21 @@ router.get('/', catchAll(async (req: express.Request, res: express.Response) => 
       res.status(getHttpStatus(status)).send(status.status);
     },
   });
-}));
+});
 
-router.post('/', ensureAccepts('html'), catchAll(async (req: express.Request, res: express.Response) => {
-  if (req.body.test === 'start') {
-    if (testingStatus.status === 'OK') {
-      setTestingError('Duration 30s');
-      statusTestTimer = setTimeout(setTestingOk, 30000);
-    }
-  } else {
-    setTestingOk();
-    if (statusTestTimer) { clearTimeout(statusTestTimer); }
-  }
-  res.redirect(req.originalUrl);
-}));
+router.post('/', (req: express.Request, res: express.Response) => {
+  res.format({
+    'text/html': () => {
+      if (req.body.test === 'start') {
+        if (testingStatus.status === 'OK') {
+          setTestingError('Duration 30s');
+          statusTestTimer = setTimeout(setTestingOk, 30000);
+        }
+      } else {
+        setTestingOk();
+        if (statusTestTimer) { clearTimeout(statusTestTimer); }
+      }
+      res.redirect(req.originalUrl);
+    },
+  });
+});

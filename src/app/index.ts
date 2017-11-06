@@ -270,10 +270,10 @@ async function doStart(): Promise<express.Application> {
   app.use('/status', status.router);
 
   // no handler found for request (404)
-  app.use(handlers.notFoundHandler);
+  app.use(handlers.notFoundHandler());
 
   // error handlers
-  app.use(handlers.requestErrorHandler);
+  app.use(handlers.requestErrorHandler());
 
   info('Application started');
   return app;
