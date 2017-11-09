@@ -1,13 +1,14 @@
 {
     "compilerOptions": {
-        "target": "es5",
+       "allowJs": true,
         "module": "commonjs",
-        "lib": ["es5", "es2015.collection", "es2015.promise", "dom"],
-        "types": [
-          "node",
-          "mocha"
-        ],
-        "allowJs": true
-        // "outDir": "built"
+        "target": "es2016",
+    //    "alwaysStrict": true,
+    //    "noImplicitAny": true,
+    //    "noImplicitThis": true,
+    //    "strictNullChecks": true,
+        "removeComments": false,
+    //    "preserveConstEnums": true,
+        "sourceMap": false
     }
 }

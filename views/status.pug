@@ -1,0 +1,59 @@
+html
+  head
+    style(type='text/css')
+      | .ok {
+      |   color: green;
+      | }
+      | .error {
+      |   color: red;
+      | }
+      | tr {
+      |  border: 1px solid;
+      | }
+      | td.status {
+      |   text-align: right;
+      |   padding: 5px 5px;
+      | }
+      | td.name {
+      |   padding: 5px 5px;
+      | }
+      | td.message {
+      |   padding: 5px 10px;
+      | }
+      | div.test {
+      |  padding: 30px 0px; 
+      |  font-weight: bold;
+      |  font-size: large;
+      |  color: red;
+      |}
+  body
+    if status.status === 'OK'
+      h2.ok Status: #{status.status}
+    else
+      h2.error Status: #{status.status}
+    p= 'Name: '
+      span(style='font-weight: bold;')= status.name
+    p= 'Version: '
+      span(style='font-weight: bold;')= status.version
+    p= 'Uptime: '
+      span(style='font-weight: bold;') #{status.uptime}s
+    table(style='border-collapse: collapse;')
+      each comp in status.components
+        tr(title='Updated: ' + comp.date)
+          if comp.status === 'OK'
+            td.status.ok= comp.status
+            td.name= comp.name
+            td.message= comp.message
+          else
+            td.status.error= comp.status
+            td.name.error= comp.name
+            td.message.error= comp.message
+    .test
+      form(method='POST')
+        span Status Test:&nbsp;
+        if testing
+          input(type='hidden', name='test', value='stop')
+          button(type='submit') Stop
+        else
+          input(type='hidden', name='test', value='start')
+          button(type='submit', onclick='return confirm("Start a 30 second status test?");') Start

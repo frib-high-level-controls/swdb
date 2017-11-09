@@ -1,4 +1,5 @@
 var app = require("../../app/server");
+var debug = require('debug');
 var expect = require("chai").expect;
 var supertest = require("supertest")(app);
 var tools = require("../../app/lib/swdblib");
@@ -923,8 +924,10 @@ describe("app", function() {
       .set('Cookie', [Cookies])
       .send({swName: "Test Record4"})
       .expect(404)
-      .expect('Cannot POST /api/v1/swdb/badbeef\n')
-      .end(done);
+      .end(function(err, res) {
+        expect(res.text).to.match(/Cannot POST \/api\/v1\/swdb\/badbeef/);
+        done();
+      });
     });
     it("Errors on update a nonexistent record via PUT swName id:badbeef", function(done) {
       supertest

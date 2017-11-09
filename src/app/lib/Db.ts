@@ -44,7 +44,7 @@ export class Db {
 
       Db.swDoc = mongoose.model('swdb', Db.schema, 'swdbCollection');
       // console.log("Connecting to mongo... " + JSON.stringify(props.mongodbUrl));
-      Db.dbConnect = mongoose.connect(this.props.mongodbUrl, (err, db) => {
+      Db.dbConnect = mongoose.connect(this.props.mongodbUrl, (err: Error) => {
         if (!err) {
           // console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl);
           // console.log("connected to mongo... " + JSON.stringify(props.mongodbUrl));

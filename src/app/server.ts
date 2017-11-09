@@ -35,7 +35,8 @@ props = ctools.getConfiguration();
 
 // allow access to static files
 app.use(express.static(__dirname + '/../../public'));
-debug.log('using ' + __dirname + '/../../public');
+debug('using ' + __dirname + '/../../public');
+
 // use JSON for data
 app.use(bodyParser.json());
 

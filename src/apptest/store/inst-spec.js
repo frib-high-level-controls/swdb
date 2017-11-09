@@ -357,7 +357,10 @@ describe("app", function() {
         .send({swName: "Test Record5"})
         .expect(404)
         .expect('Cannot POST /api/v1/inst/badbeef\n')
-        .end(done);
+        .end(function (err, res) {
+          expect(res.text).to.match(/Cannot POST \/api\/v1\/inst\/badbeef/);
+          done();
+        })
     });
     it("Errors on update a nonexistent record via PUT id:badbeef", function(done) {
       supertest

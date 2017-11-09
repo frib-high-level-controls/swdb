@@ -1,12 +1,29 @@
-node_modules
-src/public/swdb-fe/node_modules
 log
 *.log
 *.pyc
 config/swdbrc
 config/server.key
 config/server.crt
+/public/
+
+# NPM package installations
+node_modules/
+
+# NPM debug log
+npm-debug.log
+
+# Ignore Typescript cache
 .tscache
-/app
-/test
-/public
+
+# Ignore grunt-ts crumb
+.baseDir.ts
+
+# Ignore build directory
+/app/
+
+# Ignore test directory
+/test/app/
+/test/apptest/
+
+# Ignore configuration files
+/config/

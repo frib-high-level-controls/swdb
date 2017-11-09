@@ -21,9 +21,9 @@ interface InstSchema extends mongoose.Document {
 }
 
 export class InstDb {
-  public static instDoc: mongoose.Document;
+  public static instDoc: any;
   private static instSchema: mongoose.Schema;
-  private static dbConnect: mongoose.db;
+  private static dbConnect: any;
   private props: any;
 
   constructor() {
@@ -43,9 +43,9 @@ export class InstDb {
       }, { emitIndexErrors: true });
 
       InstDb.instSchema.index({ host: 1, name: 1, software: 1 }, { unique: true });
-      InstDb.instDoc = mongoose.model<InstSchema>('inst', InstDb.instSchema, 'instCollection');
+      InstDb.instDoc = mongoose.model('inst', InstDb.instSchema, 'instCollection');
 
-      InstDb.dbConnect = mongoose.connect(this.props.mongodbUrl, (err: mongoose.Error, db) => {
+      InstDb.dbConnect = mongoose.connect(this.props.mongodbUrl, (err: Error) => {
         if (!err) {
           // console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl);
           // console.log("connected to mongo... " + JSON.stringify(props.mongodbUrl));

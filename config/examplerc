@@ -1,0 +1,73 @@
+{
+  // Example application configuration in pseudo-JSON format.
+  // Comments (// or /* */) will be ignored, but must be within
+  // the JSON data structure (ie not outside of the top level object).
+  "app": {
+    "port": "3000",
+    "addr": "localhost", /* use "0.0.0.0" to bind to all interfaces */
+    "session_life": 28800000,
+    // For production generate a random string using python:
+    // >>> import os, base64
+    // >>> print base64.b64encode(os.urandom(50)).decode('ascii')
+    // Or using JavaScript (NodeJS)
+    // > var crypto = require('crypto');
+    // > console.log(crypto.randomBytes(50).toString('base64'));
+    "session_secret": "secret"
+  },
+  // MongoDB connection configuration using JavaScript client library
+  // (see http://mongodb.github.io/node-mongodb-native/2.0/reference/connecting/connection-settings/)
+  "mongo": {
+    // "user": "username",
+    // "pass": "password",
+    "addr": "localhost",
+    "port": "27017",
+    "db": "webapp-dev",
+    "options": {
+      // Authentication database 
+      // "authSource": "admin",
+
+      // ReplicaSet configuration
+      // "replicaSet": "foo";
+
+      // SSL Configuration
+      // "ssl": true,
+      // "sslValidate": true,
+      // "sslCA": "",
+      // "sslCert": "",
+      // "sslKey": "",
+      // "sslPass": "",
+      // "sslCRL": "",
+
+      // Server configuration
+      // "poolSize": 5,
+      // "socketTimeoutMS": 10000,
+      // "connectTimeoutMS": 30000,
+      // "keepAlive": 1,
+      // "autoReconnect": true,
+      // "reconnectTries": 10,
+      // "reconnectInterval": 1000,
+
+      // See http://mongoosejs.com/docs/connections.html
+      "useMongoClient": true
+    }
+  },
+  "cas": {
+    // Append the request path to the service URL
+    //"append_path": false,
+    // The CAS protocol version (CAS1.0 | CAS2.0 | CAS3.0)
+    //"version": "CAS1.0",
+    // The base URL for CAS service
+    "cas_url": "https://example.com/cas",
+    // The application service URL used in the CAS protocol
+    "service_url": "http://webapp.service.com"
+  },
+  "forgapi": {
+    // The base URL for the FORG API
+    "url": "https://example.com/"
+    // Options passed to the underlying request agent
+    //"agentOptions": {
+    //  // Useful for testing with self-signed certs
+    //  "rejectUnauthorized": true
+    //}
+  }
+}
