@@ -1,13 +1,13 @@
 /**
  * Shared authentication and authorization utilities.
  */
-import * as URI from 'uri-js';
 import * as util from 'util';
+
+import * as HttpStatus from 'http-status-codes';
+import * as URI from 'uri-js';
 
 import * as dbg from 'debug';
 import * as express from 'express';
-
-import * as handlers from './handlers';
 
 type Request = express.Request;
 type Response = express.Response;
@@ -143,7 +143,7 @@ class NullProvider extends AbstractProvider {
 
   public authenticate(options: object): RequestHandler {
     return (req: Request, res: Response, next: NextFunction) => {
-      res.status(handlers.HttpStatus.FORBIDDEN);
+      res.status(HttpStatus.FORBIDDEN);
       res.send('not authorized');
     };
   };
@@ -165,15 +165,15 @@ class NullProvider extends AbstractProvider {
   }
 };
 
-function sendUnauthorized(req: Request, res: Response, type: string, realm: string, msg?: string) {
+export function sendUnauthorized(req: Request, res: Response, type: string, realm: string, msg?: string) {
   res.header('WWW-Authenticate', util.format('%s realm="%s"', type, realm));
-  res.status(handlers.HttpStatus.UNAUTHORIZED);
-  res.send(msg ? msg : 'not authenticated');
+  res.status(HttpStatus.UNAUTHORIZED);
+  res.send(msg ? msg : HttpStatus.getStatusText(HttpStatus.UNAUTHORIZED));
 };
 
-function sendForbidden(req: Request, res: Response, msg?: string) {
-  res.status(handlers.HttpStatus.FORBIDDEN);
-  res.send(msg ? msg : 'not authorized');
+export function sendForbidden(req: Request, res: Response, msg?: string) {
+  res.status(HttpStatus.FORBIDDEN);
+  res.send(msg ? msg : HttpStatus.getStatusText(HttpStatus.FORBIDDEN));
 };
 
 

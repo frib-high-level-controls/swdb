@@ -10,9 +10,6 @@ import * as log from './logging';
 import * as ppauth from './passport-auth';
 
 type Request = express.Request;
-type Response = express.Response;
-type NextFunction = express.NextFunction;
-type RequestHandler = express.RequestHandler;
 
 type VerifyPasswordCallback = (err: any, verified?: boolean) => void;
 
