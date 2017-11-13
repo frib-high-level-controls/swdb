@@ -70,8 +70,8 @@ describe('Model History Tests', function () {
 
   before(async function() {
     await app.start();
-    // clear the collection
-    await Model.collection.drop();
+    // remove all documents
+    await Model.remove({}).exec();
   });
 
   after(async function() {
