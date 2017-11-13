@@ -1,8 +1,6 @@
 /**
  * Test the application status REST API
  */
-import * as util from 'util';
-
 import { assert } from 'chai';
 
 import * as auth from '../app/shared/auth';
