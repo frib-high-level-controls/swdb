@@ -7,14 +7,12 @@ import swdbTools = require('./swdblib');
 import express = require('express');
 
 export class Db {
-  //  props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
   public static swDoc: any;
   private static schema: any;
   private static dbConnect: any;
   private props: any;
   constructor() {
     const tools = new commonTools.CommonTools();
-    // let props: any = {};
     this.props = tools.getConfiguration();
     if (!Db.schema) {
       // console.log("No db connection found, making one...");
@@ -167,8 +165,8 @@ export class Db {
     });
   };
 }
-interface ISwdbDoc extends mongoose.MongooseDocument{
-  [key: string]: any; 
+interface ISwdbDoc extends mongoose.MongooseDocument {
+  [key: string]: any;
 
   swName: string;
   version?: string;

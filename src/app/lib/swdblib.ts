@@ -1,10 +1,6 @@
 'use strict';
-// var be = require('./db');
-// import circJSON = require("circular-json");
 import express = require('express');
-// import enumify = require('enumify');
 import fs = require('fs');
-// import XMLHttpRequest = require('xmlhttprequest');
 
 const swdb = []; // storage
 const reqLog = []; // log of change requests
@@ -91,7 +87,7 @@ export class SwdbLib {
         },
         isLength: {
           options: [{ min: 1, max: 2048 }],
-          errorMessage: "Description must be 0-2048 characters.",
+          errorMessage: 'Description must be 0-2048 characters.',
         },
       },
       owner: {

@@ -17,7 +17,7 @@ export class CommonTools {
       const rcw = rc('swdb', CommonTools.props);
 
       // rc module holds the requested --config file in .config
-      // and the loaded files in array .configs. Make sure the 
+      // and the loaded files in array .configs. Make sure the
       // requested file loaded or error
       if (!rcw.configs || (rcw.config !== rcw.configs[0])) {
         throw new Error('Config file ' + rcw.config + ' not loaded...');

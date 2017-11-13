@@ -1,14 +1,10 @@
 /* jslint node: true */
 'use strict';
-// import circJSON = require('circular-json');
-// import enumify = require('enumify');
 import express = require('express');
 import expressValidator = require('express-validator');
 import fs = require('fs');
 import request = require('request');
 import util = require('util');
-// import XMLHttpRequest =  require('xmlhttprequest').XMLHttpRequest;
-// import XMLHttpRequest =  require('xmlhttprequest');
 import instBe = require('./instDb.js');
 import swdbTools = require('./swdblib');
 
@@ -137,12 +133,6 @@ export class InstLib {
         isString: {
           errorMessage: 'V&V results must be a string.',
         },
-        // isAscii: {
-        //   errorMessage: 'V&V results must be ASCII characters.',
-        // },
-        // isURL: {
-        //   errorMessage: "V&V results location must be a URL."
-        // },
       },
       DRRs: {
         optional: true,
@@ -215,12 +205,6 @@ export class InstLib {
         isString: {
           errorMessage: 'V&V results must be a string.',
         },
-        // isAscii: {
-        //   errorMessage: 'V&V results must be ASCII characters.',
-        // },
-        // isURL: {
-        //   errorMessage: "V&V results location must be a URL."
-        // },
       },
       DRRs: {
         optional: true,
