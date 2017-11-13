@@ -4,6 +4,8 @@ import mongoose = require('mongoose');
 import util = require('util');
 import commonTools = require('./CommonTools');
 import swdbTools = require('./swdblib');
+import express = require('express');
+
 export class Db {
   //  props = JSON.parse(fs.readFileSync('./config/properties.json', 'utf8'));
   public static swDoc: any;
@@ -56,10 +58,10 @@ export class Db {
   }
 
   // Create a new record in the backend storage
-  public createDoc = (req, res, next) => {
+  public createDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
     const doc = new Db.swDoc(req.body);
-    doc.save( (err) => {
+    doc.save( (err: Error) => {
       if (err) {
         next(err);
       } else {
@@ -71,11 +73,11 @@ export class Db {
     });
   }
 
-  public getDocs = function(req, res, next) {
+  public getDocs = function(req: express.Request, res: express.Response, next: express.NextFunction) {
     const id = swdbTools.SwdbLib.getReqId(req);
     if (!id) {
       // return all
-      Db.swDoc.find({}, (err, docs) => {
+      Db.swDoc.find({}, (err: Error, docs: any) => {
         if (!err) {
           res.send(docs);
         } else {
@@ -84,7 +86,7 @@ export class Db {
       });
     } else {
       // return specified item`
-      Db.swDoc.findOne({ _id: id }, (err, docs) => {
+      Db.swDoc.findOne({ _id: id }, (err: Error, docs: any) => {
         if (!err) {
           res.send(docs);
         } else {
@@ -94,10 +96,10 @@ export class Db {
     }
   };
 
-  public updateDoc = function(req, res, next) {
+  public updateDoc = function(req: express.Request, res: express.Response, next: express.NextFunction) {
     const id = swdbTools.SwdbLib.getReqId(req);
     if (id) {
-      Db.swDoc.findOne({ _id: id }, (err, doc) => {
+      Db.swDoc.findOne({ _id: id }, (err: Error, doc: any) => {
         if (doc) {
           for (const prop in req.body) {
             if (req.body.hasOwnProperty(prop)) {
@@ -108,7 +110,7 @@ export class Db {
               doc[prop] = req.body[prop];
             }
           }
-          doc.save( (saveerr) => {
+          doc.save( (saveerr: Error) => {
             if (saveerr) {
               return next(saveerr);
             } else {
@@ -126,15 +128,15 @@ export class Db {
   };
 
   // return array of records given an array of ids
-  public getList = function(req, res, next) {
+  public getList = function(req: express.Request, res: express.Response, next: express.NextFunction) {
     const response = {};
-    const objIds = req.body.map( (id) => id);
-    Db.swDoc.find({ _id: { $in: objIds } }, (err, docs) => {
+    const objIds = req.body.map( (id: string) => id);
+    Db.swDoc.find({ _id: { $in: objIds } }, (err: Error, docs: any) => {
       if (err) {
         // console.log("err:" + JSON.stringify(err));
         return next(err);
       } else {
-        const results = {};
+        const results: {[key: string]: {swName: string, version: string, branch: string}} = {};
         for (const doc of docs) {
           this.rec = doc;
           results[this.rec.id] = {
@@ -148,13 +150,13 @@ export class Db {
     });
   };
 
-  public deleteDoc = function(req, res, next) {
+  public deleteDoc = function(req: express.Request, res: express.Response, next: express.NextFunction) {
     const id = swdbTools.SwdbLib.getReqId(req);
 
     // mongoose does not error if deleting something that does not exist
-    Db.swDoc.findOne({ _id: id }, (err, doc) => {
+    Db.swDoc.findOne({ _id: id }, (err: Error, doc: any) => {
       if (doc) {
-        Db.swDoc.remove({ _id: id }, (rmerr) => {
+        Db.swDoc.remove({ _id: id }, (rmerr: Error) => {
           if (!rmerr) {
             res.end();
           }
@@ -164,4 +166,29 @@ export class Db {
       }
     });
   };
+}
+interface ISwdbDoc extends mongoose.MongooseDocument{
+  [key: string]: any; 
+
+  swName: string;
+  version?: string;
+  branch?: string;
+  desc?: string;
+  owner: string;
+  engineer?: string;
+  levelOfCare: string;
+  status: string;
+  statusDate: Date;
+  platforms?: string;
+  designDescDocLoc?: string;
+  descDocLoc?: string;
+  vvProcLoc?: string;
+  vvResultsLoc?: string;
+  versionControl?: string;
+  versionControlLoc?: string;
+  recertFreq?: string;
+  recertStatus?: string;
+  recertDate?: Date;
+  previous?: string;
+  comment?: string;
 }
