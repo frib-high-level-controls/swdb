@@ -45,13 +45,13 @@ module.exports = function(grunt) {
   clean: {
     app: [ './app' ],
     apptest: [ './test' ],
-    public: [ './public' ]
+    public: [ './public/swdb-fe' ]
   },
   copy: {
     files: {
-      cwd: 'src/public',  // set working folder / root to copy
+      cwd: 'src/public/swdb-fe',  // set working folder / root to copy
       src: '**/*',           // copy all files and subfolders
-      dest: 'public',    // destination folder
+      dest: 'public/swdb-fe',    // destination folder
       expand: true           // required when using cwd
     }
   }
