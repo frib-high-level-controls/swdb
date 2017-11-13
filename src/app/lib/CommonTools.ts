@@ -7,7 +7,7 @@ import {RcsEnum} from './swdbEnums';
 import {AreaEnum} from './swdbEnums';
 
 export class CommonTools {
-  private static props;
+  private static props: IProps;
 
   public constructor() {
     // Only populate props the first time we instantiate.
@@ -73,4 +73,40 @@ export class CommonTools {
   public getConfiguration = () => {
     return CommonTools.props;
   }
+}
+
+interface IProps {
+  apiUrl: string;
+  instApiUrl: string;
+  ccdbApiUrl: string;
+  slotsDataSource: {
+    useSource: string;
+    test: string;
+    production: string;
+  };
+  restPort: string;
+  webUrl: string;
+  webUrlProxy: string;
+  webPort: string;
+  mongodbUrl: string;
+  auth: {
+    cas: string;
+    service: string;
+    login_service: string;
+  };
+  CORS: {
+    oringin: string;
+    method: string;
+    headers: string;
+  };
+  test: {
+    swTestDataFile: string;
+    instTestDataFile: string;
+  };
+
+  levelOfCareLabels: [string];
+  statusLabels: [string];
+  instStatusLabels: [string];
+  rcsLabels: [string];
+  areaLabels: [string];
 }
