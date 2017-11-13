@@ -1,14 +1,14 @@
 {
     "compilerOptions": {
-       "allowJs": true,
-        "module": "commonjs",
-        "target": "es2016",
-       "alwaysStrict": true,
-       "noImplicitAny": true,
-    //    "noImplicitThis": true,
+    "allowJs": true,
+    "module": "commonjs",
+    "target": "es2016",
+    "alwaysStrict": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
     //    "strictNullChecks": true,
-        "removeComments": false,
+    "removeComments": false,
     //    "preserveConstEnums": true,
-        "sourceMap": false
+    "sourceMap": false
     }
 }

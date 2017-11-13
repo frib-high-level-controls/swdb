@@ -10,10 +10,10 @@ export class Db {
   public static swDoc: any;
   private static schema: any;
   private static dbConnect: any;
-  private props: any;
+  public static props: any;
   constructor() {
     const tools = new commonTools.CommonTools();
-    this.props = tools.getConfiguration();
+    Db.props = tools.getConfiguration();
     if (!Db.schema) {
       // console.log("No db connection found, making one...");
       Db.schema = new mongoose.Schema({
@@ -23,15 +23,15 @@ export class Db {
         desc: { type: String},
         owner: { type: String, required: true },
         engineer: { type: String, required: false },
-        levelOfCare: { type: String, enum: this.props.levelOfCareLabels, required: true },
-        status: { type: String, enum: this.props.statusLabels, required: true },
+        levelOfCare: { type: String, enum: Db.props.levelOfCareLabels, required: true },
+        status: { type: String, enum: Db.props.statusLabels, required: true },
         statusDate: { type: Date, required: true },
         platforms: { type: String},
         designDescDocLoc: { type: String},
         descDocLoc: { type: String},
         vvProcLoc: { type: String},
         vvResultsLoc: { type: String},
-        versionControl: { type: String, enum: this.props.rcsLabels },
+        versionControl: { type: String, enum: Db.props.rcsLabels },
         versionControlLoc: { type: String},
         recertFreq: { type: String},
         recertStatus: { type: String},
@@ -44,7 +44,7 @@ export class Db {
 
       Db.swDoc = mongoose.model('swdb', Db.schema, 'swdbCollection');
       // console.log("Connecting to mongo... " + JSON.stringify(props.mongodbUrl));
-      Db.dbConnect = mongoose.connect(this.props.mongodbUrl, (err: Error) => {
+      Db.dbConnect = mongoose.connect(Db.props.mongodbUrl, (err: Error) => {
         if (!err) {
           // console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl);
           // console.log("connected to mongo... " + JSON.stringify(props.mongodbUrl));
@@ -64,7 +64,7 @@ export class Db {
         next(err);
       } else {
         // console.log('saved: ' + JSON.stringify(doc));
-        res.location(this.props.apiUrl + doc._id);
+        res.location(Db.props.apiUrl + doc._id);
         res.status(201);
         res.send();
       }
@@ -112,7 +112,7 @@ export class Db {
             if (saveerr) {
               return next(saveerr);
             } else {
-              res.location(this.props.apiUrl + doc._id);
+              res.location(Db.props.apiUrl + doc._id);
               res.end();
             }
           });
@@ -136,8 +136,8 @@ export class Db {
       } else {
         const results: {[key: string]: {swName: string, version: string, branch: string}} = {};
         for (const doc of docs) {
-          this.rec = doc;
-          results[this.rec.id] = {
+          // this.rec = doc;
+          results[doc.id] = {
             swName: doc.swName,
             version: doc.version,
             branch: doc.branch,
