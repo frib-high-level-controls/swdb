@@ -1,14 +1,14 @@
 /* jslint node: true */
 'use strict';
 // import circJSON = require('circular-json');
-import enumify = require('enumify');
+// import enumify = require('enumify');
 import express = require('express');
 import expressValidator = require('express-validator');
 import fs = require('fs');
 import request = require('request');
 import util = require('util');
 // import XMLHttpRequest =  require('xmlhttprequest').XMLHttpRequest;
-import XMLHttpRequest =  require('xmlhttprequest');
+// import XMLHttpRequest =  require('xmlhttprequest');
 import instBe = require('./instDb.js');
 import swdbTools = require('./swdblib');
 
@@ -161,7 +161,7 @@ export class InstLib {
     });
   };
 
-  public static updateValidation = function(req) {
+  public static updateValidation = function(req: express.Request) {
     req.checkBody({
       host: {
         optional: true,
@@ -239,7 +239,7 @@ export class InstLib {
   };
 
 
-  public static updateSanitization = function(req){
+  public static updateSanitization = function(req: express.Request){
   };
 
 }
