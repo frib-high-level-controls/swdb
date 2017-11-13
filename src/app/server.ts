@@ -6,7 +6,7 @@ import debug = require('debug');
 import express = require('express');
 import expressSession = require('express-session');
 import expressValidator = require('express-validator');
-import FileStreamRotator = require('file-stream-rotator');
+// import FileStreamRotator = require('file-stream-rotator');
 import fs = require('fs');
 import https = require('https');
 import mongoose = require('mongoose');
@@ -117,27 +117,27 @@ const logDir = path.join(__dirname, 'log');
 if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir);
 }
-const writeLogStream = FileStreamRotator.getStream({
-  date_format: 'YYYYMMDD',
-  filename: path.join(logDir, 'write_%DATE%.log'),
-  frequency: 'daily',
-  verbose: false,
-});
+// const writeLogStream = FileStreamRotator.getStream({
+  // date_format: 'YYYYMMDD',
+  // filename: path.join(logDir, 'write_%DATE%.log'),
+  // frequency: 'daily',
+  // verbose: false,
+// });
 // make a new token to expose the request body
-morgan.token('reqBody', function getReqBody(req) {
-  return JSON.stringify(req.body);
-});
+// morgan.token('reqBody', function getReqBody(req) {
+  // return JSON.stringify(req.body);
+// });
 // insert the logging into the chain
 // add a skip filter to ignore logging GETs
-app.use(morgan(
-  ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status ' +
-  ':res[content-length] ":referrer" ":user-agent" :reqBody',
-  { skip: function(req, res) {
-    return req.method === 'GET';
-  },
-    stream: writeLogStream,
-  },
-));
+// app.use(morgan(
+  // ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status ' +
+  // ':res[content-length] ":referrer" ":user-agent" :reqBody',
+  // { skip: function(req, res) {
+    // return req.method === 'GET';
+  // },
+    // stream: writeLogStream,
+  // },
+// ));
 
 // start the server
 app.listen(props.webPort, function() {
@@ -218,7 +218,7 @@ app.get('/api/v1/swdb/*', function(req: express.Request, res: express.Response, 
 });
 
 // handle incoming post requests
-app.post('/api/v1/swdb', casAuth.ensureAuthenticated, function(req: express.Request, res: express.Response, next) {
+app.post('/api/v1/swdb', casAuth.ensureAuthenticated, function(req: express.Request, res: express.Response, next: express.NextFunction) {
 
   // Do validation for  new records
 
@@ -327,7 +327,7 @@ app.patch('/api/v1/inst*', function(req: express.Request, res: express.Response,
 // });
 
 // handle errors
-app.use(function(err, req: express.Request, res: express.Response, next: express.NextFunction) {
+app.use(function(err: Error, req: express.Request, res: express.Response, next: express.NextFunction) {
   if (res.headersSent) {
     return next(err);
   }
@@ -336,7 +336,7 @@ app.use(function(err, req: express.Request, res: express.Response, next: express
     res.status(400);
     res.send(err);
   } else {
-    res.status(err.status || 500);
+    res.status(500);
     res.send(err.message || 'An error ocurred');
   }
 });
