@@ -1,14 +1,15 @@
-"use strict";
+'use strict';
 // var be = require('./db');
 // import circJSON = require("circular-json");
-import enumify = require("enumify");
-import fs = require("fs");
-import XMLHttpRequest = require('xmlhttprequest');
+import express = require('express');
+// import enumify = require('enumify');
+import fs = require('fs');
+// import XMLHttpRequest = require('xmlhttprequest');
 
 const swdb = []; // storage
 const reqLog = []; // log of change requests
 
-import CommonTools = require("./CommonTools");
+import CommonTools = require('./CommonTools');
 const ctools = new CommonTools.CommonTools();
 const props = ctools.getConfiguration();
 
@@ -26,7 +27,7 @@ export class SwdbLib {
 
   // general function to find a request ID in a request and
   // return it, if available
-  public static getReqId = (req) => {
+  public static getReqId = (req: express.Request) => {
     let id = null;
     if (req.url.match(/[^v][\da-fA-F]+$/) !== null) {
       const urlParts = req.url.split('/');
@@ -37,56 +38,56 @@ export class SwdbLib {
     }
   }
 
-  public static newValidation = function(req) {
+  public static newValidation = function(req: express.Request) {
     req.checkBody({
       swName: {
         notEmpty: {
-          errorMessage: "Software name is required.",
+          errorMessage: 'Software name is required.',
         },
         isString: {
-          errorMessage: "Software name must be a string.",
+          errorMessage: 'Software name must be a string.',
         },
         isAscii: {
-          errorMessage: "Software name must be ASCII characters.",
+          errorMessage: 'Software name must be ASCII characters.',
         },
         isLength: {
           options: [{ min: 2, max: 40 }],
-          errorMessage: "Name must be 2-40 characters.",
+          errorMessage: 'Name must be 2-40 characters.',
         },
       },
       version: {
         optional: true,
         isString: {
-          errorMessage: "Version must be a string.",
+          errorMessage: 'Version must be a string.',
         },
         isAscii: {
-          errorMessage: "Version must be ASCII characters.",
+          errorMessage: 'Version must be ASCII characters.',
         },
         isLength: {
           options: [{ min: 1, max: 30 }],
-          errorMessage: "Version must be 1-30 characters.",
+          errorMessage: 'Version must be 1-30 characters.',
         },
       },
       branch: {
         optional: true,
         isString: {
-          errorMessage: "Branch must be a string.",
+          errorMessage: 'Branch must be a string.',
         },
         isAscii: {
-          errorMessage: "Branch must be ASCII characters.",
+          errorMessage: 'Branch must be ASCII characters.',
         },
         isLength: {
           options: [{ min: 1, max: 30 }],
-          errorMessage: "Branch must be 1-30 characters.",
+          errorMessage: 'Branch must be 1-30 characters.',
         },
       },
       desc: {
         optional: true,
         isString: {
-          errorMessage: "Description must be a string.",
+          errorMessage: 'Description must be a string.',
         },
         isAscii: {
-          errorMessage: "Description must be ASCII characters.",
+          errorMessage: 'Description must be ASCII characters.',
         },
         isLength: {
           options: [{ min: 1, max: 2048 }],
@@ -95,75 +96,75 @@ export class SwdbLib {
       },
       owner: {
         notEmpty: {
-          errorMessage: "Owner is required.",
+          errorMessage: 'Owner is required.',
         },
         isString: {
-          errorMessage: "Owner must be a string.",
+          errorMessage: 'Owner must be a string.',
         },
         isAscii: {
-          errorMessage: "Owner must be ASCII characters.",
+          errorMessage: 'Owner must be ASCII characters.',
         },
         isLength: {
           options: [{ min: 2, max: 80 }],
-          errorMessage: "Owner must be 2-80 characters.",
+          errorMessage: 'Owner must be 2-80 characters.',
         },
       },
       engineer: {
         optional: true,
         isString: {
-          errorMessage: "Engineer must be a string.",
+          errorMessage: 'Engineer must be a string.',
         },
         isAscii: {
-          errorMessage: "Engineer must be ASCII characters.",
+          errorMessage: 'Engineer must be ASCII characters.',
         },
         isLength: {
           options: [{ min: 2, max: 30 }],
-          errorMessage: "Engineer must be 2-30 characters.",
+          errorMessage: 'Engineer must be 2-30 characters.',
         },
       },
       levelOfCare: {
         notEmpty: {
-          errorMessage: "Level of care is required.",
+          errorMessage: 'Level of care is required.',
         },
         isOneOf: {
           options: [props.levelOfCareLabels],
-          errorMessage: "Status must be one of " + props.levelOfCareLabels,
+          errorMessage: 'Status must be one of ' + props.levelOfCareLabels,
         },
       },
       status: {
         notEmpty: {
-          errorMessage: "Status is required.",
+          errorMessage: 'Status is required.',
         },
         isOneOf: {
           options: [props.statusLabels],
-          errorMessage: "Status must be one of " + props.statusLabels,
+          errorMessage: 'Status must be one of ' + props.statusLabels,
         },
       },
       statusDate: {
         notEmpty: {
-          errorMessage: "Status date is required.",
+          errorMessage: 'Status date is required.',
         },
         isDate: {
-          errorMessage: "Status date must be a date.",
+          errorMessage: 'Status date must be a date.',
         },
       },
       platforms: {
         optional: true,
         isString: {
-          errorMessage: "Platforms must be a string.",
+          errorMessage: 'Platforms must be a string.',
         },
         isAscii: {
-          errorMessage: "Platforms must be ASCII characters.",
+          errorMessage: 'Platforms must be ASCII characters.',
         },
         isLength: {
           options: [{ min: 4, max: 30 }],
-          errorMessage: "Platforms must be 4-30 characters.",
+          errorMessage: 'Platforms must be 4-30 characters.',
         },
       },
       designDescDocLoc: {
         optional: true,
         isURL: {
-          errorMessage: "Design description document location must be a URL.",
+          errorMessage: 'Design description document location must be a URL.',
         },
       },
       descDocLoc: {
@@ -256,7 +257,7 @@ export class SwdbLib {
 
   };
 
-  public static updateValidation = function(req) {
+  public static updateValidation = function(req: express.Request) {
     req.checkBody({
       swName: {
         optional: true,
@@ -455,7 +456,7 @@ export class SwdbLib {
     });
   };
 
-  public static updateSanitization = function(req) {
+  public static updateSanitization = function(req: express.Request) {
     return;
   };
 }
