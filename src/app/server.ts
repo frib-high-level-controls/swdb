@@ -140,14 +140,14 @@ app.get('/testlogin', function(req: express.Request, res: express.Response) {
     res.send('<p id="Test auth failed">Test auth failed</p>');
   } else if (req.query.username === 'testuser' &&
     req.query.password === 'testuserpasswd') {
-    req.session.username = 'testuser';
-    req.session.admin = true;
+    req.session!.username = 'testuser';
+    req.session!.admin = true;
     res.send('<p id="Test auth success">Test auth success</p>');
   }
 });
 
 app.get('/caslogin', casAuth.ensureAuthenticated, function(req: express.Request, res: express.Response) {
-  if (req.session.username) {
+  if (req.session!.username) {
     // cas has a username
     res.redirect(props.webUrlProxy);
 
@@ -158,7 +158,7 @@ app.get('/caslogin', casAuth.ensureAuthenticated, function(req: express.Request,
 
 // logoff
 app.get('/logout', function(req: express.Request, res: express.Response, next: express.NextFunction) {
-  req.session.destroy((err: Error) => { next(err); });
+  req.session!.destroy((err: Error) => { next(err); });
   delete req.query.ticket;
   res.clearCookie('connect.sid', {path: '/'});
   res.send('<p id="Logout complete">logout complete</p>');

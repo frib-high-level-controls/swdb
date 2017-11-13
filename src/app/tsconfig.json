@@ -6,9 +6,9 @@
     "alwaysStrict": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
-    //    "strictNullChecks": true,
+    "strictNullChecks": true,
     "removeComments": false,
-    //    "preserveConstEnums": true,
+    "preserveConstEnums": true,
     "sourceMap": false
     }
 }
