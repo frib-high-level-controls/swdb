@@ -96,7 +96,7 @@ export class InstDb {
   public updateDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const id = instTools.InstLib.getReqId(req);
     if (id) {
-      const doc = InstDb.instDoc.findOne({ _id: id }, (err: Error, founddoc: mongoose.Document) => {
+      const doc = InstDb.instDoc.findOne({ _id: id }, (err: Error, founddoc: any) => {
         if (founddoc) {
           for (const prop in req.body) {
             if (req.body.hasOwnProperty(prop)) {
