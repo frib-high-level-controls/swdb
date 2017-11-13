@@ -4,7 +4,6 @@
 import { AssertionError } from 'assert';
 
 import { assert } from 'chai';
-import * as dbg from 'debug';
 import * as mongoose from 'mongoose';
 
 import * as history from '../app/shared/history';

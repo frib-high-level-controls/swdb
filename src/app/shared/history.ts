@@ -8,7 +8,6 @@
 import * as dbg from 'debug';
 import * as mongoose from 'mongoose';
 
-import * as log from './logging';
 import * as models from './models';
 
 type QR<T> = T[] | T | null; // ie QueryResult<T>
@@ -154,7 +153,7 @@ export function model<T extends Document<T>>(name: string, schema: Schema, colle
  *
  * This method provides type safety for the options unlike Schema@plugin() method.
  */
-export function addHistory<T extends Document<T>>(schema: Schema, options?: HistoryOptions) {
+export function addHistory(schema: Schema, options?: HistoryOptions) {
   const opts: any = {
     deduplicate: true,
   };
