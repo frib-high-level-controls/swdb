@@ -16,10 +16,20 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/cookie-parser": "^1.4.1",
+    "@types/express-session": "^1.15.3",
+    "@types/morgan": "^1.7.33",
     "body-parser": "^1.15.1",
+    "cas.js": "^0.1.0",
+    "circular-json": "^0.3.1",
+    "cookie-parser": "1.4.3",
     "debug": "^3.1.0",
+    "enumify": "1.0.4",
+    "expect": "1.20.2",
     "express": "^4.13.4",
     "express-session": "^1.14.0",
+    "express-validator": "3.2.1",
+    "file-stream-rotator": "0.0.7",
     "http-status-codes": "^1.1.6",
     "mongoose": "^4.11.1",
     "morgan": "^1.7.0",
@@ -30,21 +40,10 @@
     "rc": "^1.2.1",
     "request": "^2.81.0",
     "serve-favicon": "^2.3.0",
-    "uri-js": "^3.0.2",
-
-    "@types/express-session": "^1.15.3",
-    "@types/morgan": "^1.7.33",
-    "cas.js": "^0.1.0",
-    "circular-json": "^0.3.1",
-    "cookie-parser": "1.4.3",
-    "enumify": "1.0.4",
-    "expect": "1.20.2",
-    "express-validator": "3.2.1",
-    "file-stream-rotator": "0.0.7",
     "strip-json-comments": "^2.0.1",
     "superagent": "2.3.0",
+    "uri-js": "^3.0.2",
     "xmlhttprequest": "1.8.0"
-
   },
   "devDependencies": {
     "@types/body-parser": "^1.16.3",
@@ -72,11 +71,9 @@
     "supertest": "^3.0.0",
     "tslint": "^4.5.0",
     "typescript": "2.5.3",
-
     "chai-as-promised": "6.0.0",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-jshint": "1.1.0",
     "selenium-webdriver": "3.0.1"
-
   }
 }
