@@ -47,7 +47,10 @@ app.use(function(req: express.Request, res: express.Response, next: express.Next
 });
 
 app.use(cookieParser());
-app.use(expressSession({secret: '1234567890'}));
+app.use(expressSession({secret: '1234567890',
+  resave: false,
+  saveUninitialized: false,
+}));
 app.use(expressValidator({
   customValidators: {
     isOneOf: function(str: string , arr: any[]) {
