@@ -1,6 +1,7 @@
 import fs = require('fs');
 import mongodb = require('mongodb');
 import mongoose = require('mongoose');
+import * as history from '../shared/history';
 import util = require('util');
 import commonTools = require('./CommonTools');
 import swdbTools = require('./swdblib');
@@ -8,9 +9,9 @@ import express = require('express');
 
 export class Db {
   public static swDoc: any;
+  public static props: any;
   private static schema: any;
   private static dbConnect: any;
-  public static props: any;
   constructor() {
     const tools = new commonTools.CommonTools();
     Db.props = tools.getConfiguration();
@@ -42,7 +43,16 @@ export class Db {
 
       Db.schema.index({ swName: 1, version: 1, branch: 1 }, { unique: true });
 
-      Db.swDoc = mongoose.model('swdb', Db.schema, 'swdbCollection');
+      history.addHistory(Db.schema, {
+        pathsToWatch: ['swName', 'version', 'branch', 'desc', 'owner', 'engineer', 
+          'leveOfCare', 'status', 'statusDate', 'platforms', 'designDescDocLoc', 'descDocLoc',
+          'vvProcLoc', 'vvResultsLoc', 'versionControl', 'versionControlLoc', 'recertFreq',
+          'recertStatus', 'recertDate', 'previous', 'comment'],
+        });
+
+      Db.swDoc = history.model<Model>('swdb', Db.schema, 'swdbCollection');
+
+      // Db.swDoc = mongoose.model('swdb', Db.schema, 'swdbCollection');
       // console.log("Connecting to mongo... " + JSON.stringify(props.mongodbUrl));
       Db.dbConnect = mongoose.connect(Db.props.mongodbUrl, (err: Error) => {
         if (!err) {
@@ -165,7 +175,9 @@ export class Db {
     });
   };
 }
-interface ISwdbDoc extends mongoose.MongooseDocument {
+
+// interface ISwdbDoc extends mongoose.MongooseDocument {
+interface ISwdbModel extends history.IHistory {
   [key: string]: any;
 
   swName: string;
@@ -190,3 +202,5 @@ interface ISwdbDoc extends mongoose.MongooseDocument {
   previous?: string;
   comment?: string;
 }
+
+interface Model extends ISwdbModel, history.Document<Model> {}
