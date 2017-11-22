@@ -6,6 +6,8 @@ import util = require('util');
 import commonTools = require('./CommonTools');
 import swdbTools = require('./swdblib');
 import express = require('express');
+import dbg = require('debug');
+const debug = dbg('swdb:Db');
 
 export class Db {
   public static swDoc: any;
@@ -66,22 +68,21 @@ export class Db {
   }
 
   // Create a new record in the backend storage
-  public createDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  public createDoc = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
 
     const doc = new Db.swDoc(req.body);
-    doc.save( (err: Error) => {
-      if (err) {
+
+    try {
+      await doc.saveWithHistory('test0');
+      res.location(Db.props.apiUrl + doc._id);
+      res.status(201);
+      res.send();
+    } catch (err) {
         next(err);
-      } else {
-        // console.log('saved: ' + JSON.stringify(doc));
-        res.location(Db.props.apiUrl + doc._id);
-        res.status(201);
-        res.send();
-      }
-    });
+    }
   }
 
-  public getDocs = function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public getDocs = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const id = swdbTools.SwdbLib.getReqId(req);
     if (!id) {
       // return all
@@ -104,10 +105,10 @@ export class Db {
     }
   };
 
-  public updateDoc = function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public updateDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const id = swdbTools.SwdbLib.getReqId(req);
     if (id) {
-      Db.swDoc.findOne({ _id: id }, (err: Error, doc: any) => {
+      Db.swDoc.findOne({ _id: id }, async (err: Error, doc: any) => {
         if (doc) {
           for (const prop in req.body) {
             if (req.body.hasOwnProperty(prop)) {
@@ -118,14 +119,13 @@ export class Db {
               doc[prop] = req.body[prop];
             }
           }
-          doc.save( (saveerr: Error) => {
-            if (saveerr) {
-              return next(saveerr);
-            } else {
-              res.location(Db.props.apiUrl + doc._id);
-              res.end();
-            }
-          });
+          try {
+            await doc.saveWithHistory('test0');
+            res.location(Db.props.apiUrl + doc._id);
+            res.end();
+          } catch (err) {
+            next(err);
+          }
         } else {
           return next(new Error('Record not found'));
         }
@@ -136,7 +136,7 @@ export class Db {
   };
 
   // return array of records given an array of ids
-  public getList = function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public getList = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const response = {};
     const objIds = req.body.map( (id: string) => id);
     Db.swDoc.find({ _id: { $in: objIds } }, (err: Error, docs: any) => {
@@ -158,7 +158,7 @@ export class Db {
     });
   };
 
-  public deleteDoc = function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public deleteDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const id = swdbTools.SwdbLib.getReqId(req);
 
     // mongoose does not error if deleting something that does not exist

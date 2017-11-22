@@ -22,6 +22,7 @@ npm-debug.log
 /app/
 
 # Ignore test directory
+/test
 /test/app/
 /test/apptest/
 

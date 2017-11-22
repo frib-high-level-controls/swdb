@@ -1,7 +1,7 @@
 'use strict';
 import bodyParser = require('body-parser');
 import cookieParser = require('cookie-parser');
-import debug = require('debug');
+import dbg = require('debug');
 import express = require('express');
 import expressSession = require('express-session');
 import expressValidator = require('express-validator');
@@ -19,6 +19,7 @@ import instTools = require('./lib/instLib');
 import tools = require('./lib/swdblib');
 // import casAuth = require('/home/deployer/template-webapp/src/app/shared/auth');
 
+const debug = dbg('swdb:server');
 const app: any = express();
 const be = new Be.Db();
 const instBe = new InstBe.InstDb();
@@ -32,8 +33,8 @@ props = ctools.getConfiguration();
 // let credentials = {key: privateKey, cert: certificate};
 
 // allow access to static files
-app.use(express.static(__dirname + '/../../public'));
-debug('using ' + __dirname + '/../../public');
+app.use(express.static(__dirname + '/../public'));
+debug('public using ' + __dirname + '/../public');
 
 // use JSON for data
 app.use(bodyParser.json());
@@ -115,7 +116,7 @@ app.use(expressValidator({
 
 // start the server
 app.listen(props.webPort, function() {
-  console.log('listening on port ' + props.webPort);
+  debug('listening on port ' + props.webPort);
 });
 
 // let httpsPort = Number(props.webPort);
@@ -134,11 +135,13 @@ const auth = function(req: express.Request, res: express.Response, next: express
 
 // handle incoming get requests
 app.get('/', function(req: express.Request, res: express.Response) {
-  res.sendFile('index.html', {root: path.join(__dirname, '../../public/swdb-fe/')});
+  debug('GET / request');
+  res.sendFile('index.html', {root: path.join(__dirname, '../public/swdb-fe/')});
 });
 
 // login
 app.get('/testlogin', function(req: express.Request, res: express.Response) {
+  debug('GET /testlogin request');
   if (!req.query.username || !req.query.password ) {
     res.send('<p id="Test auth failed">Test auth failed</p>');
   } else if (req.query.username === 'testuser' &&
@@ -150,6 +153,7 @@ app.get('/testlogin', function(req: express.Request, res: express.Response) {
 });
 
 app.get('/caslogin', casAuth.ensureAuthenticated, function(req: express.Request, res: express.Response) {
+  debug('GET /caslogin request');
   if (req.session!.username) {
     // cas has a username
     res.redirect(props.webUrlProxy);
@@ -161,6 +165,7 @@ app.get('/caslogin', casAuth.ensureAuthenticated, function(req: express.Request,
 
 // logoff
 app.get('/logout', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('GET /logout request');
   req.session!.destroy((err: Error) => { next(err); });
   delete req.query.ticket;
   res.clearCookie('connect.sid', {path: '/'});
@@ -169,32 +174,37 @@ app.get('/logout', function(req: express.Request, res: express.Response, next: e
 
 // for get requests that are not specific return all
 app.get('/api/v1/swdb/user', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('GET /api/v1/swdb/user request');
   res.send(JSON.stringify(req.session));
 });
 
 // for get requests that are not specific return all
 app.get('/api/v1/swdb/config', function(req: express.Request, res: express.Response, next: express.NextFunction) {
   // update props and send config
+  debug('GET /api/v1/swdb/config request');
   res.send(JSON.stringify(props));
 });
 
 // for get slot requests
 app.get('/api/v1/swdb/slot', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('GET /api/v1/swdb/slot request');
   instTools.InstLib.getSlot(req, res, next);
 });
 // for get requests that are not specific return all
 app.get('/api/v1/inst/*', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('GET /api/v1/inst/* request');
   instBe.getDocs(req, res, next);
 });
 // for get requests that are not specific return all
 app.get('/api/v1/swdb/*', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('GET /api/v1/swdb/* request');
   be.getDocs(req, res, next);
 });
 
 // handle incoming post requests
 app.post('/api/v1/swdb', casAuth.ensureAuthenticated,
   function(req: express.Request, res: express.Response, next: express.NextFunction) {
-
+  debug('POST /api/v1/swdb request');
   // Do validation for  new records
 
   tools.SwdbLib.newValidation(req);
@@ -212,6 +222,7 @@ app.post('/api/v1/swdb', casAuth.ensureAuthenticated,
 // handle incoming installation post requests
 app.post('/api/v1/inst', function(req: express.Request, res: express.Response, next: express.NextFunction) {
 
+  debug('POST /api/v1/inst request');
   // Do validation for  new records
   instTools.InstLib.newValidation(req);
 
@@ -227,12 +238,14 @@ app.post('/api/v1/inst', function(req: express.Request, res: express.Response, n
 
 // for get list of records requests
 app.post('/api/v1/swdb/list', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('POST /api/v1/swdb/list request');
   be.getList(req, res, next);
 });
 
 // handle incoming put requests for update
 app.put('/api/v1/swdb*', casAuth.ensureAuthenticated,
   function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('PUT /api/v1/swdb* request');
 
   tools.SwdbLib.updateValidation(req);
   tools.SwdbLib.updateSanitization(req);
@@ -249,6 +262,7 @@ app.put('/api/v1/swdb*', casAuth.ensureAuthenticated,
 
 // handle incoming put requests for installation update
 app.put('/api/v1/inst*', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('PUT /api/v1/inst* request');
   // Do validation for installation updates
   instTools.InstLib.updateValidation(req);
   instTools.InstLib.updateSanitization(req);
@@ -266,6 +280,7 @@ app.put('/api/v1/inst*', function(req: express.Request, res: express.Response, n
 // handle incoming patch requests for update
 app.patch('/api/v1/swdb*', casAuth.ensureAuthenticated,
   function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('PATCH /api/v1/swdb* request');
 
   tools.SwdbLib.updateValidation(req);
   tools.SwdbLib.updateSanitization(req);
@@ -282,6 +297,7 @@ app.patch('/api/v1/swdb*', casAuth.ensureAuthenticated,
 
 // handle incoming put requests for installation update
 app.patch('/api/v1/inst*', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('PATCH /api/v1/inst* request');
   // Do validation for installation updates
   instTools.InstLib.updateValidation(req);
   instTools.InstLib.updateSanitization(req);
