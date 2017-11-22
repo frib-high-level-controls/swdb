@@ -28,28 +28,51 @@ var testLogin = function(request, done) {
   console.log('Login start');
   supertest
     .get("/login?username=testuser&password=testuserpasswd")
-    .send(testAcct)
+    // .send(testAcct)
     .expect(200)
     .end(function(err,res){
       console.log('Login complete');
-      agent.saveCookies(res);
-      done();
+      // agent.saveCookies(res);
+      // done();
     });
 };
+// clear the test collection before and after tests suite
+before(function(done) {
+    console.log("Starting inst-spec");
+    this.timeout(5000);
+    // testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
+    testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
+});
+
+after(function(done) {
+    // clear the test collection
+    testTools.clearTestCollections(done);
+    // done();
+});
 
 var Cookies;
 //
 describe("app", function() {
   var chromeDriver;
-  before("setup", function(done){
-    console.log("Starting inst-spec");
-    this.timeout(5000);
-    testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
+  before("login as test user", function(done){
+    supertest
+    .get("/testlogin?username=testuser&password=testuserpasswd")
+    .expect(200)
+    .end(function(err,res){
+      Cookies = res.headers['set-cookie'].pop().split(';')[0];
+      //console.log('Login complete. Cookie: '+Cookies);
+      done();
     });
-  after(function(done) {
-    // clear the test collection
-    testTools.clearTestCollections(done);
   });
+  // before("setup", function(done){
+  //   console.log("Starting inst-spec");
+  //   this.timeout(5000);
+  //   testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
+  //   });
+  // after(function(done) {
+  //   // clear the test collection
+  //   testTools.clearTestCollections(done);
+  // });
 
   // web facing tests
   //

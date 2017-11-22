@@ -73,11 +73,13 @@ export class Db {
     const doc = new Db.swDoc(req.body);
 
     try {
-      await doc.saveWithHistory('test0');
+      await doc.saveWithHistory(req.session!.username);
+      debug('Created sw ' + doc._id + ' as ' + req.session!.username);
       res.location(Db.props.apiUrl + doc._id);
       res.status(201);
       res.send();
     } catch (err) {
+        debug('Error creating sw ' + doc._id + ': ' + err);
         next(err);
     }
   }
@@ -120,10 +122,12 @@ export class Db {
             }
           }
           try {
-            await doc.saveWithHistory('test0');
+            await doc.saveWithHistory(req.session!.username);
+            debug('Updated sw ' + doc._id + ' as ' + req.session!.username);
             res.location(Db.props.apiUrl + doc._id);
             res.end();
           } catch (err) {
+            debug('Error updating sw ' + doc._id + ': ' + err);
             next(err);
           }
         } else {

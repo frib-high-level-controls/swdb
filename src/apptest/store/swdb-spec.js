@@ -182,22 +182,22 @@ describe("app", function() {
     .end(done);
   });
 
-  // it("Errors posting a duplicate new record", function(done) {
-  //   supertest
-  //   .post("/api/v1/swdb/")
-  //   .send({swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000",levelOfCare: "LOW", status: "DEVEL", statusDate: "1/1/1970"})
-  //   .set("Accept", "application/json")
-  //   .set('Cookie', [Cookies])
-  //   .expect(500)
-  //   .expect('There was a duplicate key error')
-  //   .end((err, result) => {
-  //     if (result.headers.location.match(/^.*\/api\/v1\/swdb\/[0-9a-fA-F]{24}$/g)) {
-  //       done();
-  //     } else {
-  //       done(new Error("Location header is not set: " + JSON.stringify(result.headers.location)));
-  //     }
-  //   });
-  // });
+  it("Errors posting a duplicate new record", function(done) {
+    supertest
+    .post("/api/v1/swdb/")
+    .send({swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000",levelOfCare: "LOW", status: "DEVEL", statusDate: "1/1/1970"})
+    .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
+    .expect(500)
+    .expect('There was a duplicate key error')
+    .end((err, result) => {
+      if (result.headers.location.match(/^.*\/api\/v1\/swdb\/[0-9a-fA-F]{24}$/g)) {
+        done();
+      } else {
+        done(new Error("Location header is not set: " + JSON.stringify(result.headers.location)));
+      }
+    });
+  });
 
   it("Post a new record Test Record2", function(done) {
     supertest

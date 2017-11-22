@@ -5,37 +5,40 @@ import util = require('util');
 import instTools = require('./instLib');
 import swdbEnums = require('./swdbEnums');
 import swdbTools = require('./swdblib');
+import * as history from '../shared/history';
 
 import CommonTools = require('./CommonTools');
+import dbg = require('debug');
+const debug = dbg('swdb:instDb');
 
-interface InstSchema extends mongoose.Document {
-  host: string;
-  name?: string;
-  area: swdbEnums.AreaEnum;
-  slots?: string;
-  status: swdbEnums.InstStatusEnum;
-  statusDate: Date;
-  software: string;
-  vvResultLoc?: string;
-  drrs?: string;
-}
+// interface InstSchema extends mongoose.Document {
+//   host: string;
+//   name?: string;
+//   area: swdbEnums.AreaEnum;
+//   slots?: string;
+//   status: swdbEnums.InstStatusEnum;
+//   statusDate: Date;
+//   software: string;
+//   vvResultLoc?: string;
+//   drrs?: string;
+// }
 
 export class InstDb {
   public static instDoc: any;
+  public static props: any;
   private static instSchema: mongoose.Schema;
   private static dbConnect: any;
-  private props: any;
 
   constructor() {
     const ctools = new CommonTools.CommonTools();
-    this.props = ctools.getConfiguration();
+    InstDb.props = ctools.getConfiguration();
     if (!InstDb.instSchema) {
       InstDb.instSchema = new mongoose.Schema({
         host: { type: String, required: true },
         name: { type: String , default: '' },
-        area: { type: String, enum: this.props.areaLabels, required: true },
+        area: { type: String, enum: InstDb.props.areaLabels, required: true },
         slots: [String],
-        status: { type: String, enum: this.props.instStatusLabels, required: true },
+        status: { type: String, enum: InstDb.props.instStatusLabels, required: true },
         statusDate: { type: Date, required: true },
         software: { type: String, required: true },
         vvResultsLoc: { type: String, default: '' },
@@ -43,9 +46,15 @@ export class InstDb {
       }, { emitIndexErrors: true });
 
       InstDb.instSchema.index({ host: 1, name: 1, software: 1 }, { unique: true });
-      InstDb.instDoc = mongoose.model('inst', InstDb.instSchema, 'instCollection');
+      history.addHistory(InstDb.instSchema, {
+        pathsToWatch: ['host', 'name', 'area', 'slots', 'status', 'statusDate',
+          'software', 'vvResultsLoc', 'drrs' ],
+        });
 
-      InstDb.dbConnect = mongoose.connect(this.props.mongodbUrl, (err: Error) => {
+      // InstDb.instDoc = mongoose.model('inst', InstDb.instSchema, 'instCollection');
+      InstDb.instDoc = history.model<Model>('inst', InstDb.instSchema, 'instCollection');
+
+      InstDb.dbConnect = mongoose.connect(InstDb.props.mongodbUrl, (err: Error) => {
         if (!err) {
           // console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl);
           // console.log("connected to mongo... " + JSON.stringify(props.mongodbUrl));
@@ -57,17 +66,18 @@ export class InstDb {
   }
 
   // Create a new record in the backend storage
-  public createDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  public createDoc = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const doc = new InstDb.instDoc(req.body);
-    doc.save((err: mongoose.Error) => {
-      if (err) {
+    try {
+      await doc.saveWithHistory(req.session!.username);
+      debug('Created installation ' + doc._id + ' as ' + req.session!.username);
+      res.location(InstDb.props.instApiUrl + doc._id);
+      res.status(201);
+      res.send();
+    } catch (err) {
+        debug('Error creating installation ' + doc._id + err);
         next(err);
-      } else {
-        res.location(this.props.instApiUrl + doc._id);
-        res.status(201);
-        res.send();
-      }
-    });
+    }
   }
 
   public getDocs = function(req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -96,7 +106,7 @@ export class InstDb {
   public updateDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const id = instTools.InstLib.getReqId(req);
     if (id) {
-      const doc = InstDb.instDoc.findOne({ _id: id }, (err: Error, founddoc: any) => {
+      const doc = InstDb.instDoc.findOne({ _id: id }, async (err: Error, founddoc: any) => {
         if (founddoc) {
           for (const prop in req.body) {
             if (req.body.hasOwnProperty(prop)) {
@@ -107,14 +117,22 @@ export class InstDb {
               founddoc[prop] = req.body[prop];
             }
           }
-          founddoc.save((saveerr: Error) => {
-            if (saveerr) {
-              return next(saveerr);
-            } else {
-              res.location(this.props.instApiUrl + founddoc._id);
-              res.end();
-            }
-          });
+          try {
+            await founddoc.saveWithHistory(req.session!.username);
+            debug('Updated installation ' + founddoc._id + ' as ' + req.session!.username);
+            res.location(InstDb.props.instApiUrl + founddoc._id);
+            res.end();
+          } catch (err) {
+            next(err);
+          }
+          // founddoc.save((saveerr: Error) => {
+          //   if (saveerr) {
+          //     return next(saveerr);
+          //   } else {
+          //     res.location(InstDb.props.instApiUrl + founddoc._id);
+          //     res.end();
+          //   }
+          // });
         } else {
           return next(new Error('Record not found'));
         }
@@ -143,3 +161,19 @@ export class InstDb {
     });
   };
 }
+
+interface IInstModel extends history.IHistory {
+  [key: string]: any;
+
+  host: string;
+  name?: string;
+  area: string;
+  slots?: [string];
+  status: string;
+  statusDate: Date;
+  software: string;
+  vvResultsLoc?: string;
+  drrs?: Date;
+}
+
+interface Model extends IInstModel, history.Document<Model> {}
