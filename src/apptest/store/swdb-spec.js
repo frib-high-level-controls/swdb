@@ -1,5 +1,4 @@
 var app = require("../../app/server");
-var debug = require('debug');
 var expect = require("chai").expect;
 var supertest = require("supertest")(app);
 var tools = require("../../app/lib/swdblib");
@@ -20,6 +19,8 @@ let CommonTools = require('../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
 let props = {};
 props = ctools.getConfiguration();
+let dbg = require('debug');
+const debug = dbg('swdb:swdb-spec-tests');
 
 var testLogin = function(request, done) {
   //console.log('Login start');
@@ -81,8 +82,15 @@ describe("app", function() {
       done();
     });
   });
+  
+  it("Has the blank history", async function() {
+      let cursor = Be.Db.swDoc.db.collections.history.find();
+      let count = await cursor.count();
+      debug('Found ' + count + ' items');
+      expect(count).to.equal(0);
+  });
 
-  it("Returns location header posing new record", function(done) {
+  it("Returns location header posting new record", function(done) {
     supertest
     .post("/api/v1/swdb/")
     .set("Accept", "application/json")
@@ -99,6 +107,31 @@ describe("app", function() {
         }
       }
     });
+  });
+
+  it("Has the correct number of history entries", async function () {
+    let cursor = Be.Db.swDoc.db.collections.history.find();
+    let count = await cursor.count();
+    debug('Found ' + count + ' items');
+    expect(count).to.equal(1);
+  });
+
+  it("Has the swName history entry", async function () {
+    // let cursor = Be.Db.swDoc.db.collections.history.find({ swName: 'Header Test Record' });
+    let cursor = Be.Db.swDoc.db.collections.history.find();
+    for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
+      debug('Found ' + JSON.stringify(doc));
+      expect(doc.paths[0].name = 'swName');
+    }
+  });
+
+  it("Has the correct swName history entry", async function () {
+    // let cursor = Be.Db.swDoc.db.collections.history.find({ swName: 'Header Test Record' });
+    let cursor = Be.Db.swDoc.db.collections.history.find();
+    for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
+      debug('Found ' + JSON.stringify(doc));
+      expect(doc.paths[0].value = 'Header Test Record');
+    }
   });
 
   describe('Check location headers', function() {

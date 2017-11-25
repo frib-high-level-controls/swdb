@@ -63,6 +63,9 @@ export class InstDb {
         }
       });
     }
+    debug('InstDb.instSchema now:' + JSON.stringify(InstDb.instSchema));
+    debug('InstDb.instDoc now:' + JSON.stringify(InstDb.instDoc));
+    // debug('InstDb.dbConnect now:' + JSON.stringify(InstDb.dbConnect));
   }
 
   // Create a new record in the backend storage

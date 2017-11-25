@@ -1,18 +1,21 @@
 const ObjectId = require('mongodb').ObjectID;
+import mongo = require('mongodb');
 import CommonTools = require('../../app/lib/CommonTools');
 import Be = require('../../app/lib/Db');
-const be = new Be.Db();
+// const be = new Be.Db();
 import InstBe = require('../../app/lib/instDb.js');
 const instBe = new InstBe.InstDb();
 const tools = new CommonTools.CommonTools();
 const props = tools.getConfiguration();
+import dbg = require('debug');
+const debug = dbg('swdb:TestTools');
 
 import fs = require('fs');
 // const testInstData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/instTestDataCombined.json', 'utf8'));
 // const testSwData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/swTestDataCombined.json', 'utf8'));
 
 export class TestTools {
-  public loadTestCollectionsStandard(done, swFile: string, instFile: string) {
+  public async loadTestCollectionsStandard(done, swFile: string, instFile: string) {
     const testInstData = JSON.parse(fs.readFileSync(instFile, 'utf-8'));
     const testSwData = JSON.parse(fs.readFileSync(swFile, 'utf8'));
     // console.log("Starting standard test db clear and reload...");
@@ -30,36 +33,119 @@ export class TestTools {
     }
 
     // console.log("Dropping installation collections...");
-    InstBe.InstDb.instDoc.db.collections.instCollection.drop(
-      (err) => {
-        // console.log("Dropping sw collections...");
-        Be.Db.swDoc.db.collections.swdbCollection.drop(
-          (swDocDropErr) => {
-            // console.log("inserting testSwNames in sw collection");
-            Be.Db.swDoc.db.collections.swdbCollection.insert(testSwData,
-              (swDocInsertErr, swDocRecords) => {
-                // console.log("inserting testInstData in installations collection");
-                InstBe.InstDb.instDoc.db.collections.instCollection.insert(testInstData,
-                  (instInsertErr, instRecords) => {
-                    if (instInsertErr) {
-                      console.log(instInsertErr);
-                    }
-                    done();
-                  });
-              });
-          });
-      });
+    try {
+      await InstBe.InstDb.instDoc.db.collections.history.drop();
+    } catch (err) {
+      if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
+        debug('ignoring err: ' + JSON.stringify(err));
+        // ignore this
+      } else {
+        debug('Error dropping ' + err);
+        done(err);
+      }
+    }
+
+    try {
+      await Be.Db.swDoc.db.collections.history.drop();
+    } catch (err) {
+      if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
+        debug('ignoring err: ' + JSON.stringify(err));
+        // ignore this
+      } else {
+        debug('Error dropping ' + err);
+        done(err);
+      }
+    }
+
+    try {
+      await InstBe.InstDb.instDoc.db.collections.instCollection.drop();
+    } catch (err) {
+      if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
+        debug('ignoring err: ' + JSON.stringify(err));
+        // ignore this
+      } else {
+        debug('Error dropping ' + err);
+        done(err);
+      }
+    }
+
+    try {
+      await Be.Db.swDoc.db.collections.swdbCollection.drop();
+    } catch (err) {
+      if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
+        debug('ignoring err: ' + JSON.stringify(err));
+        // ignore this
+      } else {
+        debug('Error dropping ' + err);
+        done(err);
+      }
+    }
+
+    try {
+      await Be.Db.swDoc.db.collections.swdbCollection.insert(testSwData);
+    } catch (err) {
+      if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
+        debug('ignoring err: ' + JSON.stringify(err));
+        // ignore this
+      } else {
+        debug('Error dropping ' + err);
+        done(err);
+      }
+    }
+    try {
+      await InstBe.InstDb.instDoc.db.collections.instCollection.insert(testInstData);
+    } catch (err) {
+      if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
+        debug('ignoring err: ' + JSON.stringify(err));
+        // ignore this
+      } else {
+        debug('Error dropping ' + err);
+        done(err);
+      }
+    }
+
+    done();
   }
 
-  public clearTestCollections(done) {
-    // console.log("Cleaning up...");
-    // console.log("Dropping installation collections...");
-    InstBe.InstDb.instDoc.db.collections.instCollection.drop((err) => {
-      // chromeDriver.quit();
-      // console.log("Dropping swdb collections...");
-      Be.Db.swDoc.db.collections.swdbCollection.drop((swDocDropErr) => {
-          done();
-      });
-    });
+  public async clearTestCollections(done) {
+    try {
+      await InstBe.InstDb.instDoc.db.collections.history.drop();
+    } catch (err) {
+      if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
+        debug('ignoring err: ' + JSON.stringify(err));
+        // ignore this
+      } else {
+        debug('Error dropping software history' + err);
+        done(err);
+      }
+    }
+
+    try {
+      debug('swDoc: ' + JSON.stringify(Be.Db.swDoc));
+      await Be.Db.swDoc.db.collections.history.drop();
+    } catch (err) {
+      if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
+        debug('ignoring err: ' + JSON.stringify(err));
+        // ignore this
+      } else {
+        debug('Error dropping software history' + err);
+        done(err);
+      }
+    }
+
+    try {
+        await InstBe.InstDb.instDoc.db.collections.instCollection.drop();
+    } catch (err) {
+      debug('Error dropping installations');
+      done(err);
+    }
+
+    try {
+      await Be.Db.swDoc.db.collections.swdbCollection.drop();
+    } catch (err) {
+      debug('Error dropping software');
+      done(err);
+    }
+    done();
   }
 }

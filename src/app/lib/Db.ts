@@ -65,6 +65,8 @@ export class Db {
         }
       });
     }
+    debug('Db.schema now:' + JSON.stringify(Db.schema));
+    debug('swDoc now:' + JSON.stringify(Db.swDoc));
   }
 
   // Create a new record in the backend storage
