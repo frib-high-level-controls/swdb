@@ -136,15 +136,25 @@ export class TestTools {
     try {
         await InstBe.InstDb.instDoc.db.collections.instCollection.drop();
     } catch (err) {
-      debug('Error dropping installations');
-      done(err);
+      if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
+        debug('ignoring err: ' + JSON.stringify(err));
+        // ignore this
+      } else {
+        debug('Error dropping software history' + err);
+        done(err);
+      }
     }
 
     try {
       await Be.Db.swDoc.db.collections.swdbCollection.drop();
     } catch (err) {
-      debug('Error dropping software');
-      done(err);
+      if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
+        debug('ignoring err: ' + JSON.stringify(err));
+        // ignore this
+      } else {
+        debug('Error dropping software history' + err);
+        done(err);
+      }
     }
     done();
   }

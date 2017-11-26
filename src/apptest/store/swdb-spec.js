@@ -221,13 +221,12 @@ describe("app", function() {
     .send({swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000",levelOfCare: "LOW", status: "DEVEL", statusDate: "1/1/1970"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
-    .expect(500)
-    .expect('There was a duplicate key error')
     .end((err, result) => {
-      if (result.headers.location.match(/^.*\/api\/v1\/swdb\/[0-9a-fA-F]{24}$/g)) {
+      if ((result.text.match(/^E11000 duplicate key error*/g)) && (result.status === 500)) {
+        debug('Got ""E11000 duplicate key error"');
         done();
       } else {
-        done(new Error("Location header is not set: " + JSON.stringify(result.headers.location)));
+        done(new Error('no error found'));
       }
     });
   });
