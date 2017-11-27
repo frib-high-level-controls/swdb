@@ -39,6 +39,7 @@ var testLogin = function(request, done) {
 before(function(done) {
     console.log("Starting swdb-spec");
     this.timeout(5000);
+    testTools.testCollectionsStatus(debug);
     testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
 });
 
@@ -111,17 +112,26 @@ describe("app", function() {
 
   it("Has the correct number of history entries", async function () {
     let cursor = Be.Db.swDoc.db.collections.history.find();
-    let count = await cursor.count();
-    debug('Found ' + count + ' items');
-    expect(count).to.equal(1);
+    try {
+      let count = await cursor.count();
+      debug('Found ' + count + ' items');
+      testTools.testCollectionsStatus(debug);
+      expect(count).to.equal(1);
+    } catch (err) {
+      done(err);
+    }
   });
 
   it("Has the swName history entry", async function () {
     // let cursor = Be.Db.swDoc.db.collections.history.find({ swName: 'Header Test Record' });
     let cursor = Be.Db.swDoc.db.collections.history.find();
-    for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
-      debug('Found ' + JSON.stringify(doc));
-      expect(doc.paths[0].name = 'swName');
+    try {
+      for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
+        debug('Found ' + JSON.stringify(doc));
+        expect(doc.paths[0].name = 'swName');
+      }
+    } catch (err) {
+      done(err);
     }
   });
 
@@ -181,6 +191,7 @@ describe("app", function() {
             }
           }
         });
+      testTools.testCollectionsStatus(debug);
     });
 
     it("Returns the correct location header PATCH existing record", function (done) {
@@ -213,6 +224,7 @@ describe("app", function() {
       .send({swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
     .expect(201)
     .end(done);
+    testTools.testCollectionsStatus(debug);
   });
 
   it("Errors posting a duplicate new record", function(done) {
@@ -229,6 +241,7 @@ describe("app", function() {
         done(new Error('no error found'));
       }
     });
+    testTools.testCollectionsStatus(debug);
   });
 
   it("Post a new record Test Record2", function(done) {
@@ -239,6 +252,7 @@ describe("app", function() {
     .set('Cookie', [Cookies])
     .expect(201)
     .end(done);
+    testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for Test Record', function() {
@@ -279,6 +293,7 @@ describe("app", function() {
     .set('Cookie', [Cookies])
     .expect(201)
     .end(done);
+    testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for Desc Test Record', function() {
@@ -318,6 +333,7 @@ describe("app", function() {
     .set('Cookie', [Cookies])
     .expect(201)
     .end(done);
+    testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for Engineer Test Record', function() {
@@ -358,6 +374,7 @@ describe("app", function() {
     .set('Cookie', [Cookies])
     .expect(201)
     .end(done);
+    testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for versionControlLoc Test Record', function() {
@@ -396,6 +413,7 @@ describe("app", function() {
     .set('Cookie', [Cookies])
     .expect(201)
     .end(done);
+    testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for designDescDocLoc Test Record', function() {
@@ -434,6 +452,7 @@ describe("app", function() {
     .set('Cookie', [Cookies])
     .expect(201)
     .end(done);
+    testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for descDocLoc Test Record', function() {
@@ -472,6 +491,7 @@ describe("app", function() {
     .set('Cookie', [Cookies])
     .expect(201)
     .end(done);
+    testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for recertDate Test Record', function() {
@@ -510,6 +530,7 @@ describe("app", function() {
     .set('Cookie', [Cookies])
     .expect(201)
     .end(done);
+    testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for vvProcLoc Test Record', function() {
@@ -548,6 +569,7 @@ describe("app", function() {
     .set('Cookie', [Cookies])
     .expect(201)
     .end(done);
+    testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for vvResultsLoc Test Record', function() {
@@ -586,6 +608,7 @@ describe("app", function() {
     .set('Cookie', [Cookies])
     .expect(201)
     .end(done);
+    testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for branch Test Record', function() {
@@ -624,6 +647,7 @@ describe("app", function() {
     .set('Cookie', [Cookies])
     .expect(201)
     .end(done);
+    testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for versionControl Test Record', function() {
@@ -662,6 +686,7 @@ describe("app", function() {
     .set('Cookie', [Cookies])
     .expect(201)
     .end(done);
+    testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for previous Test Record', function() {
@@ -718,7 +743,9 @@ describe("app", function() {
     .set('Cookie', [Cookies])
       .expect(200)
       .end(done);
+      testTools.testCollectionsStatus(debug);
     });
+
     it("Returns test record 1d:Test Record3", function(done) {
       supertest
       .get("/api/v1/swdb/"+wrapper.origId)
@@ -911,6 +938,7 @@ describe("app", function() {
 
             done();
           });
+          testTools.testCollectionsStatus(debug);
         });
       }
       if (value.type === "POST") {
@@ -928,6 +956,7 @@ describe("app", function() {
             }
             done();
           });
+          testTools.testCollectionsStatus(debug);
         });
       }
 
@@ -961,6 +990,7 @@ describe("app", function() {
         expect(res.text).to.match(/Cannot POST \/api\/v1\/swdb\/badbeef/);
         done();
       });
+      testTools.testCollectionsStatus(debug);
     });
     it("Errors on update a nonexistent record via PUT swName id:badbeef", function(done) {
       supertest
@@ -970,6 +1000,7 @@ describe("app", function() {
       .expect(500)
       .expect('Record not found')
       .end(done);
+      testTools.testCollectionsStatus(debug);
     });
     it("Errors on update a nonexistent record via PATCH swName id:badbeef", function(done) {
       supertest
@@ -979,6 +1010,7 @@ describe("app", function() {
       .expect(500)
       .expect('Record not found')
       .end(done);
+      testTools.testCollectionsStatus(debug);
     });
   });
 });

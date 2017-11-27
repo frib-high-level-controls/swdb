@@ -11,8 +11,6 @@ import dbg = require('debug');
 const debug = dbg('swdb:TestTools');
 
 import fs = require('fs');
-// const testInstData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/instTestDataCombined.json', 'utf8'));
-// const testSwData = JSON.parse(fs.readFileSync('../apptest/misc/datafiles/swTestDataCombined.json', 'utf8'));
 
 export class TestTools {
   public async loadTestCollectionsStandard(done, swFile: string, instFile: string) {
@@ -32,7 +30,6 @@ export class TestTools {
       }
     }
 
-    // console.log("Dropping installation collections...");
     try {
       await InstBe.InstDb.instDoc.db.collections.history.drop();
     } catch (err) {
@@ -115,21 +112,23 @@ export class TestTools {
         debug('ignoring err: ' + JSON.stringify(err));
         // ignore this
       } else {
-        debug('Error dropping software history' + err);
+        debug('Error dropping installation history' + err);
         done(err);
       }
     }
 
-    try {
-      debug('swDoc: ' + JSON.stringify(Be.Db.swDoc));
-      await Be.Db.swDoc.db.collections.history.drop();
-    } catch (err) {
-      if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
-        debug('ignoring err: ' + JSON.stringify(err));
-        // ignore this
-      } else {
-        debug('Error dropping software history' + err);
-        done(err);
+    if (typeof Be.Db.swDoc != null) {
+      try {
+        debug('swDoc: ' + JSON.stringify(Be.Db.swDoc));
+        await Be.Db.swDoc.db.collections.history.drop();
+      } catch (err) {
+        if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
+          debug('ignoring err: ' + JSON.stringify(err));
+          // ignore this
+        } else {
+          debug('Error dropping software history' + err);
+          done(err);
+        }
       }
     }
 
@@ -140,7 +139,7 @@ export class TestTools {
         debug('ignoring err: ' + JSON.stringify(err));
         // ignore this
       } else {
-        debug('Error dropping software history' + err);
+        debug('Error dropping installation collection' + err);
         done(err);
       }
     }
@@ -152,10 +151,63 @@ export class TestTools {
         debug('ignoring err: ' + JSON.stringify(err));
         // ignore this
       } else {
-        debug('Error dropping software history' + err);
+        debug('Error dropping software collection' + err);
         done(err);
       }
     }
     done();
+  }
+
+  public async testCollectionsStatus(sdebug: debug.IDebugger) {
+    sdebug('test collections report:');
+    if (Be.Db.swDoc.db.collections.history) {
+      let cursor = Be.Db.swDoc.db.collections.history.find();
+      if (cursor) {
+        try {
+          let count = await cursor.count();
+          sdebug('SW history reports ' + count + ' items');
+        } catch (err) {
+          throw (err);
+        }
+      } else {
+        sdebug('SW history is empty');
+      }
+    }
+
+    let cursor = Be.Db.swDoc.db.collections.swdbCollection.find();
+    if (cursor) {
+      try {
+        let count = await cursor.count();
+        sdebug('SW collection reports ' + count + ' items');
+      } catch (err) {
+        throw (err);
+      }
+    } else {
+      sdebug('SW collection is empty');
+    }
+
+    cursor = InstBe.InstDb.instDoc.db.collections.history.find();
+    if (cursor) {
+      try {
+        let count = await cursor.count();
+        sdebug('Installation history reports ' + count + ' items');
+      } catch (err) {
+        throw (err);
+      }
+    } else {
+      sdebug('Installation history is empty');
+    }
+
+    cursor = InstBe.InstDb.instDoc.db.collections.instCollection.find();
+    if (cursor) {
+      try {
+        let count = await cursor.count();
+        sdebug('Installation collection reports ' + count + ' items');
+      } catch (err) {
+        throw (err);
+      }
+    } else {
+      sdebug('Installation collection is empty');
+    }
   }
 }
