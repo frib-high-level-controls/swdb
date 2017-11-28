@@ -47,7 +47,7 @@ export class Db {
 
       history.addHistory(Db.schema, {
         pathsToWatch: ['swName', 'version', 'branch', 'desc', 'owner', 'engineer', 
-          'leveOfCare', 'status', 'statusDate', 'platforms', 'designDescDocLoc', 'descDocLoc',
+          'levelOfCare', 'status', 'statusDate', 'platforms', 'designDescDocLoc', 'descDocLoc',
           'vvProcLoc', 'vvResultsLoc', 'versionControl', 'versionControlLoc', 'recertFreq',
           'recertStatus', 'recertDate', 'previous', 'comment'],
         });

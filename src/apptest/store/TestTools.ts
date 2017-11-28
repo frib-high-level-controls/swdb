@@ -159,7 +159,7 @@ export class TestTools {
   }
 
   public async testCollectionsStatus(sdebug: debug.IDebugger) {
-    sdebug('test collections report:');
+    sdebug('Test collections report:');
     if (Be.Db.swDoc.db.collections.history) {
       let cursor = Be.Db.swDoc.db.collections.history.find();
       if (cursor) {
@@ -208,6 +208,18 @@ export class TestTools {
       }
     } else {
       sdebug('Installation collection is empty');
+    }
+  }
+
+  public async dumpCollection(sdebug: debug.IDebugger, coll: mongo.Collection) {
+    sdebug('Test collections dump:');
+    let cursor = coll.find();
+    try {
+      for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
+        sdebug('Record ' + JSON.stringify(doc));
+      }
+    } catch (err) {
+      sdebug(err);
     }
   }
 }

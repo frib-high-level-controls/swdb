@@ -86,6 +86,7 @@ describe("app", function() {
   
   it("Has the blank history", async function() {
       let cursor = Be.Db.swDoc.db.collections.history.find();
+      testTools.dumpCollection(debug, Be.Db.swDoc.db.collections.history);
       let count = await cursor.count();
       debug('Found ' + count + ' items');
       expect(count).to.equal(0);
@@ -102,6 +103,7 @@ describe("app", function() {
       if (err) done(err);
       else {
         if (result.headers.location.match(/^.*\/api\/v1\/swdb\/[0-9a-fA-F]{24}$/g)) {
+          debug('Location: ' + result.headers.location);
           done();
         } else {
           done(new Error("Location header is not set" + JSON.stringify(result.headers.location)));
@@ -127,7 +129,7 @@ describe("app", function() {
     let cursor = Be.Db.swDoc.db.collections.history.find();
     try {
       for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
-        debug('Found ' + JSON.stringify(doc));
+        // debug('Found ' + JSON.stringify(doc));
         expect(doc.paths[0].name = 'swName');
       }
     } catch (err) {
@@ -139,7 +141,7 @@ describe("app", function() {
     // let cursor = Be.Db.swDoc.db.collections.history.find({ swName: 'Header Test Record' });
     let cursor = Be.Db.swDoc.db.collections.history.find();
     for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
-      debug('Found ' + JSON.stringify(doc));
+      // debug('Found ' + JSON.stringify(doc));
       expect(doc.paths[0].value = 'Header Test Record');
     }
   });
@@ -185,6 +187,7 @@ describe("app", function() {
           else {
             let re = new RegExp('^.*/api/v1/swdb/' + wrapper.origId + '$');
             if (result.headers.location.match(re)) {
+              debug('Location: ' + result.headers.location);
               done();
             } else {
               done(new Error("Location header is not set" + JSON.stringify(result.headers.location)));
@@ -206,6 +209,7 @@ describe("app", function() {
           else {
             let re = new RegExp('^.*/api/v1/swdb/' + wrapper.origId + '$');
             if (result.headers.location.match(re)) {
+              debug('Location: ' + result.headers.location);
               done();
             } else {
               done(new Error("Location header is not set" + JSON.stringify(result.headers.location)));
@@ -223,7 +227,10 @@ describe("app", function() {
     .set('Cookie', [Cookies])
       .send({swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
     .expect(201)
-    .end(done);
+    .end((end, result) => {
+      debug('Location: ' + result.headers.location);
+      done();
+    });
     testTools.testCollectionsStatus(debug);
   });
 
@@ -251,7 +258,10 @@ describe("app", function() {
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end(done);
+    .end((end, result) => {
+      debug('Location: ' + result.headers.location);
+      done();
+    });
     testTools.testCollectionsStatus(debug);
   });
 
@@ -292,7 +302,10 @@ describe("app", function() {
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end(done);
+    .end((end, result) => {
+      debug('Location: ' + result.headers.location);
+      done();
+    });
     testTools.testCollectionsStatus(debug);
   });
 
@@ -332,7 +345,10 @@ describe("app", function() {
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end(done);
+    .end((end, result) => {
+      debug('Location: ' + result.headers.location);
+      done();
+    });
     testTools.testCollectionsStatus(debug);
   });
 
@@ -373,7 +389,10 @@ describe("app", function() {
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end(done);
+    .end((end, result) => {
+      debug('Location: ' + result.headers.location);
+      done();
+    });
     testTools.testCollectionsStatus(debug);
   });
 
@@ -412,7 +431,10 @@ describe("app", function() {
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end(done);
+    .end((end, result) => {
+      debug('Location: ' + result.headers.location);
+      done();
+    });
     testTools.testCollectionsStatus(debug);
   });
 
@@ -451,7 +473,10 @@ describe("app", function() {
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end(done);
+    .end((end, result) => {
+      debug('Location: ' + result.headers.location);
+      done();
+    });
     testTools.testCollectionsStatus(debug);
   });
 
@@ -490,7 +515,10 @@ describe("app", function() {
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end(done);
+    .end((end, result) => {
+      debug('Location: ' + result.headers.location);
+      done();
+    });
     testTools.testCollectionsStatus(debug);
   });
 
@@ -529,7 +557,10 @@ describe("app", function() {
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end(done);
+    .end((end, result) => {
+      debug('Location: ' + result.headers.location);
+      done();
+    });
     testTools.testCollectionsStatus(debug);
   });
 
@@ -568,7 +599,10 @@ describe("app", function() {
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end(done);
+    .end((end, result) => {
+      debug('Location: ' + result.headers.location);
+      done();
+    });
     testTools.testCollectionsStatus(debug);
   });
 
@@ -607,7 +641,10 @@ describe("app", function() {
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end(done);
+    .end((end, result) => {
+      debug('Location: ' + result.headers.location);
+      done();
+    });
     testTools.testCollectionsStatus(debug);
   });
 
@@ -646,7 +683,10 @@ describe("app", function() {
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end(done);
+    .end((end, result) => {
+      debug('Location: ' + result.headers.location);
+      done();
+    });
     testTools.testCollectionsStatus(debug);
   });
 
@@ -685,7 +725,10 @@ describe("app", function() {
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end(done);
+    .end((end, result) => {
+      debug('Location: ' + result.headers.location);
+      done();
+    });
     testTools.testCollectionsStatus(debug);
   });
 
@@ -736,13 +779,16 @@ describe("app", function() {
       });
     });
 
-    it("Can update a record via PUT swName id:Test Record3", function(done) {
+    it("Can update a record via PUT swName id:Test Record3", function (done) {
       supertest
-      .put("/api/v1/swdb/"+wrapper.origId)
-      .send({swName: "Test Record3"})
-    .set('Cookie', [Cookies])
-      .expect(200)
-      .end(done);
+        .put("/api/v1/swdb/" + wrapper.origId)
+        .send({ swName: "Test Record3" })
+        .set('Cookie', [Cookies])
+        .expect(200)
+        .end((end, result) => {
+          debug('Location: ' + result.headers.location);
+          done();
+        });
       testTools.testCollectionsStatus(debug);
     });
 
@@ -936,6 +982,7 @@ describe("app", function() {
               expect2(res.text).toMatch(value.req.err.msgHas);
             }
 
+            debug('Location: ' + res.headers.location);
             done();
           });
           testTools.testCollectionsStatus(debug);
@@ -954,6 +1001,7 @@ describe("app", function() {
             if (value.req.err.msgHas) {
               expect2(res.text).toMatch(value.req.err.msgHas);
             }
+            debug('Location: ' + res.headers.location);
             done();
           });
           testTools.testCollectionsStatus(debug);
@@ -988,6 +1036,7 @@ describe("app", function() {
       .expect(404)
       .end(function(err, res) {
         expect(res.text).to.match(/Cannot POST \/api\/v1\/swdb\/badbeef/);
+        debug('Location: ' + res.headers.location);
         done();
       });
       testTools.testCollectionsStatus(debug);
@@ -999,7 +1048,10 @@ describe("app", function() {
       .send({swName: "Test Record4"})
       .expect(500)
       .expect('Record not found')
-      .end(done);
+      .end(function(err, res) {
+        debug('Location: ' + res.headers.location);
+        done();
+      });
       testTools.testCollectionsStatus(debug);
     });
     it("Errors on update a nonexistent record via PATCH swName id:badbeef", function(done) {
@@ -1009,8 +1061,12 @@ describe("app", function() {
       .send({swName: "Test Record4"})
       .expect(500)
       .expect('Record not found')
-      .end(done);
+      .end(function(err, res) {
+        debug('Location: ' + res.headers.location);
+        done();
+      });
       testTools.testCollectionsStatus(debug);
+      testTools.dumpCollection(debug, Be.Db.swDoc.db.collections.history);
     });
   });
 });
