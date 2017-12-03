@@ -17,6 +17,8 @@ var webdriver = require("selenium-webdriver"),
 var fs = require('fs');
 var path = require('path');
 // const circJSON = require('circular-json');
+let dbg = require('debug');
+const debug = dbg('swdb:swdb-list-tests');
 
 let CommonTools = require('../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
@@ -25,18 +27,22 @@ props = ctools.getConfiguration();
 
 test.describe("Installations record tests", function() {
   var chromeDriver;
-
-  test.before(function(done) {
-    console.log("Starting swdb-list");
-    this.timeout(5000);
-    testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
+  before("Prep DB", async function () {
+    debug("Prep DB");
+    await testTools.clearTestCollections(debug);
+    // testTools.testCollectionsStatus(debug);
+    await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
+    // done();
   });
 
-  test.after(function(done) {
-    // clear the test collection
+  after("clear db", async function () {
+    debug("Clear DB");
+    // clear the test collection.
     chromeDriver.quit();
-    testTools.clearTestCollections(done);
+    await testTools.clearTestCollections(debug);
+    // done();
   });
+
 
   var allCookies = null;
 

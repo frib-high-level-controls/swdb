@@ -36,23 +36,45 @@ var testLogin = function (request, done) {
     });
 };
 
-// clear the test collection before and after tests suite
-before(function (done) {
-  console.log("Starting swdb-history");
-  this.timeout(5000);
-  testTools.testCollectionsStatus(debug);
-  testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
-});
+// // clear the test collection before and after tests suite
+// before(function (done) {
+//   console.log("Starting swdb-history");
+//   this.timeout(5000);
+//   testTools.clearTestCollections();
+//   testTools.testCollectionsStatus(debug);
+//   testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
+// });
 
-after(function (done) {
-  // clear the test collection
-  testTools.clearTestCollections(done);
-});
+// after(function (done) {
+//   // clear the test collection
+//   testTools.clearTestCollections(done);
+// });
 
 var Cookies;
 //
-describe("app", function () {
+describe("History tests suite", function () {
+  before("Prep DB", async function () {
+    debug("Prep DB");
+    await testTools.clearTestCollections(debug);
+    // testTools.testCollectionsStatus(debug);
+    await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
+    // done();
+  });
+
+  after("clear db", async function () {
+    debug("Clear DB");
+    // clear the test collection
+    await testTools.clearTestCollections(debug);
+    // done();
+  });
+
+  // describe("Login and perform history tests", function () {
+  var wrapper = { origId: null };
+
   before("login as test user", function (done) {
+    debug("Logging in as test user");
+    this.timeout(5000);
+    // var wrapper = { origId: null };
     supertest
       .get("/testlogin?username=testuser&password=testuserpasswd")
       .expect(200)
@@ -62,83 +84,43 @@ describe("app", function () {
       });
   });
 
-  it("Has the blank history", async function (done) {
+  it("Has the blank history", async function () {
     let cursor = Be.Db.swDoc.db.collections.history.find();
     if (cursor) {
-      try {
-        let count = await cursor.count();
-        debug('Found ' + count + ' items');
-        expect(count).to.equal(0);
-        done()
-      } catch (err) {
-        done(err);
-      }
+      let count = await cursor.count();
+      debug('Found ' + count + ' items');
+      expect(count).to.equal(0);
     } else {
-      debug('Installation collection is empty');
-      done()
+      debug('Installation history collection is empty');
+      expect(count = 0).to.equal(0);
     }
   });
 
-  it("Post a new record with correct history", function(done) {
+  it("Post a new record with correct history", function (done) {
     supertest
-    .post("/api/v1/swdb/")
-    .set("Accept", "application/json")
-    .set('Cookie', [Cookies])
-      .send({swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
-    .expect(201)
-    .end(async (err, result) => {
-      /**
-      * Get the resulting header location field and parse out the id. Then search the 
-      * history for that as an rid field. Sort that list by date and take the latest. 
-      * Take the original object data as canonical, compare each field to the history,
-      * removing each found field from canonCheckList. If empty when done, all is well.
-      *
-      * @params err Description Error object.
-      * @params result Desription The express result.
-      */
-
-      debug('Location: ' + result.headers.location);
-      // get record id from the returned location and find records that match
-      let id = result.headers.location.split(/\//).pop();
-      debug('Got id ' + id);
-      // testTools.dumpCollection(debug, Be.Db.swDoc.db.collections.history);
-      let canonObj =
-        {swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: new Date("date 1000").toDateString};
-      let canonCheckList = canonObj;
-      let cursor = Be.Db.swDoc.db.collections.history.find({rid: ObjectId(id)});
-      try {
-        let count = await cursor.count();
-        // debug('Count is ' + count);
-        for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
-          debug('Got history ' + doc._id + ' with  rid ' + id + JSON.stringify(doc));
-          // debug('Found record ' + JSON.stringify(doc));
-          for (let canonKey in canonObj) {
-            // we should find an paths array object where name: "swName" and value: value
-            for (let item of doc.paths) {
-              // debug('searching element ' + JSON.stringify(item) + " for " + canonKey);
-              if (item["name"] === canonKey){
-                // debug('Found name = ' + canonKey);
-                if (item["value"] === canonObj[canonKey]) {
-                  debug('Found name = ' + canonKey + " AND value = " + canonObj[canonKey]);
-                  delete canonCheckList[canonKey];
-                }
-              }
-            }
-          }
-          if (Object.keys(canonCheckList).length === 0 && canonCheckList.constructor === Object) {
-            debug('Cannot find ' + JSON.stringify(canonCheckList) + ' in history');
-          } else {
-            debug('history entry is good');
-            done();
-          }
+      .post("/api/v1/swdb/")
+      .set("Accept", "application/json")
+      .set('Cookie', [Cookies])
+      .send({ swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000" })
+      // .expect(201)
+      .end(async (err, result) => {
+        // debug('Location: ' + result.headers.location);
+        // get record id from the returned location and find records that match
+        let id = result.headers.location.split(/\//).pop();
+        wrapper.origId = id;
+        debug('Got id ' + id);
+        // testTools.dumpCollection(debug, Be.Db.swDoc.db.collections.history);
+        let canonObj =
+          { swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: new Date("date 1000").toString() };
+        let response = null;
+        try {
+          expect(await testTools.checkHistory(debug, canonObj, id)).to.equal("History record matches");
+          done();
+        } catch (err) {
+          done(err);
         }
-      } catch (err) {
-        debug(err);
-      }
-
-    });
-    testTools.testCollectionsStatus(debug);
+      });
+    // testTools.testCollectionsStatus(debug);
   });
-
 
 });

@@ -35,23 +35,38 @@ var testLogin = function(request, done) {
   });
 };
 
-// clear the test collection before and after tests suite
-before(function(done) {
-    console.log("Starting swdb-spec");
-    this.timeout(5000);
-    testTools.testCollectionsStatus(debug);
-    testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
-});
+// // clear the test collection before and after tests suite
+// before(function(done) {
+//     console.log("Starting swdb-spec");
+//     this.timeout(5000);
+//     testTools.clearTestCollections();
+//     // testTools.testCollectionsStatus(debug);
+//     testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
+// });
 
-after(function(done) {
-    // clear the test collection
-    testTools.clearTestCollections(done);
-    // done();
-});
+// after(function(done) {
+//     // clear the test collection
+//     testTools.clearTestCollections(done);
+//     // done();
+// });
 
 var Cookies;
 //
 describe("app", function() {
+  before("Prep DB", async function () {
+    debug("Prep DB");
+    await testTools.clearTestCollections(debug);
+    // testTools.testCollectionsStatus(debug);
+    await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
+    // done();
+  });
+
+  after("clear db", async function () {
+    debug("Clear DB");
+    // clear the test collection
+    await testTools.clearTestCollections(debug);
+    // done();
+  });
   before("login as test user", function(done){
     supertest
     .get("/testlogin?username=testuser&password=testuserpasswd")
