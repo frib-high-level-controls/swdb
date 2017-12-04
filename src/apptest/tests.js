@@ -5,6 +5,7 @@ require('./store/swdb-details.js');
 require('./store/swdb-new.js');
 require('./store/swdb-update.js');
 require('./store/inst-spec.js');
+require('./store/inst-history.js');
 require('./store/inst-list.js');
 require('./store/inst-details.js');
 require('./store/inst-new.js');

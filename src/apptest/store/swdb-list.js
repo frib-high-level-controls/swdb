@@ -16,7 +16,6 @@ var webdriver = require("selenium-webdriver"),
   test = require("selenium-webdriver/testing");
 var fs = require('fs');
 var path = require('path');
-// const circJSON = require('circular-json');
 let dbg = require('debug');
 const debug = dbg('swdb:swdb-list-tests');
 
@@ -30,9 +29,7 @@ test.describe("Installations record tests", function() {
   before("Prep DB", async function () {
     debug("Prep DB");
     await testTools.clearTestCollections(debug);
-    // testTools.testCollectionsStatus(debug);
     await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
-    // done();
   });
 
   after("clear db", async function () {
@@ -40,7 +37,6 @@ test.describe("Installations record tests", function() {
     // clear the test collection.
     chromeDriver.quit();
     await testTools.clearTestCollections(debug);
-    // done();
   });
 
 

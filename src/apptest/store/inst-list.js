@@ -21,14 +21,11 @@ let ctools = new CommonTools.CommonTools();
 let props = {};
 props = ctools.getConfiguration();
 
-
-
 test.describe("Installations record tests", function() {
   var chromeDriver;
   before("Prep DB", async function () {
     debug("Prep DB");
     await testTools.clearTestCollections(debug);
-    // testTools.testCollectionsStatus(debug);
     await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
   });
 

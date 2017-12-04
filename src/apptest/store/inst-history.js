@@ -21,11 +21,11 @@ let ctools = new CommonTools.CommonTools();
 let props = {};
 props = ctools.getConfiguration();
 let dbg = require('debug');
-const debug = dbg('swdb:swdb-history-tests');
+const debug = dbg('swdb:inst-history-tests');
 
 var Cookies;
 //
-describe("History tests suite", function () {
+describe("Installations history tests suite", function () {
   before("Prep DB", async function () {
     debug("Prep DB");
     await testTools.clearTestCollections(debug);
@@ -38,7 +38,6 @@ describe("History tests suite", function () {
     await testTools.clearTestCollections(debug);
   });
 
-  // describe("Login and perform history tests", function () {
   var wrapper = { origId: null };
 
   before("login as test user", function (done) {
@@ -68,17 +67,17 @@ describe("History tests suite", function () {
 
   it("Post a new record with correct history", function (done) {
     supertest
-      .post("/api/v1/swdb/")
+      .post("/api/v1/inst/")
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
-      .send({ swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000" })
+      .send({host: "Test host", name: "Test name", area: "Global", status: "DEVEL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
       .end(async (err, result) => {
         // get record id from the returned location and find records that match
         let id = result.headers.location.split(/\//).pop();
         wrapper.origId = id;
         debug('Got id ' + id);
         let canonObj =
-          { swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: new Date("date 1000").toString() };
+          { host: "Test host", name: "Test name", area: "Global", status: "DEVEL", statusDate: new Date("date 1000").toString(), software: "badbeefbadbeefbadbeefbad"};
         let response = null;
         try {
           expect(await testTools.checkHistory(debug, canonObj, id)).to.equal("History record matches");
@@ -89,19 +88,19 @@ describe("History tests suite", function () {
       });
   });
 
-  it("Update a software record with correct history", function (done) {
+  it("Update an installation record with correct history", function (done) {
     supertest
-      .put("/api/v1/swdb/" + wrapper.origId)
+      .put("/api/v1/inst/" + wrapper.origId)
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
-      .send( { owner: "New test owner" } )
+      .send( { name: "New test name" } )
       .end(async (err, result) => {
         // get record id from the returned location and find records that match
         let id = result.headers.location.split(/\//).pop();
         wrapper.origId = id;
         debug('Got id ' + id);
         let canonObj =
-          { owner: "New test owner" };
+          { name: "New test name" };
         let response = null;
         try {
           expect(await testTools.checkHistory(debug, canonObj, id)).to.equal("History record matches");

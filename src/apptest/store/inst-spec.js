@@ -26,19 +26,6 @@ var webdriver = require("selenium-webdriver"),
 var path = require('path');
 const exec = require('child_process').exec;
 
-var testLogin = function(request, done) {
-  console.log('Login start');
-  supertest
-    .get("/login?username=testuser&password=testuserpasswd")
-    // .send(testAcct)
-    .expect(200)
-    .end(function(err,res){
-      console.log('Login complete');
-      // agent.saveCookies(res);
-      // done();
-    });
-};
-
 var Cookies;
 //
 describe("Installation api tests", function() {
@@ -46,7 +33,6 @@ describe("Installation api tests", function() {
   before("Prep DB", async function () {
     debug("Prep DB");
     await testTools.clearTestCollections(debug);
-    // testTools.testCollectionsStatus(debug);
     await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
   });
 

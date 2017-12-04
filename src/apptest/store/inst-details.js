@@ -26,9 +26,7 @@ test.describe("Installations detail screen tests", function() {
   before("Prep DB", async function () {
     debug("Prep DB");
     await testTools.clearTestCollections(debug);
-    // testTools.testCollectionsStatus(debug);
     await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
-    // done();
   });
 
   after("clear db", async function () {
@@ -36,7 +34,6 @@ test.describe("Installations detail screen tests", function() {
     // clear the test collection.
     chromeDriver.quit();
     await testTools.clearTestCollections(debug);
-    // done();
   });
 
   test.it("should show search page with login button", function() {

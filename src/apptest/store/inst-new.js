@@ -27,7 +27,6 @@ test.describe("Installations add screen tests", function() {
   before("Prep DB", async function () {
     debug("Prep DB");
     await testTools.clearTestCollections(debug);
-    // testTools.testCollectionsStatus(debug);
     await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
   });
 
