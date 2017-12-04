@@ -12,6 +12,8 @@ let webdriver = require("selenium-webdriver"),
   until = webdriver.until,
   test = require("selenium-webdriver/testing");
 let fs = require('fs');
+let dbg = require('debug');
+const debug = dbg('swdb:inst-details-tests');
 
 let CommonTools = require('../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
@@ -20,19 +22,22 @@ props = ctools.getConfiguration();
 
 
 test.describe("Installations detail screen tests", function() {
-  let chromeDriver = null;
-  test.before(function(done) {
-    console.log("Starting inst-details");
-    this.timeout(5000);
-    testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
-  });
-
-  test.after(function(done) {
-    chromeDriver.quit();
-    testTools.clearTestCollections(done);
-  });
-
   let allCookies = null;
+  before("Prep DB", async function () {
+    debug("Prep DB");
+    await testTools.clearTestCollections(debug);
+    // testTools.testCollectionsStatus(debug);
+    await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
+    // done();
+  });
+
+  after("clear db", async function () {
+    debug("Clear DB");
+    // clear the test collection.
+    chromeDriver.quit();
+    await testTools.clearTestCollections(debug);
+    // done();
+  });
 
   test.it("should show search page with login button", function() {
     chromeDriver = new webdriver.Builder()

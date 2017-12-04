@@ -13,6 +13,8 @@ let webdriver = require("selenium-webdriver"),
   test = require("selenium-webdriver/testing");
 let fs = require('fs');
 let path = require('path');
+let dbg = require('debug');
+const debug = dbg('swdb:inst-new-tests');
 
 let CommonTools = require('../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
@@ -22,17 +24,20 @@ props = ctools.getConfiguration();
 
 test.describe("Installations add screen tests", function() {
   let chromeDriver;
+  before("Prep DB", async function () {
+    debug("Prep DB");
+    await testTools.clearTestCollections(debug);
+    // testTools.testCollectionsStatus(debug);
+    await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
+  });
 
-  test.before(function(done) {
-    console.log("Starting inst-new");
-    this.timeout(5000);
-    testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
-  });
-  test.after(function(done) {
-    // clear the test collection
+  after("clear db", async function () {
+    debug("Clear DB");
+    // clear the test collection.
     chromeDriver.quit();
-    testTools.clearTestCollections(done);
+    await testTools.clearTestCollections(debug);
   });
+
 
   let allCookies = null;
 

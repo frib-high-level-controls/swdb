@@ -13,6 +13,8 @@ let TestTools = require('./TestTools');
 let testTools = new TestTools.TestTools();
 
 var fs = require('fs');
+let dbg = require('debug');
+const debug = dbg('swdb:inst-list-tests');
 
 let CommonTools = require('../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
@@ -23,18 +25,20 @@ props = ctools.getConfiguration();
 
 test.describe("Installations record tests", function() {
   var chromeDriver;
-
-  test.before(function(done) {
-    console.log("Starting inst-list");
-    this.timeout(5000);
-    testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
+  before("Prep DB", async function () {
+    debug("Prep DB");
+    await testTools.clearTestCollections(debug);
+    // testTools.testCollectionsStatus(debug);
+    await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
   });
 
-  test.after(function(done) {
-    // clear the test collection
+  after("clear db", async function () {
+    debug("Clear DB");
+    // clear the test collection.
     chromeDriver.quit();
-    testTools.clearTestCollections(done);
+    await testTools.clearTestCollections(debug);
   });
+
 
   var allCookies = null;
 

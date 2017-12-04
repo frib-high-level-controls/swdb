@@ -10,6 +10,8 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var fs = require('fs');
 let TestTools = require('./TestTools');
 let testTools = new TestTools.TestTools();
+let dbg = require('debug');
+const debug = dbg('swdb:inst-spec-tests');
 
 let CommonTools = require('../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
@@ -36,24 +38,24 @@ var testLogin = function(request, done) {
       // done();
     });
 };
-// clear the test collection before and after tests suite
-before(function(done) {
-    console.log("Starting inst-spec");
-    this.timeout(5000);
-    // testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
-    testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
-});
-
-after(function(done) {
-    // clear the test collection
-    testTools.clearTestCollections(done);
-    // done();
-});
 
 var Cookies;
 //
-describe("app", function() {
+describe("Installation api tests", function() {
   var chromeDriver;
+  before("Prep DB", async function () {
+    debug("Prep DB");
+    await testTools.clearTestCollections(debug);
+    // testTools.testCollectionsStatus(debug);
+    await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
+  });
+
+  after("clear db", async function () {
+    debug("Clear DB");
+    // clear the test collection.
+    await testTools.clearTestCollections(debug);
+  });
+
   before("login as test user", function(done){
     supertest
     .get("/testlogin?username=testuser&password=testuserpasswd")

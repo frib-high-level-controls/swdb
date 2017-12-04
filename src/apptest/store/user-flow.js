@@ -16,6 +16,8 @@ var webdriver = require("selenium-webdriver"),
   test = require("selenium-webdriver/testing");
 var fs = require('fs');
 var path = require('path');
+let dbg = require('debug');
+const debug = dbg('swdb:user-flow-tests');
 
 let CommonTools = require('../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
@@ -25,17 +27,19 @@ props = ctools.getConfiguration();
 
 test.describe("User flow tests", function() {
   var chromeDriver;
-  test.before(function(done) {
-    this.timeout(5000);
-    testTools.loadTestCollectionsStandard(done, props.test.swTestDataFile, props.test.instTestDataFile);
+  before("Prep DB", async function () {
+    debug("Prep DB");
+    await testTools.clearTestCollections(debug);
+    // testTools.testCollectionsStatus(debug);
+    await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
   });
 
-  test.after(function(done) {
-    // clear the test collection
+  after("clear db", async function () {
+    debug("Clear DB");
+    // clear the test collection.
     chromeDriver.quit();
-    testTools.clearTestCollections(done);
+    await testTools.clearTestCollections(debug);
   });
-
 
   var allCookies = null;
 
