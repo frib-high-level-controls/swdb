@@ -350,7 +350,8 @@ describe('Installation api tests', function() {
               if (value.res.err.status) {
                 expect(res.status).to.equal(value.res.err.status);
               }
-              for (let prop in value.res.msg) {
+              // for (let prop in value.res.msg) {
+              for (let prop of Object.keys(value.res.msg)) {
                 expect(res.body).to.have.property(prop);
                 // This is to allow sloppy matching on whole objects.
                 // See the npm "expect" module for more
