@@ -54,6 +54,11 @@ module.exports = function(grunt) {
       dest: 'public/swdb-fe',    // destination folder
       expand: true           // required when using cwd
     }
+  },
+  shell: {
+    publicSoftlink: {
+      command: '[ -e ./test/public ] || ln -s ../public test'
+    } 
   }
 
   });
@@ -63,6 +68,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks("grunt-tslint");
   grunt.loadNpmTasks("grunt-contrib-clean");
   grunt.loadNpmTasks("grunt-contrib-copy");
+  grunt.loadNpmTasks("grunt-shell");
   grunt.registerTask("default", ["jshint"]);
-  grunt.registerTask("build", ["ts:app","ts:apptest", "copy"]);
+  grunt.registerTask("build", ["ts:app","ts:apptest", "copy", "shell:publicSoftlink"]);
 };
