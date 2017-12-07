@@ -31,61 +31,60 @@ let exec = child_process.exec;
 
 let Cookies: string;
 //
-describe('Installation api tests', function() {
+describe('Installation api tests', () => {
   let chromeDriver;
-  before('Prep DB', async function () {
+  before('Prep DB', async  () => {
     debug('Prep DB(TS)');
     await testTools.clearTestCollections(debug);
     await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
   });
 
-  after('clear db', async function () {
+  after('clear db', async () => {
     debug('Clear DB');
     // clear the test collection.
     await testTools.clearTestCollections(debug);
   });
 
-  before('login as test user', function(done){
+  before('login as test user', (done) => {
     supertest(app)
     .get('/testlogin?username=testuser&password=testuserpasswd')
     .expect(200)
-    .end(function(err: Error, res: supertest.Response & {headers: any}) {
+    .end((err: Error, res: supertest.Response & {headers: any}) => {
       Cookies = res.headers['set-cookie'].pop().split(';')[0];
-      // console.log('Login complete. Cookie: '+Cookies);
       done();
     });
   });
 
   // web facing tests
   //
-  it('Respond with welcome', function(done) {
+  it('Respond with welcome', (done) => {
     supertest(app)
       .get('/')
       .expect(200)
-      .end(function(err, res: supertest.Response & {res: any}){
+      .end((err, res: supertest.Response & {res: any}) => {
         expect(res.res.text).to.match(/SWDB \(Prototype Interface\)/);
         done(err);
       });
   });
-  it('Returns all sw records', function(done) {
+  it('Returns all sw records', (done) => {
     supertest(app)
       .get('/api/v1/swdb/')
       .expect(200)
-      .end(function(err, res){
+      .end((err, res) => {
         expect(res.text).to.match(/\[*\]/);
         done();
       });
   });
-  it('Returns all installation records', function(done) {
+  it('Returns all installation records', (done) => {
     supertest(app)
       .get('/api/v1/inst/')
       .expect(200)
-      .end(function(err, res){
+      .end((err, res) => {
         expect(res.text).to.match(/\[*\]/);
         done();
       });
   });
-  it('Post a new installation record', function(done) {
+  it('Post a new installation record', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
       .set('Accept', 'application/json')
@@ -96,7 +95,7 @@ describe('Installation api tests', function() {
       .end(done);
   });
 
-  it('Post a new header installation record', function (done) {
+  it('Post a new header installation record',  (done) => {
     supertest(app)
       .post('/api/v1/inst/')
       .set('Accept', 'application/json')
@@ -107,13 +106,13 @@ describe('Installation api tests', function() {
       .end(done);
   });
 
-  describe('Check location headers', function () {
+  describe('Check location headers',  () => {
     let wrapper = { origId: null };
-    before('Get ID record id:Test Record', function (done) {
+    before('Get ID record id:Test Record', (done) => {
       supertest(app)
         .get('/api/v1/inst/')
         .expect(200)
-        .end(function (err, res: supertest.Response & {length: any}) {
+        .end( (err, res: supertest.Response & {length: any}) => {
           res = JSON.parse(res.text);
           for (let i = 0, iLen = res.length; i < iLen; i++) {
             if (res[i].host === 'Header Test host') {
@@ -124,11 +123,11 @@ describe('Installation api tests', function() {
         });
     });
 
-    it('Returns test record id:Header Test Record', function (done) {
+    it('Returns test record id:Header Test Record', (done) => {
       supertest(app)
         .get('/api/v1/inst/' + wrapper.origId)
         .expect(200)
-        .end(function (err: Error, res: supertest.Response) {
+        .end((err: Error, res: supertest.Response) => {
           expect(res.body).to.have.property('_id');
           expect(res.body.host).to.equal('Header Test host');
           expect(res.body._id).to.match(/.{24}/);
@@ -137,7 +136,7 @@ describe('Installation api tests', function() {
         });
     });
 
-    it('Returns the correct location header PUT existing record', function (done) {
+    it('Returns the correct location header PUT existing record', (done) => {
       supertest(app)
         .put('/api/v1/inst/' + wrapper.origId)
         .set('Accept', 'application/json')
@@ -158,7 +157,7 @@ describe('Installation api tests', function() {
         });
     });
 
-    it('Returns the correct location header PATCH existing record', function (done) {
+    it('Returns the correct location header PATCH existing record', (done) => {
       supertest(app)
         .patch('/api/v1/inst/' + wrapper.origId)
         .set('Accept', 'application/json')
@@ -179,7 +178,7 @@ describe('Installation api tests', function() {
         });
     });
   });
-  it('Errors posting a bad status installation', function(done) {
+  it('Errors posting a bad status installation', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
       .send({host: 'test host', name: 'Test name', area: 'Global', status: 'BADENUM',
@@ -187,12 +186,17 @@ describe('Installation api tests', function() {
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
       .expect(400)
-      .end(function(err, res){
-        expect(res.text).to.match(/Status must be one of {\\"0\\":\\"DEVEL\\",\\"1\\":\\"MAINT\\",\\"2\\":\\"RDY_INSTALL\\",\\"3\\":\\"RDY_INT_TEST\\",\\"4\\":\\"RDY_BEAM\\",\\"5\\":\\"DEPRECATED\\",\\"DEVEL\\":0,\\"MAINT\\":1,\\"RDY_INSTALL\\":2,\\"RDY_INT_TEST\\":3,\\"RDY_BEAM\\":4,\\"DEPRECATED\\":5}","value":"BADENUM"}/);
+      .end((err, res) =>{
+        let regex = 'Status must be one of {\\\\"0\\\\":\\\\"DEVEL\\\\",\\\\"1\\\\":\\\\"MAINT\\\\",\
+\\\\"2\\\\":\\\\"RDY_INSTALL\\\\",\\\\"3\\\\":\\\\"RDY_INT_TEST\\\\",\
+\\\\"4\\\\":\\\\"RDY_BEAM\\\\",\\\\"5\\\\":\\\\"DEPRECATED\\\\",\\\\"DEVEL\\\\":0,\
+\\\\"MAINT\\\\":1,\\\\"RDY_INSTALL\\\\":2,\\\\"RDY_INT_TEST\\\\":3,\
+\\\\"RDY_BEAM\\\\":4,\\\\"DEPRECATED\\\\":5}","value":"BADENUM"}';
+        expect(res.text).to.match(new RegExp(regex));
         done();
       });
   });
-  it('Errors posting a duplicate installation record', function(done) {
+  it('Errors posting a duplicate installation record', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
       .send({host: 'Test host', name: 'Test name', area: 'Global', status: 'DEVEL', statusDate: 'date 1000',
@@ -201,11 +205,11 @@ describe('Installation api tests', function() {
       .set('Cookie', Cookies)
       .expect(500)
       .expect('There was a duplicate key error')
-      .end(function(err, res) {
+      .end((err, res) => {
         done();
       });
   });
-  it('Post a new record installation on a different host', function(done) {
+  it('Post a new record installation on a different host', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
       .send({host: 'Test host2', name: 'Test name', area: 'Global', status: 'DEVEL',
@@ -215,7 +219,7 @@ describe('Installation api tests', function() {
       .expect(201)
       .end(done);
   });
-  it('Post a new record installation with different sw ref', function(done) {
+  it('Post a new record installation with different sw ref', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
       .send({host: 'Test host', name: 'Test name', area: 'Global', status: 'DEVEL',
@@ -225,13 +229,13 @@ describe('Installation api tests', function() {
       .expect(201)
       .end(done);
   });
-  describe('get id for installation Test host test sw ref', function() {
+  describe('get id for installation Test host test sw ref', () => {
     let wrapper = {origId: null};
-    before('Get ID record id:Test host test sw ref', function(done) {
+    before('Get ID record id:Test host test sw ref', (done) => {
       supertest(app)
         .get('/api/v1/inst/')
         .expect(200)
-        .end(function(err, res: supertest.Response & {length: any}){
+        .end((err, res: supertest.Response & {length: any}) => {
           res = JSON.parse(res.text);
           for (let i = 0, iLen = res.length; i < iLen; i++) {
             if (res[i].host === 'Test host' &&
@@ -243,11 +247,11 @@ describe('Installation api tests', function() {
         });
     });
 
-    it('Returns test installation record id:Test host test sw ref', function(done) {
+    it('Returns test installation record id:Test host test sw ref', (done) => {
       supertest(app)
         .get('/api/v1/inst/' + wrapper.origId)
         .expect(200)
-        .end(function(err, res){
+        .end((err, res) =>{
           expect(res.body).to.have.property('_id');
           expect(res.body.host).to.equal('Test host');
           expect(res.body._id).to.match(/.{24}/);
@@ -255,7 +259,7 @@ describe('Installation api tests', function() {
           done();
         });
     });
-    it('Can update a record via PUT host id:Test host3', function(done) {
+    it('Can update a record via PUT host id:Test host3', (done) => {
       supertest(app)
         .put('/api/v1/inst/' + wrapper.origId)
         .send({host: 'Test host3'})
@@ -263,11 +267,11 @@ describe('Installation api tests', function() {
         .expect(200)
         .end(done);
     });
-    it('Returns test record 1d:Test host3', function(done) {
+    it('Returns test record 1d:Test host3', (done) => {
       supertest(app)
         .get('/api/v1/inst/' + wrapper.origId)
         .expect(200)
-        .end(function(err, res){
+        .end((err, res) => {
           expect(res.body).to.have.property('_id');
           expect(res.body.host).to.equal('Test host3');
           done();
@@ -301,16 +305,16 @@ describe('Installation api tests', function() {
     ];
 
     // go through the table and check the given parameters
-    testUpdateParams.forEach(function(value: any, i) {
+    testUpdateParams.forEach((value: any, i) => {
       // handle PUT
       if (value.type === 'PUT') {
         it(value.req.err.status + ' ' + value.type + ' msg: ' +
-          JSON.stringify(JSON.stringify(value.req.msg)), function(done) {
+          JSON.stringify(JSON.stringify(value.req.msg)), (done) => {
             supertest(app)
               .put(value.req.url + wrapper.origId)
               .send(value.req.msg)
               .set('Cookie', Cookies)
-              .end(function(err, res){
+              .end((err, res) => {
                 if (value.req.err.status) {
                   expect(res.status).to.equal(value.req.err.status);
                 }
@@ -324,12 +328,12 @@ describe('Installation api tests', function() {
       }
       if (value.type === 'POST') {
         it(value.req.err.status + ' ' + value.type + ' ' + JSON.stringify(JSON.stringify(value.req.msg)),
-         function(done) {
+         (done) => {
           supertest(app)
             .post(value.req.url)
             .send(value.req.msg)
             .set('Cookie', Cookies)
-            .end(function(err, res){
+            .end((err, res) => {
               if (value.req.err.status) {
                 expect(res.status).to.equal(value.req.err.status);
               }
@@ -343,10 +347,10 @@ describe('Installation api tests', function() {
 
       // handle GET
       if (value.type === 'GET') {
-        it(value.res.err.status + ' ' + JSON.stringify(value.res.msg), function(done) {
+        it(value.res.err.status + ' ' + JSON.stringify(value.res.msg), (done) => {
           supertest(app)
             .get(value.res.url + wrapper.origId)
-            .end(function(err, res) {
+            .end((err, res) => {
               if (value.res.err.status) {
                 expect(res.status).to.equal(value.res.err.status);
               }
@@ -363,19 +367,19 @@ describe('Installation api tests', function() {
       }
     });
 
-    it('Errors on update a nonexistent record via POST id id:badbeef', function(done) {
+    it('Errors on update a nonexistent record via POST id id:badbeef', (done) => {
       supertest(app)
         .post('/api/v1/inst/badbeef')
         .set('Cookie', Cookies)
         .send({swName: 'Test Record5'})
         .expect(404)
         .expect('Cannot POST /api/v1/inst/badbeef\n')
-        .end(function (err, res) {
+        .end( (err, res) => {
           expect(res.text).to.match(/Cannot POST \/api\/v1\/inst\/badbeef/);
           done();
         });
     });
-    it('Errors on update a nonexistent record via PUT id:badbeef', function(done) {
+    it('Errors on update a nonexistent record via PUT id:badbeef', (done) => {
       supertest(app)
         .put('/api/v1/inst/badbeef')
         .set('Cookie', Cookies)
@@ -384,7 +388,7 @@ describe('Installation api tests', function() {
         .expect('Record not found')
         .end(done);
     });
-    it('Errors on update a nonexistent record via PATCH id:badbeef', function(done) {
+    it('Errors on update a nonexistent record via PATCH id:badbeef', (done) => {
       supertest(app)
         .patch('/api/v1/inst/badbeef')
         .set('Cookie', Cookies)

@@ -43,6 +43,10 @@ export class Db {
         comment: { type: String},
       }, { emitIndexErrors: true });
 
+      // Use native promises
+      mongoose.Promise = global.Promise;
+      // assert.equal(query.exec().constructor, global.Promise);
+
       Db.schema.index({ swName: 1, version: 1, branch: 1 }, { unique: true });
 
       history.addHistory(Db.schema, {

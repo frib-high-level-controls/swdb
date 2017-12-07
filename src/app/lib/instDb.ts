@@ -45,6 +45,9 @@ export class InstDb {
         drrs: { type: String, default: '' },
       }, { emitIndexErrors: true });
 
+      // Use native promises
+      mongoose.Promise = global.Promise;
+
       InstDb.instSchema.index({ host: 1, name: 1, software: 1 }, { unique: true });
       history.addHistory(InstDb.instSchema, {
         pathsToWatch: ['host', 'name', 'area', 'slots', 'status', 'statusDate',
