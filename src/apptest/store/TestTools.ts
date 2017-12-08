@@ -70,6 +70,7 @@ export class TestTools {
   public async clearTestCollections(sdebug: debug.IDebugger) {
     sdebug('Clearing test collections');
     try {
+      sdebug('Clearing inst history');
       await InstBe.InstDb.instDoc.db.collections.history.drop();
     } catch (err) {
       if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
@@ -83,6 +84,7 @@ export class TestTools {
     if (typeof Be.Db.swDoc != null) {
       try {
         sdebug('swDoc: ' + JSON.stringify(Be.Db.swDoc));
+        sdebug('Clearing swdb history');
         await Be.Db.swDoc.db.collections.history.drop();
       } catch (err) {
         if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
@@ -95,6 +97,7 @@ export class TestTools {
     }
 
     try {
+        sdebug('Clearing inst collection');
         await InstBe.InstDb.instDoc.db.collections.instCollection.drop();
     } catch (err) {
       if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
@@ -106,6 +109,7 @@ export class TestTools {
     }
 
     try {
+      sdebug('Clearing swdb collection');
       await Be.Db.swDoc.db.collections.swdbCollection.drop();
     } catch (err) {
       if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {

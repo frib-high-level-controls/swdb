@@ -195,6 +195,11 @@ app.get('/api/v1/inst/*', function(req: express.Request, res: express.Response, 
   debug('GET /api/v1/inst/* request');
   instBe.getDocs(req, res, next);
 });
+// for get history requests
+app.get('/api/v1/swdb/hist/*', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('GET /api/v1/swdb/hist/* request');
+  be.getSwdbHist(req, res, next);
+});
 // for get requests that are not specific return all
 app.get('/api/v1/swdb/*', function(req: express.Request, res: express.Response, next: express.NextFunction) {
   debug('GET /api/v1/swdb/* request');

@@ -45,7 +45,6 @@ export class Db {
 
       // Use native promises
       mongoose.Promise = global.Promise;
-      // assert.equal(query.exec().constructor, global.Promise);
 
       Db.schema.index({ swName: 1, version: 1, branch: 1 }, { unique: true });
 
@@ -112,6 +111,43 @@ export class Db {
       });
     }
   };
+
+  public  getSwdbHist = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  /**
+   * getSwdbHist method
+   *
+   * This function uses the id found in the URL, and query terms to return a JSON array of history
+   * items relevant to the id presented via the express.Response.send() method.
+   *
+   * @params req The express Request object
+   * @params res The express Response object
+   */
+
+    const id = swdbTools.SwdbLib.getReqId(req);
+    if (!id) {
+      next(new Error('Search ID must be provided'));
+    } else {
+      // get query terms and set defaults , if needed
+      let limit = req.query.limit;
+      if (!limit) {
+        limit = 5;
+      }
+      let skip = req.query.skip;
+      if (!skip) {
+        skip = 0;
+      }
+      debug('looking for history on ' + id + ' limit is ' + limit + ' skip is ' + skip);
+      let cursor = Db.swDoc.db.collections.history.find({ rid: new mongodb.ObjectID(id) })
+        .limit(limit).skip(skip);
+      try {
+        let arr = await cursor.toArray();
+        debug('found history ' + JSON.stringify(arr, null, 2));
+        res.send(arr);
+      } catch (err) {
+        next(err);
+      }
+    }
+  }
 
   public updateDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const id = swdbTools.SwdbLib.getReqId(req);

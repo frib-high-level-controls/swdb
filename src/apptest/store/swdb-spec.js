@@ -70,7 +70,7 @@ describe("app", function() {
   
   it("Has the blank history", async function() {
       let cursor = Be.Db.swDoc.db.collections.history.find();
-      testTools.dumpCollection(debug, Be.Db.swDoc.db.collections.history);
+      // testTools.dumpCollection(debug, Be.Db.swDoc.db.collections.history);
       let count = await cursor.count();
       debug('Found ' + count + ' items');
       expect(count).to.equal(0);
@@ -101,7 +101,7 @@ describe("app", function() {
     try {
       let count = await cursor.count();
       debug('Found ' + count + ' items');
-      testTools.testCollectionsStatus(debug);
+      // testTools.testCollectionsStatus(debug);
       expect(count).to.equal(1);
     } catch (err) {
       done(err);
@@ -129,6 +129,7 @@ describe("app", function() {
       expect(doc.paths[0].value = 'Header Test Record');
     }
   });
+
 
   describe('Check location headers', function() {
     var wrapper = {origId:null};
@@ -178,7 +179,27 @@ describe("app", function() {
             }
           }
         });
-      testTools.testCollectionsStatus(debug);
+      // testTools.testCollectionsStatus(debug);
+    });
+
+    it("The API history entry is correct", function (done) {
+      supertest
+        .get("/api/v1/swdb/hist/" + wrapper.origId)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) {
+            debug("Err history (api test): " + JSON.stringify(err, null, 2));
+            done(err);
+          } else {
+            debug("got history (api test): " + JSON.stringify(res, null, 2));
+            let arr = res.body[0].paths.filter(x => x.name === "swName");
+            // we should only get one item here
+            expect(arr.length).to.equal(1);
+            // check that history item has the expected value
+            expect(arr[0].value).to.equal("Header Test Record");
+            done();
+          }
+        });
     });
 
     it("Returns the correct location header PATCH existing record", function (done) {
@@ -215,7 +236,7 @@ describe("app", function() {
       debug('Location: ' + result.headers.location);
       done();
     });
-    testTools.testCollectionsStatus(debug);
+    // testTools.testCollectionsStatus(debug);
   });
 
   it("Errors posting a duplicate new record", function(done) {
@@ -232,7 +253,7 @@ describe("app", function() {
         done(new Error('no error found'));
       }
     });
-    testTools.testCollectionsStatus(debug);
+    // testTools.testCollectionsStatus(debug);
   });
 
   it("Post a new record Test Record2", function(done) {
@@ -246,7 +267,7 @@ describe("app", function() {
       debug('Location: ' + result.headers.location);
       done();
     });
-    testTools.testCollectionsStatus(debug);
+    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for Test Record', function() {
@@ -290,7 +311,7 @@ describe("app", function() {
       debug('Location: ' + result.headers.location);
       done();
     });
-    testTools.testCollectionsStatus(debug);
+    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for Desc Test Record', function() {
@@ -333,7 +354,7 @@ describe("app", function() {
       debug('Location: ' + result.headers.location);
       done();
     });
-    testTools.testCollectionsStatus(debug);
+    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for Engineer Test Record', function() {
@@ -377,7 +398,7 @@ describe("app", function() {
       debug('Location: ' + result.headers.location);
       done();
     });
-    testTools.testCollectionsStatus(debug);
+    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for versionControlLoc Test Record', function() {
@@ -419,7 +440,7 @@ describe("app", function() {
       debug('Location: ' + result.headers.location);
       done();
     });
-    testTools.testCollectionsStatus(debug);
+    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for designDescDocLoc Test Record', function() {
@@ -461,7 +482,7 @@ describe("app", function() {
       debug('Location: ' + result.headers.location);
       done();
     });
-    testTools.testCollectionsStatus(debug);
+    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for descDocLoc Test Record', function() {
@@ -503,7 +524,7 @@ describe("app", function() {
       debug('Location: ' + result.headers.location);
       done();
     });
-    testTools.testCollectionsStatus(debug);
+    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for recertDate Test Record', function() {
@@ -545,7 +566,7 @@ describe("app", function() {
       debug('Location: ' + result.headers.location);
       done();
     });
-    testTools.testCollectionsStatus(debug);
+    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for vvProcLoc Test Record', function() {
@@ -587,7 +608,7 @@ describe("app", function() {
       debug('Location: ' + result.headers.location);
       done();
     });
-    testTools.testCollectionsStatus(debug);
+    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for vvResultsLoc Test Record', function() {
@@ -629,7 +650,7 @@ describe("app", function() {
       debug('Location: ' + result.headers.location);
       done();
     });
-    testTools.testCollectionsStatus(debug);
+    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for branch Test Record', function() {
@@ -671,7 +692,7 @@ describe("app", function() {
       debug('Location: ' + result.headers.location);
       done();
     });
-    testTools.testCollectionsStatus(debug);
+    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for versionControl Test Record', function() {
@@ -713,7 +734,7 @@ describe("app", function() {
       debug('Location: ' + result.headers.location);
       done();
     });
-    testTools.testCollectionsStatus(debug);
+    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for previous Test Record', function() {
@@ -773,7 +794,7 @@ describe("app", function() {
           debug('Location: ' + result.headers.location);
           done();
         });
-      testTools.testCollectionsStatus(debug);
+      // testTools.testCollectionsStatus(debug);
     });
 
     it("Returns test record 1d:Test Record3", function(done) {
@@ -969,7 +990,7 @@ describe("app", function() {
             debug('Location: ' + res.headers.location);
             done();
           });
-          testTools.testCollectionsStatus(debug);
+          // testTools.testCollectionsStatus(debug);
         });
       }
       if (value.type === "POST") {
@@ -988,7 +1009,7 @@ describe("app", function() {
             debug('Location: ' + res.headers.location);
             done();
           });
-          testTools.testCollectionsStatus(debug);
+          // testTools.testCollectionsStatus(debug);
         });
       }
 
@@ -1023,7 +1044,7 @@ describe("app", function() {
         debug('Location: ' + res.headers.location);
         done();
       });
-      testTools.testCollectionsStatus(debug);
+      // testTools.testCollectionsStatus(debug);
     });
     it("Errors on update a nonexistent record via PUT swName id:badbeef", function(done) {
       supertest
@@ -1036,7 +1057,7 @@ describe("app", function() {
         debug('Location: ' + res.headers.location);
         done();
       });
-      testTools.testCollectionsStatus(debug);
+      // testTools.testCollectionsStatus(debug);
     });
     it("Errors on update a nonexistent record via PATCH swName id:badbeef", function(done) {
       supertest
@@ -1049,8 +1070,8 @@ describe("app", function() {
         debug('Location: ' + res.headers.location);
         done();
       });
-      testTools.testCollectionsStatus(debug);
-      testTools.dumpCollection(debug, Be.Db.swDoc.db.collections.history);
+      // testTools.testCollectionsStatus(debug);
+      // testTools.dumpCollection(debug, Be.Db.swDoc.db.collections.history);
     });
   });
 });
