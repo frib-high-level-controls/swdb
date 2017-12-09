@@ -50,8 +50,12 @@ describe('Installation api tests', () => {
     .get('/testlogin?username=testuser&password=testuserpasswd')
     .expect(200)
     .end((err: Error, res: supertest.Response & {headers: any}) => {
-      Cookies = res.headers['set-cookie'].pop().split(';')[0];
-      done();
+      if (err) {
+        done(err);
+      } else {
+        Cookies = res.headers['set-cookie'].pop().split(';')[0];
+        done();
+      }
     });
   });
 
@@ -62,8 +66,12 @@ describe('Installation api tests', () => {
       .get('/')
       .expect(200)
       .end((err, res: supertest.Response & {res: any}) => {
-        expect(res.res.text).to.match(/SWDB \(Prototype Interface\)/);
-        done(err);
+        if (err) {
+          done(err);
+        } else {
+          expect(res.res.text).to.match(/SWDB \(Prototype Interface\)/);
+          done(err);
+        }
       });
   });
   it('Returns all sw records', (done) => {
@@ -71,8 +79,12 @@ describe('Installation api tests', () => {
       .get('/api/v1/swdb/')
       .expect(200)
       .end((err, res) => {
-        expect(res.text).to.match(/\[*\]/);
-        done();
+        if (err) {
+          done(err);
+        } else {
+          expect(res.text).to.match(/\[*\]/);
+          done();
+        }
       });
   });
   it('Returns all installation records', (done) => {
@@ -80,8 +92,12 @@ describe('Installation api tests', () => {
       .get('/api/v1/inst/')
       .expect(200)
       .end((err, res) => {
-        expect(res.text).to.match(/\[*\]/);
-        done();
+        if (err) {
+          done(err);
+        } else {
+          expect(res.text).to.match(/\[*\]/);
+          done();
+        }
       });
   });
   it('Post a new installation record', (done) => {
@@ -113,13 +129,17 @@ describe('Installation api tests', () => {
         .get('/api/v1/inst/')
         .expect(200)
         .end( (err, res: supertest.Response & {length: any}) => {
-          res = JSON.parse(res.text);
-          for (let i = 0, iLen = res.length; i < iLen; i++) {
-            if (res[i].host === 'Header Test host') {
-              wrapper.origId = res[i]._id;
+          if (err) {
+            done(err);
+          } else {
+            res = JSON.parse(res.text);
+            for (let i = 0, iLen = res.length; i < iLen; i++) {
+              if (res[i].host === 'Header Test host') {
+                wrapper.origId = res[i]._id;
+              }
             }
+            done();
           }
-          done();
         });
     });
 
@@ -128,11 +148,15 @@ describe('Installation api tests', () => {
         .get('/api/v1/inst/' + wrapper.origId)
         .expect(200)
         .end((err: Error, res: supertest.Response) => {
-          expect(res.body).to.have.property('_id');
-          expect(res.body.host).to.equal('Header Test host');
-          expect(res.body._id).to.match(/.{24}/);
-          expect(res.body.__v).to.match(/\d+/);
-          done();
+          if (err) {
+            done(err);
+          } else {
+            expect(res.body).to.have.property('_id');
+            expect(res.body.host).to.equal('Header Test host');
+            expect(res.body._id).to.match(/.{24}/);
+            expect(res.body.__v).to.match(/\d+/);
+            done();
+          }
         });
     });
 
@@ -187,15 +211,20 @@ describe('Installation api tests', () => {
       .set('Cookie', Cookies)
       .expect(400)
       .end((err, res) =>{
-        let regex = 'Status must be one of {\\\\"0\\\\":\\\\"DEVEL\\\\",\\\\"1\\\\":\\\\"MAINT\\\\",\
+        if (err) {
+          done(err);
+        } else {
+          let regex = 'Status must be one of {\\\\"0\\\\":\\\\"DEVEL\\\\",\\\\"1\\\\":\\\\"MAINT\\\\",\
 \\\\"2\\\\":\\\\"RDY_INSTALL\\\\",\\\\"3\\\\":\\\\"RDY_INT_TEST\\\\",\
 \\\\"4\\\\":\\\\"RDY_BEAM\\\\",\\\\"5\\\\":\\\\"DEPRECATED\\\\",\\\\"DEVEL\\\\":0,\
 \\\\"MAINT\\\\":1,\\\\"RDY_INSTALL\\\\":2,\\\\"RDY_INT_TEST\\\\":3,\
 \\\\"RDY_BEAM\\\\":4,\\\\"DEPRECATED\\\\":5}","value":"BADENUM"}';
-        expect(res.text).to.match(new RegExp(regex));
-        done();
+          expect(res.text).to.match(new RegExp(regex));
+          done();
+        }
       });
   });
+
   it('Errors posting a duplicate installation record', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
@@ -204,11 +233,16 @@ describe('Installation api tests', () => {
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
       .expect(500)
-      .expect('There was a duplicate key error')
       .end((err, res) => {
-        done();
+        if (err) {
+          done(err);
+        } else {
+          expect(res.text).to.match(new RegExp('E11000 duplicate key error'));
+          done();
+        }
       });
   });
+
   it('Post a new record installation on a different host', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
@@ -219,6 +253,7 @@ describe('Installation api tests', () => {
       .expect(201)
       .end(done);
   });
+
   it('Post a new record installation with different sw ref', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
@@ -229,6 +264,7 @@ describe('Installation api tests', () => {
       .expect(201)
       .end(done);
   });
+
   describe('get id for installation Test host test sw ref', () => {
     let wrapper = {origId: null};
     before('Get ID record id:Test host test sw ref', (done) => {
@@ -236,14 +272,18 @@ describe('Installation api tests', () => {
         .get('/api/v1/inst/')
         .expect(200)
         .end((err, res: supertest.Response & {length: any}) => {
-          res = JSON.parse(res.text);
-          for (let i = 0, iLen = res.length; i < iLen; i++) {
-            if (res[i].host === 'Test host' &&
-              res[i].software === 'badbeefbadbeefbadbeefbad') {
+          if (err) {
+            done(err);
+          } else {
+            res = JSON.parse(res.text);
+            for (let i = 0, iLen = res.length; i < iLen; i++) {
+              if (res[i].host === 'Test host' &&
+                res[i].software === 'badbeefbadbeefbadbeefbad') {
                 wrapper.origId = res[i]._id;
               }
+            }
+            done();
           }
-          done();
         });
     });
 
@@ -251,14 +291,19 @@ describe('Installation api tests', () => {
       supertest(app)
         .get('/api/v1/inst/' + wrapper.origId)
         .expect(200)
-        .end((err, res) =>{
-          expect(res.body).to.have.property('_id');
-          expect(res.body.host).to.equal('Test host');
-          expect(res.body._id).to.match(/.{24}/);
-          expect(res.body.__v).to.match(/\d+/);
-          done();
+        .end((err, res) => {
+          if (err) {
+            done(err);
+          } else {
+            expect(res.body).to.have.property('_id');
+            expect(res.body.host).to.equal('Test host');
+            expect(res.body._id).to.match(/.{24}/);
+            expect(res.body.__v).to.match(/\d+/);
+            done();
+          }
         });
     });
+
     it('Can update a record via PUT host id:Test host3', (done) => {
       supertest(app)
         .put('/api/v1/inst/' + wrapper.origId)
@@ -267,14 +312,19 @@ describe('Installation api tests', () => {
         .expect(200)
         .end(done);
     });
+
     it('Returns test record 1d:Test host3', (done) => {
       supertest(app)
         .get('/api/v1/inst/' + wrapper.origId)
         .expect(200)
         .end((err, res) => {
-          expect(res.body).to.have.property('_id');
-          expect(res.body.host).to.equal('Test host3');
-          done();
+          if (err) {
+            done(err);
+          } else {
+            expect(res.body).to.have.property('_id');
+            expect(res.body.host).to.equal('Test host3');
+            done();
+          }
         });
     });
 
@@ -315,14 +365,18 @@ describe('Installation api tests', () => {
               .send(value.req.msg)
               .set('Cookie', Cookies)
               .end((err, res) => {
-                if (value.req.err.status) {
-                  expect(res.status).to.equal(value.req.err.status);
-                }
-                if (value.req.err.msgHas) {
-                  expect2(res.text).toMatch(value.req.err.msgHas);
-                }
+                if (err) {
+                  done(err);
+                } else {
+                  if (value.req.err.status) {
+                    expect(res.status).to.equal(value.req.err.status);
+                  }
+                  if (value.req.err.msgHas) {
+                    expect2(res.text).toMatch(value.req.err.msgHas);
+                  }
 
-                done();
+                  done();
+                }
               });
           });
       }
@@ -334,13 +388,17 @@ describe('Installation api tests', () => {
             .send(value.req.msg)
             .set('Cookie', Cookies)
             .end((err, res) => {
-              if (value.req.err.status) {
-                expect(res.status).to.equal(value.req.err.status);
+              if (err) {
+                done(err);
+              } else {
+                if (value.req.err.status) {
+                  expect(res.status).to.equal(value.req.err.status);
+                }
+                if (value.req.err.msgHas) {
+                  expect2(res.text).toMatch(value.req.err.msgHas);
+                }
+                done();
               }
-              if (value.req.err.msgHas) {
-                expect2(res.text).toMatch(value.req.err.msgHas);
-              }
-              done();
             });
         });
       }
@@ -351,17 +409,21 @@ describe('Installation api tests', () => {
           supertest(app)
             .get(value.res.url + wrapper.origId)
             .end((err, res) => {
-              if (value.res.err.status) {
-                expect(res.status).to.equal(value.res.err.status);
+              if (err) {
+                done(err);
+              } else {
+                if (value.res.err.status) {
+                  expect(res.status).to.equal(value.res.err.status);
+                }
+                // for (let prop in value.res.msg) {
+                for (let prop of Object.keys(value.res.msg)) {
+                  expect(res.body).to.have.property(prop);
+                  // This is to allow sloppy matching on whole objects.
+                  // See the npm "expect" module for more
+                  expect2(res.body[prop]).toMatch(value.res.msg[prop]);
+                }
+                done();
               }
-              // for (let prop in value.res.msg) {
-              for (let prop of Object.keys(value.res.msg)) {
-                expect(res.body).to.have.property(prop);
-                // This is to allow sloppy matching on whole objects.
-                // See the npm "expect" module for more
-                expect2(res.body[prop]).toMatch(value.res.msg[prop]);
-              }
-              done();
             });
         });
       }
@@ -373,12 +435,16 @@ describe('Installation api tests', () => {
         .set('Cookie', Cookies)
         .send({swName: 'Test Record5'})
         .expect(404)
-        .expect('Cannot POST /api/v1/inst/badbeef\n')
         .end( (err, res) => {
-          expect(res.text).to.match(/Cannot POST \/api\/v1\/inst\/badbeef/);
-          done();
+          if (err) {
+            done(err);
+          } else {
+            expect(res.text).to.match(/Cannot POST \/api\/v1\/inst\/badbeef/);
+            done();
+          }
         });
     });
+
     it('Errors on update a nonexistent record via PUT id:badbeef', (done) => {
       supertest(app)
         .put('/api/v1/inst/badbeef')
@@ -388,6 +454,7 @@ describe('Installation api tests', () => {
         .expect('Record not found')
         .end(done);
     });
+
     it('Errors on update a nonexistent record via PATCH id:badbeef', (done) => {
       supertest(app)
         .patch('/api/v1/inst/badbeef')
