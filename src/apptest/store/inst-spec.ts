@@ -5,19 +5,14 @@ let expect = chai.expect;
 import supertest = require('supertest');
 import tools = require('../../app/lib/swdblib');
 import Be = require('../../app/lib/Db');
-let be = new Be.Db();
 import instBe = require('../../app/lib/instDb');
 import expect2 = require('expect');
 import fs = require('fs');
 import TestTools = require('./TestTools');
-let testTools = new TestTools.TestTools();
 import dbg = require('debug');
 const debug = dbg('swdb:inst-spec-tests');
 
 import CommonTools = require('../../app/lib/CommonTools');
-let ctools = new CommonTools.CommonTools();
-let props: any = {};
-props = ctools.getConfiguration();
 
 
 import webdriver = require('selenium-webdriver');
@@ -27,10 +22,21 @@ import test = require('selenium-webdriver/testing');
 import path = require('path');
 import child_process = require('child_process');
 import { Express } from 'express-serve-static-core';
-let exec = child_process.exec;
 
+
+/**
+ * inst-spec.ts
+ * Test suite for software installations api
+ */
+
+let be = new Be.Db();
+let testTools = new TestTools.TestTools();
+let exec = child_process.exec;
 let Cookies: string;
-//
+let ctools = new CommonTools.CommonTools();
+let props: any = {};
+props = ctools.getConfiguration();
+
 describe('Installation api tests', () => {
   let chromeDriver;
   before('Prep DB', async  () => {
@@ -65,12 +71,12 @@ describe('Installation api tests', () => {
     supertest(app)
       .get('/')
       .expect(200)
-      .end((err, res: supertest.Response & {res: any}) => {
+      .end((err: Error, res: supertest.Response & {res: any}) => {
         if (err) {
           done(err);
         } else {
           expect(res.res.text).to.match(/SWDB \(Prototype Interface\)/);
-          done(err);
+          done();
         }
       });
   });
@@ -210,7 +216,7 @@ describe('Installation api tests', () => {
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
       .expect(400)
-      .end((err, res) =>{
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {

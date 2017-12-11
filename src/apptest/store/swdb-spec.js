@@ -182,26 +182,6 @@ describe("app", function() {
       // testTools.testCollectionsStatus(debug);
     });
 
-    it("The API history entry is correct", function (done) {
-      supertest
-        .get("/api/v1/swdb/hist/" + wrapper.origId)
-        .expect(200)
-        .end(function (err, res) {
-          if (err) {
-            debug("Err history (api test): " + JSON.stringify(err, null, 2));
-            done(err);
-          } else {
-            debug("got history (api test): " + JSON.stringify(res, null, 2));
-            let arr = res.body[0].paths.filter(x => x.name === "swName");
-            // we should only get one item here
-            expect(arr.length).to.equal(1);
-            // check that history item has the expected value
-            expect(arr[0].value).to.equal("Header Test Record");
-            done();
-          }
-        });
-    });
-
     it("Returns the correct location header PATCH existing record", function (done) {
       supertest
         .patch("/api/v1/swdb/" + wrapper.origId)
@@ -224,6 +204,154 @@ describe("app", function() {
     });
   });
 
+  describe('Check history calls', function () {
+    var wrapper = { origId: null };
+    before("Before test post and get id", function (done) {
+      supertest
+        .post("/api/v1/swdb/")
+        .send({ swName: "Hist1 Test Record", owner: "Test Owner", engineer: "Test Engineer", previous: "test-reference", levelOfCare: "LOW", status: "DEVEL", statusDate: "0" })
+        .set("Accept", "application/json")
+        .set('Cookie', [Cookies])
+        .expect(201)
+        .end((err, result) => {
+          if (err) {
+            done(err);
+          } else {
+            debug('Location: ' + result.headers.location);
+            const urlParts = result.headers.location.split('/');
+            wrapper.origId = urlParts[urlParts.length - 1];
+            done();
+          }
+        });
+    });
+    before("Before modify test record (history2)", function (done) {
+      supertest
+        .put("/api/v1/swdb/" + wrapper.origId)
+        .set("Accept", "application/json")
+        .set('Cookie', [Cookies])
+        .send({ owner: "Hist2 owner" })
+        .expect(200)
+        .end((err, result) => {
+          if (err) done(err);
+          else {
+            done();
+          }
+        });
+    });
+    before("Before modify test record (history 3)", function (done) {
+      supertest
+        .put("/api/v1/swdb/" + wrapper.origId)
+        .set("Accept", "application/json")
+        .set('Cookie', [Cookies])
+        .send({ owner: "Hist3 owner" })
+        .expect(200)
+        .end((err, result) => {
+          if (err) done(err);
+          else {
+            done();
+          }
+        });
+    });
+    before("Before modify test record (history 4)", function (done) {
+      supertest
+        .put("/api/v1/swdb/" + wrapper.origId)
+        .set("Accept", "application/json")
+        .set('Cookie', [Cookies])
+        .send({ owner: "Hist4 owner" })
+        .expect(200)
+        .end((err, result) => {
+          if (err) done(err);
+          else {
+            done();
+          }
+        });
+    });
+    before("Before modify test record (history 5)", function (done) {
+      supertest
+        .put("/api/v1/swdb/" + wrapper.origId)
+        .set("Accept", "application/json")
+        .set('Cookie', [Cookies])
+        .send({ owner: "Hist5 owner" })
+        .expect(200)
+        .end((err, result) => {
+          if (err) done(err);
+          else {
+            done();
+          }
+        });
+    });
+    before("Before modify test record (history 6)", function (done) {
+      supertest
+        .put("/api/v1/swdb/" + wrapper.origId)
+        .set("Accept", "application/json")
+        .set('Cookie', [Cookies])
+        .send({ owner: "Hist6 owner" })
+        .expect(200)
+        .end((err, result) => {
+          if (err) done(err);
+          else {
+            done();
+          }
+        });
+    });
+    before("Before modify test record (history 7)", function (done) {
+      supertest
+        .put("/api/v1/swdb/" + wrapper.origId)
+        .set("Accept", "application/json")
+        .set('Cookie', [Cookies])
+        .send({ owner: "Hist7 owner" })
+        .expect(200)
+        .end((err, result) => {
+          if (err) done(err);
+          else {
+            done();
+          }
+        });
+    });
+
+    it("The API default history entry is correct", function (done) {
+      supertest
+        .get("/api/v1/swdb/hist/" + wrapper.origId)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) {
+            debug("Err history (api test): " + JSON.stringify(err, null, 2));
+            done(err);
+          } else {
+            debug("got history (api test): " + JSON.stringify(res, null, 2));
+            let arr = res.body;
+            expect(arr.length).to.equal(5);
+            arr = res.body[0];
+            // Get the newest paths entry entry where name is "owner"
+            arr = res.body[0].paths.filter(x => x.name === "owner");
+            // check that history item has the expected value
+            expect(arr[0].value).to.equal("Hist7 owner");
+            done();
+          }
+        });
+    });
+    it("The API history (limit 1, skip1) entry is correct", function (done) {
+      supertest
+        .get("/api/v1/swdb/hist/" + wrapper.origId + "?limit=1&skip=1")
+        .expect(200)
+        .end(function (err, res) {
+          if (err) {
+            debug("Err history (api test): " + JSON.stringify(err, null, 2));
+            done(err);
+          } else {
+            debug("got history (api test): " + JSON.stringify(res, null, 2));
+            let arr = res.body;
+            expect(arr.length).to.equal(1);
+            arr = res.body[0];
+            // Get the newest paths entry entry where name is "owner"
+            arr = res.body[0].paths.filter(x => x.name === "owner");
+            // check that history item has the expected value
+            expect(arr[0].value).to.equal("Hist6 owner");
+            done();
+          }
+        });
+    });
+  });
 
   it("Post a new record", function(done) {
     supertest

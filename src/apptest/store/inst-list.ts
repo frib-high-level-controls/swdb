@@ -22,6 +22,11 @@ let ctools = new CommonTools.CommonTools();
 let props: any = {};
 props = ctools.getConfiguration();
 
+/**
+ * inst-list.ts
+ * Test suite for software installations list page
+ */
+
 let chromeDriver;
 
 test.describe('Installations record tests', function() {

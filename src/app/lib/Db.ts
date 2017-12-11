@@ -138,7 +138,7 @@ export class Db {
       }
       debug('looking for history on ' + id + ' limit is ' + limit + ' skip is ' + skip);
       let cursor = Db.swDoc.db.collections.history.find({ rid: new mongodb.ObjectID(id) })
-        .limit(limit).skip(skip);
+        .sort({at: -1}).limit(Number(limit)).skip(Number(skip));
       try {
         let arr = await cursor.toArray();
         debug('found history ' + JSON.stringify(arr, null, 2));

@@ -1,6 +1,9 @@
 'use strict';
 import express = require('express');
 import fs = require('fs');
+import url = require('url');
+import dbg = require('debug');
+const debug = dbg('swdb:swdblib');
 
 const swdb = []; // storage
 const reqLog = []; // log of change requests
@@ -25,10 +28,16 @@ export class SwdbLib {
   // return it, if available
   public static getReqId = (req: express.Request) => {
     let id = null;
-    if (req.url.match(/[^v][\da-fA-F]+$/) !== null) {
-      const urlParts = req.url.split('/');
-      id = urlParts[urlParts.length - 1];
-      return id;
+    let path = url.parse(req.url).pathname;
+    if (url.parse(req.url).pathname){
+      if (path!.match(/[^v][\da-fA-F]+$/) !== null) {
+        const urlParts = path!.split('/');
+        id = urlParts[urlParts.length - 1];
+        debug('getReqId returning ' + id);
+        return id;
+      } else {
+        return null;
+      }
     } else {
       return null;
     }
