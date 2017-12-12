@@ -1,18 +1,10 @@
 let app = require('../../app/server');
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-chai.use(chaiAsPromised);
-let expect = chai.expect;
 import mongodb = require('mongodb');
-
 import  webdriver = require('selenium-webdriver');
-let By = webdriver.By;
-let until = webdriver.until;
 import test = require('selenium-webdriver/testing');
-
 import TestTools = require('./TestTools');
-let testTools = new TestTools.TestTools();
-
 import fs = require('fs');
 import dbg = require('debug');
 const debug = dbg('swdb:inst-list-tests');
@@ -21,6 +13,11 @@ import CommonTools = require('../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
 let props: any = {};
 props = ctools.getConfiguration();
+chai.use(chaiAsPromised);
+let expect = chai.expect;
+let By = webdriver.By;
+let until = webdriver.until;
+let testTools = new TestTools.TestTools();
 
 /**
  * inst-list.ts

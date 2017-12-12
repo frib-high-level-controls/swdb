@@ -11,10 +11,7 @@ import fs = require('fs');
 import TestTools = require('./TestTools');
 import dbg = require('debug');
 const debug = dbg('swdb:inst-spec-tests');
-
 import CommonTools = require('../../app/lib/CommonTools');
-
-
 import webdriver = require('selenium-webdriver');
 let By = webdriver.By;
 let until = webdriver.until;
@@ -40,7 +37,7 @@ props = ctools.getConfiguration();
 describe('Installation api tests', () => {
   let chromeDriver;
   before('Prep DB', async  () => {
-    debug('Prep DB(TS)');
+    debug('Prep DB');
     await testTools.clearTestCollections(debug);
     await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
   });
