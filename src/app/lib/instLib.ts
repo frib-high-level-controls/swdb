@@ -7,10 +7,13 @@ import request = require('request');
 import util = require('util');
 import instBe = require('./instDb.js');
 import swdbTools = require('./swdblib');
+import url = require('url');
 
 import CommonTools = require('./CommonTools');
 import {InstStatusEnum} from './swdbEnums';
 import {AreaEnum} from './swdbEnums';
+import dbg = require('debug');
+const debug = dbg('swdb:instlib');
 const ctools = new CommonTools.CommonTools();
 let props: any = {};
 props = ctools.getConfiguration();
@@ -26,16 +29,38 @@ props = ctools.getConfiguration();
 // return it, if available
 export class InstLib {
 
-  public static getReqId = function(req: express.Request) {
+  /**
+   * getReqId gets a clean ID for from an Express.Request
+   * 
+   * @params req Express.Request
+   * @returns id The ID of the item found in the request
+   */
+  public static getReqId = (req: express.Request) => {
     let id = null;
-    if (req.url.match(/[^v][\da-fA-F]+$/) !== null) {
-      const urlParts = req.url.split('/');
-      id = urlParts[urlParts.length - 1];
-      return id;
+    let path = url.parse(req.url).pathname;
+    if (url.parse(req.url).pathname){
+      if (path!.match(/[^v][\da-fA-F]+$/) !== null) {
+        const urlParts = path!.split('/');
+        id = urlParts[urlParts.length - 1];
+        debug('getReqId returning ' + id);
+        return id;
+      } else {
+        return null;
+      }
     } else {
       return null;
     }
-  };
+  }
+  // public static getReqId = function(req: express.Request) {
+  //   let id = null;
+  //   if (req.url.match(/[^v][\da-fA-F]+$/) !== null) {
+  //     const urlParts = req.url.split('/');
+  //     id = urlParts[urlParts.length - 1];
+  //     return id;
+  //   } else {
+  //     return null;
+  //   }
+  // };
 
   // go get ccdb slot info on behalf of browsers
   public static getSlot = function(req: express.Request, res: express.Response, next: express.NextFunction) {

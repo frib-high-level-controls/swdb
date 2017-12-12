@@ -112,9 +112,9 @@ export class Db {
     }
   };
 
-  public  getSwdbHist = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  public  getHist = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
   /**
-   * getSwdbHist method
+   * getHist method
    *
    * This function uses the id found in the URL, and query terms to return a JSON array of history
    * items relevant to the id presented via the express.Response.send() method.

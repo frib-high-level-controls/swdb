@@ -24,8 +24,12 @@ const props = ctools.getConfiguration();
 // swStatus.initEnum(props.statusEnums);
 export class SwdbLib {
 
-  // general function to find a request ID in a request and
-  // return it, if available
+  /**
+   * getReqId gets a clean ID for from an Express.Request
+   * 
+   * @params req Express.Request
+   * @returns id The ID of the item found in the request
+   */
   public static getReqId = (req: express.Request) => {
     let id = null;
     let path = url.parse(req.url).pathname;

@@ -208,6 +208,165 @@ describe('Installation api tests', () => {
         });
     });
   });
+
+  describe('Check history calls', function () {
+    let wrapper = { origId: null };
+    before('Before test post and get id', function (done) {
+      supertest(app)
+        .post('/api/v1/inst/')
+        .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
+        .send({
+          host: 'Hist Test host', name: 'Hist1 Test name', area: 'Global', status: 'DEVEL',
+          statusDate: 'date 1000', software: 'badbeefbadbeefbadbeefbad',
+        })
+        .expect(201)
+        .end((err: Error, result: supertest.Response & {headers: any}) => {
+          if (err) {
+            done(err);
+          } else {
+            debug('Location: ' + result.headers.location);
+            const urlParts = result.headers.location.split('/');
+            wrapper.origId = urlParts[urlParts.length - 1];
+            done();
+          }
+        });
+    });
+    before('Before modify test record (history2)', function (done) {
+      supertest(app)
+        .put('/api/v1/inst/' + wrapper.origId)
+        .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
+        .send({ name: 'Hist2 Test name' })
+        .expect(200)
+        .end((err: Error, result) => {
+          if (err) {
+            done(err);
+          } else {
+            done();
+          }
+        });
+    });
+    before('Before modify test record (history3)', function (done) {
+      supertest(app)
+        .put('/api/v1/inst/' + wrapper.origId)
+        .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
+        .send({ name: 'Hist3 Test name' })
+        .expect(200)
+        .end((err: Error, result) => {
+          if (err) {
+            done(err);
+          } else {
+            done();
+          }
+        });
+    });
+    before('Before modify test record (history4)', function (done) {
+      supertest(app)
+        .put('/api/v1/inst/' + wrapper.origId)
+        .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
+        .send({ name: 'Hist4 Test name' })
+        .expect(200)
+        .end((err: Error, result) => {
+          if (err) {
+            done(err);
+          } else {
+            done();
+          }
+        });
+    });
+    before('Before modify test record (history5)', function (done) {
+      supertest(app)
+        .put('/api/v1/inst/' + wrapper.origId)
+        .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
+        .send({ name: 'Hist5 Test name' })
+        .expect(200)
+        .end((err: Error, result) => {
+          if (err) {
+            done(err);
+          } else {
+            done();
+          }
+        });
+    });
+    before('Before modify test record (history6)', function (done) {
+      supertest(app)
+        .put('/api/v1/inst/' + wrapper.origId)
+        .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
+        .send({ name: 'Hist6 Test name' })
+        .expect(200)
+        .end((err: Error, result) => {
+          if (err) {
+            done(err);
+          } else {
+            done();
+          }
+        });
+    });
+    before('Before modify test record (history7)', function (done) {
+      supertest(app)
+        .put('/api/v1/inst/' + wrapper.origId)
+        .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
+        .send({ name: 'Hist7 Test name' })
+        .expect(200)
+        .end((err: Error, result) => {
+          if (err) {
+            done(err);
+          } else {
+            done();
+          }
+        });
+    });
+
+    it('The API default history entry is correct', function (done) {
+      supertest(app)
+        .get('/api/v1/inst/hist/' + wrapper.origId)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) {
+            debug('Err history (inst api test): ' + JSON.stringify(err, null, 2));
+            done(err);
+          } else {
+            debug('got history (inst api test): ' + JSON.stringify(res, null, 2));
+            let arr = res.body;
+            expect(arr.length).to.equal(5);
+            arr = res.body[0];
+            // Get the newest paths entry entry where name is "owner"
+            arr = res.body[0].paths.filter(x => x.name === 'name');
+            // check that history item has the expected value
+            expect(arr[0].value).to.equal('Hist7 Test name');
+            done();
+          }
+        });
+    });
+    it('The API history (limit 1, skip1) entry is correct', function (done) {
+      supertest(app)
+        .get('/api/v1/swdb/hist/' + wrapper.origId + '?limit=1&skip=1')
+        .expect(200)
+        .end(function (err, res) {
+          if (err) {
+            debug('Err history (inst api test): ' + JSON.stringify(err, null, 2));
+            done(err);
+          } else {
+            debug('got history (inst api test): ' + JSON.stringify(res, null, 2));
+            let arr = res.body;
+            expect(arr.length).to.equal(1);
+            arr = res.body[0];
+            // Get the newest paths entry entry where name is "owner"
+            arr = res.body[0].paths.filter(x => x.name === 'name');
+            // check that history item has the expected value
+            expect(arr[0].value).to.equal('Hist6 Test name');
+            done();
+          }
+        });
+    });
+  });
+
   it('Errors posting a bad status installation', (done) => {
     supertest(app)
       .post('/api/v1/inst/')

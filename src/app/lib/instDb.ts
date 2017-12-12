@@ -1,5 +1,6 @@
 import express = require('express');
 import fs = require('fs');
+import mongodb = require('mongodb');
 import mongoose = require('mongoose');
 import util = require('util');
 import instTools = require('./instLib');
@@ -108,6 +109,44 @@ export class InstDb {
       });
     }
   };
+
+  public  getHist = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  /**
+   * getHist method
+   *
+   * This function uses the id found in the URL, and query terms to return a JSON array of history
+   * items relevant to the id presented via the express.Response.send() method.
+   *
+   * @params req The express Request object
+   * @params res The express Response object
+   */
+
+    const id = instTools.InstLib.getReqId(req);
+    debug('looking for installation history on ' + id );
+    if (!id) {
+      next(new Error('Search ID must be provided'));
+    } else {
+      // get query terms and set defaults , if needed
+      let limit = req.query.limit;
+      if (!limit) {
+        limit = 5;
+      }
+      let skip = req.query.skip;
+      if (!skip) {
+        skip = 0;
+      }
+      debug('looking for history on ' + id + ' limit is ' + limit + ' skip is ' + skip);
+      let cursor = InstDb.instDoc.db.collections.history.find({ rid: new mongodb.ObjectID(id) })
+        .sort({at: -1}).limit(Number(limit)).skip(Number(skip));
+      try {
+        let arr = await cursor.toArray();
+        debug('found history ' + JSON.stringify(arr, null, 2));
+        res.send(arr);
+      } catch (err) {
+        next(err);
+      }
+    }
+  }
 
   public updateDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const id = instTools.InstLib.getReqId(req);
