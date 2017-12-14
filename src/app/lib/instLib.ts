@@ -31,14 +31,14 @@ export class InstLib {
 
   /**
    * getReqId gets a clean ID for from an Express.Request
-   * 
+   *
    * @params req Express.Request
    * @returns id The ID of the item found in the request
    */
   public static getReqId = (req: express.Request) => {
     let id = null;
     let path = url.parse(req.url).pathname;
-    if (url.parse(req.url).pathname){
+    if (url.parse(req.url).pathname) {
       if (path!.match(/[^v][\da-fA-F]+$/) !== null) {
         const urlParts = path!.split('/');
         id = urlParts[urlParts.length - 1];
@@ -51,16 +51,6 @@ export class InstLib {
       return null;
     }
   }
-  // public static getReqId = function(req: express.Request) {
-  //   let id = null;
-  //   if (req.url.match(/[^v][\da-fA-F]+$/) !== null) {
-  //     const urlParts = req.url.split('/');
-  //     id = urlParts[urlParts.length - 1];
-  //     return id;
-  //   } else {
-  //     return null;
-  //   }
-  // };
 
   // go get ccdb slot info on behalf of browsers
   public static getSlot = function(req: express.Request, res: express.Response, next: express.NextFunction) {

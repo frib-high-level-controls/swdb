@@ -49,7 +49,7 @@ export class Db {
       Db.schema.index({ swName: 1, version: 1, branch: 1 }, { unique: true });
 
       history.addHistory(Db.schema, {
-        pathsToWatch: ['swName', 'version', 'branch', 'desc', 'owner', 'engineer', 
+        pathsToWatch: ['swName', 'version', 'branch', 'desc', 'owner', 'engineer',
           'levelOfCare', 'status', 'statusDate', 'platforms', 'designDescDocLoc', 'descDocLoc',
           'vvProcLoc', 'vvResultsLoc', 'versionControl', 'versionControlLoc', 'recertFreq',
           'recertStatus', 'recertDate', 'previous', 'comment'],
@@ -90,7 +90,7 @@ export class Db {
   }
 
   public getDocs = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const id = swdbTools.SwdbLib.getReqId(req);
+    const id = req.params.id;
     if (!id) {
       // return all
       Db.swDoc.find({}, (err: Error, docs: any) => {
@@ -110,7 +110,7 @@ export class Db {
         }
       });
     }
-  };
+  }
 
   public  getHist = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
   /**
@@ -123,7 +123,7 @@ export class Db {
    * @params res The express Response object
    */
 
-    const id = swdbTools.SwdbLib.getReqId(req);
+    const id = req.params.id;
     if (!id) {
       next(new Error('Search ID must be provided'));
     } else {
@@ -150,7 +150,7 @@ export class Db {
   }
 
   public updateDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const id = swdbTools.SwdbLib.getReqId(req);
+    const id = req.params.id;
     if (id) {
       Db.swDoc.findOne({ _id: id }, async (err: Error, doc: any) => {
         if (doc) {
@@ -179,7 +179,7 @@ export class Db {
     } else {
       next(new Error('Record not found'));
     }
-  };
+  }
 
   // return array of records given an array of ids
   public getList = (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -202,10 +202,10 @@ export class Db {
         res.send(results);
       }
     });
-  };
+  }
 
   public deleteDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const id = swdbTools.SwdbLib.getReqId(req);
+    const id = req.params.id;
 
     // mongoose does not error if deleting something that does not exist
     Db.swDoc.findOne({ _id: id }, (err: Error, doc: any) => {
@@ -219,7 +219,7 @@ export class Db {
         return next(err);
       }
     });
-  };
+  }
 }
 
 // interface ISwdbDoc extends mongoose.MongooseDocument {

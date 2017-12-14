@@ -88,7 +88,7 @@ export class InstDb {
   }
 
   public getDocs = function(req: express.Request, res: express.Response, next: express.NextFunction) {
-    const id = instTools.InstLib.getReqId(req);
+    const id = req.params.id;
     if (!id) {
       // return all
       InstDb.instDoc.find({}, function(err: Error, docs: mongoose.Document[]) {
@@ -121,7 +121,7 @@ export class InstDb {
    * @params res The express Response object
    */
 
-    const id = instTools.InstLib.getReqId(req);
+    const id = req.params.id;
     debug('looking for installation history on ' + id );
     if (!id) {
       next(new Error('Search ID must be provided'));
@@ -149,7 +149,7 @@ export class InstDb {
   }
 
   public updateDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const id = instTools.InstLib.getReqId(req);
+    const id = req.params.id;
     if (id) {
       const doc = InstDb.instDoc.findOne({ _id: id }, async (err: Error, founddoc: any) => {
         if (founddoc) {
@@ -170,14 +170,6 @@ export class InstDb {
           } catch (err) {
             next(err);
           }
-          // founddoc.save((saveerr: Error) => {
-          //   if (saveerr) {
-          //     return next(saveerr);
-          //   } else {
-          //     res.location(InstDb.props.instApiUrl + founddoc._id);
-          //     res.end();
-          //   }
-          // });
         } else {
           return next(new Error('Record not found'));
         }
@@ -188,7 +180,7 @@ export class InstDb {
   }
 
   public deleteDoc = function(req: express.Request, res: express.Response, next: express.NextFunction) {
-    const id = instTools.InstLib.getReqId(req);
+    const id = req.params.id;
 
     // mongoose does not error if deleting something that does not exist
     InstDb.instDoc.findOne({ _id: id }, function(err: Error, doc: mongoose.Document) {

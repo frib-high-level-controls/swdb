@@ -190,23 +190,19 @@ app.get('/api/v1/swdb/slot', function(req: express.Request, res: express.Respons
   debug('GET /api/v1/swdb/slot request');
   instTools.InstLib.getSlot(req, res, next);
 });
-// for get requests that are not specific return all
-app.get('/api/v1/inst/hist/*', function(req: express.Request, res: express.Response, next: express.NextFunction) {
-  debug('GET /api/v1/inst/hist/* request');
-  instBe.getHist(req, res, next);
-});
-// for get requests that are not specific return all
-app.get('/api/v1/inst/*', function(req: express.Request, res: express.Response, next: express.NextFunction) {
-  debug('GET /api/v1/inst/* request');
-  instBe.getDocs(req, res, next);
-});
+
 // for get history requests
-app.get('/api/v1/swdb/hist/*', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+app.get('/api/v1/swdb/hist/:id', function(req: express.Request, res: express.Response, next: express.NextFunction) {
   debug('GET /api/v1/swdb/hist/* request');
   be.getHist(req, res, next);
 });
+// for get requests that are specific
+app.get('/api/v1/swdb/:id', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('GET /api/v1/swdb/* request');
+  be.getDocs(req, res, next);
+});
 // for get requests that are not specific return all
-app.get('/api/v1/swdb/*', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+app.get('/api/v1/swdb', function(req: express.Request, res: express.Response, next: express.NextFunction) {
   debug('GET /api/v1/swdb/* request');
   be.getDocs(req, res, next);
 });
@@ -229,6 +225,67 @@ app.post('/api/v1/swdb', casAuth.ensureAuthenticated,
   });
 });
 
+// for get list of records requests
+app.post('/api/v1/swdb/list', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('POST /api/v1/swdb/list request');
+  be.getList(req, res, next);
+});
+
+// handle incoming put requests for update
+app.put('/api/v1/swdb/:id', casAuth.ensureAuthenticated,
+  function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('PUT /api/v1/swdb/:id request');
+
+  tools.SwdbLib.updateValidation(req);
+  tools.SwdbLib.updateSanitization(req);
+
+  req.getValidationResult().then(function(result) {
+    if (!result.isEmpty()) {
+      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+      return;
+    } else {
+      be.updateDoc(req, res, next);
+    }
+  });
+});
+
+
+// handle incoming patch requests for update
+app.patch('/api/v1/swdb/:id', casAuth.ensureAuthenticated,
+  function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('PATCH /api/v1/swdb/:id request');
+
+  tools.SwdbLib.updateValidation(req);
+  tools.SwdbLib.updateSanitization(req);
+
+  req.getValidationResult().then(function(result) {
+    if (!result.isEmpty()) {
+      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+      return;
+    } else {
+      be.updateDoc(req, res, next);
+    }
+  });
+});
+
+
+// Handle installation requests
+// for get requests that are not specific return all
+app.get('/api/v1/inst/hist/:id', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('GET /api/v1/inst/hist/:id request');
+  instBe.getHist(req, res, next);
+});
+// for get requests that are specific
+app.get('/api/v1/inst/:id', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('GET /api/v1/inst/:id request');
+  instBe.getDocs(req, res, next);
+});
+// for get requests that are not specific return all
+app.get('/api/v1/inst', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('GET /api/v1/inst/:id request');
+  instBe.getDocs(req, res, next);
+});
+
 // handle incoming installation post requests
 app.post('/api/v1/inst', function(req: express.Request, res: express.Response, next: express.NextFunction) {
 
@@ -246,33 +303,9 @@ app.post('/api/v1/inst', function(req: express.Request, res: express.Response, n
   });
 });
 
-// for get list of records requests
-app.post('/api/v1/swdb/list', function(req: express.Request, res: express.Response, next: express.NextFunction) {
-  debug('POST /api/v1/swdb/list request');
-  be.getList(req, res, next);
-});
-
-// handle incoming put requests for update
-app.put('/api/v1/swdb*', casAuth.ensureAuthenticated,
-  function(req: express.Request, res: express.Response, next: express.NextFunction) {
-  debug('PUT /api/v1/swdb* request');
-
-  tools.SwdbLib.updateValidation(req);
-  tools.SwdbLib.updateSanitization(req);
-
-  req.getValidationResult().then(function(result) {
-    if (!result.isEmpty()) {
-      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-      return;
-    } else {
-      be.updateDoc(req, res, next);
-    }
-  });
-});
-
 // handle incoming put requests for installation update
-app.put('/api/v1/inst*', function(req: express.Request, res: express.Response, next: express.NextFunction) {
-  debug('PUT /api/v1/inst* request');
+app.put('/api/v1/inst/:id', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('PUT /api/v1/inst/:id request');
   // Do validation for installation updates
   instTools.InstLib.updateValidation(req);
   instTools.InstLib.updateSanitization(req);
@@ -287,27 +320,9 @@ app.put('/api/v1/inst*', function(req: express.Request, res: express.Response, n
   });
 });
 
-// handle incoming patch requests for update
-app.patch('/api/v1/swdb*', casAuth.ensureAuthenticated,
-  function(req: express.Request, res: express.Response, next: express.NextFunction) {
-  debug('PATCH /api/v1/swdb* request');
-
-  tools.SwdbLib.updateValidation(req);
-  tools.SwdbLib.updateSanitization(req);
-
-  req.getValidationResult().then(function(result) {
-    if (!result.isEmpty()) {
-      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-      return;
-    } else {
-      be.updateDoc(req, res, next);
-    }
-  });
-});
-
 // handle incoming put requests for installation update
-app.patch('/api/v1/inst*', function(req: express.Request, res: express.Response, next: express.NextFunction) {
-  debug('PATCH /api/v1/inst* request');
+app.patch('/api/v1/inst/:id', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('PATCH /api/v1/inst/:id request');
   // Do validation for installation updates
   instTools.InstLib.updateValidation(req);
   instTools.InstLib.updateSanitization(req);
