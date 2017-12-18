@@ -10,8 +10,8 @@
     "make": "grunt clean; grunt build",
     "test-all": "mocha ./test/apptest/tests.js --config ./config/swdbrc",
     "postinstall": "cd ./src/public/swdb-fe; npm install; sudo cp ../../../config/swdb.service /etc/systemd/system/swdb.service",
-    "load-db-test": "cd ./src/app;node -e 'let myTestTools = require(\"/home/deployer/swdb/built/apptest/store/TestTools.js\");a = new myTestTools.TestTools();a.loadTestCollectionsStandard(()=>{},\"/home/deployer/swdb/src/apptest/misc/datafiles/swTestDataCombined.json\",\"/home/deployer/swdb/src/apptest/misc/datafiles/instTestDataCombined.json\");' -- -- --config /home/deployer/swdb/config/swdbrc",
-    "clear-db-test": "cd ./built/app;node -e 'let myTestTools = require(\"/home/deployer/swdb/built/apptest/store/TestTools.js\");a = new myTestTools.TestTools();a.clearTestCollections(()=>{});' -- -- --config /home/deployer/swdb/config/swdbrc"
+    "load-db-test": "node test/apptest/store/load-test-db.js --config /home/deployer/swdb/config/swdbrc",
+    "clear-db-test": "node test/apptest/store/clear-test-db.js --config config/swdbrc"
   },
   "author": "",
   "license": "ISC",

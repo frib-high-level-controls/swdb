@@ -2,7 +2,7 @@ const ObjectId = require('mongodb').ObjectID;
 import mongo = require('mongodb');
 import CommonTools = require('../../app/lib/CommonTools');
 import Be = require('../../app/lib/Db');
-// const be = new Be.Db();
+const be = new Be.Db();
 import InstBe = require('../../app/lib/instDb.js');
 const instBe = new InstBe.InstDb();
 const tools = new CommonTools.CommonTools();
@@ -175,8 +175,8 @@ export class TestTools {
   }
 
   public async dumpCollection(sdebug: debug.IDebugger, coll: mongo.Collection, search: any) {
-    sdebug('Test collections dump('+ JSON.stringify(search) + '):');
-    let cursor = coll.find(search).sort({'at': -1});
+    sdebug('Test collections dump(' + JSON.stringify(search) + '):');
+    let cursor = coll.find(search).sort({at: -1});
     try {
       for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
         sdebug('Dumped Record ' + JSON.stringify(doc));
@@ -188,11 +188,11 @@ export class TestTools {
 
   public async checkHistory(sdebug: debug.IDebugger, canonObj, id) {
   /**
-   * Search history for id as an rid field. Sort that list by date and take the latest. 
+   * Search history for id as an rid field. Sort that list by date and take the latest.
    * Take the original object data as canonical, compare each field to the history,
    * removing each found field from canonCheckList. If empty when done, all is well.
-   * 
-   * Be mindful of object types here. For instance Date object may need to be checked 
+   *
+   * Be mindful of object types here. For instance Date object may need to be checked
    * using a string representation. Others may be more complex.
    *
    * @params sdebug Description Debugger channel to report on.
