@@ -32,7 +32,7 @@ export class Db {
         platforms: { type: String},
         designDescDocLoc: { type: String},
         descDocLoc: { type: String},
-        vvProcLoc: { type: String},
+        vvProcLoc: { type: Array },
         vvResultsLoc: { type: String},
         versionControl: { type: String, enum: Db.props.rcsLabels },
         versionControlLoc: { type: String},
@@ -238,7 +238,7 @@ interface ISwdbModel extends history.IHistory {
   platforms?: string;
   designDescDocLoc?: string;
   descDocLoc?: string;
-  vvProcLoc?: string;
+  vvProcLoc?: [string];
   vvResultsLoc?: string;
   versionControl?: string;
   versionControlLoc?: string;

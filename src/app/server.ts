@@ -17,6 +17,8 @@ import Be = require('./lib/Db');
 import InstBe = require('./lib/instDb');
 import instTools = require('./lib/instLib');
 import tools = require('./lib/swdblib');
+import cJSON = require('circular-json');
+import validate = require('validate.js');
 // import casAuth = require('/home/deployer/template-webapp/src/app/shared/auth');
 
 const debug = dbg('swdb:server');
@@ -75,6 +77,46 @@ app.use(expressValidator({
         return true;
       } else {
         return false;
+      }
+    },
+    isVvProcLoc: function(val: string, req: express.Request) {
+      // Must be an array of strings
+      // debug('check vvProcLoc ' + JSON.stringify(val));
+      // let obj = {};
+      // try {
+      //   obj = JSON.parse(val);
+      // } catch (e) {
+      //   debug('parse error: ' + e);
+      //   return false;
+      // }
+      // debug('object is ' + JSON.stringify(obj));
+      /* Case 1: The string is not a json array
+       * Case 2: The Strins is an array, but the listed items are not valid urls.
+       * Case 3: The string is an arra and all listed items are valif urls
+       */
+      let result: string[] = [];
+      if (Array.isArray(val)) {
+        debug('body is ' + cJSON.stringify(req.body, null, 2));
+        val.forEach(function(element: string, idx: number, arr: any[]){
+          debug('checking element ' + element);
+          debug('checking element(by index) ' + req.body.vvProcLoc[idx]);
+          let thisResult = validate.validate({website: element},
+             {website: {url: true},
+             });
+          // debug('validation for element: ' + thisResult);
+          if (thisResult) {
+            result.push(thisResult)
+          }
+        });
+        debug('vals: ' + JSON.stringify(result, null, 2));
+        // debug('#vals: ' + result.length);
+        if (result.length !== 0) {
+          return false; // Case 2
+        } else {
+          return true; // Case 3
+        }
+      } else {
+        return false; // Case 1
       }
     },
     isSlots: function(val: any[], req: express.Request) {
@@ -217,6 +259,7 @@ app.post('/api/v1/swdb', casAuth.ensureAuthenticated,
 
   req.getValidationResult().then(function(result) {
     if (!result.isEmpty()) {
+      debug('validation result: ' + JSON.stringify(result.array()));
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
     } else {

@@ -686,13 +686,25 @@ describe("app", function() {
   it("Post a new record vvProcLoc Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "vvProcLoc Test Record", owner: "vvProcLoc Test Owner", engineer: "Test Engineer", vvProcLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .send({
+      swName: "vvProcLoc Test Record",
+      owner: "vvProcLoc Test Owner",
+      engineer: "Test Engineer",
+      vvProcLoc: ["http://www.somehost/some-path/some-file", "http://www.somehost/some-path/some-file2"],
+      levelOfCare: "LOW",
+      status: "DEVEL",
+      statusDate: "0"
+    })
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end((end, result) => {
-      debug('Location: ' + result.headers.location);
-      done();
+    .end((err, result) => {
+      if (err) {
+        done(err);
+      } else {
+        debug('Location: ' + result.headers.location);
+        done();
+      }
     });
     // testTools.testCollectionsStatus(debug);
   });
@@ -704,11 +716,15 @@ describe("app", function() {
       .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
-        res=JSON.parse(res.text);
-        for (var i=0, iLen=res.length; i<iLen; i++){
-          if (res[i].swName=="vvProcLoc Test Record") wrapper.origId=res[i]._id;
+        if (err) {
+          done(err);
+        } else {
+          res = JSON.parse(res.text);
+          for (var i = 0, iLen = res.length; i < iLen; i++) {
+            if (res[i].swName == "vvProcLoc Test Record") wrapper.origId = res[i]._id;
+          }
+          done();
         }
-        done();
       });
     });
 
@@ -717,10 +733,16 @@ describe("app", function() {
       .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
-        expect(res.body).to.have.property("_id");
-        expect(res.body.swName).to.equal("vvProcLoc Test Record");
-        expect(res.body.vvProcLoc).to.equal("http://www.somehost/some-path/some-file");
-        done();
+        if (err) {
+          done(err);
+        } else {
+          debug('res: ' + JSON.stringify(res.body));
+          expect(res.body).to.have.property("_id");
+          expect(res.body.swName).to.equal("vvProcLoc Test Record");
+          expect(JSON.stringify(res.body.vvProcLoc))
+            .to.equal('["http://www.somehost/some-path/some-file","http://www.somehost/some-path/some-file2"]');
+          done();
+        }
       });
     });
   });
@@ -732,9 +754,14 @@ describe("app", function() {
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end((end, result) => {
-      debug('Location: ' + result.headers.location);
-      done();
+    .end((err, result) => {
+      if (err) {
+        done(err);
+      }
+      else {
+        debug('Location: ' + result.headers.location);
+        done();
+      }
     });
     // testTools.testCollectionsStatus(debug);
   });
@@ -746,11 +773,15 @@ describe("app", function() {
       .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
-        res=JSON.parse(res.text);
-        for (var i=0, iLen=res.length; i<iLen; i++){
-          if (res[i].swName=="vvResultsLoc Test Record") wrapper.origId=res[i]._id;
+        if (err) {
+          done(err);
+        } else {
+          res = JSON.parse(res.text);
+          for (var i = 0, iLen = res.length; i < iLen; i++) {
+            if (res[i].swName == "vvResultsLoc Test Record") wrapper.origId = res[i]._id;
+          }
+          done();
         }
-        done();
       });
     });
 
@@ -974,8 +1005,8 @@ describe("app", function() {
       {"type": "PUT","req": {"msg": {"descDocLoc": "http://www.somehost/some-path/some-file"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"descDocLoc": "http://www.somehost/some-path/some-file"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"descDocLoc": "badurl"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
-      {"type": "PUT","req": {"msg": {"vvProcLoc": "http://www.somehost/some-path/some-file"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"vvProcLoc": "http://www.somehost/some-path/some-file"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"vvProcLoc": ["http://www.somehost/some-path/some-file"]},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"vvProcLoc": ["http://www.somehost/some-path/some-file"]},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"vvProcLoc": "http:some-malformed-url"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
       {"type": "PUT","req": {"msg": {"vvResultsLoc": "http://www.somehost/some-path/some-file3"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"vvResultsLoc": "http://www.somehost/some-path/some-file3"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},

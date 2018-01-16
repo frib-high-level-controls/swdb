@@ -184,8 +184,9 @@ export class SwdbLib {
       },
       vvProcLoc: {
         optional: true,
-        isURL: {
-          errorMessage: 'V&V procedure location must be a URL.',
+        isVvProcLoc: {
+          options: [req],
+          errorMessage: 'V&V procedure location must be an array of URLs.',
         },
       },
       vvResultsLoc: {
