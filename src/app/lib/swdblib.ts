@@ -26,14 +26,14 @@ export class SwdbLib {
 
   /**
    * getReqId gets a clean ID for from an Express.Request
-   * 
+   *
    * @params req Express.Request
    * @returns id The ID of the item found in the request
    */
   public static getReqId = (req: express.Request) => {
     let id = null;
     let path = url.parse(req.url).pathname;
-    if (url.parse(req.url).pathname){
+    if (url.parse(req.url).pathname) {
       if (path!.match(/[^v][\da-fA-F]+$/) !== null) {
         const urlParts = path!.split('/');
         id = urlParts[urlParts.length - 1];
@@ -191,8 +191,9 @@ export class SwdbLib {
       },
       vvResultsLoc: {
         optional: true,
-        isURL: {
-          errorMessage: 'V&V results location must be a URL.',
+        isVvResultsLoc: {
+          options: [req],
+          errorMessage: 'V&V results location must be an array of URLs.',
         },
       },
       versionControl: {

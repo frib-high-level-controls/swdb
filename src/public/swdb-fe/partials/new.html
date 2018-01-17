@@ -209,7 +209,35 @@
         </div>
 
         <!-- V&V procedure document location-->
-        <div class="row" ng-class="{ 'has-error' : inputForm.vvProcLocInput.$invalid && !inputForm.vvProcLocInput.$pristine }">
+        <div class="row">
+            <label class="col-sm-2">
+                <a id="add.vvProcLoc" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </a>
+                V&V Procedure Locations(URLs)</label>
+            <span class="col-sm-10"></span>
+        </div>
+        <div id="vvProcLoc-group" class="form-group">
+            <div ng-repeat="(key, value) in formData.vvProcLoc track by $index">
+                <div class="row" ng-class="{ 'has-error' : inputForm['vvProcLocInput.'+$index].$invalid && !inputForm['vvProcLocInput.'+$index].$pristine }">
+                    <label class="col-sm-2">
+                        &nbsp&nbsp
+                        <a id="rm.vvProcLoc.{{$index}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                        V&V Procedure Location {{key}}</label>
+                    <div class="col-sm-8">
+                        <input id="vvProcLoc.{{key}}" type="text" name="vvProcLocInput.{{key}}" class="form-control" ng-model="formData.vvProcLoc[$index]" ng-minlength="4"> </input>
+                    </div>
+                    <div class="col-sm-2" id="vvPlocLocInputSts.{{key}}" ng-messages="inputForm['vvProcLocInput.'+$index].$error" ng-if="inputForm['vvProcLocInput.'+$index].$dirty">
+                        <div ng-message="minlength">Minimum 4 characters</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+
+        <!-- <div class="row" ng-class="{ 'has-error' : inputForm.vvProcLocInput.$invalid && !inputForm.vvProcLocInput.$pristine }">
             <div id="vvProcLoc-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">V&V Procedure Doc (DCC URL)</label>
                 <div class="col-sm-8">
@@ -221,7 +249,7 @@
                     <div ng-message="url">Enter a valid URL</div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- V&V results document location-->
         <div class="row" ng-class="{ 'has-error' : inputForm.vvResultsLocInput.$invalid && !inputForm.vvResultsLocInput.$pristine }">

@@ -225,8 +225,20 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
         return method;
     }());
 
+    $scope.newItem = function (event) {
+        var parts = event.currentTarget.id.split('.');
+        if (parts[1] === 'vvProcLoc') {
+            $scope.formData.vvProcLoc.push("");
+        }
+    };
 
-
+    $scope.removeItem = function (event) {
+        var parts = event.currentTarget.id.split('.');
+        if (parts[1] === 'vvProcLoc') {
+            $scope.formData.vvProcLoc.splice(parts[2], 1);
+        }
+    };
+        
     $scope.processForm = function () {
       delete $scope.formData.__v;
       if (!$scope.formData.version){
@@ -287,6 +299,7 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
 
     // initialize this record
     $scope.formData = {
+        vvProcLoc: [],
     };
     $scope.swdbParams = {
         formShowErr: false,

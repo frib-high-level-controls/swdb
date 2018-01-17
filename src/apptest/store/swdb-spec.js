@@ -750,7 +750,14 @@ describe("app", function() {
   it("Post a new record vvResultsLoc Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "vvResultsLoc Test Record", owner: "vvResultsLoc Test Owner", engineer: "Test Engineer", vvResultsLoc: "http://www.somehost/some-path/some-file2", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .send({
+      swName: "vvResultsLoc Test Record",
+      owner: "vvResultsLoc Test Owner",
+      engineer: "Test Engineer",
+      vvResultsLoc: [ "http://www.somehost/some-path/some-file3", "http://www.somehost/some-path/some-file4" ],
+      levelOfCare: "LOW",
+      status: "DEVEL",
+      statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -792,7 +799,8 @@ describe("app", function() {
       .end(function(err, res){
         expect(res.body).to.have.property("_id");
         expect(res.body.swName).to.equal("vvResultsLoc Test Record");
-        expect(res.body.vvResultsLoc).to.equal("http://www.somehost/some-path/some-file2");
+        expect(JSON.stringify(res.body.vvResultsLoc))
+          .to.equal('["http://www.somehost/some-path/some-file3","http://www.somehost/some-path/some-file4"]');
         done();
       });
     });
@@ -1008,8 +1016,8 @@ describe("app", function() {
       {"type": "PUT","req": {"msg": {"vvProcLoc": ["http://www.somehost/some-path/some-file"]},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"vvProcLoc": ["http://www.somehost/some-path/some-file"]},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"vvProcLoc": "http:some-malformed-url"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
-      {"type": "PUT","req": {"msg": {"vvResultsLoc": "http://www.somehost/some-path/some-file3"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"vvResultsLoc": "http://www.somehost/some-path/some-file3"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"vvResultsLoc": ["http://www.somehost/some-path/some-file3"]},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"vvResultsLoc": ["http://www.somehost/some-path/some-file3"]},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"vvResultsLoc": "http:some-malformed-url"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
       {"type": "PUT","req": {"msg": {"versionControl": "Git"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"versionControl": "Git"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
