@@ -229,6 +229,8 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
         var parts = event.currentTarget.id.split('.');
         if (parts[1] === 'vvProcLoc') {
             $scope.formData.vvProcLoc.push("");
+        } else if (parts[1] === 'vvResultsLoc') {
+            $scope.formData.vvResultsLoc.push("");
         }
     };
 
@@ -236,6 +238,8 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
         var parts = event.currentTarget.id.split('.');
         if (parts[1] === 'vvProcLoc') {
             $scope.formData.vvProcLoc.splice(parts[2], 1);
+        } else if (parts[1] === 'vvResultsLoc') {
+            $scope.formData.vvResultsLoc.splice(parts[2], 1);
         }
     };
         
@@ -300,6 +304,7 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     // initialize this record
     $scope.formData = {
         vvProcLoc: [],
+        vvResultsLoc: [],
     };
     $scope.swdbParams = {
         formShowErr: false,

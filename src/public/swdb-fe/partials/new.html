@@ -225,11 +225,11 @@
                         <a id="rm.vvProcLoc.{{$index}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)">
                             <span class="glyphicon glyphicon-remove"></span>
                         </a>
-                        V&V Procedure Location {{key}}</label>
+                        {{key+1}}</label>
                     <div class="col-sm-8">
                         <input id="vvProcLoc.{{key}}" type="text" name="vvProcLocInput.{{key}}" class="form-control" ng-model="formData.vvProcLoc[$index]" ng-minlength="4"> </input>
                     </div>
-                    <div class="col-sm-2" id="vvPlocLocInputSts.{{key}}" ng-messages="inputForm['vvProcLocInput.'+$index].$error" ng-if="inputForm['vvProcLocInput.'+$index].$dirty">
+                    <div class="col-sm-2" id="vvProcLocInputSts.{{key}}" ng-messages="inputForm['vvProcLocInput.'+$index].$error" ng-if="inputForm['vvProcLocInput.'+$index].$dirty">
                         <div ng-message="minlength">Minimum 4 characters</div>
                     </div>
                 </div>
@@ -251,7 +251,7 @@
             </div>
         </div> -->
 
-        <!-- V&V results document location-->
+        <!-- V&V results document location
         <div class="row" ng-class="{ 'has-error' : inputForm.vvResultsLocInput.$invalid && !inputForm.vvResultsLocInput.$pristine }">
             <div id="vvResultsLoc-group" class="form-group swdbFormRow">
                 <label class="col-sm-2 control-label">V&V Results Doc (DCC URL)</label>
@@ -264,8 +264,35 @@
                     <div ng-message="url">Enter a valid URL</div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
+        <!-- V&V results document location-->
+        <div class="row">
+            <label class="col-sm-2">
+                <a id="add.vvResultsLoc" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </a>
+                V&V Results Locations(URLs)</label>
+            <span class="col-sm-10"></span>
+        </div>
+        <div id="vvResultsLoc-group" class="form-group">
+            <div ng-repeat="(key, value) in formData.vvResultsLoc track by $index">
+                <div class="row" ng-class="{ 'has-error' : inputForm['vvResultsLoc.'+$index].$invalid && !inputForm['vvResultsLocInput.'+$index].$pristine }">
+                    <label class="col-sm-2">
+                        &nbsp&nbsp
+                        <a id="rm.vvResultsLoc.{{$index}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                        {{key+1}}</label>
+                    <div class="col-sm-8">
+                        <input id="vvResultsLoc.{{key}}" type="text" name="vvResultsLocInput.{{key}}" class="form-control" ng-model="formData.vvResultsLoc[$index]" ng-minlength="4"> </input>
+                    </div>
+                    <div class="col-sm-2" id="vvResultsLocInputSts.{{key}}" ng-messages="inputForm['vvResultsLocInput.'+$index].$error" ng-if="inputForm['vvResultsLocInput.'+$index].$dirty">
+                        <div ng-message="minlength">Minimum 4 characters</div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Version control -->
         <div class="row" ng-class="{ 'has-error' : inputForm.versionControlInput.$invalid && !inputForm.versionControlInput.$pristine }">
             <div id="versionControl-group" class="form-group swdbFormRow">
