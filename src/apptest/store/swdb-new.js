@@ -155,17 +155,46 @@ test.describe("Software update screen tests", function () {
     input.click();
     input.sendKeys("Test platform");
 
-    // set vvProcLoc
-    chromeDriver.wait(until.elementLocated(By.id("vvProcLoc")), 3000);
-    input = chromeDriver.findElement(By.id("vvProcLoc"));
+    // // set vvProcLoc
+    // chromeDriver.wait(until.elementLocated(By.id("vvProcLoc")), 3000);
+    // input = chromeDriver.findElement(By.id("vvProcLoc"));
+    // input.click();
+    // input.sendKeys("http://www.google.com");
+    chromeDriver.wait(until.elementLocated(By.id("add.vvProcLoc")), 3000);
+    input = chromeDriver.findElement(By.id("add.vvProcLoc"));
     input.click();
-    input.sendKeys("http://www.google.com");
+    chromeDriver.wait(until.elementLocated(By.id("vvProcLoc.0")), 3000);
+    input0 = chromeDriver.findElement(By.id("vvProcLoc.0"));
+    input0.sendKeys("http://procservtest.com/procdoc0");
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id("vvProcLoc.1")), 3000);
+    input1 = chromeDriver.findElement(By.id("vvProcLoc.1"));
+    input1.sendKeys("http://procservtest.com/procdoc1");
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id("vvProcLoc.2")), 3000);
+    input2 = chromeDriver.findElement(By.id("vvProcLoc.2"));
+    input2.sendKeys("http://procservtest.com/procdoc2");
+
 
     // set vvResultsLoc
-    chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc")), 3000);
-    input = chromeDriver.findElement(By.id("vvResultsLoc"));
+    // chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc")), 3000);
+    // input = chromeDriver.findElement(By.id("vvResultsLoc"));
+    // input.click();
+    // input.sendKeys("http://www.google.com");
+    chromeDriver.wait(until.elementLocated(By.id("add.vvResultsLoc")), 3000);
+    input = chromeDriver.findElement(By.id("add.vvResultsLoc"));
     input.click();
-    input.sendKeys("http://www.google.com");
+    chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc.0")), 3000);
+    input0 = chromeDriver.findElement(By.id("vvResultsLoc.0"));
+    input0.sendKeys("http://resultservtest.com/resultsdoc0");
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc.1")), 3000);
+    input1 = chromeDriver.findElement(By.id("vvResultsLoc.1"));
+    input1.sendKeys("http://resultservtest.com/resultsdoc1");
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc.2")), 3000);
+    input2 = chromeDriver.findElement(By.id("vvResultsLoc.2"));
+    input2.sendKeys("http://resultservtest.com/resultdoc2");
 
     // set version control
     chromeDriver.wait(until.elementLocated(By.id("versionControl")), 3000);
@@ -310,7 +339,7 @@ test.describe("Software update screen tests", function () {
     chromeDriver.wait(until.elementLocated(By.id("vvProcLoc")), 3000);
     chromeDriver.findElement(By.id("vvProcLoc")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("http://www.google.com");
+        expect(text).to.equal("http://procservtest.com/procdoc0,http://procservtest.com/procdoc1,http://procservtest.com/procdoc2");
       });
   });
 
@@ -318,7 +347,7 @@ test.describe("Software update screen tests", function () {
     chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc")), 3000);
     chromeDriver.findElement(By.id("vvResultsLoc")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("http://www.google.com");
+        expect(text).to.equal("http://resultservtest.com/resultsdoc0,http://resultservtest.com/resultsdoc1,http://resultservtest.com/resultdoc2");
       });
   });
 
