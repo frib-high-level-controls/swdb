@@ -373,6 +373,24 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
         return method;
     }());
 
+    $scope.newItem = function (event) {
+        var parts = event.currentTarget.id.split('.');
+        if (parts[1] === 'vvProcLoc') {
+            $scope.formData.vvProcLoc.push("");
+        } else if (parts[1] === 'vvResultsLoc') {
+            $scope.formData.vvResultsLoc.push("");
+        }
+    };
+
+    $scope.removeItem = function (event) {
+        var parts = event.currentTarget.id.split('.');
+        if (parts[1] === 'vvProcLoc') {
+            $scope.formData.vvProcLoc.splice(parts[2], 1);
+        } else if (parts[1] === 'vvResultsLoc') {
+            $scope.formData.vvResultsLoc.splice(parts[2], 1);
+        }
+    };
+
     $scope.processForm = function(){
         if ($scope.inputForm.$valid){
             delete $scope.formData.__v;
