@@ -66,13 +66,19 @@ app.use(expressValidator({
         return false;
       }
     },
-    isAreas: function(val: string, req: express.Request) {
+    isArea: function(val: string, req: express.Request) {
       // Must be an array of strings
+      let result: string[] = [];
       if (Array.isArray(val)) {
+        debug('body is ' + cJSON.stringify(req.body, null, 2));
+        debug('val is ' + cJSON.stringify(val, null, 2));
         val.forEach(function(element, idx, arr){
-          req.checkBody('area[' + idx + ']',
-            'Area ' + idx + ' must be a string')
-            .optional().isAscii();
+          let thisResult = validate.isString(element);
+          // debug('validation for element: ' + thisResult);
+          if (!thisResult) {
+            // record all failed fields
+            result.push(String(element) + ' must be a string');
+          }
         });
         return true;
       } else {

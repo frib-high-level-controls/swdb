@@ -109,9 +109,10 @@ export class InstLib {
       },
       area: {
         optional: true,
-        isInEnum: {
-          options: [AreaEnum],
-          errorMessage: 'Area must be one of ' + AreaEnum,
+        isArea: {
+          options: [req],
+          // options: [AreaEnum],
+          errorMessage: 'Area must be a list of areas: ' + AreaEnum,
         },
       },
       slots: {
@@ -183,9 +184,9 @@ export class InstLib {
       },
       area: {
         optional: true,
-        isInEnum: {
-          options: [AreaEnum],
-          errorMessage: 'Area must be one of ' + AreaEnum,
+        isArea: {
+          options: [req],
+          errorMessage: 'Area must be a list of areas: ' + AreaEnum,
         },
       },
       slots: {

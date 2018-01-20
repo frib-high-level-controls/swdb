@@ -108,7 +108,7 @@ describe('Installation api tests', () => {
       .post('/api/v1/inst/')
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
-      .send({host: 'Test host', name: 'Test name', area: 'Global', status: 'DEVEL', statusDate: 'date 1000',
+      .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'DEVEL', statusDate: 'date 1000',
         software: 'badbeefbadbeefbadbeefbad'})
       .expect(201)
       .end(done);
@@ -119,7 +119,7 @@ describe('Installation api tests', () => {
       .post('/api/v1/inst/')
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
-      .send({ host: 'Header Test host', name: 'Header Test name', area: 'Global', status: 'DEVEL',
+      .send({ host: 'Header Test host', name: 'Header Test name', area: ['Global'], status: 'DEVEL',
          statusDate: 'date 1000', software: 'badbeefbadbeefbadbeefbad' })
       .expect(201)
       .end(done);
@@ -214,7 +214,7 @@ describe('Installation api tests', () => {
         .set('Accept', 'application/json')
         .set('Cookie', Cookies)
         .send({
-          host: 'Hist Test host', name: 'Hist1 Test name', area: 'Global', status: 'DEVEL',
+          host: 'Hist Test host', name: 'Hist1 Test name', area: ['Global'], status: 'DEVEL',
           statusDate: 'date 1000', software: 'badbeefbadbeefbadbeefbad',
         })
         .expect(201)
@@ -367,7 +367,7 @@ describe('Installation api tests', () => {
   it('Errors posting a bad status installation', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
-      .send({host: 'test host', name: 'Test name', area: 'Global', status: 'BADENUM',
+      .send({host: 'test host', name: 'Test name', area: ['Global'], status: 'BADENUM',
          statusDate: 'date 1000', software: 'badbeefbadbeefbadbeefbad'})
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
@@ -390,7 +390,7 @@ describe('Installation api tests', () => {
   it('Errors posting a duplicate installation record', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
-      .send({host: 'Test host', name: 'Test name', area: 'Global', status: 'DEVEL', statusDate: 'date 1000',
+      .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'DEVEL', statusDate: 'date 1000',
          software: 'badbeefbadbeefbadbeefbad'})
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
@@ -408,7 +408,7 @@ describe('Installation api tests', () => {
   it('Post a new record installation on a different host', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
-      .send({host: 'Test host2', name: 'Test name', area: 'Global', status: 'DEVEL',
+      .send({host: 'Test host2', name: 'Test name', area: ['Global'], status: 'DEVEL',
        statusDate: 'date 1000', software: 'badbeefbadbeefbadbeefbad'})
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
@@ -419,7 +419,7 @@ describe('Installation api tests', () => {
   it('Post a new record installation with different sw ref', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
-      .send({host: 'Test host', name: 'Test name', area: 'Global', status: 'DEVEL',
+      .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'DEVEL',
        statusDate: 'date 1000', software: 'badbeefbadbeefbadbeefbaa'})
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
@@ -504,8 +504,8 @@ describe('Installation api tests', () => {
       {type: 'GET', res: {msg: {name: 'Test name4'}, url: '/api/v1/inst/',  err: {status: 200}}},
       {type: 'PUT', req: {msg: {software: 'badbeefbadbeefbadbeefbad'}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'GET', res: {msg: {software: 'badbeefbadbeefbadbeefbad'}, url: '/api/v1/inst/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {area: 'FE'}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {area: 'FE'}, url: '/api/v1/inst/', err: {status: 200}}},
+      {type: 'PUT', req: {msg: {area: ['FE']}, url: '/api/v1/inst/', err: {status: 200}}},
+      {type: 'GET', res: {msg: {area: ['FE']}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'PUT', req: {msg: {drrs: 'Test DRR'}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'GET', res: {msg: {drrs: 'Test DRR'}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'PUT', req: {msg: {status: 'RDY_BEAM'}, url: '/api/v1/inst/', err: {status: 200}}},
