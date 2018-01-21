@@ -146,8 +146,9 @@ export class InstLib {
       },
       vvResultsLoc: {
         optional: true,
-        isString: {
-          errorMessage: 'V&V results must be a string.',
+        isVvResultsLoc: {
+          options: [req],
+          errorMessage: 'V&V results location must be an array of URLs.',
         },
       },
       DRRs: {
@@ -218,8 +219,9 @@ export class InstLib {
       },
       vvResultsLoc: {
         optional: true,
-        isString: {
-          errorMessage: 'V&V results must be a string.',
+        isVvResultsLoc: {
+          options: [req],
+          errorMessage: 'V&V results location must be an array of URLs.',
         },
       },
       DRRs: {

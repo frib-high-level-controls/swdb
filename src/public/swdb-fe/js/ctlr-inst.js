@@ -279,7 +279,6 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     }());
 
 
-
     $scope.processForm = function(){
         delete $scope.formData.__v;
         $scope.formData.slots = $scope.slotsSelected;
@@ -324,7 +323,16 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
         if (parts[1] === 'slots'){
             $scope.formData.slots.push("");
         } else if (parts[1] === 'vvResultsLoc'){
+            if (!$scope.formData.vvResultsLoc) {
+              $scope.formData.vvResultsLoc = [];
+            }
             $scope.formData.vvResultsLoc.push("");
+        } else if (parts[1] === 'area'){
+            // check to see if area needs initialization
+            if (!$scope.formData.area) {
+              $scope.formData.area = [];
+            }
+            $scope.formData.area.push("");
         }
     };
 
@@ -334,12 +342,14 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
             $scope.formData.slots.splice(parts[2],1);
         } else if (parts[1] === 'vvResultsLoc'){
             $scope.formData.vvResultsLoc.splice(parts[2],1);
+        } else if (parts[1] === 'area'){
+            $scope.formData.area.splice(parts[2],1);
         }
     };
 
     getEnums = function() {
         $scope.formData.status = "DEVEL";
-        $scope.formData.area = "Global";
+        $scope.formData.area = "";
     };
 
     $scope.refreshSw = () => {
@@ -365,6 +375,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
         //versionControl: "",
         slots: [],
         vvResultLoc: [],
+        area: [],
     };
 
     $scope.swdbParams = {
@@ -375,6 +386,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     };
     getEnums();
     $scope.slotsSelected = [];
+    console.log("at init $scope.formData.area is :" + JSON.stringify($scope.formData.area));
 }
 
 
@@ -502,6 +514,12 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
             $scope.formData.vvResultsLoc.push("");
         } else if (parts[1] === 'drrs'){
             $scope.formData.drrs.push("");
+        } else if (parts[1] === 'area'){
+            // check to see if area needs initialization
+            if (!$scope.formData.area) {
+              $scope.formData.area = [];
+            }
+            $scope.formData.area.push("");
         }
     };
 
@@ -515,6 +533,8 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
             $scope.formData.vvResultsLoc.splice(parts[2],1);
         } else if (parts[1] === 'drrs'){
             $scope.formData.drrs.splice(parts[2],1);
+        } else if (parts[1] === 'area'){
+            $scope.formData.area.splice(parts[2],1);
         }
     };
 

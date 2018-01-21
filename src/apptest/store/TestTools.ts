@@ -9,6 +9,7 @@ const tools = new CommonTools.CommonTools();
 const props = tools.getConfiguration();
 import dbg = require('debug');
 const debug = dbg('swdb:TestTools');
+import _ = require('lodash');
 
 import fs = require('fs');
 
@@ -205,18 +206,20 @@ export class TestTools {
     let msg = '';
     try {
       for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
-        // debug('Got history ' + doc._id + ' with  rid ' + id + JSON.stringify(doc));
+        sdebug('Got history ' + doc._id + ' with  rid ' + id + JSON.stringify(doc));
         for (let canonKey of Object.keys(canonObj)) {
           // we should find an paths array object where name: "swName" and value: value
           for (let item of doc.paths) {
             // sdebug('searching element ' + JSON.stringify(item) + ' for ' + canonKey);
             if (item['name'] === canonKey) {
               // sdebug('Found name = ' + canonKey);
-              if (item['value'] == canonObj[canonKey]) {
+              // if (item['value'] === canonObj[canonKey]) {
+              if (_.isEqual(item['value'], canonObj[canonKey])) {
                 sdebug('Found name = ' + canonKey + ' AND value = ' + canonObj[canonKey]);
                 delete canonCheckList[canonKey];
               } else {
                 msg = 'History item ' + canonKey + ': ' + item['value'] + ' does not match ' + canonObj[canonKey];
+                sdebug(msg);
               }
             }
           }

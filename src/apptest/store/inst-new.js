@@ -94,10 +94,24 @@ test.describe("Installations add screen tests", function() {
     input.sendKeys("Test name");
 
     // set area
-    chromeDriver.wait(until.elementLocated(By.id("area")), 3000);
-    input = chromeDriver.findElement(By.id("area"));
+    chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
+    input = chromeDriver.findElement(By.id("add.area"));
     input.click();
-    input.sendKeys("Global");
+    chromeDriver.wait(until.elementLocated(By.id("area.0")), 3000);
+    input0 = chromeDriver.findElement(By.id("area.0"));
+    input0.sendKeys("FE");
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id("area.1")), 3000);
+    input1 = chromeDriver.findElement(By.id("area.1"));
+    input1.sendKeys("LS1");
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id("area.2")), 3000);
+    input2 = chromeDriver.findElement(By.id("area.2"));
+    input2.sendKeys("LS2");
+    // remove the first entry
+    chromeDriver.wait(until.elementLocated(By.id("rm.area.0")), 3000);
+    input = chromeDriver.findElement(By.id("rm.area.0"));
+    input.click();
 
     // set drrs
     chromeDriver.wait(until.elementLocated(By.id("drrs")), 3000);
@@ -121,11 +135,25 @@ test.describe("Installations add screen tests", function() {
     input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
     input.click();
 
-    // set V&V Results
-    chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc")), 3000);
-    input = chromeDriver.findElement(By.id("vvResultsLoc"));
+    // set vvResultsLoc
+    chromeDriver.wait(until.elementLocated(By.id("add.vvResultsLoc")), 3000);
+    input = chromeDriver.findElement(By.id("add.vvResultsLoc"));
     input.click();
-    input.sendKeys("http://www.google.com");
+    chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc.0")), 3000);
+    input0 = chromeDriver.findElement(By.id("vvResultsLoc.0"));
+    input0.sendKeys("http://resultservtest.com/resultsdoc0");
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc.1")), 3000);
+    input1 = chromeDriver.findElement(By.id("vvResultsLoc.1"));
+    input1.sendKeys("http://resultservtest.com/resultsdoc1");
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc.2")), 3000);
+    input2 = chromeDriver.findElement(By.id("vvResultsLoc.2"));
+    input2.sendKeys("http://resultservtest.com/resultdoc2");
+    // remove the first entry
+    chromeDriver.wait(until.elementLocated(By.id("rm.vvResultsLoc.0")), 3000);
+    input = chromeDriver.findElement(By.id("rm.vvResultsLoc.0"));
+    input.click();
 
     // // set slots
     // chromeDriver.wait(until.elementLocated(By.id("slots")), 3000);
@@ -199,7 +227,7 @@ test.describe("Installations add screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("area")), 3000);
     chromeDriver.findElement(By.id("area")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("Global");
+        expect(text).to.equal("LS1,LS2");
       });
   });
 
@@ -230,12 +258,11 @@ test.describe("Installations add screen tests", function() {
   //     });
   // });
 
-  test.it("should show the correct installtion V&V results in details", function () {
-    this.timeout(8000);
+  test.it("should show the correct vvResultsLoc in details", function () {
     chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc")), 3000);
     chromeDriver.findElement(By.id("vvResultsLoc")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("http://www.google.com");
+        expect(text).to.equal("http://resultservtest.com/resultsdoc1,http://resultservtest.com/resultdoc2");
       });
   });
 });

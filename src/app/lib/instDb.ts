@@ -42,7 +42,7 @@ export class InstDb {
         status: { type: String, enum: InstDb.props.instStatusLabels, required: true },
         statusDate: { type: Date, required: true },
         software: { type: String, required: true },
-        vvResultsLoc: { type: String, default: '' },
+        vvResultsLoc: { type: [String] },
         drrs: { type: String, default: '' },
       }, { emitIndexErrors: true });
 

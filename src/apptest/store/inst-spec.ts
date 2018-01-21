@@ -512,8 +512,8 @@ describe('Installation api tests', () => {
       {type: 'GET', res: {msg: {status: 'RDY_BEAM'}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'PUT', req: {msg: {statusDate: '1997-01-01T08:00:00.000Z'}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'GET', res: {msg: {statusDate: '1997-01-01T08:00:00.000Z'}, url: '/api/v1/inst/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {vvResultsLoc: 'http://www.google.com'}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {vvResultsLoc: 'http://www.google.com'}, url: '/api/v1/inst/',  err: {status: 200}}},
+      {type: 'PUT', req: {msg: {vvResultsLoc: ['http://www.google.com']}, url: '/api/v1/inst/', err: {status: 200}}},
+      {type: 'GET', res: {msg: {vvResultsLoc: ['http://www.google.com']}, url: '/api/v1/inst/',  err: {status: 200}}},
     ];
 
     // go through the table and check the given parameters

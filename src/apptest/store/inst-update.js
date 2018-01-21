@@ -87,10 +87,24 @@ test.describe("Installations update screen tests", function() {
     input.sendKeys("Test name");
 
     // set area
-    chromeDriver.wait(until.elementLocated(By.id("area")), 3000);
-    input = chromeDriver.findElement(By.id("area"));
+    chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
+    input = chromeDriver.findElement(By.id("add.area"));
     input.click();
-    input.sendKeys("Global");
+    chromeDriver.wait(until.elementLocated(By.id("area.0")), 3000);
+    input0 = chromeDriver.findElement(By.id("area.0"));
+    input0.sendKeys("FE");
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id("area.1")), 3000);
+    input1 = chromeDriver.findElement(By.id("area.1"));
+    input1.sendKeys("LS1");
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id("area.2")), 3000);
+    input2 = chromeDriver.findElement(By.id("area.2"));
+    input2.sendKeys("LS2");
+    // remove the first entry
+    chromeDriver.wait(until.elementLocated(By.id("rm.area.0")), 3000);
+    input = chromeDriver.findElement(By.id("rm.area.0"));
+    input.click();
 
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
     input = chromeDriver.findElement(By.id("status"));
@@ -180,7 +194,7 @@ test.describe("Installations update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("area")), 3000);
     chromeDriver.findElement(By.id("area")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("Global");
+        expect(text).to.equal("LS1,LS2");
       });
   });
 

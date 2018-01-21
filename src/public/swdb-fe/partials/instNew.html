@@ -75,7 +75,36 @@
         </div>
       </div>
 
-      <!-- AREAS -->
+      <!-- Areas -->
+        <div class="row">
+            <label class="col-sm-2">
+                <a id="add.area" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </a>
+                Areas</label>
+            <span class="col-sm-10"></span>
+        </div>
+        <div id="area-group" class="form-group">
+            <div ng-repeat="(key, value) in formData.area track by $index">
+                <div class="row" ng-class="{ 'has-error' : inputForm['areaInput.'+$index].$invalid && !inputForm['areaInput.'+$index].$pristine }">
+                    <label class="col-sm-2">
+                        &nbsp&nbsp
+                        <a id="rm.area.{{$index}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                        {{key+1}}</label>
+                    <div class="col-sm-8">
+                      <!-- <input id="area.{{key}}" type="text" name="areaInput.{{key}}" class="form-control" ng-model="formData.area[$index]" ng-minlength="4"> </input> -->
+                      <select id="area.{{key}}" ng-model="formData.area[$index]" ng-options="o for o in props.areaLabels track by o"></select>
+                    </div>
+                    <div class="col-sm-2" id="areaInputSts.{{key}}" ng-messages="inputForm['areaInput.'+$index].$error" ng-if="inputForm['areaInput.'+$index].$dirty">
+                        <div ng-message="minlength">Minimum 4 characters</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      <!-- AREAS
       <div class="row swdbFormRow" ng-class="{ 'has-error' : inputForm.areaInput.$invalid && !inputForm.areaInput.$pristine }">
         <div id="area-group" class="form-group">
           <label class="col-sm-2 control-label">Area*</label>
@@ -85,7 +114,7 @@
           <div class="col-sm-2" id="areaInputSts" ng-messages="inputForm.areaInput.$error" ng-if="inputForm.areaInput.$dirty">
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- DRRs -->
       <div class="row swdbFormRow" ng-class="{ 'has-error' : inputForm.drrsInput.$invalid && !inputForm.drrsInput.$pristine }">
@@ -141,15 +170,31 @@
         </div>
       </div>
 
-      <!-- V&V Results -->
-      <div class="row swdbFormRow" ng-class="{ 'has-error' : inputForm.vvResultsLocInput.$invalid && !inputForm.vvResultsLocInput.$pristine }">
-        <div id="vvResultsLoc-group" class="form-group">
-          <label class="col-sm-2 control-label">V&V Results</label>
-          <div class="col-sm-8">
-            <input id="vvResultsLoc" type="text" name="vvResultsLocInput" class="form-control" placeholder="V&V Results" ng-model="formData.vvResultsLoc" >
-            </input>
-          </div>
-          <div class="col-sm-2" id="vvResultsLocInputSts" ng-messages="inputForm.vvResultsLocInput.$error" ng-if="inputForm.vvResultsLocInput.$dirty">
+      <!-- V&V results document location-->
+      <div class="row">
+        <label class="col-sm-2">
+          <a id="add.vvResultsLoc" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)">
+            <span class="glyphicon glyphicon-plus"></span>
+          </a>
+          V&V Results Locations(URLs)</label>
+        <span class="col-sm-10"></span>
+      </div>
+      <div id="vvResultsLoc-group" class="form-group">
+        <div ng-repeat="(key, value) in formData.vvResultsLoc track by $index">
+          <div class="row" ng-class="{ 'has-error' : inputForm['vvResultsLoc.'+$index].$invalid && !inputForm['vvResultsLocInput.'+$index].$pristine }">
+            <label class="col-sm-2">
+              &nbsp&nbsp
+              <a id="rm.vvResultsLoc.{{$index}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)">
+                <span class="glyphicon glyphicon-remove"></span>
+              </a>
+              {{key+1}}</label>
+            <div class="col-sm-8">
+              <input id="vvResultsLoc.{{key}}" type="text" name="vvResultsLocInput.{{key}}" class="form-control" ng-model="formData.vvResultsLoc[$index]"
+                ng-minlength="4"> </input>
+            </div>
+            <div class="col-sm-2" id="vvResultsLocInputSts.{{key}}" ng-messages="inputForm['vvResultsLocInput.'+$index].$error" ng-if="inputForm['vvResultsLocInput.'+$index].$dirty">
+              <div ng-message="minlength">Minimum 4 characters</div>
+            </div>
           </div>
         </div>
       </div>
