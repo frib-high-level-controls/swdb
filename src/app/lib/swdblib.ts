@@ -246,6 +246,9 @@ export class SwdbLib {
         isAscii: {
           errorMessage: 'Previous must be ASCII characters.',
         },
+        isHexadecimal: {
+          errorMessage: 'Previous must be hexadecimal characters.',
+        },
         isLength: {
           options: [{ min: 24, max: 24 }],
           errorMessage: 'Previous must be 24 hex characters as record ObjectId.',
@@ -453,6 +456,9 @@ export class SwdbLib {
         optional: true,
         isAscii: {
           errorMessage: 'Previous must be ASCII characters.',
+        },
+        isHexadecimal: {
+          errorMessage: 'Previous must be hexadecimal characters.',
         },
         isLength: {
           options: [{ min: 24, max: 24 }],

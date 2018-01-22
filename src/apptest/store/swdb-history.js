@@ -78,7 +78,7 @@ describe("History tests suite", function () {
         wrapper.origId = id;
         debug('Got id ' + id);
         let canonObj =
-          { swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: new Date("date 1000").toString() };
+          { swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: new Date("date 1000") };
         let response = null;
         try {
           expect(await testTools.checkHistory(debug, canonObj, id)).to.equal("History record matches");

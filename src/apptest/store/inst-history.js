@@ -5,6 +5,7 @@ var supertest = require("supertest")(app);
 var tools = require("../../app/lib/swdblib");
 var Be = require('../../app/lib/Db');
 let be = new Be.Db();
+let mongoose = require('mongoose');
 
 let TestTools = require('./TestTools');
 let testTools = new TestTools.TestTools();
@@ -77,7 +78,7 @@ describe("Installations history tests suite", function () {
         wrapper.origId = id;
         debug('Got id ' + id);
         let canonObj =
-          { host: "Test host", name: "Test name", area: [ "Global" ], status: "DEVEL", statusDate: new Date("date 1000"), software: "badbeefbadbeefbadbeefbad"};
+          { host: "Test host", name: "Test name", area: [ "Global" ], status: "DEVEL", statusDate: new Date("date 1000"), software: mongoose.mongo.ObjectId("badbeefbadbeefbadbeefbad")};
         let response = null;
         try {
           expect(await testTools.checkHistory(debug, canonObj, id)).to.equal("History record matches");

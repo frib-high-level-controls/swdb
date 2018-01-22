@@ -41,7 +41,7 @@ export class InstDb {
         slots: [String],
         status: { type: String, enum: InstDb.props.instStatusLabels, required: true },
         statusDate: { type: Date, required: true },
-        software: { type: String, required: true },
+        software: { type: mongoose.SchemaTypes.ObjectId, required: true },
         vvResultsLoc: { type: [String] },
         drrs: { type: String, default: '' },
       }, { emitIndexErrors: true });
