@@ -209,7 +209,7 @@ describe("app", function() {
     before("Before test post and get id", function (done) {
       supertest
         .post("/api/v1/swdb/")
-        .send({ swName: "Hist1 Test Record", owner: "Test Owner", engineer: "Test Engineer", previous: "test-reference", levelOfCare: "LOW", status: "DEVEL", statusDate: "0" })
+        .send({ swName: "Hist1 Test Record", owner: "Test Owner", engineer: "Test Engineer", previous: "badbeefbadbeefbadbeefbad", levelOfCare: "LOW", status: "DEVEL", statusDate: "0" })
         .set("Accept", "application/json")
         .set('Cookie', [Cookies])
         .expect(201)
@@ -893,7 +893,7 @@ describe("app", function() {
   it("Post a new record previous Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "previous Test Record", owner: "previous Test Owner", engineer: "Test Engineer", previous: "test-reference", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .send({swName: "previous Test Record", owner: "previous Test Owner", engineer: "Test Engineer", previous: "badbeefbadbeefbadbeefbad", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -926,7 +926,7 @@ describe("app", function() {
       .end(function(err, res){
         expect(res.body).to.have.property("_id");
         expect(res.body.swName).to.equal("previous Test Record");
-        expect(res.body.previous).to.equal("test-reference");
+        expect(res.body.previous).to.equal("badbeefbadbeefbadbeefbad");
         done();
       });
     });
@@ -1031,8 +1031,8 @@ describe("app", function() {
       {"type": "PUT","req": {"msg": {"recertDate": "April 21, 2017"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"recertDate": "2017-04-21T07:00:00.000Z"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"recertDate": "Not a date"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
-      {"type": "PUT","req": {"msg": {"previous": "test-reference"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"previous": "test-reference"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"previous": "badbeefbadbeefbadbeefbad"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"previous": "badbeefbadbeefbadbeefbad"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"previous": "bad reference is way to long for this"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
       {"type": "PUT","req": {"msg": {"comment": "NEW test comment"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"comment": "NEW test comment"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},

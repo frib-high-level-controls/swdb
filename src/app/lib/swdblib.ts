@@ -247,8 +247,8 @@ export class SwdbLib {
           errorMessage: 'Previous must be ASCII characters.',
         },
         isLength: {
-          options: [{ min: 0, max: 30 }],
-          errorMessage: 'Previous must be 0-30 characters.',
+          options: [{ min: 24, max: 24 }],
+          errorMessage: 'Previous must be 24 hex characters as record ObjectId.',
         },
       },
       comment: {
@@ -451,9 +451,12 @@ export class SwdbLib {
       },
       previous: {
         optional: true,
+        isAscii: {
+          errorMessage: 'Previous must be ASCII characters.',
+        },
         isLength: {
-          options: [{ min: 0, max: 30 }],
-          errorMessage: 'Previous must be 0-30 characters',
+          options: [{ min: 24, max: 24 }],
+          errorMessage: 'Previous must be 24 hex characters as record ObjectId.',
         },
       },
       comment: {

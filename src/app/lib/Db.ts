@@ -39,7 +39,7 @@ export class Db {
         recertFreq: { type: String},
         recertStatus: { type: String},
         recertDate: Date,
-        previous: { type: String},
+        previous: { type: mongoose.SchemaTypes.ObjectId },
         comment: { type: String},
       }, { emitIndexErrors: true });
 
