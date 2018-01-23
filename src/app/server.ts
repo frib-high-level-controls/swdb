@@ -11,7 +11,10 @@ import mongoose = require('mongoose');
 import morgan = require('morgan');
 import path = require('path');
 import util = require('util');
-import casAuth = require('./lib/auth');
+//import casAuth = require('./lib/auth');
+import auth = require('./shared/auth');
+import cfauth = require('./shared/forg-auth');
+import forgapi = require('./shared/forgapi');
 import CommonTools = require('./lib/CommonTools');
 import Be = require('./lib/Db');
 import InstBe = require('./lib/instDb');
@@ -48,6 +51,38 @@ app.use(function(req: express.Request, res: express.Response, next: express.Next
   res.header('Access-Control-Allow-Headers', props.CORS.headers);
   next();
 });
+
+// +let cfg = {
+//   +  "cas": {
+//   +    "append_path": true,
+//   +    "version": "CAS2.0",
+//   +    "cas_url": "https://cas.nscl.msu.edu", 
+//   +    "service_url": "http://swdb-dev", 
+//   +  },
+//   +  "forgapi": {
+//   +    "url": "https://forg-dev.nscl.msu.edu",
+//   +    "agentOptions": { "rejectUnauthorized": false },
+//   +  },
+//   +}
+  debug("cfg.cas.cas_url is " + props.auth.cas.cas_url);
+
+  const forgClient = new forgapi.Client({
+    url: String(props.auth.forgapi.url),
+   agentOptions: props.auth.forgapi.agentOptions || {},
+  });
+
+  const cfAuthProvider = new cfauth.ForgCasProvider(forgClient, {
+    casUrl: String(props.auth.cas.cas_url),
+    casServiceUrl: String(props.auth.cas.service_url),
+    casAppendPath: props.auth.cas.append_path === true ? true : false,
+    casVersion: props.auth.cas.version ? String(props.auth.cas.version) : undefined,
+  });
+
+  auth.setProvider(cfAuthProvider);
+
+  app.use(cfAuthProvider.initialize());
+
+
 
 app.use(cookieParser());
 app.use(expressSession({secret: '1234567890',
@@ -195,13 +230,13 @@ app.listen(props.webPort, function() {
 // });
 
 // auth middleware
-const auth = function(req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (req.session && req.session.username === 'testuser' && req.session.admin) {
-    return next();
-  } else {
-    return res.status(401).send('Not authorized');
-  }
-};
+// const auth = function(req: express.Request, res: express.Response, next: express.NextFunction) {
+//   if (req.session && req.session.username === 'testuser' && req.session.admin) {
+//     return next();
+//   } else {
+//     return res.status(401).send('Not authorized');
+//   }
+// };
 
 // handle incoming get requests
 app.get('/', function(req: express.Request, res: express.Response) {
@@ -222,29 +257,44 @@ app.get('/testlogin', function(req: express.Request, res: express.Response) {
   }
 });
 
-app.get('/caslogin', casAuth.ensureAuthenticated, function(req: express.Request, res: express.Response) {
+// app.get('/caslogin', casAuth.ensureAuthenticated, function(req: express.Request, res: express.Response) {
+app.get('/caslogin', cfAuthProvider.authenticate(), function(req: express.Request, res: express.Response) {
   debug('GET /caslogin request');
-  if (req.session!.username) {
-    // cas has a username
-    res.redirect(props.webUrlProxy);
+  // if (req.session!.username) {
+  //   // cas has a username
+  //   res.redirect(props.webUrlProxy);
 
-  } else {
-    res.send('<p id="CAS auth failed">CAS auth failed</p>');
+  // } else {
+  //   res.send('<p id="CAS auth failed">CAS auth failed</p>');
+  // }
+  if (req.query.bounce) {
+    res.redirect(req.query.bounce);
+    return;
   }
+  res.redirect('/');
 });
 
 // logoff
 app.get('/logout', function(req: express.Request, res: express.Response, next: express.NextFunction) {
   debug('GET /logout request');
   req.session!.destroy((err: Error) => { next(err); });
-  delete req.query.ticket;
   res.clearCookie('connect.sid', {path: '/'});
-  res.send('<p id="Logout complete">logout complete</p>');
+
+  delete req.query.ticket;
+  cfAuthProvider.logout(req);
+  res.redirect(props.auth.cas.cas_url + '/logout');
 });
 
 // for get requests that are not specific return all
 app.get('/api/v1/swdb/user', function(req: express.Request, res: express.Response, next: express.NextFunction) {
   debug('GET /api/v1/swdb/user request');
+  if (req.session){
+    if (req.session.passport){
+      let user2 = JSON.parse(req.session.passport.user);
+      req.session.passport.user = user2;
+    }
+  }
+  debug('sending ' + JSON.stringify(req.session));
   res.send(JSON.stringify(req.session));
 });
 
@@ -278,7 +328,7 @@ app.get('/api/v1/swdb', function(req: express.Request, res: express.Response, ne
 });
 
 // handle incoming post requests
-app.post('/api/v1/swdb', casAuth.ensureAuthenticated,
+app.post('/api/v1/swdb', auth.ensureAuthenticated,
   function(req: express.Request, res: express.Response, next: express.NextFunction) {
   debug('POST /api/v1/swdb request');
   // Do validation for  new records
@@ -303,7 +353,7 @@ app.post('/api/v1/swdb/list', function(req: express.Request, res: express.Respon
 });
 
 // handle incoming put requests for update
-app.put('/api/v1/swdb/:id', casAuth.ensureAuthenticated,
+app.put('/api/v1/swdb/:id', auth.ensureAuthenticated,
   function(req: express.Request, res: express.Response, next: express.NextFunction) {
   debug('PUT /api/v1/swdb/:id request');
 
@@ -322,7 +372,7 @@ app.put('/api/v1/swdb/:id', casAuth.ensureAuthenticated,
 
 
 // handle incoming patch requests for update
-app.patch('/api/v1/swdb/:id', casAuth.ensureAuthenticated,
+app.patch('/api/v1/swdb/:id', auth.ensureAuthenticated,
   function(req: express.Request, res: express.Response, next: express.NextFunction) {
   debug('PATCH /api/v1/swdb/:id request');
 

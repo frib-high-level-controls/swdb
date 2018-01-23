@@ -23,7 +23,7 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
     return $scope.session;
   }, function () {
     // prep for login button
-    if ($scope.session && $scope.session.username) {
+    if ($scope.session && $scope.session.passport) {
       $scope.usrBtnTxt = "";
     } else {
       $scope.usrBtnTxt = 'Log in';
@@ -31,18 +31,22 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
   }, true);
 
   $scope.usrBtnClk = function () {
-    if ($scope.session.username) {
-      let url = $window.location.origin;
-      url = url + "/logout";
-      // logout if already logged in
-      $http.get(url).success(function (data) {
-        $window.location.href = $scope.props.auth.cas + '/logout';
-      });
+    if ($scope.session.passport) {
+      // let url = $window.location.origin;
+      // url = url + "/logout";
+      // // logout if already logged in
+      // $http.get(url).success(function (data) {
+      //   $window.location.href = $scope.props.auth.cas + '/logout';
+      // });
+      $window.location.href = $scope.props.webUrl + 'logout';
     } else {
       //login
-      $window.location.href =
-        $scope.props.auth.cas + '/login?service=' +
-        encodeURIComponent($scope.props.auth.login_service);
+      // $window.location.href =
+      //   $scope.props.auth.cas + '/login?service=' +
+      //   encodeURIComponent($scope.props.auth.login_service);
+      $window.location.href = $scope.props.webUrl + 'caslogin';
+      console.log("After li session is:" + JSON.stringify($scope.session));
+
     }
   };
 
@@ -131,7 +135,8 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService,
         return $scope.session;
     }, function() {
         // prep for login button
-        if ($scope.session && $scope.session.username) {
+        // if ($scope.session && $scope.session.username) {
+        if ($scope.session && $scope.session.passport) {
             $scope.usrBtnTxt = "";
         } else {
             $scope.usrBtnTxt = 'Log in';
@@ -139,7 +144,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService,
     },true);
 
     $scope.usrBtnClk = function(){
-        if ($scope.session.username) {
+        if ($scope.session.passport) {
           let url = $window.location.origin;
           url = url + "/logout";
             // logout if alredy logged in
