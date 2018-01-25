@@ -11,7 +11,6 @@ import mongoose = require('mongoose');
 import morgan = require('morgan');
 import path = require('path');
 import util = require('util');
-//import casAuth = require('./lib/auth');
 import auth = require('./shared/auth');
 import cfauth = require('./shared/forg-auth');
 import forgapi = require('./shared/forgapi');
@@ -52,37 +51,23 @@ app.use(function(req: express.Request, res: express.Response, next: express.Next
   next();
 });
 
-// +let cfg = {
-//   +  "cas": {
-//   +    "append_path": true,
-//   +    "version": "CAS2.0",
-//   +    "cas_url": "https://cas.nscl.msu.edu", 
-//   +    "service_url": "http://swdb-dev", 
-//   +  },
-//   +  "forgapi": {
-//   +    "url": "https://forg-dev.nscl.msu.edu",
-//   +    "agentOptions": { "rejectUnauthorized": false },
-//   +  },
-//   +}
-  debug("cfg.cas.cas_url is " + props.auth.cas.cas_url);
 
-  const forgClient = new forgapi.Client({
-    url: String(props.auth.forgapi.url),
-   agentOptions: props.auth.forgapi.agentOptions || {},
-  });
+debug('cfg.cas.cas_url is ' + props.auth.cas.cas_url);
+const forgClient = new forgapi.Client({
+  url: String(props.auth.forgapi.url),
+  agentOptions: props.auth.forgapi.agentOptions || {},
+});
 
-  const cfAuthProvider = new cfauth.ForgCasProvider(forgClient, {
-    casUrl: String(props.auth.cas.cas_url),
-    casServiceUrl: String(props.auth.cas.service_url),
-    casAppendPath: props.auth.cas.append_path === true ? true : false,
-    casVersion: props.auth.cas.version ? String(props.auth.cas.version) : undefined,
-  });
+// const cfAuthProvider = new cfauth.DevForgBasicProvider(forgClient, {});
+const cfAuthProvider = new cfauth.ForgCasProvider(forgClient, {
+  casUrl: String(props.auth.cas.cas_url),
+  casServiceUrl: String(props.auth.cas.service_url),
+  casAppendPath: props.auth.cas.append_path === true ? true : false,
+  casVersion: props.auth.cas.version ? String(props.auth.cas.version) : undefined,
+});
 
-  auth.setProvider(cfAuthProvider);
-
-  app.use(cfAuthProvider.initialize());
-
-
+ auth.setProvider(cfAuthProvider);
+ app.use(cfAuthProvider.initialize());
 
 app.use(cookieParser());
 app.use(expressSession({secret: '1234567890',
@@ -288,10 +273,10 @@ app.get('/logout', function(req: express.Request, res: express.Response, next: e
 // for get requests that are not specific return all
 app.get('/api/v1/swdb/user', function(req: express.Request, res: express.Response, next: express.NextFunction) {
   debug('GET /api/v1/swdb/user request');
-  if (req.session){
-    if (req.session.passport){
+  if (req.session) {
+    if (req.session.passport) {
       let user2 = JSON.parse(req.session.passport.user);
-      req.session.passport.user = user2;
+      req.session.user = user2;
     }
   }
   debug('sending ' + JSON.stringify(req.session));

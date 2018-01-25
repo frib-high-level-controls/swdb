@@ -32,18 +32,8 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
 
   $scope.usrBtnClk = function () {
     if ($scope.session.passport) {
-      // let url = $window.location.origin;
-      // url = url + "/logout";
-      // // logout if already logged in
-      // $http.get(url).success(function (data) {
-      //   $window.location.href = $scope.props.auth.cas + '/logout';
-      // });
       $window.location.href = $scope.props.webUrl + 'logout';
     } else {
-      //login
-      // $window.location.href =
-      //   $scope.props.auth.cas + '/login?service=' +
-      //   encodeURIComponent($scope.props.auth.login_service);
       $window.location.href = $scope.props.webUrl + 'caslogin';
       console.log("After li session is:" + JSON.stringify($scope.session));
 
@@ -131,33 +121,26 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
 
 appController.controller('DetailsController', DetailsPromiseCtrl);
 function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService, userService) {
-    $scope.$watch(function() {
-        return $scope.session;
-    }, function() {
-        // prep for login button
-        // if ($scope.session && $scope.session.username) {
-        if ($scope.session && $scope.session.passport) {
-            $scope.usrBtnTxt = "";
-        } else {
-            $scope.usrBtnTxt = 'Log in';
-        }
-    },true);
+  $scope.$watch(function () {
+    return $scope.session;
+  }, function () {
+    // prep for login button
+    if ($scope.session && $scope.session.passport) {
+      $scope.usrBtnTxt = "";
+    } else {
+      $scope.usrBtnTxt = 'Log in';
+    }
+  }, true);
 
-    $scope.usrBtnClk = function(){
-        if ($scope.session.passport) {
-          let url = $window.location.origin;
-          url = url + "/logout";
-            // logout if alredy logged in
-            $http.get(url).success(function(data) {
-                $window.location.href = $scope.props.auth.cas+'/logout';
-            });
-        } else {
-            //login
-            $window.location.href =
-                $scope.props.auth.cas+'/login?service='+
-                encodeURIComponent($scope.props.auth.login_service);
-        }
-    };
+  $scope.usrBtnClk = function () {
+    if ($scope.session.passport) {
+      $window.location.href = $scope.props.webUrl + 'logout';
+    } else {
+      $window.location.href = $scope.props.webUrl + 'caslogin';
+      console.log("After li session is:" + JSON.stringify($scope.session));
+
+    }
+  };
 
     $scope.props = configService.getConfig();
     $scope.session = userService.getUser();
@@ -176,37 +159,30 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService,
 appController.controller('NewController', NewPromiseCtrl);
 function NewPromiseCtrl($scope, $http, $window, $location, configService, userService, swService) {
 
-    $scope.$watch(function() {
-        return $scope.session;
-    }, function() {
-        // prep for login button
-        if ($scope.session && $scope.session.username) {
-            $scope.usrBtnTxt = "";
-        } else {
-            $scope.usrBtnTxt = 'Log in';
-        }
-    },true);
+  $scope.$watch(function () {
+    return $scope.session;
+  }, function () {
+    // prep for login button
+    if ($scope.session && $scope.session.passport) {
+      $scope.usrBtnTxt = "";
+    } else {
+      $scope.usrBtnTxt = 'Log in';
+    }
+  }, true);
+
+  $scope.usrBtnClk = function () {
+    if ($scope.session.passport) {
+      $window.location.href = $scope.props.webUrl + 'logout';
+    } else {
+      $window.location.href = $scope.props.webUrl + 'caslogin';
+      console.log("After li session is:" + JSON.stringify($scope.session));
+
+    }
+  };
 
     $scope.bckBtnClk = function(){
       $location.path("/list");
     };
-
-    $scope.usrBtnClk = function(){
-        if ($scope.session.username) {
-          let url = $window.location.origin;
-          url = url + "/logout";
-            // logout if alredy logged in
-            $http.get(url).success(function(data) {
-                $window.location.href = $scope.props.auth.cas+'/logout';
-            });
-        } else {
-            //login
-            $window.location.href =
-                $scope.props.auth.cas+'/login?service='+
-                encodeURIComponent($scope.props.auth.login_service);
-        }
-    };
-
 
     $scope.datePicker = (function () {
         var method = {};
@@ -301,9 +277,11 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     $scope.itemArray = $scope.props.validSwNamesGUIList;
 
     // check our user session and redirect if needed
-    if (!$scope.session.username) {
+    if (!$scope.session.user) {
         //go to cas
-        $window.location.href = $scope.props.auth.cas+'/login?service='+encodeURIComponent($scope.props.auth.login_service);
+      $window.location.href = $scope.props.webUrl + 'caslogin';
+      // $window.location.href = $scope.props.auth.cas.cas_url + '/login?service=' + encodeURIComponent($scope.props.auth.cas.service_url);
+      // $window.location.href = $scope.props.auth.cas + '/login?service=' + encodeURIComponent($scope.props.auth.login_service);
     }
 
     // initialize this record
@@ -323,37 +301,32 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
 
 appController.controller('UpdateController', UpdatePromiseCtrl);
 function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService, swService) {
-
     $scope.$watch(function() {
         return $scope.session;
     }, function() {
         // prep for login button
-        if ($scope.session && $scope.session.username) {
+        // if ($scope.session && $scope.session.username) {
+        if ($scope.session && $scope.session.passport) {
             $scope.usrBtnTxt = "";
         } else {
             $scope.usrBtnTxt = 'Log in';
         }
     },true);
 
-    $scope.bckBtnClk = function(){
-      // Go back to details
-      $location.path("/details/"+$scope.formData._id);
-    };
-
     $scope.usrBtnClk = function(){
-      if ($scope.session.username) {
-        let url = $window.location.origin;
-        url = url + "/logout";
-        // logout if alredy logged in
-        $http.get(url).success(function (data) {
-          $window.location.href = $scope.props.auth.cas + '/logout';
-        });
-      } else {
-        //login
-        $window.location.href =
-          $scope.props.auth.cas + '/login?service=' +
-          encodeURIComponent($scope.props.auth.login_service);
-      }
+        if ($scope.session.passport) {
+          let url = $window.location.origin;
+          url = url + "/logout";
+            // logout if alredy logged in
+            $http.get(url).success(function(data) {
+                $window.location.href = $scope.props.auth.cas+'/logout';
+            });
+        } else {
+            //login
+            $window.location.href =
+                $scope.props.auth.cas+'/login?service='+
+                encodeURIComponent($scope.props.auth.login_service);
+        }
     };
 
     $scope.datePicker = (function () {
