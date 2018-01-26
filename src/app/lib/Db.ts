@@ -73,13 +73,13 @@ export class Db {
   }
 
   // Create a new record in the backend storage
-  public createDoc = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  public createDoc = async (user: string | undefined, req: express.Request, res: express.Response, next: express.NextFunction) => {
 
     const doc = new Db.swDoc(req.body);
 
     try {
-      await doc.saveWithHistory(req.session!.username);
-      debug('Created sw ' + doc._id + ' as ' + req.session!.username);
+      await doc.saveWithHistory(user);
+      debug('Created sw ' + doc._id + ' as ' + user);
       res.location(Db.props.apiUrl + doc._id);
       res.status(201);
       res.send();
@@ -149,7 +149,8 @@ export class Db {
     }
   }
 
-  public updateDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  public updateDoc = (user: string | undefined, req: express.Request, res: express.Response,
+     next: express.NextFunction) => {
     const id = req.params.id;
     if (id) {
       Db.swDoc.findOne({ _id: id }, async (err: Error, doc: any) => {
@@ -164,8 +165,8 @@ export class Db {
             }
           }
           try {
-            await doc.saveWithHistory(req.session!.username);
-            debug('Updated sw ' + doc._id + ' as ' + req.session!.username);
+            await doc.saveWithHistory(user);
+            debug('Updated sw ' + doc._id + ' as ' + user);
             res.location(Db.props.apiUrl + doc._id);
             res.end();
           } catch (err) {

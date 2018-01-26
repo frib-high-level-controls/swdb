@@ -51,29 +51,37 @@ app.use(function(req: express.Request, res: express.Response, next: express.Next
   next();
 });
 
-
-debug('cfg.cas.cas_url is ' + props.auth.cas.cas_url);
+debug('props at startup: ' + JSON.stringify(props, null, 2));
 const forgClient = new forgapi.Client({
   url: String(props.auth.forgapi.url),
   agentOptions: props.auth.forgapi.agentOptions || {},
 });
 
-// const cfAuthProvider = new cfauth.DevForgBasicProvider(forgClient, {});
-const cfAuthProvider = new cfauth.ForgCasProvider(forgClient, {
-  casUrl: String(props.auth.cas.cas_url),
-  casServiceUrl: String(props.auth.cas.service_url),
-  casAppendPath: props.auth.cas.append_path === true ? true : false,
-  casVersion: props.auth.cas.version ? String(props.auth.cas.version) : undefined,
-});
+let cfAuthProvider: any;
+// check whether we are testing and set the auth
+if (props.testing === 'true') {
+  debug('TEST mode is active!');
+  cfAuthProvider = new cfauth.DevForgBasicProvider(forgClient, {});
+} else {
+  debug('Normal authentication mode is active!');
+  cfAuthProvider = new cfauth.ForgCasProvider(forgClient, {
+    casUrl: String(props.auth.cas.cas_url),
+    casServiceUrl: String(props.auth.cas.service_url),
+    casAppendPath: props.auth.cas.append_path === true ? true : false,
+    casVersion: props.auth.cas.version ? String(props.auth.cas.version) : undefined,
+  });
+}
 
- auth.setProvider(cfAuthProvider);
- app.use(cfAuthProvider.initialize());
+auth.setProvider(cfAuthProvider);
 
 app.use(cookieParser());
 app.use(expressSession({secret: '1234567890',
   resave: false,
   saveUninitialized: false,
 }));
+
+app.use(cfAuthProvider.initialize());
+
 app.use(expressValidator({
   customValidators: {
     isOneOf: function(str: string , arr: any[]) {
@@ -230,17 +238,17 @@ app.get('/', function(req: express.Request, res: express.Response) {
 });
 
 // login
-app.get('/testlogin', function(req: express.Request, res: express.Response) {
-  debug('GET /testlogin request');
-  if (!req.query.username || !req.query.password ) {
-    res.send('<p id="Test auth failed">Test auth failed</p>');
-  } else if (req.query.username === 'testuser' &&
-    req.query.password === 'testuserpasswd') {
-    req.session!.username = 'testuser';
-    req.session!.admin = true;
-    res.send('<p id="Test auth success">Test auth success</p>');
-  }
-});
+// app.get('/testlogin', function(req: express.Request, res: express.Response) {
+//   debug('GET /testlogin request');
+//   if (!req.query.username || !req.query.password ) {
+//     res.send('<p id="Test auth failed">Test auth failed</p>');
+//   } else if (req.query.username === 'testuser' &&
+//     req.query.password === 'testuserpasswd') {
+//     req.session!.username = 'testuser';
+//     req.session!.admin = true;
+//     res.send('<p id="Test auth success">Test auth success</p>');
+//   }
+// });
 
 // app.get('/caslogin', casAuth.ensureAuthenticated, function(req: express.Request, res: express.Response) {
 app.get('/caslogin', cfAuthProvider.authenticate(), function(req: express.Request, res: express.Response) {
@@ -273,14 +281,16 @@ app.get('/logout', function(req: express.Request, res: express.Response, next: e
 // for get requests that are not specific return all
 app.get('/api/v1/swdb/user', function(req: express.Request, res: express.Response, next: express.NextFunction) {
   debug('GET /api/v1/swdb/user request');
-  if (req.session) {
-    if (req.session.passport) {
-      let user2 = JSON.parse(req.session.passport.user);
-      req.session.user = user2;
-    }
-  }
-  debug('sending ' + JSON.stringify(req.session));
-  res.send(JSON.stringify(req.session));
+  res.json({ user: auth.getProvider().getUser(req) });
+  debug('sending user data ' + JSON.stringify({ user: auth.getProvider().getUser(req) }, null, 2));
+  // if (req.session) {
+  //   if (req.session.passport) {
+  //     let user2 = JSON.parse(req.session.passport.user);
+  //     req.session.user = user2;
+  //   }
+  // }
+  // debug('sending ' + JSON.stringify(req.session));
+  // res.send(JSON.stringify(req.session));
 });
 
 // for get requests that are not specific return all
@@ -326,7 +336,7 @@ app.post('/api/v1/swdb', auth.ensureAuthenticated,
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
     } else {
-      be.createDoc(req, res, next);
+      be.createDoc(auth.getUsername(req), req, res, next);
     }
   });
 });
@@ -350,7 +360,7 @@ app.put('/api/v1/swdb/:id', auth.ensureAuthenticated,
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
     } else {
-      be.updateDoc(req, res, next);
+      be.updateDoc(auth.getUsername(req), req, res, next);
     }
   });
 });
@@ -369,7 +379,7 @@ app.patch('/api/v1/swdb/:id', auth.ensureAuthenticated,
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
     } else {
-      be.updateDoc(req, res, next);
+      be.updateDoc(auth.getUsername(req), req, res, next);
     }
   });
 });

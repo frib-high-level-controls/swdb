@@ -39,10 +39,17 @@ describe("app", function() {
 
   before("login as test user", function(done){
     supertest
-    .get("/testlogin?username=testuser&password=testuserpasswd")
+    // .get("/testlogin?username=testuser&password=testuserpasswd")
+    // .expect(200)
+    // .end(function(err,res){
+    //   Cookies = res.headers['set-cookie'].pop().split(';')[0];
+    //   done();
+    // });
+    .get("/caslogin?username=testuser&password=testuserpasswd")
     .expect(200)
     .end(function(err,res){
-      Cookies = res.headers['set-cookie'].pop().split(';')[0];
+      // Cookies = res.headers['set-cookie'].pop().split(';')[0];
+      debug('test login cookies: ' + JSON.stringify(res.body));
       done();
     });
   });

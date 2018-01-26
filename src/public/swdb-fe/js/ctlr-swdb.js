@@ -23,7 +23,7 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
     return $scope.session;
   }, function () {
     // prep for login button
-    if ($scope.session && $scope.session.passport) {
+    if ($scope.session && $scope.session.user) {
       $scope.usrBtnTxt = "";
     } else {
       $scope.usrBtnTxt = 'Log in';
@@ -31,12 +31,10 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
   }, true);
 
   $scope.usrBtnClk = function () {
-    if ($scope.session.passport) {
+    if ($scope.session.user) {
       $window.location.href = $scope.props.webUrl + 'logout';
     } else {
       $window.location.href = $scope.props.webUrl + 'caslogin';
-      console.log("After li session is:" + JSON.stringify($scope.session));
-
     }
   };
 
@@ -125,7 +123,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService,
     return $scope.session;
   }, function () {
     // prep for login button
-    if ($scope.session && $scope.session.passport) {
+    if ($scope.session && $scope.session.user) {
       $scope.usrBtnTxt = "";
     } else {
       $scope.usrBtnTxt = 'Log in';
@@ -133,12 +131,10 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService,
   }, true);
 
   $scope.usrBtnClk = function () {
-    if ($scope.session.passport) {
+    if ($scope.session.user) {
       $window.location.href = $scope.props.webUrl + 'logout';
     } else {
       $window.location.href = $scope.props.webUrl + 'caslogin';
-      console.log("After li session is:" + JSON.stringify($scope.session));
-
     }
   };
 
@@ -163,7 +159,7 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     return $scope.session;
   }, function () {
     // prep for login button
-    if ($scope.session && $scope.session.passport) {
+    if ($scope.session && $scope.session.user) {
       $scope.usrBtnTxt = "";
     } else {
       $scope.usrBtnTxt = 'Log in';
@@ -171,12 +167,10 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
   }, true);
 
   $scope.usrBtnClk = function () {
-    if ($scope.session.passport) {
+    if ($scope.session.user) {
       $window.location.href = $scope.props.webUrl + 'logout';
     } else {
       $window.location.href = $scope.props.webUrl + 'caslogin';
-      console.log("After li session is:" + JSON.stringify($scope.session));
-
     }
   };
 
@@ -301,33 +295,24 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
 
 appController.controller('UpdateController', UpdatePromiseCtrl);
 function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService, swService) {
-    $scope.$watch(function() {
-        return $scope.session;
-    }, function() {
-        // prep for login button
-        // if ($scope.session && $scope.session.username) {
-        if ($scope.session && $scope.session.passport) {
-            $scope.usrBtnTxt = "";
-        } else {
-            $scope.usrBtnTxt = 'Log in';
-        }
-    },true);
+  $scope.$watch(function () {
+    return $scope.session;
+  }, function () {
+    // prep for login button
+    if ($scope.session && $scope.session.user) {
+      $scope.usrBtnTxt = "";
+    } else {
+      $scope.usrBtnTxt = 'Log in';
+    }
+  }, true);
 
-    $scope.usrBtnClk = function(){
-        if ($scope.session.passport) {
-          let url = $window.location.origin;
-          url = url + "/logout";
-            // logout if alredy logged in
-            $http.get(url).success(function(data) {
-                $window.location.href = $scope.props.auth.cas+'/logout';
-            });
-        } else {
-            //login
-            $window.location.href =
-                $scope.props.auth.cas+'/login?service='+
-                encodeURIComponent($scope.props.auth.login_service);
-        }
-    };
+  $scope.usrBtnClk = function () {
+    if ($scope.session.user) {
+      $window.location.href = $scope.props.webUrl + 'logout';
+    } else {
+      $window.location.href = $scope.props.webUrl + 'caslogin';
+    }
+  };
 
     $scope.datePicker = (function () {
         var method = {};
