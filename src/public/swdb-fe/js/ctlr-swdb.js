@@ -314,83 +314,88 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     }
   };
 
-    $scope.datePicker = (function () {
-        var method = {};
-        method.instances = [];
+  $scope.bckBtnClk = function () {
+    // Go back to details
+    $location.path("/details/" + $scope.formData._id);
+  };
 
-        method.open = function ($event, instance) {
-            $event.preventDefault();
-            $event.stopPropagation();
+  $scope.datePicker = (function () {
+    var method = {};
+    method.instances = [];
 
-            method.instances[instance] = true;
-        };
+    method.open = function ($event, instance) {
+      $event.preventDefault();
+      $event.stopPropagation();
 
-        method.options = {
-            'show-weeks': false,
-            startingDay: 0
-        };
-
-        var formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-        method.format = formats[2];
-
-        return method;
-    }());
-
-    $scope.newItem = function (event) {
-        var parts = event.currentTarget.id.split('.');
-        if (parts[1] === 'vvProcLoc') {
-            $scope.formData.vvProcLoc.push("");
-        } else if (parts[1] === 'vvResultsLoc') {
-            $scope.formData.vvResultsLoc.push("");
-        }
+      method.instances[instance] = true;
     };
 
-    $scope.removeItem = function (event) {
-        var parts = event.currentTarget.id.split('.');
-        if (parts[1] === 'vvProcLoc') {
-            $scope.formData.vvProcLoc.splice(parts[2], 1);
-        } else if (parts[1] === 'vvResultsLoc') {
-            $scope.formData.vvResultsLoc.splice(parts[2], 1);
-        }
+    method.options = {
+      'show-weeks': false,
+      startingDay: 0
     };
 
-    $scope.processForm = function(){
-        if ($scope.inputForm.$valid){
-            delete $scope.formData.__v;
-            let url = $window.location.origin;
-            url = url + "/api/v1/swdb/" + $scope.formData._id;
-            $http({
-                method: 'PUT',
-                // url: $scope.props.apiUrl+$scope.formData._id,
-                url: url,
-                data: $scope.formData,
-                headers: { 'Content-Type': 'application/json' }
-            })
-              .then(function success(response){
-                    $scope.swdbParams.formStatus="Document updates successfully posted";
-                    $scope.swdbParams.formShowErr=false;
-                    $scope.swdbParams.formShowStatus=true;
-                    // sw just updated, refresh the service list
-                    swService.refreshSwList();
-                    let headers = response.headers();
-                    if (headers.location) {
-                      // if location header is present extract the id
-                      let id = headers.location.split('/').pop();
-                      $location.path('/details/' + id);
-                    }
-                }, function error(response){
-                  let headers = response.headers();
-                  $scope.swdbParams.error = { message: response.statusText + response.data, status: response.status };
-                  $scope.swdbParams.formErr = "Error: " + $scope.swdbParams.error.message + "(" + response.status + ")";
-                  $scope.swdbParams.formShowStatus = false;
-                  $scope.swdbParams.formShowErr = true;
-              });
-        } else {
-            $scope.swdbParams.formErr="Error: clear errors before submission";
-            $scope.swdbParams.formShowStatus=false;
-            $scope.swdbParams.formShowErr=true;
-        }
-    };
+    var formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+    method.format = formats[2];
+
+    return method;
+  }());
+
+  $scope.newItem = function (event) {
+    var parts = event.currentTarget.id.split('.');
+    if (parts[1] === 'vvProcLoc') {
+      $scope.formData.vvProcLoc.push("");
+    } else if (parts[1] === 'vvResultsLoc') {
+      $scope.formData.vvResultsLoc.push("");
+    }
+  };
+
+  $scope.removeItem = function (event) {
+    var parts = event.currentTarget.id.split('.');
+    if (parts[1] === 'vvProcLoc') {
+      $scope.formData.vvProcLoc.splice(parts[2], 1);
+    } else if (parts[1] === 'vvResultsLoc') {
+      $scope.formData.vvResultsLoc.splice(parts[2], 1);
+    }
+  };
+
+  $scope.processForm = function () {
+    if ($scope.inputForm.$valid) {
+      delete $scope.formData.__v;
+      let url = $window.location.origin;
+      url = url + "/api/v1/swdb/" + $scope.formData._id;
+      $http({
+        method: 'PUT',
+        // url: $scope.props.apiUrl+$scope.formData._id,
+        url: url,
+        data: $scope.formData,
+        headers: { 'Content-Type': 'application/json' }
+      })
+        .then(function success(response) {
+          $scope.swdbParams.formStatus = "Document updates successfully posted";
+          $scope.swdbParams.formShowErr = false;
+          $scope.swdbParams.formShowStatus = true;
+          // sw just updated, refresh the service list
+          swService.refreshSwList();
+          let headers = response.headers();
+          if (headers.location) {
+            // if location header is present extract the id
+            let id = headers.location.split('/').pop();
+            $location.path('/details/' + id);
+          }
+        }, function error(response) {
+          let headers = response.headers();
+          $scope.swdbParams.error = { message: response.statusText + response.data, status: response.status };
+          $scope.swdbParams.formErr = "Error: " + $scope.swdbParams.error.message + "(" + response.status + ")";
+          $scope.swdbParams.formShowStatus = false;
+          $scope.swdbParams.formShowErr = true;
+        });
+    } else {
+      $scope.swdbParams.formErr = "Error: clear errors before submission";
+      $scope.swdbParams.formShowStatus = false;
+      $scope.swdbParams.formShowErr = true;
+    }
+  };
 
 
     $scope.props = configService.getConfig();

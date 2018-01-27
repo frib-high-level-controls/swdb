@@ -64,7 +64,7 @@ test.describe('Installations record tests', function() {
     .get('/caslogin')
     .auth('ellisr', 'Pa5w0rd')
     .expect(302)
-    .end(function(err,res){
+    .end(function(err, res){
       if (err) {
         done(err);
       } else {
@@ -72,16 +72,11 @@ test.describe('Installations record tests', function() {
         debug('test login cookies: ' + Cookies);
         let parts = Cookies.split('=');
         debug('setting driver cookie ' + parts[0] + ' ' + parts[1]);
-        chromeDriver.manage().addCookie({name:parts[0], value:parts[1]});
+        chromeDriver.manage().addCookie({name: parts[0], value: parts[1]});
         done();
       }
     });
   });
-  // test.it('should login', function() {
-  //   // get test authentication
-  //   chromeDriver.get(props.webUrl + 'testlogin?username=testuser&password=testuserpasswd');
-  //   chromeDriver.wait(until.elementLocated(By.id('Test auth success')), 5000);
-  // });
 
   test.it('should show search page with username on logout button', function() {
     this.timeout(8000);

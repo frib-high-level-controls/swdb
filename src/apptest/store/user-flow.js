@@ -1,6 +1,7 @@
 var app = require("../../app/server");
 var chai = require("chai");
 var expect = require("chai").expect;
+var supertest = require("supertest")(app);
 chai.use(require("chai-as-promised"));
 var Be = require('../../app/lib/Db');
 let be = new Be.Db();
@@ -57,18 +58,38 @@ test.describe("User flow tests", function() {
       "Log in"),5000);
   });
 
-  test.it("should login", function() {
-    // get test authentication
-    chromeDriver.get(props.webUrl+"testlogin?username=testuser&password=testuserpasswd");
-    chromeDriver.wait(until.elementLocated(By.id("Test auth success")),3000);
+  test.it("login as test user", function(done){
+    supertest
+    .get("/caslogin")
+    .auth('ellisr', 'Pa5w0rd')
+    .expect(302)
+    .end(function(err,res){
+      if (err) done(err);
+      else {
+        Cookies = res.headers['set-cookie'].pop().split(';')[0];
+        debug('test login cookies: ' + Cookies);
+        let parts = Cookies.split('=');
+        debug('setting driver cookie ' + parts[0] + ' ' + parts[1]);
+        chromeDriver.manage().addCookie({name:parts[0], value:parts[1]});
+        done();
+      }
+    });
   });
 
-  test.it("should show search page with username on logout button", function() {
+  test.it('should show search page with username on logout button', function() {
+    this.timeout(8000);
+    chromeDriver.get(props.webUrl + '#/list');
+    chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
+    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
+      'ELLISR'), 5000);
+  });
+
+  test.it("should show new page with username on logout button", function() {
     this.timeout(8000);
     chromeDriver.get(props.webUrl+"#/new");
     chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
-      "testuser"),5000);
+      "ELLISR"),5000);
   });
 
 
@@ -431,7 +452,7 @@ test.it("should show search page with username on logout button", function() {
     chromeDriver.get(props.webUrl+"#/inst/new");
     chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
-      "testuser"),5000);
+      "ELLISR"),5000);
   });
 
   test.it("should show the requested installation record title", function() {
@@ -608,7 +629,7 @@ test.it("should show search page with username on logout button", function() {
       chromeDriver.get(props.webUrl + "#/new");
       chromeDriver.wait(until.elementLocated(By.id("usrBtn")), 5000);
       chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
-        "testuser"), 5000);
+        "ELLISR"), 5000);
     });
 
     test.it("should show the new sw record title and click cancel", function () {
@@ -664,7 +685,7 @@ test.it("should show search page with username on logout button", function() {
       chromeDriver.get(props.webUrl + "#/inst/new");
       chromeDriver.wait(until.elementLocated(By.id("usrBtn")), 5000);
       chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
-        "testuser"), 5000);
+        "ELLISR"), 5000);
     });
 
     test.it("should show the new sw record title and click cancel", function () {

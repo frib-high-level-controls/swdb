@@ -133,35 +133,27 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
 
 appController.controller('InstDetailsController', InstDetailsPromiseCtrl);
 function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configService, userService) {
-    $scope.$watch(function() {
-        return $scope.session;
-    }, function() {
-        // prep for login button
-        if ($scope.session && $scope.session.username) {
-            $scope.usrBtnTxt = '';
-        } else {
-            $scope.usrBtnTxt = 'Log in';
-        }
-    },true);
+  $scope.$watch(function () {
+    return $scope.session;
+  }, function () {
+    // prep for login button
+    if ($scope.session && $scope.session.user) {
+      $scope.usrBtnTxt = "";
+    } else {
+      $scope.usrBtnTxt = 'Log in';
+    }
+  }, true);
 
-    $scope.usrBtnClk = function () {
-      if ($scope.session.username) {
-        let url = $window.location.origin;
-        url = url + "/logout";
-        // logout if already logged in
-        $http.get(url).success(function (data) {
-          $window.location.href = $scope.props.auth.cas + '/logout';
-        });
-      } else {
-        //login
-        $window.location.href =
-          $scope.props.auth.cas + '/login?service=' +
-          encodeURIComponent($scope.props.auth.login_service);
-      }
-    };
+  $scope.usrBtnClk = function () {
+    if ($scope.session.user) {
+      $window.location.href = $scope.props.webUrl + 'logout';
+    } else {
+      $window.location.href = $scope.props.webUrl + 'caslogin';
+    }
+  };
 
-    $scope.props = configService.getConfig();
-    $scope.session = userService.getUser();
+  $scope.props = configService.getConfig();
+  $scope.session = userService.getUser();
     //update document fields with existing data
     let url = $window.location.origin;
     url = url + "/api/v1/inst/" + $routeParams.itemId;
@@ -176,37 +168,30 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configServ
 appController.controller('InstNewController', InstNewPromiseCtrl);
 function InstNewPromiseCtrl($scope, $http, $window, $location, configService, userService, slotService, swService) {
 
-  $scope.$watch(function() {
+  $scope.$watch(function () {
     return $scope.session;
-  }, function() {
+  }, function () {
     // prep for login button
-    if ($scope.session && $scope.session.username) {
-      $scope.usrBtnTxt = '';
+    if ($scope.session && $scope.session.user) {
+      $scope.usrBtnTxt = "";
     } else {
       $scope.usrBtnTxt = 'Log in';
     }
-  },true);
+  }, true);
 
-    $scope.bckBtnClk = function(){
-      // Go back to details
-      $location.path("/inst/list");
-    };
-
-  $scope.usrBtnClk = function(){
-    if ($scope.session.username) {
-      let url = $window.location.origin;
-      url = url + "/logout";
-      // logout if alredy logged in
-      $http.get(url).success(function(data) {
-        $window.location.href = $scope.props.auth.cas+'/logout';
-      });
+  $scope.usrBtnClk = function () {
+    if ($scope.session.user) {
+      $window.location.href = $scope.props.webUrl + 'logout';
     } else {
-      //login
-      $window.location.href =
-        $scope.props.auth.cas+'/login?service='+
-        encodeURIComponent($scope.props.auth.login_service);
+      $window.location.href = $scope.props.webUrl + 'caslogin';
     }
   };
+
+  $scope.bckBtnClk = function () {
+    // Go back to details
+    $location.path("/inst/list");
+  };
+
 
   $scope.slotSelect=function($item, $model, $label)
   {
@@ -354,9 +339,9 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     $scope.refreshSw();
 
     // check our user session and redirect if needed
-    if (!$scope.session.username) {
+    if (!$scope.session.user) {
         //go to cas
-        $window.location.href = $scope.props.auth.cas+'/login?service='+encodeURIComponent($scope.props.auth.login_service);
+      $window.location.href = $scope.props.webUrl + 'caslogin';
     }
 
     // sw just updated, refresh the service list
@@ -538,9 +523,9 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     $scope.swList = swService.getSwList();
 
     // check our user session and redirect if needed
-    if (!$scope.session.username) {
+    if (!$scope.session.user) {
         //go to cas
-        $window.location.href = $scope.props.auth.cas+'/login?service='+encodeURIComponent($scope.props.auth.login_service);
+      $window.location.href = $scope.props.webUrl + 'caslogin';
     }
 
     $scope.swdbParams = {

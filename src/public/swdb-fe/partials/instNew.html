@@ -13,7 +13,7 @@
         </li>
         <a id="usrBtn" ng-click="usrBtnClk()" class="btn btn-primary" style="float:right">
                 <span class="glyphicon glyphicon-user" style="font-size: 1.5em" ></span>
-                {{session.username}} {{usrBtnTxt}}
+                {{session.user.uid}} {{usrBtnTxt}}
             </a>
       </ul>
     </div>
@@ -198,31 +198,6 @@
           </div>
         </div>
       </div>
-
-
-      <!-- SLOTS -->
-      <!-- <div class="row swdbFormRow">
-        <label class="col-sm-2"> slots search</label>
-        <div class="col-sm-8">
-          <input id="slots" type="text" ng-model="selected" uib-typeahead="slot.name as (slot.name+' (desc:'+slot.description+')') for slot in slots |
-          filter:$viewValue | limitTo:8" class="form-control" typeahead-on-select='slotSelect($item, $model, $label)'>
-        </div>
-        <div class="col-sm-2">
-        </div>
-      </div>
-      <div class="row swdbFormRow">
-        <label class="col-sm-2">&nbspselected slots </label>
-        <div class="col-sm-8 selectedSlotBox">
-          <div ng-repeat="selectedSlot in slotsSelected">
-            <span>{{selectedSlot}} </span>
-            <button id="rmSelSlotBtn" ng-click="removeSelectedSlot(selectedSlot)" class="btn btn-xs btn-warning smCancelBtn">
-            <span class="submit glyphicon glyphicon-remove-sign"></span>&nbsp
-          </button>
-          </div>
-        </div>
-        <div class="col-sm-2">
-        </div>
-      </div> -->
 
       <!-- SUBMIT BUTTON -->
       <div id='formStatus' ng-show="swdbParams.formShowStatus" class="alert alert-success form-group col-sm-12"><span class="glyphicon glyphicon-info-sign"></span> {{swdbParams.formStatus}}</div>

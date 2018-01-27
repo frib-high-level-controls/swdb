@@ -1,6 +1,7 @@
 let app = require("../../app/server");
 let chai = require("chai");
 let expect = require("chai").expect;
+var supertest = require("supertest")(app);
 chai.use(require("chai-as-promised"));
 let ObjectId = require('mongodb').ObjectID;
 let rc = require("rc");
@@ -54,18 +55,38 @@ test.describe("Installations add screen tests", function() {
       "Log in"),5000);
   });
 
-  test.it("should login", function() {
-    // get test authentication
-    chromeDriver.get(props.webUrl+"testlogin?username=testuser&password=testuserpasswd");
-    chromeDriver.wait(until.elementLocated(By.id("Test auth success")),3000);
+  test.it("login as test user", function(done){
+    supertest
+    .get("/caslogin")
+    .auth('ellisr', 'Pa5w0rd')
+    .expect(302)
+    .end(function(err,res){
+      if (err) done(err);
+      else {
+        Cookies = res.headers['set-cookie'].pop().split(';')[0];
+        debug('test login cookies: ' + Cookies);
+        let parts = Cookies.split('=');
+        debug('setting driver cookie ' + parts[0] + ' ' + parts[1]);
+        chromeDriver.manage().addCookie({name:parts[0], value:parts[1]});
+        done();
+      }
+    });
   });
 
-  test.it("should show search page with username on logout button", function() {
+  test.it('should show search page with username on logout button', function() {
+    this.timeout(8000);
+    chromeDriver.get(props.webUrl + '#/inst/list');
+    chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
+    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
+      'ELLISR'), 5000);
+  });
+
+  test.it("should show new page with username on logout button", function() {
     this.timeout(8000);
     chromeDriver.get(props.webUrl+"#/inst/new");
     chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
-      "testuser"),5000);
+      "ELLISR"),5000);
   });
 
 
@@ -155,37 +176,6 @@ test.describe("Installations add screen tests", function() {
     input = chromeDriver.findElement(By.id("rm.vvResultsLoc.0"));
     input.click();
 
-    // // set slots
-    // chromeDriver.wait(until.elementLocated(By.id("slots")), 3000);
-    // searchInput = chromeDriver.findElement(By.id("slots"));
-    // searchInput.sendKeys("FE_LEBT");
-    // // find the second item in that list and add it to the selected list
-    // chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-")]')), 3000);
-    // input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-1"=substring(@id, string-length(@id)-string-length("option-1")+1)]/a'));
-    // input.click();
-
-    // // now search again and add the third item to the selected list
-    // searchInput.clear();
-    // searchInput.sendKeys("FE_LEBT");
-    // chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-")]')), 3000);
-    // input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-2"=substring(@id, string-length(@id)-string-length("option-2")+1)]/a'));
-    // input.click();
-
-    // // find one of the selected items and cancel it
-    // chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[9]/div[1]/div[1]/span')), 3000);
-    // input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[9]/div[1]/div[1]/span'));
-    // chromeDriver.wait(until.elementTextIs(input, "FE_LEBT:BD_D0824"),5000);
-
-    // chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="rmSelSlotBtn"]')), 3000);
-    // input = chromeDriver.findElement(By.xpath('//*[@id="rmSelSlotBtn"]'));
-    // input.click();
-
-    // // locate the other selected item to make sure we got it
-    // chromeDriver.wait(until.elementLocated(By.xpath('/html/body/div[2]/section/div[2]/form/div[9]/div[1]/div/span')), 3000);
-    // input = chromeDriver.findElement(By.xpath('/html/body/div[2]/section/div[2]/form/div[9]/div[1]/div/span'));
-    // chromeDriver.wait(until.elementTextIs(input, "FE_LEBT:AP_D0807"),5000);
-
-    // submit the record
     chromeDriver.findElement(By.id("submitBtn")).click();
   });
 
