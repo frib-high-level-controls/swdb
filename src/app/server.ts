@@ -403,7 +403,8 @@ app.get('/api/v1/inst', function(req: express.Request, res: express.Response, ne
 });
 
 // handle incoming installation post requests
-app.post('/api/v1/inst', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+app.post('/api/v1/inst', auth.ensureAuthenticated,
+  function(req: express.Request, res: express.Response, next: express.NextFunction) {
 
   debug('POST /api/v1/inst request');
   // Do validation for  new records
@@ -414,13 +415,15 @@ app.post('/api/v1/inst', function(req: express.Request, res: express.Response, n
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
     } else {
-      instBe.createDoc(req, res, next);
+      debug('POST /api/v1/inst calling create...');
+      instBe.createDoc(auth.getUsername(req), req, res, next);
     }
   });
 });
 
 // handle incoming put requests for installation update
-app.put('/api/v1/inst/:id', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+app.put('/api/v1/inst/:id', auth.ensureAuthenticated,
+  function(req: express.Request, res: express.Response, next: express.NextFunction) {
   debug('PUT /api/v1/inst/:id request');
   // Do validation for installation updates
   instTools.InstLib.updateValidation(req);
@@ -431,13 +434,14 @@ app.put('/api/v1/inst/:id', function(req: express.Request, res: express.Response
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
     } else {
-      instBe.updateDoc(req, res, next);
+      instBe.updateDoc(auth.getUsername(req), req, res, next);
     }
   });
 });
 
 // handle incoming put requests for installation update
-app.patch('/api/v1/inst/:id', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+app.patch('/api/v1/inst/:id', auth.ensureAuthenticated,
+  function(req: express.Request, res: express.Response, next: express.NextFunction) {
   debug('PATCH /api/v1/inst/:id request');
   // Do validation for installation updates
   instTools.InstLib.updateValidation(req);
@@ -448,7 +452,7 @@ app.patch('/api/v1/inst/:id', function(req: express.Request, res: express.Respon
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
     } else {
-      instBe.updateDoc(req, res, next);
+      instBe.updateDoc(auth.getUsername(req), req, res, next);
     }
   });
 });

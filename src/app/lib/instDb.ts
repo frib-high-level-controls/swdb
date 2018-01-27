@@ -73,10 +73,11 @@ export class InstDb {
   }
 
   // Create a new record in the backend storage
-  public createDoc = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  public createDoc = async (user: string | undefined,
+    req: express.Request, res: express.Response, next: express.NextFunction) => {
     const doc = new InstDb.instDoc(req.body);
     try {
-      await doc.saveWithHistory(req.session!.username);
+      await doc.saveWithHistory(user);
       debug('Created installation ' + doc._id + ' as ' + req.session!.username);
       res.location(InstDb.props.instApiUrl + doc._id);
       res.status(201);
@@ -148,7 +149,8 @@ export class InstDb {
     }
   }
 
-  public updateDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  public updateDoc = async (user: string | undefined,
+    req: express.Request, res: express.Response, next: express.NextFunction) => {
     const id = req.params.id;
     if (id) {
       const doc = InstDb.instDoc.findOne({ _id: id }, async (err: Error, founddoc: any) => {
@@ -163,7 +165,7 @@ export class InstDb {
             }
           }
           try {
-            await founddoc.saveWithHistory(req.session!.username);
+            await founddoc.saveWithHistory(user);
             debug('Updated installation ' + founddoc._id + ' as ' + req.session!.username);
             res.location(InstDb.props.instApiUrl + founddoc._id);
             res.end();

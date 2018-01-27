@@ -48,19 +48,35 @@ describe('Installation api tests', () => {
     await testTools.clearTestCollections(debug);
   });
 
-  before('login as test user', (done) => {
+  before('login as test user', function(done){
     supertest(app)
-    .get('/testlogin?username=testuser&password=testuserpasswd')
-    .expect(200)
-    .end((err: Error, res: supertest.Response & {headers: any}) => {
+    .get('/caslogin')
+    .auth('ellisr', 'Pa5w0rd')
+    .expect(302)
+    .end(function(err, res){
       if (err) {
         done(err);
       } else {
-        Cookies = res.headers['set-cookie'].pop().split(';')[0];
+        Cookies = res.header['set-cookie'].pop().split(';')[0];
+        debug('test login cookies: ' + JSON.stringify(Cookies));
         done();
       }
     });
   });
+
+  // before('login as test user', (done) => {
+  //   supertest(app)
+  //   .get('/testlogin?username=testuser&password=testuserpasswd')
+  //   .expect(200)
+  //   .end((err: Error, res: supertest.Response & {headers: any}) => {
+  //     if (err) {
+  //       done(err);
+  //     } else {
+  //       Cookies = res.headers['set-cookie'].pop().split(';')[0];
+  //       done();
+  //     }
+  //   });
+  // });
 
   // web facing tests
   //
