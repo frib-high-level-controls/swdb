@@ -41,17 +41,19 @@ describe("History tests suite", function () {
   // describe("Login and perform history tests", function () {
   var wrapper = { origId: null };
 
-  before("login as test user", function (done) {
-    debug("Logging in as test user");
-    this.timeout(5000);
-    // var wrapper = { origId: null };
+  before("login as test user", function(done){
     supertest
-      .get("/testlogin?username=testuser&password=testuserpasswd")
-      .expect(200)
-      .end(function (err, res) {
+    .get("/caslogin")
+    .auth('ellisr', 'Pa5w0rd')
+    .expect(302)
+    .end(function(err,res){
+      if (err) done(err);
+      else {
         Cookies = res.headers['set-cookie'].pop().split(';')[0];
+        debug('test login cookies: ' + JSON.stringify(Cookies));
         done();
-      });
+      }
+    });
   });
 
   it("Has the blank history", async function () {

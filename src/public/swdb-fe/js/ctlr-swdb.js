@@ -395,10 +395,15 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
 
     $scope.props = configService.getConfig();
     $scope.session = userService.getUser();
+    // // check our user session and redirect if needed
+    // if (!$scope.session.username) {
+    //     //go to cas
+    //     $window.location.href = $scope.props.auth.cas+'/login?service='+encodeURIComponent($scope.props.auth.login_service);
+    // }
     // check our user session and redirect if needed
-    if (!$scope.session.username) {
-        //go to cas
-        $window.location.href = $scope.props.auth.cas+'/login?service='+encodeURIComponent($scope.props.auth.login_service);
+    if (!$scope.session.user) {
+      //go to cas
+      $window.location.href = $scope.props.webUrl + 'caslogin';
     }
 
     $scope.swdbParams = {
