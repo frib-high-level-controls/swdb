@@ -350,7 +350,7 @@ describe('Installation api tests', () => {
             expect(arr.length).to.equal(5);
             arr = res.body[0];
             // Get the newest paths entry entry where name is "owner"
-            arr = res.body[0].paths.filter(x => x.name === 'name');
+            arr = res.body[0].paths.filter((x) => x.name === 'name');
             // check that history item has the expected value
             expect(arr[0].value).to.equal('Hist7 Test name');
             done();
@@ -371,7 +371,7 @@ describe('Installation api tests', () => {
             expect(arr.length).to.equal(1);
             arr = res.body[0];
             // Get the newest paths entry entry where name is "owner"
-            arr = res.body[0].paths.filter(x => x.name === 'name');
+            arr = res.body[0].paths.filter((x) => x.name === 'name');
             // check that history item has the expected value
             expect(arr[0].value).to.equal('Hist6 Test name');
             done();

@@ -6,29 +6,21 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
     return $scope.session;
   }, function () {
     // prep for login button
-    if ($scope.session && $scope.session.username) {
-      $scope.usrBtnTxt = '';
+    if ($scope.session && $scope.session.user) {
+      $scope.usrBtnTxt = "";
     } else {
       $scope.usrBtnTxt = 'Log in';
     }
   }, true);
 
   $scope.usrBtnClk = function () {
-    if ($scope.session.username) {
-      let url = $window.location.origin;
-      url = url + "/logout";
-      // logout if already logged in
-      $http.get(url).success(function (data) {
-        $window.location.href = $scope.props.auth.cas + '/logout';
-      });
+    if ($scope.session.user) {
+      $window.location.href = $scope.props.webUrl + 'logout';
     } else {
-      //login
-      $window.location.href =
-        $scope.props.auth.cas + '/login?service=' +
-        encodeURIComponent($scope.props.auth.login_service);
+      $window.location.href = $scope.props.webUrl + 'caslogin';
     }
   };
-  
+
   // get initialization info
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();

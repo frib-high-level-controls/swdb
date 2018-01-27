@@ -1,5 +1,6 @@
 let app = require('../../app/server');
 import chai = require('chai');
+import supertest = require('supertest');
 import chaiAsPromised = require('chai-as-promised');
 import mongodb = require('mongodb');
 import  webdriver = require('selenium-webdriver');
@@ -18,6 +19,7 @@ let expect = chai.expect;
 let By = webdriver.By;
 let until = webdriver.until;
 let testTools = new TestTools.TestTools();
+let Cookies: string;
 
 /**
  * inst-list.ts
@@ -57,18 +59,36 @@ test.describe('Installations record tests', function() {
       'Log in'), 5000);
   });
 
-  test.it('should login', function() {
-    // get test authentication
-    chromeDriver.get(props.webUrl + 'testlogin?username=testuser&password=testuserpasswd');
-    chromeDriver.wait(until.elementLocated(By.id('Test auth success')), 5000);
+  test.it('login as test user', function(done){
+    supertest(app)
+    .get('/caslogin')
+    .auth('ellisr', 'Pa5w0rd')
+    .expect(302)
+    .end(function(err,res){
+      if (err) {
+        done(err);
+      } else {
+        Cookies = res.header['set-cookie'].pop().split(';')[0];
+        debug('test login cookies: ' + Cookies);
+        let parts = Cookies.split('=');
+        debug('setting driver cookie ' + parts[0] + ' ' + parts[1]);
+        chromeDriver.manage().addCookie({name:parts[0], value:parts[1]});
+        done();
+      }
+    });
   });
+  // test.it('should login', function() {
+  //   // get test authentication
+  //   chromeDriver.get(props.webUrl + 'testlogin?username=testuser&password=testuserpasswd');
+  //   chromeDriver.wait(until.elementLocated(By.id('Test auth success')), 5000);
+  // });
 
   test.it('should show search page with username on logout button', function() {
     this.timeout(8000);
     chromeDriver.get(props.webUrl + '#/inst/list');
     chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
-      'testuser'), 5000);
+      'ELLISR'), 5000);
   });
   test.it('should show Host column names in proper order', function() {
     let xpath = '//*[@id="instList"]/thead/tr[1]/th[1]';

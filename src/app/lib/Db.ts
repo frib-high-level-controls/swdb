@@ -57,14 +57,11 @@ export class Db {
 
       Db.swDoc = history.model<Model>('swdb', Db.schema, 'swdbCollection');
 
-      // Db.swDoc = mongoose.model('swdb', Db.schema, 'swdbCollection');
-      // console.log("Connecting to mongo... " + JSON.stringify(props.mongodbUrl));
       Db.dbConnect = mongoose.connect(Db.props.mongodbUrl, (err: Error) => {
         if (!err) {
-          // console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl);
-          // console.log("connected to mongo... " + JSON.stringify(props.mongodbUrl));
+          debug('DB connected...');
         } else {
-          // console.log("Error: " + err);
+          debug('Error: ' + err);
         }
       });
     }
@@ -73,7 +70,8 @@ export class Db {
   }
 
   // Create a new record in the backend storage
-  public createDoc = async (user: string | undefined, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  public createDoc = async (user: string | undefined,
+    req: express.Request, res: express.Response, next: express.NextFunction) => {
 
     const doc = new Db.swDoc(req.body);
 

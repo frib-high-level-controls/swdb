@@ -237,29 +237,8 @@ app.get('/', function(req: express.Request, res: express.Response) {
   res.sendFile('index.html', {root: path.join(__dirname, '../public/swdb-fe/')});
 });
 
-// login
-// app.get('/testlogin', function(req: express.Request, res: express.Response) {
-//   debug('GET /testlogin request');
-//   if (!req.query.username || !req.query.password ) {
-//     res.send('<p id="Test auth failed">Test auth failed</p>');
-//   } else if (req.query.username === 'testuser' &&
-//     req.query.password === 'testuserpasswd') {
-//     req.session!.username = 'testuser';
-//     req.session!.admin = true;
-//     res.send('<p id="Test auth success">Test auth success</p>');
-//   }
-// });
-
-// app.get('/caslogin', casAuth.ensureAuthenticated, function(req: express.Request, res: express.Response) {
 app.get('/caslogin', cfAuthProvider.authenticate(), function(req: express.Request, res: express.Response) {
   debug('GET /caslogin request');
-  // if (req.session!.username) {
-  //   // cas has a username
-  //   res.redirect(props.webUrlProxy);
-
-  // } else {
-  //   res.send('<p id="CAS auth failed">CAS auth failed</p>');
-  // }
   if (req.query.bounce) {
     res.redirect(req.query.bounce);
     return;
@@ -283,14 +262,6 @@ app.get('/api/v1/swdb/user', function(req: express.Request, res: express.Respons
   debug('GET /api/v1/swdb/user request');
   res.json({ user: auth.getProvider().getUser(req) });
   debug('sending user data ' + JSON.stringify({ user: auth.getProvider().getUser(req) }, null, 2));
-  // if (req.session) {
-  //   if (req.session.passport) {
-  //     let user2 = JSON.parse(req.session.passport.user);
-  //     req.session.user = user2;
-  //   }
-  // }
-  // debug('sending ' + JSON.stringify(req.session));
-  // res.send(JSON.stringify(req.session));
 });
 
 // for get requests that are not specific return all
