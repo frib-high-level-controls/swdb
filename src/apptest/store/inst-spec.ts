@@ -51,7 +51,7 @@ describe('Installation api tests', () => {
   before('login as test user', function(done){
     supertest(app)
     .get('/login')
-    .auth('ellisr', 'Pa5w0rd')
+    .auth(props.test.username, props.test.password)
     .expect(302)
     .end(function(err, res){
       if (err) {

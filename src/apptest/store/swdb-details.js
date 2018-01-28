@@ -63,7 +63,7 @@ test.describe("Preload db record tests", function() {
   test.it("login as test user", function(done){
     supertest
     .get("/login")
-    .auth('ellisr', 'Pa5w0rd')
+    .auth(props.test.username, props.test.password)
     .expect(302)
     .end(function(err,res){
       if (err) done(err);
@@ -83,7 +83,7 @@ test.describe("Preload db record tests", function() {
     chromeDriver.get(props.webUrl+"#/list");
     chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
-      "ELLISR"),5000);
+      props.test.username.toUpperCase()),5000);
   });
 
   test.it("should show 'Add software' button", function() {

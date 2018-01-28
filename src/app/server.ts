@@ -59,7 +59,7 @@ const forgClient = new forgapi.Client({
 
 let cfAuthProvider: any;
 // check whether we are testing and set the auth
-if (props.testing === 'true') {
+if (props.test.testing === 'true') {
   debug('TEST mode is active!');
   cfAuthProvider = new cfauth.DevForgBasicProvider(forgClient, {});
 } else {

@@ -24,6 +24,17 @@ npm run make
 ```
 
 # Unit/API Test Setup
+SWDB has two outer FRIB system it depends on. 1) CAS - the suthentication system and 2) FORG
+the FRIB organizational service.
+
+At this time the CAS service can be tuned off for development and testing. To do this
+add "--test.testing: true" to mocha calls or configure the same in swdbrc. 
+FORG cannot be detached at this time, and remote testing can be accomplshed using 
+an ssh tunnel.
+``` sh
+ssh -L 8081:forg-dev.nscl.msu.edu:443 username@nsclgw1.nscl.msu.edu
+```
+And matching the local host:port in swdbrc configuration item auth.forgapi.url.
 ``` sh
 # setup for tests
 sudo npm install -g mocha

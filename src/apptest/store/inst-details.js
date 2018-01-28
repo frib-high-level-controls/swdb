@@ -53,7 +53,7 @@ test.describe("Installations detail screen tests", function() {
   test.it("login as test user", function(done){
     supertest
     .get("/login")
-    .auth('ellisr', 'Pa5w0rd')
+    .auth(props.test.username, props.test.password)
     .expect(302)
     .end(function(err,res){
       if (err) done(err);
@@ -73,7 +73,7 @@ test.describe("Installations detail screen tests", function() {
     chromeDriver.get(props.webUrl+"#/inst/list");
     chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
-      "ELLISR"),5000);
+      props.test.username.toUpperCase()),5000);
   });
 
   test.it("should find a record", function() {
@@ -93,7 +93,7 @@ test.describe("Installations detail screen tests", function() {
   test.it("should show the requested installation record user button", function() {
     chromeDriver.wait(until.elementLocated(By.id("usrBtn")),5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("usrBtn")),
-      "ELLISR"),5000);
+      props.test.username.toUpperCase()),5000);
   });
 
   test.it("should show the requested installation record host field", function() {
