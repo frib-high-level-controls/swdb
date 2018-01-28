@@ -17,7 +17,7 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
     if ($scope.session.user) {
       $window.location.href = $scope.props.webUrl + 'logout';
     } else {
-      $window.location.href = $scope.props.webUrl + 'caslogin';
+      $window.location.href = $scope.props.webUrl + 'login';
     }
   };
 
@@ -148,7 +148,7 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configServ
     if ($scope.session.user) {
       $window.location.href = $scope.props.webUrl + 'logout';
     } else {
-      $window.location.href = $scope.props.webUrl + 'caslogin';
+      $window.location.href = $scope.props.webUrl + 'login';
     }
   };
 
@@ -183,7 +183,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     if ($scope.session.user) {
       $window.location.href = $scope.props.webUrl + 'logout';
     } else {
-      $window.location.href = $scope.props.webUrl + 'caslogin';
+      $window.location.href = $scope.props.webUrl + 'login';
     }
   };
 
@@ -341,7 +341,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     // check our user session and redirect if needed
     if (!$scope.session.user) {
         //go to cas
-      $window.location.href = $scope.props.webUrl + 'caslogin';
+      $window.location.href = $scope.props.webUrl + 'login';
     }
 
     // sw just updated, refresh the service list
@@ -525,7 +525,7 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     // check our user session and redirect if needed
     if (!$scope.session.user) {
         //go to cas
-      $window.location.href = $scope.props.webUrl + 'caslogin';
+      $window.location.href = $scope.props.webUrl + 'login';
     }
 
     $scope.swdbParams = {

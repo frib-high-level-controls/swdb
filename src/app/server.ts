@@ -237,8 +237,8 @@ app.get('/', function(req: express.Request, res: express.Response) {
   res.sendFile('index.html', {root: path.join(__dirname, '../public/swdb-fe/')});
 });
 
-app.get('/caslogin', cfAuthProvider.authenticate(), function(req: express.Request, res: express.Response) {
-  debug('GET /caslogin request');
+app.get('/login', cfAuthProvider.authenticate(), function(req: express.Request, res: express.Response) {
+  debug('GET /login request');
   if (req.query.bounce) {
     res.redirect(req.query.bounce);
     return;

@@ -34,7 +34,7 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
     if ($scope.session.user) {
       $window.location.href = $scope.props.webUrl + 'logout';
     } else {
-      $window.location.href = $scope.props.webUrl + 'caslogin';
+      $window.location.href = $scope.props.webUrl + 'login';
     }
   };
 
@@ -134,7 +134,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService,
     if ($scope.session.user) {
       $window.location.href = $scope.props.webUrl + 'logout';
     } else {
-      $window.location.href = $scope.props.webUrl + 'caslogin';
+      $window.location.href = $scope.props.webUrl + 'login';
     }
   };
 
@@ -170,7 +170,7 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     if ($scope.session.user) {
       $window.location.href = $scope.props.webUrl + 'logout';
     } else {
-      $window.location.href = $scope.props.webUrl + 'caslogin';
+      $window.location.href = $scope.props.webUrl + 'login';
     }
   };
 
@@ -273,9 +273,7 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     // check our user session and redirect if needed
     if (!$scope.session.user) {
         //go to cas
-      $window.location.href = $scope.props.webUrl + 'caslogin';
-      // $window.location.href = $scope.props.auth.cas.cas_url + '/login?service=' + encodeURIComponent($scope.props.auth.cas.service_url);
-      // $window.location.href = $scope.props.auth.cas + '/login?service=' + encodeURIComponent($scope.props.auth.login_service);
+      $window.location.href = $scope.props.webUrl + 'login';
     }
 
     // initialize this record
@@ -310,7 +308,7 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     if ($scope.session.user) {
       $window.location.href = $scope.props.webUrl + 'logout';
     } else {
-      $window.location.href = $scope.props.webUrl + 'caslogin';
+      $window.location.href = $scope.props.webUrl + 'login';
     }
   };
 
@@ -408,7 +406,7 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     // check our user session and redirect if needed
     if (!$scope.session.user) {
       //go to cas
-      $window.location.href = $scope.props.webUrl + 'caslogin';
+      $window.location.href = $scope.props.webUrl + 'login';
     }
 
     $scope.swdbParams = {

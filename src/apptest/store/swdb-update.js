@@ -60,7 +60,7 @@ test.describe("Software update screen tests", function() {
 
   test.it("login as test user", function(done){
     supertest
-    .get("/caslogin")
+    .get("/login")
     .auth('ellisr', 'Pa5w0rd')
     .expect(302)
     .end(function(err,res){
