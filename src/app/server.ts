@@ -277,6 +277,24 @@ app.get('/api/v1/swdb/slot', function(req: express.Request, res: express.Respons
   instTools.InstLib.getSlot(req, res, next);
 });
 
+// for get forg groups requests
+app.get('/api/v1/swdb/forgGroups', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('GET /api/v1/swdb/forgGroups request');
+  tools.SwdbLib.getForgGroups(req, res, next);
+});
+
+// for get forg areas requests
+app.get('/api/v1/swdb/forgAreas', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('GET /api/v1/swdb/forgAreas request');
+  tools.SwdbLib.getForgAreas(req, res, next);
+});
+
+// for get forg users requests
+app.get('/api/v1/swdb/forgUsers', function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  debug('GET /api/v1/swdb/forgUsers request');
+  tools.SwdbLib.getForgUsers(req, res, next);
+});
+
 // for get history requests
 app.get('/api/v1/swdb/hist/:id', function(req: express.Request, res: express.Response, next: express.NextFunction) {
   debug('GET /api/v1/swdb/hist/* request');

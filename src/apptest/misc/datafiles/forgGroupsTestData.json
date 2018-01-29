@@ -1,0 +1,2730 @@
+[
+  {
+    "uid": "IFS:LAB.NSCL",
+    "name": "LAB.NSCL",
+    "fullname": "NSCL",
+    "leader": "SHERRILL",
+    "source": "IFS",
+    "type": "UNIT"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHSEVERIN",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchSeverin",
+    "fullname": "Research- Severin",
+    "leader": "SEVERIN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.MSS",
+    "name": "LAB.NSCL.EXPRES.ExpRes.MSS",
+    "fullname": "Magnetic Spectrograph Support",
+    "leader": "ZEGERS",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.ELECTR.RFENGINEERS",
+    "name": "LAB.NSCL.OPS.Electr.RFEngineers",
+    "fullname": "RF Engineers",
+    "leader": "MORRISD",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.JINA.JINA",
+    "name": "LAB.NSCL.JINA.JINA",
+    "fullname": "JINA",
+    "leader": "SCHATZ",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.BUSINESSIT.ADS",
+    "name": "LAB.FRIB.BSO.BusinessIT.ADS",
+    "fullname": "Application Development Staff",
+    "leader": "EVENSON",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.CFID.DESIGN.ENGSUPPORT",
+    "name": "LAB.FRIB.CFID.Design.EngSupport",
+    "fullname": "Engineering Support",
+    "leader": "BULL",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.AP",
+    "name": "LAB.FRIB.ASD.AP",
+    "fullname": "Accelerator Physics",
+    "leader": "OSTROUMO",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.MECHENG.SURVEYALLIGNMENT.SATEAM",
+    "name": "LAB.FRIB.ASD.MechEng.SurveyAllignment.SATeam",
+    "fullname": "Survey & Alignment",
+    "leader": "BULTMAN",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.EDD.CG",
+    "name": "LAB.FRIB.EDD.CG",
+    "fullname": "Compliance Group",
+    "leader": "HOPPER",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.REACC",
+    "name": "LAB.NSCL.OPS.Reacc",
+    "fullname": "Reaccelerator",
+    "leader": "VILLARI",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.AIS",
+    "name": "LAB.NSCL.AIS",
+    "fullname": "Applied Isotope Science",
+    "leader": "BOLLEN",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.ACCPHY.RESEARCHYAMAZAKI",
+    "name": "LAB.NSCL.AccPhy.ResearchYamazaki",
+    "fullname": "Research - Yamazaki",
+    "leader": "YAMAZAKI",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.FO.FINANCE.PAYROLL",
+    "name": "LAB.FRIB.BSO.FO.Finance.Payroll",
+    "fullname": "Payroll",
+    "leader": "GIBSONT",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ESD.AIS",
+    "name": "LAB.FRIB.ESD.AIS",
+    "fullname": "Applied Isotope Science Department",
+    "leader": "BOLLEN",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CONTROLS.PHYSICSAPP",
+    "name": "LAB.FRIB.ASD.Controls.PhysicsApp",
+    "fullname": "Physics Applications",
+    "leader": "IKEGAMI",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.FRONTEND.RFQ",
+    "name": "LAB.FRIB.ASD.FrontEnd.RFQ",
+    "fullname": "RFQ",
+    "leader": "POZDEYEV",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHWREDE",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchWrede",
+    "fullname": "Research - Wrede",
+    "leader": "WREDE",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.CRYOPLANTOPS",
+    "name": "LAB.NSCL.OPS.CryoplantOps",
+    "fullname": "Cryoplant Operations",
+    "leader": "CASAGRAN",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.AIS.ISOTOPEBEAMPHYSICS",
+    "name": "LAB.NSCL.AIS.IsotopeBeamPhysics",
+    "fullname": "Isotope Beam Physics",
+    "leader": "SCHWARZ",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.ACCPHY.RESEARCHMARTI",
+    "name": "LAB.NSCL.AccPhy.ResearchMarti",
+    "fullname": "Research - Marti",
+    "leader": "MARTI",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.BO.MPP",
+    "name": "LAB.FRIB.BSO.BO.MPP",
+    "fullname": "Materials and Production Planning",
+    "leader": "HORWATH",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ESD.MAGNETSYS.MFT",
+    "name": "LAB.FRIB.ESD.MagnetSys.MFT",
+    "fullname": "Magnet Fabrication and Testing",
+    "leader": "HORWATH",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.INSTALLATION.VACUUM",
+    "name": "LAB.FRIB.ASD.Installation.Vacuum",
+    "fullname": "Vacuum",
+    "leader": "MALLOCH",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOMODULE.CRYOMODULEGRP.CRYOMODULEASSEMBLY",
+    "name": "LAB.FRIB.ASD.Cryomodule.CryomoduleGrp.CryomoduleAssembly",
+    "fullname": "Cryomodule Assembly",
+    "leader": "COMPTON",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHZEGERS",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchZegers",
+    "fullname": "Research - Zegers",
+    "leader": "ZEGERS",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.CCFOPERATIONS.OPERATIONENG",
+    "name": "LAB.NSCL.OPS.CCFOperations.OperationEng",
+    "fullname": "Operation Engineers",
+    "leader": "WEST",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.NUCLTHEORY.RESEARCHNAZAREWICZ",
+    "name": "LAB.NSCL.NUCLTHEORY.ResearchNazarewicz",
+    "fullname": "Research - Nazarewicz",
+    "leader": "WITEK",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.AS.OPERATIONSSUPPORT",
+    "name": "LAB.FRIB.BSO.AS.OperationsSupport",
+    "fullname": "Operations Support",
+    "leader": "LAMBERT",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.EXPORTCONTROLTSC",
+    "name": "LAB.FRIB.BSO.ExportControlTSC",
+    "fullname": "Export Control Trade Sanction Compliance",
+    "leader": "TOWNSEND",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ESD.TF&NCU",
+    "name": "LAB.FRIB.ESD.TF&NCU",
+    "fullname": "Target Facility and NCU",
+    "leader": "LATURKAR",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOGENICS.CRYOGENICFABRICATION",
+    "name": "LAB.FRIB.ASD.Cryogenics.CryogenicFabrication",
+    "fullname": "Cryogenic Fabrication",
+    "leader": "SJONES",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOMODULE.RFMDESIGN",
+    "name": "LAB.FRIB.ASD.Cryomodule.RFMDesign",
+    "fullname": "RF Measurement & Design",
+    "leader": "POPIELAR",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHWESTFALL",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchWestfall",
+    "fullname": "Research - Westfall",
+    "leader": "WESTFALL",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.MECHDESIGN",
+    "name": "LAB.NSCL.OPS.MechDesign",
+    "fullname": "Mechanical Design",
+    "leader": "LAWTON",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.NUCLTHEORY.RESEARCHBOGNER",
+    "name": "LAB.NSCL.NUCLTHEORY.ResearchBogner",
+    "fullname": "Research - Bogner",
+    "leader": "BOGNER",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.CHIEFENGINEER.DCC",
+    "name": "LAB.FRIB.BSO.ChiefEngineer.DCC",
+    "fullname": "Document Control Center",
+    "leader": "STOUT",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.CFID.MACHINESHOP",
+    "name": "LAB.FRIB.CFID.MachineShop",
+    "fullname": "Machine Shop",
+    "leader": "PLATH",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD",
+    "name": "LAB.FRIB.ASD",
+    "fullname": "Accelerator Systems",
+    "leader": "WEI",
+    "source": "IFS",
+    "type": "DIV"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.MECHENG.TFI",
+    "name": "LAB.FRIB.ASD.MechEng.TFI",
+    "fullname": "Target Facility Integration",
+    "leader": "BULTMAN",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.ELECENG",
+    "name": "LAB.FRIB.ASD.ElecEng",
+    "fullname": "Electrical Engineering",
+    "leader": "MORRISD",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHMANTICA",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchMantica",
+    "fullname": "Research - Mantica",
+    "leader": "MANTICA",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.CCFOPERATIONS.MAINTENANCEENGINEERS",
+    "name": "LAB.NSCL.OPS.CCFOperations.MaintenanceEngineers",
+    "fullname": "Maintenance Engineers",
+    "leader": "BONOFIGL",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.NUCLTHEORY.RESEARCHHJORTH-JENSEN",
+    "name": "LAB.NSCL.NUCLTHEORY.ResearchHjorth-Jensen",
+    "fullname": "Research - Hjorth-Jensen",
+    "leader": "HJENSEN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHESTRADEVAZ",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchEstradeVaz",
+    "fullname": "Research - Estrade Vaz",
+    "leader": "ESTRADE",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.REACC.ACCELERATOR",
+    "name": "LAB.NSCL.OPS.Reacc.Accelerator",
+    "fullname": "Accelerator",
+    "leader": "VILLARI",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.AISCOMMENSALBEAMS",
+    "name": "LAB.NSCL.AISCommensalBeams",
+    "fullname": "Commensal Beams",
+    "leader": "ZEGERS",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.ACCPHY.RESEARCHLUND",
+    "name": "LAB.NSCL.AccPhy.ResearchLund",
+    "fullname": "Research - Lund",
+    "leader": "LUND",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.FO.FISCALOFFICER",
+    "name": "LAB.FRIB.BSO.FO.FiscalOfficer",
+    "fullname": "Fiscal Officer",
+    "leader": "HOPPER",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ESD.MAGNETSYS",
+    "name": "LAB.FRIB.ESD.MagnetSys",
+    "fullname": "Magnet Systems",
+    "leader": "VILLARI",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CONTROLS.PP",
+    "name": "LAB.FRIB.ASD.Controls.PP",
+    "fullname": "Personnel Protection",
+    "leader": "IKEGAMI",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.FRONTEND.IONSOURCE",
+    "name": "LAB.FRIB.ASD.FrontEnd.IonSource",
+    "fullname": "Ion Source",
+    "leader": "MACHICOA",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHSTOLZ",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchStolz",
+    "fullname": "Research - Stolz",
+    "leader": "STOLZ",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.CRYOPLANTOPS.CRYOGENICOPS",
+    "name": "LAB.NSCL.OPS.CryoplantOps.CryogenicOps",
+    "fullname": "Cryogenic Operations",
+    "leader": "GANSHYN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.NUCLTHEORY",
+    "name": "LAB.NSCL.NUCLTHEORY",
+    "fullname": "Nuclear Theory",
+    "leader": "BOGNER",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.ESH",
+    "name": "LAB.NSCL.ESH",
+    "fullname": "ES&H",
+    "leader": "GRIVINS",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHBOLLEN",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchBollen",
+    "fullname": "Research - Bollen",
+    "leader": "BOLLEN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.MECHDESIGN.PROJECTSII",
+    "name": "LAB.NSCL.OPS.MechDesign.ProjectsII",
+    "fullname": "Projects II",
+    "leader": "AREND",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.NUCLTHEORY.RESEARCHDANIELEWICZ",
+    "name": "LAB.NSCL.NUCLTHEORY.ResearchDanielewicz",
+    "fullname": "Research - Danielewicz",
+    "leader": "DANIEL",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.COMMUNICATIONS",
+    "name": "LAB.FRIB.BSO.Communications",
+    "fullname": "Communications",
+    "leader": "KINGK",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.CFID.MACHINESHOP.WELDING",
+    "name": "LAB.FRIB.CFID.MachineShop.Welding",
+    "fullname": "Welding",
+    "leader": "PLATH",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.BIM",
+    "name": "LAB.FRIB.ASD.BIM",
+    "fullname": "Beam Instrumentation and Measurements",
+    "leader": "LIDIA",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.MECHENG.WBI",
+    "name": "LAB.FRIB.ASD.MechEng.WBI",
+    "fullname": "Warm Beamline Integration",
+    "leader": "HUSSAIN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.ELECENG.ELECTRONICS",
+    "name": "LAB.FRIB.ASD.ElecEng.Electronics",
+    "fullname": "Electronics",
+    "leader": "MORRISD",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB",
+    "name": "LAB",
+    "fullname": "FRIB Laboratory",
+    "leader": "GLASMACH",
+    "source": "IFS",
+    "type": "LAB"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHLYNCH",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchLynch",
+    "fullname": "Research - Lynch",
+    "leader": "LYNCH",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.ELECTR.POWERSUPPLIES",
+    "name": "LAB.NSCL.OPS.Electr.PowerSupplies",
+    "fullname": "Power Supplies",
+    "leader": "HOLLAND",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.ACCPHY",
+    "name": "LAB.NSCL.AccPhy",
+    "fullname": "Accelerator Physics",
+    "leader": "WEI",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.FO",
+    "name": "LAB.FRIB.BSO.FO",
+    "fullname": "Financial Operations",
+    "leader": "SCHNEIDL",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.CFID.CONSTRMGMT",
+    "name": "LAB.FRIB.CFID.ConstrMgmt",
+    "fullname": "Construction Management",
+    "leader": "BULL",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CONTROLS",
+    "name": "LAB.FRIB.ASD.Controls",
+    "fullname": "Controls",
+    "leader": "IKEGAMI",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.MECHENG.MECHANICALENG",
+    "name": "LAB.FRIB.ASD.MechEng.MechanicalEng",
+    "fullname": "Mechanical Engineering",
+    "leader": "BULTMAN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.EDD.EDS",
+    "name": "LAB.FRIB.EDD.EDS",
+    "fullname": "Executive Director Staff",
+    "leader": "JACOBSON",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.AS.OPERATIONSSUPPORT.RECEPTION",
+    "name": "LAB.FRIB.BSO.AS.OperationsSupport.Reception",
+    "fullname": "Reception",
+    "leader": "FOLTZ",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.CFID",
+    "name": "LAB.FRIB.CFID",
+    "fullname": "Conventional Facilities & Infrastructure",
+    "leader": "BULL",
+    "source": "IFS",
+    "type": "DIV"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ESD.REMOTEHANDLING",
+    "name": "LAB.FRIB.ESD.RemoteHandling",
+    "fullname": "Remote Handling",
+    "leader": "BENNETT",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOGENICS.CRYOGENICENGINEERING",
+    "name": "LAB.FRIB.ASD.Cryogenics.CryogenicEngineering",
+    "fullname": "Cryogenic Engineering",
+    "leader": "TATSUMOT",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOMODULE.CAVITYPROCESSING",
+    "name": "LAB.FRIB.ASD.Cryomodule.CavityProcessing",
+    "fullname": "Cavity Processing & Cold Mass Assembly",
+    "leader": "LPOPIELA",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHLIDDICK",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchLiddick",
+    "fullname": "Research - Liddick",
+    "leader": "LIDDICK",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.CCFOPERATIONS.TECHNICALDEVELOPMENT",
+    "name": "LAB.NSCL.OPS.CCFOperations.TechnicalDevelopment",
+    "fullname": "Technical Development Group",
+    "leader": "STOLZ",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.NUCLTHEORY.RESEARCHHERGERT",
+    "name": "LAB.NSCL.NUCLTHEORY.ResearchHergert",
+    "fullname": "Research - Hergert",
+    "leader": "HERGERT",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES",
+    "name": "LAB.NSCL.EXPRES.ExpRes",
+    "fullname": "Experimental Research",
+    "leader": "ZEGERS",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS",
+    "name": "LAB.NSCL.OPS",
+    "fullname": "Operations",
+    "leader": "MORRISSEY",
+    "source": "IFS",
+    "type": "DIV"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.BO.MPP.SHIPPING&RECEIVING",
+    "name": "LAB.FRIB.BSO.BO.MPP.Shipping&Receiving",
+    "fullname": "Shipping and Receiving",
+    "leader": "HORWATH",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ESD.MAGNETSYS.MFT.DF",
+    "name": "LAB.FRIB.ESD.MagnetSys.MFT.DF",
+    "fullname": "Dipole Fabrication",
+    "leader": "HORWATH",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.INSTALLATION.INSTALLATIONGRP",
+    "name": "LAB.FRIB.ASD.Installation.InstallationGrp",
+    "fullname": "Installation",
+    "leader": "GIBSON",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOMODULE.DEVELOPMENT",
+    "name": "LAB.FRIB.ASD.Cryomodule.Development",
+    "fullname": "SRF Development",
+    "leader": "SAITO",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHSHERILL",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchSherill",
+    "fullname": "Research - Sherrill",
+    "leader": "SHERRILL",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHIWASAKI",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchIwasaki",
+    "fullname": "Research- Iwasaki",
+    "leader": "IWASAKI",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.CCFOPERATIONS.BEAMPHYSICISTS",
+    "name": "LAB.NSCL.OPS.CCFOperations.BeamPhysicists",
+    "fullname": "Beam Physicists",
+    "leader": "BAUMANN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.NUCLTHEORY.RESEARCHPRATT",
+    "name": "LAB.NSCL.NUCLTHEORY.ResearchPratt",
+    "fullname": "Research - Pratt",
+    "leader": "PRATT",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.CHIEFENGINEER",
+    "name": "LAB.FRIB.BSO.ChiefEngineer",
+    "fullname": "Chief Engineer",
+    "leader": "STOUT",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.CFID.MANUFACTURING.INSPECTION",
+    "name": "LAB.FRIB.CFID.Manufacturing.Inspection",
+    "fullname": "Inspection Team",
+    "leader": "BULL",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ESD.FRAGMENTSEPARATOR",
+    "name": "LAB.FRIB.ESD.FragmentSeparator",
+    "fullname": "Fragment Separator",
+    "leader": "HAUSMANN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.MECHENG.TBDDLEAD",
+    "name": "LAB.FRIB.ASD.MechEng.TBDDLead",
+    "fullname": "Target & Beam Dump Design Team Lead",
+    "leader": "BULTMAN",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.SRF.CRYOMODULEDESIGN",
+    "name": "LAB.FRIB.ASD.SRF.CryomoduleDesign",
+    "fullname": "Cryomodule Design",
+    "leader": "XUTI",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.AS.ASDSUPPORTTEAM",
+    "name": "LAB.FRIB.BSO.AS.ASDSupportTeam",
+    "fullname": "ASD Support Team",
+    "leader": "PATTERER",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.HR",
+    "name": "LAB.FRIB.BSO.HR",
+    "fullname": "Human Resources",
+    "leader": "MURCHIS6",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ESD.RADTRANS",
+    "name": "LAB.FRIB.ESD.RadTrans",
+    "fullname": "Radiation Transport",
+    "leader": "BOLLEN",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOGENICS.CRYOGENICOPERATION",
+    "name": "LAB.FRIB.ASD.Cryogenics.CryogenicOperation",
+    "fullname": "Cryogenic Operation",
+    "leader": "GANSHYN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOMODULE.DEVELOPMENT.COUPLERTUNER",
+    "name": "LAB.FRIB.ASD.Cryomodule.Development.CouplerTuner",
+    "fullname": "Coupler & Tuner",
+    "leader": "SAITO",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHREDSHAW",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchRedshaw",
+    "fullname": "Research - Redshaw",
+    "leader": "REDSHAW",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.REACC.DIAGNOSTICSCONTROLS",
+    "name": "LAB.NSCL.OPS.Reacc.DiagnosticsControls",
+    "fullname": "Diagnostics & Controls",
+    "leader": "VILLARI",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.AIS.ISOTOPEPRODUCTION",
+    "name": "LAB.NSCL.AIS.IsotopeProduction",
+    "fullname": "Isotope Production",
+    "leader": "SHERRILL",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.ELECTR.ELECTRONICS.ELECTRONICSSHOP",
+    "name": "LAB.NSCL.OPS.Electr.Electronics.ElectronicsShop",
+    "fullname": "Electronics Shop",
+    "leader": "SHINAVER",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.ACCPHY.RESEARCHOSTROUMOV",
+    "name": "LAB.NSCL.AccPhy.ResearchOstroumov",
+    "fullname": "Research - Ostroumov",
+    "leader": "OSTROUMO",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.FO.FINANCE.ACCOUNTING",
+    "name": "LAB.FRIB.BSO.FO.Finance.Accounting",
+    "fullname": "Accounting",
+    "leader": "GIBSONT",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ESD",
+    "name": "LAB.FRIB.ESD",
+    "fullname": "Experimental Systems",
+    "leader": "BOLLEN",
+    "source": "IFS",
+    "type": "DIV"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CONTROLS.CONTROLSNETWORK",
+    "name": "LAB.FRIB.ASD.Controls.ControlsNetwork",
+    "fullname": "Controls Network Team",
+    "leader": "IKEGAMI",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.FRONTEND.FRONTENDOPERATIONS",
+    "name": "LAB.FRIB.ASD.FrontEnd.FrontEndOperations",
+    "fullname": "Front End Operations",
+    "leader": "MACHICOA",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHPERDIKAKIS",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchPerdikakis",
+    "fullname": "Research - Perdikakis",
+    "leader": "PERDIKAK",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.CONTROLS",
+    "name": "LAB.NSCL.OPS.Controls",
+    "fullname": "Computer Controls",
+    "leader": "DAVIDSON",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.AIS.ISOTOPEHARVESTINGAPPS",
+    "name": "LAB.NSCL.AIS.IsotopeHarvestingApps",
+    "fullname": "Isotope Harvesting and Applications",
+    "leader": "BOLLEN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.ACCPHY.RESEARCHWEI",
+    "name": "LAB.NSCL.AccPhy.ResearchWei",
+    "fullname": "Research - Wei",
+    "leader": "WEI",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.BO.HRADMINISTRATION",
+    "name": "LAB.FRIB.BSO.BO.HRAdministration",
+    "fullname": "Human Resources Administration",
+    "leader": "NOWAK",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.ELECTR",
+    "name": "LAB.NSCL.OPS.Electr",
+    "fullname": "Electrical Engineering",
+    "leader": "MORRISD",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.JINA",
+    "name": "LAB.NSCL.JINA",
+    "fullname": "JINA",
+    "leader": "SCHATZ",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.BUSINESSIT.AS",
+    "name": "LAB.FRIB.BSO.BusinessIT.AS",
+    "fullname": "Infrastructure Staff",
+    "leader": "HUHN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.CFID.DESIGN.SMITHGROUP",
+    "name": "LAB.FRIB.CFID.Design.Smithgroup",
+    "fullname": "Design A/E Smithgroup",
+    "leader": "BULL",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.BIM.ELECTRONICINSTRUMENTATION",
+    "name": "LAB.FRIB.ASD.BIM.ElectronicInstrumentation",
+    "fullname": "Electronic Instrumentation",
+    "leader": "COGAN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.MECHENG.SURVEYALLIGNMENT.INSPECTION",
+    "name": "LAB.FRIB.ASD.MechEng.SurveyAllignment.Inspection",
+    "fullname": "Inspection",
+    "leader": "BULTMAN",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.EDD",
+    "name": "LAB.FRIB.EDD",
+    "fullname": "Executive Director",
+    "leader": "JACOBSON",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ESD.MAGNETSYS.OPERATIONSSUPPORT.OPSTEAM",
+    "name": "LAB.FRIB.ESD.MagnetSys.OperationsSupport.OPSTeam",
+    "fullname": "Operations Support",
+    "leader": "MAGSIG",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.INSTALLATION",
+    "name": "LAB.FRIB.ASD.Installation",
+    "fullname": "Installation",
+    "leader": "HUSSAIN",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.ACCPHY.RESEARCHCHU",
+    "name": "LAB.NSCL.AccPhy.ResearchChu",
+    "fullname": "Research - Chu",
+    "leader": "CHU",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.BO",
+    "name": "LAB.FRIB.BSO.BO",
+    "fullname": "Business Operations",
+    "leader": "NOWAK",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ESD.MAGNETSYS.OPERATIONSSUPPORT",
+    "name": "LAB.FRIB.ESD.MagnetSys.OperationsSupport",
+    "fullname": "Operations Support",
+    "leader": "MAGSIG",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CONTROLS.ICFC",
+    "name": "LAB.FRIB.ASD.Controls.ICFC",
+    "fullname": "Integration & Conv Facilities Controls",
+    "leader": "STANLEY",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOMODULE.SUPERCONDUCTINGMECHDESIGN",
+    "name": "LAB.FRIB.ASD.Cryomodule.SuperconductingMechDesign",
+    "fullname": "Superconducting Mechanical Design",
+    "leader": "MILLERS",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHTSANG",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchTsang",
+    "fullname": "Research - Tsang",
+    "leader": "TSANG",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.MECHDESIGN.PROJECTSI",
+    "name": "LAB.NSCL.OPS.MechDesign.ProjectsI",
+    "fullname": "Projects I",
+    "leader": "OTTARSON",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.NUCLTHEORY.RESEARCHBROWN",
+    "name": "LAB.NSCL.NUCLTHEORY.ResearchBrown",
+    "fullname": "Research - Brown",
+    "leader": "BROWN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.BUSINESSIT.SS",
+    "name": "LAB.FRIB.BSO.BusinessIT.SS",
+    "fullname": "Support Staff",
+    "leader": "MUSSELL",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.CFID.DESIGN",
+    "name": "LAB.FRIB.CFID.Design",
+    "fullname": "Design",
+    "leader": "BULL",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.BIM.DETECTORSMEASUREMENTS",
+    "name": "LAB.FRIB.ASD.BIM.DetectorsMeasurements",
+    "fullname": "Detectors and Measurements",
+    "leader": "LIDIA",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.MECHENG.SURVEYALIGNMENT",
+    "name": "LAB.FRIB.ASD.MechEng.SurveyAlignment",
+    "fullname": "Survey & Alignment",
+    "leader": "BULTMAN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.ELECENG.RADIOFREQUENCY",
+    "name": "LAB.FRIB.ASD.ElecEng.RadioFrequency",
+    "fullname": "Radio Frequency",
+    "leader": "MORRISD",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHMITTIG",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchMittig",
+    "fullname": "Research - Mittig",
+    "leader": "MITTIG",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.CCFOPERATIONS.DETECTORSYSTEMS",
+    "name": "LAB.NSCL.OPS.CCFOperations.DetectorSystems",
+    "fullname": "Detector Systems",
+    "leader": "CORTESI",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOMODULE.CRYOMODULEGRP",
+    "name": "LAB.FRIB.ASD.Cryomodule.CryomoduleGrp",
+    "fullname": "Cryomodule",
+    "leader": "COMPTON",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.NUCLTHEORY.RESEARCHSHINDLER",
+    "name": "LAB.NSCL.NUCLTHEORY.ResearchShindler",
+    "fullname": "Research - Shindler",
+    "leader": "SHINDLER",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.AS",
+    "name": "LAB.FRIB.BSO.AS",
+    "fullname": "Administrative Support",
+    "leader": "PATTERER",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.BO.COMMPROCUREMENT",
+    "name": "LAB.FRIB.BSO.BO.CommProcurement",
+    "fullname": "Commodities Procurement",
+    "leader": "SHUART",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ESD.MAGNETSYS.MFT.CIQT",
+    "name": "LAB.FRIB.ESD.MagnetSys.MFT.CIQT",
+    "fullname": "CIQT Fabrication",
+    "leader": "HORWATH",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHSCHATZ",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchSchatz",
+    "fullname": "Research - Schatz",
+    "leader": "SCHATZ",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.CCFOPERATIONS.IONSOURCE",
+    "name": "LAB.NSCL.OPS.CCFOperations.IonSource",
+    "fullname": "Ion Source",
+    "leader": "MACHICOA",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.NUCLTHEORY.RESEARCHZELEVINSKY",
+    "name": "LAB.NSCL.NUCLTHEORY.ResearchZelevinsky",
+    "fullname": "Research - Zelevinsky",
+    "leader": "ZELEVINS",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EDU",
+    "name": "LAB.NSCL.EDU",
+    "fullname": "Education",
+    "leader": "SPYROU",
+    "source": "IFS",
+    "type": "DIV"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHSPYROU",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchSpyrou",
+    "fullname": "Research - Spyrou",
+    "leader": "SPYROU",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.ELECTR.ELECTRONICS",
+    "name": "LAB.NSCL.OPS.Electr.Electronics",
+    "fullname": "Electronics",
+    "leader": "MORRISD",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.ACCPHY.RESEARCHHAO",
+    "name": "LAB.NSCL.AccPhy.ResearchHao",
+    "fullname": "Research - Hao",
+    "leader": "HAOY",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.FO.FINANCE",
+    "name": "LAB.FRIB.BSO.FO.Finance",
+    "fullname": "Finance",
+    "leader": "GIBSONT",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.CFID.CONSTRMGMT.COSTBARTONMALOW",
+    "name": "LAB.FRIB.CFID.ConstrMgmt.CostBartonMalow",
+    "fullname": "Cost Estimating CM Barton Malow",
+    "leader": "BULL",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CONTROLS.LLC",
+    "name": "LAB.FRIB.ASD.Controls.LLC",
+    "fullname": "Low Levels Controls",
+    "leader": "HODGES",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CHARGESTRIPPERAREAGRPLEADER",
+    "name": "LAB.FRIB.ASD.ChargeStripperAreaGrpLeader",
+    "fullname": "Charge Stripper Area Group Leader",
+    "leader": "MARTI",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOGENICS.CRYOGENICCONTROLS",
+    "name": "LAB.FRIB.ASD.Cryogenics.CryogenicControls",
+    "fullname": "Cryogenic Controls",
+    "leader": "STANLEY",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.SRF.DEVELOPMENT.TUNER",
+    "name": "LAB.FRIB.ASD.SRF.Development.Tuner",
+    "fullname": "Tuner Development",
+    "leader": "SAITO",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES",
+    "name": "LAB.NSCL.EXPRES",
+    "fullname": "Experimental Research",
+    "leader": "ZEGERS",
+    "source": "IFS",
+    "type": "DIV"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHGADE",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchGade",
+    "fullname": "Research - Gade",
+    "leader": "GADE",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.ELECTR.ELECTRONICS.NUCLEARELECTRONICS",
+    "name": "LAB.NSCL.OPS.Electr.Electronics.NuclearElectronics",
+    "fullname": "Nuclear Electronics",
+    "leader": "MORRISD",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.ACCPHY.RESEARCHLIDIA",
+    "name": "LAB.NSCL.AccPhy.ResearchLidia",
+    "fullname": "Research - Lidia",
+    "leader": "LIDIA",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.FO.FINANCE.R&A",
+    "name": "LAB.FRIB.BSO.FO.Finance.R&A",
+    "fullname": "Budgeting, Reporting & Accounts Payable",
+    "leader": "GIBSONT",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.CFID.CONSTRMGMT.CONSTRBARTONMALOW",
+    "name": "LAB.FRIB.CFID.ConstrMgmt.ConstrBartonMalow",
+    "fullname": "Construction CM Barton Malow",
+    "leader": "BULL",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CONTROLS.CONTROLSOP",
+    "name": "LAB.FRIB.ASD.Controls.ControlsOp",
+    "fullname": "Controls Operation",
+    "leader": "PRILLER",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.FRONTEND",
+    "name": "LAB.FRIB.ASD.FrontEnd",
+    "fullname": "Front End",
+    "leader": "POZDEYEV",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHSINGH",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchSingh",
+    "fullname": "Research - Singh",
+    "leader": "SINGHJ",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.REACC.INJECTION",
+    "name": "LAB.NSCL.OPS.Reacc.Injection",
+    "fullname": "Injection",
+    "leader": "VILLARI",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.AIS.EXTREMEMATERIALS",
+    "name": "LAB.NSCL.AIS.ExtremeMaterials",
+    "fullname": "Extreme Materials",
+    "leader": "BOLLEN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.ACCPHY.RESEARCHSAITO",
+    "name": "LAB.NSCL.AccPhy.ResearchSaito",
+    "fullname": "Research - Saito",
+    "leader": "SAITO",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.FO.PROJECTCONTROLS",
+    "name": "LAB.FRIB.BSO.FO.ProjectControls",
+    "fullname": "Project Controls",
+    "leader": "SCHNEIDL",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ESD.MAGNETSYS.MPE",
+    "name": "LAB.FRIB.ESD.MagnetSys.MPE",
+    "fullname": "Magnets Physics and Engineering Group",
+    "leader": "BURKHARD",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CONTROLS.HLCO",
+    "name": "LAB.FRIB.ASD.Controls.HLCO",
+    "fullname": "High Level Controls Operations",
+    "leader": "LETOURNE",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOMODULE",
+    "name": "LAB.FRIB.ASD.Cryomodule",
+    "fullname": "Cryomodule",
+    "leader": "XUTI",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHTHOENNESSEN",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchThoennessen",
+    "fullname": "Research - Thoennessen",
+    "leader": "THOENNES",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.CCFOPERATIONS.MAINTENANCEINSTALLATIONS.VACUUM",
+    "name": "LAB.NSCL.OPS.CCFOperations.MaintenanceInstallations.Vacuum",
+    "fullname": "Vacuum",
+    "leader": "BONOFIGL",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.NUCLTHEORY.RESEARCHBAUER",
+    "name": "LAB.NSCL.NUCLTHEORY.ResearchBauer",
+    "fullname": "Research - Bauer",
+    "leader": "BAUER",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.AS.OFFICEMGMT",
+    "name": "LAB.FRIB.BSO.AS.OfficeMgmt",
+    "fullname": "Office Management",
+    "leader": "KEBLER",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.CFID.BUILDINGMGMTADMINII",
+    "name": "LAB.FRIB.CFID.BuildingMgmtAdminII",
+    "fullname": "Building Management Administration II",
+    "leader": "BULL",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ESD.EXPERIMENTALEQUIPMENT",
+    "name": "LAB.FRIB.ESD.ExperimentalEquipment",
+    "fullname": "Experimental Equipment",
+    "leader": "BOLLEN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.MECHENG",
+    "name": "LAB.FRIB.ASD.MechEng",
+    "fullname": "Mechanical Engineering",
+    "leader": "BULTMAN",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOMODULE.CAVITYFABRICATION",
+    "name": "LAB.FRIB.ASD.Cryomodule.CavityFabrication",
+    "fullname": "Cavity Fabrication",
+    "leader": "COMPTON",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.ESHQ",
+    "name": "LAB.FRIB.BSO.ESHQ",
+    "fullname": "Environmental Safety, Health and Quality",
+    "leader": "GRIVINS",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.CFID.MANUFACTURING",
+    "name": "LAB.FRIB.CFID.Manufacturing",
+    "fullname": "Manufacturing",
+    "leader": "BULL",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ESD.TARGETBDS",
+    "name": "LAB.FRIB.ESD.TargetBDS",
+    "fullname": "Target and Beam Dump Systems",
+    "leader": "PELLEMOI",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.MECHENG.TBDDGROUP",
+    "name": "LAB.FRIB.ASD.MechEng.TBDDGroup",
+    "fullname": "Target & Beam Dump Design Group",
+    "leader": "HUSSAIN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.SRF.CAVITYFABRICATION.ELECTRONBEAMWELDING",
+    "name": "LAB.FRIB.ASD.SRF.CavityFabrication.ElectronBeamWelding",
+    "fullname": "Electron Beam Welding",
+    "leader": "COMPTON",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHMORRISSEY",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchMorrissey",
+    "fullname": "Research - Morrissey",
+    "leader": "MORRISSEY",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.MECHDESIGN.RESEARCHOPERATIONS",
+    "name": "LAB.NSCL.OPS.MechDesign.ResearchOperations",
+    "fullname": "Research Operations",
+    "leader": "SNOW",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.NUCLTHEORY.RESEARCHNUNES",
+    "name": "LAB.NSCL.NUCLTHEORY.ResearchNunes",
+    "fullname": "Research - Nunes",
+    "leader": "NUNES",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.BUSINESSIT",
+    "name": "LAB.FRIB.BSO.BusinessIT",
+    "fullname": "Business IT",
+    "leader": "JONESC",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.CFID.FACILITIES",
+    "name": "LAB.FRIB.CFID.Facilities",
+    "fullname": "Facilities",
+    "leader": "ELKIN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.BIM.GLOBALSYSTEMS",
+    "name": "LAB.FRIB.ASD.BIM.GlobalSystems",
+    "fullname": "Global Systems",
+    "leader": "LIDIA",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.MECHENG.INSPECTION",
+    "name": "LAB.FRIB.ASD.MechEng.Inspection",
+    "fullname": "Inspection",
+    "leader": "BULTMAN",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.ELECENG.POWERSUPPLIES",
+    "name": "LAB.FRIB.ASD.ElecEng.PowerSupplies",
+    "fullname": "Power Supplies",
+    "leader": "HOLLAND",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHNAVILIATCUNCIC",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchNaviliatCuncic",
+    "fullname": "Research - Naviliat Cuncic",
+    "leader": "NAVILIAT",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.CCFOPERATIONS",
+    "name": "LAB.NSCL.OPS.CCFOperations",
+    "fullname": "CCF Operations",
+    "leader": "STOLZ",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.NUCLTHEORY.RESEARCHLEE",
+    "name": "LAB.NSCL.NUCLTHEORY.ResearchLee",
+    "fullname": "Research - Lee",
+    "leader": "LEED",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO",
+    "name": "LAB.FRIB.BSO",
+    "fullname": "FRIB Unit Administration",
+    "leader": "GLASMACH",
+    "source": "IFS",
+    "type": "DIV"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.BO.TECHPROCUREMENT",
+    "name": "LAB.FRIB.BSO.BO.TechProcurement",
+    "fullname": "Technical Procurement",
+    "leader": "ZEQOLLAR",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ESD.MAGNETSYS.MFT.WIQ",
+    "name": "LAB.FRIB.ESD.MagnetSys.MFT.WIQ",
+    "fullname": "WIQ Fabrication",
+    "leader": "HORWATH",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOGENICS",
+    "name": "LAB.FRIB.ASD.Cryogenics",
+    "fullname": "Cryogenics",
+    "leader": "CASAGRAN",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.SRF.DEVELOPMENT.SOLENOIDSHIELDING",
+    "name": "LAB.FRIB.ASD.SRF.Development.SolenoidShielding",
+    "fullname": "Solenoid and Shielding",
+    "leader": "SAITO",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "ADB:AREAC513AEDA",
+    "name": "AREAc513aeda",
+    "fullname": "Electrical Assembly (3300, 3321, 3323, 3325)",
+    "leader": "wei",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA1FF87D06",
+    "name": "AREA1ff87d06",
+    "fullname": "North Central Office Tower (12XX, 22XX, 32XX, 42XX)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAB475E952",
+    "name": "AREAb475e952",
+    "fullname": "Transfer Hall (1500_Transfer Hall)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA7C66FE3B",
+    "name": "AREA7c66fe3b",
+    "fullname": "A1900 lab (B040)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA78470F78",
+    "name": "AREA78470f78",
+    "fullname": "General Purpose NSCL Lab (1035)",
+    "leader": "zegers",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAE118E9D7",
+    "name": "AREAe118e9d7",
+    "fullname": "Primary Hallway (1HW3)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREADF901834",
+    "name": "AREAdf901834",
+    "fullname": "West High Bay (1500)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA7A131003",
+    "name": "AREA7a131003",
+    "fullname": "D-Line (1330, 1361)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA46228A25",
+    "name": "AREA46228a25",
+    "fullname": "Machine Shop (1520)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA2B6F58CC",
+    "name": "AREA2b6f58cc",
+    "fullname": "SRF Trailer",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA05D23B70",
+    "name": "AREA05d23b70",
+    "fullname": "Rack Room (1624, 1624A, 1624B, 1624C, 1624D)",
+    "leader": "feyzi",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA7B8CA34E",
+    "name": "AREA7b8ca34e",
+    "fullname": "Controls Assembly (4300, 4321, 4323)",
+    "leader": "wei",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAB654D3D7",
+    "name": "AREAb654d3d7",
+    "fullname": "K1200 Vault (1500_K1200)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA3E0A0620",
+    "name": "AREA3e0a0620",
+    "fullname": "Receiving Area (1405, 1405A)",
+    "leader": "nowak",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA7206C5F4",
+    "name": "AREA7206c5f4",
+    "fullname": "Electrical Rooms (1614, 1625, 1629, 1634, 1645, 2604, 2605, 2609, 2611, 2613, 2620, 3601, 3600A, 3600B)",
+    "leader": "frazee",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA9C3F99A6",
+    "name": "AREA9c3f99a6",
+    "fullname": "Alignment lab (1233)",
+    "leader": "bultman",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAD6099C34",
+    "name": "AREAd6099c34",
+    "fullname": "Lithium Target",
+    "leader": "marti",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA6E0C3D22",
+    "name": "AREA6e0c3d22",
+    "fullname": "Data-Us (1280)",
+    "leader": "zegers",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAB75F29D0",
+    "name": "AREAb75f29d0",
+    "fullname": "Laboratory Exterior",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAA43E3969",
+    "name": "AREAa43e3969",
+    "fullname": "South High Bay (1520)",
+    "leader": "bollen",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA7F200E83",
+    "name": "AREA7f200e83",
+    "fullname": "Linac Tunnel Infrastructure (SB606, SB606A, SB606B, SB607, SB608, HWSB62, 1621, 1631, 1631A)",
+    "leader": "feyzi",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA43D3D763",
+    "name": "AREA43d3d763",
+    "fullname": "East High Bay (1500)",
+    "leader": "glasmach",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA8F6EFAF7",
+    "name": "AREA8f6efaf7",
+    "fullname": "Mechanical Areas (1265, 1297, 1374)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA2A4A67BF",
+    "name": "AREA2a4a67bf",
+    "fullname": "SRF VTA Area (1700)",
+    "leader": "wei",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA499DE4BA",
+    "name": "AREA499de4ba",
+    "fullname": "Remote Handling (SSB601, SSB603, SB603, B605, B608,HWB1)",
+    "leader": "bollen",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA8CF5F9B3",
+    "name": "AREA8cf5f9b3",
+    "fullname": "Control Room (1176)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA6F2E3AA3",
+    "name": "AREA6f2e3aa3",
+    "fullname": "K1200 RF Balcony (1500_Mezzanine)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAC415199E",
+    "name": "AREAc415199e",
+    "fullname": "ReA3 Rack Area (1500_BelowMezzanine)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA7E1E6536",
+    "name": "AREA7e1e6536",
+    "fullname": "Coupling Line (1500_K500)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA035441AC",
+    "name": "AREA035441ac",
+    "fullname": "K500 + K1200 Roof (1500_upper level)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA5B7C56DD",
+    "name": "AREA5b7c56dd",
+    "fullname": "S1/S2 Vault (1500_S1)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA2554B558",
+    "name": "AREA2554b558",
+    "fullname": "Fragment Separator (SSB602, SSB602A, 1600, 1600A, 1600B, 1600C, 1600E, 1601, HW161)",
+    "leader": "hausmann",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA00EB3160",
+    "name": "AREA00eb3160",
+    "fullname": "Atrium (1154A)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREADD2430DD",
+    "name": "AREAdd2430dd",
+    "fullname": "Gamma Lab (1034)",
+    "leader": "zegers",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA6C92547C",
+    "name": "AREA6c92547c",
+    "fullname": "North West Office Tower (11XX, 21XX, 31XX, 41XX)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAA0B5CCDB",
+    "name": "AREAa0b5ccdb",
+    "fullname": "Vault Roof Area (1500_Upper Level)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA8651102A",
+    "name": "AREA8651102a",
+    "fullname": "NSCL Control Room",
+    "leader": "stolz",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA7BA9DCCE",
+    "name": "AREA7ba9dcce",
+    "fullname": "DAQ Lab (1102)",
+    "leader": "zegers",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA882D7741",
+    "name": "AREA882d7741",
+    "fullname": "Kaeser Compressor Room (1508)",
+    "leader": "casagran",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA6AED42B5",
+    "name": "AREA6aed42b5",
+    "fullname": "South Hallway (1500_SH)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA84B25158",
+    "name": "AREA84b25158",
+    "fullname": "Linac Tunnel Charge Selector and Transport (SB608)",
+    "leader": "marti",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA3381D466",
+    "name": "AREA3381d466",
+    "fullname": "Beta Counting System (1060)",
+    "leader": "zegers",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA35FEBAB9",
+    "name": "AREA35febab9",
+    "fullname": "HiRA Lab (1048, 1054, 1054A)",
+    "leader": "zegers",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA7F1C25DA",
+    "name": "AREA7f1c25da",
+    "fullname": "Proton Detector Lab (1039)",
+    "leader": "zegers",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA10623F21",
+    "name": "AREA10623f21",
+    "fullname": "West Office Wing (10XX, 20XX)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA8716ED80",
+    "name": "AREA8716ed80",
+    "fullname": "East Loading Bay Crane (1631)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREABC90A3C7",
+    "name": "AREAbc90a3c7",
+    "fullname": "900W Cryoplant (1500)",
+    "leader": "casagran",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAE1020C21",
+    "name": "AREAe1020c21",
+    "fullname": "Electronics Shop (1344)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA89457639",
+    "name": "AREA89457639",
+    "fullname": "North East Office Area (13XX, 23XX, 33XX, 43XX, 53XX, 63XX)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAB31FAB04",
+    "name": "AREAb31fab04",
+    "fullname": "Unassigned NSCL Labs (1047)",
+    "leader": "zegers",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA63074401",
+    "name": "AREA63074401",
+    "fullname": "Machine Shop and Horizontal Mill",
+    "leader": "plath",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA1B73981F",
+    "name": "AREA1b73981f",
+    "fullname": "Detector Clean Room (B049, 1146)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA3E5AE75A",
+    "name": "AREA3e5ae75a",
+    "fullname": "Laser Room (1441)",
+    "leader": "zegers",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA683476EE",
+    "name": "AREA683476ee",
+    "fullname": "SPIN-Lab Area (1350)",
+    "leader": "zegers",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAB813146A",
+    "name": "AREAb813146a",
+    "fullname": "Linac Tunnel Linac Segments (SB608)",
+    "leader": "ao",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAD85D1602",
+    "name": "AREAd85d1602",
+    "fullname": "CFID Trailer (trailer #6)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA68195598",
+    "name": "AREA68195598",
+    "fullname": "Ion Trap Lab (1066)",
+    "leader": "zegers",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA98CF473D",
+    "name": "AREA98cf473d",
+    "fullname": "ReA12 High Bay (1480)",
+    "leader": "sherrill",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA90D2E525",
+    "name": "AREA90d2e525",
+    "fullname": "ASD Service Rooms (2601, 2602, 2603, 2606, 2610, 2614, 2617, 2621, HW261, HW262, 3600D, 3604, HW361)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAA21C9C63",
+    "name": "AREAa21c9c63",
+    "fullname": "ECR Area (1500A)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA6E1D449C",
+    "name": "AREA6e1d449c",
+    "fullname": "N2/N3 Vault (1500_N2, 1500_N3)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAB0C21778",
+    "name": "AREAb0c21778",
+    "fullname": "Student Shop (1512)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA5BC1F55F",
+    "name": "AREA5bc1f55f",
+    "fullname": "Underfloor of Rack Room (below raised floor in 1624, 1624A, 1624B, 1624C, 1624D)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA415AE4B8",
+    "name": "AREA415ae4b8",
+    "fullname": "E-Pool (1031)",
+    "leader": "zegers",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREACAF471EC",
+    "name": "AREAcaf471ec",
+    "fullname": "North Hallway (1HW8)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA186987BF",
+    "name": "AREA186987bf",
+    "fullname": "Vacuum Lab (1502)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAC72734B5",
+    "name": "AREAc72734b5",
+    "fullname": "Magnet Fabrication and Assembly",
+    "leader": "burkhard",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA97424E48",
+    "name": "AREA97424e48",
+    "fullname": "East High Bay Extension (1580)",
+    "leader": "glasmach",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAF0A63F26",
+    "name": "AREAf0a63f26",
+    "fullname": "N1 Vault (1500_N1)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA66F78EFD",
+    "name": "AREA66f78efd",
+    "fullname": "Stock Room (1502)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA86FFCB79",
+    "name": "AREA86ffcb79",
+    "fullname": "Roof (4600, 4600A, 4601, 4602, Air Plenums 1, 2, 3, 4, 5)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA4B860C14",
+    "name": "AREA4b860c14",
+    "fullname": "Cryo plant (1510, 1510A, 1510B)",
+    "leader": "casagran",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA4DC76F0B",
+    "name": "AREA4dc76f0b",
+    "fullname": "K500 RF Balcony (1500_Mezzanine)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA8549180F",
+    "name": "AREA8549180f",
+    "fullname": "S3 Vault (1500_S3)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA9C2AE58B",
+    "name": "AREA9c2ae58b",
+    "fullname": "Front End (1632, 1633, 1633A, 1638)",
+    "leader": "pozdeyev",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA6CCCFFC1",
+    "name": "AREA6cccffc1",
+    "fullname": "Detector Lab (B033, B034, B039, B045)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA7CBFC5D5",
+    "name": "AREA7cbfc5d5",
+    "fullname": "LEBIT / BECOLA (1361)",
+    "leader": "zegers",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA824D9F24",
+    "name": "AREA824d9f24",
+    "fullname": "SRF Cryoplant (1700)",
+    "leader": "casagran",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAFC7545C3",
+    "name": "AREAfc7545c3",
+    "fullname": "Linac Tunnel Medium Energy Beam Transport (SB608)",
+    "leader": "pozdeyev",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAEA548BD7",
+    "name": "AREAea548bd7",
+    "fullname": "Clean room and Prep Area (1500B, 1500C)",
+    "leader": "wei",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA51A4DA5E",
+    "name": "AREA51a4da5e",
+    "fullname": "IT Network/IDF Rooms (1002, 1052, 1136, 1217, 1250, 1337, 1618, 1701, 2032, 2055,2134, 2226, 3136, 3226, 4136, 4226, 5326, 6326)",
+    "leader": "beher",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREADB3417EC",
+    "name": "AREAdb3417ec",
+    "fullname": "ReA3 High Bay (1421)",
+    "leader": "sherrill",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA8376F861",
+    "name": "AREA8376f861",
+    "fullname": "Controls IT Network/IDF Rooms (1618, 1619, 1639, 1640, 2607, 2608, 3600C, 3602, 3603)",
+    "leader": "jonesc",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAB5EBDF1C",
+    "name": "AREAb5ebdf1c",
+    "fullname": "Computer Room (1232C)",
+    "leader": "jonesc",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA1285EFDA",
+    "name": "AREA1285efda",
+    "fullname": "AT-TPC Lab (1148)",
+    "leader": "zegers",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAC79BD4C7",
+    "name": "AREAc79bd4c7",
+    "fullname": "ECR Ion Source Laboratory (1042)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREACF492A62",
+    "name": "AREAcf492a62",
+    "fullname": "N4 Vault (1500_N4)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAA909F6A4",
+    "name": "AREAa909f6a4",
+    "fullname": "SuN Lab (1045)",
+    "leader": "zegers",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA337B130B",
+    "name": "AREA337b130b",
+    "fullname": "Cryomodule Assembly",
+    "leader": "xuti",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAF6C762E7",
+    "name": "AREAf6c762e7",
+    "fullname": "Cyclotron Stopper (1480)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAAE44709E",
+    "name": "AREAae44709e",
+    "fullname": "K500 Vault (1500_K500)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA0D947BC3",
+    "name": "AREA0d947bc3",
+    "fullname": "Scintillator Laboratory (1056)",
+    "leader": "zegers",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA34A318FA",
+    "name": "AREA34a318fa",
+    "fullname": "Ground Floor Support Areas (1609, 1620, 1626, 1627, 1635, 1636, 1637, 1641, 1642)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAFF63CA81",
+    "name": "AREAff63ca81",
+    "fullname": "Diagnostics Lab (6300, 6323, 6324)",
+    "leader": "wei",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAD695646E",
+    "name": "AREAd695646e",
+    "fullname": "LENDA Lab (1075)",
+    "leader": "zegers",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA07166EB1",
+    "name": "AREA07166eb1",
+    "fullname": "SRF High Bay (1700)",
+    "leader": "wei",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAB51BC8DB",
+    "name": "AREAb51bc8db",
+    "fullname": "Non-conventional Utilities (SB600, SB601, SB602, SB604,SB605, HWSB61, B601, B602, B607, B609, B610, 1600D,1602, 1603, 1605, 1606, 1606A, 1607, 1608, 1610, 1610A,1611, 1612, HW162, 2600, 2600A)",
+    "leader": "borden",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA35D2673E",
+    "name": "AREA35d2673e",
+    "fullname": "JINA Lab (1062)",
+    "leader": "zegers",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA8CE1C11E",
+    "name": "AREA8ce1c11e",
+    "fullname": "ReA3 Platform (1500_Mezzanine)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA2F8FF20F",
+    "name": "AREA2f8ff20f",
+    "fullname": "Cryogenics (1622, 1623, 2615, 2616, 2618)",
+    "leader": "casagran",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA05F80344",
+    "name": "AREA05f80344",
+    "fullname": "Gas Bottle and Flammable Storage Rooms (1520C/D/E)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREAF00CF85F",
+    "name": "AREAf00cf85f",
+    "fullname": "Operator Assembly (1180, 1180A)",
+    "leader": "djm",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "ADB:AREA0A99C945",
+    "name": "AREA0a99c945",
+    "fullname": "Welding Shop (1512)",
+    "leader": "bull",
+    "source": "ADB",
+    "type": "AREA"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.HOMELANDSECURITY",
+    "name": "LAB.FRIB.BSO.HomelandSecurity",
+    "fullname": "Homeland Security",
+    "leader": "CONGLETO",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.BSO.SECURITY",
+    "name": "LAB.FRIB.BSO.Security",
+    "fullname": "Security",
+    "leader": "SMITHAA",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ESD.TARGETFIG",
+    "name": "LAB.FRIB.ESD.TargetFIG",
+    "fullname": "Target Facility Integration Group",
+    "leader": "CARR",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOMODULE.CRYOINSTALLCOMM",
+    "name": "LAB.FRIB.ASD.Cryomodule.CryoInstallComm",
+    "fullname": "Cryomodule Installation & Commissioning",
+    "leader": "AO",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOMODULE.CRYOINSTALLCOMM.CRYOCOMM",
+    "name": "LAB.FRIB.ASD.Cryomodule.CryoInstallComm.CryoComm",
+    "fullname": "Cryomodule Commissioning",
+    "leader": "AO",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOMODULE.CRYOMODULEGRP.FABRICATION",
+    "name": "LAB.FRIB.ASD.Cryomodule.CryomoduleGrp.Fabrication",
+    "fullname": "Fabrication",
+    "leader": "COMPTON",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.CCFOPERATIONS.FASTBEAMPHYSICS",
+    "name": "LAB.NSCL.OPS.CCFOperations.FastBeamPhysics",
+    "fullname": "Fast Beam Physics",
+    "leader": "CHANDANA",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.NUCLTHEORY.RESEARCHROBERTS",
+    "name": "LAB.NSCL.NUCLTHEORY.ResearchRoberts",
+    "fullname": "Research - Roberts",
+    "leader": "ROBERTSL",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.THERMALBEAMOPS",
+    "name": "LAB.NSCL.OPS.ThermalBeamOps",
+    "fullname": "Thermal Beam Operations Group",
+    "leader": "MORRISSEY",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ESD.TARGETFIS",
+    "name": "LAB.FRIB.ESD.TargetFIS",
+    "fullname": "Target Facility Integration Staff",
+    "leader": "CARR",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.REACC.REABEAMPHYSICS",
+    "name": "LAB.NSCL.OPS.Reacc.ReABeamPhysics",
+    "fullname": "ReA Beam Physics Team",
+    "leader": "VILLARI",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.BEAMPHYSICS",
+    "name": "LAB.NSCL.OPS.BeamPhysics",
+    "fullname": "Beam Physics",
+    "leader": "HAUSMANN",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.EDD.FC",
+    "name": "LAB.FRIB.EDD.FC",
+    "fullname": "Financial Compliance",
+    "leader": "HOPPER",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOGENICS.CRYOGENICMECHDESIGN",
+    "name": "LAB.FRIB.ASD.Cryogenics.CryogenicMechDesign",
+    "fullname": "Cryogenic Mechanical Design",
+    "leader": "CASAGRAN",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.ACCELERATOROPS.IONSOURCES",
+    "name": "LAB.FRIB.ASD.AcceleratorOps.IonSources",
+    "fullname": "Ion Sources",
+    "leader": "MACHICOA",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.ACCELERATOROPS",
+    "name": "LAB.FRIB.ASD.AcceleratorOps",
+    "fullname": "Accelerator Operations",
+    "leader": "POZDEYEV",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.ACCELERATOROPS.MACHINEOPERATORS",
+    "name": "LAB.FRIB.ASD.AcceleratorOps.MachineOperators",
+    "fullname": "Machine Operators",
+    "leader": "MACHICOA",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.ACCELERATOROPS.BEAMTECHNICALDEVELOPMENT",
+    "name": "LAB.FRIB.ASD.AcceleratorOps.BeamTechnicalDevelopment",
+    "fullname": "Beam and Technical Development",
+    "leader": "POZDEYEV",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CONTROLS.CI",
+    "name": "LAB.FRIB.ASD.Controls.CI",
+    "fullname": "Controls Integration",
+    "leader": "STANLEY",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CONTROLS.CONTROLSOP.PROCESSCONTROLS",
+    "name": "LAB.FRIB.ASD.Controls.ControlsOp.ProcessControls",
+    "fullname": "Process Controls",
+    "leader": "PRILLER",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CONTROLS.EBC",
+    "name": "LAB.FRIB.ASD.Controls.EBC",
+    "fullname": "Experimental Beamline Controls",
+    "leader": "DAVIDSON",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.CFID.BUILDINGOPS",
+    "name": "LAB.FRIB.CFID.BuildingOps",
+    "fullname": "Building Operations Group",
+    "leader": "KOLP",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.CFID.ECSUPPORT",
+    "name": "LAB.FRIB.CFID.ECSupport",
+    "fullname": "Engineering/Commissioning Support Group",
+    "leader": "BULL",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CRYOMODULE.SUPERCONDUCTINGMAGNET",
+    "name": "LAB.FRIB.ASD.Cryomodule.SuperconductingMagnet",
+    "fullname": "FS2D3 Superconducting Magnet",
+    "leader": "CHENJI",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.CONTROLS.APPLICATIONSOFTWARE",
+    "name": "LAB.NSCL.OPS.Controls.ApplicationSoftware",
+    "fullname": "NSCL Application Software",
+    "leader": "LETOURNE",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.COMPUTERCONTROLS",
+    "name": "LAB.NSCL.OPS.ComputerControls",
+    "fullname": "Computer Controls",
+    "leader": "DAVIDSON",
+    "source": "IFS",
+    "type": "DEPT"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHBAZIN",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchBazin",
+    "fullname": "Research - Bazin",
+    "leader": "BAZIN",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.ACCPHY.RESEARCHPOZDEYEV",
+    "name": "LAB.NSCL.AccPhy.ResearchPozdeyev",
+    "fullname": "Research - Pozdeyev",
+    "leader": "POZDEYEV",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.ACCPHY.RESEARCHMACHICOANE",
+    "name": "LAB.NSCL.AccPhy.ResearchMachicoane",
+    "fullname": "Research - Machicoane",
+    "leader": "MACHICOA",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.OPS.CONTROLS.OPERATION",
+    "name": "LAB.NSCL.OPS.Controls.Operation",
+    "fullname": "Operation",
+    "leader": "PRILLER",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CHARGESTRIPPERAREAGRP",
+    "name": "LAB.FRIB.ASD.ChargeStripperAreaGrp",
+    "fullname": "Charge Stripper Area Group",
+    "leader": "KANEMURA",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.ASD.CHARGESTRIPPERAREAGRP.HCSTRIPPERTEAM",
+    "name": "LAB.FRIB.ASD.ChargeStripperAreaGrp.HCStripperTeam",
+    "fullname": "Helium Charge Stripper Team",
+    "leader": "KANEMURA",
+    "source": "IFS",
+    "type": "TEAM"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.ACCPHY.RESEARCHGANNI",
+    "name": "LAB.NSCL.AccPhy.ResearchGanni",
+    "fullname": "Research - Ganni",
+    "leader": "GANNI",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.RESEARCHMINAMISONO",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ResearchMinamisono",
+    "fullname": "Research - Minamisono",
+    "leader": "MINAMISO",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.NSCL.EXPRES.EXPRES.SCIENTIFICSOFTWAREGROUP",
+    "name": "LAB.NSCL.EXPRES.ExpRes.ScientificSoftwareGroup",
+    "fullname": "Scientific Software Group",
+    "leader": "ZEGERS",
+    "source": "IFS",
+    "type": "GROUP"
+  },
+  {
+    "uid": "IFS:LAB.FRIB.THEORYALLIANCE",
+    "name": "LAB.FRIB.TheoryAlliance",
+    "fullname": "FRIB Theory Alliance",
+    "leader": "NUNES",
+    "source": "IFS",
+    "type": "DEPT"
+  }
+]

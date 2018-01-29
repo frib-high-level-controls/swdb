@@ -4,6 +4,26 @@ var app = angular.module('app', [
     'ngMessages'
 ]);
 
+// Service to get FORG user data to controllers
+app.service('forgUserService', function($http) {
+    var userData = null;
+
+    var promise = 	$http({url: props.auth.forgapi.url + 
+      '/api/v1/users',method: "GET"}).success(function(data) {
+        userData = data;
+    });
+
+    return {
+        promise: promise,
+        setData: function (data) {
+            userData = data;
+        },
+        getUsers: function () {
+            return userData;
+        }
+    };
+});
+
 // Service to get config data to controllers
 app.service('configService', function($http) {
     var configData = null;

@@ -2,6 +2,8 @@
 import express = require('express');
 import fs = require('fs');
 import url = require('url');
+import request = require('request');
+import forgApi = require('../shared/forgapi');
 import dbg = require('debug');
 const debug = dbg('swdb:swdblib');
 
@@ -10,7 +12,7 @@ const reqLog = []; // log of change requests
 
 import CommonTools = require('./CommonTools');
 const ctools = new CommonTools.CommonTools();
-const props = ctools.getConfiguration();
+const props: any = ctools.getConfiguration();
 
 /* This process conforms to the FRIB development process
  * see Configuration Management Plan for FRIB
@@ -46,6 +48,138 @@ export class SwdbLib {
       return null;
     }
   }
+
+  // go get forg groups info on behalf of browsers
+  public static getForgGroups = function(req: express.Request, res: express.Response, next: express.NextFunction) {
+    // Prepare the source location by looking at the properties useSource
+    const source = props.forgGroupsDataSource[props.forgGroupsDataSource.useSource];
+    debug('Using forg groups source: ' + source);
+    // if the location is http:// then open the URL
+    if (source.match(/^https?:\/\//)) {
+      request({
+        url: source,
+        strictSSL: false,
+        headers: {
+          'Accept': 'application/json',
+          'DISCS-Authorization': 'key:pass',
+        },
+        timeout: 5 * 1000,
+      }, function(error, response, body) {
+        if (error) {
+          debug('GET forg groups got error: ' + error);
+          next(error);
+        } else {
+          if (response.statusCode === 200) {
+            debug('GET forg groups got: ' + JSON.stringify(body));
+            res.send(body);
+          }
+        }
+      });
+    } else {
+      // try to open the slot source as a file
+      fs.readFile(source, { encoding: 'utf-8' }, function(err, data) {
+        if (!err) {
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.write(data);
+          res.end();
+          debug('File read of forg groups got: ' + JSON.stringify(data));
+        } else {
+          debug('File read of forg groups got error : ' + err);
+          next(err);
+        }
+      });
+    }
+  };
+
+  // go get forg  areas info on behalf of browsers
+  public static getForgAreas = function(req: express.Request, res: express.Response, next: express.NextFunction) {
+    // Prepare the source location by looking at the properties useSource
+    const source = props.forgGroupsDataSource[props.forgGroupsDataSource.useSource];
+    debug('Using forg groups source: ' + source);
+    // if the location is http:// then open the URL
+    if (source.match(/^https?:\/\//)) {
+      request({
+        url: source,
+        strictSSL: false,
+        headers: {
+          'Accept': 'application/json',
+          'DISCS-Authorization': 'key:pass',
+        },
+        timeout: 5 * 1000,
+      }, function(error, response, body) {
+        if (error) {
+          debug('GET forg areas got error: ' + error);
+          next(error);
+        } else {
+          if (response.statusCode === 200) {
+            try {
+              const areasBody = JSON.parse(body).filter((element: forgApi.ApiGroup,
+                idx: number, array: forgApi.ApiGroup[]) => {
+                return element.type === 'AREA';
+              });
+              debug('GET forg areas got: ' + JSON.stringify(areasBody));
+              res.send(areasBody);
+          } catch(err) {
+            debug('caouft error: ' + err);
+          }
+          }
+        }
+      });
+    } else {
+      // try to open the areas source as a file
+      fs.readFile(source, { encoding: 'utf-8' }, function(err, data) {
+        if (!err) {
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.write(data);
+          res.end();
+          debug('File read of forg areas got: ' + JSON.stringify(data));
+        } else {
+          debug('File read of forg areas got error : ' + err);
+          next(err);
+        }
+      });
+    }
+  };
+
+  // go get ccdb slot info on behalf of browsers
+  public static getForgUsers = function(req: express.Request, res: express.Response, next: express.NextFunction) {
+    // Prepare the source location by looking at the properties useSource
+    const source = props.forgUsersDataSource[props.forgUsersDataSource.useSource];
+    debug('Using forg users source: ' + source);
+    // if the location is http:// then open the URL
+    if (source.match(/^https?:\/\//)) {
+      request({
+        url: source,
+        strictSSL: false,
+        headers: {
+          'Accept': 'application/json',
+          'DISCS-Authorization': 'key:pass',
+        },
+        timeout: 5 * 1000,
+      }, function(error, response, body) {
+        if (error) {
+          debug('GET forg users got error: ' + error);
+          next(error);
+        } else {
+          if (response.statusCode === 200) {
+            debug('GET forg users got: ' + JSON.stringify(body));
+            res.send(body);
+          }
+        }
+      });
+    } else {
+      // try to open the slot source as a file
+      fs.readFile(source, { encoding: 'utf-8' }, function(err, data) {
+        if (!err) {
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.write(data);
+          res.end();
+        } else {
+          next(err);
+        }
+      });
+    }
+  };
 
   public static newValidation = function(req: express.Request) {
     req.checkBody({
