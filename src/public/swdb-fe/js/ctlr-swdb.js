@@ -1,19 +1,19 @@
-var appController = angular.module('appController', ['datatables','ngAnimate','ngSanitize','ui.bootstrap','ngCookies','ui.select']);
+var appController = angular.module('appController', ['datatables', 'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ngCookies', 'ui.select']);
 
-appController.run(['$rootScope','$route','$http','$routeParams','$location','configService', function($rootScope,$route,$http,$routeParams,$location, configService, slotService) {
+appController.run(['$rootScope', '$route', '$http', '$routeParams', '$location', 'configService', function ($rootScope, $route, $http, $routeParams, $location, configService, slotService) {
 
-    $rootScope.$on("$routeChangeSuccess", function(currentRoute, previousRoute){
-        //Change page title, based on Route information
-        $rootScope.title = $route.current.title;
+  $rootScope.$on("$routeChangeSuccess", function (currentRoute, previousRoute) {
+    //Change page title, based on Route information
+    $rootScope.title = $route.current.title;
 
-    });
+  });
 }]);
 
 // expose system status to all controllers via service.
-appController.factory('StatusService', function() {
-    return {
-        dbConnected : 'false'
-    };
+appController.factory('StatusService', function () {
+  return {
+    dbConnected: 'false'
+  };
 });
 
 appController.controller('ListController', ListPromiseCtrl);
@@ -138,17 +138,17 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService,
     }
   };
 
-    $scope.props = configService.getConfig();
-    $scope.session = userService.getUser();
-    //update document fields with existing data
-    let url = $window.location.origin;
-    url = url + "/api/v1/swdb/" + $routeParams.itemId;
+  $scope.props = configService.getConfig();
+  $scope.session = userService.getUser();
+  //update document fields with existing data
+  let url = $window.location.origin;
+  url = url + "/api/v1/swdb/" + $routeParams.itemId;
 
-    // $http.get($scope.props.apiUrl+$routeParams.itemId).success(function(data) {
-    $http.get(url).success(function(data) {
-        $scope.formData = data;
-        $scope.whichItem = $routeParams.itemId;
-    });
+  // $http.get($scope.props.apiUrl+$routeParams.itemId).success(function(data) {
+  $http.get(url).success(function (data) {
+    $scope.formData = data;
+    $scope.whichItem = $routeParams.itemId;
+  });
 }
 
 
@@ -217,7 +217,7 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
       $scope.formData.vvResultsLoc.splice(parts[2], 1);
     }
   };
-        
+
   $scope.processForm = function () {
     delete $scope.formData.__v;
     if (!$scope.formData.version) {
@@ -264,7 +264,7 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     $scope.formData.status = "DEVEL";
     $scope.formData.versionControl = "Other";
   };
-    
+
   // get forg user records from swdb api
   $scope.getForgUsers = function (val) {
     console.log("running getForgUser()");
@@ -283,31 +283,31 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     // console.log("select item " + $item);
     // console.log("select model " + $model);
     // console.log("select label " + $label);
-    $scopr.formData.engineer = $model
-};
-    $scope.props = configService.getConfig();
-    $scope.session = userService.getUser();
+    $scope.formData.engineer = $model;
+  };
+  $scope.props = configService.getConfig();
+  $scope.session = userService.getUser();
 
-    $scope.itemArray = $scope.props.validSwNamesGUIList;
+  $scope.itemArray = $scope.props.validSwNamesGUIList;
 
-    // check our user session and redirect if needed
-    if (!$scope.session.user) {
-        //go to cas
-      $window.location.href = $scope.props.webUrl + 'login';
-    }
+  // check our user session and redirect if needed
+  if (!$scope.session.user) {
+    //go to cas
+    $window.location.href = $scope.props.webUrl + 'login';
+  }
 
-    // initialize this record
-    $scope.formData = {
-        vvProcLoc: [],
-        vvResultsLoc: [],
-    };
-    $scope.swdbParams = {
-        formShowErr: false,
-        formShowStatus: false,
-        formStatus: "",
-        formErr: ""
-    };
-    getEnums();
+  // initialize this record
+  $scope.formData = {
+    vvProcLoc: [],
+    vvResultsLoc: [],
+  };
+  $scope.swdbParams = {
+    formShowErr: false,
+    formShowStatus: false,
+    formStatus: "",
+    formErr: ""
+  };
+  getEnums();
 }
 
 
@@ -416,41 +416,41 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
   };
 
 
-    $scope.props = configService.getConfig();
-    $scope.session = userService.getUser();
-    // // check our user session and redirect if needed
-    // if (!$scope.session.username) {
-    //     //go to cas
-    //     $window.location.href = $scope.props.auth.cas+'/login?service='+encodeURIComponent($scope.props.auth.login_service);
-    // }
-    // check our user session and redirect if needed
-    if (!$scope.session.user) {
-      //go to cas
-      $window.location.href = $scope.props.webUrl + 'login';
-    }
+  $scope.props = configService.getConfig();
+  $scope.session = userService.getUser();
+  // // check our user session and redirect if needed
+  // if (!$scope.session.username) {
+  //     //go to cas
+  //     $window.location.href = $scope.props.auth.cas+'/login?service='+encodeURIComponent($scope.props.auth.login_service);
+  // }
+  // check our user session and redirect if needed
+  if (!$scope.session.user) {
+    //go to cas
+    $window.location.href = $scope.props.webUrl + 'login';
+  }
 
-    $scope.swdbParams = {
-        formShowErr: false,
-        formShowStatus: false,
-        formStatus: "",
-        formErr: ""
-    };
+  $scope.swdbParams = {
+    formShowErr: false,
+    formShowStatus: false,
+    formStatus: "",
+    formErr: ""
+  };
 
-    //update document fields with existing data
-    let url = $window.location.origin;
-    url = url + "/api/v1/swdb/" + $routeParams.itemId;
+  //update document fields with existing data
+  let url = $window.location.origin;
+  url = url + "/api/v1/swdb/" + $routeParams.itemId;
 
-    // $http.get($scope.props.apiUrl+$routeParams.itemId).success(function(data) {
-    $http.get(url).success(function(data) {
-        $scope.itemArray = $scope.props.validSwNamesGUIList;
-        $scope.formData = data;
-        $scope.whichItem = $routeParams.itemId;
+  // $http.get($scope.props.apiUrl+$routeParams.itemId).success(function(data) {
+  $http.get(url).success(function (data) {
+    $scope.itemArray = $scope.props.validSwNamesGUIList;
+    $scope.formData = data;
+    $scope.whichItem = $routeParams.itemId;
 
-        // make a Date object from this string
-        $scope.formData.statusDate = new Date($scope.formData.statusDate);
-        // set selctor to current swName value
-        $scope.selectedItem = {name: $scope.formData.swName};
-    });
+    // make a Date object from this string
+    $scope.formData.statusDate = new Date($scope.formData.statusDate);
+    // set selctor to current swName value
+    $scope.selectedItem = { name: $scope.formData.swName };
+  });
 
 }
 
