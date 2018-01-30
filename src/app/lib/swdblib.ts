@@ -49,7 +49,13 @@ export class SwdbLib {
     }
   }
 
-  // go get forg groups info on behalf of browsers
+  /**
+   * getFrogGroups gets FORG group data from the source specified in the properties file
+   *
+   * @params req Express.Request
+   * @params res Express.Response
+   * @params next Express.NextFunction
+   */
   public static getForgGroups = function(req: express.Request, res: express.Response, next: express.NextFunction) {
     // Prepare the source location by looking at the properties useSource
     const source = props.forgGroupsDataSource[props.forgGroupsDataSource.useSource];
@@ -91,7 +97,13 @@ export class SwdbLib {
     }
   };
 
-  // go get forg  areas info on behalf of browsers
+  /**
+   * getForgAreas gets FORG area data from the source specified in the properties file
+   *
+   * @params req Express.Request
+   * @params res Express.Response
+   * @params next Express.NextFunction
+   */
   public static getForgAreas = function(req: express.Request, res: express.Response, next: express.NextFunction) {
     // Prepare the source location by looking at the properties useSource
     const source = props.forgGroupsDataSource[props.forgGroupsDataSource.useSource];
@@ -141,7 +153,13 @@ export class SwdbLib {
     }
   };
 
-  // go get ccdb slot info on behalf of browsers
+  /**
+   * getForgUsers gets FORG user data from the source specified in the properties file
+   *
+   * @params req Express.Request
+   * @params res Express.Response
+   * @params next Express.NextFunction
+   */
   public static getForgUsers = function(req: express.Request, res: express.Response, next: express.NextFunction) {
     // Prepare the source location by looking at the properties useSource
     const source = props.forgUsersDataSource[props.forgUsersDataSource.useSource];
@@ -181,6 +199,12 @@ export class SwdbLib {
     }
   };
 
+  /**
+   * newValidation checks validation on new swdb records
+   * Uses express-validator.
+   *
+   * @params req Express.Request
+   */
   public static newValidation = function(req: express.Request) {
     req.checkBody({
       swName: {
@@ -405,6 +429,12 @@ export class SwdbLib {
 
   };
 
+  /**
+   * updateValidation checks validation on swdb record updates
+   * Uses express-validator.
+   *
+   * @params req Express.Request
+   */
   public static updateValidation = function(req: express.Request) {
     req.checkBody({
       swName: {

@@ -153,7 +153,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService,
 
 
 appController.controller('NewController', NewPromiseCtrl);
-function NewPromiseCtrl($scope, $http, $window, $location, configService, userService, swService) {
+function NewPromiseCtrl($scope, $http, $window, $location, configService, userService, swService, forgUserService) {
 
   $scope.$watch(function () {
     return $scope.session;
@@ -174,97 +174,117 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     }
   };
 
-    $scope.bckBtnClk = function(){
-      $location.path("/list");
+  $scope.bckBtnClk = function () {
+    $location.path("/list");
+  };
+
+  $scope.datePicker = (function () {
+    var method = {};
+    method.instances = [];
+
+    method.open = function ($event, instance) {
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      method.instances[instance] = true;
     };
 
-    $scope.datePicker = (function () {
-        var method = {};
-        method.instances = [];
-
-        method.open = function ($event, instance) {
-            $event.preventDefault();
-            $event.stopPropagation();
-
-            method.instances[instance] = true;
-        };
-
-        method.options = {
-            'show-weeks': false,
-            startingDay: 0
-        };
-
-        var formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-        method.format = formats[2];
-
-        return method;
-    }());
-
-    $scope.newItem = function (event) {
-        var parts = event.currentTarget.id.split('.');
-        if (parts[1] === 'vvProcLoc') {
-            $scope.formData.vvProcLoc.push("");
-        } else if (parts[1] === 'vvResultsLoc') {
-            $scope.formData.vvResultsLoc.push("");
-        }
+    method.options = {
+      'show-weeks': false,
+      startingDay: 0
     };
 
-    $scope.removeItem = function (event) {
-        var parts = event.currentTarget.id.split('.');
-        if (parts[1] === 'vvProcLoc') {
-            $scope.formData.vvProcLoc.splice(parts[2], 1);
-        } else if (parts[1] === 'vvResultsLoc') {
-            $scope.formData.vvResultsLoc.splice(parts[2], 1);
-        }
-    };
+    var formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+    method.format = formats[2];
+
+    return method;
+  }());
+
+  $scope.newItem = function (event) {
+    var parts = event.currentTarget.id.split('.');
+    if (parts[1] === 'vvProcLoc') {
+      $scope.formData.vvProcLoc.push("");
+    } else if (parts[1] === 'vvResultsLoc') {
+      $scope.formData.vvResultsLoc.push("");
+    }
+  };
+
+  $scope.removeItem = function (event) {
+    var parts = event.currentTarget.id.split('.');
+    if (parts[1] === 'vvProcLoc') {
+      $scope.formData.vvProcLoc.splice(parts[2], 1);
+    } else if (parts[1] === 'vvResultsLoc') {
+      $scope.formData.vvResultsLoc.splice(parts[2], 1);
+    }
+  };
         
-    $scope.processForm = function () {
-      delete $scope.formData.__v;
-      if (!$scope.formData.version){
-        // $scope.formData.version="";
-      }
-      if ($scope.inputForm.$valid) {
-        let url = $window.location.origin;
-        url = url + "/api/v1/swdb/";
-        $http({
-          method: 'POST',
-          // url: $scope.props.apiUrl,
-          url: url,
-          data: $scope.formData,
-          headers: { 'Content-Type': 'application/json' }
-        })
-          .then(function success(response) {
-            $scope.swdbParams.formStatus = "Document posted";
-            $scope.swdbParams.formShowErr = false;
-            $scope.swdbParams.formShowStatus = true;
-            let headers = response.headers();
-            // sw just updated, refresh the service list
-            swService.refreshSwList();
-            if (headers.location){
-              // if location header is present extract the id
-              let id = headers.location.split('/').pop();
-              $location.path('/details/' + id);
-            }
-          }, function error(response) {
-            let headers = response.headers();
-            $scope.swdbParams.error = { message: response.statusText + response.data, status: response.status };
-            $scope.swdbParams.formErr = "Error: " + $scope.swdbParams.error.message + "(" + response.status + ")";
-            $scope.swdbParams.formShowStatus = false;
-            $scope.swdbParams.formShowErr = true;
-          });
-      } else {
-        $scope.swdbParams.formErr = "Error: clear errors before submission";
-        $scope.swdbParams.formShowStatus = false;
-        $scope.swdbParams.formShowErr = true;
-      }
-    };
+  $scope.processForm = function () {
+    delete $scope.formData.__v;
+    if (!$scope.formData.version) {
+      // $scope.formData.version="";
+    }
+    if ($scope.inputForm.$valid) {
+      let url = $window.location.origin;
+      url = url + "/api/v1/swdb/";
+      $http({
+        method: 'POST',
+        // url: $scope.props.apiUrl,
+        url: url,
+        data: $scope.formData,
+        headers: { 'Content-Type': 'application/json' }
+      })
+        .then(function success(response) {
+          $scope.swdbParams.formStatus = "Document posted";
+          $scope.swdbParams.formShowErr = false;
+          $scope.swdbParams.formShowStatus = true;
+          let headers = response.headers();
+          // sw just updated, refresh the service list
+          swService.refreshSwList();
+          if (headers.location) {
+            // if location header is present extract the id
+            let id = headers.location.split('/').pop();
+            $location.path('/details/' + id);
+          }
+        }, function error(response) {
+          let headers = response.headers();
+          $scope.swdbParams.error = { message: response.statusText + response.data, status: response.status };
+          $scope.swdbParams.formErr = "Error: " + $scope.swdbParams.error.message + "(" + response.status + ")";
+          $scope.swdbParams.formShowStatus = false;
+          $scope.swdbParams.formShowErr = true;
+        });
+    } else {
+      $scope.swdbParams.formErr = "Error: clear errors before submission";
+      $scope.swdbParams.formShowStatus = false;
+      $scope.swdbParams.formShowErr = true;
+    }
+  };
 
-    getEnums = function() {
-        $scope.formData.levelOfCare = "NONE";
-        $scope.formData.status = "DEVEL";
-        $scope.formData.versionControl = "Other";
-    };
+  getEnums = function () {
+    $scope.formData.levelOfCare = "NONE";
+    $scope.formData.status = "DEVEL";
+    $scope.formData.versionControl = "Other";
+  };
+    
+  // get forg user records from swdb api
+  $scope.getForgUsers = function (val) {
+    console.log("running getForgUser()");
+    return $http.get("/api/v1/swdb/forgUsers").then(function (response) {
+      //console.log("Got forg user  list:" + JSON.stringify(response.data));
+      return response.data.map(function (item) {
+        //console.log("looking at:"+JSON.stringify(item));
+        return item;
+      });
+    });
+  };
 
+
+  // set the engineer field to the selected user
+  $scope.onEngineerSelect = function ($item, $model, $label) {
+    // console.log("select item " + $item);
+    // console.log("select model " + $model);
+    // console.log("select label " + $label);
+    $scopr.formData.engineer = $model
+};
     $scope.props = configService.getConfig();
     $scope.session = userService.getUser();
 

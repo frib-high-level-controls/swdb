@@ -8,9 +8,9 @@ var app = angular.module('app', [
 app.service('forgUserService', function($http) {
     var userData = null;
 
-    var promise = 	$http({url: props.auth.forgapi.url + 
-      '/api/v1/users',method: "GET"}).success(function(data) {
+    var promise = 	$http({url: '/api/v1/swdb/forgUsers', method: "GET"}).success(function(data) {
         userData = data;
+        //console.log("userData set to " + JSON.stringify(userData, null, 2));
     });
 
     return {
@@ -19,7 +19,8 @@ app.service('forgUserService', function($http) {
             userData = data;
         },
         getUsers: function () {
-            return userData;
+          //console.log("forgUserService.getUsers() returning " + JSON.stringify(userData));  
+          return userData;
         }
     };
 });
@@ -28,7 +29,7 @@ app.service('forgUserService', function($http) {
 app.service('configService', function($http) {
     var configData = null;
 
-    var promise = 	$http({url: '/api/v1/swdb/config',method: "GET"}).success(function(data) {
+    var promise = 	$http({url: '/api/v1/swdb/config', method: "GET"}).success(function(data) {
         configData = data;
     });
 
@@ -133,6 +134,23 @@ app.filter('swFilt', function () {
     else {
       return srchTxt;
     }
+  };
+});
+
+app.filter('engFilter', function() {
+  return function (forgUserIn, srchTxt) {
+    //console.log("engFilter got " + srchTxt + JSON.stringify(forgUserIn));
+    return forgUserIn.then(function(forgUserIn) {
+      let re = new RegExp(srchTxt, 'i');
+      filtered = forgUserIn.filter(function(element, idx, arr) {
+        // console.log("searching " + srchTxt + JSON.stringify(element.uid));
+        if (element.uid.match(re)) {
+          // console.log("matched " + JSON.stringify(element));
+          return element;
+        }
+      });
+      return filtered;
+    });
   };
 });
 

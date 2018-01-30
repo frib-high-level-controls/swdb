@@ -72,6 +72,90 @@ describe("app", function() {
       done();
     });
   });
+
+  it("Returns FORG user records", function(done) {
+    this.timeout(5000);
+    supertest
+    .get("/api/v1/swdb/forgUsers")
+    .expect(200)
+    .end(function(err, res){
+      if (err) {
+        done(err);
+      } else {
+        try {
+          sub = JSON.parse(res.text).filter((element, idx, array) => {
+            return element.uid === "ELLISR";
+          });
+          if (sub.length === 1) {
+            done();
+          }
+          else {
+            debug('Got filtered array ' + JSON.stringify(sub));
+            done(new Error('Cannot find expected user "ELLISR"'));
+          }
+        }
+        catch (err) { 
+          done(err);
+        }
+      }
+    });
+  });
+
+  it("Returns FORG group records", function(done) {
+    this.timeout(5000);
+    supertest
+    .get("/api/v1/swdb/forgGroups")
+    .expect(200)
+    .end(function(err, res){
+      if (err) {
+        done(err);
+      } else {
+        try {
+          sub = JSON.parse(res.text).filter((element, idx, array) => {
+            return element.uid === "IFS:LAB.FRIB.ASD.CONTROLS";
+          });
+          if (sub.length === 1) {
+            done();
+          }
+          else {
+            debug('Got filtered array ' + JSON.stringify(sub));
+            done(new Error('Cannot find expected user "IFS:LAB.FRIB.ASD.CONTROLS"'));
+          }
+        }
+        catch (err) { 
+          done(err);
+        }
+      }
+    });
+  });
+
+  it("Returns FORG area records", function(done) {
+    this.timeout(5000);
+    supertest
+    .get("/api/v1/swdb/forgAreas")
+    .expect(200)
+    .end(function(err, res){
+      if (err) {
+        done(err);
+      } else {
+        try {
+          sub = JSON.parse(res.text).filter((element, idx, array) => {
+            return element.uid === "ADB:AREAB475E952";
+          });
+          if (sub.length === 1) {
+            done();
+          }
+          else {
+            debug('Got filtered array ' + JSON.stringify(sub));
+            done(new Error('Cannot find expected user "ADB:AREAB475E952"'));
+          }
+        }
+        catch (err) { 
+          done(err);
+        }
+      }
+    });
+  });
   
   it("Has the blank history", async function() {
       let cursor = Be.Db.swDoc.db.collections.history.find();
