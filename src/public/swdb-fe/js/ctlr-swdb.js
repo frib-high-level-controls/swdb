@@ -265,28 +265,17 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     $scope.formData.versionControl = "Other";
   };
 
-  // get forg user records from swdb api
-  $scope.getForgUsers = function (val) {
-    console.log("running getForgUser()");
-    return $http.get("/api/v1/swdb/forgUsers").then(function (response) {
-      //console.log("Got forg user  list:" + JSON.stringify(response.data));
-      return response.data.map(function (item) {
-        //console.log("looking at:"+JSON.stringify(item));
-        return item;
-      });
-    });
-  };
-
-
   // set the engineer field to the selected user
   $scope.onEngineerSelect = function ($item, $model, $label) {
-    // console.log("select item " + $item);
-    // console.log("select model " + $model);
-    // console.log("select label " + $label);
     $scope.formData.engineer = $model;
   };
+
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
+  forgUserService.promise.then(function(){
+    $scope.forgUsersList = forgUserService.getUsers().data;
+    //console.log("forgUsersList promise updated just now");
+  });
 
   $scope.itemArray = $scope.props.validSwNamesGUIList;
 

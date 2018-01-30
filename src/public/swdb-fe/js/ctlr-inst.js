@@ -212,20 +212,20 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     }
   };
 
-  // get sw records from swdb api
-  let url = $window.location.origin;
-  url = url + "/api/v1/swdb/";
+  // // get sw records from swdb api
+  // let url = $window.location.origin;
+  // url = url + "/api/v1/swdb/";
 
-  $scope.getSw = function(val) {
-    return $http.get(url).then(function(response){
-    // return $http.get($scope.props.apiUrl).then(function(response){
-      //console.log("Got sw list:"+JSON.stringify(response.data));
-      return response.data.map(function(item){
-        //console.log("looking at:"+JSON.stringify(item));
-        return item;
-      });
-    });
-  };
+  // $scope.getSw = function(val) {
+  //   return $http.get(url).then(function(response){
+  //   // return $http.get($scope.props.apiUrl).then(function(response){
+  //     //console.log("Got sw list:"+JSON.stringify(response.data));
+  //     return response.data.map(function(item){
+  //       //console.log("looking at:"+JSON.stringify(item));
+  //       return item;
+  //     });
+  //   });
+  // };
 
   $scope.swSelect=function($item, $model, $label)
   {
@@ -424,19 +424,19 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     }
   };
 
-  // get sw records from swdb api
-  $scope.getSw = function(val) {
-    let url = $window.location.origin;
-    url = url + "/api/v1/swdb/";
-    return $http.get(url).then(function(response){
-    // return $http.get($scope.props.apiUrl).then(function(response){
-      //console.log("Got sw list:"+JSON.stringify(response.data));
-      return response.data.map(function(item){
-        //console.log("looking at:"+JSON.stringify(item));
-        return item;
-      });
-    });
-  };
+  // // get sw records from swdb api
+  // $scope.getSw = function(val) {
+  //   let url = $window.location.origin;
+  //   url = url + "/api/v1/swdb/";
+  //   return $http.get(url).then(function(response){
+  //   // return $http.get($scope.props.apiUrl).then(function(response){
+  //     //console.log("Got sw list:"+JSON.stringify(response.data));
+  //     return response.data.map(function(item){
+  //       //console.log("looking at:"+JSON.stringify(item));
+  //       return item;
+  //     });
+  //   });
+  // };
 
   $scope.swSelect=function($item, $model, $label)
   {

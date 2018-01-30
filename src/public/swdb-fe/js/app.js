@@ -4,26 +4,6 @@ var app = angular.module('app', [
     'ngMessages'
 ]);
 
-// Service to get FORG user data to controllers
-app.service('forgUserService', function($http) {
-    var userData = null;
-
-    var promise = 	$http({url: '/api/v1/swdb/forgUsers', method: "GET"}).success(function(data) {
-        userData = data;
-        //console.log("userData set to " + JSON.stringify(userData, null, 2));
-    });
-
-    return {
-        promise: promise,
-        setData: function (data) {
-            userData = data;
-        },
-        getUsers: function () {
-          //console.log("forgUserService.getUsers() returning " + JSON.stringify(userData));  
-          return userData;
-        }
-    };
-});
 
 // Service to get config data to controllers
 app.service('configService', function($http) {
@@ -108,6 +88,30 @@ app.service('swService', function($http) {
         }
     };
 });
+// Service to get FORG user data to controllers
+app.service('forgUserService', function($http) {
+    var userData = null;
+
+    var promise = 	$http({url: '/api/v1/swdb/forgUsers', method: "GET"}).then(function(data) {
+        userData = data;
+        //console.log("userData set to " + JSON.stringify(userData, null, 2));
+    });
+
+    return {
+        promise: promise,
+        getUsers: function () {
+          //console.log("forgUserService.getUsers() returning " + JSON.stringify(userData));  
+          return userData;
+        },
+      refreshUsersList: function () {
+        $http({ url: '/api/v1/swdb/forgUsers', method: "GET" }).then(function (data) {
+           userData = data;
+           return userData;
+           //console.log("forgUserService.refreshUsersList() returning");  
+           });
+        }
+    };
+});
 
 app.filter('swFilt', function () {
   // custom filter for sw records  
@@ -134,6 +138,21 @@ app.filter('swFilt', function () {
     else {
       return srchTxt;
     }
+  };
+});
+
+app.filter('engNopromiseFilter', function () {
+  return function (forgUserIn, srchTxt) {
+    //console.log("engFilter got " + srchTxt + JSON.stringify(forgUserIn));
+    let re = new RegExp(srchTxt, 'i');
+    filtered = forgUserIn.filter(function (element, idx, arr) {
+      // console.log("searching " + srchTxt + JSON.stringify(element.uid));
+      if (element.uid.match(re)) {
+        // console.log("matched " + JSON.stringify(element));
+        return element;
+      }
+    });
+    return filtered;
   };
 });
 
