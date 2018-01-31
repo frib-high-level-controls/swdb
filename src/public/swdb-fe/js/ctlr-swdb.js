@@ -301,7 +301,7 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
 
 
 appController.controller('UpdateController', UpdatePromiseCtrl);
-function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService, swService) {
+function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService, swService, forgUserService) {
   $scope.$watch(function () {
     return $scope.session;
   }, function () {
@@ -404,14 +404,18 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     }
   };
 
+  // set the engineer field to the selected user
+  $scope.onEngineerSelect = function ($item, $model, $label) {
+    $scope.formData.engineer = $model;
+  };
 
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
-  // // check our user session and redirect if needed
-  // if (!$scope.session.username) {
-  //     //go to cas
-  //     $window.location.href = $scope.props.auth.cas+'/login?service='+encodeURIComponent($scope.props.auth.login_service);
-  // }
+  forgUserService.promise.then(function(){
+    $scope.forgUsersList = forgUserService.getUsers().data;
+    //console.log("forgUsersList promise updated just now");
+  });
+
   // check our user session and redirect if needed
   if (!$scope.session.user) {
     //go to cas
