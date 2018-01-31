@@ -88,29 +88,80 @@ app.service('swService', function($http) {
         }
     };
 });
+
 // Service to get FORG user data to controllers
-app.service('forgUserService', function($http) {
-    var userData = null;
+app.service('forgUserService', function ($http) {
+  var userData = null;
 
-    var promise = 	$http({url: '/api/v1/swdb/forgUsers', method: "GET"}).then(function(data) {
+  var promise = $http({ url: '/api/v1/swdb/forgUsers', method: "GET" }).then(function (data) {
+    userData = data;
+    //console.log("userData set to " + JSON.stringify(userData, null, 2));
+  });
+
+  return {
+    promise: promise,
+    getUsers: function () {
+      //console.log("forgUserService.getUsers() returning " + JSON.stringify(userData));  
+      return userData;
+    },
+    refreshUsersList: function () {
+      $http({ url: '/api/v1/swdb/forgUsers', method: "GET" }).then(function (data) {
         userData = data;
-        //console.log("userData set to " + JSON.stringify(userData, null, 2));
-    });
+        return userData;
+        //console.log("forgUserService.refreshUsersList() returning");  
+      });
+    }
+  };
+});
 
-    return {
-        promise: promise,
-        getUsers: function () {
-          //console.log("forgUserService.getUsers() returning " + JSON.stringify(userData));  
-          return userData;
-        },
-      refreshUsersList: function () {
-        $http({ url: '/api/v1/swdb/forgUsers', method: "GET" }).then(function (data) {
-           userData = data;
-           return userData;
-           //console.log("forgUserService.refreshUsersList() returning");  
-           });
-        }
-    };
+// Service to get FORG group data to controllers
+app.service('forgGroupService', function ($http) {
+  var groupData = null;
+
+  var promise = $http({ url: '/api/v1/swdb/forgGroups', method: "GET" }).then(function (data) {
+    groupData = data;
+    //console.log("userData set to " + JSON.stringify(userData, null, 2));
+  });
+
+  return {
+    promise: promise,
+    getGroups: function () {
+      //console.log("forgUserService.getUsers() returning " + JSON.stringify(userData));  
+      return groupData;
+    },
+    refreshGroupsList: function () {
+      $http({ url: '/api/v1/swdb/forgGroups', method: "GET" }).then(function (data) {
+        groupData = data;
+        return groupData;
+        //console.log("forgUserService.refreshUsersList() returning");  
+      });
+    }
+  };
+});
+
+// Service to get FORG area data to controllers
+app.service('forgAreaService', function ($http) {
+  var areaData = null;
+
+  var promise = $http({ url: '/api/v1/swdb/forgAreas', method: "GET" }).then(function (data) {
+    areaData = data;
+    //console.log("userData set to " + JSON.stringify(userData, null, 2));
+  });
+
+  return {
+    promise: promise,
+    getAreas: function () {
+      //console.log("forgUserService.getUsers() returning " + JSON.stringify(userData));  
+      return areaData;
+    },
+    refreshAreasList: function () {
+      $http({ url: '/api/v1/swdb/forgAreas', method: "GET" }).then(function (data) {
+        areaData = data;
+        return areaData;
+        //console.log("forgUserService.refreshUsersList() returning");  
+      });
+    }
+  };
 });
 
 app.filter('swFilt', function () {
@@ -146,6 +197,21 @@ app.filter('engNopromiseFilter', function () {
     //console.log("engFilter got " + srchTxt + JSON.stringify(forgUserIn));
     let re = new RegExp(srchTxt, 'i');
     filtered = forgUserIn.filter(function (element, idx, arr) {
+      // console.log("searching " + srchTxt + JSON.stringify(element.uid));
+      if (element.uid.match(re)) {
+        // console.log("matched " + JSON.stringify(element));
+        return element;
+      }
+    });
+    return filtered;
+  };
+});
+
+app.filter('ownNopromiseFilter', function () {
+  return function (forgGroupIn, srchTxt) {
+    //console.log("groupFilter got " + srchTxt + JSON.stringify(forgGroupIn));
+    let re = new RegExp(srchTxt, 'i');
+    filtered = forgGroupIn.filter(function (element, idx, arr) {
       // console.log("searching " + srchTxt + JSON.stringify(element.uid));
       if (element.uid.match(re)) {
         // console.log("matched " + JSON.stringify(element));

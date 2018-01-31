@@ -153,7 +153,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService,
 
 
 appController.controller('NewController', NewPromiseCtrl);
-function NewPromiseCtrl($scope, $http, $window, $location, configService, userService, swService, forgUserService) {
+function NewPromiseCtrl($scope, $http, $window, $location, configService, userService, swService, forgUserService, forgGroupService) {
 
   $scope.$watch(function () {
     return $scope.session;
@@ -269,12 +269,21 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
   $scope.onEngineerSelect = function ($item, $model, $label) {
     $scope.formData.engineer = $model;
   };
+  // set the owner field to the selected user
+  $scope.onOwnerSelect = function ($item, $model, $label) {
+    $scope.formData.owner = $model;
+  };
 
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
   forgUserService.promise.then(function(){
     $scope.forgUsersList = forgUserService.getUsers().data;
     //console.log("forgUsersList promise updated just now");
+  });
+
+  forgGroupService.promise.then(function(){
+    $scope.forgGroupsList = forgGroupService.getGroups().data;
+    //console.log("forgGroupsList promise updated just now");
   });
 
   $scope.itemArray = $scope.props.validSwNamesGUIList;
@@ -301,7 +310,7 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
 
 
 appController.controller('UpdateController', UpdatePromiseCtrl);
-function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService, swService, forgUserService) {
+function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService, swService, forgUserService, forgGroupService) {
   $scope.$watch(function () {
     return $scope.session;
   }, function () {
@@ -408,12 +417,20 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
   $scope.onEngineerSelect = function ($item, $model, $label) {
     $scope.formData.engineer = $model;
   };
+  // set the owner field to the selected user
+  $scope.onOwnerSelect = function ($item, $model, $label) {
+    $scope.formData.owner = $model;
+  };
 
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
   forgUserService.promise.then(function(){
     $scope.forgUsersList = forgUserService.getUsers().data;
     //console.log("forgUsersList promise updated just now");
+  });
+  forgGroupService.promise.then(function(){
+    $scope.forgGroupsList = forgGroupService.getGroups().data;
+    //console.log("forgGroupsList promise updated just now");
   });
 
   // check our user session and redirect if needed

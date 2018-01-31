@@ -137,7 +137,11 @@ test.describe("Software update screen tests", function () {
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
     input = chromeDriver.findElement(By.id("owner"));
     input.click();
-    input.sendKeys("Test owner");
+    input.sendKeys("controls");
+    //*[@id="typeahead-11-1083-option-5"]/a
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-") and "option-5"=substring(@id, string-length(@id)-string-length("option-5")+1)]/a')));
+    input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-5"=substring(@id, string-length(@id)-string-length("option-5")+1)]/a'));
+    input.click();
 
     // set engineer
     chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
@@ -315,7 +319,7 @@ test.describe("Software update screen tests", function () {
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
     chromeDriver.findElement(By.id("owner")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("Test owner");
+        expect(text).to.equal("IFS:LAB.NSCL.OPS.CONTROLS");
       });
   });
 

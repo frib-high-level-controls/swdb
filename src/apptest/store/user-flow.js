@@ -136,13 +136,22 @@ test.describe("User flow tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
     input = chromeDriver.findElement(By.id("owner"));
     input.click();
-    input.sendKeys("Test owner");
+    input.sendKeys("controls");
+    //*[@id="typeahead-11-1083-option-5"]/a
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-") and "option-5"=substring(@id, string-length(@id)-string-length("option-5")+1)]/a')));
+    input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-5"=substring(@id, string-length(@id)-string-length("option-5")+1)]/a'));
+    input.click();
 
     // set engineer
     chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
     input = chromeDriver.findElement(By.id("engineer"));
     input.click();
-    input.sendKeys("Test engineer");
+    input.sendKeys("ellis");
+    // chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="typeahead-11-*-option-0"]/a')));
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-") and "option-0"=substring(@id, string-length(@id)-string-length("option-0")+1)]/a')));
+    input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-0"=substring(@id, string-length(@id)-string-length("option-0")+1)]/a'));
+    input.click();
+
 
     // set level of care
     chromeDriver.wait(until.elementLocated(By.id("levelOfCare")), 3000);
@@ -351,7 +360,7 @@ test.describe("User flow tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
     chromeDriver.findElement(By.id("owner")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("Test owner");
+        expect(text).to.equal("IFS:LAB.NSCL.OPS.CONTROLS");
       });
   });
 
@@ -359,7 +368,7 @@ test.describe("User flow tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
     chromeDriver.findElement(By.id("engineer")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("Test engineer");
+        expect(text).to.equal("ELLISR");
       });
   });
 
