@@ -143,7 +143,11 @@ test.describe("Software update screen tests", function () {
     chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
     input = chromeDriver.findElement(By.id("engineer"));
     input.click();
-    input.sendKeys("Test engineer");
+    input.sendKeys("ellis");
+    // chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="typeahead-11-*-option-0"]/a')));
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-") and "option-0"=substring(@id, string-length(@id)-string-length("option-0")+1)]/a')));
+    input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-0"=substring(@id, string-length(@id)-string-length("option-0")+1)]/a'));
+    input.click();
 
     // set level of care
     chromeDriver.wait(until.elementLocated(By.id("levelOfCare")), 3000);
@@ -319,7 +323,7 @@ test.describe("Software update screen tests", function () {
     chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
     chromeDriver.findElement(By.id("engineer")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("Test engineer");
+        expect(text).to.equal("ELLISR");
       });
   });
 
