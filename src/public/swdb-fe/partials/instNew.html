@@ -95,7 +95,14 @@
                         {{key+1}}</label>
                     <div class="col-sm-8">
                       <!-- <input id="area.{{key}}" type="text" name="areaInput.{{key}}" class="form-control" ng-model="formData.area[$index]" ng-minlength="4"> </input> -->
-                      <select id="area.{{key}}" ng-model="formData.area[$index]" ng-options="o for o in props.areaLabels track by o"></select>
+                      <!-- <select id="area.{{key}}" ng-model="formData.area[$index]" ng-options="o.uid as (o.uid + ': ' + o.fullname) for o in forgAreasList"></select> -->
+                      <ui-select id="area.{{key}}" ng-model="areasSelected[$index]" theme="bootstrap">
+                        <ui-select-match placeholder="Select or search area in the list...">{{$select.selected.uid}}</ui-select-match>
+                        <ui-select-choices repeat="item in forgAreasList | filter: $select.search">
+                          <div ng-bind-html="item.uid | highlight: $select.search"></div>
+                          <small ng-bind-html="item.fullname | highlight: $select.search"></small>
+                        </ui-select-choices>
+                      </ui-select>
                     </div>
                     <div class="col-sm-2" id="areaInputSts.{{key}}" ng-messages="inputForm['areaInput.'+$index].$error" ng-if="inputForm['areaInput.'+$index].$dirty">
                         <div ng-message="minlength">Minimum 4 characters</div>

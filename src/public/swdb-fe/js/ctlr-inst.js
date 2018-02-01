@@ -70,10 +70,10 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
     DTColumnBuilder.newColumn('software')
       .withTitle('Software').withOption('defaultContent', '')
       .renderWith(function (data, type, full, meta) {
-        if (!$scope.swMeta[full.software].branch){
+        if (!$scope.swMeta[full.software].branch) {
           $scope.swMeta[full.software].branch = "";
         }
-        if (!$scope.swMeta[full.software].version){
+        if (!$scope.swMeta[full.software].version) {
           $scope.swMeta[full.software].version = "";
         }
         return '<a href="#/details/' + full.software + '" >' +
@@ -106,25 +106,25 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
       table.columns().eq(0).each(function (colIdx) {
         let th = $('<th></th>').appendTo(tr);
         // if (table.column(colIdx).searching) {
-          // append column search with id derived from column init data
-          th.append('<input id="' + table.settings().init().aoColumns[colIdx].mData + "Srch"+'" type="text" placeholder="' + (table.column(colIdx).placeholder || '')
+        // append column search with id derived from column init data
+        th.append('<input id="' + table.settings().init().aoColumns[colIdx].mData + "Srch" + '" type="text" placeholder="' + (table.column(colIdx).placeholder || '')
           // th.append('<input type="text" placeholder="' + (table.column(colIdx).placeholder || '')
-            + '" style="width:80%;" autocomplete="off">');
-          th.on('keyup', 'input', function () {
-            let elem = this; // aids type inference to avoid cast
-            if (elem instanceof HTMLInputElement) {
-              table.column(colIdx).search(elem.value).draw();
-            }
-          });
+          + '" style="width:80%;" autocomplete="off">');
+        th.on('keyup', 'input', function () {
+          let elem = this; // aids type inference to avoid cast
+          if (elem instanceof HTMLInputElement) {
+            table.column(colIdx).search(elem.value).draw();
+          }
+        });
 
-          // Now apply filter routines to each column
-          $('input', table.column(colIdx).header()).on('keyup change', function () {
-            console.log("searching column " + colIdx);
-            table
-              .column(colIdx)
-              .search(this.value)
-              .draw();
-          });
+        // Now apply filter routines to each column
+        $('input', table.column(colIdx).header()).on('keyup change', function () {
+          console.log("searching column " + colIdx);
+          table
+            .column(colIdx)
+            .search(this.value)
+            .draw();
+        });
         // }
       });
     }
@@ -154,19 +154,19 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configServ
 
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
-    //update document fields with existing data
-    let url = $window.location.origin;
-    url = url + "/api/v1/inst/" + $routeParams.itemId;
-    // $http.get($scope.props.instApiUrl+$routeParams.itemId).success(function(data) {
-    $http.get(url).success(function(data) {
-        $scope.formData = data;
-        $scope.whichItem = $routeParams.itemId;
-    });
+  //update document fields with existing data
+  let url = $window.location.origin;
+  url = url + "/api/v1/inst/" + $routeParams.itemId;
+  // $http.get($scope.props.instApiUrl+$routeParams.itemId).success(function(data) {
+  $http.get(url).success(function (data) {
+    $scope.formData = data;
+    $scope.whichItem = $routeParams.itemId;
+  });
 }
 
 
 appController.controller('InstNewController', InstNewPromiseCtrl);
-function InstNewPromiseCtrl($scope, $http, $window, $location, configService, userService, slotService, swService) {
+function InstNewPromiseCtrl($scope, $http, $window, $location, configService, userService, slotService, swService, forgAreaService) {
 
   $scope.$watch(function () {
     return $scope.session;
@@ -193,10 +193,9 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
   };
 
 
-  $scope.slotSelect=function($item, $model, $label)
-  {
+  $scope.slotSelect = function ($item, $model, $label) {
     var index = $scope.slotsSelected.indexOf($model);
-    if (index == -1){
+    if (index == -1) {
       $scope.slotsSelected.unshift($model);
       $('#slots').focus();
     }
@@ -204,11 +203,10 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     }
   };
 
-  $scope.removeSelectedSlot=function($item)
-  {
+  $scope.removeSelectedSlot = function ($item) {
     var index = $scope.slotsSelected.indexOf($item);
-    if (index > -1){
-      $scope.slotsSelected.splice(index,1);
+    if (index > -1) {
+      $scope.slotsSelected.splice(index, 1);
     }
   };
 
@@ -227,159 +225,172 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
   //   });
   // };
 
-  $scope.swSelect=function($item, $model, $label)
-  {
-    $scope.formData.software=$item._id;
+  $scope.swSelect = function ($item, $model, $label) {
+    $scope.formData.software = $item._id;
     //console.log("software is now:"+$scope.formData.software);
   };
 
-    $scope.datePicker = (function () {
-        var method = {};
-        method.instances = [];
+  $scope.datePicker = (function () {
+    var method = {};
+    method.instances = [];
 
-        method.open = function ($event, instance) {
-            $event.preventDefault();
-            $event.stopPropagation();
+    method.open = function ($event, instance) {
+      $event.preventDefault();
+      $event.stopPropagation();
 
-            method.instances[instance] = true;
-        };
-
-        method.options = {
-            'show-weeks': false,
-            startingDay: 0
-        };
-
-        var formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-        method.format = formats[2];
-
-        return method;
-    }());
-
-
-    $scope.processForm = function(){
-        delete $scope.formData.__v;
-        $scope.formData.slots = $scope.slotsSelected;
-        console.log(JSON.stringify($scope.formData));
-
-        if ($scope.inputForm.$valid){
-          let url = $window.location.origin;
-          url = url + "/api/v1/inst/";
-            $http({
-                method: 'POST',
-                url: url,
-                // url: $scope.props.instApiUrl,
-                data: $scope.formData,
-                headers: { 'Content-Type': 'application/json' }
-            })
-              .then(function success(response) {
-                $scope.swdbParams.formStatus = "Document posted";
-                $scope.swdbParams.formShowErr = false;
-                $scope.swdbParams.formShowStatus = true;
-                let headers = response.headers();
-                if (headers.location) {
-                  // if location header is present extract the id
-                  let id = headers.location.split('/').pop();
-                  // console.log("going to: /inst/details/"+id);
-                  $location.path('/inst/details/' + id);
-                }
-              }, function error(response) {
-                $scope.swdbParams.error = { message: response.statusText + response.data, status: response.status };
-                $scope.swdbParams.formErr = "Error: " + $scope.swdbParams.error.message + "(" + response.status + ")";
-                $scope.swdbParams.formShowStatus = false;
-                $scope.swdbParams.formShowErr = true;
-              });
-        } else {
-            $scope.swdbParams.formErr="Error: clear errors before submission";
-            $scope.swdbParams.formShowStatus=false;
-            $scope.swdbParams.formShowErr=true;
-        }
+      method.instances[instance] = true;
     };
 
-    $scope.newItem = function(event) {
-        var parts = event.currentTarget.id.split('.');
-        if (parts[1] === 'slots'){
-            $scope.formData.slots.push("");
-        } else if (parts[1] === 'vvResultsLoc'){
-            if (!$scope.formData.vvResultsLoc) {
-              $scope.formData.vvResultsLoc = [];
-            }
-            $scope.formData.vvResultsLoc.push("");
-        } else if (parts[1] === 'area'){
-            // check to see if area needs initialization
-            if (!$scope.formData.area) {
-              $scope.formData.area = [];
-            }
-            $scope.formData.area.push("");
-        }
+    method.options = {
+      'show-weeks': false,
+      startingDay: 0
     };
 
-    $scope.removeItem = function(event) {
-        var parts = event.currentTarget.id.split('.');
-        if (parts[1] === 'slots'){
-            $scope.formData.slots.splice(parts[2],1);
-        } else if (parts[1] === 'vvResultsLoc'){
-            $scope.formData.vvResultsLoc.splice(parts[2],1);
-        } else if (parts[1] === 'area'){
-            $scope.formData.area.splice(parts[2],1);
-        }
-    };
+    var formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+    method.format = formats[2];
 
-    getEnums = function() {
-        $scope.formData.status = "DEVEL";
-        $scope.formData.area = "";
-    };
+    return method;
+  }());
 
-    $scope.refreshSw = () => {
-      $scope.swList = swService.getSwList();
-    };
 
-    $scope.props = configService.getConfig();
-    $scope.session = userService.getUser();
-    $scope.slots = slotService.getSlot();
-    $scope.refreshSw();
+  $scope.processForm = function () {
+    delete $scope.formData.__v;
+    $scope.formData.slots = $scope.slotsSelected;
 
-    // check our user session and redirect if needed
-    if (!$scope.session.user) {
-        //go to cas
-      $window.location.href = $scope.props.webUrl + 'login';
+    // Prep any selected areas
+    flattenedAreas = $scope.areasSelected.map(function(item, idx, array) {
+      return item.uid;
+    });
+    $scope.formData.area = flattenedAreas;
+
+    // console.log('Got formData: ' + JSON.stringify($scope.formData, null, 2));
+    // console.log('Got areasSelected: ' + JSON.stringify($scope.areasSelected, null, 2));
+
+    if ($scope.inputForm.$valid) {
+      let url = $window.location.origin;
+      url = url + "/api/v1/inst/";
+      $http({
+        method: 'POST',
+        url: url,
+        // url: $scope.props.instApiUrl,
+        data: $scope.formData,
+        headers: { 'Content-Type': 'application/json' }
+      })
+        .then(function success(response) {
+          $scope.swdbParams.formStatus = "Document posted";
+          $scope.swdbParams.formShowErr = false;
+          $scope.swdbParams.formShowStatus = true;
+          let headers = response.headers();
+          if (headers.location) {
+            // if location header is present extract the id
+            let id = headers.location.split('/').pop();
+            // console.log("going to: /inst/details/"+id);
+            $location.path('/inst/details/' + id);
+          }
+        }, function error(response) {
+          $scope.swdbParams.error = { message: response.statusText + response.data, status: response.status };
+          $scope.swdbParams.formErr = "Error: " + $scope.swdbParams.error.message + "(" + response.status + ")";
+          $scope.swdbParams.formShowStatus = false;
+          $scope.swdbParams.formShowErr = true;
+        });
+    } else {
+      $scope.swdbParams.formErr = "Error: clear errors before submission";
+      $scope.swdbParams.formShowStatus = false;
+      $scope.swdbParams.formShowErr = true;
     }
+  };
 
-    // sw just updated, refresh the service list
-    swService.refreshSwList();
+  $scope.newItem = function (event) {
+    var parts = event.currentTarget.id.split('.');
+    if (parts[1] === 'slots') {
+      $scope.formData.slots.push("");
+    } else if (parts[1] === 'vvResultsLoc') {
+      if (!$scope.formData.vvResultsLoc) {
+        $scope.formData.vvResultsLoc = [];
+      }
+      $scope.formData.vvResultsLoc.push("");
+    } else if (parts[1] === 'area') {
+      // check to see if area needs initialization
+      if (!$scope.formData.area) {
+        $scope.formData.area = [];
+      }
+      $scope.formData.area.push("");
+    }
+  };
 
-    // initialize this record
-    $scope.formData = {
-        //versionControl: "",
-        slots: [],
-        vvResultLoc: [],
-        area: [],
-    };
+  $scope.removeItem = function (event) {
+    var parts = event.currentTarget.id.split('.');
+    if (parts[1] === 'slots') {
+      $scope.formData.slots.splice(parts[2], 1);
+    } else if (parts[1] === 'vvResultsLoc') {
+      $scope.formData.vvResultsLoc.splice(parts[2], 1);
+    } else if (parts[1] === 'area') {
+      $scope.formData.area.splice(parts[2], 1);
+    }
+  };
 
-    $scope.swdbParams = {
-        formShowErr: false,
-        formShowStatus: false,
-        formStatus: "",
-        formErr: ""
-    };
-    getEnums();
-    $scope.slotsSelected = [];
-    console.log("at init $scope.formData.area is :" + JSON.stringify($scope.formData.area));
+  getEnums = function () {
+    $scope.formData.status = "DEVEL";
+    $scope.formData.area = "";
+  };
+
+  $scope.refreshSw = () => {
+    $scope.swList = swService.getSwList();
+  };
+
+  $scope.props = configService.getConfig();
+  $scope.session = userService.getUser();
+  $scope.slots = slotService.getSlot();
+  $scope.refreshSw();
+
+  forgAreaService.promise.then(function () {
+    $scope.forgAreasList = forgAreaService.getAreas().data;
+    //console.log("forgUsersList promise updated just now");
+  });
+
+  // check our user session and redirect if needed
+  if (!$scope.session.user) {
+    //go to cas
+    $window.location.href = $scope.props.webUrl + 'login';
+  }
+
+  // sw just updated, refresh the service list
+  swService.refreshSwList();
+
+  // initialize this record
+  $scope.formData = {
+    //versionControl: "",
+    slots: [],
+    vvResultLoc: [],
+    area: [],
+  };
+
+  $scope.swdbParams = {
+    formShowErr: false,
+    formShowStatus: false,
+    formStatus: "",
+    formErr: ""
+  };
+  getEnums();
+  $scope.slotsSelected = [];
+  $scope.areasSelected = [];
+  console.log("at init $scope.formData.area is :" + JSON.stringify($scope.formData.area));
 }
 
 
 appController.controller('InstUpdateController', InstUpdatePromiseCtrl);
-function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService, swService) {
+function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService, swService, forgAreaService) {
 
-  $scope.$watch(function() {
+  $scope.$watch(function () {
     return $scope.session;
-  }, function() {
+  }, function () {
     // prep for login button
     if ($scope.session && $scope.session.username) {
       $scope.usrBtnTxt = '';
     } else {
       $scope.usrBtnTxt = 'Log in';
     }
-  },true);
+  }, true);
 
   $scope.datePicker = (function () {
     var method = {};
@@ -408,18 +419,18 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     $location.path("/inst/details/" + $scope.formData._id);
   };
 
-  $scope.usrBtnClk = function(){
+  $scope.usrBtnClk = function () {
     if ($scope.session.username) {
       let url = $window.location.origin;
       url = url + "/logout";
       // logout if alredy logged in
-      $http.get(url).success(function(data) {
-        $window.location.href = $scope.props.auth.cas+'/logout';
+      $http.get(url).success(function (data) {
+        $window.location.href = $scope.props.auth.cas + '/logout';
       });
     } else {
       //login
       $window.location.href =
-        $scope.props.auth.cas+'/login?service='+
+        $scope.props.auth.cas + '/login?service=' +
         encodeURIComponent($scope.props.auth.login_service);
     }
   };
@@ -438,115 +449,124 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
   //   });
   // };
 
-  $scope.swSelect=function($item, $model, $label)
-  {
-    $scope.formData.software=$item._id;
-    //console.log("software is now:"+$scope.formData.software);
+  $scope.processForm = function () {
+    // Prep any selected areas
+    flattenedAreas = $scope.areasSelected.map(function(item, idx, array) {
+      return item.uid;
+    });
+    $scope.formData.area = flattenedAreas;
+
+    console.log('Got formData: ' + JSON.stringify(formData, null, 2));
+    console.log('Got selectedAreas: ' + JSON.stringify(selectedAreas, null, 2));
+    if ($scope.inputForm.$valid) {
+      delete $scope.formData.__v;
+      let url = $window.location.origin;
+      url = url + "/api/v1/inst/" + $scope.formData._id;
+
+      $http({
+        method: 'PUT',
+        // url: $scope.props.instApiUrl+$scope.formData._id,
+        url: url,
+        data: $scope.formData,
+        headers: { 'Content-Type': 'application/json' }
+      })
+        .then(function success(response) {
+          $scope.swdbParams.formStatus = "Document updates successfully posted";
+          $scope.swdbParams.formShowErr = false;
+          $scope.swdbParams.formShowStatus = true;
+          let headers = response.headers();
+          if (headers.location) {
+            // if location header is present extract the id
+            console.log('Got header.location: ' + headers.location);
+            let id = headers.location.split('/').pop();
+            $location.path('/inst/details/' + id);
+          }
+        }, function error(response) {
+          $scope.swdbParams.error = { message: response.statusText + response.data, status: response.status };
+          $scope.swdbParams.formErr = "Error: " + $scope.swdbParams.error.message + "(" + response.status + ")";
+          $scope.swdbParams.formShowStatus = false;
+          $scope.swdbParams.formShowErr = true;
+        });
+    } else {
+      $scope.swdbParams.formErr = "Error: clear errors before submission";
+      $scope.swdbParams.formShowStatus = false;
+      $scope.swdbParams.formShowErr = true;
+    }
   };
 
-    $scope.processForm = function(){
-        if ($scope.inputForm.$valid){
-            delete $scope.formData.__v;
-            let url = $window.location.origin;
-            url = url + "/api/v1/inst/" + $scope.formData._id;
-
-            $http({
-                method: 'PUT',
-                // url: $scope.props.instApiUrl+$scope.formData._id,
-                url: url,
-                data: $scope.formData,
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(function success(response) {
-              $scope.swdbParams.formStatus = "Document updates successfully posted";
-              $scope.swdbParams.formShowErr = false;
-              $scope.swdbParams.formShowStatus = true;
-              let headers = response.headers();
-              if (headers.location) {
-                // if location header is present extract the id
-                console.log('Got header.location: ' + headers.location);
-                let id = headers.location.split('/').pop();
-                $location.path('/inst/details/' + id);
-              }
-              }, function error(response) {
-                $scope.swdbParams.error = { message: response.statusText + response.data, status: response.status };
-                $scope.swdbParams.formErr = "Error: " + $scope.swdbParams.error.message + "(" + response.status + ")";
-                $scope.swdbParams.formShowStatus = false;
-                $scope.swdbParams.formShowErr = true;
-              });
-        } else {
-            $scope.swdbParams.formErr="Error: clear errors before submission";
-            $scope.swdbParams.formShowStatus=false;
-            $scope.swdbParams.formShowErr=true;
-        }
-    };
-
-    $scope.newItem = function(event) {
-        var parts = event.currentTarget.id.split('.');
-        if (parts[1] === 'area'){
-            $scope.formData.area.push("");
-        } else if (parts[1] === 'slots'){
-            $scope.formData.slots.push("");
-        } else if (parts[1] === 'vvResultsLoc'){
-            $scope.formData.vvResultsLoc.push("");
-        } else if (parts[1] === 'drrs'){
-            $scope.formData.drrs.push("");
-        } else if (parts[1] === 'area'){
-            // check to see if area needs initialization
-            if (!$scope.formData.area) {
-              $scope.formData.area = [];
-            }
-            $scope.formData.area.push("");
-        }
-    };
-
-    $scope.removeItem = function(event) {
-        var parts = event.currentTarget.id.split('.');
-        if (parts[1] === 'area'){
-            $scope.formData.area.splice(parts[2],1);
-        } else if (parts[1] === 'slots'){
-            $scope.formData.slots.splice(parts[2],1);
-        } else if (parts[1] === 'vvResultsLoc'){
-            $scope.formData.vvResultsLoc.splice(parts[2],1);
-        } else if (parts[1] === 'drrs'){
-            $scope.formData.drrs.splice(parts[2],1);
-        } else if (parts[1] === 'area'){
-            $scope.formData.area.splice(parts[2],1);
-        }
-    };
-
-    // refresh the service list
-    swService.refreshSwList();
-
-    $scope.props = configService.getConfig();
-    $scope.session = userService.getUser();
-    $scope.swList = swService.getSwList();
-
-    // check our user session and redirect if needed
-    if (!$scope.session.user) {
-        //go to cas
-      $window.location.href = $scope.props.webUrl + 'login';
+  $scope.newItem = function (event) {
+    var parts = event.currentTarget.id.split('.');
+    if (parts[1] === 'area') {
+      $scope.formData.area.push("");
+    } else if (parts[1] === 'slots') {
+      $scope.formData.slots.push("");
+    } else if (parts[1] === 'vvResultsLoc') {
+      $scope.formData.vvResultsLoc.push("");
+    } else if (parts[1] === 'drrs') {
+      $scope.formData.drrs.push("");
+    } else if (parts[1] === 'area') {
+      // check to see if area needs initialization
+      if (!$scope.formData.area) {
+        $scope.formData.area = [];
+      }
+      $scope.formData.area.push("");
     }
+  };
 
-    $scope.swdbParams = {
-        formShowErr: false,
-        formShowStatus: false,
-        formStatus: "",
-        formErr: ""
-    };
+  $scope.removeItem = function (event) {
+    var parts = event.currentTarget.id.split('.');
+    if (parts[1] === 'area') {
+      $scope.formData.area.splice(parts[2], 1);
+    } else if (parts[1] === 'slots') {
+      $scope.formData.slots.splice(parts[2], 1);
+    } else if (parts[1] === 'vvResultsLoc') {
+      $scope.formData.vvResultsLoc.splice(parts[2], 1);
+    } else if (parts[1] === 'drrs') {
+      $scope.formData.drrs.splice(parts[2], 1);
+    } else if (parts[1] === 'area') {
+      $scope.formData.area.splice(parts[2], 1);
+    }
+  };
 
-    //update document fields with existing data
-    let url = $window.location.origin;
-    url = url + "/api/v1/inst/" + $routeParams.itemId;
-    // $http.get($scope.props.instApiUrl+$routeParams.itemId).success(function(data) {
-    $http.get(url).success(function(data) {
-        $scope.formData = data;
-        $scope.whichItem = $routeParams.itemId;
-        $scope.swSelected = data.software;
+  // refresh the service list
+  swService.refreshSwList();
 
-        // make a Date object from this string
-        $scope.formData.statusDate = new Date($scope.formData.statusDate);
-        $scope.formData.area.selected = data.area;
-    });
+  $scope.props = configService.getConfig();
+  $scope.session = userService.getUser();
+  $scope.swList = swService.getSwList();
+
+  forgAreaService.promise.then(function () {
+    $scope.forgAreasList = forgAreaService.getAreas().data;
+    //console.log("forgUsersList promise updated just now");
+  });
+
+  // check our user session and redirect if needed
+  if (!$scope.session.user) {
+    //go to cas
+    $window.location.href = $scope.props.webUrl + 'login';
+  }
+
+  $scope.swdbParams = {
+    formShowErr: false,
+    formShowStatus: false,
+    formStatus: "",
+    formErr: ""
+  };
+
+  //update document fields with existing data
+  let url = $window.location.origin;
+  url = url + "/api/v1/inst/" + $routeParams.itemId;
+  // $http.get($scope.props.instApiUrl+$routeParams.itemId).success(function(data) {
+  $http.get(url).success(function (data) {
+    $scope.formData = data;
+    $scope.whichItem = $routeParams.itemId;
+    $scope.swSelected = data.software;
+
+    // make a Date object from this string
+    $scope.formData.statusDate = new Date($scope.formData.statusDate);
+    $scope.areasSelected = $scope.formData.area;
+    console.log('Got initial formData: ' + JSON.stringify($scope.formData, null, 2));
+    console.log('Got initial areasSelected: ' + JSON.stringify($scope.areasSelected, null, 2));
+  });
 }
 

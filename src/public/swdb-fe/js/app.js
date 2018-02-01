@@ -239,6 +239,21 @@ app.filter('engFilter', function() {
   };
 });
 
+app.filter('areasNopromiseFilter', function () {
+  return function (forgAreaIn, srchTxt) {
+    //console.log("areaFilter got " + srchTxt + JSON.stringify(forgAreaIn));
+    let re = new RegExp(srchTxt, 'i');
+    filtered = forgAreaIn.filter(function (element, idx, arr) {
+      // console.log("searching " + srchTxt + JSON.stringify(element.uid));
+      if (element.uid.match(re)) {
+        // console.log("matched " + JSON.stringify(element));
+        return element;
+      }
+    });
+    return filtered;
+  };
+});
+
 app.config(['$routeProvider', function($routeProvider){
     $routeProvider.
         when('/list', {
