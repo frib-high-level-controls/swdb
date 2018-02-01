@@ -5,6 +5,8 @@ config/swdbrc
 config/server.key
 config/server.crt
 /public/
+src/apptest/misc/datafiles/forgGroupsTestData.json
+src/apptest/misc/datafiles/forgUsersTestData.json
 
 # NPM package installations
 node_modules/
