@@ -315,18 +315,28 @@ router.get('/', (req: express.Request, res: express.Response) => {
 });
 
 router.post('/', (req: express.Request, res: express.Response) => {
-  res.format({
-    'text/html': () => {
-      if (req.body.test === 'start') {
-        if (testingStatus.status === 'OK') {
-          setTestingError('Duration 30s');
-          statusTestTimer = setTimeout(setTestingOk, 30000);
-        }
-      } else {
-        setTestingOk();
-        if (statusTestTimer) { clearTimeout(statusTestTimer); }
+    if (req.body.test === 'start') {
+      if (testingStatus.status === 'OK') {
+        setTestingError('Duration 30s');
+        statusTestTimer = setTimeout(setTestingOk, 30000);
       }
-      res.redirect(req.originalUrl);
-    },
+    } else if (req.body.test === 'stop') {
+      setTestingOk();
+      if (statusTestTimer) { clearTimeout(statusTestTimer); }
+    }
+    let status = getApiStatus(req.app);
+    res.format({
+      'text/html': () => {
+        res.status(getHttpStatus(status)).render('status', {
+          testing: (testingStatus.status !== 'OK'),
+          status: status,
+        });
+      },
+      'application/json': () => {
+        res.status(getHttpStatus(status)).json(status);
+      },
+      'default': () => {
+        res.status(getHttpStatus(status)).send(status.status);
+      },
   });
 });
