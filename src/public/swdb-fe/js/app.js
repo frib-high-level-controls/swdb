@@ -110,6 +110,21 @@ app.service('forgUserService', function ($http) {
         return userData;
         //console.log("forgUserService.refreshUsersList() returning");  
       });
+    },
+    /**
+     * userUidsToObjects
+     * @param userUids array id user UID strings
+     * @return array of user objects from forg
+     */
+    userUidsToObjects: function(userUids) {
+      // console.log("users: " + JSON.stringify(userUids));
+      // console.log("userData: " + JSON.stringify(userData));
+      forgObj = userUids.map(function(item, idx, array){
+        return userData.data.find(function(elem) {
+          return elem.uid === item;
+        })
+      }) 
+      return forgObj;
     }
   };
 });
@@ -135,6 +150,21 @@ app.service('forgGroupService', function ($http) {
         return groupData;
         //console.log("forgUserService.refreshUsersList() returning");  
       });
+    },
+    /**
+     * groupUidsToObjects
+     * @param groupUids array id group UID strings
+     * @return array of group objects from forg
+     */
+    groupUidsToObjects: function(groupUids) {
+      // console.log("groups: " + JSON.stringify(groupUids));
+      // console.log("groupData: " + JSON.stringify(groupData));
+      forgObj = groupUids.map(function(item, idx, array){
+        return groupData.data.find(function(elem) {
+          return elem.uid === item;
+        })
+      }) 
+      return forgObj;
     }
   };
 });
@@ -160,6 +190,21 @@ app.service('forgAreaService', function ($http) {
         return areaData;
         //console.log("forgUserService.refreshUsersList() returning");  
       });
+    },
+    /**
+     * areaUIidsToObjects
+     * @param areaUids array id area UID strings
+     * @return array of area objects from forg
+     */
+    areaUidsToObjects: function(areaUids) {
+      // console.log("areas: " + JSON.stringify(areaUids));
+      // console.log("areaData: " + JSON.stringify(areaData));
+      forgObj = areaUids.map(function(item, idx, array){
+        return areaData.data.find(function(elem) {
+          return elem.uid === item;
+        })
+      }) 
+      return forgObj;
     }
   };
 });

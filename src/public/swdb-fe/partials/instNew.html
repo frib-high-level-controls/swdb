@@ -85,7 +85,8 @@
             <span class="col-sm-10"></span>
         </div>
         <div id="area-group" class="form-group">
-            <div ng-repeat="(key, value) in formData.area track by $index">
+            <!-- <div ng-repeat="(key, value) in formData.area track by $index"> -->
+            <div ng-repeat="(key, value) in areasSelected track by $index">
                 <div class="row" ng-class="{ 'has-error' : inputForm['areaInput.'+$index].$invalid && !inputForm['areaInput.'+$index].$pristine }">
                     <label class="col-sm-2">
                         &nbsp&nbsp

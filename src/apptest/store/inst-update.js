@@ -57,6 +57,7 @@ test.describe("Installations update screen tests", function() {
   });
 
   test.it("login as test user", function(done){
+    this.timeout(8000);
     supertest
     .get("/login")
     .auth(props.test.username, props.test.password)
@@ -96,7 +97,7 @@ test.describe("Installations update screen tests", function() {
   });
 
   test.it("Add new record", function() {
-    this.timeout(10000);
+    this.timeout(15000);
     chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
     var input = chromeDriver.findElement(By.id("host"));
     input.sendKeys("testHost1");
@@ -108,25 +109,55 @@ test.describe("Installations update screen tests", function() {
     input.sendKeys("Test name");
 
     // set area
+    // add controls room, operator area, nscl control room
+    // then delete the controls room
     chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
     input = chromeDriver.findElement(By.id("add.area"));
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("area.0")), 3000);
     input0 = chromeDriver.findElement(By.id("area.0"));
-    input0.sendKeys("FE");
+    input0.click();
+
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.0"]/input[1]')), 3000);
+    input0b = chromeDriver.findElement(By.xpath('//*[@id="area.0"]/input[1]'));
+    input0b.sendKeys("controls\n");
+
+    chromeDriver.wait(until.elementTextContains(input0,
+      "ADB:AREA7B8CA34E"), 5000);
+
+    chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
+    input = chromeDriver.findElement(By.id("add.area"));
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("area.1")), 3000);
     input1 = chromeDriver.findElement(By.id("area.1"));
-    input1.sendKeys("LS1");
+    input1.click();
+
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.1"]/input[1]')), 3000);
+    input1b = chromeDriver.findElement(By.xpath('//*[@id="area.1"]/input[1]'));
+    input1b.sendKeys("operator\n");
+
+    chromeDriver.wait(until.elementTextContains(input1,
+      "ADB:AREAF00CF85F"), 5000);
+
+    chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
+    input = chromeDriver.findElement(By.id("add.area"));
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("area.2")), 3000);
     input2 = chromeDriver.findElement(By.id("area.2"));
-    input2.sendKeys("LS2");
-    // remove the first entry
+    input2.click();
+
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.2"]/input[1]')), 3000);
+    input2b = chromeDriver.findElement(By.xpath('//*[@id="area.2"]/input[1]'));
+    input2b.sendKeys("nscl control room\n");
+
+    chromeDriver.wait(until.elementTextContains(input2,
+      "ADB:AREA8651102A"), 5000);
+
     chromeDriver.wait(until.elementLocated(By.id("rm.area.0")), 3000);
     input = chromeDriver.findElement(By.id("rm.area.0"));
     input.click();
 
+    // set status
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
     input = chromeDriver.findElement(By.id("status"));
     input.click();
@@ -215,7 +246,7 @@ test.describe("Installations update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("area")), 3000);
     chromeDriver.findElement(By.id("area")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("LS1,LS2");
+        expect(text).to.equal("ADB:AREAF00CF85F,ADB:AREA8651102A");
       });
   });
 

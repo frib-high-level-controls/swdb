@@ -494,19 +494,33 @@ test.it("should show search page with username on logout button", function() {
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("area.0")), 3000);
     input0 = chromeDriver.findElement(By.id("area.0"));
-    input0.sendKeys("FE");
-    input.click();
-    chromeDriver.wait(until.elementLocated(By.id("area.1")), 3000);
-    input1 = chromeDriver.findElement(By.id("area.1"));
-    input1.sendKeys("LS1");
-    input.click();
-    chromeDriver.wait(until.elementLocated(By.id("area.2")), 3000);
-    input2 = chromeDriver.findElement(By.id("area.2"));
-    input2.sendKeys("LS2");
-    // remove the first entry
-    chromeDriver.wait(until.elementLocated(By.id("rm.area.0")), 3000);
-    input = chromeDriver.findElement(By.id("rm.area.0"));
-    input.click();
+    input0.click();
+
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.0"]/input[1]')), 3000);
+    input0b = chromeDriver.findElement(By.xpath('//*[@id="area.0"]/input[1]'));
+    input0b.sendKeys("controls\n");
+
+    chromeDriver.wait(until.elementTextContains(input0,
+      "ADB:AREA7B8CA34E"), 5000);
+    // // set area
+    // chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
+    // input = chromeDriver.findElement(By.id("add.area"));
+    // input.click();
+    // chromeDriver.wait(until.elementLocated(By.id("area.0")), 3000);
+    // input0 = chromeDriver.findElement(By.id("area.0"));
+    // input0.sendKeys("FE");
+    // input.click();
+    // chromeDriver.wait(until.elementLocated(By.id("area.1")), 3000);
+    // input1 = chromeDriver.findElement(By.id("area.1"));
+    // input1.sendKeys("LS1");
+    // input.click();
+    // chromeDriver.wait(until.elementLocated(By.id("area.2")), 3000);
+    // input2 = chromeDriver.findElement(By.id("area.2"));
+    // input2.sendKeys("LS2");
+    // // remove the first entry
+    // chromeDriver.wait(until.elementLocated(By.id("rm.area.0")), 3000);
+    // input = chromeDriver.findElement(By.id("rm.area.0"));
+    // input.click();
 
     // set drrs
     chromeDriver.wait(until.elementLocated(By.id("drrs")), 3000);
@@ -592,7 +606,7 @@ test.it("should show search page with username on logout button", function() {
     chromeDriver.wait(until.elementLocated(By.id("area")), 3000);
     chromeDriver.findElement(By.id("area")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("LS1,LS2");
+        expect(text).to.equal("ADB:AREA7B8CA34E");
       });
   });
 

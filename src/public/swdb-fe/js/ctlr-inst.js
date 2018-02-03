@@ -311,10 +311,10 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
       $scope.formData.vvResultsLoc.push("");
     } else if (parts[1] === 'area') {
       // check to see if area needs initialization
-      if (!$scope.formData.area) {
-        $scope.formData.area = [];
+      if (!$scope.areasSelected) {
+        $scope.areasSelected = [];
       }
-      $scope.formData.area.push("");
+      $scope.areasSelected.push("");
     }
   };
 
@@ -325,7 +325,9 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     } else if (parts[1] === 'vvResultsLoc') {
       $scope.formData.vvResultsLoc.splice(parts[2], 1);
     } else if (parts[1] === 'area') {
-      $scope.formData.area.splice(parts[2], 1);
+      // $scope.formData.area.splice(parts[2], 1);
+      $scope.areasSelected.splice(parts[2], 1);
+      // console.log("after rm areasSelected now: " + JSON.stringify($scope.areasSelected));
     }
   };
 
@@ -385,8 +387,8 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     return $scope.session;
   }, function () {
     // prep for login button
-    if ($scope.session && $scope.session.username) {
-      $scope.usrBtnTxt = '';
+    if ($scope.session && $scope.session.user) {
+      $scope.usrBtnTxt = "";
     } else {
       $scope.usrBtnTxt = 'Log in';
     }
@@ -420,34 +422,12 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
   };
 
   $scope.usrBtnClk = function () {
-    if ($scope.session.username) {
-      let url = $window.location.origin;
-      url = url + "/logout";
-      // logout if alredy logged in
-      $http.get(url).success(function (data) {
-        $window.location.href = $scope.props.auth.cas + '/logout';
-      });
+    if ($scope.session.user) {
+      $window.location.href = $scope.props.webUrl + 'logout';
     } else {
-      //login
-      $window.location.href =
-        $scope.props.auth.cas + '/login?service=' +
-        encodeURIComponent($scope.props.auth.login_service);
+      $window.location.href = $scope.props.webUrl + 'login';
     }
   };
-
-  // // get sw records from swdb api
-  // $scope.getSw = function(val) {
-  //   let url = $window.location.origin;
-  //   url = url + "/api/v1/swdb/";
-  //   return $http.get(url).then(function(response){
-  //   // return $http.get($scope.props.apiUrl).then(function(response){
-  //     //console.log("Got sw list:"+JSON.stringify(response.data));
-  //     return response.data.map(function(item){
-  //       //console.log("looking at:"+JSON.stringify(item));
-  //       return item;
-  //     });
-  //   });
-  // };
 
   $scope.processForm = function () {
     // Prep any selected areas
@@ -456,8 +436,8 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     });
     $scope.formData.area = flattenedAreas;
 
-    console.log('Got formData: ' + JSON.stringify(formData, null, 2));
-    console.log('Got selectedAreas: ' + JSON.stringify(selectedAreas, null, 2));
+    console.log('Got formData: ' + JSON.stringify($scope.formData, null, 2));
+    console.log('Got selectedAreas: ' + JSON.stringify($scope.selectedAreas, null, 2));
     if ($scope.inputForm.$valid) {
       delete $scope.formData.__v;
       let url = $window.location.origin;
@@ -506,17 +486,17 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
       $scope.formData.drrs.push("");
     } else if (parts[1] === 'area') {
       // check to see if area needs initialization
-      if (!$scope.formData.area) {
-        $scope.formData.area = [];
+      if (!$scope.areasSelected) {
+        $scope.areasSelected = [];
       }
-      $scope.formData.area.push("");
+      $scope.areasSelected.push("");
     }
   };
 
   $scope.removeItem = function (event) {
     var parts = event.currentTarget.id.split('.');
     if (parts[1] === 'area') {
-      $scope.formData.area.splice(parts[2], 1);
+      $scope.areasSelected.splice(parts[2], 1);
     } else if (parts[1] === 'slots') {
       $scope.formData.slots.splice(parts[2], 1);
     } else if (parts[1] === 'vvResultsLoc') {
@@ -561,10 +541,12 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     $scope.formData = data;
     $scope.whichItem = $routeParams.itemId;
     $scope.swSelected = data.software;
-
+    // convert the retreived record areas
+    forgAreaService.promise.then(function(){
+      $scope.areasSelected =  forgAreaService.areaUidsToObjects($scope.formData.area);
+    })
     // make a Date object from this string
     $scope.formData.statusDate = new Date($scope.formData.statusDate);
-    $scope.areasSelected = $scope.formData.area;
     console.log('Got initial formData: ' + JSON.stringify($scope.formData, null, 2));
     console.log('Got initial areasSelected: ' + JSON.stringify($scope.areasSelected, null, 2));
   });
