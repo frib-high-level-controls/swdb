@@ -4,6 +4,19 @@ var app = angular.module('app', [
     'ngMessages'
 ]);
 
+// record xfer service
+app.service('recService', function() {
+    var recData = null;
+
+    return {
+        setRec: function (data) {
+            recData = data;
+        },
+        getRec: function () {
+            return recData;
+        }
+    };
+});
 
 // Service to get config data to controllers
 app.service('configService', function($http) {

@@ -118,7 +118,7 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
 
 
 appController.controller('DetailsController', DetailsPromiseCtrl);
-function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService, userService) {
+function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService, recService) {
   $scope.$watch(function () {
     return $scope.session;
   }, function () {
@@ -137,6 +137,16 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService,
       $window.location.href = $scope.props.webUrl + 'login';
     }
   };
+  
+  $scope.bumpVerBtnClk = function () {
+    // set the recService and then transfer to the new 
+    console.log("got bumpVerBtnClk");
+    recService.setRec({
+      updateRecID: $routeParams.itemId,
+      formData: $scope.formData,
+    });
+    $location.path("/new");
+  };
 
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
@@ -153,7 +163,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, configService,
 
 
 appController.controller('NewController', NewPromiseCtrl);
-function NewPromiseCtrl($scope, $http, $window, $location, configService, userService, swService, forgUserService, forgGroupService) {
+function NewPromiseCtrl($scope, $http, $window, $location, configService, userService, swService, forgUserService, forgGroupService, recService) {
 
   $scope.$watch(function () {
     return $scope.session;
@@ -306,6 +316,28 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     formErr: ""
   };
   getEnums();
+
+  // expect recService to provide ID and formdata
+  let updateRec = recService.getRec();
+  if (updateRec) {
+    console.log("Found update record, setting defaults: " + JSON.stringify(updateRec,null,2));
+    let updateRedID = updateRec.updateRecId;
+    $scope.formData.swName = updateRec.formData.swName;
+    $scope.formData.levelOfCare = updateRec.formData.levelOfCare;
+    $scope.formData.status = "DEVEL";
+    $scope.formData.statusDate = new Date();
+    $scope.formData.platforms = updateRec.formData.platforms;
+    $scope.formData.designDescDocLoc = updateRec.formData.designDescDocLoc;
+    $scope.formData.descDocLoc = updateRec.formData.descDocLoc;
+    $scope.formData.vvProcLoc = updateRec.formData.vvProcLoc;
+    $scope.formData.versionControl = updateRec.formData.versionControl;
+    $scope.formData.versionControlLoc = updateRec.formData.versionControlLoc;
+    $scope.formData.recertFreq = updateRec.formData.recertFreq;
+    $scope.formData.previous = updateRedID;
+
+    // got the new data, now clear the service for next time.
+    recService.setRec(null);
+  };
 }
 
 
