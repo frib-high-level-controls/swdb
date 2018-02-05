@@ -156,8 +156,7 @@ class NullProvider extends AbstractProvider {
 
   public authenticate(options: object): RequestHandler {
     return (req: Request, res: Response, next: NextFunction) => {
-      res.status(HttpStatus.FORBIDDEN);
-      res.send('not authorized');
+      sendForbidden(req, res);
     };
   };
 
@@ -218,21 +217,26 @@ export function hasAnyRole(req: Request, ...roles: Array<string | string[]>): bo
   return getProvider().hasAnyRole(req, ...roles);
 };
 
-// TODO: Consider making this a function that returns a request handler.
-export function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
-  const username = getUsername(req);
-  if (!username) {
-    const redirectUrl = '/login?bounce=' + encodeURIComponent(req.originalUrl);
-    debug('Request NOT authenticted: Redirect: %s', redirectUrl);
-    res.redirect(redirectUrl);
-    return;
-  }
-  next();
+export function ensureAuthc(): RequestHandler {
+  return (req, res, next) => {
+    const username = getUsername(req);
+    if (!username) {
+      const redirectUrl = '/login?bounce=' + encodeURIComponent(req.originalUrl);
+      debug('Request NOT authenticted: Redirect: %s', redirectUrl);
+      res.redirect(redirectUrl);
+      return;
+    }
+    next();
+  };
 };
 
+// Retained for backwards compatibility
+export const ensureAuthenticated = ensureAuthc();
+
 export function ensureHasUsername(...usernames: Array<string | string[]>): RequestHandler {
+  const authc = ensureAuthc();
   return (req, res, next) => {
-    ensureAuthenticated(req, res, (err: any) => {
+    authc(req, res, (err: any) => {
       if (!hasUsername(req, ...usernames)) {
         sendForbidden(req, res);
         return;
@@ -243,8 +247,9 @@ export function ensureHasUsername(...usernames: Array<string | string[]>): Reque
 };
 
 export function ensureHasRole(...roles: Array<string | string[]>): RequestHandler {
+  const authc = ensureAuthc();
   return (req, res, next) => {
-    ensureAuthenticated(req, res, (err: any) => {
+    authc(req, res, (err: any) => {
       if (!hasRole(req, ...roles)) {
         sendForbidden(req, res);
         return;
@@ -255,8 +260,9 @@ export function ensureHasRole(...roles: Array<string | string[]>): RequestHandle
 };
 
 export function ensureHasAnyRole(...roles: Array<string | string[]>): RequestHandler {
+  const authc = ensureAuthc();
   return (req, res, next) => {
-    ensureAuthenticated(req, res, (err: any) => {
+    authc(req, res, (err: any) => {
       if (!hasAnyRole(req, ...roles)) {
         sendForbidden(req, res);
         return;
