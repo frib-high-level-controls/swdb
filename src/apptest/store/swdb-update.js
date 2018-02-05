@@ -98,7 +98,7 @@ test.describe("Software update screen tests", function() {
   });
 
   test.it("Add new record", function() {
-    this.timeout(20000);
+    this.timeout(25000);
     chromeDriver.wait(until.elementLocated(By.id('swName')), 3000);
     var input = chromeDriver.findElement(By.id('swName')).sendKeys("Test Record3");
 
@@ -448,5 +448,310 @@ test.describe("Software update screen tests", function() {
   //       expect(text).to.equal("2017-09-30T07:00:00.000Z");
   //     });
   // });
+  test.it("should click new version shows new record page ", function () {
+    chromeDriver.wait(until.elementLocated(By.id("bumpVerBtn")),
+      8000).click();
+    chromeDriver.wait(until.titleIs("SWDB - New"), 5000);
+  });
+
+  test.it("should show the correct description in bump version new", function () {
+    chromeDriver.wait(until.elementLocated(By.id("desc")), 3000);
+    chromeDriver.findElement(By.id("desc")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("New Test Description");
+      });
+  });
+
+  test.it("should show the correct software name in bump version new", function () {
+    chromeDriver.wait(until.elementLocated(By.id("swName")), 3000);
+    chromeDriver.findElement(By.id("swName")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Test Record3");
+      });
+  });
+
+  test.it("should show the correct software branch in bump version new", function () {
+    chromeDriver.wait(until.elementLocated(By.id("branch")), 3000);
+    chromeDriver.findElement(By.id("branch")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("");
+      });
+  });
+
+  test.it("should show the correct software version in bump version new", function () {
+    chromeDriver.wait(until.elementLocated(By.id("version")), 3000);
+    chromeDriver.findElement(By.id("version")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("");
+      });
+  });
+
+  test.it("should show the correct description doc in bump version new", function () {
+    chromeDriver.wait(until.elementLocated(By.id("descDocLoc")), 3000);
+    chromeDriver.findElement(By.id("descDocLoc")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("http://www.google.com");
+      });
+  });
+
+  test.it("should show the correct design description doc in bump version new", function () {
+    chromeDriver.wait(until.elementLocated(By.id("designDescDocLoc")), 3000);
+    chromeDriver.findElement(By.id("designDescDocLoc")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("http://www.google.com");
+      });
+  });
+  
+  test.it("should show the correct owner in bump version new", function () {
+    this.timeout(5000);
+    chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
+    chromeDriver.wait(function() {
+      return chromeDriver.findElement(By.id("owner")).getAttribute("value").then(function(val){
+        if (val === "IFS:LAB.NSCL.OPS.CONTROLS") {
+          // return chai.assert.strictEqual(val,"xIFS:LAB.NSCL.OPS.CONTROLS" ,"Got");
+          return true;
+        } else {
+          // return chai.assert.notStrictEqual(val,"xIFS:LAB.NSCL.OPS.CONTROLS" ,"Not Got");
+          return false;
+        }
+      });
+    });
+  });
+
+  test.it("should show the correct engineer in bump version new", function () {
+    this.timeout(5000);
+    chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
+    chromeDriver.wait(function() {
+      return chromeDriver.findElement(By.id("engineer")).getAttribute("value").then(function(val){
+        return val === "ELLISR";
+      });
+    });
+  });
+
+  test.it("should show the correct levelOfCare in bump version new", function () {
+    chromeDriver.wait(until.elementLocated(By.id("levelOfCare")), 3000);
+    chromeDriver.findElement(By.id("levelOfCare")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("LOW");
+      });
+  });
+
+  test.it("should show the correct status in bump version new", function () {
+    chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
+    chromeDriver.findElement(By.id("status")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("DEVEL");
+      });
+  });
+
+  // test.it("should show the correct statusDate in details", function () {
+  //   chromeDriver.wait(until.elementLocated(By.id("statusDate")), 3000);
+  //   chromeDriver.findElement(By.id("statusDate")).getAttribute("value").then(
+  //     function (text) {
+  //       expect(text).to.equal("2017-09-30T07:00:00.000Z");
+  //     });
+  // });
+
+  test.it("should show the correct platforms in bump version new", function () {
+    chromeDriver.wait(until.elementLocated(By.id("platforms")), 3000);
+    chromeDriver.findElement(By.id("platforms")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Test platform");
+      });
+  });
+
+  // test.it("should show the correct vvProcLoc in bump version new", function () {
+  //   chromeDriver.wait(until.elementLocated(By.id("vvProcLoc")), 3000);
+  //   chromeDriver.findElement(By.id("vvProcLoc")).getAttribute("value").then(
+  //     function (text) {
+  //       expect(text).to.equal("http://procservtest.com/procdoc1,http://procservtest.com/procdoc2");
+  //     });
+  // });
+
+  // test.it("should show the correct vvResultsLoc in details", function () {
+  //   chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc")), 3000);
+  //   chromeDriver.findElement(By.id("vvResultsLoc")).getAttribute("value").then(
+  //     function (text) {
+  //       expect(text).to.equal("");
+  //     });
+  // });
+
+  test.it("should show the correct versionControl in bump version new", function () {
+    chromeDriver.wait(until.elementLocated(By.id("versionControl")), 3000);
+    chromeDriver.findElement(By.id("versionControl")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Git");
+      });
+  });
+
+  test.it("should show the correct versionControlLoc in bump version new", function () {
+    chromeDriver.wait(until.elementLocated(By.id("versionControlLoc")), 3000);
+    chromeDriver.findElement(By.id("versionControlLoc")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("http://www.google.com");
+      });
+  });
+
+  test.it("should show the correct recertFreq in bump version new", function () {
+    chromeDriver.wait(until.elementLocated(By.id("recertFreq")), 3000);
+    chromeDriver.findElement(By.id("recertFreq")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Test recertification frequency");
+      });
+  });
+
+  test.it("should update the branch and version and submit ", function () {
+    this.timeout(5000);
+    // set version
+    chromeDriver.wait(until.elementLocated(By.id("version")), 3000);
+    input = chromeDriver.findElement(By.id("version"));
+    input.click();
+    input.sendKeys("Bumped Version");
+
+    // set branch
+    chromeDriver.wait(until.elementLocated(By.id("branch")), 3000);
+    input = chromeDriver.findElement(By.id("branch"));
+    input.click();
+    input.sendKeys("Bumped Branch");
+    chromeDriver.wait(until.elementLocated(By.id("submitBtn")),
+      8000).click();
+    chromeDriver.wait(until.titleIs("SWDB - Details"), 5000);
+  });
+
+  test.it("should show the correct description in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("desc")), 3000);
+    chromeDriver.findElement(By.id("desc")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("New Test Description");
+      });
+  });
+
+  test.it("should show the correct software name in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("swName")), 3000);
+    chromeDriver.findElement(By.id("swName")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Test Record3");
+      });
+  });
+
+  test.it("should show the correct software branch in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("branch")), 3000);
+    chromeDriver.findElement(By.id("branch")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Bumped Branch");
+      });
+  });
+
+  test.it("should show the correct software version in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("version")), 3000);
+    chromeDriver.findElement(By.id("version")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Bumped Version");
+      });
+  });
+
+  test.it("should show the correct description doc in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("descDocLoc")), 3000);
+    chromeDriver.findElement(By.id("descDocLoc")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("http://www.google.com");
+      });
+  });
+
+  test.it("should show the correct design description doc in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("designDescDocLoc")), 3000);
+    chromeDriver.findElement(By.id("designDescDocLoc")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("http://www.google.com");
+      });
+  });
+
+  test.it("should show the correct owner in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
+    chromeDriver.findElement(By.id("owner")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("IFS:LAB.NSCL.OPS.CONTROLS");
+      });
+  });
+
+  test.it("should show the correct engineer in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
+    chromeDriver.findElement(By.id("engineer")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("ELLISR");
+      });
+  });
+
+  test.it("should show the correct levelOfCare in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("levelOfCare")), 3000);
+    chromeDriver.findElement(By.id("levelOfCare")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("LOW");
+      });
+  });
+
+  test.it("should show the correct status in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
+    chromeDriver.findElement(By.id("status")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("DEVEL");
+      });
+  });
+
+  // test.it("should show the correct statusDate in details", function () {
+  //   chromeDriver.wait(until.elementLocated(By.id("statusDate")), 3000);
+  //   chromeDriver.findElement(By.id("statusDate")).getAttribute("value").then(
+  //     function (text) {
+  //       expect(text).to.equal("2017-09-30T07:00:00.000Z");
+  //     });
+  // });
+
+  test.it("should show the correct platforms in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("platforms")), 3000);
+    chromeDriver.findElement(By.id("platforms")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Test platform");
+      });
+  });
+
+  test.it("should show the correct vvProcLoc in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("vvProcLoc")), 3000);
+    chromeDriver.findElement(By.id("vvProcLoc")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("http://procservtest.com/procdoc1,http://procservtest.com/procdoc2");
+      });
+  });
+
+  test.it("should show the correct vvResultsLoc in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc")), 3000);
+    chromeDriver.findElement(By.id("vvResultsLoc")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("");
+      });
+  });
+
+  test.it("should show the correct versionControl in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("versionControl")), 3000);
+    chromeDriver.findElement(By.id("versionControl")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Git");
+      });
+  });
+
+  test.it("should show the correct versionControlLoc in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("versionControlLoc")), 3000);
+    chromeDriver.findElement(By.id("versionControlLoc")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("http://www.google.com");
+      });
+  });
+
+  test.it("should show the correct recertFreq in details", function () {
+    chromeDriver.wait(until.elementLocated(By.id("recertFreq")), 3000);
+    chromeDriver.findElement(By.id("recertFreq")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Test recertification frequency");
+      });
+  });
 
 });

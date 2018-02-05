@@ -323,6 +323,11 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     console.log("Found update record, setting defaults: " + JSON.stringify(updateRec,null,2));
     let updateRedID = updateRec.updateRecId;
     $scope.formData.swName = updateRec.formData.swName;
+    $scope.formData.desc = updateRec.formData.desc;
+    $scope.formData.owner = updateRec.formData.owner;
+    $scope.ownerSelected = updateRec.formData.owner;
+    $scope.formData.engineer = updateRec.formData.engineer;
+    $scope.engineerSelected = updateRec.formData.engineer;
     $scope.formData.levelOfCare = updateRec.formData.levelOfCare;
     $scope.formData.status = "DEVEL";
     $scope.formData.statusDate = new Date();
