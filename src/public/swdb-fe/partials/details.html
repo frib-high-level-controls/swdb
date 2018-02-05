@@ -249,6 +249,15 @@
     <a id="updateBtn" class="btn btn-info" href="#/update/{{formData._id}}"><span class="glyphicon glyphicon-edit"></span>      Update this document </a>
     <a id="bumpVerBtn" class="btn btn-default" ng-click="bumpVerBtnClk()"><span class="glyphicon glyphicon-plus-sign"></span>      New revision </a>
 
+    <!-- <button type="button" class="btn btn-default" ng-click="isHistCollapsed = !isHistCollapsed">Show history</button> -->
+    <a id="histBtn" class="btn btn-default" ng-click="isHistCollapsed = !isHistCollapsed"><span class="glyphicon glyphicon-list-alt"></span>Show history</a>
+    <hr>
+    <div uib-collapse="isHistCollapsed">
+      <div class="well well-lg">Some History content
+        {{history}}
+      </div>
+    </div>
+
   </form>
 </div>
 </section>

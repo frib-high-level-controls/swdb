@@ -159,6 +159,13 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, con
     $scope.formData = data;
     $scope.whichItem = $routeParams.itemId;
   });
+
+  // get history
+  url = "/api/v1/swdb/hist/" + $routeParams.itemId;
+  $http.get(url).then(function (data) {
+    $scope.history = data.data;
+    console.log("Got history: " + JSON.stringify($scope.history, null, 2));
+  });
 }
 
 
