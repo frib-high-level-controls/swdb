@@ -216,18 +216,21 @@ export function getStatus(): ApplicationStatus {
 };
 
 export function getComponent(name: string): ComponentStatus | undefined {
+  let uname = name.toUpperCase();
   for (let comp of components) {
-    if (comp.name === name) {
+    if (comp.name.toUpperCase() === uname) {
       return comp;
     }
   }
 };
 
 export function setComponentOk(name: string, message?: string, ...param: any[]): void {
+  let uname = name.toUpperCase();
   for (let comp of components) {
-    if (comp.name === name) {
+    if (comp.name.toUpperCase() === uname) {
       comp.status = 'OK';
       comp.date = new Date();
+      comp.name = name;
       comp.message = message ? util.format(message, ...param) : 'OK';
       return;
     }
@@ -241,10 +244,12 @@ export function setComponentOk(name: string, message?: string, ...param: any[]):
 };
 
 export function setComponentError(name: string, message?: string, ...param: any[]): void {
+  let uname = name.toUpperCase();
   for (let comp of components) {
-    if (comp.name === name) {
+    if (comp.name.toUpperCase() === uname) {
       comp.status = 'ERROR';
       comp.date = new Date();
+      comp.name = name;
       comp.message = message ? util.format(message, ...param) : 'ERROR';
       return;
     }
@@ -289,7 +294,7 @@ function getApiStatus(app: express.Application): ApiApplicationStatus {
   };
 };
 
-function getHttpStatus(status: ApplicationStatus): number {
+function getHttpStatus(status: { status: string }): number {
   if (status.status !== 'OK') {
     return HttpStatus.INTERNAL_SERVER_ERROR;
   }
@@ -338,5 +343,33 @@ router.post('/', (req: express.Request, res: express.Response) => {
       'default': () => {
         res.status(getHttpStatus(status)).send(status.status);
       },
+  });
+});
+
+router.get('/:name', (req: express.Request, res: express.Response) => {
+  let name = String(req.params.name).toUpperCase();
+  let component: ComponentStatus;
+  if (name === 'TEST') {
+    component = testingStatus;
+  } else if (name === 'LOAD') {
+    component = loadStatus;
+  } else if (name === 'MEMORY') {
+    component = memoryStatus;
+  } else {
+    let c = getComponent(name);
+    if (c) {
+      component = c;
+    } else {
+      res.status(HttpStatus.NOT_FOUND).send(HttpStatus.getStatusText(HttpStatus.NOT_FOUND));
+      return;
+    }
+  }
+  res.format({
+    'application/json': () => {
+      res.status(getHttpStatus(component)).json(component);
+    },
+    'default': () => {
+      res.status(getHttpStatus(component)).send(component.status);
+    },
   });
 });
