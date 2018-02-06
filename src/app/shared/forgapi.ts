@@ -30,9 +30,9 @@ export interface SearchUser {
 
 export type GroupType = 'LAB' | 'UNIT' | 'DIV' | 'DEPT' | 'GROUP' | 'TEAM' | 'AREA' | 'UNKNOWN';
 
-export interface ApiGroup {
+export interface Group {
   uid: string;
-  name: string;
+  srcname: string;
   fullname: string;
   leader: string;
   source: string;
@@ -41,7 +41,7 @@ export interface ApiGroup {
 
 export interface SearchGroup {
   uid: string;
-  name: string;
+  srcname: string;
   fullname: string;
   source: string;
   type: GroupType;
