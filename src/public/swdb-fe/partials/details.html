@@ -250,11 +250,15 @@
     <a id="bumpVerBtn" class="btn btn-default" ng-click="bumpVerBtnClk()"><span class="glyphicon glyphicon-plus-sign"></span>      New revision </a>
 
     <!-- <button type="button" class="btn btn-default" ng-click="isHistCollapsed = !isHistCollapsed">Show history</button> -->
-    <a id="histBtn" class="btn btn-default" ng-click="isHistCollapsed = !isHistCollapsed"><span class="glyphicon glyphicon-list-alt"></span>Show history</a>
+    <a id="histBtn" class="btn btn-default" ng-click="isHistCollapsed = !isHistCollapsed"><span class="glyphicon glyphicon-list-alt"></span> Show history</a>
     <hr>
     <div uib-collapse="isHistCollapsed">
-      <div class="well well-lg">Some History content
-        {{history}}
+      <div class="well well-lg">
+        <label class="swdbSection">
+           History
+        </label>
+          <!-- <div ng-bind-html="history" style="height: 500px; overflow: auto;"></div> -->
+          <div ng-bind-html="history"></div>
       </div>
     </div>
 

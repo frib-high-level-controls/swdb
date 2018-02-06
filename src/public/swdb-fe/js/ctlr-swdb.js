@@ -148,6 +148,23 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, con
     $location.path("/new");
   };
 
+  mkHistTable = function (data){
+    let table = '<table id="histTable" class="swdbHistTable"';
+    data.map(function(elem, idx, arr){
+      console.log("Parsing: " + JSON.stringify(elem));
+      console.log("table now: " + table);
+      table = table.concat('<tr class="swdbHistTr"><td class="swdbHistTdSection">'+
+        new Date(elem.at) + '</td><td class="swdbHistTdSection">' + elem.by + '</td></tr>');
+      elem.paths.map(function(pathElem, patIdx, pathArr){
+        table = table.concat('<tr class="swdbHistTr"><td class="swdbHistTd">' +
+          pathElem.name + '</td><td class="swdbHistTd">' + pathElem.value + '</td></tr>');
+      });
+      console.log("table now: " + table);
+    });
+    table = table.concat("</table>");
+    return table;
+  };
+
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
   //update document fields with existing data
@@ -163,8 +180,10 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, con
   // get history
   url = "/api/v1/swdb/hist/" + $routeParams.itemId;
   $http.get(url).then(function (data) {
-    $scope.history = data.data;
-    console.log("Got history: " + JSON.stringify($scope.history, null, 2));
+    $scope.isHistCollapsed = true;
+    $scope.history = mkHistTable(data.data);
+    // console.log("Got history: " + JSON.stringify(data.data, null, 2));
+    // console.log("Got table: " + JSON.stringify($scope.history, null, 2));
   });
 }
 
