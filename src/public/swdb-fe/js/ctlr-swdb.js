@@ -118,7 +118,7 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
 
 
 appController.controller('DetailsController', DetailsPromiseCtrl);
-function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService, recService) {
+function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sce, configService, userService, recService) {
   $scope.$watch(function () {
     return $scope.session;
   }, function () {
@@ -149,7 +149,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, con
   };
 
   mkHistTable = function (data){
-    let table = '<table id="histTable" class="swdbHistTable"';
+    let table = '<table id="histTable" class="swdbHistTable">';
     data.map(function(elem, idx, arr){
       console.log("Parsing: " + JSON.stringify(elem));
       console.log("table now: " + table);
@@ -159,9 +159,9 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, con
         table = table.concat('<tr class="swdbHistTr"><td class="swdbHistTd">' +
           pathElem.name + '</td><td class="swdbHistTd">' + pathElem.value + '</td></tr>');
       });
-      console.log("table now: " + table);
     });
     table = table.concat("</table>");
+    console.log("Returning table: " + table);
     return table;
   };
 
@@ -181,7 +181,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, con
   url = "/api/v1/swdb/hist/" + $routeParams.itemId;
   $http.get(url).then(function (data) {
     $scope.isHistCollapsed = true;
-    $scope.history = mkHistTable(data.data);
+    $scope.history = $sce.trustAsHtml(mkHistTable(data.data));
     // console.log("Got history: " + JSON.stringify(data.data, null, 2));
     // console.log("Got table: " + JSON.stringify($scope.history, null, 2));
   });

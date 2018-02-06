@@ -441,13 +441,10 @@ test.describe("Software update screen tests", function() {
       });
   });
 
-  // test.it("should show the correct recertDate in details", function () {
-  //   chromeDriver.wait(until.elementLocated(By.id("recertDate")), 3000);
-  //   chromeDriver.findElement(By.id("recertDate")).getAttribute("value").then(
-  //     function (text) {
-  //       expect(text).to.equal("2017-09-30T07:00:00.000Z");
-  //     });
-  // });
+/**
+ * Click the version update button on the details page and check field defaults on 
+ * the resulting new record page.
+ */
   test.it("should click new version shows new record page ", function () {
     chromeDriver.wait(until.elementLocated(By.id("bumpVerBtn")),
       8000).click();
@@ -600,6 +597,9 @@ test.describe("Software update screen tests", function() {
       });
   });
 
+/**
+ * Update the branch and version and check the resulting details screen 
+ */
   test.it("should update the branch and version and submit ", function () {
     this.timeout(5000);
     // set version
@@ -752,6 +752,50 @@ test.describe("Software update screen tests", function() {
       function (text) {
         expect(text).to.equal("Test recertification frequency");
       });
+  });
+
+/**
+ * Test the hisory section
+ * Do another update
+ * Then check the history table
+ */
+
+  test.it("should go to update", function() {
+    chromeDriver.wait(until.elementLocated(By.id("updateBtn")),
+      8000).click();
+    chromeDriver.wait(until.titleIs("SWDB - Update"), 5000);
+  });
+
+  test.it("should update the same record", function() {
+    this.timeout(20000);
+    chromeDriver.wait(until.elementLocated(By.id("desc")), 8000)
+      .clear();
+    chromeDriver.wait(until.elementLocated(By.id("desc")), 8000)
+      .sendKeys("New Test Description2");
+    chromeDriver.wait(until.elementLocated(By.id("submitBtn")), 8000)
+      .click();
+    // chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("formStatus")),
+    //   "Document updates successfully posted"),5000);
+  });
+  
+  test.it("should show the history table in details", function () {
+    chromeDriver.wait(until.titleIs("SWDB - Details"), 5000);
+    chromeDriver.wait(until.elementLocated(By.id("histBtn")), 3000);
+    chromeDriver.findElement(By.id("histBtn")).click();
+    chromeDriver.wait(until.elementLocated(By.id("histTable")), 3000);
+  });
+
+  test.it("should show both desc changes in the history table of details", function () {
+    //*[@id="histTable"]/tbody/tr[2]/td[2] shold be "New Test Description2"
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="histTable"]/tbody/tr[2]/td[2]')), 3000);
+    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
+      By.xpath('//*[@id="histTable"]/tbody/tr[2]/td[2]')),
+       "New Test Description2"),5000);
+    //*[@id="histTable"]/tbody/tr[7]/td[2]
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="histTable"]/tbody/tr[2]/td[2]')), 3000);
+    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
+      By.xpath('//*[@id="histTable"]/tbody/tr[7]/td[2]')),
+       "New Test Description"),5000);
   });
 
 });
