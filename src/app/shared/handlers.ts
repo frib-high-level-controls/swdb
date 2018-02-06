@@ -36,9 +36,41 @@ export function catchAll(handler: RequestPromiseHandler): RequestHandler {
   };
 };
 
-// Wrap the Express format() method to support promises.
-// (For more details: http://expressjs.com/en/api.html#res.format)
-// In addition, this method provides more specific typings than the original.
+/**
+ * Find the query parameter with the specified name using case-insensitive search.
+ * By default the parameter is converted to a string. This can be disabled using the 'raw' option.
+ */
+export function findQueryParam(req: Request, name: string, caseSensitive: boolean, raw: true): any;
+export function findQueryParam(req: Request, name: string, caseSensitive?: boolean, raw?: false): string | undefined;
+export function findQueryParam(req: Request, name: string, caseSensitive?: boolean, raw?: boolean): any {
+  function safeToString(obj: any): any {
+    if (raw) {
+      return obj;
+    }
+    if (obj !== undefined) {
+      return String(obj);
+    }
+  }
+  if (req.query.hasOwnProperty(name)) {
+    return safeToString(req.query[name]);
+  }
+  if (!caseSensitive) {
+    name = name.toUpperCase();
+    for (let key in req.query) {
+      if (req.query.hasOwnProperty(key)) {
+        if (key.toUpperCase() === name) {
+          return safeToString(req.query[key]);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Wrap the Express format() method to support promises.
+ * (For more details: http://expressjs.com/en/api.html#res.format)
+ * In addition, this method provides more specific typings than the original.
+ */
 export function format(res: Response, cbs: { [key: string]: () => Promise<void> | void }): Promise<void> {
 
   return new Promise((resolve, reject) => {
