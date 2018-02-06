@@ -34,11 +34,11 @@ export interface IProvider {
 
   getRoles(req: Request): string[] | undefined;
 
-  hasUsername(req: Request, username: string | string[]): boolean;
+  hasUsername(req: Request, ...username: Array<string | string[]>): boolean;
 
-  hasRole(req: Request, role: string | string[]): boolean;
+  hasRole(req: Request, ...role: Array<string | string[]>): boolean;
 
-  hasAnyRole(req: Request, role: string | string[]): boolean;
+  hasAnyRole(req: Request, ...role: Array<string | string[]>): boolean;
 };
 
 const debug = dbg('webapp:auth');
@@ -56,65 +56,78 @@ export abstract class AbstractProvider implements IProvider {
 
   public abstract getRoles(req: Request): string[] | undefined;
 
-  public hasUsername(req: Request, username: string | string[]): boolean {
-    const name = this.getUsername(req);
+  public hasUsername(req: Request, ...usernames: Array<(string | string[])>): boolean {
+    let name = this.getUsername(req);
     if (!name) {
       return false;
     }
 
-    const usernames = new Set<string>();
-    if (Array.isArray(username)) {
-      for (let u of username) {
-        usernames.add(u.toUpperCase());
+    name = name.toUpperCase();
+    for (let username of usernames) {
+      if (Array.isArray(username)) {
+        for (let n of username) {
+          if (name === n.toUpperCase()) {
+            return true;
+          }
+        }
+      } else {
+        if (name === username.toUpperCase()) {
+          return true;
+        }
       }
-    } else {
-      usernames.add(username.toUpperCase());
     }
-
-    return usernames.has(name.toUpperCase());
+    return false;
   };
 
-  public hasRole(req: Request, role: string | string[]): boolean {
+  public hasRole(req: Request, ...roles: Array<(string | string[])>): boolean {
     const userRoles = this.getRoles(req);
     if (!userRoles) {
       return false;
     }
 
-    const roles = new Set<string>();
-    if (Array.isArray(role)) {
-      for (let r of role) {
-        roles.add(r.toUpperCase());
-      }
-    } else {
-      roles.add(role.toUpperCase());
+    const userRoleSet = new Set<string>();
+    for (let ur of userRoles) {
+      userRoleSet.add(ur.toUpperCase());
     }
 
-    for (let userRole of userRoles) {
-      if (!roles.has(userRole.toUpperCase())) {
-        return false;
+    for (let role of roles) {
+      if (Array.isArray(role)) {
+        for (let r of role) {
+          if (!userRoleSet.has(r.toUpperCase())) {
+            return false;
+          }
+        }
+      } else {
+        if (!userRoleSet.has(role.toUpperCase())) {
+          return false;
+        }
       }
     }
     return true;
   };
 
-  public hasAnyRole(req: Request, role: string | string[]): boolean {
+  public hasAnyRole(req: Request, ...roles: Array<(string | string[])>): boolean {
     const userRoles = this.getRoles(req);
     if (!userRoles) {
       return false;
     }
 
-    const roles = new Set<string>();
-    if (Array.isArray(role)) {
-      for (let r of role) {
-        roles.add(r.toUpperCase());
-      }
-    } else {
-      roles.add(role.toUpperCase());
+    const userRoleSet = new Set<string>();
+    for (let ur of userRoles) {
+      userRoleSet.add(ur.toUpperCase());
     }
 
-    for (let userRole of userRoles) {
-      if (roles.has(userRole.toUpperCase())) {
-        return true;
+    for (let role of roles) {
+      if (Array.isArray(role)) {
+        for (let r of role) {
+          if (userRoleSet.has(r.toUpperCase())) {
+            return true;
+          }
+        }
+      } else {
+        if (userRoleSet.has(role.toUpperCase())) {
+          return true;
+        }
       }
     }
     return false;
@@ -143,8 +156,7 @@ class NullProvider extends AbstractProvider {
 
   public authenticate(options: object): RequestHandler {
     return (req: Request, res: Response, next: NextFunction) => {
-      res.status(HttpStatus.FORBIDDEN);
-      res.send('not authorized');
+      sendForbidden(req, res);
     };
   };
 
@@ -193,34 +205,39 @@ export function getUsername(req: Request): string | undefined {
   return getProvider().getUsername(req);
 };
 
-export function hasUsername(req: Request, username: string | string[]): boolean {
-  return getProvider().hasUsername(req, username);
+export function hasUsername(req: Request, ...usernames: Array<string | string[]>): boolean {
+  return getProvider().hasUsername(req, ...usernames);
 };
 
-export function hasRole(req: Request, role: string | string[]): boolean {
-  return getProvider().hasRole(req, role);
+export function hasRole(req: Request, ...roles: Array<string | string[]>): boolean {
+  return getProvider().hasRole(req, ...roles);
 };
 
-export function hasAnyRole(req: Request, role: string | string[]): boolean {
-  return getProvider().hasAnyRole(req, role);
+export function hasAnyRole(req: Request, ...roles: Array<string | string[]>): boolean {
+  return getProvider().hasAnyRole(req, ...roles);
 };
 
-// TODO: Consider making this a function that returns a request handler.
-export function ensureAuthenticated(req: Request, res: Response, next: NextFunction) {
-  const username = getUsername(req);
-  if (!username) {
-    const redirectUrl = '/login?bounce=' + encodeURIComponent(req.originalUrl);
-    debug('Request NOT authenticted: Redirect: %s', redirectUrl);
-    res.redirect(redirectUrl);
-    return;
-  }
-  next();
-};
-
-export function ensureHasUsername(username: string | string[]): RequestHandler {
+export function ensureAuthc(): RequestHandler {
   return (req, res, next) => {
-    ensureAuthenticated(req, res, (err: any) => {
-      if (!hasUsername(req, username)) {
+    const username = getUsername(req);
+    if (!username) {
+      const redirectUrl = '/login?bounce=' + encodeURIComponent(req.originalUrl);
+      debug('Request NOT authenticted: Redirect: %s', redirectUrl);
+      res.redirect(redirectUrl);
+      return;
+    }
+    next();
+  };
+};
+
+// Retained for backwards compatibility
+export const ensureAuthenticated = ensureAuthc();
+
+export function ensureHasUsername(...usernames: Array<string | string[]>): RequestHandler {
+  const authc = ensureAuthc();
+  return (req, res, next) => {
+    authc(req, res, (err: any) => {
+      if (!hasUsername(req, ...usernames)) {
         sendForbidden(req, res);
         return;
       }
@@ -229,10 +246,11 @@ export function ensureHasUsername(username: string | string[]): RequestHandler {
   };
 };
 
-export function ensureHasRole(role: string | string[]): RequestHandler {
+export function ensureHasRole(...roles: Array<string | string[]>): RequestHandler {
+  const authc = ensureAuthc();
   return (req, res, next) => {
-    ensureAuthenticated(req, res, (err: any) => {
-      if (!hasRole(req, role)) {
+    authc(req, res, (err: any) => {
+      if (!hasRole(req, ...roles)) {
         sendForbidden(req, res);
         return;
       }
@@ -241,10 +259,11 @@ export function ensureHasRole(role: string | string[]): RequestHandler {
   };
 };
 
-export function ensureHasAnyRole(role: string | string[]): RequestHandler {
+export function ensureHasAnyRole(...roles: Array<string | string[]>): RequestHandler {
+  const authc = ensureAuthc();
   return (req, res, next) => {
-    ensureAuthenticated(req, res, (err: any) => {
-      if (!hasAnyRole(req, role)) {
+    authc(req, res, (err: any) => {
+      if (!hasAnyRole(req, ...roles)) {
         sendForbidden(req, res);
         return;
       }
