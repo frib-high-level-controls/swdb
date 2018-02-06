@@ -145,7 +145,7 @@ export function model<T extends Document<T>>(name: string, schema: Schema, colle
   } else if ((<any> type).schema !== historySchema) {
     throw new Error('Path \'history\' does not have the expected schema');
   }
-  return <Model<T>> mongoose.model<T>(name, schema, collection);
+  return <Model<T>> mongoose.model<Document<T>>(name, schema, collection);
 };
 
 /**
