@@ -192,3 +192,36 @@ export function requestErrorHandler(): ErrorRequestHandler {
     }).catch(next);
   };
 };
+
+/**
+ * Set the response local 'basePath' to relative
+ * path of application base. Redirect GET requests
+ * to remove trailing slash.
+ */
+export function basePathHandler(): RequestHandler {
+  return (req, res, next) => {
+    let url = req.url.split('?');
+
+    let redirect = (req.method === 'GET') && url[0].endsWith('/');
+    if (redirect) {
+      url[0] = url[0].substr(0, url[0].length - 1);
+    }
+
+    let basePaths: string[] = [];
+
+    let segments = url[0].split('/');
+    for (let idx = 0; idx < segments.length - 1; idx += 1) {
+      basePaths.push('..');
+    }
+
+    let basePath = basePaths.join('/');
+
+    if (redirect) {
+      res.redirect(basePath + url.join('?'));
+      return;
+    }
+
+    res.locals.basePath = basePath;
+    next();
+  };
+}
