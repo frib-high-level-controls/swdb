@@ -6,7 +6,6 @@ import * as express from 'express';
 import * as HttpStatusCodes from 'http-status-codes';
 
 import * as log from './logging';
-import { setComponentError } from './status';
 
 
 type Request = express.Request;
@@ -196,7 +195,6 @@ export function requestErrorHandler(): ErrorRequestHandler {
     }
 
     if (status >= 500) {
-      setComponentError('Handlers', '(%s) %s', status, message);
       log.error(err);
     }
 
