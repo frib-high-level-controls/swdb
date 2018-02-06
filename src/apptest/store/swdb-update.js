@@ -774,11 +774,10 @@ test.describe("Software update screen tests", function() {
       .sendKeys("New Test Description2");
     chromeDriver.wait(until.elementLocated(By.id("submitBtn")), 8000)
       .click();
-    // chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("formStatus")),
-    //   "Document updates successfully posted"),5000);
   });
   
   test.it("should show the history table in details", function () {
+    this.timeout(10000);
     chromeDriver.wait(until.titleIs("SWDB - Details"), 5000);
     chromeDriver.wait(until.elementLocated(By.id("histBtn")), 3000);
     chromeDriver.findElement(By.id("histBtn")).click();
