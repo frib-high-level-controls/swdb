@@ -260,6 +260,9 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
         this.history.updatedBy = updatedBy;
         this.history.updateIds.push(update._id);
       } else {
+        // TODO: Consider removing this branch
+        //       as this.history *should* be
+        //       initialized by the schema.
         this.history = {
           updatedAt: updatedAt,
           updatedBy: updatedBy,
@@ -268,6 +271,8 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
       }
       if (this.history.updates) {
         this.history.updates.push(update);
+      } else if (this.history.updateIds.length === 1) {
+        this.history.updates = [ update ];
       }
       return this.save();
     });
