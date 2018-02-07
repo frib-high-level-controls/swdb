@@ -255,6 +255,15 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
   };
 
   $scope.processForm = function () {
+    console.log("pre ownerSelected: " + JSON.stringify($scope.ownerSelected, null, 2));
+    console.log("pre engineerSelected: " + JSON.stringify($scope.engineerSelected, null, 2));
+    // Prep any selected owner
+    console.log("ownerSelected: " + JSON.stringify($scope.ownerSelected, null, 2));
+    $scope.formData.owner = $scope.ownerSelected.item.uid;
+    // Prep any selected engineer
+    console.log("engineerSelected: " + JSON.stringify($scope.engineerSelected, null, 2));
+    $scope.formData.engineer = $scope.engineerSelected.item.uid;
+
     delete $scope.formData.__v;
     if (!$scope.formData.version) {
       // $scope.formData.version="";
@@ -330,6 +339,10 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     $window.location.href = $scope.props.webUrl + 'login';
   }
 
+  //initialize selected owner and engineer
+  $scope.ownerSelected = {item: {}};
+  $scope.engineerSelected = {item: {}};
+
   // initialize this record
   $scope.formData = {
     vvProcLoc: [],
@@ -351,9 +364,9 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     $scope.formData.swName = updateRec.formData.swName;
     $scope.formData.desc = updateRec.formData.desc;
     $scope.formData.owner = updateRec.formData.owner;
-    $scope.ownerSelected = updateRec.formData.owner;
+    // $scope.ownerSelected = updateRec.formData.owner;
     $scope.formData.engineer = updateRec.formData.engineer;
-    $scope.engineerSelected = updateRec.formData.engineer;
+    // $scope.engineerSelected = updateRec.formData.engineer;
     $scope.formData.levelOfCare = updateRec.formData.levelOfCare;
     $scope.formData.status = "DEVEL";
     $scope.formData.statusDate = new Date();
@@ -368,6 +381,20 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
 
     // got the new data, now clear the service for next time.
     recService.setRec(null);
+    // convert the retreived record owner
+    forgGroupService.promise.then(function(){
+      let thisOwner = [$scope.formData.owner];
+      let forgObjs = forgGroupService.groupUidsToObjects(thisOwner)[0];
+      $scope.ownerSelected.item = forgObjs;
+      console.log("ownerSelected.item now: " + JSON.stringify(forgObjs, null, 2));
+    })
+    // convert the retreived record engineer
+    forgUserService.promise.then(function(){
+      let thisEngineer = [$scope.formData.engineer];
+      let forgObjs = forgUserService.userUidsToObjects(thisEngineer)[0];
+      $scope.engineerSelected.item = forgObjs;
+      console.log("engineerSelected.item now: " + JSON.stringify(forgObjs, null, 2));
+    })
   };
 }
 
@@ -440,6 +467,10 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
 
   $scope.processForm = function () {
     if ($scope.inputForm.$valid) {
+    // Prep any selected owner
+    $scope.formData.owner = $scope.ownerSelected.item.uid;
+    // Prep any selected engineer
+    $scope.formData.engineer = $scope.engineerSelected.item.uid;
       delete $scope.formData.__v;
       let url = $window.location.origin;
       url = url + "/api/v1/swdb/" + $scope.formData._id;
@@ -502,6 +533,10 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     $window.location.href = $scope.props.webUrl + 'login';
   }
 
+  //initialize selected owner and engineer
+  $scope.ownerSelected = {item: {}};
+  $scope.engineerSelected = {item: {}};
+
   $scope.swdbParams = {
     formShowErr: false,
     formShowStatus: false,
@@ -523,6 +558,14 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     $scope.formData.statusDate = new Date($scope.formData.statusDate);
     // set selctor to current swName value
     $scope.selectedItem = { name: $scope.formData.swName };
+    // convert the retreived record owner
+    forgGroupService.promise.then(function(){
+      $scope.ownerSelected.item =  forgGroupService.groupUidsToObjects([$scope.formData.owner])[0];
+    })
+    // convert the retreived record engineer
+    forgUserService.promise.then(function(){
+      $scope.engineerSelected.item =  forgUserService.userUidsToObjects([$scope.formData.engineer])[0];
+    })
   });
 
 }
