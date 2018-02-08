@@ -64,6 +64,7 @@ describe("app", function() {
     });
   });
   it("Returns all sw records", function(done) {
+    this.timeout(5000);
     supertest
     .get("/api/v1/swdb/")
     .expect(200)

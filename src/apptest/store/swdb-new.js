@@ -99,7 +99,7 @@ test.describe("Software update screen tests", function () {
   });
 
   test.it("Add new record", function () {
-    this.timeout(25000);
+    this.timeout(35000);
     chromeDriver.wait(until.elementLocated(By.id('swName')), 3000);
     var input = chromeDriver.findElement(By.id('swName')).sendKeys("Test Record3");
 
@@ -133,25 +133,20 @@ test.describe("Software update screen tests", function () {
     input.click();
     input.sendKeys("http://www.google.com");
 
-    // set owner
+    // set owner 
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
     input = chromeDriver.findElement(By.id("owner"));
     input.click();
+    //*[@id="owner"]/input[1]
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="owner"]/input[1]')));
+    input = chromeDriver.findElement(By.xpath('//*[@id="owner"]/input[1]'));
     input.sendKeys("controls");
-    //*[@id="typeahead-11-1083-option-5"]/a
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-") and "option-5"=substring(@id, string-length(@id)-string-length("option-5")+1)]/a')));
-    input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-5"=substring(@id, string-length(@id)-string-length("option-5")+1)]/a'));
+    //*[@id="ui-select-choices-row-0-2"]/span
+    // "IFS:LAB.NSCL.OPS.CONTROLS"
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-0-2"]')));
+    input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-2"]'));
     input.click();
 
-    // set engineer
-    chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
-    input = chromeDriver.findElement(By.id("engineer"));
-    input.click();
-    input.sendKeys("ellis");
-    // chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="typeahead-11-*-option-0"]/a')));
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-") and "option-0"=substring(@id, string-length(@id)-string-length("option-0")+1)]/a')));
-    input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-0"=substring(@id, string-length(@id)-string-length("option-0")+1)]/a'));
-    input.click();
 
     // set level of care
     chromeDriver.wait(until.elementLocated(By.id("levelOfCare")), 3000);
@@ -256,6 +251,19 @@ test.describe("Software update screen tests", function () {
     // input.clear();
     // input.click();
     // input.sendKeys("2017-10-01T07:00:00.000Z");
+    // set engineer
+    chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
+    input = chromeDriver.findElement(By.id("engineer"));
+    input.click();
+    //*[@id="engineer"]/input[1]
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="engineer"]/input[1]')));
+    input = chromeDriver.findElement(By.xpath('//*[@id="engineer"]/input[1]'));
+    input.sendKeys("ellisr");
+    //*[@id="ui-select-choices-row-1-0"]/span/div
+    //*[@id="ui-select-choices-row-1-0"]/span
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-1-0"]')));
+    input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-1-0"]'));
+    input.click();
 
 
     chromeDriver.findElement(By.id("submitBtn")).click();
@@ -264,6 +272,7 @@ test.describe("Software update screen tests", function () {
   });
 
   test.it("should show the details record", function () {
+    this.timeout(5000);
     chromeDriver.wait(until.titleIs("SWDB - Details"), 5000);
   });
 
@@ -319,7 +328,7 @@ test.describe("Software update screen tests", function () {
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
     chromeDriver.findElement(By.id("owner")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("IFS:LAB.NSCL.OPS.CONTROLS");
+        expect(text).to.equal("IFS:LAB.FRIB.ASD.CONTROLS");
       });
   });
 
