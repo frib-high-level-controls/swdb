@@ -1,6 +1,6 @@
 {
   "name": "webapp",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "private": true,
   "scripts": {
     "start": "./bin/app",
@@ -15,6 +15,7 @@
     "express": "^4.13.4",
     "express-session": "^1.14.0",
     "http-status-codes": "^1.1.6",
+    "mongoose": "^4.11.1",
     "morgan": "^1.7.0",
     "passport": "^0.4.0",
     "passport-cas": "^0.1.1",
@@ -33,6 +34,7 @@
     "@types/express-session": "^1.15.0",
     "@types/http-status-codes": "^1.0.29",
     "@types/mocha": "^2.2.41",
+    "@types/mongoose": "^4.7.18",
     "@types/morgan": "^1.7.32",
     "@types/passport": "^0.4.2",
     "@types/passport-http": "^0.3.2",
