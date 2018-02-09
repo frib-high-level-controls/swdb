@@ -16,6 +16,7 @@ import handlers = require('./shared/handlers');
 import logging = require('./shared/logging');
 import status = require('./shared/status');
 import tasks = require('./shared/tasks');
+import auth = require('./shared/auth');
 
 // package metadata
 interface Package {
@@ -266,6 +267,19 @@ async function doStart(): Promise<express.Application> {
 
   app.use(express.static(path.resolve(__dirname, '..', 'public')));
   app.use(express.static(path.resolve(__dirname, '..', 'bower_components')));
+
+  app.get('/login', auth.getProvider().authenticate(), (req, res) => {
+    if (req.query.bounce) {
+      res.redirect(req.query.bounce);
+      return;
+    }
+    res.redirect(res.locals.basePath || '/');
+  });
+
+  app.get('/logout', (req, res) => {
+    auth.getProvider().logout(req);
+    res.redirect(res.locals.basePath || '/');
+  });
 
   app.use('/status', status.router);
 
