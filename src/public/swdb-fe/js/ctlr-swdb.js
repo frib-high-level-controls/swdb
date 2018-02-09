@@ -180,7 +180,13 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
   // get history
   url = "/api/v1/swdb/hist/" + $routeParams.itemId;
   $http.get(url).then(function (data) {
-    $scope.isHistCollapsed = true;
+    $scope.rawHistory = data.data;
+    $scope.rawHistory.map = function(elem, idx, arr) {
+      elem.isCollapsed = true;
+    }
+    console.log("Got history: " + JSON.stringify(data.data, null, 2));
+    //console.log('rawHistory now: ' + $scope.rawHistory);
+    $scope.isHistCollapsed = false;
     $scope.history = $sce.trustAsHtml(mkHistTable(data.data));
     // console.log("Got history: " + JSON.stringify(data.data, null, 2));
     // console.log("Got table: " + JSON.stringify($scope.history, null, 2));
@@ -468,9 +474,13 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
   $scope.processForm = function () {
     if ($scope.inputForm.$valid) {
     // Prep any selected owner
-    $scope.formData.owner = $scope.ownerSelected.item.uid;
+    if ($scope.formData.owner) {
+      $scope.formData.owner = $scope.ownerSelected.item.uid;
+    }
     // Prep any selected engineer
-    $scope.formData.engineer = $scope.engineerSelected.item.uid;
+    if ($scope.formData.engineer) {
+      $scope.formData.engineer = $scope.engineerSelected.item.uid;
+    }
       delete $scope.formData.__v;
       let url = $window.location.origin;
       url = url + "/api/v1/swdb/" + $scope.formData._id;

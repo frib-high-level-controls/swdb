@@ -250,18 +250,29 @@
     <a id="bumpVerBtn" class="btn btn-default" ng-click="bumpVerBtnClk()"><span class="glyphicon glyphicon-plus-sign"></span>      New revision </a>
 
     <!-- <button type="button" class="btn btn-default" ng-click="isHistCollapsed = !isHistCollapsed">Show history</button> -->
-    <a id="histBtn" class="btn btn-default" ng-click="isHistCollapsed = !isHistCollapsed"><span class="glyphicon glyphicon-list-alt"></span> Show history</a>
+    <!-- <a id="histBtn" class="btn btn-default" ng-click="isHistCollapsed = !isHistCollapsed"><span class="glyphicon glyphicon-list-alt"></span> Show history</a> -->
     <hr>
-    <div uib-collapse="isHistCollapsed">
+    <!-- <div uib-collapse="isHistCollapsed"> -->
       <div class="well well-lg">
         <label class="swdbSection">
            History
         </label>
-          <!-- <div ng-bind-html="history" style="height: 500px; overflow: auto;"></div> -->
-          <div ng-bind-html="history"></div>
+        <div ng-repeat="elem in rawHistory track by $index">
+          <div class="panel panel-default" ng-click="rawHistory[$index].isCollapsed = !rawHistory[$index].isCollapsed">
+            <label class="control-label swdbLinkLike">{{elem.at}} by {{elem.by}}</label>
+            <div id="hist{{$index}}" uib-collapse="rawHistory[$index].isCollapsed" ng-init="rawHistory[$index].isCollapsed=true">
+              <ol class="list-group">
+    
+                <li class="list-group-item" ng-repeat="pathElem in elem.paths track by $index">
+                  <strong>{{pathElem.name}}</strong>
+                  <div class="text-danger bg-danger pull-right">{{pathElem.value}}</div>
+                </li>
+    
+              </ol>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-
   </form>
 </div>
 </section>

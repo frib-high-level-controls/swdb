@@ -66,6 +66,12 @@ swdb-bottom-div {
   background-color: lightgray;
 }
 
+.swdbLinkLike {
+  cursor:pointer;
+  color:blue;
+  text-decoration:underline;
+}
+
 /* table.dataTable thead .sorting:after,
 table.dataTable thead .sorting_asc:after,
 table.dataTable thead .sorting_desc:after,
