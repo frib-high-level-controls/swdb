@@ -368,7 +368,7 @@ test.describe("User flow tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
     chromeDriver.findElement(By.id("owner")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("IFS:LAB.FRIB.ASD.CONTROLS");
+        expect(text).to.equal("IFS:LAB.FRIB.ASD.CONTROLS.LLC");
       });
   });
 
@@ -476,7 +476,7 @@ test.it("should show search page with username on logout button", function() {
     chromeDriver.wait(until.titleIs("SWDB - New Installation"), 5000);
   });
 
-  test.it("Add new record", function() {
+  test.it("Add new installation record", function() {
     this.timeout(12000);
     chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
     var input = chromeDriver.findElement(By.id("host"));
@@ -509,7 +509,7 @@ test.it("should show search page with username on logout button", function() {
     input0b.sendKeys("controls\n");
 
     chromeDriver.wait(until.elementTextContains(input0,
-      "ADB:AREA7B8CA34E"), 5000);
+      "ADB:AREA.FRIB.CTRLITIDF"), 5000);
     // // set area
     // chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
     // input = chromeDriver.findElement(By.id("add.area"));
@@ -614,7 +614,7 @@ test.it("should show search page with username on logout button", function() {
     chromeDriver.wait(until.elementLocated(By.id("area")), 3000);
     chromeDriver.findElement(By.id("area")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("ADB:AREA7B8CA34E");
+        expect(text).to.equal("ADB:AREA.FRIB.CTRLITIDF");
       });
   });
 

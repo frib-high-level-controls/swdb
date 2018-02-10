@@ -212,11 +212,15 @@ app.service('forgAreaService', function ($http) {
     areaUidsToObjects: function(areaUids) {
       // console.log("areas: " + JSON.stringify(areaUids));
       // console.log("areaData: " + JSON.stringify(areaData));
-      forgObj = areaUids.map(function(item, idx, array){
-        return areaData.data.find(function(elem) {
-          return elem.uid === item;
+      if (areaUids) {
+        forgObj = areaUids.map(function (item, idx, array) {
+          return areaData.data.find(function (elem) {
+            return elem.uid === item;
+          })
         })
-      }) 
+      } else {
+        forgObj = null;
+      }
       return forgObj;
     }
   };

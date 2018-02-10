@@ -123,7 +123,7 @@ test.describe("Installations update screen tests", function() {
     input0b.sendKeys("controls\n");
 
     chromeDriver.wait(until.elementTextContains(input0,
-      "ADB:AREA7B8CA34E"), 5000);
+      "ADB:AREA.FRIB.CTRLITIDF"), 5000);
 
     chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
     input = chromeDriver.findElement(By.id("add.area"));
@@ -137,7 +137,7 @@ test.describe("Installations update screen tests", function() {
     input1b.sendKeys("operator\n");
 
     chromeDriver.wait(until.elementTextContains(input1,
-      "ADB:AREAF00CF85F"), 5000);
+      "ADB:AREA.NSCL.OPASSY"), 5000);
 
     chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
     input = chromeDriver.findElement(By.id("add.area"));
@@ -148,10 +148,10 @@ test.describe("Installations update screen tests", function() {
 
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.2"]/input[1]')), 3000);
     input2b = chromeDriver.findElement(By.xpath('//*[@id="area.2"]/input[1]'));
-    input2b.sendKeys("nscl control room\n");
+    input2b.sendKeys("control room\n");
 
     chromeDriver.wait(until.elementTextContains(input2,
-      "ADB:AREA8651102A"), 5000);
+      "ADB:AREA.NSCL.CONTROLRM"), 5000);
 
     chromeDriver.wait(until.elementLocated(By.id("rm.area.0")), 3000);
     input = chromeDriver.findElement(By.id("rm.area.0"));
@@ -246,7 +246,7 @@ test.describe("Installations update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("area")), 3000);
     chromeDriver.findElement(By.id("area")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("ADB:AREAF00CF85F,ADB:AREA8651102A");
+        expect(text).to.equal("ADB:AREA.NSCL.OPASSY,ADB:AREA.NSCL.CONTROLRM");
       });
   });
 

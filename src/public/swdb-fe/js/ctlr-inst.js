@@ -162,6 +162,13 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configServ
     $scope.formData = data;
     $scope.whichItem = $routeParams.itemId;
   });
+  // get history
+  url = "/api/v1/swdb/hist/" + $routeParams.itemId;
+  $http.get(url).then(function (data) {
+    $scope.rawHistory = data.data;
+    console.log("Got history: " + JSON.stringify(data.data, null, 2));
+    //console.log('rawHistory now: ' + $scope.rawHistory);
+  });
 }
 
 
@@ -431,10 +438,14 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
 
   $scope.processForm = function () {
     // Prep any selected areas
-    flattenedAreas = $scope.areasSelected.map(function(item, idx, array) {
-      return item.uid;
-    });
-    $scope.formData.area = flattenedAreas;
+    if ($scope.areasSelected) {
+      flattenedAreas = $scope.areasSelected.map(function (item, idx, array) {
+        if (item) {
+          return item.uid;
+        }
+      });
+      $scope.formData.area = flattenedAreas;
+    }
 
     console.log('Got formData: ' + JSON.stringify($scope.formData, null, 2));
     console.log('Got selectedAreas: ' + JSON.stringify($scope.selectedAreas, null, 2));
@@ -476,8 +487,9 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
 
   $scope.newItem = function (event) {
     var parts = event.currentTarget.id.split('.');
+    console.log("got add: " + parts);
     if (parts[1] === 'area') {
-      $scope.formData.area.push("");
+      $scope.areasSelected.push("");
     } else if (parts[1] === 'slots') {
       $scope.formData.slots.push("");
     } else if (parts[1] === 'vvResultsLoc') {
@@ -539,6 +551,7 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
   // $http.get($scope.props.instApiUrl+$routeParams.itemId).success(function(data) {
   $http.get(url).success(function (data) {
     $scope.formData = data;
+
     $scope.whichItem = $routeParams.itemId;
     $scope.swSelected = data.software;
     // convert the retreived record areas
