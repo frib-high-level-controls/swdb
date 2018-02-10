@@ -135,26 +135,26 @@
     <a id="updateBtn" class="btn btn-info" href="#/inst/update/{{formData._id}}"><span class="glyphicon glyphicon-edit"></span>      Update this document </a>
 
     <hr>
-    <div class="well well-lg">
-      <label class="swdbSection">
-         History
-      </label>
-      <div ng-repeat="elem in rawHistory track by $index">
-        <div class="panel panel-default" ng-click="rawHistory[$index].isCollapsed = !rawHistory[$index].isCollapsed">
-          <label class="control-label swdbLinkLike">{{elem.at}} by {{elem.by}}</label>
-          <div id="hist{{$index}}" uib-collapse="rawHistory[$index].isCollapsed" ng-init="rawHistory[$index].isCollapsed=true">
-            <ol class="list-group">
-  
-              <li class="list-group-item" ng-repeat="pathElem in elem.paths track by $index">
-                <strong>{{pathElem.name}}</strong>
-                <div class="text-danger bg-danger pull-right">{{pathElem.value}}</div>
-              </li>
+      <div class="well well-lg">
+        <label class="swdbSection">
+           History
+        </label>
+        <div ng-repeat="elem in rawHistory track by $index">
+          <div id="hist.{{$index}}" class="panel panel-default" ng-click="rawHistory[$index].isCollapsed = !rawHistory[$index].isCollapsed">
+            <label class="control-label swdbLinkLike">{{elem.at}} by {{elem.by}}</label>
+            <div id="histPath.{{$index}}" uib-collapse="rawHistory[$index].isCollapsed" ng-init="rawHistory[$index].isCollapsed=true">
+              <ol class="list-group">
     
-            </ol>
+                <li class="list-group-item" ng-repeat="pathElem in elem.paths track by $index" ng-init="$parentIndex = $index">
+                  <strong id="histPathName.{{$parentIndex}}.{{$index}}">{{pathElem.name}}</strong>
+                  <div id="histPathValue.{{$parentIndex}}.{{$index}}" class="text-danger bg-danger pull-right">{{pathElem.value}}</div>
+                </li>
+    
+              </ol>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
   </form>
 </div>

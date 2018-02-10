@@ -285,4 +285,20 @@ test.describe("Installations update screen tests", function() {
         expect(text).to.equal("");
       });
   });
+
+  test.it("should show changes in the history table of details", function () {
+    this.timeout(20000);
+    //*[@id="histTable"]/tbody/tr[2]/td[2] shold be "New Test Description2"
+    chromeDriver.wait(until.elementLocated(By.id("hist.0")), 3000);
+    input = chromeDriver.findElement(By.id("hist.0"));
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id('histPathName.0.0')), 3000);
+    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
+      By.id('histPathName.0.0')),
+       "host"),3000);
+    chromeDriver.wait(until.elementLocated(By.id('histPathValue.0.0')), 3000);
+    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
+      By.id('histPathValue.0.0')),
+       "testHost2"),3000);
+  });
 });
