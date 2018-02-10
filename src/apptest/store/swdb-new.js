@@ -246,11 +246,6 @@ test.describe("Software update screen tests", function () {
     input = chromeDriver.findElement(By.xpath('//*[@id="recertDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
     input.click();
 
-    // chromeDriver.wait(until.elementLocated(By.id("statusDate")), 3000);
-    // input = chromeDriver.findElement(By.id("statusDate"));
-    // input.clear();
-    // input.click();
-    // input.sendKeys("2017-10-01T07:00:00.000Z");
     // set engineer
     chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
     input = chromeDriver.findElement(By.id("engineer"));
@@ -328,7 +323,7 @@ test.describe("Software update screen tests", function () {
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
     chromeDriver.findElement(By.id("owner")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("IFS:LAB.FRIB.ASD.CONTROLS");
+        expect(text).to.equal("IFS:LAB.FRIB.ASD.CONTROLS.LLC");
       });
   });
 

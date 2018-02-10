@@ -141,14 +141,14 @@ describe("app", function() {
       } else {
         try {
           sub = JSON.parse(res.text).filter((element, idx, array) => {
-            return element.uid === "ADB:AREAB475E952";
+            return element.uid === "ADB:AREA.FRIB.CTRLITIDF";
           });
           if (sub.length === 1) {
             done();
           }
           else {
             debug('Got filtered array ' + JSON.stringify(sub));
-            done(new Error('Cannot find expected user "ADB:AREAB475E952"'));
+            done(new Error('Cannot find expected user "ADB:AREA.FRIB.CTRLITIDF"'));
           }
         }
         catch (err) { 

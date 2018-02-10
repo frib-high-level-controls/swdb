@@ -367,7 +367,7 @@ test.describe("Software update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
     chromeDriver.findElement(By.id("owner")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("IFS:LAB.FRIB.ASD.CONTROLS");
+        expect(text).to.equal("IFS:LAB.FRIB.ASD.CONTROLS.LLC");
       });
   });
 
@@ -514,7 +514,7 @@ test.describe("Software update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
       By.xpath('//*[@id="owner"]/div[1]/span/span[2]/span')),
-      "IFS:LAB.FRIB.ASD.CONTROLS"), 5000);
+      "IFS:LAB.FRIB.ASD.CONTROLS.LLC"), 5000);
   });
 
   test.it("should show the correct engineer in bump version new", function () {
@@ -670,7 +670,7 @@ test.describe("Software update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
     chromeDriver.findElement(By.id("owner")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("IFS:LAB.FRIB.ASD.CONTROLS");
+        expect(text).to.equal("IFS:LAB.FRIB.ASD.CONTROLS.LLC");
       });
   });
 
@@ -779,22 +779,22 @@ test.describe("Software update screen tests", function() {
   test.it("should show the history table in details", function () {
     this.timeout(10000);
     chromeDriver.wait(until.titleIs("SWDB - Details"), 5000);
-    chromeDriver.wait(until.elementLocated(By.id("histBtn")), 3000);
-    chromeDriver.findElement(By.id("histBtn")).click();
-    chromeDriver.wait(until.elementLocated(By.id("histTable")), 3000);
   });
 
   test.it("should show both desc changes in the history table of details", function () {
+    this.timeout(20000);
     //*[@id="histTable"]/tbody/tr[2]/td[2] shold be "New Test Description2"
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="histTable"]/tbody/tr[2]/td[2]')), 3000);
+    chromeDriver.wait(until.elementLocated(By.id("hist.0")), 3000);
+    input = chromeDriver.findElement(By.id("hist.0"));
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id('histPathName.0.0')), 3000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
-      By.xpath('//*[@id="histTable"]/tbody/tr[2]/td[2]')),
-       "New Test Description2"),5000);
-    //*[@id="histTable"]/tbody/tr[7]/td[2]
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="histTable"]/tbody/tr[2]/td[2]')), 3000);
+      By.id('histPathName.0.0')),
+       "desc"),3000);
+    chromeDriver.wait(until.elementLocated(By.id('histPathValue.0.0')), 3000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
-      By.xpath('//*[@id="histTable"]/tbody/tr[7]/td[2]')),
-       "New Test Description"),5000);
+      By.id('histPathValue.0.0')),
+       "New Test Description2"),3000);
   });
 
 });
