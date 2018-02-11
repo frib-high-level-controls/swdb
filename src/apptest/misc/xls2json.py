@@ -34,30 +34,29 @@ class Lib:
   def getStatus(item, iss, columns):
     val = ""
     if (re.match("^Development$", item, flags=re.IGNORECASE) or
-        re.match("^DEVEL$", item, flags=re.IGNORECASE)):
-      val = "DEVEL"
+      re.match("^DEVEL$", item, flags=re.IGNORECASE)):
+        val = "DEVEL"
     elif (re.match("^Ready for installation$", item, flags=re.IGNORECASE) or
-          re.match("^Ready for install$", item, flags=re.IGNORECASE) or
-          re.match("^RDY_INSTALL$", item, flags=re.IGNORECASE)):
-      val = "RDY_INSTALL"
+      re.match("^Ready for install$", item, flags=re.IGNORECASE) or
+      re.match("^RDY_INSTALL$", item, flags=re.IGNORECASE)):
+        val = "RDY_INSTALL"
     elif (re.match("^Ready for integration test$", item, flags=re.IGNORECASE) or
-          re.match("^Ready for verification with beam$", item, flags=re.IGNORECASE) or
-          re.match("^RDY_INT_TEST$", item, flags=re.IGNORECASE)):
-      val = "RDY_INT_TEST"
+      re.match("^Ready for verification with beam$", item, flags=re.IGNORECASE) or
+      re.match("^RDY_INT_TEST$", item, flags=re.IGNORECASE)):
+        val = "RDY_INT_TEST"
     elif (re.match("^Ready for beam$", item, flags=re.IGNORECASE) or
-          re.match("^RDY_BEAM$", item, flags=re.IGNORECASE)):
-      val = "RDY_BEAM"
-    elif re.match("^Retired$", item, flags=re.IGNORECASE):
+      re.match("^RDY_BEAM$", item, flags=re.IGNORECASE)):
+        val = "RDY_BEAM"
+    elif (re.match("^Retired$", item, flags=re.IGNORECASE)):
       val = "RETIRED"
     else:
       line = ''.join(str(v)+' ' for v in columns)
-      issues.append({"msg": "WARNING: unknown sw status listed for this record: "
-                            + line, "value": item})
+      issues.append({"msg": "WARNING: unknown sw status listed for this record: "+line,
+        "value": item})
     return val
 
   @staticmethod
   def getInstStatus(item, iss, columns):
-    print "instStatus is " + str(item)
     val = ""
     if (re.match("^Development$", item, flags=re.IGNORECASE) or
       re.match("^DEVEL$", item, flags=re.IGNORECASE)):
@@ -133,7 +132,7 @@ class Lib:
 
 
 # Open the workbook and select the worksheet
-wb = xlrd.open_workbook('/home/deployer/xlate/Software_Configuration_DRR01-03.xlsx')
+wb = xlrd.open_workbook('/home/deployer/xlate/newSoftware_Configuration_DRR01-03.xlsx')
 sheet = wb.sheet_by_index(2)
 array = []
 instArray = []
@@ -151,23 +150,24 @@ for sheet in wb.sheets():
     row = OrderedDict()
     cols = sheet.row_values(nrow)
     if cols[0] != "":
-      keyStr = cols[0]+"-"+str(cols[4])
+      keyStr = cols[2]+"-"+str(cols[5])
       if not swKeyList.get(keyStr):
-        print "adding new swkey " +keyStr
         # store the _id for this key for future lookups
         swKeyList[keyStr] = format(lineId, "024x")
-        row["swName"] = cols[0]
+        row["swName"] = cols[2]
         row["desc"] = cols[1]
         row["status"] = "RDY_INSTALL"
+        # row["status"] = Lib.getStatus(cols[6], issues)
+        # row["statusDate"] = time.strftime("%m/%d/%Y")
         #Note sw status date is set below from the installation status date
-        row["version"] = str(cols[4])
-        row["area"] = Lib.getArea(cols[5], issues, cols)
-        row["owner"] = cols[6]
-        row["engineer"] = cols[7]
-        row["levelOfCare"] = Lib.getLevelOfCare(cols[8], issues, cols)
-        row["platforms"] = cols[9]
-        row["versionControl"] = Lib.getRcs(cols[10], issues, cols)
-        row["versionControlLoc"] = cols[11]
+        row["version"] = str(cols[5])
+        row["area"] = Lib.getArea(cols[6], issues, cols)
+        row["owner"] = cols[7]
+        row["engineer"] = cols[8]
+        row["levelOfCare"] = Lib.getLevelOfCare(cols[9], issues, cols)
+        row["platforms"] = cols[10]
+        row["versionControl"] = Lib.getRcs(cols[11], issues, cols)
+        row["versionControlLoc"] = cols[12]
         row["_id"] = format(lineId, "024x")
 
         print "\n" + str(nrow)+":Adding sw row "+json.dumps(row)
@@ -175,17 +175,16 @@ for sheet in wb.sheets():
       else:
         print "Found existing swName:" + cols[2] + " version:" + str(cols[5]) + " skipping add sw."
 
-      for host in cols[2].split(','):
+      for host in cols[3].split(','):
         instKeyStr = host+"-"+cols[0]+"-"+swKeyList[keyStr]
         # check that this installation is not already present
         if not instKeyList.get(instKeyStr):
-          print "adding new instkey " + instKeyStr
           instKeyList[instKeyStr] = True
           instRow = OrderedDict()
           instRow["host"] = host
           instRow["name"] = cols[0]
-          instRow["area"] = Lib.getArea(cols[5], issues, cols)
-          instRow["status"] = Lib.getInstStatus(cols[3], issues, cols)
+          instRow["area"] = Lib.getArea(cols[6], issues, cols)
+          instRow["status"] = Lib.getInstStatus(cols[4],issues, cols)
 
           # instRow["statusDate"] = time.strftime("%m/%d/%Y", cols[15])
           vvDate = sheet.cell_value(nrow, 15)
@@ -199,7 +198,7 @@ for sheet in wb.sheets():
             # sw status date gets set from installation status date
             row["statusDate"] = vvDatetime.strftime("%m/%d/%Y")
 
-          instRow["vvResultsLoc"] = cols[13]
+          instRow["vvResultsLoc"] = cols[14]
           instRow["software"] = swKeyList[keyStr]
           instRow["drrs"] = sheet.name
 
@@ -217,7 +216,7 @@ with open('/home/deployer/xlate/swOut.json', 'w') as jfile:
 with open('/home/deployer/xlate/instOut.json', 'w') as jfile:
   jfile.write(inst_json_data)
 
-if len(issues) > 0:
+if (len(issues) > 0):
   print 'Issues:'+''.join(Fore.RED)
   pp.pprint(issues)
   print ''.join(Style.RESET_ALL)
