@@ -232,7 +232,7 @@ export function basePathHandler(): RequestHandler {
   return (req, res, next) => {
     let url = req.url.split('?');
 
-    let redirect = (req.method === 'GET') && url[0].endsWith('/');
+    let redirect = (req.method === 'GET') && (url[0] !== '/') && url[0].endsWith('/');
     if (redirect) {
       url[0] = url[0].substr(0, url[0].length - 1);
     }
