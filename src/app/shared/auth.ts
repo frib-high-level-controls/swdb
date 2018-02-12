@@ -9,6 +9,8 @@ import * as URI from 'uri-js';
 import * as dbg from 'debug';
 import * as express from 'express';
 
+import * as log from './logging';
+
 type Request = express.Request;
 type Response = express.Response;
 type NextFunction = express.NextFunction;
@@ -23,6 +25,8 @@ export interface IUser {
  * See: http://passportjs.org
  */
 export interface IProvider {
+
+  initialize(): RequestHandler;
 
   authenticate(options?: any): RequestHandler;
 
@@ -45,6 +49,8 @@ const debug = dbg('webapp:auth');
 
 
 export abstract class AbstractProvider implements IProvider {
+
+  public abstract initialize(): RequestHandler;
 
   public abstract authenticate(options?: any): RequestHandler;
 
@@ -153,6 +159,12 @@ export abstract class AbstractProvider implements IProvider {
 
 
 class NullProvider extends AbstractProvider {
+
+  public initialize(): RequestHandler {
+    return (req, res, next) => {
+      log.warn('Initialize NullAuthProvider');
+    };
+  };
 
   public authenticate(options: object): RequestHandler {
     return (req: Request, res: Response, next: NextFunction) => {
