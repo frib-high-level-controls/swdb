@@ -230,23 +230,19 @@ export function requestErrorHandler(): ErrorRequestHandler {
  */
 export function basePathHandler(): RequestHandler {
   return (req, res, next) => {
+    let basePaths: string[] = [ '.' ];
+
     let url = req.url.split('?');
-
-    let redirect = (req.method === 'GET') && (url[0] !== '/') && url[0].endsWith('/');
-    if (redirect) {
-      url[0] = url[0].substr(0, url[0].length - 1);
-    }
-
-    let basePaths: string[] = [];
-
     let segments = url[0].split('/');
-    for (let idx = 0; idx < segments.length - 1; idx += 1) {
+    for (let idx = 0; idx < (segments.length - 2); idx += 1) {
       basePaths.push('..');
     }
 
     let basePath = basePaths.join('/');
 
-    if (redirect) {
+    // Redirect to remove trailing slash (GET requests only)
+    if ((req.method === 'GET') && (url[0] !== '/') && url[0].endsWith('/')) {
+      url[0] = url[0].substr(0, url[0].length - 1);
       res.redirect(basePath + url.join('?'));
       return;
     }
