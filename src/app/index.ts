@@ -218,6 +218,9 @@ async function doStart(): Promise<express.Application> {
   app.use(express.static(path.resolve(__dirname, '..', 'public')));
   app.use(express.static(path.resolve(__dirname, '..', 'bower_components')));
 
+  // Authentication handlers
+  app.use(auth.getProvider().initialize());
+
   app.get('/login', auth.getProvider().authenticate(), (req, res) => {
     if (req.query.bounce) {
       res.redirect(req.query.bounce);
