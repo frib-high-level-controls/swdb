@@ -19,7 +19,6 @@ export type VerifyCallback = (err: any, user?: auth.IUser | false) => void;
 
 export interface BasicProviderOptions {
   realm?: string;
-  passReqToCallback?: boolean;
 };
 
 export interface CasProviderOptions {
