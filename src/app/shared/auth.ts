@@ -163,6 +163,7 @@ class NullProvider extends AbstractProvider {
   public initialize(): RequestHandler {
     return (req, res, next) => {
       log.warn('Initialize NullAuthProvider');
+      next();
     };
   };
 
