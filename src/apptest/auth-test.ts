@@ -8,8 +8,6 @@ import * as auth from '../app/shared/auth';
 import * as express from 'express';
 
 type Request = express.Request;
-// type Response = express.Response;
-// type NextFunction = express.NextFunction;
 type RequestHandler = express.RequestHandler;
 
 /**
@@ -19,22 +17,34 @@ type RequestHandler = express.RequestHandler;
 class TestProvider extends auth.AbstractProvider  {
   private username: string;
   private roles: string[];
+
   constructor(name: string, roles: string[]) {
     super();
     this.username = name;
     this.roles = roles;
   }
 
-  public getUser(req: Request): auth.IUser {
-    let IUser = {username: this.username, roles: this.roles};
-    return IUser;
+  public initialize(): RequestHandler {
+    return (req, res, next) => {
+      next();
+    };
   };
-  public getRoles(req: Request): string[] | undefined {
-    let roles = this.roles;
-    return roles;
-  };
+
   public authenticate(options?: any): RequestHandler {
-    return this.authenticate(options);
+    return (req, res, next) => {
+      next();
+    };
+  };
+
+  public getUser(req: Request): auth.IUser {
+    return {
+      username: this.username,
+      roles: this.roles
+    };
+  };
+
+  public getRoles(req: Request): string[] | undefined {
+    return this.roles;
   };
 
   public logout(req: Request): void {
@@ -42,8 +52,7 @@ class TestProvider extends auth.AbstractProvider  {
   };
 
   public getUsername(req: Request): string | undefined {
-    let username = this.username;
-    return username;
+    return this.username;
   };
 }
 
