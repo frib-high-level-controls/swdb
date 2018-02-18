@@ -117,7 +117,7 @@
       <!-- OWNER -->
       <div class="row" ng-class="{ 'has-error' : inputForm.ownerInput.$invalid && !inputForm.ownerInput.$pristine }">
         <div id="owner-group" class="form-group swdbFormRow">
-          <label class="col-sm-2 control-label">Owner</label>
+          <label class="col-sm-2 control-label">Owner*</label>
           <div class="col-sm-8">
             <!-- <input name="owner" id="owner" type="text" ng-model="ownerSelected" placeholder="type to search" uib-typeahead="own.uid as (own.uid + ': ' + own.fullname) for own in forgGroupsList | ownNopromiseFilter:$viewValue | limitTo:8"
               typeahead-on-select='onOwnerSelect($item, $model, $label)' typeahead-loading="ownLoadingLocations" typeahead-no-results="ownNoResults" typeahead-editable="false"
