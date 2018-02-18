@@ -234,7 +234,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
 
   $scope.swSelect = function ($item, $model, $label) {
     $scope.formData.software = $item._id;
-    //console.log("software is now:"+$scope.formData.software);
+    console.log("software is now:"+$scope.formData.software);
   };
 
   $scope.datePicker = (function () {
@@ -263,6 +263,8 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
   $scope.processForm = function () {
     delete $scope.formData.__v;
     $scope.formData.slots = $scope.slotsSelected;
+
+    $scope.formData.software = $scope.swSelected._id;
 
     // Prep any selected areas
     flattenedAreas = $scope.areasSelected.map(function(item, idx, array) {
@@ -345,6 +347,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
 
   $scope.refreshSw = () => {
     $scope.swList = swService.getSwList();
+    console.log("swList is now "+JSON.stringify($scope.swList));
   };
 
   $scope.props = configService.getConfig();
@@ -553,15 +556,24 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     $scope.formData = data;
 
     $scope.whichItem = $routeParams.itemId;
-    $scope.swSelected = data.software;
     // convert the retreived record areas
     forgAreaService.promise.then(function(){
       $scope.areasSelected =  forgAreaService.areaUidsToObjects($scope.formData.area);
     })
     // make a Date object from this string
     $scope.formData.statusDate = new Date($scope.formData.statusDate);
+
+    // convert the retreived record software
+    swService.promise.then(function(){
+      let obj = swService.swIdsToObjects([$scope.formData.software])[0];
+      // $scope.swSelected.item =  swService.swIdsToObjects([$scope.formData.software])[0];
+      console.log('Got initial obj: ' + JSON.stringify(obj, null, 2));
+      $scope.swSelected = {item: obj};
+      console.log('Got initial swSelected: ' + JSON.stringify($scope.swSelected, null, 2));
+    });
     console.log('Got initial formData: ' + JSON.stringify($scope.formData, null, 2));
     console.log('Got initial areasSelected: ' + JSON.stringify($scope.areasSelected, null, 2));
+
   });
 }
 

@@ -61,13 +61,23 @@
         <div id="software-group" class="form-group">
           <label class="col-sm-2 control-label">Software*</label>
           <div class="col-sm-8">
-            <input id="software" type="text" ng-model="swSelected" placeholder="type to search" uib-typeahead="sw._id as (sw.swName+' / '+sw.branch+' / '+sw.version) for sw in swList | swFilt:$viewValue | limitTo:8"
+            <!-- <input id="software" type="text" ng-model="swSelected" placeholder="type to search" uib-typeahead="sw._id as (sw.swName+' / '+sw.branch+' / '+sw.version) for sw in swList | swFilt:$viewValue | limitTo:8" -->
+            <!-- <input id="software" type="text" ng-model="swSelected" placeholder="type to search"
+             uib-typeahead="(sw.swName+' / '+sw.branch+' / '+sw.version) for sw in swList | swFilt:$viewValue | limitTo:8"
               typeahead-on-select='swSelect($item, $model, $label)' typeahead-loading="loadingLocations" typeahead-no-results="noResults"
-              class="form-control">
+              typeahead-editable="false" class="form-control">
             <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
             <div ng-show="noResults">
               <i class="glyphicon glyphicon-remove"></i> No Results Found
-            </div>
+            </div> -->
+            <ui-select id="software" ng-model="swSelected.item" on-select="swSelect($item)" theme="bootstrap">
+              <ui-select-match placeholder="Select or search software in the list...">{{$select.selected.swName}}/{{$select.selected.branch}}/{{$select.selected.version}}</ui-select-match>
+              <ui-select-choices repeat="item in swList | filter: $select.search">
+                  <div ng-bind-html="item.swName | highlight: $select.search"></div>
+                  <small ng-bind-html="'Branch: ' + item.branch +' Version: ' + item.version | highlight: $select.search"></small>
+              </ui-select-choices>
+            </ui-select>
+
           </div>
           <div class="col-sm-2" id="softwareInputSts" ng-messages="inputForm.softwareInput.$error" ng-if="inputForm.softwareInput.$dirty">
             <div ng-message="minlength">Minimum 2 characters</div>

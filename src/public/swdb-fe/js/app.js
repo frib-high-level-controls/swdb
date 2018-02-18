@@ -98,7 +98,25 @@ app.service('swService', function($http) {
         $http({ url: '/api/v1/swdb/', method: "GET" }).success(function (data) {
            swData = data;
            });
-        }
+      },
+      /**
+       * userUidsToObjects
+       * @param swIds array id user ID strings
+       * @return array of sw objects from forg
+       */
+      swIdsToObjects: function(swIds) {
+        console.log("sw ids: " + JSON.stringify(swIds));
+        // console.log("swData: " + JSON.stringify(swData));
+        swObj = swIds.map(function(item, idx, array){
+          let node =  swData.find(function(elem) {
+            return elem._id === item;
+          });
+          console.log("node found: "+JSON.stringify(node, null, 2));
+          return node;
+        }); 
+        console.log("node swObj: "+JSON.stringify(swObj, null, 2));
+        return swObj;
+      }
     };
 });
 

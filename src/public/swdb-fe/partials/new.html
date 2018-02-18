@@ -119,13 +119,6 @@
         <div id="owner-group" class="form-group swdbFormRow">
           <label class="col-sm-2 control-label">Owner*</label>
           <div class="col-sm-8">
-            <!-- <input name="owner" id="owner" type="text" ng-model="ownerSelected" placeholder="type to search" uib-typeahead="own.uid as (own.uid + ': ' + own.fullname) for own in forgGroupsList | ownNopromiseFilter:$viewValue | limitTo:8"
-              typeahead-on-select='onOwnerSelect($item, $model, $label)' typeahead-loading="ownLoadingLocations" typeahead-no-results="ownNoResults" typeahead-editable="false"
-              class="form-control">
-            <i ng-show="ownLoadingLocations" class="glyphicon glyphicon-refresh"></i>
-            <div ng-show="ownNoResults">
-              <i class="glyphicon glyphicon-remove"></i> No Results Found -->
-            <!-- </div> -->
             <ui-select id="owner" ng-model="ownerSelected.item" theme="bootstrap">
               <ui-select-match placeholder="Select or search area in the list...">{{$select.selected.uid}}</ui-select-match>
               <ui-select-choices repeat="item in forgGroupsList | filter: $select.search">
