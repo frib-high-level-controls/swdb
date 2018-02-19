@@ -264,15 +264,14 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     delete $scope.formData.__v;
     $scope.formData.slots = $scope.slotsSelected;
 
-    $scope.formData.software = $scope.swSelected._id;
-
     // Prep any selected areas
     flattenedAreas = $scope.areasSelected.map(function(item, idx, array) {
       return item.uid;
     });
     $scope.formData.area = flattenedAreas;
 
-    // console.log('Got formData: ' + JSON.stringify($scope.formData, null, 2));
+    $scope.formData.software = $scope.swSelected.item._id;
+    console.log('Got formData: ' + JSON.stringify($scope.formData, null, 2));
     // console.log('Got areasSelected: ' + JSON.stringify($scope.areasSelected, null, 2));
 
     if ($scope.inputForm.$valid) {
@@ -386,6 +385,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
   getEnums();
   $scope.slotsSelected = [];
   $scope.areasSelected = [];
+  $scope.swSelected = {item: {}};
   console.log("at init $scope.formData.area is :" + JSON.stringify($scope.formData.area));
 }
 
@@ -449,6 +449,8 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
       });
       $scope.formData.area = flattenedAreas;
     }
+
+    $scope.formData.software = $scope.swSelected.item._id;
 
     console.log('Got formData: ' + JSON.stringify($scope.formData, null, 2));
     console.log('Got selectedAreas: ' + JSON.stringify($scope.selectedAreas, null, 2));

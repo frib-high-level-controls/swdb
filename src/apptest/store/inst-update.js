@@ -96,18 +96,14 @@ test.describe("Installations update screen tests", function() {
     chromeDriver.wait(until.titleIs("SWDB - New Installation"), 5000);
   });
 
-  test.it("Add new record", function() {
-    this.timeout(15000);
+  test.it("Set the host", function() {
     chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
     var input = chromeDriver.findElement(By.id("host"));
     input.sendKeys("testHost1");
+  });
 
-    // set name
-    chromeDriver.wait(until.elementLocated(By.id("name")), 3000);
-    input = chromeDriver.findElement(By.id("name"));
-    input.click();
-    input.sendKeys("Test name");
-
+  test.it("Set the area", function() {
+    this.timeout(10000);
     // set area
     // add controls room, operator area, nscl control room
     // then delete the controls room
@@ -156,7 +152,9 @@ test.describe("Installations update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("rm.area.0")), 3000);
     input = chromeDriver.findElement(By.id("rm.area.0"));
     input.click();
+  });
 
+  test.it("Set the status", function() {
     // set status
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
     input = chromeDriver.findElement(By.id("status"));
@@ -164,7 +162,10 @@ test.describe("Installations update screen tests", function() {
     input.sendKeys("RDY_BEAM");
 
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
+  });
 
+  test.it("Set the status date", function() {
+    this.timeout(10000);
     // set status date
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
@@ -172,19 +173,43 @@ test.describe("Installations update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
     input.click();
+  });
 
+  test.it("Set the software", function() {
+    this.timeout(15000);
     // set software
     chromeDriver.wait(until.elementLocated(By.id("software")), 3000);
     searchInput = chromeDriver.findElement(By.id("software"));
+    searchInput.click();
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="software"]/input[1]')));
+    searchInput = chromeDriver.findElement(By.xpath('//*[@id="software"]/input[1]'));
     searchInput.sendKeys("BEAST");
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[starts-with(@id,"typeahead-") and "option-4"=substring(@id, string-length(@id)-string-length("option-4")+1)]/a')));
-    input = chromeDriver.findElement(By.xpath('//*[starts-with(@id,"typeahead-") and "option-4"=substring(@id, string-length(@id)-string-length("option-2")+1)]/a'));
+    //*[@id="ui-select-choices-row-1-2"]/span
+    //*[@id="ui-select-choices-row-0-2"]/span/div/span
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-0-3"]/span')));
+    input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-3"]/span'));
     input.click();
-    chromeDriver.findElement(By.id("submitBtn")).click();
+    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
+      By.id('software')),
+       "BEAST/b5/0.2"),3000);
+    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
+      By.id('software')),
+       "BEAST/b5/0.2"),3000);
+    // chromeDriver.pause(2000);
+  });
+
+  test.it("Set the name", function() {
+    // set name
+    chromeDriver.wait(until.elementLocated(By.id("name")), 3000);
+    input = chromeDriver.findElement(By.id("name"));
+    input.click();
+    input.sendKeys("Test name");
   });
 
   test.it("should show the details record", function () {
     this.timeout(8000);
+    // chromeDriver.pause(2000);
+    chromeDriver.findElement(By.id("submitBtn")).click();
     chromeDriver.wait(until.titleIs("SWDB - Installation Details"), 5000);
   });
 
@@ -197,6 +222,7 @@ test.describe("Installations update screen tests", function() {
   });
 
   test.it("should go to update record", function () {
+    chromeDriver.wait(until.elementLocated(By.id("updateBtn")), 3000);
     chromeDriver.findElement(By.id("updateBtn")).click();
     chromeDriver.wait(until.titleIs("SWDB - Update Installation"), 5000);
   });
@@ -237,7 +263,7 @@ test.describe("Installations update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("software")), 3000);
     chromeDriver.findElement(By.id("software")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("5947589458a6aa0face9a556");
+        expect(text).to.equal("5947589458a6aa0face9a555");
       });
   });
 

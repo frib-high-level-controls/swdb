@@ -38,6 +38,7 @@ describe("app", function() {
   });
 
   before("login as test user", function(done){
+    this.timeout(5000);
     supertest
     .get("/login")
     .auth(props.test.username, props.test.password)
