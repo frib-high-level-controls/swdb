@@ -5,26 +5,19 @@ import * as util from 'util';
 
 import * as request from 'request';
 
-import * as status from '../shared/status';
+import * as auth from './auth';
+import * as status from './status';
 
 // Types for API v1
-export interface User {
+export interface User extends auth.IUser {
   uid: string;
   fullname: string;
-  lastname: string;
-  firstname: string;
-  // email: string,
-  // office: string,
-  // phone: string,
-  // mobile: string,
   roles: string[];
 };
 
 export interface SearchUser {
   uid: string;
   fullname: string;
-  lastname: string;
-  firstname: string;
   role: string;
 }
 
