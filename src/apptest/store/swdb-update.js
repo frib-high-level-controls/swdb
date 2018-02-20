@@ -367,7 +367,7 @@ test.describe("Software update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
     chromeDriver.findElement(By.id("owner")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("IFS:LAB.FRIB.ASD.CONTROLS.LLC");
+        expect(text).to.equal("IFS:LAB.FRIB.ASD.CONTROLS.EBC");
       });
   });
 
@@ -514,7 +514,7 @@ test.describe("Software update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
       By.xpath('//*[@id="owner"]/div[1]/span/span[2]/span')),
-      "IFS:LAB.FRIB.ASD.CONTROLS.LLC"), 5000);
+      "IFS:LAB.FRIB.ASD.CONTROLS.EBC"), 5000);
   });
 
   test.it("should show the correct engineer in bump version new", function () {
@@ -670,7 +670,7 @@ test.describe("Software update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
     chromeDriver.findElement(By.id("owner")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("IFS:LAB.FRIB.ASD.CONTROLS.LLC");
+        expect(text).to.equal("IFS:LAB.FRIB.ASD.CONTROLS.EBC");
       });
   });
 

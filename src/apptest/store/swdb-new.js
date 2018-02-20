@@ -323,7 +323,7 @@ test.describe("Software update screen tests", function () {
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
     chromeDriver.findElement(By.id("owner")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("IFS:LAB.FRIB.ASD.CONTROLS.LLC");
+        expect(text).to.equal("IFS:LAB.FRIB.ASD.CONTROLS.EBC");
       });
   });
 
