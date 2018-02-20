@@ -217,24 +217,9 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     }
   };
 
-  // // get sw records from swdb api
-  // let url = $window.location.origin;
-  // url = url + "/api/v1/swdb/";
-
-  // $scope.getSw = function(val) {
-  //   return $http.get(url).then(function(response){
-  //   // return $http.get($scope.props.apiUrl).then(function(response){
-  //     //console.log("Got sw list:"+JSON.stringify(response.data));
-  //     return response.data.map(function(item){
-  //       //console.log("looking at:"+JSON.stringify(item));
-  //       return item;
-  //     });
-  //   });
-  // };
-
   $scope.swSelect = function ($item, $model, $label) {
     $scope.formData.software = $item._id;
-    console.log("software is now:"+$scope.formData.software);
+    // console.log("software is now:"+$scope.formData.software);
   };
 
   $scope.datePicker = (function () {
@@ -346,7 +331,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
 
   $scope.refreshSw = () => {
     $scope.swList = swService.getSwList();
-    console.log("swList is now "+JSON.stringify($scope.swList));
+    // console.log("swList is now "+JSON.stringify($scope.swList));
   };
 
   $scope.props = configService.getConfig();
@@ -569,12 +554,12 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     swService.promise.then(function(){
       let obj = swService.swIdsToObjects([$scope.formData.software])[0];
       // $scope.swSelected.item =  swService.swIdsToObjects([$scope.formData.software])[0];
-      console.log('Got initial obj: ' + JSON.stringify(obj, null, 2));
+      // console.log('Got initial obj: ' + JSON.stringify(obj, null, 2));
       $scope.swSelected = {item: obj};
-      console.log('Got initial swSelected: ' + JSON.stringify($scope.swSelected, null, 2));
+      // console.log('Got initial swSelected: ' + JSON.stringify($scope.swSelected, null, 2));
     });
-    console.log('Got initial formData: ' + JSON.stringify($scope.formData, null, 2));
-    console.log('Got initial areasSelected: ' + JSON.stringify($scope.areasSelected, null, 2));
+    // console.log('Got initial formData: ' + JSON.stringify($scope.formData, null, 2));
+    // console.log('Got initial areasSelected: ' + JSON.stringify($scope.areasSelected, null, 2));
 
   });
 }
