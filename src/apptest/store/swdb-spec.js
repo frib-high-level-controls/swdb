@@ -1128,7 +1128,7 @@ describe("app", function() {
       {"type": "PUT","req": {"msg": {"comment": "NEW test comment"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"comment": "NEW test comment"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       // test new record basic only required items
-      {"type":"POST", "req": {"msg": {"swName": "NEW-test-name-1", "status": "RDY_BEAM", "statusDate": "1/1/1997", "owner": "test owner", "levelOfCare": "MEDIUM"}, "url": "/api/v1/swdb/",
+      {"type":"POST", "req": {"msg": {"swName": "NEW-test-name-1", "status": "RDY_TEST", "statusDate": "1/1/1997", "owner": "test owner", "levelOfCare": "MEDIUM"}, "url": "/api/v1/swdb/",
       "err": {"status": 201, "msgHas": ''}}},
       // test new swName is required, min, max
       {"type":"POST", "req": {"msg": {"owner": "test owner"}, "url": "/api/v1/swdb/",
@@ -1145,7 +1145,8 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '{"param":"statusDate","msg":"Status date is required."}'}}},
       // test new status enumerated
       {"type":"POST", "req": {"msg": {"status": "not-enumerated"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_INSTALL,RDY_INT_TEST,RDY_BEAM,RETIRED","value":"not-enumerated"}'}}},
+      "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_TEST,RDY_INSTALL,RETIRED","value":"not-enumerated"}'}}},
+      // "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_INSTALL,RDY_INT_TEST,RDY_BEAM,RETIRED","value":"not-enumerated"}'}}},
       // test new statusDate with non-date
       {"type":"POST", "req": {"msg": {"swName":"testing","owner":"test owner","levelOfCare":"LOW","status":"DEVEL","statusDate": "non-date"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"statusDate","msg":"Status date must be a date.","value":"non-date"}'}}},
@@ -1183,7 +1184,8 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '{"param":"levelOfCare","msg":"Level of care must be one of NONE,LOW,MEDIUM,HIGH,SAFETY","value":"not-enumerated"}'}}},
       // test update status enumerated
       {"type":"PUT", "req": {"msg": {"status": "not-enumerated"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_INSTALL,RDY_INT_TEST,RDY_BEAM,RETIRED","value":"not-enumerated"}'}}},
+      "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_TEST,RDY_INSTALL,RETIRED","value":"not-enumerated"}'}}},
+      // "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_INSTALL,RDY_INT_TEST,RDY_BEAM,RETIRED","value":"not-enumerated"}'}}},
       // test update statusDate with non-date
       {"type":"PUT", "req": {"msg": {"statusDate": "non-date"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"statusDate","msg":"Status date must be a date.","value":"non-date"}'}}},

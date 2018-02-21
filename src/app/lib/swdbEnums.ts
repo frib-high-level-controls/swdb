@@ -2,14 +2,11 @@ export enum  LevelOfCareEnum {
   'NONE', 'LOW', 'MEDIUM', 'HIGH', 'SAFETY',
 }
 export enum  StatusEnum {
-  'DEVEL', 'RDY_INSTALL', 'RDY_INT_TEST', 'RDY_BEAM', 'RETIRED',
+  'DEVEL', 'RDY_TEST', 'RDY_INSTALL', 'RETIRED',
 }
 export enum  InstStatusEnum {
-  'DEVEL', 'MAINT', 'RDY_INSTALL', 'RDY_INT_TEST', 'RDY_BEAM', 'DEPRECATED',
+  'RDY_INSTALL', 'RDY_VERIFY', 'RDY_BEAM', 'RETIRED',
 }
 export enum  RcsEnum {
   'Git', 'AssetCentre', 'Filesystem', 'Debian', 'Other',
-}
-export enum  AreaEnum {
-  'Global', 'FE', 'LS1', 'FS1', 'LS2', 'FS2', 'LS3', 'BDS', 'FS',
 }

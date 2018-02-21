@@ -64,20 +64,6 @@ describe('Installation api tests', () => {
     });
   });
 
-  // before('login as test user', (done) => {
-  //   supertest(app)
-  //   .get('/testlogin?username=testuser&password=testuserpasswd')
-  //   .expect(200)
-  //   .end((err: Error, res: supertest.Response & {headers: any}) => {
-  //     if (err) {
-  //       done(err);
-  //     } else {
-  //       Cookies = res.headers['set-cookie'].pop().split(';')[0];
-  //       done();
-  //     }
-  //   });
-  // });
-
   // web facing tests
   //
   it('Respond with welcome', (done) => {
@@ -124,7 +110,7 @@ describe('Installation api tests', () => {
       .post('/api/v1/inst/')
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
-      .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'DEVEL', statusDate: 'date 1000',
+      .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'RDY_INSTALL', statusDate: 'date 1000',
         software: 'badbeefbadbeefbadbeefbad'})
       .expect(201)
       .end(done);
@@ -135,7 +121,7 @@ describe('Installation api tests', () => {
       .post('/api/v1/inst/')
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
-      .send({ host: 'Header Test host', name: 'Header Test name', area: ['Global'], status: 'DEVEL',
+      .send({ host: 'Header Test host', name: 'Header Test name', area: ['Global'], status: 'RDY_INSTALL',
          statusDate: 'date 1000', software: 'badbeefbadbeefbadbeefbad' })
       .expect(201)
       .end(done);
@@ -230,7 +216,7 @@ describe('Installation api tests', () => {
         .set('Accept', 'application/json')
         .set('Cookie', Cookies)
         .send({
-          host: 'Hist Test host', name: 'Hist1 Test name', area: ['Global'], status: 'DEVEL',
+          host: 'Hist Test host', name: 'Hist1 Test name', area: ['Global'], status: 'RDY_INSTALL',
           statusDate: 'date 1000', software: 'badbeefbadbeefbadbeefbad',
         })
         .expect(201)
@@ -392,11 +378,7 @@ describe('Installation api tests', () => {
         if (err) {
           done(err);
         } else {
-          let regex = 'Status must be one of {\\\\"0\\\\":\\\\"DEVEL\\\\",\\\\"1\\\\":\\\\"MAINT\\\\",\
-\\\\"2\\\\":\\\\"RDY_INSTALL\\\\",\\\\"3\\\\":\\\\"RDY_INT_TEST\\\\",\
-\\\\"4\\\\":\\\\"RDY_BEAM\\\\",\\\\"5\\\\":\\\\"DEPRECATED\\\\",\\\\"DEVEL\\\\":0,\
-\\\\"MAINT\\\\":1,\\\\"RDY_INSTALL\\\\":2,\\\\"RDY_INT_TEST\\\\":3,\
-\\\\"RDY_BEAM\\\\":4,\\\\"DEPRECATED\\\\":5}","value":"BADENUM"}';
+          let regex = 'Status must be one of {\\\\"0\\\\":\\\\"RDY_INSTALL\\\\",\\\\"1\\\\":\\\\"RDY_VERIFY\\\\",\\\\"2\\\\":\\\\"RDY_BEAM\\\\",\\\\"3\\\\":\\\\"RETIRED\\\\"';
           expect(res.text).to.match(new RegExp(regex));
           done();
         }
@@ -406,7 +388,7 @@ describe('Installation api tests', () => {
   it('Errors posting a duplicate installation record', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
-      .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'DEVEL', statusDate: 'date 1000',
+      .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'RDY_INSTALL', statusDate: 'date 1000',
          software: 'badbeefbadbeefbadbeefbad'})
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
@@ -424,7 +406,7 @@ describe('Installation api tests', () => {
   it('Post a new record installation on a different host', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
-      .send({host: 'Test host2', name: 'Test name', area: ['Global'], status: 'DEVEL',
+      .send({host: 'Test host2', name: 'Test name', area: ['Global'], status: 'RDY_INSTALL',
        statusDate: 'date 1000', software: 'badbeefbadbeefbadbeefbad'})
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
@@ -435,7 +417,7 @@ describe('Installation api tests', () => {
   it('Post a new record installation with different sw ref', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
-      .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'DEVEL',
+      .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'RDY_INSTALL',
        statusDate: 'date 1000', software: 'badbeefbadbeefbadbeefbaa'})
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)

@@ -11,7 +11,6 @@ import url = require('url');
 
 import CommonTools = require('./CommonTools');
 import {InstStatusEnum} from './swdbEnums';
-import {AreaEnum} from './swdbEnums';
 import dbg = require('debug');
 const debug = dbg('swdb:instlib');
 const ctools = new CommonTools.CommonTools();
@@ -112,7 +111,7 @@ export class InstLib {
         isArea: {
           options: [req],
           // options: [AreaEnum],
-          errorMessage: 'Area must be a list of areas: ' + AreaEnum,
+          errorMessage: 'Area must be a list of area strings.',
         },
       },
       slots: {
@@ -187,7 +186,7 @@ export class InstLib {
         optional: true,
         isArea: {
           options: [req],
-          errorMessage: 'Area must be a list of areas: ' + AreaEnum,
+          errorMessage: 'Area must be a list of area strings.',
         },
       },
       slots: {

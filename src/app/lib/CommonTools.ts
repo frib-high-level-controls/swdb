@@ -4,7 +4,6 @@ import {LevelOfCareEnum} from './swdbEnums';
 import {StatusEnum} from './swdbEnums';
 import {InstStatusEnum} from './swdbEnums';
 import {RcsEnum} from './swdbEnums';
-import {AreaEnum} from './swdbEnums';
 
 export class CommonTools {
   private static props: IProps;
@@ -28,7 +27,6 @@ export class CommonTools {
       rcw.StatusEnum = StatusEnum;
       rcw.InstStatusEnum = InstStatusEnum;
       rcw.RcsEnum = RcsEnum;
-      rcw.AreaEnum = AreaEnum;
 
       // Add the enum labels
       rcw.levelOfCareLabels = [];
