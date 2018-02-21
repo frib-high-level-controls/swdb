@@ -61,6 +61,7 @@ test.describe("Installations update screen tests", function() {
     supertest
     .get("/login")
     .auth(props.test.username, props.test.password)
+    .timeout(8000)
     .expect(302)
     .end(function(err,res){
       if (err) done(err);

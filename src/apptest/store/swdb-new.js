@@ -60,9 +60,11 @@ test.describe("Software update screen tests", function () {
   });
 
   test.it("login as test user", function(done){
+    this.timeout(8000);
     supertest
     .get("/login")
     .auth(props.test.username, props.test.password)
+    .timeout(8000)
     .expect(302)
     .end(function(err,res){
       if (err) done(err);
