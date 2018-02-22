@@ -4,6 +4,11 @@
   "description": "SW DB",
   "main": "server.js",
   "scripts": {
+    "make": "grunt clean; grunt build",
+    "test-all": "mocha ./test/apptest/tests.js --config ./config/swdbrc --test.testing true",
+    "postinstall": "cd ./src/public/swdb-fe; npm install",
+    "load-db-test": "node test/apptest/store/load-test-db.js --config /home/deployer/swdb/config/swdbrc",
+    "clear-db-test": "node test/apptest/store/clear-test-db.js --config config/swdbrc",
     "start": "./bin/app",
     "grunt": "./node_modules/.bin/grunt",
     "mocha": "./node_modules/.bin/mocha",
@@ -64,19 +69,19 @@
     "@types/serve-favicon": "^2.2.28",
     "@types/supertest": "^2.0.1",
     "chai": "^4.0.2",
+    "chai-as-promised": "6.0.0",
     "grunt": "^1.0.1",
     "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-jshint": "1.1.0",
     "grunt-ts": "^5.5.1",
     "grunt-tslint": "^4.0.1",
     "jsonschema": "^1.1.1",
     "mocha": "^5.0.0",
     "nyc": "^11.4.1",
+    "selenium-webdriver": "3.0.1",
     "supertest": "^3.0.0",
     "tslint": "^4.5.0",
-    "typescript": "2.5.3",
-    "chai-as-promised": "6.0.0",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-jshint": "1.1.0",
-    "selenium-webdriver": "3.0.1"
+    "typescript": "^2.7.2"
   }
 }

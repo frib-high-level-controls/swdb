@@ -125,8 +125,8 @@ export class SwdbLib {
         } else {
           if (response.statusCode === 200) {
             try {
-              const areasBody = JSON.parse(body).filter((element: forgApi.ApiGroup,
-                idx: number, array: forgApi.ApiGroup[]) => {
+              const areasBody = JSON.parse(body).filter((element: forgApi.Group,
+                idx: number, array: forgApi.Group[]) => {
                 return element.type === 'AREA';
               });
               debug('GET forg areas got: ' + JSON.stringify(areasBody));
