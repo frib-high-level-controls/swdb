@@ -9,9 +9,13 @@ import * as session from 'express-session';
 
 import { State } from '../app';
 
+import * as auth from '../app/shared/auth';
+import * as forgauth from '../app/shared/forg-auth';
 import * as handlers from '../app/shared/handlers';
 import * as status from '../app/shared/status';
 import * as tasks from '../app/shared/tasks';
+
+import forgapi = require('./shared/mock-forgapi');
 
 // application states
 export type State = State;
@@ -38,6 +42,13 @@ export function start(): Promise<express.Application> {
 
 async function doStart(): Promise<express.Application> {
   app = express();
+
+  const forgClient = new forgapi.MockClient();
+
+  const cfAuthProvider = new forgauth.DevForgBasicProvider(forgClient, {});
+
+  auth.setProvider(cfAuthProvider);
+
 
   // status monitor start
   await status.monitor.start();
