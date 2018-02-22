@@ -6,7 +6,6 @@ import * as express from 'express';
 import * as HttpStatusCodes from 'http-status-codes';
 
 import * as log from './logging';
-import { setComponentError } from './status';
 
 
 type Request = express.Request;
@@ -36,9 +35,41 @@ export function catchAll(handler: RequestPromiseHandler): RequestHandler {
   };
 };
 
-// Wrap the Express format() method to support promises.
-// (For more details: http://expressjs.com/en/api.html#res.format)
-// In addition, this method provides more specific typings than the original.
+/**
+ * Find the query parameter with the specified name using case-insensitive search.
+ * By default the parameter is converted to a string. This can be disabled using the 'raw' option.
+ */
+export function findQueryParam(req: Request, name: string, caseSensitive: boolean, raw: true): any;
+export function findQueryParam(req: Request, name: string, caseSensitive?: boolean, raw?: false): string | undefined;
+export function findQueryParam(req: Request, name: string, caseSensitive?: boolean, raw?: boolean): any {
+  function safeToString(obj: any): any {
+    if (raw) {
+      return obj;
+    }
+    if (obj !== undefined) {
+      return String(obj);
+    }
+  }
+  if (req.query.hasOwnProperty(name)) {
+    return safeToString(req.query[name]);
+  }
+  if (!caseSensitive) {
+    name = name.toUpperCase();
+    for (let key in req.query) {
+      if (req.query.hasOwnProperty(key)) {
+        if (key.toUpperCase() === name) {
+          return safeToString(req.query[key]);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Wrap the Express format() method to support promises.
+ * (For more details: http://expressjs.com/en/api.html#res.format)
+ * In addition, this method provides more specific typings than the original.
+ */
 export function format(res: Response, cbs: { [key: string]: () => Promise<void> | void }): Promise<void> {
 
   return new Promise((resolve, reject) => {
@@ -124,6 +155,17 @@ export class RequestError extends Error implements HttpStatusError  {
   }
 };
 
+/**
+ * Ensure the request contains a valid web API package.
+ */
+export function ensurePackage(allowError?: boolean) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!req.body || (!req.body.data || (allowError && !req.body.error))) {
+      next(new RequestError('Request body not a valid data package', HttpStatus.BAD_REQUEST));
+    }
+    next();
+  };
+};
 
 export function ensureAccepts(type: string): RequestHandler;
 export function ensureAccepts(type: string[]): RequestHandler;
@@ -164,7 +206,6 @@ export function requestErrorHandler(): ErrorRequestHandler {
     }
 
     if (status >= 500) {
-      setComponentError('Handlers', '(%s) %s', status, message);
       log.error(err);
     }
 
@@ -192,3 +233,32 @@ export function requestErrorHandler(): ErrorRequestHandler {
     }).catch(next);
   };
 };
+
+/**
+ * Set the response local 'basePath' to relative
+ * path of application base. Redirect GET requests
+ * to remove trailing slash.
+ */
+export function basePathHandler(): RequestHandler {
+  return (req, res, next) => {
+    let basePaths: string[] = [ '.' ];
+
+    let url = req.url.split('?');
+    let segments = url[0].split('/');
+    for (let idx = 0; idx < (segments.length - 2); idx += 1) {
+      basePaths.push('..');
+    }
+
+    let basePath = basePaths.join('/');
+
+    // Redirect to remove trailing slash (GET requests only)
+    if ((req.method === 'GET') && (url[0] !== '/') && url[0].endsWith('/')) {
+      url[0] = url[0].substr(0, url[0].length - 1);
+      res.redirect(basePath + url.join('?'));
+      return;
+    }
+
+    res.locals.basePath = basePath;
+    next();
+  };
+}

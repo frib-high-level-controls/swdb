@@ -8,7 +8,6 @@
 import * as dbg from 'debug';
 import * as mongoose from 'mongoose';
 
-import * as log from './logging';
 import * as models from './models';
 
 type QR<T> = T[] | T | null; // ie QueryResult<T>
@@ -146,7 +145,7 @@ export function model<T extends Document<T>>(name: string, schema: Schema, colle
   } else if ((<any> type).schema !== historySchema) {
     throw new Error('Path \'history\' does not have the expected schema');
   }
-  return <Model<T>> mongoose.model<T>(name, schema, collection);
+  return <Model<T>> mongoose.model<Document<T>>(name, schema, collection);
 };
 
 /**
@@ -154,7 +153,7 @@ export function model<T extends Document<T>>(name: string, schema: Schema, colle
  *
  * This method provides type safety for the options unlike Schema@plugin() method.
  */
-export function addHistory<T extends Document<T>>(schema: Schema, options?: HistoryOptions) {
+export function addHistory(schema: Schema, options?: HistoryOptions) {
   const opts: any = {
     deduplicate: true,
   };
@@ -261,6 +260,9 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
         this.history.updatedBy = updatedBy;
         this.history.updateIds.push(update._id);
       } else {
+        // TODO: Consider removing this branch
+        //       as this.history *should* be
+        //       initialized by the schema.
         this.history = {
           updatedAt: updatedAt,
           updatedBy: updatedBy,
@@ -269,6 +271,8 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
       }
       if (this.history.updates) {
         this.history.updates.push(update);
+      } else if (this.history.updateIds.length === 1) {
+        this.history.updates = [ update ];
       }
       return this.save();
     });

@@ -10,9 +10,6 @@ import * as log from './logging';
 import * as ppauth from './passport-auth';
 
 type Request = express.Request;
-type Response = express.Response;
-type NextFunction = express.NextFunction;
-type RequestHandler = express.RequestHandler;
 
 type VerifyPasswordCallback = (err: any, verified?: boolean) => void;
 
@@ -24,11 +21,7 @@ function getUsername(provider: auth.IProvider, req: Request): string | undefined
   if (!user) {
     return;
   }
-  const username = user.uid;
-  if (typeof username !== 'string') {
-    return;
-  }
-  return username;
+  return user.uid ? String(user.uid) : undefined;
 };
 
 
@@ -37,11 +30,7 @@ function getRoles(provider: auth.IProvider, req: Request): string[] | undefined 
   if (!user) {
     return;
   }
-  const roles = user.roles;
-  if (!Array.isArray(roles)) {
-    return;
-  }
-  return roles;
+  return Array.isArray(user.roles) ? user.roles.map(String) : undefined;
 };
 
 
@@ -56,13 +45,7 @@ function verifyWithForg(forgClient: forgapi.IClient, username: string, done: ppa
     if (debug.enabled) {
       debug('FORG user found: %s', JSON.stringify(user));
     }
-    done(null, {
-      uid: user.uid,
-      firstname: user.firstname,
-      lastname: user.lastname,
-      fullname: user.fullname,
-      roles: Array.from(user.roles),
-    });
+    done(null, user);
   })
   .catch((err) => {
     done(err);

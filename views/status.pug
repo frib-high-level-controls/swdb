@@ -37,6 +37,8 @@ html
       span(style='font-weight: bold;')= status.version
     p= 'Uptime: '
       span(style='font-weight: bold;') #{status.uptime}s
+    p
+      button(type='button', onclick='location = location.href; return false;') Refresh
     table(style='border-collapse: collapse;')
       each comp in status.components
         tr(title='Updated: ' + comp.date)

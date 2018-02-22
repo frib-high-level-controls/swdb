@@ -42,6 +42,10 @@ export class MockClient implements forgapi.IClient {
     }
   };
 
+  public clear() {
+    this.users.clear();
+  }
+
   public findUser(uid: string): Promise<User | undefined> {
     const user = this.users.get(uid.toUpperCase());
     if (!user) {

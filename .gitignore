@@ -1,12 +1,6 @@
-log
-*.log
-*.pyc
-config/swdbrc
-config/server.key
-config/server.crt
-/public/
-src/apptest/misc/datafiles/forgGroupsTestData.json
-src/apptest/misc/datafiles/forgUsersTestData.json
+# IDE configure file
+.idea/
+.vscode/
 
 # NPM package installations
 node_modules/
@@ -30,3 +24,6 @@ npm-debug.log
 
 # Ignore configuration files
 /config/
+
+# Ignore test coverage results
+/.nyc_output

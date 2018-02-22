@@ -72,7 +72,7 @@ export abstract class AbstractStandardTask<T> extends EventEmitter {
     if (this.state !== state) {
       debug('Task state changed: %s', state);
       this.state = state;
-      this.emit(state);
+      this.emit(state.toLowerCase());
     }
   };
 
@@ -155,16 +155,16 @@ export abstract class AbstractIntervalTask extends AbstractStandardTask<void> {
     let now = process.hrtime();
     this.executing = Promise.resolve().then(() => {
       debug('Interval task executing');
-      this.emit('EXECUTING');
+      this.emit('executing');
       return this.doExecute();
     })
     .then(() => {
       debug('Interval task executed');
-      this.emit('EXECUTED', process.hrtime(now)[0]);
+      this.emit('executed', process.hrtime(now)[0]);
     })
     .catch((err) => {
       debug('Interval task executed: %s', err);
-      this.emit('EXECUTED', process.hrtime(now)[0]);
+      this.emit('executed', process.hrtime(now)[0]);
       throw err;
     });
     return this.executing;

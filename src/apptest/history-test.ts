@@ -4,7 +4,6 @@
 import { AssertionError } from 'assert';
 
 import { assert } from 'chai';
-import * as dbg from 'debug';
 import * as mongoose from 'mongoose';
 
 import * as history from '../app/shared/history';
@@ -71,8 +70,8 @@ describe('Model History Tests', function () {
 
   before(async function() {
     await app.start();
-    // clear the collection
-    await Model.collection.drop();
+    // remove all documents
+    await Model.remove({}).exec();
   });
 
   after(async function() {

@@ -1,0 +1,9 @@
+{
+  "extension": [
+    ".js"
+  ],
+  "include": [
+    "test/app/**/*.js"
+  ],
+  "exclude": []
+}
