@@ -14,6 +14,7 @@ import util = require('util');
 import auth = require('./shared/auth');
 import cfauth = require('./shared/forg-auth');
 import forgapi = require('./shared/forgapi');
+import * as mockforgapi from '../apptest/shared/mock-forgapi';
 import CommonTools = require('./lib/CommonTools');
 import Be = require('./lib/Db');
 import InstBe = require('./lib/instDb');
@@ -52,18 +53,27 @@ app.use(function(req: express.Request, res: express.Response, next: express.Next
 });
 
 debug('props at startup: ' + JSON.stringify(props, null, 2));
-const forgClient = new forgapi.Client({
-  url: String(props.auth.forgapi.url),
-  agentOptions: props.auth.forgapi.agentOptions || {},
-});
 
 let cfAuthProvider: any;
 // check whether we are testing and set the auth
 if (props.test.testing === 'true') {
   debug('TEST mode is active!');
+  let gdata: forgapi.Group[] = ctools.getForgGroupsTestFile();
+  const forgClient = mockforgapi.MockClient.getInstance();
+  debug('loading mock forg groups for with: ' + JSON.stringify(gdata, null, 2));
+  forgClient.addGroup(gdata);
+  let udata: forgapi.User[] = ctools.getForgUsersTestFile();
+  debug('loading mock forg users for with: ' + JSON.stringify(udata, null, 2));
+  forgClient.addUser(udata);
+
+
   cfAuthProvider = new cfauth.DevForgBasicProvider(forgClient, {});
 } else {
   debug('Normal authentication mode is active!');
+  const forgClient = new forgapi.Client({
+    url: String(props.auth.forgapi.url),
+    agentOptions: props.auth.forgapi.agentOptions || {},
+  });
   cfAuthProvider = new cfauth.ForgCasProvider(forgClient, {
     casUrl: String(props.auth.cas.cas_url),
     casServiceUrl: String(props.auth.cas.service_url),

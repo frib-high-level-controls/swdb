@@ -4,6 +4,10 @@ import {LevelOfCareEnum} from './swdbEnums';
 import {StatusEnum} from './swdbEnums';
 import {InstStatusEnum} from './swdbEnums';
 import {RcsEnum} from './swdbEnums';
+import express = require('express');
+import forgapi = require('../shared/forgapi');
+import dbg = require('debug');
+const debug = dbg('swdb:CommonTools');
 
 export class CommonTools {
   private static props: IProps;
@@ -71,6 +75,33 @@ export class CommonTools {
   public getConfiguration = () => {
     return CommonTools.props;
   }
+
+/**
+ * getForgGroupsTestFile gets the specified file data as json
+ */
+  public getForgGroupsTestFile = (): forgapi.Group[] => {
+    // Prepare the source location by looking at the properties useSource
+    const source = CommonTools.props.forgGroupsDataSource[CommonTools.props.forgGroupsDataSource.useSource];
+    debug('forg group source is: ' + source);
+    let groupdata: forgapi.Group[] = [];
+    let raw = fs.readFileSync(source, { encoding: 'utf-8' });
+    groupdata = JSON.parse(raw);
+    debug('forg group json data is: ' + JSON.stringify(groupdata));
+    return groupdata;
+  }
+
+  /**
+   * getForgUsersTestFile gets the specified file data as json
+   */
+  public getForgUsersTestFile = (): forgapi.User[] => {
+    // Prepare the source location by looking at the properties useSource
+    const source = CommonTools.props.forgUsersDataSource[CommonTools.props.forgUsersDataSource.useSource];
+    let userdata: forgapi.User[] = [];
+    let raw = fs.readFileSync(source, { encoding: 'utf-8' });
+    userdata = JSON.parse(raw);
+    debug('forg group json data is: ' + JSON.stringify(userdata));
+    return userdata;
+  }
 }
 
 interface IProps {
@@ -80,6 +111,16 @@ interface IProps {
   slotsDataSource: {
     useSource: string;
     test: string;
+    production: string;
+  };
+  forgGroupsDataSource: {
+    useSource: string;
+    testFile: string;
+    production: string;
+  };
+  forgUsersDataSource: {
+    useSource: string;
+    testFile: string;
     production: string;
   };
   restPort: string;
