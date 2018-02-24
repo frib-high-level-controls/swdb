@@ -134,8 +134,8 @@ test.describe("Installations add screen tests", function() {
     input.sendKeys("Test name");
   });
 
-  test.it("Add new record - set area", function() {
-    this.timeout(10000);
+  test.it("Add new record - set area 0", function() {
+    this.timeout(6000);
     // set area
     // add controls room, operator area, nscl control room
     // then delete the controls room
@@ -151,8 +151,11 @@ test.describe("Installations add screen tests", function() {
     input0b.sendKeys("controls\n");
 
     chromeDriver.wait(until.elementTextContains(input0,
-      "ADB:AREA.FRIB.CTRLITIDF"), 5000);
+      "IFS:LAB.FRIB.ASD.CONTROLS.HLCO"), 5000);
+    });
 
+  test.it("Add new record - set area 1", function() {
+    this.timeout(6000);
     chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
     input = chromeDriver.findElement(By.id("add.area"));
     input.click();
@@ -165,8 +168,11 @@ test.describe("Installations add screen tests", function() {
     input1b.sendKeys("operator\n");
 
     chromeDriver.wait(until.elementTextContains(input1,
-      "ADB:AREA.NSCL.OPASSY"), 5000);
+      "IFS:LAB.FRIB.ASD.ACCELERATOROPS.MACHINEOPERATORS"), 5000);
+    });
 
+  test.it("Add new record - set area 2", function() {
+    this.timeout(6000);
     chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
     input = chromeDriver.findElement(By.id("add.area"));
     input.click();
@@ -180,7 +186,9 @@ test.describe("Installations add screen tests", function() {
 
     chromeDriver.wait(until.elementTextContains(input2,
       "ADB:AREA.NSCL.CONTROLRM"), 5000);
+    });
 
+  test.it("Add new record - remove area 0", function() {
     chromeDriver.wait(until.elementLocated(By.id("rm.area.0")), 3000);
     input = chromeDriver.findElement(By.id("rm.area.0"));
     input.click();
@@ -277,7 +285,7 @@ test.describe("Installations add screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("area")), 3000);
     chromeDriver.findElement(By.id("area")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("ADB:AREA.NSCL.OPASSY,ADB:AREA.NSCL.CONTROLRM");
+        expect(text).to.equal("IFS:LAB.FRIB.ASD.ACCELERATOROPS.MACHINEOPERATORS,ADB:AREA.NSCL.CONTROLRM");
       });
   });
 

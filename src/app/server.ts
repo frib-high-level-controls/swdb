@@ -22,7 +22,6 @@ import instTools = require('./lib/instLib');
 import tools = require('./lib/swdblib');
 import cJSON = require('circular-json');
 import validate = require('validate.js');
-// import casAuth = require('/home/deployer/template-webapp/src/app/shared/auth');
 
 const debug = dbg('swdb:server');
 const app: any = express();
@@ -31,11 +30,6 @@ const instBe = new InstBe.InstDb();
 const ctools = new CommonTools.CommonTools();
 let props: any = {};
 props = ctools.getConfiguration();
-
-// // for https functionality
-// let privateKey  = fs.readFileSync(props.sslKey, 'utf8');
-// let certificate = fs.readFileSync(props.sslCrt, 'utf8');
-// let credentials = {key: privateKey, cert: certificate};
 
 // allow access to static files
 app.use(express.static(__dirname + '/../public'));
@@ -65,7 +59,6 @@ if (props.test.testing === 'true') {
   let udata: forgapi.User[] = ctools.getForgUsersTestFile();
   debug('loading mock forg users for with: ' + JSON.stringify(udata, null, 2));
   forgClient.addUser(udata);
-
 
   cfAuthProvider = new cfauth.DevForgBasicProvider(forgClient, {});
 } else {
@@ -226,20 +219,6 @@ app.use(expressValidator({
 app.listen(props.webPort, function() {
   debug('listening on port ' + props.webPort);
 });
-
-// let httpsPort = Number(props.webPort);
-// var httpsSrv = https.createServer(credentials, app).listen(httpsPort, function() {
-//     console.log('Https listening on '+httpsPort);
-// });
-
-// auth middleware
-// const auth = function(req: express.Request, res: express.Response, next: express.NextFunction) {
-//   if (req.session && req.session.username === 'testuser' && req.session.admin) {
-//     return next();
-//   } else {
-//     return res.status(401).send('Not authorized');
-//   }
-// };
 
 // handle incoming get requests
 app.get('/', function(req: express.Request, res: express.Response) {

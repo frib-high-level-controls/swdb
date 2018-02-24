@@ -289,7 +289,7 @@ test.describe("User flow tests", function() {
   });
 
   test.it("Add new record - set engineer", function() {
-    this.timeout(8000);
+    this.timeout(10000);
     // set engineer
     chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
     input = chromeDriver.findElement(By.id("engineer"));
@@ -572,10 +572,11 @@ test.it("should show search page with username on logout button", function() {
     input.sendKeys("Test name");
   });
 
-
-  test.it("Add new installation - set area", function() {
-    this.timeout(5000);
+  test.it("Add new record - set area 0", function() {
+    this.timeout(6000);
     // set area
+    // add controls room, operator area, nscl control room
+    // then delete the controls room
     chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
     input = chromeDriver.findElement(By.id("add.area"));
     input.click();
@@ -588,7 +589,47 @@ test.it("should show search page with username on logout button", function() {
     input0b.sendKeys("controls\n");
 
     chromeDriver.wait(until.elementTextContains(input0,
-      "ADB:AREA.FRIB.CTRLITIDF"), 5000);
+      "IFS:LAB.FRIB.ASD.CONTROLS.HLCO"), 5000);
+    });
+
+  test.it("Add new record - set area 1", function() {
+    this.timeout(6000);
+    chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
+    input = chromeDriver.findElement(By.id("add.area"));
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id("area.1")), 3000);
+    input1 = chromeDriver.findElement(By.id("area.1"));
+    input1.click();
+
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.1"]/input[1]')), 3000);
+    input1b = chromeDriver.findElement(By.xpath('//*[@id="area.1"]/input[1]'));
+    input1b.sendKeys("operator\n");
+
+    chromeDriver.wait(until.elementTextContains(input1,
+      "IFS:LAB.FRIB.ASD.ACCELERATOROPS.MACHINEOPERATORS"), 5000);
+    });
+
+  test.it("Add new record - set area 2", function() {
+    this.timeout(6000);
+    chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
+    input = chromeDriver.findElement(By.id("add.area"));
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id("area.2")), 3000);
+    input2 = chromeDriver.findElement(By.id("area.2"));
+    input2.click();
+
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.2"]/input[1]')), 3000);
+    input2b = chromeDriver.findElement(By.xpath('//*[@id="area.2"]/input[1]'));
+    input2b.sendKeys("control room\n");
+
+    chromeDriver.wait(until.elementTextContains(input2,
+      "ADB:AREA.NSCL.CONTROLRM"), 5000);
+    });
+
+  test.it("Add new record - remove area 0", function() {
+    chromeDriver.wait(until.elementLocated(By.id("rm.area.0")), 3000);
+    input = chromeDriver.findElement(By.id("rm.area.0"));
+    input.click();
   });
 
   test.it("Add new installation - set drr", function() {
@@ -683,7 +724,7 @@ test.it("should show search page with username on logout button", function() {
     chromeDriver.wait(until.elementLocated(By.id("area")), 3000);
     chromeDriver.findElement(By.id("area")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("ADB:AREA.FRIB.CTRLITIDF");
+        expect(text).to.equal("IFS:LAB.FRIB.ASD.ACCELERATOROPS.MACHINEOPERATORS,ADB:AREA.NSCL.CONTROLRM");
       });
   });
 
