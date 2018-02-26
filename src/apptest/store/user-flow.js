@@ -229,7 +229,7 @@ test.describe("User flow tests", function() {
 
 
   test.it("Add new record - set vvResultsLoc", function() {
-    this.timeout(5000);
+    this.timeout(7000);
     // set vvResultsLoc
     chromeDriver.wait(until.elementLocated(By.id("add.vvResultsLoc")), 3000);
     input = chromeDriver.findElement(By.id("add.vvResultsLoc"));
