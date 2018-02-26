@@ -41,9 +41,9 @@
       <div class="row" ng-class="{ 'has-error' : inputForm.versionInput.$invalid && !inputForm.versionInput.$pristine }">
         <div id="version-group" class="form-group swdbFormRow">
           <label class="col-sm-2 control-label">Version</label>
-          <div class="col-sm-8">
+          <div class="col-sm-8" uib-tooltip="{{versionMouseover}}">
             <input id="version" type="text" name="versionInput" class="form-control" placeholder="Version" ng-model="formData.version"
-              ng-minlength="2">
+              ng-disabled="versionDisabled" ng-minlength="2">
             </input>
           </div>
           <div class="col-sm-2" id="versionInputSts" ng-messages="inputForm.versionInput.$error" ng-if="inputForm.versionInput.$dirty">
@@ -56,9 +56,9 @@
       <div class="row" ng-class="{ 'has-error' : inputForm.branchInput.$invalid && !inputForm.branchInput.$pristine }">
         <div id="branch-group" class="form-group swdbFormRow">
           <label class="col-sm-2 control-label">Branch</label>
-          <div class="col-sm-8">
+          <div class="col-sm-8" uib-tooltip="{{branchMouseover}}">
             <input id="branch" type="text" name="branchInput" class="form-control" placeholder="Branch name" ng-model="formData.branch"
-              ng-minlength="2">
+              ng-disabled="branchDisabled" ng-minlength="2">
             </input>
           </div>
           <div class="col-sm-2" id="branchInputSts" ng-messages="inputForm.branchInput.$error" ng-if="inputForm.branchInput.$dirty">
@@ -178,7 +178,8 @@
         <div id="status-group" class="form-group swdbFormRow">
           <label class="col-sm-2 control-label">Status*</label>
           <div class="col-sm-10">
-            <select id="status" ng-model="formData.status" ng-options="o for o in props.statusLabels track by o"></select>
+            <select id="status" ng-model="formData.status" ng-options="o for o in props.statusLabels track by o"
+            ng-change="onStatusChange()"></select>
           </div>
           <div class="col-sm-2" id="statusInputSts" ng-messages="inputForm.statusInput.$error" ng-if="inputForm.statusInput.$dirty">
           </div>

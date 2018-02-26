@@ -526,6 +526,21 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     $scope.formData.owner = $model;
   };
 
+  $scope.onStatusChange = function ($item, $model, $label) {
+    if ($scope.formData.status === 'RDY_INSTALL') {
+      $scope.branchDisabled = true;
+      $scope.versionDisabled = true;
+      $scope.branchMouseover = "Branch cannot change when status is 'RDY_INSTALL'";
+      $scope.versionMouseover = "Version cannot change when status is 'RDY_INSTALL'";
+    }
+    else {
+      $scope.branchDisabled = false;
+      $scope.versionDisabled = false;
+      $scope.branchMouseover = "";
+      $scope.versionMouseover = "";
+    }
+  }
+
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
   forgUserService.promise.then(function(){
@@ -563,6 +578,19 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     $scope.itemArray = $scope.props.validSwNamesGUIList;
     $scope.formData = data;
     $scope.whichItem = $routeParams.itemId;
+
+    if ($scope.formData.status === 'RDY_INSTALL') {
+      $scope.branchDisabled = true;
+      $scope.versionDisabled = true;
+      $scope.branchMouseover = "Branch cannot change when status is 'RDY_INSTALL'";
+      $scope.versionMouseover = "Version cannot change when status is 'RDY_INSTALL'";
+    }
+    else {
+      $scope.branchDisabled = false;
+      $scope.versionDisabled = false;
+      $scope.branchMouseover = "";
+      $scope.versionMouseover = "";
+    }
 
     // make a Date object from this string
     $scope.formData.statusDate = new Date($scope.formData.statusDate);
