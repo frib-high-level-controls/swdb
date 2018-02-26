@@ -6,8 +6,8 @@ import dbg = require('debug');
  * Description: A helper program to load the db with test data for validation testing.
  */
 
-const debug = dbg('swdb:load-test-db');
+const debug = dbg('swdb:load-db');
 let a = new myTestTools.TestTools();
-a.loadTestCollectionsStandard(debug,
-  '/home/deployer/swdb/src/apptest/misc/datafiles/swTestDataCombined.json',
-  '/home/deployer/swdb/src/apptest/misc/datafiles/instTestDataCombined.json');
+a.loadCollectionsWithHistory(debug,
+  a.props.test.swTestDataFile,
+  a.props.test.instTestDataFile);

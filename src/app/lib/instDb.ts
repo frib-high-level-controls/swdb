@@ -67,8 +67,8 @@ export class InstDb {
         }
       });
     }
-    debug('InstDb.instSchema now:' + JSON.stringify(InstDb.instSchema));
-    debug('InstDb.instDoc now:' + JSON.stringify(InstDb.instDoc));
+    // debug('InstDb.instSchema now:' + JSON.stringify(InstDb.instSchema));
+    // debug('InstDb.instDoc now:' + JSON.stringify(InstDb.instDoc));
     // debug('InstDb.dbConnect now:' + JSON.stringify(InstDb.dbConnect));
   }
 
@@ -85,6 +85,25 @@ export class InstDb {
     } catch (err) {
         debug('Error creating installation ' + doc._id + err);
         next(err);
+    }
+  }
+
+  /**
+   * createDocByRecord - crates a new record given a single sw record
+   * 
+   * @param user The user making the request (String)
+   * @param req The requested sw record to save
+   */
+  public createDocByRecord = async (user: string | undefined,
+    req: any ) => {
+
+    const doc = new InstDb.instDoc(req);
+
+    try {
+      await doc.saveWithHistory(user);
+      debug('Created nstallation ' + doc._id + ' as ' + user);
+    } catch (err) {
+        debug('Error creating installation ' + doc._id + ': ' + err);
     }
   }
 

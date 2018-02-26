@@ -86,6 +86,24 @@ export class Db {
         next(err);
     }
   }
+  /**
+   * createDocByRecord - crates a new record given a single sw record
+   * 
+   * @param user The user making the request (String)
+   * @param req The requested sw record to save
+   */
+  public createDocByRecord = async (user: string | undefined,
+    req: any ) => {
+
+    const doc = new Db.swDoc(req);
+
+    try {
+      await doc.saveWithHistory(user);
+      debug('Created sw ' + doc._id + ' as ' + user);
+    } catch (err) {
+        debug('Error creating sw ' + doc._id + ': ' + err);
+    }
+  }
 
   public getDocs = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const id = req.params.id;

@@ -5,8 +5,6 @@ import Be = require('../../app/lib/Db');
 const be = new Be.Db();
 import InstBe = require('../../app/lib/instDb.js');
 const instBe = new InstBe.InstDb();
-const tools = new CommonTools.CommonTools();
-const props = tools.getConfiguration();
 import dbg = require('debug');
 const debug = dbg('swdb:TestTools');
 import _ = require('lodash');
@@ -14,6 +12,9 @@ import _ = require('lodash');
 import fs = require('fs');
 
 export class TestTools {
+  public tools = new CommonTools.CommonTools();
+  public props = this.tools.getConfiguration();
+
   // public async loadTestCollectionsStandard(done, swFile: string, instFile: string) {
   public async loadTestCollectionsStandard(sdebug: debug.IDebugger, swFile: string, instFile: string) {
     let testInstData = [];
@@ -66,6 +67,77 @@ export class TestTools {
     }
 
     // done();
+  }
+  /**
+   *  loadCollectionsWithHistory - loads the given data with history
+   * 
+   * @param sdebug The callers debug object for easy debugging
+   * @param swFile The path/filename of the sw JSON data to load
+   * @param instFile The path/filename of the installation JSON data to load
+   */
+  public async loadCollectionsWithHistory(sdebug: debug.IDebugger, swFile: string, instFile: string) {
+    let testInstData = [];
+    let testSwData = [];
+    sdebug('loading DB with history');
+    try {
+      testInstData = JSON.parse(fs.readFileSync(instFile, 'utf-8'));
+      testSwData = JSON.parse(fs.readFileSync(swFile, 'utf8'));
+    } catch (err) {
+      sdebug(err);
+    }
+    // console.log("Starting standard test db clear and reload...");
+    // before we start loading data, convert _ids to ObjectIDs
+    // console.log("Converting ObjectIds...");
+    for (const i in testSwData) {
+      if ('_id' in testSwData[i]) {
+        testSwData[i]._id = ObjectId(testSwData[i]._id);
+      }
+    }
+    for (const i in testInstData) {
+      if ('_id' in testInstData[i]) {
+        testInstData[i]._id = ObjectId(testInstData[i]._id);
+      }
+    }
+
+
+    try {
+      testSwData.forEach(async (swRec) => {
+      // await Be.Db.swDoc.db.collections.swdbCollection.insert(testSwData);
+        await be.createDocByRecord('Automated-ETL', swRec);
+        sdebug('Inserting software ' + JSON.stringify(swRec));
+      });
+      // let status = await Be.Db.swDoc.db.collections.swdbCollection.currentOp(
+      //   {
+      //     $or: [
+      //       { op: 'query', 'query.createIndexes': { $exists: true } },
+      //       { op: 'insert', ns: /\.system\.indexes\b/ }
+      //     ],
+      //   },
+      // );
+      debug('Indexing status: ' + JSON.stringify(status));
+    } catch (err) {
+      if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
+        sdebug('ignoring err: ' + JSON.stringify(err));
+        // ignore this
+      } else {
+        sdebug('Error inserting ' + err);
+      }
+    }
+    try {
+      // await InstBe.InstDb.instDoc.db.collections.instCollection.insert(testInstData);
+      testInstData.forEach(async (instRec) => {
+      // await Be.Db.swDoc.db.collections.swdbCollection.insert(testSwData);
+        await instBe.createDocByRecord('Automated-ETL', instRec);
+        sdebug('Inserting installation' + JSON.stringify(instRec));
+      })
+    } catch (err) {
+      if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
+        sdebug('ignoring err: ' + JSON.stringify(err));
+        // ignore this
+      } else {
+        sdebug('Error inserting ' + err);
+      }
+    }
   }
 
   public async clearTestCollections(sdebug: debug.IDebugger) {

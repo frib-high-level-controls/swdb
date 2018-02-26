@@ -29,7 +29,7 @@ module.exports = function(grunt) {
           // Typescript compiler fails for find the source files (grunt-ts v5.5.1).
           //outDir: './app',
           options: {
-              additionalFlags: '--outDir ./app --listEmittedFiles'
+              additionalFlags: '--outDir . --listEmittedFiles'
           },
       },
       apptest: {

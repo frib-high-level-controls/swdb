@@ -26,6 +26,7 @@ var Cookies;
 //
 describe("app", function() {
   before("Prep DB", async function () {
+    this.timeout(8000);
     debug("Prep DB");
     await testTools.clearTestCollections(debug);
     await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);

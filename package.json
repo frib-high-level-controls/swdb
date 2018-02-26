@@ -9,6 +9,8 @@
     "postinstall": "cd ./src/public/swdb-fe; npm install",
     "load-db-test": "node test/apptest/store/load-test-db.js --config /home/deployer/swdb/config/swdbrc",
     "clear-db-test": "node test/apptest/store/clear-test-db.js --config config/swdbrc",
+    "load-db": "node test/apptest/store/load-db.js --config /home/deployer/swdb/config/swdbrc",
+    "clear-db": "node test/apptest/store/clear-db.js --config config/swdbrc",
     "start": "./bin/app",
     "grunt": "./node_modules/.bin/grunt",
     "mocha": "./node_modules/.bin/mocha",
