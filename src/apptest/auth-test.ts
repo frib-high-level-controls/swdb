@@ -39,7 +39,7 @@ class TestProvider extends auth.AbstractProvider  {
   public getUser(req: Request): auth.IUser {
     return {
       username: this.username,
-      roles: this.roles
+      roles: this.roles,
     };
   };
 

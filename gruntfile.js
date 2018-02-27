@@ -36,7 +36,7 @@ module.exports = function(grunt) {
             },
             files: {
                 src: [
-                    "src/app/**/*.ts"
+                    "src/**/*.ts"
                 ]
             }
         },
