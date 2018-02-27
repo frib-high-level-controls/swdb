@@ -1,6 +1,8 @@
 /**
  * These type definition are shared by the client and server.
  */
+
+// tslint:disable:no-namespace
 declare namespace webapi {
   // Common 'package' for API requests and responses data.
   // Inspired by the following specifications (especially the Google style guide):
@@ -17,19 +19,19 @@ declare namespace webapi {
     // Description of the error to display to the user.
     message: string;
     // Optional error details.
-    errors?: PkgErrorDetail[]
+    errors?: PkgErrorDetail[];
   }
 
   export interface PkgErrorDetail {
     // Identifies the type of error (ie 'ValidationError').
-    reason?: string
+    reason?: string;
     // Description of the error to display to the user.
     message: string;
     // The location of the error. (Indicates a portion
     // of the request data to which this error applies.)
     location: string;
   }
- 
+
   // Application specific types defined below.
 
 }
