@@ -53,4 +53,8 @@ module.exports = function(grunt) {
     grunt.registerTask("default", [
         "ts:app"
     ]);
+
+    grunt.registerTask('lint', [
+        'tslint',
+    ]);
 }
