@@ -60,17 +60,9 @@
       <div class="row swdbFormRow" ng-class="{ 'has-error' : inputForm.softwareInput.$invalid && !inputForm.softwareInput.$pristine }">
         <div id="software-group" class="form-group">
           <label class="col-sm-2 control-label">Software*</label>
-          <div class="col-sm-8">
-            <!-- <input id="software" type="text" ng-model="swSelected" placeholder="type to search" uib-typeahead="sw._id as (sw.swName+' / '+sw.branch+' / '+sw.version) for sw in swList | swFilt:$viewValue | limitTo:8" -->
-            <!-- <input id="software" type="text" ng-model="swSelected" placeholder="type to search"
-             uib-typeahead="(sw.swName+' / '+sw.branch+' / '+sw.version) for sw in swList | swFilt:$viewValue | limitTo:8"
-              typeahead-on-select='swSelect($item, $model, $label)' typeahead-loading="loadingLocations" typeahead-no-results="noResults"
-              typeahead-editable="false" class="form-control">
-            <i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
-            <div ng-show="noResults">
-              <i class="glyphicon glyphicon-remove"></i> No Results Found
-            </div> -->
-            <ui-select id="software" ng-model="swSelected.item" on-select="swSelect($item)" theme="bootstrap">
+          <div class="col-sm-8" uib-tooltip="{{softwareMouseover}}">
+            <ui-select id="software" ng-model="swSelected.item" on-select="swSelect($item)" 
+              ng-disabled="softwareDisabled" theme="bootstrap">
               <ui-select-match placeholder="Select or search software in the list...">{{$select.selected.swName}}/{{$select.selected.branch}}/{{$select.selected.version}}</ui-select-match>
               <ui-select-choices repeat="item in swList | filter: $select.search">
                   <div ng-bind-html="item.swName | highlight: $select.search"></div>
@@ -97,7 +89,7 @@
         <div id="area-group" class="form-group">
             <!-- <div ng-repeat="(key, value) in formData.area track by $index"> -->
             <div ng-repeat="(key, value) in areasSelected track by $index">
-                <div class="row" ng-class="{ 'has-error' : inputForm['areaInput.'+$index].$invalid && !inputForm['areaInput.'+$index].$pristine }">
+                <div class="row swdbFormRow" ng-class="{ 'has-error' : inputForm['areaInput.'+$index].$invalid && !inputForm['areaInput.'+$index].$pristine }">
                     <label class="col-sm-2">
                         &nbsp&nbsp
                         <a id="rm.area.{{$index}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)">
@@ -122,18 +114,6 @@
             </div>
         </div>
 
-      <!-- AREAS
-      <div class="row swdbFormRow" ng-class="{ 'has-error' : inputForm.areaInput.$invalid && !inputForm.areaInput.$pristine }">
-        <div id="area-group" class="form-group">
-          <label class="col-sm-2 control-label">Area*</label>
-          <div class="col-sm-10">
-            <select id="area" ng-model="formData.area" ng-options="o for o in props.areaLabels track by o"></select>
-          </div>
-          <div class="col-sm-2" id="areaInputSts" ng-messages="inputForm.areaInput.$error" ng-if="inputForm.areaInput.$dirty">
-          </div>
-        </div>
-      </div> -->
-
       <!-- DRRs -->
       <div class="row swdbFormRow" ng-class="{ 'has-error' : inputForm.drrsInput.$invalid && !inputForm.drrsInput.$pristine }">
         <div id="drrs-group" class="form-group">
@@ -156,7 +136,8 @@
         <div id="status-group" class="form-group">
           <label class="col-sm-2 control-label">Status*</label>
           <div class="col-sm-10">
-            <select id="status" ng-model="formData.status" ng-options="o for o in props.instStatusLabels track by o"></select>
+            <select id="status" ng-model="formData.status" ng-options="o for o in props.instStatusLabels track by o"
+              ng-change="onStatusChange()"></select>
           </div>
           <div class="col-sm-2" id="statusInputSts" ng-messages="inputForm.statusInput.$error" ng-if="inputForm.statusInput.$dirty">
           </div>
@@ -199,7 +180,7 @@
       </div>
       <div id="vvResultsLoc-group" class="form-group">
         <div ng-repeat="(key, value) in formData.vvResultsLoc track by $index">
-          <div class="row" ng-class="{ 'has-error' : inputForm['vvResultsLoc.'+$index].$invalid && !inputForm['vvResultsLocInput.'+$index].$pristine }">
+          <div class="row swdbFormRow" ng-class="{ 'has-error' : inputForm['vvResultsLoc.'+$index].$invalid && !inputForm['vvResultsLocInput.'+$index].$pristine }">
             <label class="col-sm-2">
               &nbsp&nbsp
               <a id="rm.vvResultsLoc.{{$index}}" class="btn btn-danger btn-xs" data-nodrag="" ng-click="removeItem($event)">

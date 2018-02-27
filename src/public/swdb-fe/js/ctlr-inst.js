@@ -510,6 +510,17 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     }
   };
 
+  $scope.onStatusChange = function ($item, $model, $label) {
+    if ($scope.formData.status !== 'RDY_INSTALL') {
+      $scope.softwareDisabled = true;
+      $scope.softwareMouseover = "Software can only change when status is 'RDY_INSTALL'";
+    }
+    else {
+      $scope.softwareDisabled = false;
+      $scope.softwareMouseover = "";
+    }
+  }
+
   // refresh the service list
   swService.refreshSwList();
 
@@ -541,6 +552,8 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
   // $http.get($scope.props.instApiUrl+$routeParams.itemId).success(function(data) {
   $http.get(url).success(function (data) {
     $scope.formData = data;
+    // set software field diable based on the given status
+    $scope.onStatusChange();
 
     $scope.whichItem = $routeParams.itemId;
     // convert the retreived record areas
@@ -553,13 +566,10 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     // convert the retreived record software
     swService.promise.then(function(){
       let obj = swService.swIdsToObjects([$scope.formData.software])[0];
-      // $scope.swSelected.item =  swService.swIdsToObjects([$scope.formData.software])[0];
       // console.log('Got initial obj: ' + JSON.stringify(obj, null, 2));
       $scope.swSelected = {item: obj};
       // console.log('Got initial swSelected: ' + JSON.stringify($scope.swSelected, null, 2));
     });
-    // console.log('Got initial formData: ' + JSON.stringify($scope.formData, null, 2));
-    // console.log('Got initial areasSelected: ' + JSON.stringify($scope.areasSelected, null, 2));
 
   });
 }
