@@ -2,7 +2,7 @@
   {
     "swName": "Control System Studio",
     "desc": "Primary operator interface for the accelerator. CS Studio is used to create and display operator screens (ie OPIs). CS Studio integrates with other services including Olog, Scan Server, Archive Appliance, Channel Finder and Save/Restore.",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "4.4.2-4.debian08.1",
     "area": "Global",
     "owner": "High Level Controls Operations Group Leader",
@@ -15,7 +15,7 @@
   {
     "swName": "Operations Log Server",
     "desc": "Operator log service",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "1.0.0-5.debian08.1",
     "area": "Global",
     "owner": "High Level Controls Operations Group Leader",
@@ -28,7 +28,7 @@
   {
     "swName": "Archive Appliance",
     "desc": "EPICS channel data archive service.",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "0.0.1_SNAPSHOT_23",
     "area": "Global",
     "owner": "High Level Controls Operations Group Leader",
@@ -41,7 +41,7 @@
   {
     "swName": "Alarm Server",
     "desc": "EPICS channel alarm monitor and notification service.",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "1.3.0-14.debian08.1",
     "area": "FE",
     "owner": "High Level Controls Operations Group Leader",
@@ -54,7 +54,7 @@
   {
     "swName": "Scan Server",
     "desc": "EPICS channel data acquisition service.",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "4.1.1-34.debian08.1",
     "area": "FE",
     "owner": "High Level Controls Operations Group Leader",
@@ -67,7 +67,7 @@
   {
     "swName": "ULEBT PS",
     "desc": "Upper LEBT power supply control IOC",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "b786c519968",
     "area": "FE",
     "owner": "Low Level Controls Operations Group Leader",
@@ -80,7 +80,7 @@
   {
     "swName": "ULEBT VAC",
     "desc": "Upper LEBT vaccuum control IOC",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "0aabc169270",
     "area": "FE",
     "owner": "Low Level Controls Operations Group Leader",
@@ -93,7 +93,7 @@
   {
     "swName": "ULEBT PLC",
     "desc": "Upper LEBT programmable logic controller IOC",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "0a844a244bc",
     "area": "FE",
     "owner": "Low Level Controls Operations Group Leader",
@@ -106,7 +106,7 @@
   {
     "swName": "SCS1 PS",
     "desc": "SCS1 power supply control IOC",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "8358dbacbe4",
     "area": "FE",
     "owner": "Low Level Controls Operations Group Leader",
@@ -119,7 +119,7 @@
   {
     "swName": "SCS1 VAC",
     "desc": "SCS1 vaccuum control IOC",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "92dd84aaceb",
     "area": "FE",
     "owner": "Low Level Controls Operations Group Leader",
@@ -132,7 +132,7 @@
   {
     "swName": "SCS1 PLC",
     "desc": "SCS1 programmable logic controller IOC",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "3a037862b61",
     "area": "FE",
     "owner": "Low Level Controls Operations Group Leader",
@@ -145,7 +145,7 @@
   {
     "swName": "GTS MASTER",
     "desc": "Global Timing System event generator IOC",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "4cc4e0b9474",
     "area": "Global",
     "owner": "High Level Systems Group Leader",
@@ -158,7 +158,7 @@
   {
     "swName": "GTS CHOPPER",
     "desc": "Chopper GTS event receiver IOC",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "02d365e4bf2",
     "area": "FE",
     "owner": "High Level Systems Group Leader",
@@ -171,7 +171,7 @@
   {
     "swName": "ECR Scan IOC",
     "desc": "Support IOC for ECR scan application",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "hlc-fe_0.1.0~20170424123726.24+debian08",
     "area": "FE",
     "owner": "High Level Controls Operations Group Leader",
@@ -184,7 +184,7 @@
   {
     "swName": "SRS1 EMS IOC",
     "desc": "Alison scanner IOC (Horizontal)",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "6a706040be7",
     "area": "FE",
     "owner": "Diagnostics Group Leader",
@@ -197,7 +197,7 @@
   {
     "swName": "SRS1 EMS2 IOC",
     "desc": "Alison scanner IOC #2 (Vertical)",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "6a706040be7",
     "area": "FE",
     "owner": "Diagnostics Group Leader",
@@ -210,7 +210,7 @@
   {
     "swName": "SCS1 VD IOC",
     "desc": "SCS1 camera IOC (D0739)",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "44750d11d31",
     "area": "FE",
     "owner": "Diagnostics Group Leader",
@@ -223,7 +223,7 @@
   {
     "swName": "LEBT VD D0812 IOC",
     "desc": "LEBT camera IOC (D0812)",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "44750d11d31",
     "area": "FE",
     "owner": "Diagnostics Group Leader",
@@ -236,7 +236,7 @@
   {
     "swName": "LEBT EMS D0811 IOC",
     "desc": "LEBT pepperpot camera IOC (D0811)",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "44750d11d31",
     "area": "FE",
     "owner": "Diagnostics Group Leader",
@@ -249,7 +249,7 @@
   {
     "swName": "SCS1 STPC01 IOC",
     "desc": "SCS1 stepper motor controller IOC (01)",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "6b8f7375374",
     "area": "FE",
     "owner": "Diagnostics Group Leader",
@@ -262,7 +262,7 @@
   {
     "swName": "LEBT STPC03 IOC",
     "desc": "LEBT stepper motor controller IOC (03)",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "6b8f7375374",
     "area": "FE",
     "owner": "Diagnostics Group Leader",
@@ -275,7 +275,7 @@
   {
     "swName": "LEBT STPC04 IOC",
     "desc": "LEBT stepper motor controller IOC (04)",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "6b8f7375374",
     "area": "FE",
     "owner": "Diagnostics Group Leader",
@@ -288,7 +288,7 @@
   {
     "swName": "FE PICO8 IOC",
     "desc": "FE PICO8 data acqusition IOC",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "c3e744c098c",
     "area": "FE",
     "owner": "Diagnostics Group Leader",
@@ -301,7 +301,7 @@
   {
     "swName": "DIAG EVR IOC",
     "desc": "FE GTS event receiver for diagnstics IOC",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "86fc1eeaf73",
     "area": "FE",
     "owner": "Diagnostics Group Leader",
@@ -314,7 +314,7 @@
   {
     "swName": "DIAG_MTCA01:PICO3 Firmware",
     "desc": "Firmware for PICO8 data acquistion card",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "0xB108",
     "area": "FE",
     "owner": "Diagnostics Group Leader",
@@ -327,7 +327,7 @@
   {
     "swName": "DIAG_MTCA01:PICO4 Firmware",
     "desc": "Firmware for PICO8 data acquistion card",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "0xB108",
     "area": "FE",
     "owner": "Diagnostics Group Leader",
@@ -340,7 +340,7 @@
   {
     "swName": "DIAG_MTCA01:PICO5 Firmware",
     "desc": "Firmware for PICO8 data acquistion card",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "0xB108",
     "area": "FE",
     "owner": "Diagnostics Group Leader",
@@ -353,7 +353,7 @@
   {
     "swName": "DIAG_MTCA01:PICO6 Firmware",
     "desc": "Firmware for PICO8 data acquistion card",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "0xB108",
     "area": "FE",
     "owner": "Diagnostics Group Leader",
@@ -366,7 +366,7 @@
   {
     "swName": "DIAG_MTCA01:PICO7 Firmware",
     "desc": "Firmware for PICO8 data acquistion card",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "0xB108",
     "area": "FE",
     "owner": "Diagnostics Group Leader",
@@ -379,7 +379,7 @@
   {
     "swName": "DIAG_MTCA01:PICO8 Firmware",
     "desc": "Firmware for PICO8 data acquistion card",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "0xB108",
     "area": "FE",
     "owner": "Diagnostics Group Leader",
@@ -392,7 +392,7 @@
   {
     "swName": "DIAG_MTCA01:PICO9 Firmware",
     "desc": "Firmware for PICO8 data acquistion card",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "0xB108",
     "area": "FE",
     "owner": "Diagnostics Group Leader",
@@ -405,7 +405,7 @@
   {
     "swName": "DIAG MTCA01:EVR Firmware",
     "desc": "Firmware for FGPDB Event Receiver EVR + FPS card",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "0xE112",
     "area": "FE",
     "owner": "Diagnostics Group Leader",
@@ -418,7 +418,7 @@
   {
     "swName": "ULEBT PLC",
     "desc": "Upper LEBT programmable logic controller",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": 12.0,
     "area": "FE",
     "owner": "Low Level Controls Group Leader",
@@ -431,7 +431,7 @@
   {
     "swName": "OPI FE",
     "desc": "Operator screens for Front End",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "f9f4dad50c6",
     "area": "FE",
     "owner": "High Level Controls Operations Group Leader",
@@ -444,7 +444,7 @@
   {
     "swName": "OPI Common",
     "desc": "Operator screens common components",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "1b1c67a8991",
     "area": "Global",
     "owner": "High Level Controls Operations Group Leader",
@@ -457,7 +457,7 @@
   {
     "swName": "OPI Diagnostics",
     "desc": "Operator screens for diagnostics",
-    "status": "Ready for Verification with Beam",
+    "status": "Ready for verification",
     "version": "??",
     "area": "Global",
     "owner": "Diagnostics Group Leader",
@@ -470,7 +470,7 @@
   {
     "swName": "OPI GTS",
     "desc": "Operator screens for Global Timing System",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "02d365e4bf2",
     "area": "Global",
     "owner": "High Level Systems Group Leader",
@@ -483,7 +483,7 @@
   {
     "swName": "Operations Log Web",
     "desc": "Web interface for olog service.",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "9010c717c20",
     "area": "Global",
     "owner": "High Level Controls Operations Group Leader",
@@ -496,7 +496,7 @@
   {
     "swName": "FE Alarms",
     "desc": "Alarm configuration for FE (FRIB-T30506-TD-000836-R001 )",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "8a368779267",
     "area": "FE",
     "owner": "High Level Controls Operations Group Leader",
@@ -509,7 +509,7 @@
   {
     "swName": "FE_ISRC1:PSOL_D0690 Firmware",
     "desc": "Firmware for Ametek SGA power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "3.70-1.96",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -522,7 +522,7 @@
   {
     "swName": "FE_ISRC1:PSC1_D0695 Firmware",
     "desc": "Firmware for Ametek XG power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": 1.05,
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -535,7 +535,7 @@
   {
     "swName": "FE_ISRC1:PSC2_D0695 Firmware",
     "desc": "Firmware for Ametek XG power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": 1.05,
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -548,7 +548,7 @@
   {
     "swName": "FE_ISRC1:PSEL_D0698 Firmware",
     "desc": "Firmware for ISEG HPS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": 5.41,
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -561,7 +561,7 @@
   {
     "swName": "FE_SCS1:PSOL_D0704 Firmware",
     "desc": "Firmware for Ametek SGA power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "3.70-1.96",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -574,7 +574,7 @@
   {
     "swName": "FE_SCS1:PSC1_D0709 Firmware",
     "desc": "Firmware for Ametek XG power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": 1.05,
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -587,7 +587,7 @@
   {
     "swName": "FE_SCS1:PSC2_D0709 Firmware",
     "desc": "Firmware for Ametek XG power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": 1.05,
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -600,7 +600,7 @@
   {
     "swName": "FE_SCS1:PSD_D0717 Firmware",
     "desc": "Firmware for SPE RTM  power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "BRC1K_FRIB_RT 20160809",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -613,7 +613,7 @@
   {
     "swName": "FE_SCS1:PSC1_D0723 Firmware",
     "desc": "Firmware for Ametek XG power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": 1.05,
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -626,7 +626,7 @@
   {
     "swName": "FE_SCS1:PSC2_D0723 Firmware",
     "desc": "Firmware for Ametek XG power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": 1.05,
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -639,7 +639,7 @@
   {
     "swName": "FE_SCS1:PSQ1_D0726 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -652,7 +652,7 @@
   {
     "swName": "FE_SCS1:PSQ2_D0726 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -665,7 +665,7 @@
   {
     "swName": "FE_SCS1:PSQ1_D0730 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -678,7 +678,7 @@
   {
     "swName": "FE_SCS1:PSQ2_D0730 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -691,7 +691,7 @@
   {
     "swName": "FE_SCS1:PSQ1_D0733 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -704,7 +704,7 @@
   {
     "swName": "FE_SCS1:PSQ2_D0733 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -717,7 +717,7 @@
   {
     "swName": "FE_SCS1:PSQ1_D0743 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -730,7 +730,7 @@
   {
     "swName": "FE_SCS1:PSQ2_D0743 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -743,7 +743,7 @@
   {
     "swName": "FE_SCS1:PSQ1_D0746 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -756,7 +756,7 @@
   {
     "swName": "FE_SCS1:PSQ2_D0746 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -769,7 +769,7 @@
   {
     "swName": "FE_SCS1:PSQ1_D0749 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -782,7 +782,7 @@
   {
     "swName": "FE_SCS1:PSQ2_D0749 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -795,7 +795,7 @@
   {
     "swName": "PS MPOD Crate #1 Firmware",
     "desc": "Firmware for WEINER MPOD Crate",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "MPOD 2.1.3156.0",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -808,7 +808,7 @@
   {
     "swName": "PS MPOD Crate #2 Firmware",
     "desc": "Firmware for WEINER MPOD Crate",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "MPOD 2.1.3156.0",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -821,7 +821,7 @@
   {
     "swName": "PS MPOD Crate #5 Firmware",
     "desc": "Firmware for WEINER MPOD Crate",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "MPOD 2.1.3156.0",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -834,7 +834,7 @@
   {
     "swName": "PS MPOD Crate #6 Firmware",
     "desc": "Firmware for WEINER MPOD Crate",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "MPOD 2.1.3156.0",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -847,7 +847,7 @@
   {
     "swName": "FE_LEBT:PSD_D0759 Firmware",
     "desc": "Firmware for SPE RTM  power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "BRC1K_FRIB_RT 20160302",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -860,7 +860,7 @@
   {
     "swName": "FE_LEBT:PSQ1_D0767 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -873,7 +873,7 @@
   {
     "swName": "FE_LEBT:PSQ2_D0767 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -886,7 +886,7 @@
   {
     "swName": "FE_LEBT:PSQ1_D0770 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -899,7 +899,7 @@
   {
     "swName": "FE_LEBT:PSQ2_D0770 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -912,7 +912,7 @@
   {
     "swName": "FE_LEBT:PSC1_D0773 Firmware",
     "desc": "Firmware for Ametek XG power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": 1.05,
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -925,7 +925,7 @@
   {
     "swName": "FE_LEBT:PSC2_D0773 Firmware",
     "desc": "Firmware for Ametek XG power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": 1.05,
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -938,7 +938,7 @@
   {
     "swName": "FE_LEBT:PSQ1_D0776 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -951,7 +951,7 @@
   {
     "swName": "FE_LEBT:PSQ2_D0776 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -964,7 +964,7 @@
   {
     "swName": "FE_LEBT:PSQ1_D0780 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -977,7 +977,7 @@
   {
     "swName": "FE_LEBT:PSQ2_D0780 Firmware",
     "desc": "Firmware for ISEG ESS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "ESS01C 01.10",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -990,7 +990,7 @@
   {
     "swName": "FE_LEBT:PSOL_D0787 Firmware",
     "desc": "Firmware for Ametek SGA power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "3.70-1.96",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -1003,7 +1003,7 @@
   {
     "swName": "FE_LEBT:PSC1_D0790 Firmware",
     "desc": "Firmware for Ametek XG power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": 1.05,
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -1016,7 +1016,7 @@
   {
     "swName": "FE_LEBT:PSC2_D0790 Firmware",
     "desc": "Firmware for Ametek XG power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": 1.05,
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -1029,7 +1029,7 @@
   {
     "swName": "FE_LEBT:PSCH1_D0792 Firmware",
     "desc": "Firmware for ISEG HPS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": 5.41,
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -1042,7 +1042,7 @@
   {
     "swName": "FE_LEBT:PSCH2_D0792 Firmware",
     "desc": "Firmware for ISEG HPS power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": 5.41,
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -1055,7 +1055,7 @@
   {
     "swName": "FE_LEBT:PSOL_D0802 Firmware",
     "desc": "Firmware for Ametek SGA power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "3.70-1.96",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -1068,7 +1068,7 @@
   {
     "swName": "FE_LEBT:PSC1_D0805 Firmware",
     "desc": "Firmware for Ametek XG power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": 1.05,
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -1081,7 +1081,7 @@
   {
     "swName": "FE_LEBT:PSC2_D0805 Firmware",
     "desc": "Firmware for Ametek XG power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": 1.05,
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -1094,7 +1094,7 @@
   {
     "swName": "FE_LEBT:PSOL_D0818 Firmware",
     "desc": "Firmware for Ametek SGA power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": "3.70-1.96",
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -1107,7 +1107,7 @@
   {
     "swName": "FE_LEBT:PSC1_D0821 Firmware",
     "desc": "Firmware for Ametek XG power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": 1.05,
     "area": "FE",
     "owner": "Power Supplies Group Leader",
@@ -1120,7 +1120,7 @@
   {
     "swName": "FE_LEBT:PSC2_D0821 Firmware",
     "desc": "Firmware for Ametek XG power supplies",
-    "status": "Ready for Beam",
+    "status": "Ready for beam",
     "version": 1.05,
     "area": "FE",
     "owner": "Power Supplies Group Leader",

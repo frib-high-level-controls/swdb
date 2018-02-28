@@ -13,7 +13,6 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var fs = require('fs');
 var path = require('path');
 const exec = require('child_process').exec;
-// const circJSON = require('circular-json');
 
 let CommonTools = require('../../app/lib/CommonTools');
 let ctools = new CommonTools.CommonTools();
@@ -72,8 +71,12 @@ describe("app", function() {
     .get("/api/v1/swdb/")
     .expect(200)
     .end(function(err, res){
-      expect(res.text).to.match(/\[*\]/);
-      done();
+      if (err) {
+        done(err);
+      } else {
+        expect(res.text).to.match(/\[*\]/);
+        done();
+      }
     });
   });
 
@@ -163,7 +166,6 @@ describe("app", function() {
   
   it("Has the blank history", async function() {
       let cursor = Be.Db.swDoc.db.collections.history.find();
-      // testTools.dumpCollection(debug, Be.Db.swDoc.db.collections.history);
       let count = await cursor.count();
       debug('Found ' + count + ' items');
       expect(count).to.equal(0);
@@ -174,7 +176,7 @@ describe("app", function() {
     .post("/api/v1/swdb/")
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
-      .send({swName: "Header Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
+      .send({swName: "Header Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "Development", statusDate: "date 1000"})
     .expect(201)
     .end((err, result) => {
       if (err) done(err);
@@ -194,7 +196,6 @@ describe("app", function() {
     try {
       let count = await cursor.count();
       debug('Found ' + count + ' items');
-      // testTools.testCollectionsStatus(debug);
       expect(count).to.equal(1);
     } catch (err) {
       done(err);
@@ -202,11 +203,9 @@ describe("app", function() {
   });
 
   it("Has the swName history entry", async function () {
-    // let cursor = Be.Db.swDoc.db.collections.history.find({ swName: 'Header Test Record' });
     let cursor = Be.Db.swDoc.db.collections.history.find();
     try {
       for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
-        // debug('Found ' + JSON.stringify(doc));
         expect(doc.paths[0].name = 'swName');
       }
     } catch (err) {
@@ -215,10 +214,8 @@ describe("app", function() {
   });
 
   it("Has the correct swName history entry", async function () {
-    // let cursor = Be.Db.swDoc.db.collections.history.find({ swName: 'Header Test Record' });
     let cursor = Be.Db.swDoc.db.collections.history.find();
     for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
-      // debug('Found ' + JSON.stringify(doc));
       expect(doc.paths[0].value = 'Header Test Record');
     }
   });
@@ -227,16 +224,19 @@ describe("app", function() {
   describe('Check location headers', function() {
     var wrapper = {origId:null};
     before("Get ID record id:Test Record", function(done) {
-      //var origId = tools.getIdFromSwName("test1000");
       supertest
       .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
-        res=JSON.parse(res.text);
-        for (var i=0, iLen=res.length; i<iLen; i++){
-          if (res[i].swName=="Header Test Record") wrapper.origId=res[i]._id;
+        if (err) {
+          done(err);
+        } else {
+          res = JSON.parse(res.text);
+          for (var i = 0, iLen = res.length; i < iLen; i++) {
+            if (res[i].swName == "Header Test Record") wrapper.origId = res[i]._id;
+          }
+          done();
         }
-        done();
       });
     });
 
@@ -245,11 +245,15 @@ describe("app", function() {
       .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
-        expect(res.body).to.have.property("_id");
-        expect(res.body.swName).to.equal("Header Test Record");
-        expect(res.body._id).to.match(/.{24}/);
-        expect(res.body.__v).to.match(/\d+/);
-        done();
+        if (err) {
+          done(err);
+        } else {
+          expect(res.body).to.have.property("_id");
+          expect(res.body.swName).to.equal("Header Test Record");
+          expect(res.body._id).to.match(/.{24}/);
+          expect(res.body.__v).to.match(/\d+/);
+          done();
+        }
       });
     });
   
@@ -272,7 +276,6 @@ describe("app", function() {
             }
           }
         });
-      // testTools.testCollectionsStatus(debug);
     });
 
     it("Returns the correct location header PATCH existing record", function (done) {
@@ -302,7 +305,7 @@ describe("app", function() {
     before("Before test post and get id", function (done) {
       supertest
         .post("/api/v1/swdb/")
-        .send({ swName: "Hist1 Test Record", owner: "Test Owner", engineer: "Test Engineer", previous: "badbeefbadbeefbadbeefbad", levelOfCare: "LOW", status: "DEVEL", statusDate: "0" })
+        .send({ swName: "Hist1 Test Record", owner: "Test Owner", engineer: "Test Engineer", previous: "badbeefbadbeefbadbeefbad", levelOfCare: "LOW", status: "Development", statusDate: "0" })
         .set("Accept", "application/json")
         .set('Cookie', [Cookies])
         .expect(201)
@@ -451,59 +454,67 @@ describe("app", function() {
     .post("/api/v1/swdb/")
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
-      .send({swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000"})
+      .send({swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "Development", statusDate: "date 1000"})
     .expect(201)
     .end((end, result) => {
       debug('Location: ' + result.headers.location);
       done();
     });
-    // testTools.testCollectionsStatus(debug);
   });
 
   it("Errors posting a duplicate new record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000",levelOfCare: "LOW", status: "DEVEL", statusDate: "1/1/1970"})
+    .send({swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000",levelOfCare: "LOW", status: "Development", statusDate: "1/1/1970"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .end((err, result) => {
-      if ((result.text.match(/^E11000 duplicate key error*/g)) && (result.status === 500)) {
-        debug('Got ""E11000 duplicate key error"');
-        done();
+      if (err) {
+        done(err);
       } else {
-        done(new Error('no error found'));
+        if ((result.text.match(/^E11000 duplicate key error*/g)) && (result.status === 500)) {
+          debug('Got ""E11000 duplicate key error"');
+          done();
+        } else {
+          done(new Error('no error found'));
+        }
       }
     });
-    // testTools.testCollectionsStatus(debug);
   });
 
   it("Post a new record Test Record2", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "Test Record2", owner: "Owner 1002", engineer: "Engineer 1002",levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
+    .send({swName: "Test Record2", owner: "Owner 1002", engineer: "Engineer 1002",levelOfCare: "LOW", status: "Development", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end((end, result) => {
-      debug('Location: ' + result.headers.location);
-      done();
+    .end((err, result) => {
+      if (err) {
+        done(err);
+      } else {
+        debug('Location: ' + result.headers.location);
+        done();
+      }
     });
-    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for Test Record', function() {
     var wrapper = {origId:null};
     before("Get ID record id:Test Record", function(done) {
-      //var origId = tools.getIdFromSwName("test1000");
       supertest
       .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
-        res=JSON.parse(res.text);
-        for (var i=0, iLen=res.length; i<iLen; i++){
-          if (res[i].swName=="Test Record") wrapper.origId=res[i]._id;
+        if (err) {
+          done(err);
+        } else {
+          res = JSON.parse(res.text);
+          for (var i = 0, iLen = res.length; i < iLen; i++) {
+            if (res[i].swName == "Test Record") wrapper.origId = res[i]._id;
+          }
+          done();
         }
-        done();
       });
     });
 
@@ -512,11 +523,15 @@ describe("app", function() {
       .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
-        expect(res.body).to.have.property("_id");
-        expect(res.body.swName).to.equal("Test Record");
-        expect(res.body._id).to.match(/.{24}/);
-        expect(res.body.__v).to.match(/\d+/);
-        done();
+        if (err) {
+          done(err);
+        } else {
+          expect(res.body).to.have.property("_id");
+          expect(res.body.swName).to.equal("Test Record");
+          expect(res.body._id).to.match(/.{24}/);
+          expect(res.body.__v).to.match(/\d+/);
+          done();
+        }
       });
     });
   });
@@ -524,15 +539,18 @@ describe("app", function() {
   it("Post a new record Desc Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "Desc Test Record", owner: "Owner 1002", engineer: "Engineer 1002",levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
+    .send({swName: "Desc Test Record", owner: "Owner 1002", engineer: "Engineer 1002",levelOfCare: "LOW", status: "Development", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end((end, result) => {
-      debug('Location: ' + result.headers.location);
-      done();
+    .end((err, result) => {
+      if (err) {
+        done(err);
+      } else {
+        debug('Location: ' + result.headers.location);
+        done();
+      }
     });
-    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for Desc Test Record', function() {
@@ -542,11 +560,15 @@ describe("app", function() {
       .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
-        res=JSON.parse(res.text);
-        for (var i=0, iLen=res.length; i<iLen; i++){
-          if (res[i].swName=="Desc Test Record") wrapper.origId=res[i]._id;
+        if (err) {
+          done(err);
+        } else {
+          res = JSON.parse(res.text);
+          for (var i = 0, iLen = res.length; i < iLen; i++) {
+            if (res[i].swName == "Desc Test Record") wrapper.origId = res[i]._id;
+          }
+          done();
         }
-        done();
       });
     });
 
@@ -555,11 +577,15 @@ describe("app", function() {
       .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
-        expect(res.body).to.have.property("_id");
-        expect(res.body.swName).to.equal("Desc Test Record");
-        expect(res.body._id).to.match(/.{24}/);
-        expect(res.body.__v).to.match(/\d+/);
-        done();
+        if (err) {
+          done(err);
+        } else {
+          expect(res.body).to.have.property("_id");
+          expect(res.body.swName).to.equal("Desc Test Record");
+          expect(res.body._id).to.match(/.{24}/);
+          expect(res.body.__v).to.match(/\d+/);
+          done();
+        }
       });
     });
   });
@@ -567,15 +593,18 @@ describe("app", function() {
   it("Post a new record Engineer Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "Engineer Test Record", owner: "Owner 1002", engineer: "Any Engineer",  levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
+    .send({swName: "Engineer Test Record", owner: "Owner 1002", engineer: "Any Engineer",  levelOfCare: "LOW", status: "Development", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end((end, result) => {
-      debug('Location: ' + result.headers.location);
-      done();
+    .end((err, result) => {
+      if (err) {
+        done(err);
+      } else {
+        debug('Location: ' + result.headers.location);
+        done();
+      }
     });
-    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for Engineer Test Record', function() {
@@ -585,11 +614,15 @@ describe("app", function() {
       .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
-        res=JSON.parse(res.text);
-        for (var i=0, iLen=res.length; i<iLen; i++){
-          if (res[i].swName=="Engineer Test Record") wrapper.origId=res[i]._id;
+        if (err) {
+          done(err);
+        } else {
+          res = JSON.parse(res.text);
+          for (var i = 0, iLen = res.length; i < iLen; i++) {
+            if (res[i].swName == "Engineer Test Record") wrapper.origId = res[i]._id;
+          }
+          done();
         }
-        done();
       });
     });
 
@@ -598,12 +631,16 @@ describe("app", function() {
       .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
-        expect(res.body).to.have.property("_id");
-        expect(res.body.swName).to.equal("Engineer Test Record");
-        expect(res.body.engineer).to.equal("Any Engineer");
-        expect(res.body._id).to.match(/.{24}/);
-        expect(res.body.__v).to.match(/\d+/);
-        done();
+        if (err) {
+          done(err);
+        } else {
+          expect(res.body).to.have.property("_id");
+          expect(res.body.swName).to.equal("Engineer Test Record");
+          expect(res.body.engineer).to.equal("Any Engineer");
+          expect(res.body._id).to.match(/.{24}/);
+          expect(res.body.__v).to.match(/\d+/);
+          done();
+        }
       });
     });
   });
@@ -611,15 +648,18 @@ describe("app", function() {
   it("Post a new record versionControlLoc Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "versionControlLoc Test Record", owner: "versioControlLoc Test Owner", engineer: "Test Engineer", versionControlLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
+    .send({swName: "versionControlLoc Test Record", owner: "versioControlLoc Test Owner", engineer: "Test Engineer", versionControlLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "Development", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end((end, result) => {
-      debug('Location: ' + result.headers.location);
-      done();
+    .end((err, result) => {
+      if (err) {
+        done(err);
+      } else {
+        debug('Location: ' + result.headers.location);
+        done();
+      }
     });
-    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for versionControlLoc Test Record', function() {
@@ -629,11 +669,15 @@ describe("app", function() {
       .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
-        res=JSON.parse(res.text);
-        for (var i=0, iLen=res.length; i<iLen; i++){
-          if (res[i].swName=="versionControlLoc Test Record") wrapper.origId=res[i]._id;
+        if (err) {
+          done(err);
+        } else {
+          res = JSON.parse(res.text);
+          for (var i = 0, iLen = res.length; i < iLen; i++) {
+            if (res[i].swName == "versionControlLoc Test Record") wrapper.origId = res[i]._id;
+          }
+          done();
         }
-        done();
       });
     });
 
@@ -642,10 +686,14 @@ describe("app", function() {
       .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
-        expect(res.body).to.have.property("_id");
-        expect(res.body.swName).to.equal("versionControlLoc Test Record");
-        expect(res.body.versionControlLoc).to.equal("http://www.somehost/some-path/some-file");
-        done();
+        if (err) {
+          done(err);
+        } else {
+          expect(res.body).to.have.property("_id");
+          expect(res.body.swName).to.equal("versionControlLoc Test Record");
+          expect(res.body.versionControlLoc).to.equal("http://www.somehost/some-path/some-file");
+          done();
+        }
       });
     });
   });
@@ -653,15 +701,18 @@ describe("app", function() {
   it("Post a new record designDescDocLoc Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "designDescDocLoc Test Record", owner: "designDescDocLoc Test Owner", engineer: "Test Engineer", designDescDocLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
+    .send({swName: "designDescDocLoc Test Record", owner: "designDescDocLoc Test Owner", engineer: "Test Engineer", designDescDocLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "Development", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end((end, result) => {
-      debug('Location: ' + result.headers.location);
-      done();
+    .end((err, result) => {
+      if (err) {
+        done(err);
+      } else {
+        debug('Location: ' + result.headers.location);
+        done();
+      }
     });
-    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for designDescDocLoc Test Record', function() {
@@ -671,11 +722,15 @@ describe("app", function() {
       .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
-        res=JSON.parse(res.text);
-        for (var i=0, iLen=res.length; i<iLen; i++){
-          if (res[i].swName=="designDescDocLoc Test Record") wrapper.origId=res[i]._id;
+        if (err) {
+          done(err);
+        } else {
+          res = JSON.parse(res.text);
+          for (var i = 0, iLen = res.length; i < iLen; i++) {
+            if (res[i].swName == "designDescDocLoc Test Record") wrapper.origId = res[i]._id;
+          }
+          done();
         }
-        done();
       });
     });
 
@@ -684,10 +739,14 @@ describe("app", function() {
       .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
-        expect(res.body).to.have.property("_id");
-        expect(res.body.swName).to.equal("designDescDocLoc Test Record");
-        expect(res.body.designDescDocLoc).to.equal("http://www.somehost/some-path/some-file");
-        done();
+        if (err) {
+          done(err);
+        } else {
+          expect(res.body).to.have.property("_id");
+          expect(res.body.swName).to.equal("designDescDocLoc Test Record");
+          expect(res.body.designDescDocLoc).to.equal("http://www.somehost/some-path/some-file");
+          done();
+        }
       });
     });
   });
@@ -695,15 +754,18 @@ describe("app", function() {
   it("Post a new record descDocLoc Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "descDocLoc Test Record", owner: "descDocLoc Test Owner", engineer: "Test Engineer", descDocLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1002"})
+    .send({swName: "descDocLoc Test Record", owner: "descDocLoc Test Owner", engineer: "Test Engineer", descDocLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "Development", statusDate: "date 1002"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end((end, result) => {
-      debug('Location: ' + result.headers.location);
-      done();
+    .end((err, result) => {
+      if (err) {
+        done(err);
+      } else {
+        debug('Location: ' + result.headers.location);
+        done();
+      }
     });
-    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for descDocLoc Test Record', function() {
@@ -713,11 +775,15 @@ describe("app", function() {
       .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
-        res=JSON.parse(res.text);
-        for (var i=0, iLen=res.length; i<iLen; i++){
-          if (res[i].swName=="descDocLoc Test Record") wrapper.origId=res[i]._id;
+        if (err) {
+          done(err);
+        } else {
+          res = JSON.parse(res.text);
+          for (var i = 0, iLen = res.length; i < iLen; i++) {
+            if (res[i].swName == "descDocLoc Test Record") wrapper.origId = res[i]._id;
+          }
+          done();
         }
-        done();
       });
     });
 
@@ -726,10 +792,14 @@ describe("app", function() {
       .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
-        expect(res.body).to.have.property("_id");
-        expect(res.body.swName).to.equal("descDocLoc Test Record");
-        expect(res.body.descDocLoc).to.equal("http://www.somehost/some-path/some-file");
-        done();
+        if (err) {
+          done(err);
+        } else {
+          expect(res.body).to.have.property("_id");
+          expect(res.body.swName).to.equal("descDocLoc Test Record");
+          expect(res.body.descDocLoc).to.equal("http://www.somehost/some-path/some-file");
+          done();
+        }
       });
     });
   });
@@ -737,15 +807,18 @@ describe("app", function() {
   it("Post a new record recertDate Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "recertDate Test Record", owner: "recertDate Test Owner", engineer: "Test Engineer", recertDate: "April 20, 2016", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .send({swName: "recertDate Test Record", owner: "recertDate Test Owner", engineer: "Test Engineer", recertDate: "April 20, 2016", levelOfCare: "LOW", status: "Development", statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end((end, result) => {
-      debug('Location: ' + result.headers.location);
-      done();
+    .end((err, result) => {
+      if (err) {
+        done(err);
+      } else {
+        debug('Location: ' + result.headers.location);
+        done();
+      }
     });
-    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for recertDate Test Record', function() {
@@ -755,11 +828,15 @@ describe("app", function() {
       .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
-        res=JSON.parse(res.text);
-        for (var i=0, iLen=res.length; i<iLen; i++){
-          if (res[i].swName=="recertDate Test Record") wrapper.origId=res[i]._id;
+        if (err) {
+          done(err);
+        } else {
+          res = JSON.parse(res.text);
+          for (var i = 0, iLen = res.length; i < iLen; i++) {
+            if (res[i].swName == "recertDate Test Record") wrapper.origId = res[i]._id;
+          }
+          done();
         }
-        done();
       });
     });
 
@@ -768,10 +845,14 @@ describe("app", function() {
       .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
-        expect(res.body).to.have.property("_id");
-        expect(res.body.swName).to.equal("recertDate Test Record");
-        expect(res.body.recertDate).to.equal("2016-04-20T07:00:00.000Z");
-        done();
+        if (err) {
+          done(err);
+        } else {
+          expect(res.body).to.have.property("_id");
+          expect(res.body.swName).to.equal("recertDate Test Record");
+          expect(res.body.recertDate).to.equal("2016-04-20T07:00:00.000Z");
+          done();
+        }
       });
     });
   });
@@ -785,7 +866,7 @@ describe("app", function() {
       engineer: "Test Engineer",
       vvProcLoc: ["http://www.somehost/some-path/some-file", "http://www.somehost/some-path/some-file2"],
       levelOfCare: "LOW",
-      status: "DEVEL",
+      status: "Development",
       statusDate: "0"
     })
     .set("Accept", "application/json")
@@ -799,7 +880,6 @@ describe("app", function() {
         done();
       }
     });
-    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for vvProcLoc Test Record', function() {
@@ -849,7 +929,7 @@ describe("app", function() {
       engineer: "Test Engineer",
       vvResultsLoc: [ "http://www.somehost/some-path/some-file3", "http://www.somehost/some-path/some-file4" ],
       levelOfCare: "LOW",
-      status: "DEVEL",
+      status: "Development",
       statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -863,7 +943,6 @@ describe("app", function() {
         done();
       }
     });
-    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for vvResultsLoc Test Record', function() {
@@ -890,11 +969,15 @@ describe("app", function() {
       .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
-        expect(res.body).to.have.property("_id");
-        expect(res.body.swName).to.equal("vvResultsLoc Test Record");
-        expect(JSON.stringify(res.body.vvResultsLoc))
-          .to.equal('["http://www.somehost/some-path/some-file3","http://www.somehost/some-path/some-file4"]');
-        done();
+        if (err) {
+          done(err);
+        } else {
+          expect(res.body).to.have.property("_id");
+          expect(res.body.swName).to.equal("vvResultsLoc Test Record");
+          expect(JSON.stringify(res.body.vvResultsLoc))
+            .to.equal('["http://www.somehost/some-path/some-file3","http://www.somehost/some-path/some-file4"]');
+          done();
+        }
       });
     });
   });
@@ -902,15 +985,18 @@ describe("app", function() {
   it("Post a new record branch Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "branch Test Record", owner: "branch Test Owner", engineer: "Test Engineer", branch: "New branch", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .send({swName: "branch Test Record", owner: "branch Test Owner", engineer: "Test Engineer", branch: "New branch", levelOfCare: "LOW", status: "Development", statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end((end, result) => {
-      debug('Location: ' + result.headers.location);
-      done();
+    .end((err, result) => {
+      if (err) {
+        done(err);
+      } else {
+        debug('Location: ' + result.headers.location);
+        done();
+      }
     });
-    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for branch Test Record', function() {
@@ -920,11 +1006,15 @@ describe("app", function() {
       .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
-        res=JSON.parse(res.text);
-        for (var i=0, iLen=res.length; i<iLen; i++){
-          if (res[i].swName=="branch Test Record") wrapper.origId=res[i]._id;
+        if (err) {
+          done(err);
+        } else {
+          res = JSON.parse(res.text);
+          for (var i = 0, iLen = res.length; i < iLen; i++) {
+            if (res[i].swName == "branch Test Record") wrapper.origId = res[i]._id;
+          }
+          done();
         }
-        done();
       });
     });
 
@@ -933,10 +1023,14 @@ describe("app", function() {
       .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
-        expect(res.body).to.have.property("_id");
-        expect(res.body.swName).to.equal("branch Test Record");
-        expect(res.body.branch).to.equal("New branch");
-        done();
+        if (err) {
+          done(err);
+        } else {
+          expect(res.body).to.have.property("_id");
+          expect(res.body.swName).to.equal("branch Test Record");
+          expect(res.body.branch).to.equal("New branch");
+          done();
+        }
       });
     });
   });
@@ -944,15 +1038,18 @@ describe("app", function() {
   it("Post a new record versionControl Test Record", function(done) {
     supertest
       .post("/api/v1/swdb/")
-    .send({swName: "versionControl Test Record", owner: "versionControl Test Owner", engineer: "Test Engineer", versionControl: "Git", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .send({swName: "versionControl Test Record", owner: "versionControl Test Owner", engineer: "Test Engineer", versionControl: "Git", levelOfCare: "LOW", status: "Development", statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end((end, result) => {
-      debug('Location: ' + result.headers.location);
-      done();
+    .end((err, result) => {
+      if (err) {
+        done(err);
+      } else {
+        debug('Location: ' + result.headers.location);
+        done();
+      }
     });
-    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for versionControl Test Record', function() {
@@ -962,11 +1059,15 @@ describe("app", function() {
       .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
-        res=JSON.parse(res.text);
-        for (var i=0, iLen=res.length; i<iLen; i++){
-          if (res[i].swName=="versionControl Test Record") wrapper.origId=res[i]._id;
+        if (err) {
+          done(err);
+        } else {
+          res = JSON.parse(res.text);
+          for (var i = 0, iLen = res.length; i < iLen; i++) {
+            if (res[i].swName == "versionControl Test Record") wrapper.origId = res[i]._id;
+          }
+          done();
         }
-        done();
       });
     });
 
@@ -975,10 +1076,14 @@ describe("app", function() {
       .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
-        expect(res.body).to.have.property("_id");
-        expect(res.body.swName).to.equal("versionControl Test Record");
-        expect(res.body.versionControl).to.equal("Git");
-        done();
+        if (err) {
+          done(err);
+        } else {
+          expect(res.body).to.have.property("_id");
+          expect(res.body.swName).to.equal("versionControl Test Record");
+          expect(res.body.versionControl).to.equal("Git");
+          done();
+        }
       });
     });
   });
@@ -986,15 +1091,18 @@ describe("app", function() {
   it("Post a new record previous Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "previous Test Record", owner: "previous Test Owner", engineer: "Test Engineer", previous: "badbeefbadbeefbadbeefbad", levelOfCare: "LOW", status: "DEVEL", statusDate: "0"})
+    .send({swName: "previous Test Record", owner: "previous Test Owner", engineer: "Test Engineer", previous: "badbeefbadbeefbadbeefbad", levelOfCare: "LOW", status: "Development", statusDate: "0"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
-    .end((end, result) => {
-      debug('Location: ' + result.headers.location);
-      done();
+    .end((err, result) => {
+      if (err) {
+        done(err);
+      } else {
+        debug('Location: ' + result.headers.location);
+        done();
+      }
     });
-    // testTools.testCollectionsStatus(debug);
   });
 
   describe('get id for previous Test Record', function() {
@@ -1004,11 +1112,15 @@ describe("app", function() {
       .get("/api/v1/swdb/")
       .expect(200)
       .end(function(err,res){
-        res=JSON.parse(res.text);
-        for (var i=0, iLen=res.length; i<iLen; i++){
-          if (res[i].swName=="previous Test Record") wrapper.origId=res[i]._id;
+        if (err) {
+          done(err);
+        } else {
+          res = JSON.parse(res.text);
+          for (var i = 0, iLen = res.length; i < iLen; i++) {
+            if (res[i].swName == "previous Test Record") wrapper.origId = res[i]._id;
+          }
+          done();
         }
-        done();
       });
     });
 
@@ -1017,10 +1129,14 @@ describe("app", function() {
       .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
-        expect(res.body).to.have.property("_id");
-        expect(res.body.swName).to.equal("previous Test Record");
-        expect(res.body.previous).to.equal("badbeefbadbeefbadbeefbad");
-        done();
+        if (err) {
+          done(err);
+        } else {
+          expect(res.body).to.have.property("_id");
+          expect(res.body.swName).to.equal("previous Test Record");
+          expect(res.body.previous).to.equal("badbeefbadbeefbadbeefbad");
+          done();
+        }
       });
     });
   });
@@ -1032,15 +1148,18 @@ describe("app", function() {
       supertest
       .get("/api/v1/swdb/")
       .expect(200)
-      //var origId = tools.getIdFromSwName("test1000");
       .end(function(err,res){
-        res=JSON.parse(res.text);
-        for (var i=0, iLen=res.length; i<iLen; i++){
-          if (res[i].swName=="Test Record2"){
-            wrapper.origId=res[i]._id;
+        if (err) {
+          done(err);
+        } else {
+          res = JSON.parse(res.text);
+          for (var i = 0, iLen = res.length; i < iLen; i++) {
+            if (res[i].swName == "Test Record2") {
+              wrapper.origId = res[i]._id;
+            }
           }
+          done();
         }
-        done();
       });
     });
 
@@ -1050,11 +1169,14 @@ describe("app", function() {
         .send({ swName: "Test Record3" })
         .set('Cookie', [Cookies])
         .expect(200)
-        .end((end, result) => {
-          debug('Location: ' + result.headers.location);
-          done();
+        .end((err, result) => {
+          if (err) {
+            done(err);
+          } else {
+            debug('Location: ' + result.headers.location);
+            done();
+          }
         });
-      // testTools.testCollectionsStatus(debug);
     });
 
     it("Returns test record 1d:Test Record3", function(done) {
@@ -1062,10 +1184,13 @@ describe("app", function() {
       .get("/api/v1/swdb/"+wrapper.origId)
       .expect(200)
       .end(function(err, res){
-        expect(res.body).to.have.property("_id");
-        //expect(res.body._id).to.equal(wrapper.origId);
-        expect(res.body.swName).to.equal("Test Record3");
-        done();
+        if (err) {
+          done(err);
+        } else {
+          expect(res.body).to.have.property("_id");
+          expect(res.body.swName).to.equal("Test Record3");
+          done();
+        }
       });
     });
 
@@ -1087,10 +1212,10 @@ describe("app", function() {
       {"type": "GET","res": {"msg": {"levelOfCare": "MEDIUM"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"levelOfCare": "SAFETY"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"levelOfCare": "SAFETY"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"status": "RDY_INSTALL"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"status": "RDY_INSTALL"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"status": "Ready for install"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"status": "Ready for install"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"status": "ERRONEOUS_VALUE"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
-      {"type": "GET","res": {"msg": {"status": "RDY_INSTALL"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"status": "Ready for install"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"statusDate": "7/7/1977"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"statusDate": "1977-07-07"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"version": "NEW test version"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
@@ -1130,7 +1255,7 @@ describe("app", function() {
       {"type": "PUT","req": {"msg": {"comment": "NEW test comment"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"comment": "NEW test comment"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       // test new record basic only required items
-      {"type":"POST", "req": {"msg": {"swName": "NEW-test-name-1", "status": "RDY_TEST", "statusDate": "1/1/1997", "owner": "test owner", "levelOfCare": "MEDIUM"}, "url": "/api/v1/swdb/",
+      {"type":"POST", "req": {"msg": {"swName": "NEW-test-name-1", "status": "Ready for test", "statusDate": "1/1/1997", "owner": "test owner", "levelOfCare": "MEDIUM"}, "url": "/api/v1/swdb/",
       "err": {"status": 201, "msgHas": ''}}},
       // test new swName is required, min, max
       {"type":"POST", "req": {"msg": {"owner": "test owner"}, "url": "/api/v1/swdb/",
@@ -1143,14 +1268,14 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '{"param":"levelOfCare","msg":"Level of care is required."}'}}},
       {"type":"POST", "req": {"msg": {"swName": "NEW Test name", "owner":"NEW OWNER", "levelOfCare": "LOW"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status is required."}'}}},
-      {"type":"POST", "req": {"msg": {"swName": "NEW Test name", "owner":"NEW OWNER", "levelOfCare": "LOW","status":"DEVEL"}, "url": "/api/v1/swdb/",
+      {"type":"POST", "req": {"msg": {"swName": "NEW Test name", "owner":"NEW OWNER", "levelOfCare": "LOW","status":"Development"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"statusDate","msg":"Status date is required."}'}}},
       // test new status enumerated
       {"type":"POST", "req": {"msg": {"status": "not-enumerated"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_TEST,RDY_INSTALL,RETIRED","value":"not-enumerated"}'}}},
+      "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of Development,Ready for test,Ready for install,Retired","value":"not-enumerated"}'}}},
       // "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_INSTALL,RDY_INT_TEST,RDY_BEAM,RETIRED","value":"not-enumerated"}'}}},
       // test new statusDate with non-date
-      {"type":"POST", "req": {"msg": {"swName":"testing","owner":"test owner","levelOfCare":"LOW","status":"DEVEL","statusDate": "non-date"}, "url": "/api/v1/swdb/",
+      {"type":"POST", "req": {"msg": {"swName":"testing","owner":"test owner","levelOfCare":"LOW","status":"Development","statusDate": "non-date"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"statusDate","msg":"Status date must be a date.","value":"non-date"}'}}},
       // test new version min, max
       {"type":"POST", "req": {"msg": {"version": ""}, "url": "/api/v1/swdb/",
@@ -1186,7 +1311,7 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '{"param":"levelOfCare","msg":"Level of care must be one of NONE,LOW,MEDIUM,HIGH,SAFETY","value":"not-enumerated"}'}}},
       // test update status enumerated
       {"type":"PUT", "req": {"msg": {"status": "not-enumerated"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_TEST,RDY_INSTALL,RETIRED","value":"not-enumerated"}'}}},
+      "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of Development,Ready for test,Ready for install,Retired","value":"not-enumerated"}'}}},
       // "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_INSTALL,RDY_INT_TEST,RDY_BEAM,RETIRED","value":"not-enumerated"}'}}},
       // test update statusDate with non-date
       {"type":"PUT", "req": {"msg": {"statusDate": "non-date"}, "url": "/api/v1/swdb/",
@@ -1242,17 +1367,20 @@ describe("app", function() {
           .send(value.req.msg)
           .set('Cookie', [Cookies])
           .end(function(err,res){
-            if (value.req.err.status){
-              expect(res.status).to.equal(value.req.err.status);
-            }
-            if (value.req.err.msgHas) {
-              expect2(res.text).toMatch(value.req.err.msgHas);
-            }
+            if (err) {
+              done(err);
+            } else {
+              if (value.req.err.status) {
+                expect(res.status).to.equal(value.req.err.status);
+              }
+              if (value.req.err.msgHas) {
+                expect2(res.text).toMatch(value.req.err.msgHas);
+              }
 
-            debug('Location: ' + res.headers.location);
-            done();
+              debug('Location: ' + res.headers.location);
+              done();
+            }
           });
-          // testTools.testCollectionsStatus(debug);
         });
       }
       if (value.type === "POST") {
@@ -1262,16 +1390,19 @@ describe("app", function() {
           .send(value.req.msg)
           .set('Cookie', [Cookies])
           .end(function(err,res){
-            if (value.req.err.status){
-              expect(res.status).to.equal(value.req.err.status);
+            if (err) {
+              done(err);
+            } else {
+              if (value.req.err.status) {
+                expect(res.status).to.equal(value.req.err.status);
+              }
+              if (value.req.err.msgHas) {
+                expect2(res.text).toMatch(value.req.err.msgHas);
+              }
+              debug('Location: ' + res.headers.location);
+              done();
             }
-            if (value.req.err.msgHas) {
-              expect2(res.text).toMatch(value.req.err.msgHas);
-            }
-            debug('Location: ' + res.headers.location);
-            done();
           });
-          // testTools.testCollectionsStatus(debug);
         });
       }
 
@@ -1281,16 +1412,20 @@ describe("app", function() {
           supertest
           .get(value.res.url+wrapper.origId)
           .end(function(err, res) {
-            if (value.res.err.status){
-              expect(res.status).to.equal(value.res.err.status);
+            if (err) {
+              done(err);
+            } else {
+              if (value.res.err.status) {
+                expect(res.status).to.equal(value.res.err.status);
+              }
+              for (var prop in value.res.msg) {
+                expect(res.body).to.have.property(prop);
+                // This is to allow sloppy matching on whole objects.
+                // See the npm "expect" module for more
+                expect2(res.body[prop]).toMatch(value.res.msg[prop]);
+              }
+              done();
             }
-            for (var prop in value.res.msg) {
-              expect(res.body).to.have.property(prop);
-              // This is to allow sloppy matching on whole objects.
-              // See the npm "expect" module for more
-              expect2(res.body[prop]).toMatch(value.res.msg[prop]);
-            }
-            done();
           });
         });
       }
@@ -1302,11 +1437,14 @@ describe("app", function() {
       .send({swName: "Test Record4"})
       .expect(404)
       .end(function(err, res) {
-        expect(res.text).to.match(/Cannot POST \/api\/v1\/swdb\/badbeef/);
-        debug('Location: ' + res.headers.location);
-        done();
+        if (err) {
+          done(err);
+        } else {
+          expect(res.text).to.match(/Cannot POST \/api\/v1\/swdb\/badbeef/);
+          debug('Location: ' + res.headers.location);
+          done();
+        }
       });
-      // testTools.testCollectionsStatus(debug);
     });
     it("Errors on update a nonexistent record via PUT swName id:badbeef", function(done) {
       supertest
@@ -1316,10 +1454,13 @@ describe("app", function() {
       .expect(500)
       .expect('Record not found')
       .end(function(err, res) {
-        debug('Location: ' + res.headers.location);
-        done();
+        if (err) {
+          done(err);
+        } else {
+          debug('Location: ' + res.headers.location);
+          done();
+        }
       });
-      // testTools.testCollectionsStatus(debug);
     });
     it("Errors on update a nonexistent record via PATCH swName id:badbeef", function(done) {
       supertest
@@ -1329,11 +1470,13 @@ describe("app", function() {
       .expect(500)
       .expect('Record not found')
       .end(function(err, res) {
-        debug('Location: ' + res.headers.location);
-        done();
+        if (err) {
+          done(err);
+        } else {
+          debug('Location: ' + res.headers.location);
+          done();
+        }
       });
-      // testTools.testCollectionsStatus(debug);
-      // testTools.dumpCollection(debug, Be.Db.swDoc.db.collections.history);
     });
   });
 });

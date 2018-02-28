@@ -1,17 +1,17 @@
 [
-  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"Test Record","version":"0.1","branch":"b1","comment":"EPICS Dictionary server"},
-  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"Test Record2","version":"0.2","branch":"b1","comment":"EPICS Dictionary server"},
-  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"Test Record3","version":"0.3","branch":"b1","comment":"EPICS Dictionary server"},
-  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"Test Record4","version":"0.4","branch":"b1","comment":"EPICS Dictionary server"},
-  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b2","comment":"alarm configuration binary"},
-  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b3","_id":"5947589458a6aa0face9a553","_v":"0","comment":"alarm configuration binary"},
-  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b4","_id":"5947589458a6aa0face9a554","_v":"0","comment":"alarm configuration binary"},
-  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b5","_id":"5947589458a6aa0face9a555","_v":"0","comment":"alarm configuration binary"},
-  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b6","_id":"5947589458a6aa0face9a556","_v":"0","comment":"alarm configuration binary"},
-  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b7","_id":"5947589458a6aa0face9a557","_v":"0","comment":"alarm configuration binary"},
-  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b8","_id":"5947589458a6aa0face9a558","_v":"0","comment":"alarm configuration binary"},
-  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b9","_id":"5947589458a6aa0face9a559","_v":"0","comment":"alarm configuration binary"},
-  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b10","_id":"5947589458a6aa0face9a510","_v":"0","comment":"alarm configuration binary"},
-  {"status":"DEVEL","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b11","_id":"5947589458a6aa0face9a511","_v":"0","comment":"alarm configuration binary"}
+  {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"Test Record","version":"0.1","branch":"b1","comment":"EPICS Dictionary server"},
+  {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"Test Record2","version":"0.2","branch":"b1","comment":"EPICS Dictionary server"},
+  {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"Test Record3","version":"0.3","branch":"b1","comment":"EPICS Dictionary server"},
+  {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"Test Record4","version":"0.4","branch":"b1","comment":"EPICS Dictionary server"},
+  {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b2","comment":"alarm configuration binary"},
+  {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b3","_id":"5947589458a6aa0face9a553","_v":"0","comment":"alarm configuration binary"},
+  {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b4","_id":"5947589458a6aa0face9a554","_v":"0","comment":"alarm configuration binary"},
+  {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b5","_id":"5947589458a6aa0face9a555","_v":"0","comment":"alarm configuration binary"},
+  {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b6","_id":"5947589458a6aa0face9a556","_v":"0","comment":"alarm configuration binary"},
+  {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b7","_id":"5947589458a6aa0face9a557","_v":"0","comment":"alarm configuration binary"},
+  {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b8","_id":"5947589458a6aa0face9a558","_v":"0","comment":"alarm configuration binary"},
+  {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b9","_id":"5947589458a6aa0face9a559","_v":"0","comment":"alarm configuration binary"},
+  {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b10","_id":"5947589458a6aa0face9a510","_v":"0","comment":"alarm configuration binary"},
+  {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b11","_id":"5947589458a6aa0face9a511","_v":"0","comment":"alarm configuration binary"}
 ]
 
