@@ -374,7 +374,7 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     $scope.formData.engineer = updateRec.formData.engineer;
     // $scope.engineerSelected = updateRec.formData.engineer;
     $scope.formData.levelOfCare = updateRec.formData.levelOfCare;
-    $scope.formData.status = "DEVEL";
+    $scope.formData.status = $scope.props.statusLabels[0];
     $scope.formData.statusDate = new Date();
     $scope.formData.platforms = updateRec.formData.platforms;
     $scope.formData.designDescDocLoc = updateRec.formData.designDescDocLoc;

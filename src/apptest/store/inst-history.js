@@ -75,14 +75,14 @@ describe("Installations history tests suite", function () {
       .post("/api/v1/inst/")
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
-      .send({host: "Test host", name: "Test name", area: [ "Global" ], status: "RDY_INSTALL", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
+      .send({host: "Test host", name: "Test name", area: [ "Global" ], status: "Ready for install", statusDate: "date 1000", software: "badbeefbadbeefbadbeefbad"})
       .end(async (err, result) => {
         // get record id from the returned location and find records that match
         let id = result.headers.location.split(/\//).pop();
         wrapper.origId = id;
         debug('Got id ' + id);
         let canonObj =
-          { host: "Test host", name: "Test name", area: [ "Global" ], status: "RDY_INSTALL", statusDate: new Date("date 1000"), software: mongoose.mongo.ObjectId("badbeefbadbeefbadbeefbad")};
+          { host: "Test host", name: "Test name", area: [ "Global" ], status: "Ready for install", statusDate: new Date("date 1000"), software: mongoose.mongo.ObjectId("badbeefbadbeefbadbeefbad")};
         let response = null;
         try {
           expect(await testTools.checkHistory(debug, canonObj, id)).to.equal("History record matches");

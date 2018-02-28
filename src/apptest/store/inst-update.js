@@ -176,7 +176,7 @@ test.describe("Installations update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
     input = chromeDriver.findElement(By.id("status"));
     input.click();
-    input.sendKeys("RDY_BEAM");
+    input.sendKeys("Ready for beam");
 
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
   });
@@ -302,7 +302,7 @@ test.describe("Installations update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
     chromeDriver.findElement(By.id("status")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("RDY_BEAM");
+        expect(text).to.equal("Ready for beam");
       });
   });
   // need date test

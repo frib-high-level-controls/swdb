@@ -206,7 +206,7 @@ test.describe("Preload db record tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
     chromeDriver.findElement(By.id("status")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("DEVEL");
+        expect(text).to.equal("Development");
       });
   });
 

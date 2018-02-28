@@ -129,7 +129,7 @@ test.describe("Installations detail screen tests", function() {
   test.it("should show the requested installation record status field", function() {
     chromeDriver.wait(until.elementLocated(By.id("status")),5000);
     chromeDriver.findElement(By.id("status")).getAttribute("value").then(function(result) {
-      expect(result).to.match(/RDY_INSTALL/);
+      expect(result).to.match(/Ready for install/);
     });
   });
 

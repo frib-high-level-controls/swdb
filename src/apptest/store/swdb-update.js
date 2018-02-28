@@ -158,7 +158,7 @@ test.describe("Software update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
     input = chromeDriver.findElement(By.id("status"));
     input.click();
-    input.sendKeys("DEVEL");
+    input.sendKeys("Development");
 
     // set status date
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')), 3000);
@@ -393,7 +393,7 @@ test.describe("Software update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
     chromeDriver.findElement(By.id("status")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("DEVEL");
+        expect(text).to.equal("Development");
       });
   });
 
@@ -539,7 +539,7 @@ test.describe("Software update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
     chromeDriver.findElement(By.id("status")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("DEVEL");
+        expect(text).to.equal("Development");
       });
   });
 
@@ -696,7 +696,7 @@ test.describe("Software update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
     chromeDriver.findElement(By.id("status")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("DEVEL");
+        expect(text).to.equal("Development");
       });
   });
 
