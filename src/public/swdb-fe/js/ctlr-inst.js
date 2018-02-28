@@ -511,9 +511,10 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
   };
 
   $scope.onStatusChange = function ($item, $model, $label) {
-    if ($scope.formData.status !== 'RDY_INSTALL') {
+    if ($scope.formData.status !== $scope.props.instStatusLabels[0]) {
       $scope.softwareDisabled = true;
-      $scope.softwareMouseover = "Software can only change when status is 'RDY_INSTALL'";
+      $scope.softwareMouseover = "Software can only change when status is '" + 
+        $scope.props.instStatusLabels[0] + "'";
     }
     else {
       $scope.softwareDisabled = false;

@@ -527,11 +527,16 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
   };
 
   $scope.onStatusChange = function ($item, $model, $label) {
-    if ($scope.formData.status === 'RDY_INSTALL') {
+    console.log("props: " + JSON.stringify($scope.props));
+    console.log("Status is now " + $scope.formData.status);
+    console.log("props.statusLabels[2] is " + $scope.props.statusLabels[2]);
+    if ($scope.formData.status === $scope.props.statusLabels[2]) {
       $scope.branchDisabled = true;
       $scope.versionDisabled = true;
-      $scope.branchMouseover = "Branch cannot change when status is 'RDY_INSTALL'";
-      $scope.versionMouseover = "Version cannot change when status is 'RDY_INSTALL'";
+      $scope.branchMouseover = "Branch cannot change when status is '" +
+        $scope.props.statusLabels[2] + "'";
+      $scope.versionMouseover = "Version cannot change when status is '" +
+        $scope.props.statusLabels[2] + "'";
     }
     else {
       $scope.branchDisabled = false;
@@ -579,18 +584,8 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     $scope.formData = data;
     $scope.whichItem = $routeParams.itemId;
 
-    if ($scope.formData.status === 'RDY_INSTALL') {
-      $scope.branchDisabled = true;
-      $scope.versionDisabled = true;
-      $scope.branchMouseover = "Branch cannot change when status is 'RDY_INSTALL'";
-      $scope.versionMouseover = "Version cannot change when status is 'RDY_INSTALL'";
-    }
-    else {
-      $scope.branchDisabled = false;
-      $scope.versionDisabled = false;
-      $scope.branchMouseover = "";
-      $scope.versionMouseover = "";
-    }
+    // Setup field display based on status
+    $scope.onStatusChange();
 
     // make a Date object from this string
     $scope.formData.statusDate = new Date($scope.formData.statusDate);
