@@ -78,7 +78,7 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
       .renderWith(function (data, type, full, meta) {
         let thisDate = new Date(full.statusDate);
         let month = thisDate.getMonth()+1;
-        let day = thisDate.getDay();
+        let day = thisDate.getDate();
         let year = thisDate.getFullYear();
         return month + '/' + day + '/' + year;
       })
@@ -184,14 +184,14 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
     if (data.statusDate) {
       let thisDate = new Date(data.statusDate);
       let month = thisDate.getMonth()+1;
-      let day = thisDate.getDay();
+      let day = thisDate.getDate();
       let year = thisDate.getFullYear();
       $scope.formData.statusDate =  month + '/' + day + '/' + year;
     }
     if (data.recertDate) {
       let thisDate = new Date(data.recertDate);
       let month = thisDate.getMonth()+1;
-      let day = thisDate.getDay();
+      let day = thisDate.getDate();
       let year = thisDate.getFullYear();
       $scope.cormData.recertDate = month + '/' + day + '/' + year;
     }

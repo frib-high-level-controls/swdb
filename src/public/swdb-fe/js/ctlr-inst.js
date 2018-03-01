@@ -94,7 +94,7 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
       .renderWith(function (data, type, full, meta) {
         let thisDate = new Date(full.statusDate);
         let month = thisDate.getMonth()+1;
-        let day = thisDate.getDay();
+        let day = thisDate.getDate();
         let year = thisDate.getFullYear();
         return month + '/' + day + '/' + year;
       })
@@ -172,7 +172,7 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configServ
     if (data.statusDate) {
       let thisDate = new Date(data.statusDate);
       let month = thisDate.getMonth()+1;
-      let day = thisDate.getDay();
+      let day = thisDate.getDate();
       let year = thisDate.getFullYear();
       $scope.formData.statusDate =  month + '/' + day + '/' + year;
     }
@@ -420,7 +420,7 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
       startingDay: 0
     };
 
-    method.format = 'M!/d!/yyyy';
+    method.format = 'MM/dd/yyyy';
 
     return method;
   }());
