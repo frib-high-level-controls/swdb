@@ -214,7 +214,7 @@ test.describe("Preload db record tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("statusDate")), 3000);
     chromeDriver.findElement(By.id("statusDate")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("July 7, 1970");
+        expect(text).to.equal("7/7/1970");
       });
   });
 

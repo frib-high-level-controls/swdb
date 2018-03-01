@@ -136,7 +136,7 @@ test.describe("Installations detail screen tests", function() {
   test.it("should show the requested installation record status date field", function() {
     chromeDriver.wait(until.elementLocated(By.id("statusDate")),5000);
     chromeDriver.findElement(By.id("statusDate")).getAttribute("value").then(function(result) {
-      expect(result).to.match(/2016-09-21T07:00:00.000Z/);
+      expect(result).to.match(/9\/21\/2016/);
     });
   });
 

@@ -173,7 +173,7 @@ test.describe("Software update screen tests", function () {
     input = chromeDriver.findElement(By.id("statusDate"));
     input.clear();
 
-    input.sendKeys("2017-10-01T07:00:00.000Z");
+    input.sendKeys("10/1/2017");
 
 
     // set platforms

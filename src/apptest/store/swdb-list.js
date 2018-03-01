@@ -153,7 +153,7 @@ test.describe("Installations record tests", function() {
     xpath = '//*[@id="swdbList"]/thead/tr[1]/th[7]';
     chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
     var field = chromeDriver.findElement(By.xpath(xpath));
-    return expect(Promise.resolve(field.getText())).to.eventually.equal("Status date");
+    return expect(Promise.resolve(field.getText())).to.eventually.equal("Status date (m/d/y)");
   });
 
   test.it("should show a known record", function() {

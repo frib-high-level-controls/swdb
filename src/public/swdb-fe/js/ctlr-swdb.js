@@ -193,7 +193,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
       let month = thisDate.getMonth()+1;
       let day = thisDate.getDate();
       let year = thisDate.getFullYear();
-      $scope.cormData.recertDate = month + '/' + day + '/' + year;
+      $scope.formData.recertDate = month + '/' + day + '/' + year;
     }
     $scope.whichItem = $routeParams.itemId;
   });
@@ -530,6 +530,8 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
           $scope.swdbParams.formShowErr = true;
         });
     } else {
+      console.log("statusDate: " + JSON.stringify($scope.formData.statusDate));
+      console.log("recertDate: " + JSON.stringify($scope.formData.recertDate));
       $scope.swdbParams.formErr = "Error: clear errors before submission";
       $scope.swdbParams.formShowStatus = false;
       $scope.swdbParams.formShowErr = true;
@@ -607,7 +609,12 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     $scope.onStatusChange();
 
     // make a Date object from this string
-    $scope.formData.statusDate = new Date($scope.formData.statusDate);
+    if ($scope.formData.statusDate) {
+      $scope.formData.statusDate = new Date($scope.formData.statusDate);
+    }
+    if ($scope.formData.recertDate) {
+      $scope.formData.recertDate = new Date($scope.formData.recertDate);
+    }
     // set selctor to current swName value
     $scope.selectedItem = { name: $scope.formData.swName };
     // convert the retreived record owner
