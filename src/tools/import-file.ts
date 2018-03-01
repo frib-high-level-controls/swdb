@@ -9,7 +9,11 @@ import rc = require('rc');
 import mongoose = require('mongoose');
 import XLSX = require('xlsx');
 
-//import * as history from '../app/shared/history';
+import * as history from '../app/shared/history';
+import { Db } from '../app/lib/Db';
+import { InstDb } from '../app/lib/instDb';
+
+interface HistoryDocument extends history.Document<HistoryDocument> {};
 
 interface Config {
   configs?: string[];
@@ -28,30 +32,11 @@ interface Config {
   _?: Array<{}>;
 };
 
-// interface CombinedDataRow {
-//   name: string;
-//   description: string;
-//   name_1: string;
-//   host: string;
-//   status: string;
-//   version: string;
-//   area: string;
-//   owner: string;
-//   engineer: string;
-//   level_of_care: string;
-//   platforms: string;
-//   vcs_type: string;
-//   vcs_location: string;
-//   build_tools: string;
-//   vv_results: string;
-//   vv_date: string;
-// };
-
 interface SWDataRow {
   swName: string;
   desc: string;
   status: string;
-  statusDate: string;
+  statusDate: Date;
   version: string;
   owner: string;
   engineer: string;
@@ -59,7 +44,7 @@ interface SWDataRow {
   platforms: string;
   versionControl: string;
   versionControlLoc: string;
-  _id: mongoose.Types.ObjectId;
+  _id: mongoose.Types.ObjectId | undefined;
 }
 
 interface InstDataRow {
@@ -67,9 +52,9 @@ interface InstDataRow {
   name: string;
   area: string;
   status: string;
-  statusDate: string;
+  statusDate: Date;
   vvResultsLoc: string;
-  software: mongoose.Types.ObjectId;
+  software: mongoose.Types.ObjectId | undefined;
   drrs: string;
 }
 
@@ -127,102 +112,161 @@ async function main() {
   }
 
   //let models = new Map<string, mongoose.Model<mongoose.Document>>();
-  
+  let combinedData: CombinedJson = {swData: [], instData: []};
   for (let filePath of cfg._) {
     let absFilePath = path.resolve(String(filePath));
     let name = path.basename(absFilePath, '.xlsx');
     console.log('filename %s', name);
     // Convert xlsx to json
-    let combinedData: CombinedJson = getXlsxJson(name);
-    console.log('swData %s \n\n', JSON.stringify(combinedData.swData));
-    console.log('instData %s', JSON.stringify(combinedData.instData));
+    combinedData = getXlsxJson(name);
+    //console.log('swData %s \n\n', JSON.stringify(combinedData.swData));
+    //console.log('instData %s', JSON.stringify(combinedData.instData));
+    //models.set(JSON.stringify(combinedData.swData), Db.swDoc);
+    //models.set(JSON.stringify(combinedData.instData), InstDb.instDoc);
   }
   
-    // let valid = true;
-  
-    // let documents = new Map<string, mongoose.Document[]>();
-  
-    // for (let [filePath, Model] of models.entries()) {
-    //   let docs = documents.get(filePath);
-    //   if (!docs) {
-    //     documents.set(filePath, docs = []);
-    //   }
-  
-    //   let data = await new Promise<Array<{}>>((resolve, reject) => {
-    //     debug('Read and parse file: %s', filePath);
-    //     fs.readFile(filePath, 'UTF-8', (err, json) => {
-    //       if (err) {
-    //         reject(err);
-    //         return;
-    //       }
-    //       let d;
-    //       try {
-    //         d = JSON.parse(json);
-    //       } catch (err) {
-    //         reject(err);
-    //         return;
-    //       }
-    //       if (!Array.isArray(d)) {
-    //         reject(new Error('Array of documents expected'));
-    //         return;
-    //       }
-    //       resolve(d);
-    //     });
-    //   });
-    //   debug('Total data records read: %s', data.length);
-  
-    //   for (let d of data) {
-    //     info('Create %s and validate: %s', Model.modelName, JSON.stringify(d));
-    //     let doc = new Model(d);
-    //     try {
-    //       await doc.validate();
-    //     } catch (err) {
-    //       valid = false;
-    //       error(err);
-    //     }
-    //     docs.push(doc);
-    //   }
-    // }
-  
-    // if (!valid) {
-    //   return;
-    // }
-  
-    if (cfg.dryrun !== false && cfg.dryrun !== 'false') {
-      info('DRYRUN DONE');
-      return;
+  let valid = true;
+  let swDataDoc: mongoose.Document[] = [];
+  new Db();
+  for (let d of combinedData.swData) {
+    //info('Create swDb and validate: %s', JSON.stringify(d));
+    //console.log('Create swDb and validate: %s', JSON.stringify(d));
+    let doc = new Db.swDoc(d);
+    try {
+      await doc.validate();
+    } catch (err) {
+      valid = false;
+      error(err);
     }
-  
-    // // Configure Mongoose (MongoDB)
-    // let mongoUrl = 'mongodb://';
-    // if (cfg.mongo.user) {
-    //   mongoUrl += encodeURIComponent(String(cfg.mongo.user));
-    //   if (cfg.mongo.pass) {
-    //     mongoUrl += ':' + encodeURIComponent(String(cfg.mongo.pass));
-    //   }
-    //   mongoUrl += '@';
-    // }
-    // mongoUrl += cfg.mongo.addr + ':' + cfg.mongo.port + '/' + cfg.mongo.db;
-  
-    // await mongoose.connect(mongoUrl, cfg.mongo.options);
-  
-    // const updatedBy = cfg.user ? String(cfg.user) : 'system';
-  
-    // for (let [_, docs] of documents.entries()) {
-    //   for (let doc of docs) {
-    //     try {
-    //       if (typeof (<HistoryDocument> doc).saveWithHistory === 'function') {
-    //         await (<HistoryDocument> doc).saveWithHistory(updatedBy);
-    //       } else {
-    //         await doc.save();
-    //       }
-    //     } catch (err) {
-    //       error(err);
-    //     }
-    //   }
-    // }
-  
-    // await mongoose.disconnect();
+    swDataDoc.push(doc);
+  }
+  //console.log('swDataDoc %s', swDataDoc.toString());
+  let instDataDoc: mongoose.Document[] = [];
+  new InstDb();
+  for (let d of combinedData.instData) {
+    //info('Create instDB and validate: %s', JSON.stringify(d));
+    //console.log('Create instDB and validate: %s', JSON.stringify(d));
+    let doc = new InstDb.instDoc(d);
+    try {
+      await doc.validate();
+    } catch (err) {
+      valid = false;
+      error(err);
+    }
+    instDataDoc.push(doc);
+  }
+  //console.log('instDataDoc %s', instDataDoc.toString());
+  //let documents = new Map<string, mongoose.Document[]>();
+
+  // for (let [data, Model] of models.entries()) {
+  //   let docs = [];
+  //   // if (!docs) {
+  //   //   documents.set(data, docs = []);
+  //   // }
+
+  //   // let data = await new Promise<Array<{}>>((resolve, reject) => {
+  //   //   debug('Read and parse file: %s', filePath);
+  //   //   fs.readFile(filePath, 'UTF-8', (err, json) => {
+  //   //     if (err) {
+  //   //       reject(err);
+  //   //       return;
+  //   //     }
+  //   //     let d;
+  //   //     try {
+  //   //       d = JSON.parse(json);
+  //   //     } catch (err) {
+  //   //       reject(err);
+  //   //       return;
+  //   //     }
+  //   //     if (!Array.isArray(d)) {
+  //   //       reject(new Error('Array of documents expected'));
+  //   //       return;
+  //   //     }
+  //   //     resolve(d);
+  //   //   });
+  //   // });
+  //   data = JSON.parse(data);
+  //   debug('Total data records read: %s', data.length);
+
+  //   for (let d of data) {
+  //     info('Create %s and validate: %s', Model.modelName, JSON.stringify(d));
+  //     let doc = new Model(d);
+  //     try {
+  //       await doc.validate();
+  //     } catch (err) {
+  //       valid = false;
+  //       error(err);
+  //     }
+  //     docs.push(doc);
+  //   }
+  // }
+
+  if (!valid) {
+    return;
+  }
+
+  if (cfg.dryrun !== false && cfg.dryrun !== 'false') {
+    info('DRYRUN DONE');
+    return;
+  }
+
+  // Configure Mongoose (MongoDB)
+  let mongoUrl = 'mongodb://';
+  if (cfg.mongo.user) {
+    mongoUrl += encodeURIComponent(String(cfg.mongo.user));
+    if (cfg.mongo.pass) {
+      mongoUrl += ':' + encodeURIComponent(String(cfg.mongo.pass));
+    }
+    mongoUrl += '@';
+  }
+  console.log('cfg.mongo.addr %s port %s db %s', cfg.mongo.addr, cfg.mongo.port, cfg.mongo.db)
+  mongoUrl += cfg.mongo.addr + ':' + cfg.mongo.port + '/' + cfg.mongo.db;
+
+  await mongoose.connect(mongoUrl, cfg.mongo.options);
+  // Clean DB before saving data
+  await mongoose.connection.db.dropDatabase();
+
+  const updatedBy = cfg.user ? String(cfg.user) : 'system';
+
+  // for (let [_, docs] of documents.entries()) {
+  //   for (let doc of docs) {
+  //     try {
+  //       if (typeof (<HistoryDocument>doc).saveWithHistory === 'function') {
+  //         await (<HistoryDocument>doc).saveWithHistory(updatedBy);
+  //       } else {
+  //         await doc.save();
+  //       }
+  //     } catch (err) {
+  //       error(err);
+  //     }
+  //   }
+  // }
+
+  for (let doc of swDataDoc) {
+    try {
+      if (typeof (<HistoryDocument>doc).saveWithHistory === 'function') {
+        await (<HistoryDocument>doc).saveWithHistory(updatedBy);
+      } else {
+        await doc.save();
+      }
+    } catch (err) {
+      error(err);
+    }
+  }
+
+  for (let doc of instDataDoc) {
+    try {
+      if (typeof (<HistoryDocument>doc).saveWithHistory === 'function') {
+        await (<HistoryDocument>doc).saveWithHistory(updatedBy);
+      } else {
+        await doc.save();
+      }
+    } catch (err) {
+      error(err);
+    }
+  }
+
+  await mongoose.disconnect();
 };
 
 /**
@@ -231,66 +275,92 @@ async function main() {
  * @returns {Array}
  */
 function getXlsxJson(fileName: any) {
-    // Read data from sheet
-    let workbook = XLSX.readFile(fileName);
-    let worksheet = workbook.Sheets['DRR01-03'];
-    let swDataArray: SWDataRow[] = [];
-    let instDataArray: InstDataRow[] = [];
-    let lineId = 0;
+  // Read data from sheet
+  let workbook = XLSX.readFile(fileName);
+  let swDataArray: SWDataRow[] = [];
+  let instDataArray: InstDataRow[] = [];
+  //let lineId = 0;
+  let swKeyList = new Map<string, mongoose.Types.ObjectId>();
+  let instKeyList = new Map<string, boolean>();
 
+  for (let i = 0; i < workbook.SheetNames.length; i++) {
+    let sheetName = workbook.SheetNames[i];
+    let worksheet = workbook.Sheets[sheetName];
+    console.log('Looking at sheet %s', sheetName);
     if (!worksheet) {
-        console.error('Cannot read data from sheet ' + worksheet + ', please check the config file.');
-        process.exit(1);
-      }
+      console.error('Cannot read data from sheet ' + sheetName + ', please check the config file.');
+      process.exit(1);
+    }
     let combinedData = XLSX.utils.sheet_to_json(worksheet);
     if (combinedData.length === 0) {
-      console.error('Cannot convert data to valid json list, please check the config file.');
+      console.error('Cannot convert data to json for worksheet ' + sheetName);
       process.exit(1);
     }
 
     for (let row of combinedData) {
-      lineId++;
+      //lineId++;
       let parseRow = JSON.parse(JSON.stringify(row));
-      let swData: SWDataRow = {swName: 'Undefined', desc: 'Undefined', status: 'RDY_INSTALL', version: 'Undefined',
-                              owner: 'Undefined', engineer: 'Undefined', levelOfCare: 'NONE',
-                              platforms: 'Undefined', versionControl: 'Other', versionControlLoc: 'Undefined',
-                              _id: new mongoose.Types.ObjectId(), statusDate: 'Undefined'};
-      swData.swName = parseRow["Name_1"];
-      swData.desc = parseRow["Description"];
-      swData.status = 'RDY_INSTALL';
-      swData.statusDate = parseRow["V&V Date"];
-      swData.version = parseRow["Version"]
-      swData.owner = parseRow["Owner"];
-      swData.engineer = parseRow["Engineer"];
-      swData.levelOfCare = parseRow["Level Of Care"];
-      swData.platforms = parseRow["Platforms"];
-      swData.versionControl = parseRow["VCS Type"];
-      swData.versionControlLoc = parseRow["VCS Location"];
-      swData._id = mongoose.Types.ObjectId(lineId);
 
-      swDataArray.push(swData);
+      if (!parseRow["Name"]) {
+        continue;
+      }
 
+      let keyStr: string = parseRow["Name_1"] + '-' + parseRow["Version"];
+
+      if (swKeyList.get(keyStr)) {
+        console.log('Found existing swName: %s version %s skipping add', parseRow["Name_1"], parseRow["Version"]);
+      } else {
+        swKeyList.set(keyStr, mongoose.Types.ObjectId());
+        let swData: SWDataRow = {
+          swName: '', desc: '', status: 'RDY_INSTALL', version: '',
+          owner: '', engineer: '', levelOfCare: 'NONE',
+          platforms: '', versionControl: 'Other', versionControlLoc: '',
+          _id: undefined, statusDate: new Date()
+        };
+        swData.swName = parseRow["Name_1"];
+        swData.desc = parseRow["Description"];
+        swData.status = 'RDY_INSTALL';
+        //swData.statusDate = parseRow["V&V Date"];
+        swData.statusDate = new Date();
+        swData.version = parseRow["Version"]
+        swData.owner = parseRow["Owner"];
+        swData.engineer = parseRow["Engineer"];
+        swData.levelOfCare = (<string>parseRow["Level Of Care"]).toUpperCase();
+        swData.platforms = parseRow["Platforms"];
+        swData.versionControl = parseRow["VCS Type"] === 'Archive' ? 'Other' : (parseRow["VCS Type"] === 'AssetCenter' ? 'AssetCentre' : parseRow["VCS Type"]);
+        swData.versionControlLoc = parseRow["VCS Location"];
+        swData._id = swKeyList.get(keyStr);
+
+        swDataArray.push(swData);
+      }
       if (parseRow["Host"]) {
-        let hosts = parseRow["Host"].split(';');
+        let hosts: string[] = parseRow["Host"].split(',');
         for (let host of hosts) {
-          let instData: InstDataRow = {
-            host: 'Undefined', name: 'Undefined', area: 'Undefined', status: 'RDY_INSTALL',
-            statusDate: 'Undefined', vvResultsLoc: 'Undefined', software: new mongoose.Types.ObjectId(), drrs: 'Undefined'
-          };
-          instData.host = host;
-          instData.name = swData.swName;
-          instData.area = parseRow["Area"];
-          instData.status = 'RDY_INSTALL';
-          instData.statusDate = swData.statusDate;
-          instData.vvResultsLoc = swData.versionControlLoc;
-          instData.software = mongoose.Types.ObjectId(lineId);
-          instData.drrs = 'DRR01-03';
+          let instKeyStr = host + '-' + parseRow["Name"] + '-' + swKeyList.get(keyStr);
+          if (instKeyList.get(instKeyStr)) {
+            console.log('Found existing installation %s skipping add', instKeyStr);
+          } else {
+            instKeyList.set(instKeyStr, true);
+            let instData: InstDataRow = {
+              host: '', name: '', area: '', status: 'RDY_INSTALL',
+              statusDate: new Date(), vvResultsLoc: '', software: undefined, drrs: ''
+            };
+            instData.host = host;
+            instData.name = parseRow["Name"];
+            instData.area = parseRow["Area"];
+            instData.status = 'RDY_INSTALL';
+            instData.statusDate = new Date();
+            instData.vvResultsLoc = parseRow["VCS Location"];
+            instData.software = swKeyList.get(keyStr);
+            instData.drrs = sheetName;
 
-          instDataArray.push(instData);
+            instDataArray.push(instData);
+          }
         }
       }
     }
-    return ({swData: swDataArray, instData: instDataArray});
   }
+  return ({ swData: swDataArray, instData: instDataArray });
+}
 
-  main().catch(error);
+main().catch(error);
