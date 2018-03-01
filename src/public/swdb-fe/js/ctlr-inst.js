@@ -89,7 +89,15 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
     DTColumnBuilder.newColumn('status')
       .withTitle('Status').withOption('defaultContent', ''),
     DTColumnBuilder.newColumn('statusDate')
-      .withTitle('Status Date').withOption('defaultContent', '')
+      // .withTitle('Status Date').withOption('defaultContent', '')
+      .withTitle('Status date (m/d/y)')
+      .renderWith(function (data, type, full, meta) {
+        let thisDate = new Date(full.statusDate);
+        let month = thisDate.getMonth()+1;
+        let day = thisDate.getDay();
+        let year = thisDate.getFullYear();
+        return month + '/' + day + '/' + year;
+      })
   ];
 
   angular.element('#instList').on('init.dt', function (event, loadedDT) {
@@ -160,6 +168,14 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configServ
   // $http.get($scope.props.instApiUrl+$routeParams.itemId).success(function(data) {
   $http.get(url).success(function (data) {
     $scope.formData = data;
+    // format dates for display
+    if (data.statusDate) {
+      let thisDate = new Date(data.statusDate);
+      let month = thisDate.getMonth()+1;
+      let day = thisDate.getDay();
+      let year = thisDate.getFullYear();
+      $scope.formData.statusDate =  month + '/' + day + '/' + year;
+    }
     $scope.whichItem = $routeParams.itemId;
   });
   // get history
@@ -238,8 +254,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
       startingDay: 0
     };
 
-    var formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-    method.format = formats[2];
+    method.format = 'M!/d!/yyyy';
 
     return method;
   }());
@@ -405,8 +420,7 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
       startingDay: 0
     };
 
-    var formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-    method.format = formats[2];
+    method.format = 'M!/d!/yyyy';
 
     return method;
   }());

@@ -74,7 +74,14 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
     DTColumnBuilder.newColumn('status')
       .withTitle('Status').withOption('defaultContent', ""),
     DTColumnBuilder.newColumn('statusDate')
-      .withTitle('Status date').withOption('defaultContent', "")
+      .withTitle('Status date (m/d/y)')
+      .renderWith(function (data, type, full, meta) {
+        let thisDate = new Date(full.statusDate);
+        let month = thisDate.getMonth()+1;
+        let day = thisDate.getDay();
+        let year = thisDate.getFullYear();
+        return month + '/' + day + '/' + year;
+      })
   ];
 
   angular.element('#swdbList').on('init.dt', function (event, loadedDT) {
@@ -171,9 +178,23 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
   let url = $window.location.origin;
   url = url + "/api/v1/swdb/" + $routeParams.itemId;
 
-  // $http.get($scope.props.apiUrl+$routeParams.itemId).success(function(data) {
   $http.get(url).success(function (data) {
     $scope.formData = data;
+    // format dates for display
+    if (data.statusDate) {
+      let thisDate = new Date(data.statusDate);
+      let month = thisDate.getMonth()+1;
+      let day = thisDate.getDay();
+      let year = thisDate.getFullYear();
+      $scope.formData.statusDate =  month + '/' + day + '/' + year;
+    }
+    if (data.recertDate) {
+      let thisDate = new Date(data.recertDate);
+      let month = thisDate.getMonth()+1;
+      let day = thisDate.getDay();
+      let year = thisDate.getFullYear();
+      $scope.cormData.recertDate = month + '/' + day + '/' + year;
+    }
     $scope.whichItem = $routeParams.itemId;
   });
 
@@ -185,11 +206,8 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
       elem.isCollapsed = true;
     }
     console.log("Got history: " + JSON.stringify(data.data, null, 2));
-    //console.log('rawHistory now: ' + $scope.rawHistory);
     $scope.isHistCollapsed = false;
     $scope.history = $sce.trustAsHtml(mkHistTable(data.data));
-    // console.log("Got history: " + JSON.stringify(data.data, null, 2));
-    // console.log("Got table: " + JSON.stringify($scope.history, null, 2));
   });
 }
 
@@ -236,9 +254,7 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
       startingDay: 0
     };
 
-    var formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-    method.format = formats[2];
-
+    method.format = 'M!/d!/yyyy';
     return method;
   }());
 
@@ -269,6 +285,10 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     // Prep any selected engineer
     console.log("engineerSelected: " + JSON.stringify($scope.engineerSelected, null, 2));
     $scope.formData.engineer = $scope.engineerSelected.item.uid;
+
+    if ($scope.formData.statusDate instanceof String) {
+      $scope.formData.statusDate = new Date($scope.formData.statusDate);
+    }
 
     delete $scope.formData.__v;
     if (!$scope.formData.version) {
@@ -447,8 +467,7 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
       startingDay: 0
     };
 
-    var formats = ['MM/dd/yyyy', 'dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-    method.format = formats[2];
+    method.format = 'M!/d!/yyyy';
 
     return method;
   }());

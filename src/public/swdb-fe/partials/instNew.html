@@ -153,7 +153,7 @@
             <p class="input-group">
               <input id="statusDate" name="statusDateInput" type="text" class="form-control" uib-datepicker-popup="{{datePicker.format}}"
                 ng-model="formData.statusDate" is-open="datePicker.instances['statusDate']" datepicker-options="datePicker.options"
-                ng-required="true" close-text="Close" alt-input-formats="altInputFormats" ng-pattern="/^(\d{1,2}[-/]\d{1,2}[-/]\d{4})|((\d{4}[-/]\d{2}[-/]\d{2})(T\d{2}:\d{2}:\d{2}.\d{3}Z)?)$/"
+                ng-required="true" close-text="Close" alt-input-formats="altInputFormats" 
               />
               <span class="input-group-btn">
             <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'statusDate')"><i class="glyphicon glyphicon-calendar"></i></button>

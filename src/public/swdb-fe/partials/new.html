@@ -187,7 +187,32 @@
       </div>
 
       <!-- STATUS DATE -->
-      <div class="row" ng-class="{ 'has-error' : inputForm.statusDateInput.$invalid && !inputForm.statusDateInput.$pristine }">
+      <div class="row" >
+        <div id="statusDate-group" class="form-group swdbFormRow">
+          <label class="col-sm-2 control-label">Status Date*</label>
+          <div class="col-sm-8">
+
+            <p class="input-group">
+              <input id="statusDate" name="statusDateInput" type="text" class="form-control" placeholder="Status Date (mm/dd/yyy)" uib-datepicker-popup="{{datePicker.format}}"
+                ng-model="formData.statusDate" is-open="datePicker.instances['statusDate']" datepicker-options="datePicker.options"
+                ng-required="true" close-text="Close" 
+              />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'statusDate')">
+                  <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+              </span>
+            </p>
+
+            <!-- </input> -->
+          </div>
+          <div class="col-sm-2" id="statusDateInputSts">
+          </div>
+        </div>
+      </div>
+
+      <!-- STATUS DATE -->
+      <!-- <div class="row" ng-class="{ 'has-error' : inputForm.statusDateInput.$invalid && !inputForm.statusDateInput.$pristine }">
         <div id="statusDate-group" class="form-group swdbFormRow">
           <label class="col-sm-2 control-label">Status Date*</label>
           <div class="col-sm-8">
@@ -202,16 +227,15 @@
                   <i class="glyphicon glyphicon-calendar"></i>
                 </button>
               </span>
-            </p>
-
-            <!-- </input> -->
+            </p> -->
+<!-- 
           </div>
           <div class="col-sm-2" id="statusDateInputSts" ng-messages="inputForm.statusDateInput.$error" ng-if="inputForm.statusDateInput.$dirty">
             <div ng-message="required">Date is required</div>
             <div ng-message="pattern">Use date format YYYY/MM/DD</div>
           </div>
         </div>
-      </div>
+      </div> -->
 
 
       <!-- PLATFORM -->
@@ -348,7 +372,31 @@
       </div>
 
       <!-- Recertification date -->
-      <div class="row" ng-class="{ 'has-error' : inputForm.recertDateInput.$invalid && !inputForm.recertDateInput.$pristine }">
+      <div class="row" >
+        <div id="recertDate-group" class="form-group swdbFormRow">
+          <label class="col-sm-2 control-label">Recert Date</label>
+          <div class="col-sm-8">
+
+            <p class="input-group">
+              <input id="recertDate" name="recertDateInput" type="text" class="form-control" uib-datepicker-popup="{{datePicker.format}}"
+                ng-model="formData.recertDate" is-open="datePicker.instances['recertDate']" placeholder="Recertification Date (mm/dd/yyyy)"
+                datepicker-options="datePicker.options" ng-required="false" close-text="Close" />
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'recertDate')">
+                  <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+              </span>
+            </p>
+
+            <!-- </input> -->
+          </div>
+          <div class="col-sm-2" id="recertDateInputSts" >
+          </div>
+        </div>
+      </div>
+
+      <!-- Recertification date -->
+      <!-- <div class="row" ng-class="{ 'has-error' : inputForm.recertDateInput.$invalid && !inputForm.recertDateInput.$pristine }">
         <div id="recertDate-group" class="form-group swdbFormRow">
           <label class="col-sm-2 control-label">Recert Date</label>
           <div class="col-sm-8">
@@ -363,16 +411,16 @@
                   <i class="glyphicon glyphicon-calendar"></i>
                 </button>
               </span>
-            </p>
+            </p> -->
 
             <!-- </input> -->
-          </div>
+          <!-- </div>
           <div class="col-sm-2" id="recertDateInputSts" ng-messages="inputForm.recertDateInput.$error" ng-if="inputForm.recertDateInput.$dirty">
             <div ng-message="required">Date is required</div>
             <div ng-message="pattern">Use date format YYYY/MM/DD</div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <!-- Previous revision 
             <div class="row" ng-class="{ 'has-error' : inputForm.previousInput.$invalid && !inputForm.previousInput.$pristine }">

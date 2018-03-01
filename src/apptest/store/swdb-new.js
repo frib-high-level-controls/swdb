@@ -171,7 +171,8 @@ test.describe("Software update screen tests", function () {
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("statusDate")), 3000);
     input = chromeDriver.findElement(By.id("statusDate"));
-    input.click();
+    input.clear();
+
     input.sendKeys("2017-10-01T07:00:00.000Z");
 
 
