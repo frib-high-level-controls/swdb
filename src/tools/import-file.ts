@@ -30,6 +30,9 @@ interface Config {
   user?: {};
   dryrun?: {};
   _?: Array<{}>;
+  engineer?: {[key: string]: string };
+  area?: {[key: string]: string };
+  owner?: {[key: string]: string };
 };
 
 interface SWDataRow {
@@ -93,7 +96,7 @@ async function main() {
   if (debug.enabled) {
     debug(JSON.stringify(cfg, null, 4));
   }
-
+  info(JSON.stringify(cfg, null, 4));
   if (cfg.h || cfg.help) {
     info(`Usage: import-file [ options ] data.json [ ... ]
 
@@ -118,19 +121,14 @@ async function main() {
     let name = path.basename(absFilePath, '.xlsx');
     console.log('filename %s', name);
     // Convert xlsx to json
-    combinedData = getXlsxJson(name);
-    //console.log('swData %s \n\n', JSON.stringify(combinedData.swData));
-    //console.log('instData %s', JSON.stringify(combinedData.instData));
-    //models.set(JSON.stringify(combinedData.swData), Db.swDoc);
-    //models.set(JSON.stringify(combinedData.instData), InstDb.instDoc);
+    combinedData = getXlsxJson(name, cfg);
   }
   
   let valid = true;
   let swDataDoc: mongoose.Document[] = [];
   new Db();
   for (let d of combinedData.swData) {
-    //info('Create swDb and validate: %s', JSON.stringify(d));
-    //console.log('Create swDb and validate: %s', JSON.stringify(d));
+    info('Create swDb and validate: %s', JSON.stringify(d));
     let doc = new Db.swDoc(d);
     try {
       await doc.validate();
@@ -144,8 +142,7 @@ async function main() {
   let instDataDoc: mongoose.Document[] = [];
   new InstDb();
   for (let d of combinedData.instData) {
-    //info('Create instDB and validate: %s', JSON.stringify(d));
-    //console.log('Create instDB and validate: %s', JSON.stringify(d));
+    info('Create instDB and validate: %s', JSON.stringify(d));
     let doc = new InstDb.instDoc(d);
     try {
       await doc.validate();
@@ -155,51 +152,6 @@ async function main() {
     }
     instDataDoc.push(doc);
   }
-  //console.log('instDataDoc %s', instDataDoc.toString());
-  //let documents = new Map<string, mongoose.Document[]>();
-
-  // for (let [data, Model] of models.entries()) {
-  //   let docs = [];
-  //   // if (!docs) {
-  //   //   documents.set(data, docs = []);
-  //   // }
-
-  //   // let data = await new Promise<Array<{}>>((resolve, reject) => {
-  //   //   debug('Read and parse file: %s', filePath);
-  //   //   fs.readFile(filePath, 'UTF-8', (err, json) => {
-  //   //     if (err) {
-  //   //       reject(err);
-  //   //       return;
-  //   //     }
-  //   //     let d;
-  //   //     try {
-  //   //       d = JSON.parse(json);
-  //   //     } catch (err) {
-  //   //       reject(err);
-  //   //       return;
-  //   //     }
-  //   //     if (!Array.isArray(d)) {
-  //   //       reject(new Error('Array of documents expected'));
-  //   //       return;
-  //   //     }
-  //   //     resolve(d);
-  //   //   });
-  //   // });
-  //   data = JSON.parse(data);
-  //   debug('Total data records read: %s', data.length);
-
-  //   for (let d of data) {
-  //     info('Create %s and validate: %s', Model.modelName, JSON.stringify(d));
-  //     let doc = new Model(d);
-  //     try {
-  //       await doc.validate();
-  //     } catch (err) {
-  //       valid = false;
-  //       error(err);
-  //     }
-  //     docs.push(doc);
-  //   }
-  // }
 
   if (!valid) {
     return;
@@ -227,20 +179,6 @@ async function main() {
   await mongoose.connection.db.dropDatabase();
 
   const updatedBy = cfg.user ? String(cfg.user) : 'system';
-
-  // for (let [_, docs] of documents.entries()) {
-  //   for (let doc of docs) {
-  //     try {
-  //       if (typeof (<HistoryDocument>doc).saveWithHistory === 'function') {
-  //         await (<HistoryDocument>doc).saveWithHistory(updatedBy);
-  //       } else {
-  //         await doc.save();
-  //       }
-  //     } catch (err) {
-  //       error(err);
-  //     }
-  //   }
-  // }
 
   for (let doc of swDataDoc) {
     try {
@@ -274,19 +212,18 @@ async function main() {
  * @param fileName
  * @returns {Array}
  */
-function getXlsxJson(fileName: any) {
+function getXlsxJson(fileName: any, cfg: Config) {
   // Read data from sheet
   let workbook = XLSX.readFile(fileName);
   let swDataArray: SWDataRow[] = [];
   let instDataArray: InstDataRow[] = [];
-  //let lineId = 0;
   let swKeyList = new Map<string, mongoose.Types.ObjectId>();
   let instKeyList = new Map<string, boolean>();
 
   for (let i = 0; i < workbook.SheetNames.length; i++) {
     let sheetName = workbook.SheetNames[i];
     let worksheet = workbook.Sheets[sheetName];
-    console.log('Looking at sheet %s', sheetName);
+    info('Looking at sheet %s', sheetName);
     if (!worksheet) {
       console.error('Cannot read data from sheet ' + sheetName + ', please check the config file.');
       process.exit(1);
@@ -298,7 +235,6 @@ function getXlsxJson(fileName: any) {
     }
 
     for (let row of combinedData) {
-      //lineId++;
       let parseRow = JSON.parse(JSON.stringify(row));
 
       if (!parseRow["Name"]) {
@@ -308,7 +244,7 @@ function getXlsxJson(fileName: any) {
       let keyStr: string = parseRow["Name_1"] + '-' + parseRow["Version"];
 
       if (swKeyList.get(keyStr)) {
-        console.log('Found existing swName: %s version %s skipping add', parseRow["Name_1"], parseRow["Version"]);
+        info('Found existing swName: %s version %s skipping add', parseRow["Name_1"], parseRow["Version"]);
       } else {
         swKeyList.set(keyStr, mongoose.Types.ObjectId());
         let swData: SWDataRow = {
@@ -323,8 +259,8 @@ function getXlsxJson(fileName: any) {
         //swData.statusDate = parseRow["V&V Date"];
         swData.statusDate = new Date();
         swData.version = parseRow["Version"]
-        swData.owner = parseRow["Owner"];
-        swData.engineer = parseRow["Engineer"];
+        swData.owner = (cfg.owner && cfg.owner[parseRow["Owner"]]) ? cfg.owner[parseRow["Owner"]] : parseRow["Owner"];
+        swData.engineer = (cfg.engineer && cfg.engineer[parseRow["Engineer"]]) ? cfg.engineer[parseRow["Engineer"]] : parseRow["Engineer"];
         swData.levelOfCare = (<string>parseRow["Level Of Care"]).toUpperCase();
         swData.platforms = parseRow["Platforms"];
         swData.versionControl = parseRow["VCS Type"] === 'Archive' ? 'Other' : (parseRow["VCS Type"] === 'AssetCenter' ? 'AssetCentre' : parseRow["VCS Type"]);
@@ -338,7 +274,7 @@ function getXlsxJson(fileName: any) {
         for (let host of hosts) {
           let instKeyStr = host + '-' + parseRow["Name"] + '-' + swKeyList.get(keyStr);
           if (instKeyList.get(instKeyStr)) {
-            console.log('Found existing installation %s skipping add', instKeyStr);
+            info('Found existing installation %s skipping add', instKeyStr);
           } else {
             instKeyList.set(instKeyStr, true);
             let instData: InstDataRow = {
@@ -347,7 +283,7 @@ function getXlsxJson(fileName: any) {
             };
             instData.host = host;
             instData.name = parseRow["Name"];
-            instData.area = parseRow["Area"];
+            instData.area = (cfg.area && cfg.area[parseRow["Area"]]) ? cfg.area[parseRow["Area"]] : parseRow["Area"];
             instData.status = 'RDY_INSTALL';
             instData.statusDate = new Date();
             instData.vvResultsLoc = parseRow["VCS Location"];
