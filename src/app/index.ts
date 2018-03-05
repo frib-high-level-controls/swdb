@@ -221,7 +221,7 @@ async function doStart(): Promise<express.Application> {
   // Authentication handlers
   app.use(auth.getProvider().initialize());
 
-  app.get('/login', auth.getProvider().authenticate(), (req, res) => {
+  app.get('/login', auth.getProvider().authenticate({ rememberParams: [ 'bounce' ]}), (req, res) => {
     if (req.query.bounce) {
       res.redirect(req.query.bounce);
       return;
