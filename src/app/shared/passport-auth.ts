@@ -142,7 +142,7 @@ export abstract class CasPassportAbstractProvider extends PassportAbstractProvid
     const strategyOptions: ppcas.StrategyOptions = {
       ssoBaseURL: options.casUrl,
       serviceURL: options.casAppendPath ? undefined : options.casServiceUrl,
-      serverBaseURL: options.casAppendPath ? options.casServiceUrl : undefined,
+      serverBaseURL: options.casServiceUrl,
       validateURL: options.casVersion === 'CAS2.0' ? '/serviceValidate' : undefined,
       version: version,
     };
