@@ -118,10 +118,16 @@ async function main() {
   let combinedData: CombinedJson = {swData: [], instData: []};
   for (let filePath of cfg._) {
     let absFilePath = path.resolve(String(filePath));
-    let name = path.basename(absFilePath, '.xlsx');
-    console.log('filename %s', name);
+    let name = path.basename(absFilePath);
+    console.log('filename %s %s', name, absFilePath);
     // Convert xlsx to json
-    combinedData = getXlsxJson(name, cfg);
+    let combinedDataLocal = getXlsxJson(name, cfg);
+    for (let i =0; i < combinedDataLocal.swData.length; i++) {
+      combinedData.swData.push(combinedDataLocal.swData[i]);
+    }
+    for (let i =0; i < combinedDataLocal.instData.length; i++) {
+      combinedData.instData.push(combinedDataLocal.instData[i]);
+    }
   }
   
   let valid = true;
