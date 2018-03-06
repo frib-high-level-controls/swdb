@@ -218,7 +218,7 @@ async function main() {
  * @param fileName
  * @returns {Array}
  */
-function getXlsxJson(fileName: any, cfg: Config) {
+function getXlsxJson(fileName: string, cfg: Config) {
   // Read data from sheet
   let workbook = XLSX.readFile(fileName);
   let swDataArray: SWDataRow[] = [];
@@ -254,14 +254,14 @@ function getXlsxJson(fileName: any, cfg: Config) {
       } else {
         swKeyList.set(keyStr, mongoose.Types.ObjectId());
         let swData: SWDataRow = {
-          swName: '', desc: '', status: 'RDY_INSTALL', version: '',
+          swName: '', desc: '', status: 'Ready for install', version: '',
           owner: '', engineer: '', levelOfCare: 'NONE',
           platforms: '', versionControl: 'Other', versionControlLoc: '',
           _id: undefined, statusDate: new Date()
         };
         swData.swName = parseRow["Name_1"];
         swData.desc = parseRow["Description"];
-        swData.status = 'RDY_INSTALL';
+        swData.status = 'Ready for install';
         //swData.statusDate = parseRow["V&V Date"];
         swData.statusDate = new Date();
         swData.version = parseRow["Version"]
@@ -284,13 +284,13 @@ function getXlsxJson(fileName: any, cfg: Config) {
           } else {
             instKeyList.set(instKeyStr, true);
             let instData: InstDataRow = {
-              host: '', name: '', area: '', status: 'RDY_INSTALL',
+              host: '', name: '', area: '', status: 'Ready for install',
               statusDate: new Date(), vvResultsLoc: '', software: undefined, drrs: ''
             };
             instData.host = host;
             instData.name = parseRow["Name"];
             instData.area = (cfg.area && cfg.area[parseRow["Area"]]) ? cfg.area[parseRow["Area"]] : parseRow["Area"];
-            instData.status = 'RDY_INSTALL';
+            instData.status = 'Ready for install';
             instData.statusDate = new Date();
             instData.vvResultsLoc = parseRow["VCS Location"];
             instData.software = swKeyList.get(keyStr);
