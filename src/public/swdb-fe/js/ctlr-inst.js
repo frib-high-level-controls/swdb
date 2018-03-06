@@ -346,6 +346,10 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
 
   $scope.refreshSw = () => {
     $scope.swList = swService.getSwList();
+    $scope.swList = swService.getSwList().filter(function(item, index, arr){
+      // filter for software that is in the "Ready for Install" state
+      return item.status === $scope.props.StatusEnum[2];
+    });
     // console.log("swList is now "+JSON.stringify($scope.swList));
   };
 
@@ -541,7 +545,10 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
 
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
-  $scope.swList = swService.getSwList();
+  $scope.swList = swService.getSwList().filter(function (item, index, arr) {
+    // filter for software that is in the "Ready for Install" state
+    return item.status === $scope.props.StatusEnum[2];
+  });
 
   forgAreaService.promise.then(function () {
     $scope.forgAreasList = forgAreaService.getAreas().data;

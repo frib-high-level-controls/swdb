@@ -54,10 +54,10 @@ if (props.test.testing === 'true') {
   debug('TEST mode is active!');
   let gdata: forgapi.Group[] = ctools.getForgGroupsTestFile();
   const forgClient = mockforgapi.MockClient.getInstance();
-  debug('loading mock forg groups for with: ' + JSON.stringify(gdata, null, 2));
+  // debug('loading mock forg groups for with: ' + JSON.stringify(gdata, null, 2));
   forgClient.addGroup(gdata);
   let udata: forgapi.User[] = ctools.getForgUsersTestFile();
-  debug('loading mock forg users for with: ' + JSON.stringify(udata, null, 2));
+  // debug('loading mock forg users for with: ' + JSON.stringify(udata, null, 2));
   forgClient.addUser(udata);
 
   cfAuthProvider = new cfauth.DevForgBasicProvider(forgClient, {});
