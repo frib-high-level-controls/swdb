@@ -1,7 +1,6 @@
 /**
  * Import data from a xls file to the database.
  */
-//import * as fs from 'fs';
 import * as path from 'path';
 
 import * as dbg from 'debug';
@@ -9,9 +8,9 @@ import rc = require('rc');
 import mongoose = require('mongoose');
 import XLSX = require('xlsx');
 
-import * as history from '../app/shared/history';
 import { Db } from '../app/lib/Db';
 import { InstDb } from '../app/lib/instDb';
+import * as history from '../app/shared/history';
 
 interface HistoryDocument extends history.Document<HistoryDocument> {};
 
@@ -39,7 +38,7 @@ interface SWDataRow {
   swName: string;
   desc: string;
   status: string;
-  statusDate: Date;
+  statusDate: string;
   version: string;
   owner: string;
   engineer: string;
@@ -55,7 +54,7 @@ interface InstDataRow {
   name: string;
   area: string;
   status: string;
-  statusDate: Date;
+  statusDate: string;
   vvResultsLoc: string;
   software: mongoose.Types.ObjectId | undefined;
   drrs: string;
@@ -72,6 +71,9 @@ const debug = dbg('import-file');
 
 const info = console.info;
 const error = console.error;
+
+let swKeyList = new Map<string, mongoose.Types.ObjectId>();
+let instKeyList = new Map<string, boolean>();
 
 async function main() {
   let cfg: Config = {
@@ -114,22 +116,21 @@ async function main() {
     return;
   }
 
-  //let models = new Map<string, mongoose.Model<mongoose.Document>>();
   let combinedData: CombinedJson = {swData: [], instData: []};
   for (let filePath of cfg._) {
     let absFilePath = path.resolve(String(filePath));
     let name = path.basename(absFilePath);
-    console.log('filename %s %s', name, absFilePath);
+    info('filename %s %s', name, absFilePath);
     // Convert xlsx to json
     let combinedDataLocal = getXlsxJson(name, cfg);
-    for (let i =0; i < combinedDataLocal.swData.length; i++) {
-      combinedData.swData.push(combinedDataLocal.swData[i]);
+    for (let data of combinedDataLocal.swData) {
+      combinedData.swData.push(data);
     }
-    for (let i =0; i < combinedDataLocal.instData.length; i++) {
-      combinedData.instData.push(combinedDataLocal.instData[i]);
+    for (let data of combinedDataLocal.instData) {
+      combinedData.instData.push(data);
     }
   }
-  
+
   let valid = true;
   let swDataDoc: mongoose.Document[] = [];
   new Db();
@@ -144,7 +145,7 @@ async function main() {
     }
     swDataDoc.push(doc);
   }
-  //console.log('swDataDoc %s', swDataDoc.toString());
+
   let instDataDoc: mongoose.Document[] = [];
   new InstDb();
   for (let d of combinedData.instData) {
@@ -177,7 +178,7 @@ async function main() {
     }
     mongoUrl += '@';
   }
-  console.log('cfg.mongo.addr %s port %s db %s', cfg.mongo.addr, cfg.mongo.port, cfg.mongo.db)
+  info('cfg.mongo.addr %s port %s db %s', cfg.mongo.addr, cfg.mongo.port, cfg.mongo.db);
   mongoUrl += cfg.mongo.addr + ':' + cfg.mongo.port + '/' + cfg.mongo.db;
 
   await mongoose.connect(mongoUrl, cfg.mongo.options);
@@ -188,8 +189,8 @@ async function main() {
 
   for (let doc of swDataDoc) {
     try {
-      if (typeof (<HistoryDocument>doc).saveWithHistory === 'function') {
-        await (<HistoryDocument>doc).saveWithHistory(updatedBy);
+      if (typeof (<HistoryDocument> doc).saveWithHistory === 'function') {
+        await (<HistoryDocument> doc).saveWithHistory(updatedBy);
       } else {
         await doc.save();
       }
@@ -200,8 +201,8 @@ async function main() {
 
   for (let doc of instDataDoc) {
     try {
-      if (typeof (<HistoryDocument>doc).saveWithHistory === 'function') {
-        await (<HistoryDocument>doc).saveWithHistory(updatedBy);
+      if (typeof (<HistoryDocument> doc).saveWithHistory === 'function') {
+        await (<HistoryDocument> doc).saveWithHistory(updatedBy);
       } else {
         await doc.save();
       }
@@ -223,11 +224,9 @@ function getXlsxJson(fileName: string, cfg: Config) {
   let workbook = XLSX.readFile(fileName);
   let swDataArray: SWDataRow[] = [];
   let instDataArray: InstDataRow[] = [];
-  let swKeyList = new Map<string, mongoose.Types.ObjectId>();
-  let instKeyList = new Map<string, boolean>();
 
-  for (let i = 0; i < workbook.SheetNames.length; i++) {
-    let sheetName = workbook.SheetNames[i];
+  for (let sheet of workbook.SheetNames) {
+    let sheetName = sheet;
     let worksheet = workbook.Sheets[sheetName];
     info('Looking at sheet %s', sheetName);
     if (!worksheet) {
@@ -241,61 +240,54 @@ function getXlsxJson(fileName: string, cfg: Config) {
     }
 
     for (let row of combinedData) {
-      let parseRow = JSON.parse(JSON.stringify(row));
+      let parseRow = row;
 
-      if (!parseRow["Name"]) {
+      if (!parseRow['Name']) {
         continue;
       }
 
-      let keyStr: string = parseRow["Name_1"] + '-' + parseRow["Version"];
+      let keyStr: string = parseRow['Name_1'] + '-' + parseRow['Version'];
 
       if (swKeyList.get(keyStr)) {
-        info('Found existing swName: %s version %s skipping add', parseRow["Name_1"], parseRow["Version"]);
+        info('Found existing swName: %s version %s skipping add', parseRow['Name_1'], parseRow['Version']);
       } else {
         swKeyList.set(keyStr, mongoose.Types.ObjectId());
         let swData: SWDataRow = {
-          swName: '', desc: '', status: 'Ready for install', version: '',
-          owner: '', engineer: '', levelOfCare: 'NONE',
-          platforms: '', versionControl: 'Other', versionControlLoc: '',
-          _id: undefined, statusDate: new Date()
+          swName: parseRow['Name_1'],
+          desc: parseRow['Description'],
+          status: 'Ready for install',
+          version: parseRow['Version'],
+          owner: (cfg.owner && cfg.owner[parseRow['Owner']]) ? cfg.owner[parseRow['Owner']] : 'UNKNOWN OWNER',
+          engineer: (cfg.engineer && cfg.engineer[parseRow['Engineer']]) ? cfg.engineer[parseRow['Engineer']] :
+            'UNKNOWN ENGINEER',
+          levelOfCare: (<string> parseRow['Level Of Care']).toUpperCase(),
+          platforms: parseRow['Platforms'],
+          versionControl: parseRow['VCS Type'] === 'Archive' ? 'Other' : (parseRow['VCS Type'] === 'AssetCenter' ?
+            'AssetCentre' : parseRow['VCS Type']),
+          versionControlLoc: parseRow['VCS Location'],
+          _id: swKeyList.get(keyStr),
+          statusDate: Date(),
         };
-        swData.swName = parseRow["Name_1"];
-        swData.desc = parseRow["Description"];
-        swData.status = 'Ready for install';
-        //swData.statusDate = parseRow["V&V Date"];
-        swData.statusDate = new Date();
-        swData.version = parseRow["Version"]
-        swData.owner = (cfg.owner && cfg.owner[parseRow["Owner"]]) ? cfg.owner[parseRow["Owner"]] : parseRow["Owner"];
-        swData.engineer = (cfg.engineer && cfg.engineer[parseRow["Engineer"]]) ? cfg.engineer[parseRow["Engineer"]] : parseRow["Engineer"];
-        swData.levelOfCare = (<string>parseRow["Level Of Care"]).toUpperCase();
-        swData.platforms = parseRow["Platforms"];
-        swData.versionControl = parseRow["VCS Type"] === 'Archive' ? 'Other' : (parseRow["VCS Type"] === 'AssetCenter' ? 'AssetCentre' : parseRow["VCS Type"]);
-        swData.versionControlLoc = parseRow["VCS Location"];
-        swData._id = swKeyList.get(keyStr);
-
         swDataArray.push(swData);
       }
-      if (parseRow["Host"]) {
-        let hosts: string[] = parseRow["Host"].split(',');
+      if (parseRow['Host']) {
+        let hosts: string[] = parseRow['Host'].split(',');
         for (let host of hosts) {
-          let instKeyStr = host + '-' + parseRow["Name"] + '-' + swKeyList.get(keyStr);
+          let instKeyStr = host + '-' + parseRow['Name'] + '-' + swKeyList.get(keyStr);
           if (instKeyList.get(instKeyStr)) {
             info('Found existing installation %s skipping add', instKeyStr);
           } else {
             instKeyList.set(instKeyStr, true);
             let instData: InstDataRow = {
-              host: '', name: '', area: '', status: 'Ready for install',
-              statusDate: new Date(), vvResultsLoc: '', software: undefined, drrs: ''
+              host: host,
+              name: parseRow['Name'],
+              area: (cfg.area && cfg.area[parseRow['Area']]) ? cfg.area[parseRow['Area']] : 'UNKNOWN AREA',
+              status: 'Ready for install',
+              statusDate: Date(),
+              vvResultsLoc: parseRow['VCS Location'],
+              software: swKeyList.get(keyStr),
+              drrs: sheetName,
             };
-            instData.host = host;
-            instData.name = parseRow["Name"];
-            instData.area = (cfg.area && cfg.area[parseRow["Area"]]) ? cfg.area[parseRow["Area"]] : parseRow["Area"];
-            instData.status = 'Ready for install';
-            instData.statusDate = new Date();
-            instData.vvResultsLoc = parseRow["VCS Location"];
-            instData.software = swKeyList.get(keyStr);
-            instData.drrs = sheetName;
-
             instDataArray.push(instData);
           }
         }
