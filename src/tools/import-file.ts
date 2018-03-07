@@ -12,6 +12,20 @@ import { Db } from '../app/lib/Db';
 import { InstDb } from '../app/lib/instDb';
 import * as history from '../app/shared/history';
 
+// Constants correspond to column names in xlsx file
+const COL_NAME = 'Name';
+const COL_AREA = 'Area';
+const COL_OWNER = 'Owner';
+const COL_VERSION = 'Version';
+const COL_NAME_1 = 'Name_1';
+const COL_ENGINEER = 'Engineer';
+const COL_LOC = 'Level Of Care';
+const COL_DESCRIPTION = 'Description';
+const COL_PLATFORMS = 'Platforms';
+const COL_VCS_TYPE = 'VCS Type';
+const COL_VCS_LOCATION = 'VCS Location';
+const COL_HOST = 'Host';
+
 interface HistoryDocument extends history.Document<HistoryDocument> {};
 
 interface Config {
@@ -100,12 +114,11 @@ async function main() {
   }
   info(JSON.stringify(cfg, null, 4));
   if (cfg.h || cfg.help) {
-    info(`Usage: import-file [ options ] data.json [ ... ]
+    info(`Usage: import-file [ options ] data.xlsx [ ... ]
 
     Options
         --help               display help information
         --config [rcfile]    load configuration from rcfile
-        --user [username]    username to use when saving with history
         --dryrun [dryrun]    validate CCDB data (default: true)
     `);
     return;
@@ -133,7 +146,7 @@ async function main() {
 
   let valid = true;
   let swDataDoc: mongoose.Document[] = [];
-  new Db();
+  new Db(); // tslint:disable-line
   for (let d of combinedData.swData) {
     info('Create swDb and validate: %s', JSON.stringify(d));
     let doc = new Db.swDoc(d);
@@ -147,7 +160,7 @@ async function main() {
   }
 
   let instDataDoc: mongoose.Document[] = [];
-  new InstDb();
+  new InstDb(); // tslint:disable-line
   for (let d of combinedData.instData) {
     info('Create instDB and validate: %s', JSON.stringify(d));
     let doc = new InstDb.instDoc(d);
@@ -185,7 +198,7 @@ async function main() {
   // Clean DB before saving data
   await mongoose.connection.db.dropDatabase();
 
-  const updatedBy = cfg.user ? String(cfg.user) : 'system';
+  const updatedBy = 'system';
 
   for (let doc of swDataDoc) {
     try {
@@ -240,51 +253,49 @@ function getXlsxJson(fileName: string, cfg: Config) {
     }
 
     for (let row of combinedData) {
-      let parseRow = row;
-
-      if (!parseRow['Name']) {
+      if (!row[COL_NAME]) {
         continue;
       }
 
-      let keyStr: string = parseRow['Name_1'] + '-' + parseRow['Version'];
+      let keyStr: string = row[COL_NAME_1] + '-' + row[COL_VERSION];
 
       if (swKeyList.get(keyStr)) {
-        info('Found existing swName: %s version %s skipping add', parseRow['Name_1'], parseRow['Version']);
+        info('Found existing swName: %s version %s skipping add', row[COL_NAME_1], row[COL_VERSION]);
       } else {
         swKeyList.set(keyStr, mongoose.Types.ObjectId());
         let swData: SWDataRow = {
-          swName: parseRow['Name_1'],
-          desc: parseRow['Description'],
+          swName: row[COL_NAME_1],
+          desc: row[COL_DESCRIPTION],
           status: 'Ready for install',
-          version: parseRow['Version'],
-          owner: (cfg.owner && cfg.owner[parseRow['Owner']]) ? cfg.owner[parseRow['Owner']] : 'UNKNOWN OWNER',
-          engineer: (cfg.engineer && cfg.engineer[parseRow['Engineer']]) ? cfg.engineer[parseRow['Engineer']] :
+          version: row[COL_VERSION],
+          owner: (cfg.owner && cfg.owner[row[COL_OWNER]]) ? cfg.owner[row[COL_OWNER]] : 'UNKNOWN OWNER',
+          engineer: (cfg.engineer && cfg.engineer[row[COL_ENGINEER]]) ? cfg.engineer[row[COL_ENGINEER]] :
             'UNKNOWN ENGINEER',
-          levelOfCare: (<string> parseRow['Level Of Care']).toUpperCase(),
-          platforms: parseRow['Platforms'],
-          versionControl: parseRow['VCS Type'] === 'Archive' ? 'Other' : (parseRow['VCS Type'] === 'AssetCenter' ?
-            'AssetCentre' : parseRow['VCS Type']),
-          versionControlLoc: parseRow['VCS Location'],
+          levelOfCare: (<string> row[COL_LOC]).toUpperCase(),
+          platforms: row[COL_PLATFORMS],
+          versionControl: row[COL_VCS_TYPE] === 'Archive' ? 'Other' : (row[COL_VCS_TYPE] === 'AssetCenter' ?
+            'AssetCentre' : row[COL_VCS_TYPE]),
+          versionControlLoc: row[COL_VCS_LOCATION],
           _id: swKeyList.get(keyStr),
           statusDate: Date(),
         };
         swDataArray.push(swData);
       }
-      if (parseRow['Host']) {
-        let hosts: string[] = parseRow['Host'].split(',');
+      if (row[COL_HOST]) {
+        let hosts: string[] = row[COL_HOST].split(',');
         for (let host of hosts) {
-          let instKeyStr = host + '-' + parseRow['Name'] + '-' + swKeyList.get(keyStr);
+          let instKeyStr = host + '-' + row[COL_NAME] + '-' + swKeyList.get(keyStr);
           if (instKeyList.get(instKeyStr)) {
             info('Found existing installation %s skipping add', instKeyStr);
           } else {
             instKeyList.set(instKeyStr, true);
             let instData: InstDataRow = {
               host: host,
-              name: parseRow['Name'],
-              area: (cfg.area && cfg.area[parseRow['Area']]) ? cfg.area[parseRow['Area']] : 'UNKNOWN AREA',
+              name: row[COL_NAME],
+              area: (cfg.area && cfg.area[row[COL_AREA]]) ? cfg.area[row[COL_AREA]] : 'UNKNOWN AREA',
               status: 'Ready for install',
               statusDate: Date(),
-              vvResultsLoc: parseRow['VCS Location'],
+              vvResultsLoc: row[COL_VCS_LOCATION],
               software: swKeyList.get(keyStr),
               drrs: sheetName,
             };
