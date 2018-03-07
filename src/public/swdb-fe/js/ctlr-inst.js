@@ -345,12 +345,11 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
   };
 
   $scope.refreshSw = () => {
-    $scope.swList = swService.getSwList();
     $scope.swList = swService.getSwList().filter(function(item, index, arr){
       // filter for software that is in the "Ready for Install" state
-      return item.status === $scope.props.StatusEnum[2];
+      return item.status.toUpperCase() === $scope.props.StatusEnum[2].toUpperCase();
     });
-    // console.log("swList is now "+JSON.stringify($scope.swList));
+    console.log("inst-new: swList is now "+JSON.stringify($scope.swList));
   };
 
   $scope.props = configService.getConfig();
@@ -368,9 +367,6 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     //go to cas
     $window.location.href = $scope.props.webUrl + 'login';
   }
-
-  // sw just updated, refresh the service list
-  swService.refreshSwList();
 
   // initialize this record
   $scope.formData = {
@@ -547,7 +543,7 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
   $scope.session = userService.getUser();
   $scope.swList = swService.getSwList().filter(function (item, index, arr) {
     // filter for software that is in the "Ready for Install" state
-    return item.status === $scope.props.StatusEnum[2];
+    return item.status.toUpperCase() === $scope.props.StatusEnum[2].toUpperCase();
   });
 
   forgAreaService.promise.then(function () {

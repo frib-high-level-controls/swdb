@@ -12,6 +12,7 @@
   {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b8","_id":"5947589458a6aa0face9a558","_v":"0","comment":"alarm configuration binary"},
   {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b9","_id":"5947589458a6aa0face9a559","_v":"0","comment":"alarm configuration binary"},
   {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b10","_id":"5947589458a6aa0face9a510","_v":"0","comment":"alarm configuration binary"},
-  {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b11","_id":"5947589458a6aa0face9a511","_v":"0","comment":"alarm configuration binary"}
+  {"status":"Development","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b11","_id":"5947589458a6aa0face9a511","_v":"0","comment":"alarm configuration binary"},
+  {"status":"Ready for Install","levelOfCare":"MEDIUM","statusDate":"1970-07-07T07:00:00.000Z","owner":"Berryman","swName":"BEAST","version":"0.2","branch":"b12","_id":"5947589458a6aa0face9a512","_v":"0","comment":"alarm configuration binary"}
 ]
 

@@ -203,15 +203,15 @@ test.describe("Installations update screen tests", function() {
     searchInput.sendKeys("BEAST");
     //*[@id="ui-select-choices-row-1-2"]/span
     //*[@id="ui-select-choices-row-0-2"]/span/div/span
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-0-3"]/span')));
-    input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-3"]/span'));
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-0-0"]/span')));
+    input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-0"]/span'));
     input.click();
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
       By.id('software')),
-       "BEAST/b5/0.2"),3000);
+       "BEAST/b12/0.2"),3000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
       By.id('software')),
-       "BEAST/b5/0.2"),3000);
+       "BEAST/b12/0.2"),3000);
     // chromeDriver.pause(2000);
   });
 
@@ -275,7 +275,7 @@ test.describe("Installations update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("software")), 3000);
     chromeDriver.findElement(By.id("software")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("5947589458a6aa0face9a555");
+        expect(text).to.equal("5947589458a6aa0face9a512");
       });
   });
 

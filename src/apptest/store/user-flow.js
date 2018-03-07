@@ -184,7 +184,7 @@ test.describe("User flow tests", function() {
     input.sendKeys("Development");
   });
 
-  test.it("Add new record - set ststus date", function() {
+  test.it("Add new record - set status date", function() {
     this.timeout(5000);
     // set status date
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')), 3000);
@@ -541,7 +541,7 @@ test.it("should show search page with username on logout button", function() {
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="software"]/input[1]')));
     searchInput = chromeDriver.findElement(By.xpath('//*[@id="software"]/input[1]'));
     searchInput.sendKeys("BEAST");
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-4-3"]/span')), 5000);
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-4-0"]/span')), 5000);
     // chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="software"]')), 5000);
     // input = chromeDriver.findElement(By.xpath('//*[@id="software"]'));
     // input.getAttribute("innerHTML").then(function(result) {
@@ -550,17 +550,17 @@ test.it("should show search page with username on logout button", function() {
   });
   test.it("Add new record - click row", function() {
     this.timeout(5000);
-    input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-4-3"]/span'));
+    input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-4-0"]/span'));
     input.click();
   });
   test.it("Add new record - check input", function() {
     this.timeout(5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
       By.id('software')),
-       "BEAST/b5/0.2"),3000);
+       "BEAST/b12/0.2"),3000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
       By.id('software')),
-       "BEAST/b5/0.2"),3000);
+       "BEAST/b12/0.2"),3000);
     // chromeDriver.pause(2000);
   });
 
@@ -715,7 +715,7 @@ test.it("should show search page with username on logout button", function() {
     chromeDriver.wait(until.elementLocated(By.id("software")), 3000);
     chromeDriver.findElement(By.id("software")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("5947589458a6aa0face9a555");
+        expect(text).to.equal("5947589458a6aa0face9a512");
       });
   });
 

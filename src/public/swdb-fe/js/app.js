@@ -87,16 +87,19 @@ app.service('swService', function($http) {
 
     var promise = 	$http({url: '/api/v1/swdb/',method: "GET"}).success(function(data) {
         swData = data;
+        console.log('set initial swData: ' + JSON.stringify(swData, null, 2));
     });
 
     return {
       promise: promise,
       getSwList: function () {
           return swData;
+          console.log('sending swData: ' + JSON.stringify(swData, null, 2));
         },
       refreshSwList: function () {
         $http({ url: '/api/v1/swdb/', method: "GET" }).success(function (data) {
-           swData = data;
+          swData = data;
+          console.log('set another swData: ' + JSON.stringify(swData, null, 2));
            });
       },
       /**
