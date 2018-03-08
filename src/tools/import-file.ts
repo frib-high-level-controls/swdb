@@ -46,6 +46,7 @@ interface Config {
   engineer?: {[key: string]: string };
   area?: {[key: string]: string };
   owner?: {[key: string]: string };
+  statusDate?: {[key: string]: string };
 };
 
 interface SWDataRow {
@@ -250,7 +251,10 @@ function getXlsxJson(fileName: string, cfg: Config) {
       console.error('Cannot convert data to json for worksheet ' + sheetName);
       process.exit(1);
     }
-
+    if (cfg.statusDate && !cfg.statusDate[sheetName]) {
+      error('No Status Date available for sheet %s', sheetName);
+      process.exit(1);
+    }
     for (let row of combinedData) {
       if (!row[COL_NAME]) {
         continue;
@@ -262,21 +266,28 @@ function getXlsxJson(fileName: string, cfg: Config) {
         info('Found existing swName: %s version %s skipping add', row[COL_NAME_1], row[COL_VERSION]);
       } else {
         swKeyList.set(keyStr, mongoose.Types.ObjectId());
+        if (cfg.owner && !cfg.owner[row[COL_OWNER]]) {
+          error('Unknown Owner Name %s', row[COL_OWNER]);
+          process.exit(1);
+        }
+        if (cfg.engineer && !cfg.engineer[row[COL_ENGINEER]]) {
+          error('Unknown Engineer Name %s', row[COL_ENGINEER]);
+          process.exit(1);
+        }
         let swData: SWDataRow = {
           swName: row[COL_NAME_1],
           desc: row[COL_DESCRIPTION],
           status: 'Ready for install',
           version: row[COL_VERSION],
-          owner: (cfg.owner && cfg.owner[row[COL_OWNER]]) ? cfg.owner[row[COL_OWNER]] : 'UNKNOWN OWNER',
-          engineer: (cfg.engineer && cfg.engineer[row[COL_ENGINEER]]) ? cfg.engineer[row[COL_ENGINEER]] :
-            'UNKNOWN ENGINEER',
+          owner: cfg.owner[row[COL_OWNER]],
+          engineer: cfg.engineer[row[COL_ENGINEER]],
           levelOfCare: (<string> row[COL_LOC]).toUpperCase(),
           platforms: row[COL_PLATFORMS],
           versionControl: row[COL_VCS_TYPE] === 'Archive' ? 'Other' : (row[COL_VCS_TYPE] === 'AssetCenter' ?
             'AssetCentre' : row[COL_VCS_TYPE]),
           versionControlLoc: row[COL_VCS_LOCATION],
           _id: swKeyList.get(keyStr),
-          statusDate: Date(),
+          statusDate: cfg.statusDate[sheetName],
         };
         swDataArray.push(swData);
       }
@@ -288,12 +299,16 @@ function getXlsxJson(fileName: string, cfg: Config) {
             info('Found existing installation %s skipping add', instKeyStr);
           } else {
             instKeyList.set(instKeyStr, true);
+            if ((cfg.area && !cfg.area[row[COL_AREA]])) {
+              error('Unknown Area Name %s', row[COL_AREA]);
+              process.exit(1);
+            }
             let instData: InstDataRow = {
               host: host,
               name: row[COL_NAME],
-              area: (cfg.area && cfg.area[row[COL_AREA]]) ? cfg.area[row[COL_AREA]] : 'UNKNOWN AREA',
+              area: cfg.area[row[COL_AREA]],
               status: 'Ready for install',
-              statusDate: Date(),
+              statusDate: cfg.statusDate[sheetName],
               vvResultsLoc: row[COL_VCS_LOCATION],
               software: swKeyList.get(keyStr),
               drrs: sheetName,
