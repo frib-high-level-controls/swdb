@@ -132,10 +132,9 @@ async function main() {
   let combinedData: CombinedJson = {swData: [], instData: []};
   for (let filePath of cfg._) {
     let absFilePath = path.resolve(String(filePath));
-    let name = path.basename(absFilePath);
-    info('filename %s %s', name, absFilePath);
+    info('filepath %s', absFilePath)
     // Convert xlsx to json
-    let combinedDataLocal = getXlsxJson(name, cfg);
+    let combinedDataLocal = getXlsxJson(absFilePath, cfg);
     for (let data of combinedDataLocal.swData) {
       combinedData.swData.push(data);
     }
