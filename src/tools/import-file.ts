@@ -263,6 +263,32 @@ function getXlsxJson(fileName: string, cfg: Config) {
       let keyStr: string = row[COL_NAME_1] + '-' + row[COL_VERSION];
 
       if (swKeyList.get(keyStr)) {
+        // Duplicate exists
+        for (let data of swDataArray) {
+          // Find the original row to which this row is a duplicate of
+          if (data._id === swKeyList.get(keyStr)) {
+            // Check if rest of the fields match
+            if (data.owner !== cfg.owner[row[COL_OWNER]]) {
+              error('Duplicate found for SW %s version %s, but owners do not match !!!', row[COL_NAME_1], row[COL_VERSION]);
+            }
+            if (data.engineer !== cfg.engineer[row[COL_ENGINEER]]) {
+              error('Duplicate found for SW %s version %s, but engineers do not match !!!', row[COL_NAME_1], row[COL_VERSION]);
+            }
+            if (data.levelOfCare !== (<string> row[COL_LOC]).toUpperCase()) {
+              error('Duplicate found for SW %s version %s, but levels of care do not match !!!', row[COL_NAME_1], row[COL_VERSION]);
+            }
+            if (data.platforms !== row[COL_PLATFORMS]) {
+              error('Duplicate found for SW %s version %s, but platforms do not match !!!', row[COL_NAME_1], row[COL_VERSION]);
+            }
+            if (data.versionControl !== (row[COL_VCS_TYPE] === 'Archive' ? 'Other' : (row[COL_VCS_TYPE] === 'AssetCenter' ?
+              'AssetCentre' : row[COL_VCS_TYPE]))) {
+              error('Duplicate found for SW %s version %s, but version control types do not match !!!', row[COL_NAME_1], row[COL_VERSION]);
+            }
+            if (data.versionControlLoc !== row[COL_VCS_LOCATION]) {
+              error('Duplicate found for SW %s version %s, but version control locations do not match !!!', row[COL_NAME_1], row[COL_VERSION]);
+            }
+          }
+        }
         info('Found existing swName: %s version %s skipping add', row[COL_NAME_1], row[COL_VERSION]);
       } else {
         swKeyList.set(keyStr, mongoose.Types.ObjectId());
