@@ -5,6 +5,7 @@ var app = angular.module('app', [
 ]);
 
 // record xfer service
+// for transferring records between routes
 app.service('recService', function() {
     var recData = null;
 
@@ -87,19 +88,19 @@ app.service('swService', function($http) {
 
     var promise = 	$http({url: '/api/v1/swdb/',method: "GET"}).success(function(data) {
         swData = data;
-        console.log('set initial swData: ' + JSON.stringify(swData, null, 2));
+        // console.log('set initial swData: ' + JSON.stringify(swData, null, 2));
     });
 
     return {
       promise: promise,
       getSwList: function () {
           return swData;
-          console.log('sending swData: ' + JSON.stringify(swData, null, 2));
+          // console.log('sending swData: ' + JSON.stringify(swData, null, 2));
         },
       refreshSwList: function () {
         $http({ url: '/api/v1/swdb/', method: "GET" }).success(function (data) {
           swData = data;
-          console.log('set another swData: ' + JSON.stringify(swData, null, 2));
+          // console.log('set another swData: ' + JSON.stringify(swData, null, 2));
            });
       },
       /**
@@ -121,6 +122,36 @@ app.service('swService', function($http) {
         return swObj;
       }
     };
+});
+
+// Service to get inst data to controllers
+app.service('instService', function($http) {
+    var instData = null;
+
+    var promise = 	$http({url: '/api/v1/inst/',method: "GET"}).then(function(data) {
+        instData = data;
+        // console.log('set initial instData: ' + JSON.stringify(instData, null, 2));
+    });
+
+    return {
+      promise: promise,
+      getInstList: function () {
+          return instData;
+          // console.log('sending instData: ' + JSON.stringify(instData, null, 2));
+        },
+      refreshInstList: function () {
+        $http({ url: '/api/v1/inst/', method: "GET" }).then(function (data) {
+          instData = data;
+          // console.log('set another instData: ' + JSON.stringify(instData, null, 2));
+        });
+      },
+      getInstsBySw: function (swId) {
+        let arr = instData.map(function (item, idx, arr){
+          return item.software === swId;
+        });
+        return arr;
+      }
+    }
 });
 
 // Service to get FORG user data to controllers
