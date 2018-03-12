@@ -202,11 +202,7 @@ async function main() {
 
   for (let doc of swDataDoc) {
     try {
-      if (typeof (<HistoryDocument> doc).saveWithHistory === 'function') {
-        await (<HistoryDocument> doc).saveWithHistory(updatedBy);
-      } else {
-        await doc.save();
-      }
+      await (<HistoryDocument> doc).saveWithHistory(updatedBy);
     } catch (err) {
       error(err);
     }
@@ -214,11 +210,7 @@ async function main() {
 
   for (let doc of instDataDoc) {
     try {
-      if (typeof (<HistoryDocument> doc).saveWithHistory === 'function') {
-        await (<HistoryDocument> doc).saveWithHistory(updatedBy);
-      } else {
-        await doc.save();
-      }
+      await (<HistoryDocument> doc).saveWithHistory(updatedBy);
     } catch (err) {
       error(err);
     }
@@ -309,8 +301,7 @@ function getXlsxJson(fileName: string, cfg: Config) {
           engineer: cfg.engineer[row[COL_ENGINEER]],
           levelOfCare: (<string> row[COL_LOC]).toUpperCase(),
           platforms: row[COL_PLATFORMS],
-          versionControl: row[COL_VCS_TYPE] === 'Archive' ? 'Other' : (row[COL_VCS_TYPE] === 'AssetCenter' ?
-            'AssetCentre' : row[COL_VCS_TYPE]),
+          versionControl: row[COL_VCS_TYPE] === 'Archive' ? 'Other' : row[COL_VCS_TYPE],
           versionControlLoc: row[COL_VCS_LOCATION],
           _id: swKeyList.get(keyStr),
           statusDate: cfg.statusDate[sheetName],
@@ -323,6 +314,7 @@ function getXlsxJson(fileName: string, cfg: Config) {
           let instKeyStr = host + '-' + row[COL_NAME] + '-' + swKeyList.get(keyStr);
           if (instKeyList.get(instKeyStr)) {
             info('Found existing installation %s skipping add', instKeyStr);
+            process.exit(1);
           } else {
             instKeyList.set(instKeyStr, true);
             if ((cfg.area && !cfg.area[row[COL_AREA]])) {
