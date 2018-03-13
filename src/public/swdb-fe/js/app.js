@@ -129,7 +129,7 @@ app.service('instService', function($http) {
     var instData = null;
 
     var promise = 	$http({url: '/api/v1/inst/',method: "GET"}).then(function(data) {
-        instData = data;
+        instData = data.data;
         // console.log('set initial instData: ' + JSON.stringify(instData, null, 2));
     });
 
@@ -141,15 +141,23 @@ app.service('instService', function($http) {
         },
       refreshInstList: function () {
         $http({ url: '/api/v1/inst/', method: "GET" }).then(function (data) {
-          instData = data;
+          instData = data.data;
           // console.log('set another instData: ' + JSON.stringify(instData, null, 2));
         });
       },
       getInstsBySw: function (swId) {
+        console.log('getInstsBySw: ' + JSON.stringify(instData));
         let arr = instData.map(function (item, idx, arr){
-          return item.software === swId;
+          if (item.software === swId) {
+            return item
+          }
         });
-        return arr;
+        // map returns [null] if nothing matches. make it [].
+        if (arr[0] == null) {
+          return [];
+        } else {
+          return arr;
+        }
       }
     }
 });
@@ -467,6 +475,9 @@ app.config(['$routeProvider', function($routeProvider){
                 },
                 'userServiceData': function(userService){
                     return userService.promise;
+                },
+                'instServiceData': function(instService){
+                    return instService.promise;
                 }
             }
         })

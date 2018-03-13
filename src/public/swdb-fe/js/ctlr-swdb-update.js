@@ -3,7 +3,8 @@
  */
 
 appController.controller('UpdateController', UpdatePromiseCtrl);
-function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService, swService, forgUserService, forgGroupService) {
+function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService,
+   swService, instService, forgUserService, forgGroupService) {
   $scope.$watch(function () {
     return $scope.session;
   }, function () {
@@ -202,6 +203,17 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     forgUserService.promise.then(function(){
       $scope.engineerSelected.item =  forgUserService.userUidsToObjects([$scope.formData.engineer])[0];
     })
-  });
 
+    // disable status field if there are installations referring to this sw
+    instService.promise.then(() => {
+      let instsReferring = instService.getInstsBySw($routeParams.itemId);
+      console.log('instsReferring: ' + JSON.stringify(instsReferring));
+      if ((instsReferring.length >= 1) && (instsReferring !== [null])) {
+        $scope.statusDisabled = true;
+      } else {
+        $scope.statusDisabled = false;
+      }
+
+    });
+  });
 }
