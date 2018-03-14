@@ -202,6 +202,7 @@ async function main() {
 
   for (let doc of swDataDoc) {
     try {
+      // Need to typecast doc to type HistoryDocument to use saveWithHistory method
       await (<HistoryDocument> doc).saveWithHistory(updatedBy);
     } catch (err) {
       error(err);
@@ -210,6 +211,7 @@ async function main() {
 
   for (let doc of instDataDoc) {
     try {
+      // Need to typecast doc to type HistoryDocument to use saveWithHistory method
       await (<HistoryDocument> doc).saveWithHistory(updatedBy);
     } catch (err) {
       error(err);
@@ -235,12 +237,12 @@ function getXlsxJson(fileName: string, cfg: Config) {
     let worksheet = workbook.Sheets[sheetName];
     info('Looking at sheet %s', sheetName);
     if (!worksheet) {
-      console.error('Cannot read data from sheet ' + sheetName + ', please check the config file.');
+      error('Cannot read data from sheet ' + sheetName + ', please check the config file.');
       process.exit(1);
     }
     let combinedData = XLSX.utils.sheet_to_json(worksheet);
     if (combinedData.length === 0) {
-      console.error('Cannot convert data to json for worksheet ' + sheetName);
+      error('Cannot convert data to json for worksheet ' + sheetName);
       process.exit(1);
     }
     if (cfg.statusDate && !cfg.statusDate[sheetName]) {
@@ -266,14 +268,13 @@ function getXlsxJson(fileName: string, cfg: Config) {
             if (data.engineer !== cfg.engineer[row[COL_ENGINEER]]) {
               error('Duplicate found for SW %s version %s, but engineers do not match !!!', row[COL_NAME_1], row[COL_VERSION]);
             }
-            if (data.levelOfCare !== (<string> row[COL_LOC]).toUpperCase()) {
+            if (data.levelOfCare !== (String(row[COL_LOC])).toUpperCase()) {
               error('Duplicate found for SW %s version %s, but levels of care do not match !!!', row[COL_NAME_1], row[COL_VERSION]);
             }
             if (data.platforms !== row[COL_PLATFORMS]) {
               error('Duplicate found for SW %s version %s, but platforms do not match !!!', row[COL_NAME_1], row[COL_VERSION]);
             }
-            if (data.versionControl !== (row[COL_VCS_TYPE] === 'Archive' ? 'Other' : (row[COL_VCS_TYPE] === 'AssetCenter' ?
-              'AssetCentre' : row[COL_VCS_TYPE]))) {
+            if (data.versionControl !== (row[COL_VCS_TYPE] === 'Archive' ? 'Other' : row[COL_VCS_TYPE])) {
               error('Duplicate found for SW %s version %s, but version control types do not match !!!', row[COL_NAME_1], row[COL_VERSION]);
             }
             if (data.versionControlLoc !== row[COL_VCS_LOCATION]) {
@@ -299,7 +300,7 @@ function getXlsxJson(fileName: string, cfg: Config) {
           version: row[COL_VERSION],
           owner: cfg.owner[row[COL_OWNER]],
           engineer: cfg.engineer[row[COL_ENGINEER]],
-          levelOfCare: (<string> row[COL_LOC]).toUpperCase(),
+          levelOfCare: (String(row[COL_LOC])).toUpperCase(),
           platforms: row[COL_PLATFORMS],
           versionControl: row[COL_VCS_TYPE] === 'Archive' ? 'Other' : row[COL_VCS_TYPE],
           versionControlLoc: row[COL_VCS_LOCATION],
@@ -313,7 +314,7 @@ function getXlsxJson(fileName: string, cfg: Config) {
         for (let host of hosts) {
           let instKeyStr = host + '-' + row[COL_NAME] + '-' + swKeyList.get(keyStr);
           if (instKeyList.get(instKeyStr)) {
-            info('Found existing installation %s skipping add', instKeyStr);
+            info('Found existing installation %s, exiting !!', instKeyStr);
             process.exit(1);
           } else {
             instKeyList.set(instKeyStr, true);
