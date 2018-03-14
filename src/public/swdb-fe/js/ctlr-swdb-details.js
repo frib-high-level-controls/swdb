@@ -3,7 +3,8 @@
  */
 
 appController.controller('DetailsController', DetailsPromiseCtrl);
-function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sce, configService, userService, recService) {
+function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sce, configService,
+  swService, userService, recService) {
   $scope.$watch(function () {
     return $scope.session;
   }, function () {
@@ -78,7 +79,9 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
 
   // get history
   url = "/api/v1/swdb/hist/" + $routeParams.itemId;
-  $http.get(url).then(function (data) {
+  // $http.get(url).then(function (data) {
+  swService.promise.then(function () {
+    let data = swService.getSwList();    
     $scope.rawHistory = data.data;
     $scope.rawHistory.map = function(elem, idx, arr) {
       elem.isCollapsed = true;

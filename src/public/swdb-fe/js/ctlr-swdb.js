@@ -51,7 +51,6 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
       var defer = $q.defer();
       let url = $window.location.origin;
       url = url + "/api/v1/swdb/";
-      // $http.get($scope.props.apiUrl).then(function(result) {
       $http.get(url).then(function (result) {
         defer.resolve(result.data);
       });
@@ -101,7 +100,6 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
       // Apply the search
       table.columns().eq(0).each(function (colIdx) {
         let th = $('<th></th>').appendTo(tr);
-        // if (table.column(colIdx).searchable) {
         if (true) {
           // append column search with id derived from column init data
           th.append('<input class="swdbTableHeaderSearch" id="' + table.settings().init().aoColumns[colIdx].mData + "Srch" + '" type="text" placeholder="' + (table.column(colIdx).placeholder || '')
@@ -115,7 +113,6 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
 
           // Now apply filter routines to each column
           $('input', table.column(colIdx).header()).on('keyup change', function () {
-            console.log("searching column " + colIdx);
             table
               .column(colIdx)
               .search(this.value)

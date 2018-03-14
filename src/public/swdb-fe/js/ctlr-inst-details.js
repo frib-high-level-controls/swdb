@@ -3,7 +3,8 @@
  */
 
 appController.controller('InstDetailsController', InstDetailsPromiseCtrl);
-function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configService, userService) {
+function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configService, userService,
+  instService) {
   $scope.$watch(function () {
     return $scope.session;
   }, function () {
@@ -26,10 +27,8 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configServ
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
   //update document fields with existing data
-  let url = $window.location.origin;
-  url = url + "/api/v1/inst/" + $routeParams.itemId;
-  // $http.get($scope.props.instApiUrl+$routeParams.itemId).success(function(data) {
-  $http.get(url).success(function (data) {
+  instService.promise.then(function () {
+    let data = instService.getInstById($routeParams.itemId);    
     $scope.formData = data;
     // format dates for display
     if (data.statusDate) {
@@ -45,7 +44,5 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configServ
   url = "/api/v1/swdb/hist/" + $routeParams.itemId;
   $http.get(url).then(function (data) {
     $scope.rawHistory = data.data;
-    console.log("Got history: " + JSON.stringify(data.data, null, 2));
-    //console.log('rawHistory now: ' + $scope.rawHistory);
   });
 }

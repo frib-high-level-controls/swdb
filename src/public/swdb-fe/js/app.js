@@ -145,6 +145,21 @@ app.service('instService', function($http) {
           instData = data.data;
         });
       },
+      /**
+       * getInstById
+       * @param instId id user ID string
+       * @return matching inst object
+       */
+      getInstById: function (instId) {
+        return instData.find(function (item, idx){
+          return item._id === instId;
+        })
+      },
+      /**
+       * getInstBySw
+       * @param swId id user ID string
+       * @return list of matching inst objects
+       */
       getInstsBySw: function (swId) {
         let arr = instData.map(function (item, idx, arr){
           if (item.software === swId) {
@@ -387,7 +402,10 @@ app.config(['$routeProvider', function($routeProvider){
                 },
                 'userServiceData': function(userService){
                     return userService.promise;
-                }
+                },
+                'swServiceData': function(swService){
+                    return swService.promise;
+                },
             }
         })
         .when('/inst/details/:itemId', {
@@ -400,7 +418,10 @@ app.config(['$routeProvider', function($routeProvider){
                 },
                 'userServiceData': function(userService){
                     return userService.promise;
-                }
+                },
+                'instServiceData': function(instService){
+                    return instService.promise;
+                },
             }
         })
         .when('/new', {
