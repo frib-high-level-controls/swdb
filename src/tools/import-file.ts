@@ -145,11 +145,11 @@ async function main() {
   }
 
   let valid = true;
-  let swDataDoc: mongoose.Document[] = [];
+  let swDataDoc: HistoryDocument[] = [];
   new Db(); // tslint:disable-line
   for (let d of combinedData.swData) {
     info('Create swDb and validate: %s', JSON.stringify(d));
-    let doc = new Db.swDoc(d);
+    let doc: HistoryDocument = new Db.swDoc(d);
     try {
       await doc.validate();
     } catch (err) {
@@ -159,11 +159,11 @@ async function main() {
     swDataDoc.push(doc);
   }
 
-  let instDataDoc: mongoose.Document[] = [];
+  let instDataDoc: HistoryDocument[] = [];
   new InstDb(); // tslint:disable-line
   for (let d of combinedData.instData) {
     info('Create instDB and validate: %s', JSON.stringify(d));
-    let doc = new InstDb.instDoc(d);
+    let doc: HistoryDocument = new InstDb.instDoc(d);
     try {
       await doc.validate();
     } catch (err) {
@@ -202,8 +202,7 @@ async function main() {
 
   for (let doc of swDataDoc) {
     try {
-      // Need to typecast doc to type HistoryDocument to use saveWithHistory method
-      await (<HistoryDocument> doc).saveWithHistory(updatedBy);
+      await doc.saveWithHistory(updatedBy);
     } catch (err) {
       error(err);
     }
@@ -211,8 +210,7 @@ async function main() {
 
   for (let doc of instDataDoc) {
     try {
-      // Need to typecast doc to type HistoryDocument to use saveWithHistory method
-      await (<HistoryDocument> doc).saveWithHistory(updatedBy);
+      await doc.saveWithHistory(updatedBy);
     } catch (err) {
       error(err);
     }
