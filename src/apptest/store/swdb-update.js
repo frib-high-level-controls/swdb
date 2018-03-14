@@ -15,6 +15,10 @@ var webdriver = require("selenium-webdriver"),
   By = webdriver.By,
   until = webdriver.until,
   test = require("selenium-webdriver/testing");
+  chrome = require("selenium-webdriver/chrome");
+var options = new chrome.Options();
+var prefs = new webdriver.logging.Preferences();
+
 var fs = require('fs');
 var path = require('path');
 let dbg = require('debug');
@@ -37,6 +41,17 @@ test.describe("Software update screen tests", function() {
   after("clear db", async function () {
     debug("Clear DB");
     // clear the test collection.
+    if (props.test.showLogs === 'true') {
+      debug('printing logs...' + props.test.showLogs);
+      chromeDriver
+        .then(() => chromeDriver.manage().logs().get(webdriver.logging.Type.BROWSER))
+        .then((logs) => {
+          debug(logs);
+        });
+    } else {
+      debug('not printing logs...' + props.test.showLogs);
+    }
+
     chromeDriver.quit();
     await testTools.clearTestCollections(debug);
   });
@@ -46,9 +61,13 @@ test.describe("Software update screen tests", function() {
 
   test.it("should show search page with login button", function() {
     this.timeout(8000);
-
+    prefs.setLevel(webdriver.logging.Type.BROWSER, webdriver.logging.Level.ALL);
+    options.setLoggingPrefs(prefs);
+    
     chromeDriver = new webdriver.Builder()
-      .forBrowser("chrome")
+      // .forBrowser("chrome")
+      .withCapabilities(webdriver.Capabilities.chrome())
+      .setChromeOptions(options)
       .build();
     chromeDriver.manage().window().setPosition(200,0);
 

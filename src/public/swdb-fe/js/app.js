@@ -88,20 +88,27 @@ app.service('swService', function($http) {
 
     var promise = 	$http({url: '/api/v1/swdb/',method: "GET"}).success(function(data) {
         swData = data;
-        // console.log('set initial swData: ' + JSON.stringify(swData, null, 2));
     });
 
     return {
       promise: promise,
       getSwList: function () {
           return swData;
-          // console.log('sending swData: ' + JSON.stringify(swData, null, 2));
         },
       refreshSwList: function () {
         $http({ url: '/api/v1/swdb/', method: "GET" }).success(function (data) {
           swData = data;
-          // console.log('set another swData: ' + JSON.stringify(swData, null, 2));
            });
+      },
+      /**
+       * getSwById
+       * @param swId id user ID string
+       * @return matching sw objects
+       */
+      getSwById: function (swId) {
+        return swData.find(function (item, idx){
+          return item._id === swId;
+        })
       },
       /**
        * userUidsToObjects
@@ -109,16 +116,12 @@ app.service('swService', function($http) {
        * @return array of sw objects from forg
        */
       swIdsToObjects: function(swIds) {
-        console.log("sw ids: " + JSON.stringify(swIds));
-        // console.log("swData: " + JSON.stringify(swData));
         swObj = swIds.map(function(item, idx, array){
           let node =  swData.find(function(elem) {
             return elem._id === item;
           });
-          console.log("node found: "+JSON.stringify(node, null, 2));
           return node;
         }); 
-        console.log("node swObj: "+JSON.stringify(swObj, null, 2));
         return swObj;
       }
     };
@@ -130,23 +133,19 @@ app.service('instService', function($http) {
 
     var promise = 	$http({url: '/api/v1/inst/',method: "GET"}).then(function(data) {
         instData = data.data;
-        // console.log('set initial instData: ' + JSON.stringify(instData, null, 2));
     });
 
     return {
       promise: promise,
       getInstList: function () {
           return instData;
-          // console.log('sending instData: ' + JSON.stringify(instData, null, 2));
         },
       refreshInstList: function () {
         $http({ url: '/api/v1/inst/', method: "GET" }).then(function (data) {
           instData = data.data;
-          // console.log('set another instData: ' + JSON.stringify(instData, null, 2));
         });
       },
       getInstsBySw: function (swId) {
-        console.log('getInstsBySw: ' + JSON.stringify(instData));
         let arr = instData.map(function (item, idx, arr){
           if (item.software === swId) {
             return item
@@ -168,20 +167,17 @@ app.service('forgUserService', function ($http) {
 
   var promise = $http({ url: '/api/v1/swdb/forgUsers', method: "GET" }).then(function (data) {
     userData = data;
-    //console.log("userData set to " + JSON.stringify(userData, null, 2));
   });
 
   return {
     promise: promise,
     getUsers: function () {
-      //console.log("forgUserService.getUsers() returning " + JSON.stringify(userData));  
       return userData;
     },
     refreshUsersList: function () {
       $http({ url: '/api/v1/swdb/forgUsers', method: "GET" }).then(function (data) {
         userData = data;
         return userData;
-        //console.log("forgUserService.refreshUsersList() returning");  
       });
     },
     /**
@@ -190,8 +186,6 @@ app.service('forgUserService', function ($http) {
      * @return array of user objects from forg
      */
     userUidsToObjects: function(userUids) {
-      // console.log("users: " + JSON.stringify(userUids));
-      // console.log("userData: " + JSON.stringify(userData));
       forgObj = userUids.map(function(item, idx, array){
         return userData.data.find(function(elem) {
           return elem.uid === item;
@@ -208,20 +202,17 @@ app.service('forgGroupService', function ($http) {
 
   var promise = $http({ url: '/api/v1/swdb/forgGroups', method: "GET" }).then(function (data) {
     groupData = data;
-    //console.log("userData set to " + JSON.stringify(userData, null, 2));
   });
 
   return {
     promise: promise,
     getGroups: function () {
-      //console.log("forgUserService.getUsers() returning " + JSON.stringify(userData));  
       return groupData;
     },
     refreshGroupsList: function () {
       $http({ url: '/api/v1/swdb/forgGroups', method: "GET" }).then(function (data) {
         groupData = data;
         return groupData;
-        //console.log("forgUserService.refreshUsersList() returning");  
       });
     },
     /**
@@ -230,8 +221,6 @@ app.service('forgGroupService', function ($http) {
      * @return array of group objects from forg
      */
     groupUidsToObjects: function(groupUids) {
-      // console.log("groups: " + JSON.stringify(groupUids));
-      // console.log("groupData: " + JSON.stringify(groupData));
       forgObj = groupUids.map(function(item, idx, array){
         return groupData.data.find(function(elem) {
           return elem.uid === item;
@@ -248,20 +237,17 @@ app.service('forgAreaService', function ($http) {
 
   var promise = $http({ url: '/api/v1/swdb/forgAreas', method: "GET" }).then(function (data) {
     areaData = data;
-    //console.log("userData set to " + JSON.stringify(userData, null, 2));
   });
 
   return {
     promise: promise,
     getAreas: function () {
-      //console.log("forgUserService.getUsers() returning " + JSON.stringify(userData));  
       return areaData;
     },
     refreshAreasList: function () {
       $http({ url: '/api/v1/swdb/forgAreas', method: "GET" }).then(function (data) {
         areaData = data;
         return areaData;
-        //console.log("forgUserService.refreshUsersList() returning");  
       });
     },
     /**
@@ -270,8 +256,6 @@ app.service('forgAreaService', function ($http) {
      * @return array of area objects from forg
      */
     areaUidsToObjects: function(areaUids) {
-      // console.log("areas: " + JSON.stringify(areaUids));
-      // console.log("areaData: " + JSON.stringify(areaData));
       if (areaUids) {
         forgObj = areaUids.map(function (item, idx, array) {
           return areaData.data.find(function (elem) {
@@ -299,10 +283,8 @@ app.filter('swFilt', function () {
           element.branch = "";
         }
         if (element.swName.match(re) || element.branch.match(re) || element.version.match(re)) {
-          // console.log("Match " + JSON.stringify(element) + " " + srchTxt);
           swOut.push(element);
         } else {
-          // console.log("No match " + JSON.stringify(element) + " " + srchTxt);
           return false;
         }
       });
@@ -316,12 +298,9 @@ app.filter('swFilt', function () {
 
 app.filter('engNopromiseFilter', function () {
   return function (forgUserIn, srchTxt) {
-    //console.log("engFilter got " + srchTxt + JSON.stringify(forgUserIn));
     let re = new RegExp(srchTxt, 'i');
     filtered = forgUserIn.filter(function (element, idx, arr) {
-      // console.log("searching " + srchTxt + JSON.stringify(element.uid));
       if (element.uid.match(re)) {
-        // console.log("matched " + JSON.stringify(element));
         return element;
       }
     });
@@ -331,12 +310,9 @@ app.filter('engNopromiseFilter', function () {
 
 app.filter('ownNopromiseFilter', function () {
   return function (forgGroupIn, srchTxt) {
-    //console.log("groupFilter got " + srchTxt + JSON.stringify(forgGroupIn));
     let re = new RegExp(srchTxt, 'i');
     filtered = forgGroupIn.filter(function (element, idx, arr) {
-      // console.log("searching " + srchTxt + JSON.stringify(element.uid));
       if (element.uid.match(re)) {
-        // console.log("matched " + JSON.stringify(element));
         return element;
       }
     });
@@ -346,13 +322,10 @@ app.filter('ownNopromiseFilter', function () {
 
 app.filter('engFilter', function() {
   return function (forgUserIn, srchTxt) {
-    //console.log("engFilter got " + srchTxt + JSON.stringify(forgUserIn));
     return forgUserIn.then(function(forgUserIn) {
       let re = new RegExp(srchTxt, 'i');
       filtered = forgUserIn.filter(function(element, idx, arr) {
-        // console.log("searching " + srchTxt + JSON.stringify(element.uid));
         if (element.uid.match(re)) {
-          // console.log("matched " + JSON.stringify(element));
           return element;
         }
       });
@@ -363,12 +336,9 @@ app.filter('engFilter', function() {
 
 app.filter('areasNopromiseFilter', function () {
   return function (forgAreaIn, srchTxt) {
-    //console.log("areaFilter got " + srchTxt + JSON.stringify(forgAreaIn));
     let re = new RegExp(srchTxt, 'i');
     filtered = forgAreaIn.filter(function (element, idx, arr) {
-      // console.log("searching " + srchTxt + JSON.stringify(element.uid));
       if (element.uid.match(re)) {
-        // console.log("matched " + JSON.stringify(element));
         return element;
       }
     });
@@ -475,6 +445,9 @@ app.config(['$routeProvider', function($routeProvider){
                 },
                 'userServiceData': function(userService){
                     return userService.promise;
+                },
+                'swServiceData': function(swService){
+                    return swService.promise;
                 },
                 'instServiceData': function(instService){
                     return instService.promise;

@@ -108,8 +108,6 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
           $scope.swdbParams.formShowErr = true;
         });
     } else {
-      console.log("statusDate: " + JSON.stringify($scope.formData.statusDate));
-      console.log("recertDate: " + JSON.stringify($scope.formData.recertDate));
       $scope.swdbParams.formErr = "Error: clear errors before submission";
       $scope.swdbParams.formShowStatus = false;
       $scope.swdbParams.formShowErr = true;
@@ -126,9 +124,6 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
   };
 
   $scope.onStatusChange = function ($item, $model, $label) {
-    console.log("props: " + JSON.stringify($scope.props));
-    console.log("Status is now " + $scope.formData.status);
-    console.log("props.statusLabels[2] is " + $scope.props.statusLabels[2]);
     if ($scope.formData.status === $scope.props.statusLabels[2]) {
       $scope.branchDisabled = true;
       $scope.versionDisabled = true;
@@ -149,11 +144,9 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
   $scope.session = userService.getUser();
   forgUserService.promise.then(function(){
     $scope.forgUsersList = forgUserService.getUsers().data;
-    //console.log("forgUsersList promise updated just now");
   });
   forgGroupService.promise.then(function(){
     $scope.forgGroupsList = forgGroupService.getGroups().data;
-    //console.log("forgGroupsList promise updated just now");
   });
 
   // check our user session and redirect if needed
@@ -174,11 +167,9 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
   };
 
   //update document fields with existing data
-  let url = $window.location.origin;
-  url = url + "/api/v1/swdb/" + $routeParams.itemId;
-
-  // $http.get($scope.props.apiUrl+$routeParams.itemId).success(function(data) {
-  $http.get(url).success(function (data) {
+  swService.promise.then(function () {
+    let data = swService.getSwById($routeParams.itemId);    
+    // console.log('update data for ' + $routeParams.itemId + ' is now ' + JSON.stringify(data));
     $scope.itemArray = $scope.props.validSwNamesGUIList;
     $scope.formData = data;
     $scope.whichItem = $routeParams.itemId;
@@ -207,7 +198,7 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     // disable status field if there are installations referring to this sw
     instService.promise.then(() => {
       let instsReferring = instService.getInstsBySw($routeParams.itemId);
-      console.log('instsReferring: ' + JSON.stringify(instsReferring));
+      // console.log('instsReferring: ' + JSON.stringify(instsReferring));
       if ((instsReferring.length >= 1) && (instsReferring !== [null])) {
         $scope.statusDisabled = true;
       } else {
