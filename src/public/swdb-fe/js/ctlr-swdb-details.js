@@ -57,8 +57,10 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
   let url = $window.location.origin;
   url = url + "/api/v1/swdb/" + $routeParams.itemId;
 
-  $http.get(url).success(function (data) {
+  swService.refreshSwList().then(function () {
+    let data = swService.getSwById($routeParams.itemId);    
     $scope.formData = data;
+    console.log('swdb details got :' + JSON.stringify(data, null, 2));
     // format dates for display
     if (data.statusDate) {
       let thisDate = new Date(data.statusDate);
@@ -79,9 +81,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
 
   // get history
   url = "/api/v1/swdb/hist/" + $routeParams.itemId;
-  // $http.get(url).then(function (data) {
-  swService.promise.then(function () {
-    let data = swService.getSwList();    
+  $http.get(url).then(function (data) {
     $scope.rawHistory = data.data;
     $scope.rawHistory.map = function(elem, idx, arr) {
       elem.isCollapsed = true;

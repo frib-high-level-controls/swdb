@@ -3,7 +3,8 @@
  */
 
 appController.controller('InstUpdateController', InstUpdatePromiseCtrl);
-function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService, swService, forgAreaService) {
+function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService,
+  userService, instService, swService, forgAreaService) {
 
   $scope.$watch(function () {
     return $scope.session;
@@ -72,7 +73,6 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
 
       $http({
         method: 'PUT',
-        // url: $scope.props.instApiUrl+$scope.formData._id,
         url: url,
         data: $scope.formData,
         headers: { 'Content-Type': 'application/json' }
@@ -160,7 +160,6 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
 
   forgAreaService.promise.then(function () {
     $scope.forgAreasList = forgAreaService.getAreas().data;
-    //console.log("forgUsersList promise updated just now");
   });
 
   // check our user session and redirect if needed
@@ -177,10 +176,8 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
   };
 
   //update document fields with existing data
-  let url = $window.location.origin;
-  url = url + "/api/v1/inst/" + $routeParams.itemId;
-  // $http.get($scope.props.instApiUrl+$routeParams.itemId).success(function(data) {
-  $http.get(url).success(function (data) {
+  instService.promise.then(function () {
+    let data = instService.getInstById($routeParams.itemId);    
     $scope.formData = data;
     // set software field diable based on the given status
     $scope.onStatusChange();
@@ -196,9 +193,7 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     // convert the retreived record software
     swService.promise.then(function(){
       let obj = swService.swIdsToObjects([$scope.formData.software])[0];
-      // console.log('Got initial obj: ' + JSON.stringify(obj, null, 2));
       $scope.swSelected = {item: obj};
-      // console.log('Got initial swSelected: ' + JSON.stringify($scope.swSelected, null, 2));
     });
 
   });

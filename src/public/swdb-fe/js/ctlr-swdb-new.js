@@ -74,7 +74,9 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     $scope.formData.owner = $scope.ownerSelected.item.uid;
     // Prep any selected engineer
     console.log("engineerSelected: " + JSON.stringify($scope.engineerSelected, null, 2));
-    $scope.formData.engineer = $scope.engineerSelected.item.uid;
+    if ($scope.engineerSelected.item) {
+      $scope.formData.engineer = $scope.engineerSelected.item.uid;
+    }
 
     if ($scope.formData.statusDate instanceof String) {
       $scope.formData.statusDate = new Date($scope.formData.statusDate);

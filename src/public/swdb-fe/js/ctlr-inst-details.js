@@ -27,7 +27,7 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configServ
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
   //update document fields with existing data
-  instService.promise.then(function () {
+  instService.refreshInstList().then(function () {
     let data = instService.getInstById($routeParams.itemId);    
     $scope.formData = data;
     // format dates for display

@@ -85,9 +85,9 @@ app.service('slotService', function($http) {
 // Service to get sw data to controllers
 app.service('swService', function($http) {
     var swData = null;
-
     var promise = 	$http({url: '/api/v1/swdb/',method: "GET"}).success(function(data) {
         swData = data;
+        console.log('default swService load occurred: ' + JSON.stringify(data));
     });
 
     return {
@@ -96,9 +96,11 @@ app.service('swService', function($http) {
           return swData;
         },
       refreshSwList: function () {
-        $http({ url: '/api/v1/swdb/', method: "GET" }).success(function (data) {
+        promise = $http({ url: '/api/v1/swdb/', method: "GET" }).success(function (data) {
           swData = data;
-           });
+          console.log('swService reload occurred: ' + JSON.stringify(data));
+        });
+        return promise;
       },
       /**
        * getSwById
@@ -141,13 +143,14 @@ app.service('instService', function($http) {
           return instData;
         },
       refreshInstList: function () {
-        $http({ url: '/api/v1/inst/', method: "GET" }).then(function (data) {
+        promise = $http({ url: '/api/v1/inst/', method: "GET" }).then(function (data) {
           instData = data.data;
         });
+        return promise;
       },
       /**
        * getInstById
-       * @param instId id user ID string
+       * @param instId installation ID string
        * @return matching inst object
        */
       getInstById: function (instId) {
@@ -157,8 +160,8 @@ app.service('instService', function($http) {
       },
       /**
        * getInstBySw
-       * @param swId id user ID string
-       * @return list of matching inst objects
+       * @param swId software ID string
+       * @return list of matching installation objects
        */
       getInstsBySw: function (swId) {
         let arr = instData.map(function (item, idx, arr){
@@ -488,6 +491,12 @@ app.config(['$routeProvider', function($routeProvider){
                 },
                 'slotServiceData': function(slotService){
                     return slotService.promise;
+                },
+                'swServiceData': function(swService){
+                    return swService.promise;
+                },
+                'instServiceData': function(instService){
+                    return instService.promise;
                 }
             }
         })
