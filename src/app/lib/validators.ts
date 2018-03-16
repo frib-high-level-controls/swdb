@@ -4,7 +4,11 @@ import expressValidator = require('express-validator');
 import cJSON = require('circular-json');
 import validate = require('validate.js');
 import dbg = require('debug');
-const debug = dbg('swdb:server');
+import Be = require('./Db');
+import commonTools = require('./CommonTools');
+const tools = new commonTools.CommonTools();
+const props = tools.getConfiguration();
+const debug = dbg('swdb:validators');
 
 export class CustomValidators {
   public static vals = {
@@ -135,6 +139,38 @@ export class CustomValidators {
           return false;
         }
       },
+
     },
+  };
+
+  public static swUpdateWorkflowValidation = async function(req: express.Request, be) {
+    debug('swUpdateWorkflowValidation: ' + JSON.stringify(req.body));
+    // get the id of the record which is wanting update
+    // go get the existing record
+    let id = req.body._id;
+    try {
+      let queryPromise = await be.findOne({ _id: id }).exec();
+      // if old status was Ready for install
+      if (queryPromise.status === props.StatusEnum[2]) {
+        // if the version or branch have changed
+        if ((req.body.version !== queryPromise.version) || (req.body.branch !== queryPromise.branch)) {
+          return {
+            error: true,
+            data: 'Version and branch cannot change in state ' + props.StatusEnum[2],
+          };
+        }
+      } else {
+        // this record update is okay for workflow
+        return {
+          error: false,
+          data: queryPromise,
+        };
+      }
+    } catch (err) {
+      return {
+        error: true,
+        data: err,
+      };
+    }
   };
 };

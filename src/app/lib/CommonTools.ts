@@ -143,6 +143,11 @@ interface IProps {
     instTestDataFile: string;
   };
 
+  LevelOfCareEnum: Enumerator;
+  StatusEnum: Enumerator;
+  InstStatusEnum: Enumerator;
+  RcsEnum: Enumerator;
+
   levelOfCareLabels: [string];
   statusLabels: [string];
   instStatusLabels: [string];

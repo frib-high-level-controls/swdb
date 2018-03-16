@@ -201,14 +201,16 @@ app.post('/api/v1/swdb/list', function(req: express.Request, res: express.Respon
 
 // handle incoming put requests for update
 app.put('/api/v1/swdb/:id', auth.ensureAuthenticated,
-  function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  async function(req: express.Request, res: express.Response, next: express.NextFunction) {
   debug('PUT /api/v1/swdb/:id request');
 
   tools.SwdbLib.updateValidation(req);
   tools.SwdbLib.updateSanitization(req);
+  let wfResults =
+   await customValidators.CustomValidators.swUpdateWorkflowValidation(req, be);
 
   req.getValidationResult().then(function(result) {
-    if (!result.isEmpty()) {
+    if ((!result.isEmpty()) || (wfResults.error)) {
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
     } else {
