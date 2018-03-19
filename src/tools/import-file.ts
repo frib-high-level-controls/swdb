@@ -43,10 +43,10 @@ interface Config {
   user?: {};
   dryrun?: {};
   _?: Array<{}>;
-  engineer?: {[key: string]: string };
-  area?: {[key: string]: string };
-  owner?: {[key: string]: string };
-  statusDate?: {[key: string]: string };
+  engineer: {[key: string]: string };
+  area: {[key: string]: string };
+  owner: {[key: string]: string };
+  statusDate: {[key: string]: string };
 };
 
 interface SWDataRow {
@@ -101,6 +101,10 @@ async function main() {
         useMongoClient: true,
       },
     },
+    engineer: {},
+    area: {},
+    owner: {},
+    statusDate: {}
   };
 
   rc('import-file', cfg);
@@ -217,6 +221,7 @@ async function main() {
   }
 
   await mongoose.disconnect();
+  process.exit();
 };
 
 /**
@@ -231,20 +236,19 @@ function getXlsxJson(fileName: string, cfg: Config) {
   let instDataArray: InstDataRow[] = [];
 
   for (let sheet of workbook.SheetNames) {
-    let sheetName = sheet;
-    let worksheet = workbook.Sheets[sheetName];
-    info('Looking at sheet %s', sheetName);
+    let worksheet = workbook.Sheets[sheet];
+    info('Looking at sheet %s', sheet);
     if (!worksheet) {
-      error('Cannot read data from sheet ' + sheetName + ', please check the config file.');
+      error('Cannot read data from sheet ' + sheet + ', please check the config file.');
       process.exit(1);
     }
     let combinedData = XLSX.utils.sheet_to_json(worksheet);
     if (combinedData.length === 0) {
-      error('Cannot convert data to json for worksheet ' + sheetName);
+      error('Cannot convert data to json for worksheet ' + sheet);
       process.exit(1);
     }
-    if (cfg.statusDate && !cfg.statusDate[sheetName]) {
-      error('No Status Date available for sheet %s', sheetName);
+    if (cfg.statusDate && !cfg.statusDate[sheet]) {
+      error('No Status Date available for sheet %s', sheet);
       process.exit(1);
     }
     for (let row of combinedData) {
@@ -303,7 +307,7 @@ function getXlsxJson(fileName: string, cfg: Config) {
           versionControl: row[COL_VCS_TYPE] === 'Archive' ? 'Other' : row[COL_VCS_TYPE],
           versionControlLoc: row[COL_VCS_LOCATION],
           _id: swKeyList.get(keyStr),
-          statusDate: cfg.statusDate[sheetName],
+          statusDate: cfg.statusDate[sheet],
         };
         swDataArray.push(swData);
       }
@@ -325,10 +329,10 @@ function getXlsxJson(fileName: string, cfg: Config) {
               name: row[COL_NAME],
               area: cfg.area[row[COL_AREA]],
               status: 'Ready for install',
-              statusDate: cfg.statusDate[sheetName],
+              statusDate: cfg.statusDate[sheet],
               vvResultsLoc: row[COL_VCS_LOCATION],
               software: swKeyList.get(keyStr),
-              drrs: sheetName,
+              drrs: sheet,
             };
             instDataArray.push(instData);
           }
