@@ -1212,10 +1212,10 @@ describe("app", function() {
       {"type": "GET","res": {"msg": {"levelOfCare": "MEDIUM"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"levelOfCare": "SAFETY"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"levelOfCare": "SAFETY"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"status": "Ready for install"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"status": "Ready for install"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"status": "Development"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"status": "Development"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"status": "ERRONEOUS_VALUE"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
-      {"type": "GET","res": {"msg": {"status": "Ready for install"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"status": "Development"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"statusDate": "7/7/1977"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"statusDate": "1977-07-07"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"version": "NEW test version"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
@@ -1451,8 +1451,8 @@ describe("app", function() {
       .put("/api/v1/swdb/badbeef")
       .set('Cookie', [Cookies])
       .send({swName: "Test Record4"})
-      .expect(500)
-      .expect('Record not found')
+      .expect(400)
+      .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
       .end(function(err, res) {
         if (err) {
           done(err);
@@ -1467,8 +1467,8 @@ describe("app", function() {
       .patch("/api/v1/swdb/badbeef")
       .set('Cookie', [Cookies])
       .send({swName: "Test Record4"})
-      .expect(500)
-      .expect('Record not found')
+      .expect(400)
+      .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
       .end(function(err, res) {
         if (err) {
           done(err);

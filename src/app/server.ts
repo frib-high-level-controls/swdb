@@ -206,15 +206,19 @@ app.put('/api/v1/swdb/:id', auth.ensureAuthenticated,
 
   tools.SwdbLib.updateValidation(req);
   tools.SwdbLib.updateSanitization(req);
-  let wfResults =
-   await customValidators.CustomValidators.swUpdateWorkflowValidation(req, be);
-
-  req.getValidationResult().then(function(result) {
-    if ((!result.isEmpty()) || (wfResults.error)) {
+  req.getValidationResult().then(async function(result) {
+    if (!result.isEmpty()) {
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
     } else {
-      be.updateDoc(auth.getUsername(req), req, res, next);
+      let wfResults =
+        await customValidators.CustomValidators.swUpdateWorkflowValidation(req, be);
+      if (wfResults.error) {
+        res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults.data));
+        return;
+      } else {
+        be.updateDoc(auth.getUsername(req), req, res, next);
+      }
     }
   });
 });
@@ -227,15 +231,22 @@ app.patch('/api/v1/swdb/:id', auth.ensureAuthenticated,
 
   tools.SwdbLib.updateValidation(req);
   tools.SwdbLib.updateSanitization(req);
-
-  req.getValidationResult().then(function(result) {
+  req.getValidationResult().then(async function(result) {
     if (!result.isEmpty()) {
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
     } else {
-      be.updateDoc(auth.getUsername(req), req, res, next);
+      let wfResults =
+        await customValidators.CustomValidators.swUpdateWorkflowValidation(req, be);
+      if (wfResults.error) {
+        res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults.data));
+        return;
+      } else {
+        be.updateDoc(auth.getUsername(req), req, res, next);
+      }
     }
   });
+
 });
 
 

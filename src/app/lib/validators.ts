@@ -6,6 +6,9 @@ import validate = require('validate.js');
 import dbg = require('debug');
 import Be = require('./Db');
 import commonTools = require('./CommonTools');
+import mongodb = require('mongodb');
+import  mongoose = require('mongoose');
+let objectID = mongodb.ObjectID;
 const tools = new commonTools.CommonTools();
 const props = tools.getConfiguration();
 const debug = dbg('swdb:validators');
@@ -144,21 +147,40 @@ export class CustomValidators {
   };
 
   public static swUpdateWorkflowValidation = async function(req: express.Request, be) {
-    debug('swUpdateWorkflowValidation: ' + JSON.stringify(req.body));
     // get the id of the record which is wanting update
     // go get the existing record
-    let id = req.body._id;
+    let id = req.params.id;
     try {
-      let queryPromise = await be.findOne({ _id: id }).exec();
+      let idObj = new mongoose.mongo.ObjectId(req.params.id);
+    } catch (err) {
+      return {
+        error: true,
+        data: 'Record id parse err: ' + id + ': ' + JSON.stringify(err),
+      };
+    }
+    try {
+      let queryPromise = await Be.Db.swDoc.findOne({ _id: id }).exec();
       // if old status was Ready for install
+      // first, see if there was eve a  record to update
+      if (!queryPromise){
+        return {
+          error: true,
+          data: 'Record id not found' + id,
+        };
+      }
       if (queryPromise.status === props.StatusEnum[2]) {
         // if the version or branch have changed
         if ((req.body.version !== queryPromise.version) || (req.body.branch !== queryPromise.branch)) {
+          debug('swUpdateWorkflowValidation version and/or branch changed');
           return {
             error: true,
             data: 'Version and branch cannot change in state ' + props.StatusEnum[2],
           };
         }
+        return {
+          error: false,
+          data: queryPromise,
+        };
       } else {
         // this record update is okay for workflow
         return {
@@ -167,6 +189,7 @@ export class CustomValidators {
         };
       }
     } catch (err) {
+      debug('swUpdateWorkflowValidation err: ' + JSON.stringify(err));
       return {
         error: true,
         data: err,
