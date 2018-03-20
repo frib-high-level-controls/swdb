@@ -293,13 +293,20 @@ app.put('/api/v1/inst/:id', auth.ensureAuthenticated,
   // Do validation for installation updates
   instTools.InstLib.updateValidation(req);
   instTools.InstLib.updateSanitization(req);
-
-  req.getValidationResult().then(function(result) {
+  req.getValidationResult().then(async function(result) {
     if (!result.isEmpty()) {
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
     } else {
-      instBe.updateDoc(auth.getUsername(req), req, res, next);
+      let wfResults =
+        await customValidators.CustomValidators.instUpdateWorkflowValidation(req);
+      if (wfResults.error) {
+        debug('Workflow validation errors ' + JSON.stringify(wfResults));
+        res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults.data));
+        return;
+      } else {
+        instBe.updateDoc(auth.getUsername(req), req, res, next);
+      }
     }
   });
 });
@@ -311,13 +318,20 @@ app.patch('/api/v1/inst/:id', auth.ensureAuthenticated,
   // Do validation for installation updates
   instTools.InstLib.updateValidation(req);
   instTools.InstLib.updateSanitization(req);
-
-  req.getValidationResult().then(function(result) {
+  req.getValidationResult().then(async function(result) {
     if (!result.isEmpty()) {
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
     } else {
-      instBe.updateDoc(auth.getUsername(req), req, res, next);
+      let wfResults =
+        await customValidators.CustomValidators.instUpdateWorkflowValidation(req);
+      if (wfResults.error) {
+        debug('Workflow validation errors ' + JSON.stringify(wfResults));
+        res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults.data));
+        return;
+      } else {
+        instBe.updateDoc(auth.getUsername(req), req, res, next);
+      }
     }
   });
 });

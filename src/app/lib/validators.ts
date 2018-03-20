@@ -5,6 +5,7 @@ import cJSON = require('circular-json');
 import validate = require('validate.js');
 import dbg = require('debug');
 import Be = require('./Db');
+import InstBe = require('./instDb');
 import commonTools = require('./CommonTools');
 import mongodb = require('mongodb');
 import  mongoose = require('mongoose');
@@ -190,6 +191,66 @@ export class CustomValidators {
       }
     } catch (err) {
       debug('swUpdateWorkflowValidation err: ' + JSON.stringify(err));
+      return {
+        error: true,
+        data: err,
+      };
+    }
+  };
+
+  /**
+   * instUpdateWorflowValidation - method to detect workflow issues with installation updates
+   * @param req - express request
+   * @param instBe - db object for installation db access
+   * 
+   * @returns - { error: boolean,
+   *            data: error string }
+   */
+  public static instUpdateWorkflowValidation = async function(req: express.Request) {
+    // get the id of the record which is wanting update
+    // go get the existing record
+    let id = req.params.id;
+    try {
+      let idObj = new mongoose.mongo.ObjectId(req.params.id);
+    } catch (err) {
+      return {
+        error: true,
+        data: 'Record id parse err: ' + id + ': ' + JSON.stringify(err),
+      };
+    }
+    try {
+      let queryPromise = await InstBe.InstDb.instDoc.findOne({ _id: id }).exec();
+      // if old status was Ready for install
+      // first, see if there was eve a  record to update
+      if (!queryPromise){
+        return {
+          error: true,
+          data: 'Record id not found' + id,
+        };
+      }
+      if ((req.body.software) && (req.body.software !== queryPromise.software)) {
+        debug('software from ' + JSON.stringify(queryPromise.software) + ' to ' + JSON.stringify(req.body.software));
+        if (queryPromise.status === props.InstStatusEnum[0]) {
+          // req is changing software, and in in Ready for installation
+          return {
+            error: false,
+            data: queryPromise,
+          };
+        } else {
+          // req is changing sw, and not in Ready for installation
+          return {
+            error: true,
+            data: 'Installation software field can only be changed in state ' + props.InstStatusEnum[0],
+          };
+        }
+      } else {
+        return {
+          error: false,
+          data: queryPromise,
+        };
+      }
+    } catch (err) {
+      debug('instUpdateWorkflowValidation db err: ' + JSON.stringify(err));
       return {
         error: true,
         data: err,

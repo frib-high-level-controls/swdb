@@ -613,8 +613,8 @@ describe('Installation api tests', () => {
         .put('/api/v1/inst/badbeef')
         .set('Cookie', Cookies)
         .send({swName: 'Test Record5'})
-        .expect(500)
-        .expect('Record not found')
+        .expect(400)
+        .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
         .end(done);
     });
 
@@ -623,8 +623,8 @@ describe('Installation api tests', () => {
         .patch('/api/v1/inst/badbeef')
         .set('Cookie', Cookies)
         .send({swName: 'Test Record5'})
-        .expect(500)
-        .expect('Record not found')
+        .expect(400)
+        .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
         .end(done);
     });
   });
