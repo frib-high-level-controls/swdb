@@ -275,13 +275,21 @@ app.post('/api/v1/inst', auth.ensureAuthenticated,
   // Do validation for  new records
   instTools.InstLib.newValidation(req);
 
-  req.getValidationResult().then(function(result) {
+  req.getValidationResult().then(async function(result) {
     if (!result.isEmpty()) {
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
     } else {
-      debug('POST /api/v1/inst calling create...');
-      instBe.createDoc(auth.getUsername(req), req, res, next);
+      let wfResults =
+        await customValidators.CustomValidators.wfRule3(req);
+      if (wfResults.error) {
+        debug('Workflow validation errors ' + JSON.stringify(wfResults));
+        res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults.data));
+        return;
+      } else {
+        debug('POST /api/v1/inst calling create...');
+        instBe.createDoc(auth.getUsername(req), req, res, next);
+      }
     }
   });
 });

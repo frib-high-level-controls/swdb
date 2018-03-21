@@ -257,4 +257,68 @@ export class CustomValidators {
       };
     }
   };
+
+  /**
+   * wfRule3 - method to detect installations attempting to point to software that is not
+   * in state Ready for install
+   * @param req - express request
+   * 
+   * @returns - { error: boolean,
+   *            data: error string }
+   */
+  public static wfRule3 = async function(req: express.Request) {
+    // here the req passed is either a new installation or an update.
+    // the software listed in the request must have state Ready for install.
+
+    // check that the id is parsable
+    if (req.body.software) {
+      let id = req.body.software;
+      try {
+        let idObj = new mongoose.mongo.ObjectId(id);
+      } catch (err) {
+        return {
+          error: true,
+          data: 'Record id parse err: ' + id + ': ' + JSON.stringify(err),
+        };
+      }
+      try {
+        let queryPromise = await Be.Db.swDoc.findOne({ _id: id }).exec();
+        // if old status was Ready for install
+        // first, see if there was eve a  record to update
+        if (!queryPromise) {
+          return {
+            error: true,
+            data: 'Record id not found' + id,
+          };
+        } else {
+          let sts: string = props.StatusEnum[2];
+          if (queryPromise.status !== sts) {
+            debug('status: "' + JSON.stringify(queryPromise.status) + '"');
+            debug('props status: "' + JSON.stringify(queryPromise.status) + '"');
+            return {
+              error: true,
+              data: 'Software field must point to software with status ' + sts + '.' +
+              'The given software, ' + id + ', has status ' + queryPromise.status,
+            };
+          } else {
+            return {
+              error: false,
+              data: 'No errors',
+            };
+          }
+        }
+      } catch (err) {
+        debug('instUpdateWorkflowValidation db err: ' + JSON.stringify(err));
+        return {
+          error: true,
+          data: err,
+        };
+      }
+    } else {
+        return {
+          error: false,
+          data: 'No software listed',
+        };
+    }
+  };
 };
