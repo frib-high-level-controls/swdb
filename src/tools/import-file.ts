@@ -32,14 +32,6 @@ interface Config {
   configs?: string[];
   h?: {};
   help?: {};
-  mongo: {
-    user?: {};
-    pass?: {};
-    port: {};
-    addr: {};
-    db: {};
-    options: {};
-  };
   user?: {};
   dryrun?: {};
   _?: Array<{}>;
@@ -92,19 +84,10 @@ let instKeyList = new Map<string, boolean>();
 
 async function main() {
   let cfg: Config = {
-    mongo: {
-      port: '27017',
-      addr: 'localhost',
-      db: 'swdb-dev',
-      options: {
-        // see http://mongoosejs.com/docs/connections.html
-        useMongoClient: true,
-      },
-    },
     engineer: {},
     area: {},
     owner: {},
-    statusDate: {}
+    statusDate: {},
   };
 
   rc('import-file', cfg);
@@ -137,17 +120,18 @@ async function main() {
   let combinedData: CombinedJson = {swData: [], instData: []};
   for (let filePath of cfg._) {
     let absFilePath = path.resolve(String(filePath));
-    info('filepath %s', absFilePath)
+    info('filepath %s', absFilePath);
     // Convert xlsx to json
     let combinedDataLocal = getXlsxJson(absFilePath, cfg);
-    for (let data of combinedDataLocal.swData) {
-      combinedData.swData.push(data);
-    }
-    for (let data of combinedDataLocal.instData) {
-      combinedData.instData.push(data);
-    }
+    combinedData.swData.push(...combinedDataLocal.swData);
+    combinedData.instData.push(...combinedDataLocal.instData);
   }
 
+  let connected = new Promise((resolve, reject) => {
+    mongoose.connection.once('error', reject);
+    mongoose.connection.once('connected', resolve);
+  });
+  
   let valid = true;
   let swDataDoc: HistoryDocument[] = [];
   new Db(); // tslint:disable-line
@@ -178,27 +162,20 @@ async function main() {
   }
 
   if (!valid) {
+    await mongoose.disconnect();
     return;
   }
 
+  await connected; // wait for the connection
+  await Db.swDoc.init(); // wait for the createIndex
+  await InstDb.instDoc.init(); // wait for the createIndex
+  
   if (cfg.dryrun !== false && cfg.dryrun !== 'false') {
     info('DRYRUN DONE');
+    await mongoose.disconnect();
     return;
   }
 
-  // Configure Mongoose (MongoDB)
-  let mongoUrl = 'mongodb://';
-  if (cfg.mongo.user) {
-    mongoUrl += encodeURIComponent(String(cfg.mongo.user));
-    if (cfg.mongo.pass) {
-      mongoUrl += ':' + encodeURIComponent(String(cfg.mongo.pass));
-    }
-    mongoUrl += '@';
-  }
-  info('cfg.mongo.addr %s port %s db %s', cfg.mongo.addr, cfg.mongo.port, cfg.mongo.db);
-  mongoUrl += cfg.mongo.addr + ':' + cfg.mongo.port + '/' + cfg.mongo.db;
-
-  await mongoose.connect(mongoUrl, cfg.mongo.options);
   // Clean DB before saving data
   await mongoose.connection.db.dropDatabase();
 
@@ -221,7 +198,6 @@ async function main() {
   }
 
   await mongoose.disconnect();
-  process.exit();
 };
 
 /**
@@ -265,22 +241,28 @@ function getXlsxJson(fileName: string, cfg: Config) {
           if (data._id === swKeyList.get(keyStr)) {
             // Check if rest of the fields match
             if (data.owner !== cfg.owner[row[COL_OWNER]]) {
-              error('Duplicate found for SW %s version %s, but owners do not match !!!', row[COL_NAME_1], row[COL_VERSION]);
+              error('Duplicate found for SW %s version %s, but owners do not match !!!',
+              row[COL_NAME_1], row[COL_VERSION]);
             }
             if (data.engineer !== cfg.engineer[row[COL_ENGINEER]]) {
-              error('Duplicate found for SW %s version %s, but engineers do not match !!!', row[COL_NAME_1], row[COL_VERSION]);
+              error('Duplicate found for SW %s version %s, but engineers do not match !!!',
+              row[COL_NAME_1], row[COL_VERSION]);
             }
             if (data.levelOfCare !== (String(row[COL_LOC])).toUpperCase()) {
-              error('Duplicate found for SW %s version %s, but levels of care do not match !!!', row[COL_NAME_1], row[COL_VERSION]);
+              error('Duplicate found for SW %s version %s, but levels of care do not match !!!',
+              row[COL_NAME_1], row[COL_VERSION]);
             }
             if (data.platforms !== row[COL_PLATFORMS]) {
-              error('Duplicate found for SW %s version %s, but platforms do not match !!!', row[COL_NAME_1], row[COL_VERSION]);
+              error('Duplicate found for SW %s version %s, but platforms do not match !!!',
+              row[COL_NAME_1], row[COL_VERSION]);
             }
             if (data.versionControl !== (row[COL_VCS_TYPE] === 'Archive' ? 'Other' : row[COL_VCS_TYPE])) {
-              error('Duplicate found for SW %s version %s, but version control types do not match !!!', row[COL_NAME_1], row[COL_VERSION]);
+              error('Duplicate found for SW %s version %s, but version control types do not match !!!',
+              row[COL_NAME_1], row[COL_VERSION]);
             }
             if (data.versionControlLoc !== row[COL_VCS_LOCATION]) {
-              error('Duplicate found for SW %s version %s, but version control locations do not match !!!', row[COL_NAME_1], row[COL_VERSION]);
+              error('Duplicate found for SW %s version %s, but version control locations do not match !!!',
+              row[COL_NAME_1], row[COL_VERSION]);
             }
           }
         }
