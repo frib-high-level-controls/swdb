@@ -113,7 +113,7 @@ describe('Installation api tests', () => {
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
       .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'Ready for install', statusDate: 'date 1000',
-        software: 'badbeefbadbeefbadbeefbad'})
+        software: '5947589458a6aa0face9a512'})
       .expect(201)
       .end(done);
   });
@@ -124,7 +124,7 @@ describe('Installation api tests', () => {
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
       .send({ host: 'Header Test host', name: 'Header Test name', area: ['Global'], status: 'Ready for install',
-         statusDate: 'date 1000', software: 'badbeefbadbeefbadbeefbad' })
+         statusDate: 'date 1000', software: '5947589458a6aa0face9a512' })
       .expect(201)
       .end(done);
   });
@@ -219,7 +219,7 @@ describe('Installation api tests', () => {
         .set('Cookie', Cookies)
         .send({
           host: 'Hist Test host', name: 'Hist1 Test name', area: ['Global'], status: 'Ready for install',
-          statusDate: 'date 1000', software: 'badbeefbadbeefbadbeefbad',
+          statusDate: 'date 1000', software: '5947589458a6aa0face9a512',
         })
         .expect(201)
         .end((err: Error, result: supertest.Response & {headers: any}) => {
@@ -392,7 +392,7 @@ describe('Installation api tests', () => {
     supertest(app)
       .post('/api/v1/inst/')
       .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'Ready for install', statusDate: 'date 1000',
-         software: 'badbeefbadbeefbadbeefbad'})
+         software: '5947589458a6aa0face9a512'})
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
       .expect(500)
@@ -410,23 +410,23 @@ describe('Installation api tests', () => {
     supertest(app)
       .post('/api/v1/inst/')
       .send({host: 'Test host2', name: 'Test name', area: ['Global'], status: 'Ready for install',
-       statusDate: 'date 1000', software: 'badbeefbadbeefbadbeefbad'})
+       statusDate: 'date 1000', software: '5947589458a6aa0face9a512'})
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
       .expect(201)
       .end(done);
   });
 
-  it('Post a new record installation with different sw ref', (done) => {
-    supertest(app)
-      .post('/api/v1/inst/')
-      .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'Ready for install',
-       statusDate: 'date 1000', software: 'badbeefbadbeefbadbeefbaa'})
-      .set('Accept', 'application/json')
-      .set('Cookie', Cookies)
-      .expect(201)
-      .end(done);
-  });
+  // it('Post a new record installation with different sw ref', (done) => {
+  //   supertest(app)
+  //     .post('/api/v1/inst/')
+  //     .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'Ready for install',
+  //      statusDate: 'date 1000', software: 'badbeefbadbeefbadbeefbaa'})
+  //     .set('Accept', 'application/json')
+  //     .set('Cookie', Cookies)
+  //     .expect(201)
+  //     .end(done);
+  // });
 
   describe('get id for installation Test host test sw ref', () => {
     let wrapper = {origId: null};
@@ -441,7 +441,7 @@ describe('Installation api tests', () => {
             res = JSON.parse(res.text);
             for (let i = 0, iLen = res.length; i < iLen; i++) {
               if (res[i].host === 'Test host' &&
-                res[i].software === 'badbeefbadbeefbadbeefbad') {
+                res[i].software === '5947589458a6aa0face9a512') {
                 wrapper.origId = res[i]._id;
               }
             }
@@ -503,8 +503,8 @@ describe('Installation api tests', () => {
       {type: 'GET', res: {msg: {host: 'Test host4'}, url: '/api/v1/inst/',  err: {status: 200}}},
       {type: 'PUT', req: {msg: {name: 'Test name4'}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'GET', res: {msg: {name: 'Test name4'}, url: '/api/v1/inst/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {software: 'badbeefbadbeefbadbeefbad'}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {software: 'badbeefbadbeefbadbeefbad'}, url: '/api/v1/inst/',  err: {status: 200}}},
+      {type: 'PUT', req: {msg: {software: '5947589458a6aa0face9a512'}, url: '/api/v1/inst/', err: {status: 200}}},
+      {type: 'GET', res: {msg: {software: '5947589458a6aa0face9a512'}, url: '/api/v1/inst/',  err: {status: 200}}},
       {type: 'PUT', req: {msg: {area: ['FE']}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'GET', res: {msg: {area: ['FE']}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'PUT', req: {msg: {drrs: 'Test DRR'}, url: '/api/v1/inst/', err: {status: 200}}},
@@ -614,7 +614,7 @@ describe('Installation api tests', () => {
         .set('Cookie', Cookies)
         .send({swName: 'Test Record5'})
         .expect(400)
-        .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
+        .expect('Worklow validation errors: [{"error":true,"data":"Record id parse err: badbeef: {}"}]')
         .end(done);
     });
 
@@ -624,7 +624,7 @@ describe('Installation api tests', () => {
         .set('Cookie', Cookies)
         .send({swName: 'Test Record5'})
         .expect(400)
-        .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
+        .expect('Worklow validation errors: [{"error":true,"data":"Record id parse err: badbeef: {}"}]')
         .end(done);
     });
   });

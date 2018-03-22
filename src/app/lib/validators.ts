@@ -9,6 +9,7 @@ import InstBe = require('./instDb');
 import commonTools = require('./CommonTools');
 import mongodb = require('mongodb');
 import  mongoose = require('mongoose');
+import  history = require('../shared/history');
 let objectID = mongodb.ObjectID;
 const tools = new commonTools.CommonTools();
 const props = tools.getConfiguration();
@@ -209,6 +210,7 @@ export class CustomValidators {
   public static instUpdateWorkflowValidation = async function(req: express.Request) {
     // get the id of the record which is wanting update
     // go get the existing record
+    debug('Checking instUpdateWorkflowValidation');
     let id = req.params.id;
     try {
       let idObj = new mongoose.mongo.ObjectId(req.params.id);
@@ -225,7 +227,7 @@ export class CustomValidators {
       if (!queryPromise){
         return {
           error: true,
-          data: 'Record id not found' + id,
+          data: 'Rule2 record id not found ' + id,
         };
       }
       if ((req.body.software) && (req.body.software !== queryPromise.software)) {
@@ -271,6 +273,7 @@ export class CustomValidators {
     // the software listed in the request must have state Ready for install.
 
     // check that the id is parsable
+    debug('Checking wfRule3');
     if (req.body.software) {
       let id = req.body.software;
       try {
@@ -282,25 +285,30 @@ export class CustomValidators {
         };
       }
       try {
-        let queryPromise = await Be.Db.swDoc.findOne({ _id: id }).exec();
+        let queryPromise1  = await Be.Db.swDoc.find().exec();
+        // debug('Rule3 sees swDocs: ' + JSON.stringify(queryPromise1));
+        let queryPromise  = await Be.Db.swDoc.findOne({ _id: id }).exec();
         // if old status was Ready for install
         // first, see if there was eve a  record to update
         if (!queryPromise) {
+          debug('No queryPromise, returning err');
           return {
             error: true,
-            data: 'Record id not found' + id,
+            data: 'Rule3 record id not found ' + id,
           };
         } else {
           let sts: string = props.StatusEnum[2];
           if (queryPromise.status !== sts) {
             debug('status: "' + JSON.stringify(queryPromise.status) + '"');
             debug('props status: "' + JSON.stringify(queryPromise.status) + '"');
+            debug('Sw field status is incorrect, returning err');
             return {
               error: true,
               data: 'Software field must point to software with status ' + sts + '.' +
               'The given software, ' + id + ', has status ' + queryPromise.status,
             };
           } else {
+            debug('Sw field status is okay, returning okay');
             return {
               error: false,
               data: 'No errors',
@@ -315,10 +323,11 @@ export class CustomValidators {
         };
       }
     } else {
-        return {
-          error: false,
-          data: 'No software listed',
-        };
+      debug('Sw field status is blank, returning okay');
+      return {
+        error: false,
+        data: 'No software listed',
+      };
     }
   };
 };

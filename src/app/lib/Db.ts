@@ -221,6 +221,19 @@ export class Db {
     });
   }
 
+  public chkConn = async () => {
+    // Ensure the database is connected
+    if (mongoose.connection.readyState !== 1) {
+      // Otherwise, wait for the the 'connected' or 'error' event
+      await new Promise((resolve, reject) => {
+        mongoose.connection.once('error', reject);
+        mongoose.connection.once('connected', resolve);
+      });
+    } else {
+      debug('Connection established...');
+    }
+  }
+
   public deleteDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const id = req.params.id;
 

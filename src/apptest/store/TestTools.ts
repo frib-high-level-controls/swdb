@@ -17,6 +17,8 @@ export class TestTools {
 
   // public async loadTestCollectionsStandard(done, swFile: string, instFile: string) {
   public async loadTestCollectionsStandard(sdebug: debug.IDebugger, swFile: string, instFile: string) {
+    await be.chkConn();
+    await instBe.chkConn();
     let testInstData = [];
     let testSwData = [];
     sdebug('loading test DB');
@@ -43,7 +45,7 @@ export class TestTools {
 
     try {
       sdebug('Inserting test sw data');
-      await Be.Db.swDoc.db.collections.swdbCollection.insert(testSwData);
+      await Be.Db.swDoc.db.collections.swdbCollection.insert(testSwData).exec();
     } catch (err) {
       if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
         sdebug('ignoring err: ' + JSON.stringify(err));
@@ -55,7 +57,7 @@ export class TestTools {
     }
     try {
       sdebug('Inserting test installation data');
-      await InstBe.InstDb.instDoc.db.collections.instCollection.insert(testInstData);
+      await InstBe.InstDb.instDoc.db.collections.instCollection.insert(testInstData).exec();
     } catch (err) {
       if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
         sdebug('ignoring err: ' + JSON.stringify(err));
@@ -76,6 +78,8 @@ export class TestTools {
    * @param instFile The path/filename of the installation JSON data to load
    */
   public async loadCollectionsWithHistory(sdebug: debug.IDebugger, swFile: string, instFile: string) {
+    await be.chkConn();
+    await instBe.chkConn();
     let testInstData = [];
     let testSwData = [];
     sdebug('loading DB with history');
@@ -141,6 +145,8 @@ export class TestTools {
   }
 
   public async clearTestCollections(sdebug: debug.IDebugger) {
+    await be.chkConn();
+    await instBe.chkConn();
     sdebug('Clearing test collections');
     try {
       sdebug('Clearing inst history');
