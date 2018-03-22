@@ -207,7 +207,8 @@ export class CustomValidators {
    * @returns - { error: boolean,
    *            data: error string }
    */
-  public static instUpdateWorkflowValidation = async function(req: express.Request) {
+  public static noInstSwChangeUnlessReadyForInstall = async function(req: express.Request) {
+    // The installation sw field cxan only change in the Ready for install state
     // get the id of the record which is wanting update
     // go get the existing record
     debug('Checking instUpdateWorkflowValidation');
@@ -261,14 +262,14 @@ export class CustomValidators {
   };
 
   /**
-   * wfRule3 - method to detect installations attempting to point to software that is not
+   * noInstSwUnlessSwIsReadyForInstall  - method to detect installations attempting to point to software that is not
    * in state Ready for install
    * @param req - express request
    * 
    * @returns - { error: boolean,
    *            data: error string }
    */
-  public static wfRule3 = async function(req: express.Request) {
+  public static noInstSwUnlessSwIsReadyForInstall = async function(req: express.Request) {
     // here the req passed is either a new installation or an update.
     // the software listed in the request must have state Ready for install.
 

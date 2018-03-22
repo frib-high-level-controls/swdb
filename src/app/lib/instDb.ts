@@ -213,6 +213,14 @@ export class InstDb {
     }
   }
 
+  public chkIdx = async () => {
+    // Ensure the index is created
+    await new Promise((resolve, reject) => {
+      InstDb.instDoc.on('error', reject);
+      InstDb.instDoc.on('index', resolve);
+    });
+  }
+
 
   public deleteDoc = function(req: express.Request, res: express.Response, next: express.NextFunction) {
     const id = req.params.id;

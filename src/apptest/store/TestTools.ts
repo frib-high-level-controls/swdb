@@ -46,33 +46,33 @@ export class TestTools {
     try {
       sdebug('Inserting test sw data');
       await Be.Db.swDoc.db.collections.swdbCollection.insert(testSwData).exec();
+      // await Be.Db.swDoc.init();
+      // await InstBe.InstDb.instDoc.init();
+      await be.chkIdx();
     } catch (err) {
       if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
         sdebug('ignoring err: ' + JSON.stringify(err));
-        // ignore this
       } else {
         sdebug('Error inserting ' + err);
-        // done(err);
       }
     }
     try {
       sdebug('Inserting test installation data');
       await InstBe.InstDb.instDoc.db.collections.instCollection.insert(testInstData).exec();
+      // await Be.Db.swDoc.init();
+      // await InstBe.InstDb.instDoc.init();
+      await instBe.chkIdx();
     } catch (err) {
       if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
         sdebug('ignoring err: ' + JSON.stringify(err));
-        // ignore this
       } else {
         sdebug('Error inserting ' + err);
-        // done(err);
       }
     }
-
-    // done();
   }
   /**
    *  loadCollectionsWithHistory - loads the given data with history
-   * 
+   *
    * @param sdebug The callers debug object for easy debugging
    * @param swFile The path/filename of the sw JSON data to load
    * @param instFile The path/filename of the installation JSON data to load
@@ -89,9 +89,7 @@ export class TestTools {
     } catch (err) {
       sdebug(err);
     }
-    // console.log("Starting standard test db clear and reload...");
     // before we start loading data, convert _ids to ObjectIDs
-    // console.log("Converting ObjectIds...");
     for (const i in testSwData) {
       if ('_id' in testSwData[i]) {
         testSwData[i]._id = ObjectId(testSwData[i]._id);
@@ -106,18 +104,9 @@ export class TestTools {
 
     try {
       testSwData.forEach(async (swRec) => {
-      // await Be.Db.swDoc.db.collections.swdbCollection.insert(testSwData);
         await be.createDocByRecord('Automated-ETL', swRec);
         sdebug('Inserting software ' + JSON.stringify(swRec));
       });
-      // let status = await Be.Db.swDoc.db.collections.swdbCollection.currentOp(
-      //   {
-      //     $or: [
-      //       { op: 'query', 'query.createIndexes': { $exists: true } },
-      //       { op: 'insert', ns: /\.system\.indexes\b/ }
-      //     ],
-      //   },
-      // );
       debug('Indexing status: ' + JSON.stringify(status));
     } catch (err) {
       if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
@@ -128,16 +117,15 @@ export class TestTools {
       }
     }
     try {
-      // await InstBe.InstDb.instDoc.db.collections.instCollection.insert(testInstData);
       testInstData.forEach(async (instRec) => {
-      // await Be.Db.swDoc.db.collections.swdbCollection.insert(testSwData);
         await instBe.createDocByRecord('Automated-ETL', instRec);
         sdebug('Inserting installation' + JSON.stringify(instRec));
-      })
+      });
+      await Be.Db.swDoc.init();
+      await InstBe.InstDb.instDoc.init();
     } catch (err) {
       if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
         sdebug('ignoring err: ' + JSON.stringify(err));
-        // ignore this
       } else {
         sdebug('Error inserting ' + err);
       }
@@ -154,7 +142,6 @@ export class TestTools {
     } catch (err) {
       if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
         sdebug('ignoring err: ' + JSON.stringify(err));
-        // ignore this
       } else {
         sdebug('Error dropping installation history' + err);
       }
@@ -168,7 +155,6 @@ export class TestTools {
       } catch (err) {
         if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
           sdebug('ignoring err: ' + JSON.stringify(err));
-          // ignore this
         } else {
           sdebug('Error dropping software history' + err);
         }
@@ -181,7 +167,6 @@ export class TestTools {
     } catch (err) {
       if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
         sdebug('ignoring err: ' + JSON.stringify(err));
-        // ignore this
       } else {
         sdebug('Error dropping installation collection' + err);
       }
@@ -193,11 +178,12 @@ export class TestTools {
     } catch (err) {
       if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
         sdebug('ignoring err: ' + JSON.stringify(err));
-        // ignore this
       } else {
         sdebug('Error dropping software collection' + err);
       }
     }
+    await Be.Db.swDoc.init();
+    await InstBe.InstDb.instDoc.init();
   }
 
   public async testCollectionsStatus(sdebug: debug.IDebugger) {
@@ -227,18 +213,6 @@ export class TestTools {
     } else {
       sdebug('SW collection is empty');
     }
-
-    // cursor = InstBe.InstDb.instDoc.db.collections.history.find();
-    // if (cursor) {
-    //   try {
-    //     let count = await cursor.count();
-    //     sdebug('Installation history reports ' + count + ' items');
-    //   } catch (err) {
-    //     sdebug(err);
-    //   }
-    // } else {
-    //   sdebug('Installation history is empty');
-    // }
 
     cursor = InstBe.InstDb.instDoc.db.collections.instCollection.find();
     if (cursor) {

@@ -36,7 +36,8 @@ props = ctools.getConfiguration();
 
 describe('Installation api tests', () => {
   let chromeDriver;
-  before('Prep DB', async  () => {
+  before('Prep DB', async  function() {
+    this.timeout(5000);
     debug('Prep DB');
     await testTools.clearTestCollections(debug);
     await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);

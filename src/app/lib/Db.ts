@@ -234,6 +234,14 @@ export class Db {
     }
   }
 
+  public chkIdx = async () => {
+    // Ensure the index is created
+    await new Promise((resolve, reject) => {
+      Db.swDoc.on('error', reject);
+      Db.swDoc.on('index', resolve);
+    });
+  }
+
   public deleteDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const id = req.params.id;
 
