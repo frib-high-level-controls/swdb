@@ -160,6 +160,7 @@ export class CustomValidators {
     async function(req: express.Request): Promise<IValResult> {
     // get the id of the record which is wanting update
     // go get the existing record
+    debug('Checking wfRuler1');
     let id = req.params.id;
     try {
       let idObj = new mongoose.mongo.ObjectId(req.params.id);
@@ -221,6 +222,7 @@ export class CustomValidators {
     // get the id of the record which is wanting update
     // go get the existing record
     debug('Checking instUpdateWorkflowValidation');
+    debug('Checking wfRuler2');
     let id = req.params.id;
     try {
       let idObj = new mongoose.mongo.ObjectId(req.params.id);

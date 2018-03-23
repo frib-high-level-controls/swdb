@@ -1194,6 +1194,135 @@ describe("app", function() {
       });
     });
 
+  // workflow rule1 tests
+  it("Post a new record to test version/branch lock on Ready for install(rule 1)", function(done) {
+    supertest
+    .post("/api/v1/swdb/")
+    .send( {
+      swName: "Rule 1 Test Record",
+      owner: "previous Test Owner",
+      engineer: "Test Engineer",
+      levelOfCare: "LOW",
+      status: "Development",
+      statusDate: "0"
+    })
+    .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
+    .expect(201)
+    .end((err, result) => {
+      if (err) {
+        done(err);
+      } else {
+        debug('Location: ' + result.headers.location);
+        done();
+      }
+    });
+  });
+
+  describe('get id for rule 1 record', function() {
+    var wrapper = {origId:null};
+    before("Get ID previous id: rule 1 Test Record", function(done) {
+      supertest
+      .get("/api/v1/swdb/")
+      .expect(200)
+      .end(function(err,res){
+        if (err) {
+          done(err);
+        } else {
+          res = JSON.parse(res.text);
+          for (var i = 0, iLen = res.length; i < iLen; i++) {
+            if (res[i].swName == "Rule 1 Test Record") wrapper.origId = res[i]._id;
+          }
+          done();
+        }
+      });
+    });
+
+    it("Returns test record id: previous Test Record", function(done) {
+      supertest
+      .get("/api/v1/swdb/"+wrapper.origId)
+      .expect(200)
+      .end(function(err, res){
+        if (err) {
+          done(err);
+        } else {
+          expect(res.body).to.have.property("_id");
+          expect(res.body.swName).to.equal("Rule 1 Test Record");
+          done();
+        }
+      });
+    });
+
+    it("set version branch in rule 1 Test Record", function(done) {
+      supertest
+      .put("/api/v1/swdb/" + wrapper.origId)
+      .send({ 
+        version: "Test version",
+        branch: "Test branch",
+       })
+      .set('Cookie', [Cookies])
+      .expect(200)
+      .end(function(err, res){
+        if (err) {
+          done(err);
+        } else {
+          done();
+        }
+      });
+    });
+
+    it("set status in rule 1 Test Record", function(done) {
+      supertest
+      .put("/api/v1/swdb/" + wrapper.origId)
+      .send({ 
+        status: "Ready for install",
+       })
+      .set('Cookie', [Cookies])
+      .expect(200)
+      .end(function(err, res){
+        if (err) {
+          done(err);
+        } else {
+          done();
+        }
+      });
+    });
+
+    it("Returns test record id: previous Test Record", function(done) {
+      supertest
+      .get("/api/v1/swdb/"+wrapper.origId)
+      .expect(200)
+      .end(function(err, res){
+        if (err) {
+          done(err);
+        } else {
+          expect(res.body).to.have.property("_id");
+          expect(res.body.status).to.equal("Ready for install");
+          done();
+        }
+      });
+    });
+
+    it("set version/branch in rule 1 Test Record", function(done) {
+      supertest
+      .put("/api/v1/swdb/" + wrapper.origId)
+      .send({ 
+        version: "Test version2",
+        branch: "Test branch2",
+       })
+      .set('Cookie', [Cookies])
+      .expect(400)
+      .expect('Worklow validation errors: [{"error":true,"data":"Version and branch cannot change in state Ready for install"}]')
+      .end(function(err, res){
+        if (err) {
+          done(err);
+        } else {
+          done();
+        }
+      });
+    });
+  });
+
     // This table lists test requests to make and the expected
     // responses.
     // {req:{msg:,url:,type:,err{status:}}
