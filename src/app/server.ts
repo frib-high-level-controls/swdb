@@ -348,8 +348,10 @@ app.put('/api/v1/inst/:id', auth.ensureAuthenticated,
     } else {
       // setup an array of validations to perfrom
       // save the results in wfResultsArr, and errors in errors.
-      let wfValArr = [customValidators.CustomValidators.noInstSwChangeUnlessReadyForInstall,
-        customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall];
+      let wfValArr = [
+        customValidators.CustomValidators.noInstSwChangeUnlessReadyForInstall,
+        customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall,
+      ];
 
       let errors = [];
       let wfResultArr = await Promise.all(wfValArr.map(async function (item, idx, arr) {
@@ -364,8 +366,6 @@ app.put('/api/v1/inst/:id', auth.ensureAuthenticated,
 
       debug('Workflow validation results :' + JSON.stringify(wfResultArr));
 
-      // let wfResults =
-      //   await customValidators.CustomValidators.instUpdateWorkflowValidation(req);
       if (errors.length > 0) {
         debug('Workflow validation errors ' + JSON.stringify(errors));
         res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors));
@@ -391,8 +391,10 @@ app.patch('/api/v1/inst/:id', auth.ensureAuthenticated,
     } else {
       // setup an array of validations to perfrom
       // save the results in wfResultsArr, and errors in errors.
-      let wfValArr = [customValidators.CustomValidators.noInstSwChangeUnlessReadyForInstall,
-      customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall];
+      let wfValArr = [
+        customValidators.CustomValidators.noInstSwChangeUnlessReadyForInstall,
+        customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall,
+      ];
 
       let errors = [];
       let wfResultArr = await Promise.all(
