@@ -148,7 +148,16 @@ export class CustomValidators {
     },
   };
 
-  public static swUpdateWorkflowValidation = async function(req: express.Request, be) {
+  /**
+   * swNoVerBranchChgIfStatusRdyInstall - method to detect version/branch change when sw status 
+   *  is Ready for install
+   * @param req - express request
+   * @param instBe - db object for installation db access
+   *
+   * @returns Promise<IValResult>
+   */
+  public static swNoVerBranchChgIfStatusRdyInstall =
+    async function(req: express.Request): Promise<IValResult> {
     // get the id of the record which is wanting update
     // go get the existing record
     let id = req.params.id;
@@ -164,7 +173,7 @@ export class CustomValidators {
       let queryPromise = await Be.Db.swDoc.findOne({ _id: id }).exec();
       // if old status was Ready for install
       // first, see if there was eve a  record to update
-      if (!queryPromise){
+      if (!queryPromise) {
         return {
           error: true,
           data: 'Record id not found' + id,
@@ -203,11 +212,11 @@ export class CustomValidators {
    * instUpdateWorflowValidation - method to detect workflow issues with installation updates
    * @param req - express request
    * @param instBe - db object for installation db access
-   * 
-   * @returns - { error: boolean,
-   *            data: error string }
+   *
+   * @returns Promise<IValResult>
    */
-  public static noInstSwChangeUnlessReadyForInstall = async function(req: express.Request) {
+  public static noInstSwChangeUnlessReadyForInstall =
+    async function(req: express.Request): Promise<IValResult> {
     // The installation sw field cxan only change in the Ready for install state
     // get the id of the record which is wanting update
     // go get the existing record
@@ -266,10 +275,10 @@ export class CustomValidators {
    * in state Ready for install
    * @param req - express request
    * 
-   * @returns - { error: boolean,
-   *            data: error string }
+   * @returns Promise<IValResult>
    */
-  public static noInstSwUnlessSwIsReadyForInstall = async function(req: express.Request) {
+  public static noInstSwUnlessSwIsReadyForInstall = 
+    async function(req: express.Request): Promise<IValResult> {
     // here the req passed is either a new installation or an update.
     // the software listed in the request must have state Ready for install.
 
@@ -331,4 +340,72 @@ export class CustomValidators {
       };
     }
   };
+
+  /**
+   * noSwStateChgIfReferringInst  - method to detect software attempting to change state
+   * when there are installations referring to it.
+   * @param req - express request
+   * 
+   * @returns Promise<IValResult>
+   */
+  public static noSwStateChgIfReferringInst = async function(req: express.Request): Promise<IValResult> {
+    // check that the id is parsable
+    debug('Checking wfRule4');
+    // go get the existing record
+    let id = req.params.id;
+    try {
+      let idObj = new mongoose.mongo.ObjectId(req.params.id);
+    } catch (err) {
+      return {
+        error: true,
+        data: 'Record id parse err: ' + id + ': ' + JSON.stringify(err),
+      };
+    }
+    try {
+      let queryPromise = await Be.Db.swDoc.findOne({ _id: id }).exec();
+      // if old status was Ready for install
+      // first, see if there was eve a  record to update
+      if (!queryPromise){
+        return {
+          error: true,
+          data: 'Record id not found' + id,
+        };
+      }
+      if (queryPromise.status === req.body.status) {
+        return {
+          error: false,
+          data: 'No status changed.',
+        };
+      } else {
+        // go find installations that refer to this sw
+        queryPromise = await InstBe.InstDb.instDoc.find({ software: id }).exec();
+        if (queryPromise.length > 0) {
+          // there are referring installations
+          return {
+            error: true,
+            data: 'Software state cannot change while there are active installations: ' +
+              queryPromise.map(function (item){
+                return item._id;
+              }),
+          };
+        } else {
+          return {
+            error: false,
+            data: 'No referring acive installations.',
+          };
+        }
+      }
+    } catch (err) {
+      debug(err);
+      return {
+        error: true,
+        data: JSON.stringify(err),
+      };
+    }
+  };
 };
+
+interface IValResult {
+    error: boolean;
+    data: string;
+}

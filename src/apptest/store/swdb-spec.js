@@ -1452,7 +1452,7 @@ describe("app", function() {
       .set('Cookie', [Cookies])
       .send({swName: "Test Record4"})
       .expect(400)
-      .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
+      .expect('Worklow validation errors: [{"error":true,"data":"Record id parse err: badbeef: {}"},{"error":true,"data":"Record id parse err: badbeef: {}"}]')
       .end(function(err, res) {
         if (err) {
           done(err);
@@ -1468,7 +1468,7 @@ describe("app", function() {
       .set('Cookie', [Cookies])
       .send({swName: "Test Record4"})
       .expect(400)
-      .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
+      .expect('Worklow validation errors: [{"error":true,"data":"Record id parse err: badbeef: {}"},{"error":true,"data":"Record id parse err: badbeef: {}"}]')
       .end(function(err, res) {
         if (err) {
           done(err);

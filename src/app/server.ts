@@ -211,10 +211,30 @@ app.put('/api/v1/swdb/:id', auth.ensureAuthenticated,
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
     } else {
-      let wfResults =
-        await customValidators.CustomValidators.swUpdateWorkflowValidation(req, be);
-      if (wfResults.error) {
-        res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults.data));
+      // setup an array of validations to perfrom
+      // save the results in wfResultsArr, and errors in errors.
+      let wfValArr = [
+        customValidators.CustomValidators.swNoVerBranchChgIfStatusRdyInstall,
+        customValidators.CustomValidators.noSwStateChgIfReferringInst,
+      ];
+
+      let errors = [];
+      let wfResultArr = await Promise.all(
+        wfValArr.map(async function (item, idx, arr) {
+          let r = await item(req);
+          if (r.error) {
+            errors.push(r);
+          }
+          debug('wfValArr[' + idx + ']: ' + JSON.stringify(r));
+          return r;
+        }),
+      );
+
+      debug('Workflow validation results :' + JSON.stringify(wfResultArr));
+
+      if (errors.length > 0) {
+        debug('Workflow validation errors ' + JSON.stringify(errors));
+        res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors));
         return;
       } else {
         be.updateDoc(auth.getUsername(req), req, res, next);
@@ -236,10 +256,30 @@ app.patch('/api/v1/swdb/:id', auth.ensureAuthenticated,
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
     } else {
-      let wfResults =
-        await customValidators.CustomValidators.swUpdateWorkflowValidation(req, be);
-      if (wfResults.error) {
-        res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults.data));
+      // setup an array of validations to perfrom
+      // save the results in wfResultsArr, and errors in errors.
+      let wfValArr = [
+        customValidators.CustomValidators.swNoVerBranchChgIfStatusRdyInstall,
+        customValidators.CustomValidators.noSwStateChgIfReferringInst,
+      ];
+
+      let errors = [];
+      let wfResultArr = await Promise.all(
+        wfValArr.map(async function (item, idx, arr) {
+          let r = await item(req);
+          if (r.error) {
+            errors.push(r);
+          }
+          debug('wfValArr[' + idx + ']: ' + JSON.stringify(r));
+          return r;
+        }),
+      );
+
+      debug('Workflow validation results :' + JSON.stringify(wfResultArr));
+
+      if (errors.length > 0) {
+        debug('Workflow validation errors ' + JSON.stringify(errors));
+        res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors));
         return;
       } else {
         be.updateDoc(auth.getUsername(req), req, res, next);
@@ -355,20 +395,19 @@ app.patch('/api/v1/inst/:id', auth.ensureAuthenticated,
       customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall];
 
       let errors = [];
-      let wfResultArr = await Promise.all(wfValArr.map(async function (item, idx, arr) {
-        let r = await item(req);
-        if (r.error) {
-          errors.push(r);
-        }
-        debug('wfValArr[' + idx + ']: ' + JSON.stringify(r));
-        return r;
-      }),
+      let wfResultArr = await Promise.all(
+        wfValArr.map(async function (item, idx, arr) {
+          let r = await item(req);
+          if (r.error) {
+            errors.push(r);
+          }
+          debug('wfValArr[' + idx + ']: ' + JSON.stringify(r));
+          return r;
+        }),
       );
 
       debug('Workflow validation results :' + JSON.stringify(wfResultArr));
 
-      // let wfResults =
-      //   await customValidators.CustomValidators.instUpdateWorkflowValidation(req);
       if (errors.length > 0) {
         debug('Workflow validation errors ' + JSON.stringify(errors));
         res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors));
