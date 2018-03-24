@@ -629,4 +629,105 @@ describe('Installation api tests', () => {
         .end(done);
     });
   });
+
+  describe('Workflow rule 2 testing', () => {
+    let wrapper = { origId: null, swId: null };
+    it('Post a new installation record', (done) => {
+      supertest(app)
+        .post('/api/v1/inst/')
+        .send({
+          host: 'Rule 2 test host', name: 'Test name', area: ['Global'], status: 'Ready for install',
+          statusDate: 'date 1000', software: '5947589458a6aa0face9a512',
+        })
+        .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
+        .expect(201)
+        // .end(done);
+        .end(function (err, res) {
+          if (err) {
+            done(err);
+          } else {
+            // grab the new installation id from the returned location header.
+            // We use this later to verify the error message.
+            let id = res.header.location.split(/\//).pop();
+            wrapper.origId = id;
+            done()
+          }
+        });
+    });
+
+    it('Post a new software record', (done) => {
+      supertest(app)
+        .post('/api/v1/swdb/')
+        .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
+        .send({
+          swName: 'Rule 4 Test Record',
+          version: 'test version',
+          branch: 'test branch',
+          owner: 'previous Test Owner',
+          engineer: 'Test Engineer',
+          levelOfCare: 'LOW',
+          status: 'Ready for install',
+          statusDate: '0',
+        })
+        .expect(201)
+        // .end(done);
+        .end(function (err, res) {
+          if (err) {
+            done(err);
+          } else {
+            // grab the new installation id from the returned location header.
+            // We use this later to verify the error message.
+            let id = res.header.location.split(/\//).pop();
+            wrapper.swId = id;
+            done();
+          }
+        })
+    });
+
+    it('set software field to something in Ready for install', (done) => {
+      supertest(app)
+        .put('/api/v1/inst/' + wrapper.origId)
+        .send({ software: wrapper.swId })
+        .set('Cookie', Cookies)
+        .expect(200)
+        .end(function (err, res) {
+          if (err) {
+            debug('in err wrapper.origId = ' + wrapper.origId);
+            debug('in err wrapper.swId = ' + wrapper.swId);
+            debug(JSON.stringify(res));
+            done(err);
+          } else {
+            done();
+          }
+        })
+    });
+
+    it('Set status to Read for beam', (done) => {
+      supertest(app)
+        .put('/api/v1/inst/' + wrapper.origId)
+        .set('Cookie', Cookies)
+        .send({status: 'Ready for beam'})
+        .expect(200)
+        .end(done);
+    });
+
+    it('Set software to something else', (done) => {
+      supertest(app)
+        .put('/api/v1/inst/' + wrapper.origId)
+        .set('Cookie', Cookies)
+        .send({ software: '5947589458a6aa0face9a512' })
+        .expect(400)
+        .expect('Worklow validation errors: [{\"error\":true,\"data\":\"Installation software field can only be changed in state Ready for install\"}]')
+        .end(function (err, res) {
+          if (err) {
+            debug(JSON.stringify(res));
+            done(err);
+          } else {
+            done();
+          }
+        })
+    });
+  });
 });

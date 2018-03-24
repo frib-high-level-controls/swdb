@@ -223,10 +223,10 @@ export class CustomValidators {
     // The installation sw field cxan only change in the Ready for install state
     // get the id of the record which is wanting update
     // go get the existing record
-    debug('Checking instUpdateWorkflowValidation');
     debug('Checking wfRuler2');
     let id = req.params.id;
     try {
+      debug('Rule 2 id: ' + id);
       let idObj = new mongoose.mongo.ObjectId(req.params.id);
     } catch (err) {
       return {
@@ -305,7 +305,7 @@ export class CustomValidators {
         // if old status was Ready for install
         // first, see if there was eve a  record to update
         if (!queryPromise) {
-          debug('No queryPromise, returning err');
+          debug('Rule3 No queryPromise, returning err');
           return {
             error: true,
             data: 'Rule3 record id not found ' + id,
@@ -313,16 +313,14 @@ export class CustomValidators {
         } else {
           let sts: string = props.StatusEnum[2];
           if (queryPromise.status !== sts) {
-            debug('status: "' + JSON.stringify(queryPromise.status) + '"');
-            debug('props status: "' + JSON.stringify(queryPromise.status) + '"');
-            debug('Sw field status is incorrect, returning err');
+            debug('Rule3 Sw field status is incorrect, returning err');
             return {
               error: true,
               data: 'Software field must point to software with status ' + sts + '.' +
               'The given software, ' + id + ', has status ' + queryPromise.status,
             };
           } else {
-            debug('Sw field status is okay, returning okay');
+            debug('Rule 3: Sw field status is okay, returning okay');
             return {
               error: false,
               data: 'No errors',
@@ -330,14 +328,14 @@ export class CustomValidators {
           }
         }
       } catch (err) {
-        debug('instUpdateWorkflowValidation db err: ' + JSON.stringify(err));
+        debug('Rule3 db err: ' + JSON.stringify(err));
         return {
           error: true,
           data: err,
         };
       }
     } else {
-      debug('Sw field status is blank, returning okay');
+      debug('Rule3 Sw field status is blank, returning okay');
       return {
         error: false,
         data: 'No software listed',
