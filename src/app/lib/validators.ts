@@ -182,8 +182,10 @@ export class CustomValidators {
       }
       if (queryPromise.status === props.StatusEnum[2]) {
         // if the version or branch have changed
-        if ((req.body.version !== queryPromise.version) || (req.body.branch !== queryPromise.branch)) {
-          debug('swUpdateWorkflowValidation version and/or branch changed');
+        // debug('swUpdateWorkflowValidation req: ' + JSON.stringify(req.body));
+        if ((('version' in req.body) || ('branch' in req.body)) &&
+         ((req.body.version !== queryPromise.version) || (req.body.branch !== queryPromise.branch))) {
+          // debug('swUpdateWorkflowValidation version and/or branch changed');
           return {
             error: true,
             data: 'Version and branch cannot change in state ' + props.StatusEnum[2],

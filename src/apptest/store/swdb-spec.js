@@ -1323,6 +1323,132 @@ describe("app", function() {
     });
   });
 
+  // workflow rule4 tests
+  it("Post a new record to test status lock if installations (rule 4)", function(done) {
+    supertest
+    .post("/api/v1/swdb/")
+    .send( {
+      swName: "Rule 4 Test Record",
+      version: "test version",
+      branch: "test branch",
+      owner: "previous Test Owner",
+      engineer: "Test Engineer",
+      levelOfCare: "LOW",
+      status: "Development",
+      statusDate: "0"
+    })
+    .set("Accept", "application/json")
+    .set('Cookie', [Cookies])
+    .expect(201)
+    .end((err, result) => {
+      if (err) {
+        done(err);
+      } else {
+        debug('Location: ' + result.headers.location);
+        done();
+      }
+    });
+  });
+
+  describe('get id for rule 4 record', function() {
+    var wrapper = {origId:null};
+    before("Get ID previous id: rule 4 Test Record", function(done) {
+      supertest
+      .get("/api/v1/swdb/")
+      .expect(200)
+      .end(function(err,res){
+        if (err) {
+          done(err);
+        } else {
+          res = JSON.parse(res.text);
+          for (var i = 0, iLen = res.length; i < iLen; i++) {
+            if (res[i].swName == "Rule 4 Test Record") wrapper.origId = res[i]._id;
+          }
+          done();
+        }
+      });
+    });
+
+    it("Returns test record id: Rule 4 Test Record", function(done) {
+      supertest
+      .get("/api/v1/swdb/"+wrapper.origId)
+      .expect(200)
+      .end(function(err, res){
+        if (err) {
+          done(err);
+        } else {
+          expect(res.body).to.have.property("_id");
+          expect(res.body.swName).to.equal("Rule 4 Test Record");
+          done();
+        }
+      });
+    });
+
+    it("set status in rule 4 Test Record", function(done) {
+      supertest
+      .put("/api/v1/swdb/" + wrapper.origId)
+      .send({ 
+        status: "Ready for install",
+       })
+      .set('Cookie', [Cookies])
+      .expect(200)
+      .end(function(err, res){
+        if (err) {
+          done(err);
+        } else {
+          done();
+        }
+      });
+    });
+
+    it('Rule 4 test - Post a new installation record', (done) => {
+      supertest
+        .post('/api/v1/inst/')
+        .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
+        .send({
+          host: 'Test host',
+          name: 'Test name',
+          area: ['Global'],
+          status: 'Ready for install',
+          statusDate: 'date 1000',
+          software: wrapper.origId,
+        })
+        .expect(201)
+        // .end(done);
+        .end(function (err, res) {
+          if (err) {
+            done(err);
+          } else {
+            // grab the new installation id from the returned location header.
+            // We use this later to verify the error message.
+            id = res.header.location.split(/\//).pop();
+            wrapper.instId = id;
+            done()
+          }
+        })
+    });
+
+    it("Rule 4 test - errors setting status having installations", function(done) {
+      supertest
+      .put("/api/v1/swdb/" + wrapper.origId)
+      .send({ 
+        status: "Development",
+       })
+      .set('Cookie', [Cookies])
+      .expect(400)
+      .expect('Worklow validation errors: [{"error":true,"data":"Software state cannot change while ' +
+       'there are active installations: ' + wrapper.instId + '"}]')
+      .end(function(err, res){
+        if (err) {
+          done(err);
+        } else {
+          done();
+        }
+      });
+    });
+  });
+
     // This table lists test requests to make and the expected
     // responses.
     // {req:{msg:,url:,type:,err{status:}}
