@@ -631,6 +631,15 @@ describe('Installation api tests', () => {
   });
 
   describe('Workflow rule 2 testing', () => {
+    /*
+     * Tests for installations can have software change only if installation is Ready to install
+     * 1) Make a new installation record pointing to existing sw in status Ready for install
+     * 2) Create a new software record in state Ready for instal
+     * 3) Try to set installation to the new software record in state Ready for install
+     * 4) Set the installation status to Ready for beam
+     * 5) Try to set installation back to the original software
+     *  (this should fail with the proper error listed)
+     */
     let wrapper = { origId: null, swId: null };
     it('Post a new installation record', (done) => {
       supertest(app)
@@ -662,7 +671,7 @@ describe('Installation api tests', () => {
         .set('Accept', 'application/json')
         .set('Cookie', Cookies)
         .send({
-          swName: 'Rule 4 Test Record',
+          swName: 'Rule 2 Test Record',
           version: 'test version',
           branch: 'test branch',
           owner: 'previous Test Owner',
@@ -720,6 +729,89 @@ describe('Installation api tests', () => {
         .send({ software: '5947589458a6aa0face9a512' })
         .expect(400)
         .expect('Worklow validation errors: [{\"error\":true,\"data\":\"Installation software field can only be changed in state Ready for install\"}]')
+        .end(function (err, res) {
+          if (err) {
+            debug(JSON.stringify(res));
+            done(err);
+          } else {
+            done();
+          }
+        })
+    });
+  });
+
+  describe('Workflow rule 3 testing', () => {
+    /*
+     * Tests for installations being set software records in status Ready for install
+     * 1) Make a new installation record pointing to existing sw in status Ready for install
+     * 2) Create a new software record in state Development
+     * 3) Try to set installation to the new software record in state Development
+     *  (this should fail with the proper error listed)
+     */
+    let wrapper = { origId: null, swId: null };
+    it('Post a new installation record', (done) => {
+      supertest(app)
+        .post('/api/v1/inst/')
+        .send({
+          host: 'Rule 3 test host', name: 'Test name', area: ['Global'], status: 'Ready for install',
+          statusDate: 'date 1000', software: '5947589458a6aa0face9a512',
+        })
+        .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
+        .expect(201)
+        // .end(done);
+        .end(function (err, res) {
+          if (err) {
+            done(err);
+          } else {
+            // grab the new installation id from the returned location header.
+            // We use this later to verify the error message.
+            let id = res.header.location.split(/\//).pop();
+            wrapper.origId = id;
+            done()
+          }
+        });
+    });
+
+    it('Post a new software record', (done) => {
+      supertest(app)
+        .post('/api/v1/swdb/')
+        .set('Accept', 'application/json')
+        .set('Cookie', Cookies)
+        .send({
+          swName: 'Rule 3 Test Record',
+          version: 'test version',
+          branch: 'test branch',
+          owner: 'previous Test Owner',
+          engineer: 'Test Engineer',
+          levelOfCare: 'LOW',
+          status: 'Development',
+          statusDate: '0',
+        })
+        .expect(201)
+        // .end(done);
+        .end(function (err, res) {
+          if (err) {
+            done(err);
+          } else {
+            // grab the new installation id from the returned location header.
+            // We use this later to verify the error message.
+            let id = res.header.location.split(/\//).pop();
+            wrapper.swId = id;
+            done();
+          }
+        });
+    });
+
+    it('Rule 3 Fails setting software to something status Development', (done) => {
+      supertest(app)
+        .put('/api/v1/inst/' + wrapper.origId)
+        .set('Cookie', Cookies)
+        .send({ software: wrapper.swId })
+        .expect(400)
+        .expect('Worklow validation errors: [{"error":true,"data":"Software field must point to software ' +
+         'with status Ready for install.The given software, ' +
+         wrapper.swId + ', has status Development"}]')
         .end(function (err, res) {
           if (err) {
             debug(JSON.stringify(res));
