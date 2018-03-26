@@ -211,7 +211,7 @@ app.put('/api/v1/swdb/:id', auth.ensureAuthenticated,
         customValidators.CustomValidators.noSwStateChgIfReferringInst,
       ];
 
-      let errors = [];
+      let errors: customValidators.IValResult[] = [];
       let wfResultArr = await Promise.all(
         wfValArr.map(async function (item, idx, arr) {
           let r = await item(req);
@@ -256,7 +256,7 @@ app.patch('/api/v1/swdb/:id', auth.ensureAuthenticated,
         customValidators.CustomValidators.noSwStateChgIfReferringInst,
       ];
 
-      let errors = [];
+      let errors: customValidators.IValResult[] = [];
       let wfResultArr = await Promise.all(
         wfValArr.map(async function (item, idx, arr) {
           let r = await item(req);
@@ -346,7 +346,7 @@ app.put('/api/v1/inst/:id', auth.ensureAuthenticated,
         customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall,
       ];
 
-      let errors = [];
+      let errors: customValidators.IValResult[] = [];
       let wfResultArr = await Promise.all(wfValArr.map(async function (item, idx, arr) {
         let r = await item(req);
         if (r.error) {
@@ -389,7 +389,7 @@ app.patch('/api/v1/inst/:id', auth.ensureAuthenticated,
         customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall,
       ];
 
-      let errors = [];
+      let errors: customValidators.IValResult[] = [];
       let wfResultArr = await Promise.all(
         wfValArr.map(async function (item, idx, arr) {
           let r = await item(req);

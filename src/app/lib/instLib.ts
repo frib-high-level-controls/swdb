@@ -31,11 +31,11 @@ export class InstLib {
    * @returns id The ID of the item found in the request
    */
   public static getReqId = (req: express.Request) => {
-    let id = null;
-    let path = url.parse(req.url).pathname;
+    let id: string | null = null;
+    let path: string | null | undefined = url.parse(req.url).pathname;
     if (url.parse(req.url).pathname) {
       if (path!.match(/[^v][\da-fA-F]+$/) !== null) {
-        const urlParts = path!.split('/');
+        const urlParts: string[] = path!.split('/');
         id = urlParts[urlParts.length - 1];
         debug('getReqId returning ' + id);
         return id;

@@ -404,7 +404,7 @@ export class CustomValidators {
   };
 };
 
-interface IValResult {
+export interface IValResult {
     error: boolean;
     data: string;
 }
