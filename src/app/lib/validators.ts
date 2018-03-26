@@ -1,16 +1,11 @@
 import express = require('express');
-import expressSession = require('express-session');
-import expressValidator = require('express-validator');
 import cJSON = require('circular-json');
 import validate = require('validate.js');
 import dbg = require('debug');
 import Be = require('./Db');
 import InstBe = require('./instDb');
 import commonTools = require('./CommonTools');
-import mongodb = require('mongodb');
 import  mongoose = require('mongoose');
-import  history = require('../shared/history');
-let objectID = mongodb.ObjectID;
 const tools = new commonTools.CommonTools();
 const props = tools.getConfiguration();
 const debug = dbg('swdb:validators');
@@ -149,7 +144,7 @@ export class CustomValidators {
   };
 
   /**
-   * swNoVerBranchChgIfStatusRdyInstall - method to detect version/branch change when sw status 
+   * swNoVerBranchChgIfStatusRdyInstall - method to detect version/branch change when sw status
    *  is Ready for install
    * @param req - express request
    * @param instBe - db object for installation db access
@@ -164,6 +159,7 @@ export class CustomValidators {
     let id = req.params.id;
     try {
       let idObj = new mongoose.mongo.ObjectId(req.params.id);
+      debug(JSON.stringify(idObj));
     } catch (err) {
       return {
         error: true,
@@ -228,6 +224,7 @@ export class CustomValidators {
     try {
       debug('Rule 2 id: ' + id);
       let idObj = new mongoose.mongo.ObjectId(req.params.id);
+      debug(JSON.stringify(idObj));
     } catch (err) {
       return {
         error: true,
@@ -238,7 +235,7 @@ export class CustomValidators {
       let queryPromise = await InstBe.InstDb.instDoc.findOne({ _id: id }).exec();
       // if old status was Ready for install
       // first, see if there was eve a  record to update
-      if (!queryPromise){
+      if (!queryPromise) {
         return {
           error: true,
           data: 'Rule2 record id not found ' + id,
@@ -278,10 +275,10 @@ export class CustomValidators {
    * noInstSwUnlessSwIsReadyForInstall  - method to detect installations attempting to point to software that is not
    * in state Ready for install
    * @param req - express request
-   * 
+   *
    * @returns Promise<IValResult>
    */
-  public static noInstSwUnlessSwIsReadyForInstall = 
+  public static noInstSwUnlessSwIsReadyForInstall =
     async function(req: express.Request): Promise<IValResult> {
     // here the req passed is either a new installation or an update.
     // the software listed in the request must have state Ready for install.
@@ -292,6 +289,7 @@ export class CustomValidators {
       let id = req.body.software;
       try {
         let idObj = new mongoose.mongo.ObjectId(id);
+        debug(JSON.stringify(idObj));
       } catch (err) {
         return {
           error: true,
@@ -299,8 +297,6 @@ export class CustomValidators {
         };
       }
       try {
-        let queryPromise1  = await Be.Db.swDoc.find().exec();
-        // debug('Rule3 sees swDocs: ' + JSON.stringify(queryPromise1));
         let queryPromise  = await Be.Db.swDoc.findOne({ _id: id }).exec();
         // if old status was Ready for install
         // first, see if there was eve a  record to update
@@ -347,7 +343,7 @@ export class CustomValidators {
    * noSwStateChgIfReferringInst  - method to detect software attempting to change state
    * when there are installations referring to it.
    * @param req - express request
-   * 
+   *
    * @returns Promise<IValResult>
    */
   public static noSwStateChgIfReferringInst = async function(req: express.Request): Promise<IValResult> {
@@ -357,6 +353,7 @@ export class CustomValidators {
     let id = req.params.id;
     try {
       let idObj = new mongoose.mongo.ObjectId(req.params.id);
+      debug(JSON.stringify(idObj));
     } catch (err) {
       return {
         error: true,
@@ -367,7 +364,7 @@ export class CustomValidators {
       let queryPromise = await Be.Db.swDoc.findOne({ _id: id }).exec();
       // if old status was Ready for install
       // first, see if there was eve a  record to update
-      if (!queryPromise){
+      if (!queryPromise) {
         return {
           error: true,
           data: 'Record id not found' + id,

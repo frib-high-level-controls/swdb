@@ -1,10 +1,7 @@
-import fs = require('fs');
 import mongodb = require('mongodb');
 import mongoose = require('mongoose');
 import * as history from '../shared/history';
-import util = require('util');
 import commonTools = require('./CommonTools');
-import swdbTools = require('./swdblib');
 import express = require('express');
 import dbg = require('debug');
 const debug = dbg('swdb:Db');
@@ -13,7 +10,7 @@ export class Db {
   public static swDoc: any;
   public static props: any;
   private static schema: any;
-  private static dbConnect: any;
+  private static dbConnect: any = null;
   constructor() {
     const tools = new commonTools.CommonTools();
     Db.props = tools.getConfiguration();
@@ -59,7 +56,7 @@ export class Db {
 
       Db.dbConnect = mongoose.connect(Db.props.mongodbUrl, (err: Error) => {
         if (!err) {
-          debug('DB connected...');
+          debug('DB connected...' + Db.dbConnect.toString());
         } else {
           debug('Error: ' + err);
         }
@@ -88,7 +85,7 @@ export class Db {
   }
   /**
    * createDocByRecord - crates a new record given a single sw record
-   * 
+   *
    * @param user The user making the request (String)
    * @param req The requested sw record to save
    */
@@ -200,7 +197,6 @@ export class Db {
 
   // return array of records given an array of ids
   public getList = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const response = {};
     const objIds = req.body.map( (id: string) => id);
     Db.swDoc.find({ _id: { $in: objIds } }, (err: Error, docs: any) => {
       if (err) {

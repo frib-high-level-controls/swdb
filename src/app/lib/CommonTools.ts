@@ -4,7 +4,6 @@ import {LevelOfCareEnum} from './swdbEnums';
 import {StatusEnum} from './swdbEnums';
 import {InstStatusEnum} from './swdbEnums';
 import {RcsEnum} from './swdbEnums';
-import express = require('express');
 import forgapi = require('../shared/forgapi');
 import dbg = require('debug');
 const debug = dbg('swdb:CommonTools');
