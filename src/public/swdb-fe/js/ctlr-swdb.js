@@ -2,7 +2,7 @@
  * This is the top-level controller for swdb
  */
 
-var appController = angular.module('appController', ['datatables', 'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ngCookies', 'ui.select']);
+var appController = angular.module('appController', ['datatables', 'datatables.bootstrap', 'ngAnimate', 'ngSanitize', 'ui.bootstrap', 'ngCookies', 'ui.select']);
 
 appController.run(['$rootScope', '$route', '$http', '$routeParams', '$location', 'configService', function ($rootScope, $route, $http, $routeParams, $location, configService, slotService) {
 
@@ -56,6 +56,7 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
       });
       return defer.promise;
     })
+    .withBootstrap()
     .withPaginationType('full_numbers')
     .withDOM('<"row"<"col-sm-8"l><"col-sm-4"B>>rtip');
 

@@ -55,6 +55,7 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
     });
     return defer.promise;
   })
+    .withBootstrap()
     .withPaginationType('full_numbers')
     .withDOM('<"row"<"col-sm-8"l><"col-sm-4"B>>rtip');
   vm.dtOptions.searching = true;
