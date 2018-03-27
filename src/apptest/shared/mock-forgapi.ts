@@ -1,9 +1,32 @@
 /*
  * Mock FORG API Client with in-memory user store.
  */
+import * as auth from '../../app/shared/auth';
 import * as forgapi from '../../app/shared/forgapi';
+import * as log from '../../app/shared/logging';
 
 export type User = forgapi.User;
+export type Group = forgapi.Group;
+
+export type SearchUser = forgapi.SearchUser;
+export type SearchGroup = forgapi.SearchGroup;
+
+export type SearchUsersOptions = forgapi.SearchUsersOptions;
+export type SearchGroupsOptions = forgapi.SearchGroupsOptions;
+
+
+/**
+ * Construct a RegExp that matches the given pattern
+ *
+ * Wildcard: * - match anything
+ */
+export function matchPattern(pattern: string, flags?: string): RegExp {
+  // This snippet for escaping regex special characters is copied from MDN
+  // See: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions
+  pattern = pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+  pattern = pattern.replace(/\\\*/g, '(.*)');
+  return new RegExp('^' + pattern + '$', flags);
+};
 
 export class MockClient implements forgapi.IClient {
 
@@ -19,37 +42,41 @@ export class MockClient implements forgapi.IClient {
 
   public users = new Map<string, User>();
 
+  public groups = new Map<string, Group>();
+
   public addUser(user: User | User[]) {
     if (Array.isArray(user)) {
       for (let u of user) {
         this.addUser(u);
       }
-    } else {
-      if (user.uid) {
-        user.uid = user.uid.toUpperCase();
-        this.users.set(user.uid, user);
+    } else if (user.uid) {
+      user.uid = user.uid.toUpperCase();
+      if (this.users.has(user.uid)) {
+        log.warn('Mock FORG API already contains user: %s', user.uid);
       }
+      this.users.set(user.uid, user);
     }
   };
 
-  public removeUser(user: string | string[]) {
-    if (Array.isArray(user)) {
-      for (let u of user) {
+  public removeUser(uid: string | string[]) {
+    if (Array.isArray(uid)) {
+      for (let u of uid) {
         this.removeUser(u);
       }
     } else {
-      this.users.delete(user.toUpperCase());
+      this.users.delete(uid.toUpperCase());
     }
   };
 
   public clear() {
     this.users.clear();
+    this.groups.clear();
   }
 
-  public findUser(uid: string): Promise<User | undefined> {
+  public findUser(uid: string): Promise<User | null> {
     const user = this.users.get(uid.toUpperCase());
     if (!user) {
-      return Promise.resolve(undefined);
+      return Promise.resolve(null);
     }
     return Promise.resolve(user);
   };
@@ -57,4 +84,119 @@ export class MockClient implements forgapi.IClient {
   public findUsers(): Promise<User[]> {
     return Promise.resolve(Array.from(this.users.values()));
   };
+
+  public searchUsers(opts: SearchUsersOptions): Promise<SearchUser[]> {
+    let users: SearchUser[] = [];
+
+    for (let user of this.users.values()) {
+      let conds = 0;
+      let found = 0;
+      if (opts.fullname) {
+        conds += 1;
+        if (user.fullname.match(matchPattern(opts.fullname, 'i'))) {
+          found += 1;
+        }
+      }
+      if (opts.role) {
+        conds += 1;
+        if (user.roles.includes(opts.role.toUpperCase())) {
+          found += 1;
+        }
+      }
+      if (conds === found) {
+        users.push({
+          uid: user.uid,
+          fullname: user.fullname,
+          role: auth.formatRole('USR', user.uid),
+        });
+      }
+    }
+    return Promise.resolve(users);
+  }
+
+  public addGroup(group: Group | Group[]) {
+    if (Array.isArray(group)) {
+      for (let g of group) {
+        this.addGroup(g);
+      }
+    } else if (group.uid) {
+      group.uid = group.uid.toUpperCase();
+      if (this.groups.has(group.uid)) {
+        log.warn('Mock FORG API already contains group: %s', group.uid);
+      }
+      this.groups.set(group.uid, group);
+    }
+  };
+
+  public removeGroup(uid: string | string[]) {
+    if (Array.isArray(uid)) {
+      for (let u of uid) {
+        this.removeGroup(u);
+      }
+    } else {
+      this.users.delete(uid.toUpperCase());
+    }
+  };
+
+  public findGroup(uid: string): Promise<Group | null> {
+    const group = this.groups.get(uid.toUpperCase());
+    if (!group) {
+      return Promise.resolve(null);
+    }
+    return Promise.resolve(group);
+  }
+
+  public findGroups(): Promise<Group[]> {
+    return Promise.resolve(Array.from(this.groups.values()));
+  };
+
+  public searchGroups(opts: SearchGroupsOptions): Promise<SearchGroup[]> {
+    let groups: SearchGroup[] = [];
+
+    for (let group of this.groups.values()) {
+      let conds = 0;
+      let found = 0;
+      if (opts.srcname) {
+        conds += 1;
+        if (group.srcname.match(matchPattern(opts.srcname, 'i'))) {
+          found += 1;
+        }
+      }
+      if (opts.fullname) {
+        conds += 1;
+        if (group.fullname.match(matchPattern(opts.fullname, 'i'))) {
+          found += 1;
+        }
+      }
+      if (opts.leader) {
+        conds += 1;
+        if (group.leader.toUpperCase() === opts.leader.toUpperCase()) {
+          found += 1;
+        }
+      }
+      if (opts.source) {
+        conds += 1;
+        if (group.source.toUpperCase() === opts.source.toUpperCase()) {
+          found += 1;
+        }
+      }
+      if (opts.type) {
+        conds += 1;
+        if (group.type.toUpperCase() === opts.type.toUpperCase()) {
+          found += 1;
+        }
+      }
+      if (conds === found) {
+        groups.push({
+          uid: group.uid,
+          srcname: group.srcname,
+          fullname: group.fullname,
+          source: group.source,
+          type: group.type,
+          role: auth.formatRole('GRP', group.uid),
+        });
+      }
+    }
+    return Promise.resolve(groups);
+  }
 }
