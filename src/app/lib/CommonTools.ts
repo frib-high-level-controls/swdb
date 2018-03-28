@@ -80,7 +80,7 @@ export class CommonTools {
  */
   public getForgGroupsTestFile = (): forgapi.Group[] => {
     // Prepare the source location by looking at the properties useSource
-    const source = CommonTools.props.forgGroupsDataSource[CommonTools.props.forgGroupsDataSource.useSource];
+    const source: string = CommonTools.props.forgGroupsDataSource[CommonTools.props.forgGroupsDataSource.useSource];
     debug('forg group source is: ' + source);
     let groupdata: forgapi.Group[] = [];
     let raw = fs.readFileSync(source, { encoding: 'utf-8' });
@@ -94,7 +94,7 @@ export class CommonTools {
    */
   public getForgUsersTestFile = (): forgapi.User[] => {
     // Prepare the source location by looking at the properties useSource
-    const source = CommonTools.props.forgUsersDataSource[CommonTools.props.forgUsersDataSource.useSource];
+    const source: string = CommonTools.props.forgUsersDataSource[CommonTools.props.forgUsersDataSource.useSource];
     let userdata: forgapi.User[] = [];
     let raw = fs.readFileSync(source, { encoding: 'utf-8' });
     userdata = JSON.parse(raw);
@@ -103,21 +103,24 @@ export class CommonTools {
   }
 }
 
-interface IProps {
+export interface IProps {
   apiUrl: string;
   instApiUrl: string;
   ccdbApiUrl: string;
   slotsDataSource: {
+    [index: string]: string;
     useSource: string;
     test: string;
     production: string;
   };
   forgGroupsDataSource: {
+    [index: string]: string;
     useSource: string;
     testFile: string;
     production: string;
   };
   forgUsersDataSource: {
+    [index: string]: string;
     useSource: string;
     testFile: string;
     production: string;
@@ -142,10 +145,10 @@ interface IProps {
     instTestDataFile: string;
   };
 
-  LevelOfCareEnum: Enumerator;
-  StatusEnum: Enumerator;
-  InstStatusEnum: Enumerator;
-  RcsEnum: Enumerator;
+  LevelOfCareEnum: LevelOfCareEnum;
+  StatusEnum: StatusEnum;
+  InstStatusEnum: InstStatusEnum;
+  RcsEnum: RcsEnum;
 
   levelOfCareLabels: [string];
   statusLabels: [string];
