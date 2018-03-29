@@ -2,11 +2,9 @@ let app = require('../../app/server');
 import chai = require('chai');
 import supertest = require('supertest');
 import chaiAsPromised = require('chai-as-promised');
-import mongodb = require('mongodb');
 import  webdriver = require('selenium-webdriver');
 import test = require('selenium-webdriver/testing');
 import TestTools = require('./TestTools');
-import fs = require('fs');
 import dbg = require('debug');
 const debug = dbg('swdb:inst-list-tests');
 
@@ -26,7 +24,7 @@ let Cookies: string;
  * Test suite for software installations list page
  */
 
-let chromeDriver;
+let chromeDriver: any;
 
 test.describe('Installations record tests', function() {
   before('Prep DB', async function () {
@@ -42,10 +40,7 @@ test.describe('Installations record tests', function() {
     await testTools.clearTestCollections(debug);
   });
 
-
-  let allCookies = null;
-
-  test.it('should show search page with login button', function() {
+  test.it('should show search page with login button', function(this: any) {
     this.timeout(8000);
 
     chromeDriver = new webdriver.Builder()
@@ -59,7 +54,7 @@ test.describe('Installations record tests', function() {
       'Log in'), 8000);
   });
 
-  test.it('login as test user', function(done){
+  test.it('login as test user', function(this: any, done){
     this.timeout(8000);
     supertest(app)
     .get('/login')
@@ -80,7 +75,7 @@ test.describe('Installations record tests', function() {
     });
   });
 
-  test.it('should show search page with username on logout button', function() {
+  test.it('should show search page with username on logout button', function(this: any) {
     this.timeout(8000);
     chromeDriver.get(props.webUrl + '#/inst/list');
     chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
@@ -137,7 +132,7 @@ test.describe('Installations record tests', function() {
   });
 
   // find an installation record
-  test.it('should find a record', function() {
+  test.it('should find a record', function(this: any) {
     this.timeout(8000);
     chromeDriver.get(props.webUrl + '#/inst/list');
     chromeDriver.wait(until.elementLocated(By.id('hostSrch')), 8000)

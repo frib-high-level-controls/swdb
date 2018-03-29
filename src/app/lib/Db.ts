@@ -257,7 +257,7 @@ export class Db {
 }
 
 // interface ISwdbDoc extends mongoose.MongooseDocument {
-interface ISwdbModel extends history.IHistory {
+export interface ISwdbModel extends history.IHistory {
   [key: string]: any;
 
   swName: string;

@@ -1,24 +1,12 @@
 import app = require('../../app/server');
-import express = require('express');
 import chai = require('chai');
 let expect = chai.expect;
 import supertest = require('supertest');
-import tools = require('../../app/lib/swdblib');
-import Be = require('../../app/lib/Db');
-import instBe = require('../../app/lib/instDb');
 import expect2 = require('expect');
-import fs = require('fs');
 import TestTools = require('./TestTools');
 import dbg = require('debug');
 const debug = dbg('swdb:inst-spec-tests');
 import CommonTools = require('../../app/lib/CommonTools');
-import webdriver = require('selenium-webdriver');
-let By = webdriver.By;
-let until = webdriver.until;
-import test = require('selenium-webdriver/testing');
-import path = require('path');
-import child_process = require('child_process');
-import { Express } from 'express-serve-static-core';
 
 
 /**
@@ -26,16 +14,13 @@ import { Express } from 'express-serve-static-core';
  * Test suite for software installations api
  */
 
-let be = new Be.Db();
 let testTools = new TestTools.TestTools();
-let exec = child_process.exec;
 let Cookies: string;
 let ctools = new CommonTools.CommonTools();
 let props: any = {};
 props = ctools.getConfiguration();
 
 describe('Installation api tests', () => {
-  let chromeDriver;
   before('Prep DB', async  function() {
     this.timeout(5000);
     debug('Prep DB');
@@ -113,8 +98,8 @@ describe('Installation api tests', () => {
       .post('/api/v1/inst/')
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
-      .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'Ready for install', statusDate: 'date 1000',
-        software: '5947589458a6aa0face9a512'})
+      .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'Ready for install',
+        statusDate: 'date 1000', software: '5947589458a6aa0face9a512'})
       .expect(201)
       .end(done);
   });
@@ -381,8 +366,10 @@ describe('Installation api tests', () => {
         if (err) {
           done(err);
         } else {
-          let regex = 'Status must be one of {\\\\"0\\\\":\\\\"Ready for install\\\\",\\\\"1\\\\":\\\\"Ready for verification\\\\",\\\\"2\\\\":\\\\"Ready for beam\\\\",\\\\"3\\\\":\\\\"Retired\\\\",\\\\"Ready for install\\\\":0,\\\\"Ready for verification\\\\":1,\\\\"Ready for beam\\\\":2,\\\\"Retired\\\\":3}';
-          // 'Status must be one of {\\\\"0\\\\":\\\\"RDY_INSTALL\\\\",\\\\"1\\\\":\\\\"RDY_VERIFY\\\\",\\\\"2\\\\":\\\\"RDY_BEAM\\\\",\\\\"3\\\\":\\\\"RETIRED\\\\"';
+          let regex = 'Status must be one of {\\\\"0\\\\":\\\\"Ready for install\\\\",\\\\"1\\\\":' +
+           '\\\\"Ready for verification\\\\",\\\\"2\\\\":\\\\"Ready for beam\\\\",\\\\"3\\\\":' +
+           '\\\\"Retired\\\\",\\\\"Ready for install\\\\":0,\\\\"Ready for verification\\\\":1,' +
+           '\\\\"Ready for beam\\\\":2,\\\\"Retired\\\\":3}';
           expect(res.text).to.match(new RegExp(regex));
           done();
         }
@@ -392,8 +379,8 @@ describe('Installation api tests', () => {
   it('Errors posting a duplicate installation record', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
-      .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'Ready for install', statusDate: 'date 1000',
-         software: '5947589458a6aa0face9a512'})
+      .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'Ready for install',
+       statusDate: 'date 1000', software: '5947589458a6aa0face9a512'})
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
       .expect(500)
@@ -651,7 +638,6 @@ describe('Installation api tests', () => {
         .set('Accept', 'application/json')
         .set('Cookie', Cookies)
         .expect(201)
-        // .end(done);
         .end(function (err, res) {
           if (err) {
             done(err);
@@ -660,7 +646,7 @@ describe('Installation api tests', () => {
             // We use this later to verify the error message.
             let id = res.header.location.split(/\//).pop();
             wrapper.origId = id;
-            done()
+            done();
           }
         });
     });
@@ -692,7 +678,7 @@ describe('Installation api tests', () => {
             wrapper.swId = id;
             done();
           }
-        })
+        });
     });
 
     it('set software field to something in Ready for install', (done) => {
@@ -710,7 +696,7 @@ describe('Installation api tests', () => {
           } else {
             done();
           }
-        })
+        });
     });
 
     it('Set status to Read for beam', (done) => {
@@ -728,7 +714,8 @@ describe('Installation api tests', () => {
         .set('Cookie', Cookies)
         .send({ software: '5947589458a6aa0face9a512' })
         .expect(400)
-        .expect('Worklow validation errors: [{\"error\":true,\"data\":\"Installation software field can only be changed in state Ready for install\"}]')
+        .expect('Worklow validation errors: [{\"error\":true,\"data\":' +
+         '\"Installation software field can only be changed in state Ready for install\"}]')
         .end(function (err, res) {
           if (err) {
             debug(JSON.stringify(res));
@@ -736,7 +723,7 @@ describe('Installation api tests', () => {
           } else {
             done();
           }
-        })
+        });
     });
   });
 
@@ -768,7 +755,7 @@ describe('Installation api tests', () => {
             // We use this later to verify the error message.
             let id = res.header.location.split(/\//).pop();
             wrapper.origId = id;
-            done()
+            done();
           }
         });
     });
@@ -819,7 +806,7 @@ describe('Installation api tests', () => {
           } else {
             done();
           }
-        })
+        });
     });
   });
 });

@@ -7,7 +7,7 @@ import InstBe = require('../../app/lib/instDb.js');
 const instBe = new InstBe.InstDb();
 import dbg = require('debug');
 const debug = dbg('swdb:TestTools');
-import _ = require('lodash');
+import _  = require('lodash');
 
 import fs = require('fs');
 
@@ -15,12 +15,11 @@ export class TestTools {
   public tools = new CommonTools.CommonTools();
   public props = this.tools.getConfiguration();
 
-  // public async loadTestCollectionsStandard(done, swFile: string, instFile: string) {
   public async loadTestCollectionsStandard(sdebug: debug.IDebugger, swFile: string, instFile: string) {
     await be.chkConn();
     await instBe.chkConn();
-    let testInstData = [];
-    let testSwData = [];
+    let testInstData: any = [];
+    let testSwData: any = [];
     sdebug('loading test DB');
     try {
       testInstData = JSON.parse(fs.readFileSync(instFile, 'utf-8'));
@@ -28,9 +27,7 @@ export class TestTools {
     } catch (err) {
       sdebug(err);
     }
-    // console.log("Starting standard test db clear and reload...");
     // before we start loading data, convert _ids to ObjectIDs
-    // console.log("Converting ObjectIds...");
     for (const i in testSwData) {
       if ('_id' in testSwData[i]) {
         testSwData[i]._id = ObjectId(testSwData[i]._id);
@@ -46,8 +43,6 @@ export class TestTools {
     try {
       sdebug('Inserting test sw data');
       await Be.Db.swDoc.db.collections.swdbCollection.insert(testSwData).exec();
-      // await Be.Db.swDoc.init();
-      // await InstBe.InstDb.instDoc.init();
       await be.chkIdx();
     } catch (err) {
       if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
@@ -59,8 +54,6 @@ export class TestTools {
     try {
       sdebug('Inserting test installation data');
       await InstBe.InstDb.instDoc.db.collections.instCollection.insert(testInstData).exec();
-      // await Be.Db.swDoc.init();
-      // await InstBe.InstDb.instDoc.init();
       await instBe.chkIdx();
     } catch (err) {
       if ((err instanceof mongo.MongoError) && (err.message === 'ns not found')) {
@@ -80,8 +73,8 @@ export class TestTools {
   public async loadCollectionsWithHistory(sdebug: debug.IDebugger, swFile: string, instFile: string) {
     await be.chkConn();
     await instBe.chkConn();
-    let testInstData = [];
-    let testSwData = [];
+    let testInstData: any = [];
+    let testSwData: any = [];
     sdebug('loading DB with history');
     try {
       testInstData = JSON.parse(fs.readFileSync(instFile, 'utf-8'));
@@ -103,7 +96,7 @@ export class TestTools {
 
 
     try {
-      testSwData.forEach(async (swRec) => {
+      testSwData.forEach(async (swRec: Be.ISwdbModel) => {
         await be.createDocByRecord('Automated-ETL', swRec);
         sdebug('Inserting software ' + JSON.stringify(swRec));
       });
@@ -117,7 +110,7 @@ export class TestTools {
       }
     }
     try {
-      testInstData.forEach(async (instRec) => {
+      testInstData.forEach(async (instRec: InstBe.IInstModel) => {
         await instBe.createDocByRecord('Automated-ETL', instRec);
         sdebug('Inserting installation' + JSON.stringify(instRec));
       });
@@ -239,7 +232,7 @@ export class TestTools {
     }
   }
 
-  public async checkHistory(sdebug: debug.IDebugger, canonObj, id) {
+  public async checkHistory(sdebug: debug.IDebugger, canonObj: any, id: string) {
   /**
    * Search history for id as an rid field. Sort that list by date and take the latest.
    * Take the original object data as canonical, compare each field to the history,
@@ -254,7 +247,6 @@ export class TestTools {
    */
     let canonCheckList = canonObj;
     let cursor = Be.Db.swDoc.db.collections.history.find({ rid: ObjectId(id) }).sort({at: -1}).limit(1);
-    // let cursor = Be.Db.swDoc.db.collections.history.find();
     let msg = '';
     try {
       for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
@@ -263,14 +255,15 @@ export class TestTools {
           // we should find an paths array object where name: "swName" and value: value
           for (let item of doc.paths) {
             // sdebug('searching element ' + JSON.stringify(item) + ' for ' + canonKey);
-            if (item['name'] === canonKey) {
-              // sdebug('Found name = ' + canonKey);
-              // if (item['value'] === canonObj[canonKey]) {
-              if (_.isEqual(item['value'], canonObj[canonKey])) {
+            let param = 'name';
+            if (item[param] === canonKey) {
+              param = 'value';
+              if (_.isEqual(item[param], canonObj[canonKey])) {
                 sdebug('Found name = ' + canonKey + ' AND value = ' + canonObj[canonKey]);
                 delete canonCheckList[canonKey];
               } else {
-                msg = 'History item ' + canonKey + ': ' + item['value'] + ' does not match ' + canonObj[canonKey];
+                param = 'value';
+                msg = 'History item ' + canonKey + ': ' + item[param] + ' does not match ' + canonObj[canonKey];
                 sdebug(msg);
               }
             }

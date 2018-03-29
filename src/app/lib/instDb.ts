@@ -21,7 +21,7 @@ const debug = dbg('swdb:instDb');
 
 export class InstDb {
   // public static instDoc: history.Model<history.Document<>; 
-  public static instDoc: any; 
+  public static instDoc: any;
   public static props: any;
   private static instSchema: mongoose.Schema;
   private static dbConnect: any;
@@ -234,7 +234,7 @@ export class InstDb {
   };
 }
 
-interface IInstModel extends history.IHistory {
+export interface IInstModel extends history.IHistory {
   [key: string]: any;
 
   host: string;
