@@ -176,7 +176,12 @@ describe("app", function() {
     .post("/api/v1/swdb/")
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
-      .send({swName: "Header Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "Development", statusDate: "date 1000"})
+      .send({swName: "Header Test Record",
+       owner: "Owner 1000",
+       engineer: "Engineer 1000",
+       levelOfCare: "LOW",
+       status: "Development",
+       statusDate: "2017-04-21T00:00:00.000Z"})
     .expect(201)
     .end((err, result) => {
       if (err) done(err);
@@ -305,7 +310,13 @@ describe("app", function() {
     before("Before test post and get id", function (done) {
       supertest
         .post("/api/v1/swdb/")
-        .send({ swName: "Hist1 Test Record", owner: "Test Owner", engineer: "Test Engineer", previous: "badbeefbadbeefbadbeefbad", levelOfCare: "LOW", status: "Development", statusDate: "0" })
+        .send({ swName: "Hist1 Test Record",
+         owner: "Test Owner",
+         engineer: "Test Engineer",
+         previous: "badbeefbadbeefbadbeefbad",
+         levelOfCare: "LOW",
+         status: "Development",
+         statusDate: "2017-04-21T00:00:00.000Z" })
         .set("Accept", "application/json")
         .set('Cookie', [Cookies])
         .expect(201)
@@ -454,7 +465,12 @@ describe("app", function() {
     .post("/api/v1/swdb/")
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
-      .send({swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "Development", statusDate: "date 1000"})
+      .send({swName: "Test Record",
+       owner: "Owner 1000",
+       engineer: "Engineer 1000",
+       levelOfCare: "LOW",
+       status: "Development",
+       statusDate: "2017-04-21T00:00:00.000Z"})
     .expect(201)
     .end((end, result) => {
       debug('Location: ' + result.headers.location);
@@ -465,7 +481,12 @@ describe("app", function() {
   it("Errors posting a duplicate new record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000",levelOfCare: "LOW", status: "Development", statusDate: "1/1/1970"})
+    .send({swName: "Test Record",
+     owner: "Owner 1000",
+     engineer: "Engineer 1000",
+     levelOfCare: "LOW",
+     status: "Development",
+     statusDate: "2017-04-21T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .end((err, result) => {
@@ -485,7 +506,12 @@ describe("app", function() {
   it("Post a new record Test Record2", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "Test Record2", owner: "Owner 1002", engineer: "Engineer 1002",levelOfCare: "LOW", status: "Development", statusDate: "date 1002"})
+    .send({swName: "Test Record2",
+     owner: "Owner 1002",
+     engineer: "Engineer 1002",
+     levelOfCare: "LOW",
+     status: "Development",
+     statusDate: "1970-01-01T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -539,7 +565,12 @@ describe("app", function() {
   it("Post a new record Desc Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "Desc Test Record", owner: "Owner 1002", engineer: "Engineer 1002",levelOfCare: "LOW", status: "Development", statusDate: "date 1002"})
+    .send({swName: "Desc Test Record",
+     owner: "Owner 1002",
+     engineer: "Engineer 1002",
+     levelOfCare: "LOW",
+     status: "Development",
+     statusDate: "2017-04-21T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -593,7 +624,12 @@ describe("app", function() {
   it("Post a new record Engineer Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "Engineer Test Record", owner: "Owner 1002", engineer: "Any Engineer",  levelOfCare: "LOW", status: "Development", statusDate: "date 1002"})
+    .send({swName: "Engineer Test Record",
+     owner: "Owner 1002",
+     engineer: "Any Engineer",
+     levelOfCare: "LOW",
+     status: "Development",
+     statusDate: "2017-04-21T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -648,7 +684,13 @@ describe("app", function() {
   it("Post a new record versionControlLoc Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "versionControlLoc Test Record", owner: "versioControlLoc Test Owner", engineer: "Test Engineer", versionControlLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "Development", statusDate: "date 1002"})
+    .send({swName: "versionControlLoc Test Record",
+     owner: "versioControlLoc Test Owner",
+     engineer: "Test Engineer",
+     versionControlLoc: "http://www.somehost/some-path/some-file",
+     levelOfCare: "LOW",
+     status: "Development",
+     statusDate: "2017-04-21T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -701,7 +743,13 @@ describe("app", function() {
   it("Post a new record designDescDocLoc Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "designDescDocLoc Test Record", owner: "designDescDocLoc Test Owner", engineer: "Test Engineer", designDescDocLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "Development", statusDate: "date 1002"})
+    .send({swName: "designDescDocLoc Test Record",
+     owner: "designDescDocLoc Test Owner",
+     engineer: "Test Engineer",
+     designDescDocLoc: "http://www.somehost/some-path/some-file",
+     levelOfCare: "LOW",
+     status: "Development",
+     statusDate: "2017-04-21T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -754,7 +802,13 @@ describe("app", function() {
   it("Post a new record descDocLoc Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "descDocLoc Test Record", owner: "descDocLoc Test Owner", engineer: "Test Engineer", descDocLoc: "http://www.somehost/some-path/some-file", levelOfCare: "LOW", status: "Development", statusDate: "date 1002"})
+    .send({swName: "descDocLoc Test Record",
+     owner: "descDocLoc Test Owner",
+     engineer: "Test Engineer",
+     descDocLoc: "http://www.somehost/some-path/some-file",
+     levelOfCare: "LOW",
+     status: "Development",
+     statusDate: "2017-04-21T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -807,7 +861,13 @@ describe("app", function() {
   it("Post a new record recertDate Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "recertDate Test Record", owner: "recertDate Test Owner", engineer: "Test Engineer", recertDate: "April 20, 2016", levelOfCare: "LOW", status: "Development", statusDate: "0"})
+    .send({swName: "recertDate Test Record",
+     owner: "recertDate Test Owner",
+     engineer: "Test Engineer",
+     recertDate: "1970-01-01T00:00:00.000Z",
+     levelOfCare: "LOW",
+     status: "Development",
+     statusDate: "1970-01-01T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -850,7 +910,7 @@ describe("app", function() {
         } else {
           expect(res.body).to.have.property("_id");
           expect(res.body.swName).to.equal("recertDate Test Record");
-          expect(res.body.recertDate).to.equal("2016-04-20T07:00:00.000Z");
+          expect(res.body.recertDate).to.equal("1970-01-01T00:00:00.000Z");
           done();
         }
       });
@@ -867,7 +927,7 @@ describe("app", function() {
       vvProcLoc: ["http://www.somehost/some-path/some-file", "http://www.somehost/some-path/some-file2"],
       levelOfCare: "LOW",
       status: "Development",
-      statusDate: "0"
+      statusDate: "1970-01-01T00:00:00.000Z"
     })
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -930,7 +990,7 @@ describe("app", function() {
       vvResultsLoc: [ "http://www.somehost/some-path/some-file3", "http://www.somehost/some-path/some-file4" ],
       levelOfCare: "LOW",
       status: "Development",
-      statusDate: "0"})
+      statusDate: "1970-01-01T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -985,7 +1045,13 @@ describe("app", function() {
   it("Post a new record branch Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "branch Test Record", owner: "branch Test Owner", engineer: "Test Engineer", branch: "New branch", levelOfCare: "LOW", status: "Development", statusDate: "0"})
+    .send({swName: "branch Test Record",
+     owner: "branch Test Owner",
+     engineer: "Test Engineer",
+     branch: "New branch",
+     levelOfCare: "LOW",
+     status: "Development",
+     statusDate: "1970-01-01T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -1038,7 +1104,13 @@ describe("app", function() {
   it("Post a new record versionControl Test Record", function(done) {
     supertest
       .post("/api/v1/swdb/")
-    .send({swName: "versionControl Test Record", owner: "versionControl Test Owner", engineer: "Test Engineer", versionControl: "Git", levelOfCare: "LOW", status: "Development", statusDate: "0"})
+    .send({swName: "versionControl Test Record",
+     owner: "versionControl Test Owner",
+     engineer: "Test Engineer",
+     versionControl: "Git",
+     levelOfCare: "LOW",
+     status: "Development",
+     statusDate: "1970-01-01T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -1091,7 +1163,13 @@ describe("app", function() {
   it("Post a new record previous Test Record", function(done) {
     supertest
     .post("/api/v1/swdb/")
-    .send({swName: "previous Test Record", owner: "previous Test Owner", engineer: "Test Engineer", previous: "badbeefbadbeefbadbeefbad", levelOfCare: "LOW", status: "Development", statusDate: "0"})
+    .send({swName: "previous Test Record",
+     owner: "previous Test Owner",
+     engineer: "Test Engineer",
+     previous: "badbeefbadbeefbadbeefbad",
+     levelOfCare: "LOW",
+     status: "Development",
+     statusDate: "1970-01-01T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
     .expect(201)
@@ -1204,7 +1282,7 @@ describe("app", function() {
       engineer: "Test Engineer",
       levelOfCare: "LOW",
       status: "Development",
-      statusDate: "0"
+      statusDate: "1970-01-01T00:00:00.000Z"
     })
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -1335,7 +1413,7 @@ describe("app", function() {
       engineer: "Test Engineer",
       levelOfCare: "LOW",
       status: "Development",
-      statusDate: "0"
+      statusDate: "1970-01-01T00:00:00.000Z"
     })
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -1411,7 +1489,7 @@ describe("app", function() {
           name: 'Test name',
           area: ['Global'],
           status: 'Ready for install',
-          statusDate: 'date 1000',
+          statusDate: '1970-01-01T00:00:00.000Z',
           software: wrapper.origId,
         })
         .expect(201)
@@ -1471,8 +1549,8 @@ describe("app", function() {
       {"type": "GET","res": {"msg": {"status": "Development"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"status": "ERRONEOUS_VALUE"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
       {"type": "GET","res": {"msg": {"status": "Development"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"statusDate": "7/7/1977"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"statusDate": "1977-07-07"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"statusDate": "1970-01-01T00:00:00.000Z"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"statusDate": "1970-01-01T00:00:00.000Z"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"version": "NEW test version"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"version": "NEW test version"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"branch": "NEW Branch"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
@@ -1501,8 +1579,8 @@ describe("app", function() {
       {"type": "GET","res": {"msg": {"recertFreq": "NEW test recert frequency"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"recertStatus": "NEW test recert status"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"recertStatus": "NEW test recert status"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"recertDate": "April 21, 2017"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"recertDate": "2017-04-21T07:00:00.000Z"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"recertDate": "2017-04-21T00:00:00.000Z"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"recertDate": "2017-04-21T00:00:00.000Z"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"recertDate": "Not a date"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
       {"type": "PUT","req": {"msg": {"previous": "badbeefbadbeefbadbeefbad"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"previous": "badbeefbadbeefbadbeefbad"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
@@ -1510,7 +1588,7 @@ describe("app", function() {
       {"type": "PUT","req": {"msg": {"comment": "NEW test comment"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"comment": "NEW test comment"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       // test new record basic only required items
-      {"type":"POST", "req": {"msg": {"swName": "NEW-test-name-1", "status": "Ready for test", "statusDate": "1/1/1997", "owner": "test owner", "levelOfCare": "MEDIUM"}, "url": "/api/v1/swdb/",
+      {"type":"POST", "req": {"msg": {"swName": "NEW-test-name-1", "status": "Ready for test", "statusDate": "1970-01-01T00:00:00.000Z", "owner": "test owner", "levelOfCare": "MEDIUM"}, "url": "/api/v1/swdb/",
       "err": {"status": 201, "msgHas": ''}}},
       // test new swName is required, min, max
       {"type":"POST", "req": {"msg": {"owner": "test owner"}, "url": "/api/v1/swdb/",
