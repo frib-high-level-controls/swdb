@@ -25,6 +25,7 @@ const COL_PLATFORMS = 'Platforms';
 const COL_VCS_TYPE = 'VCS Type';
 const COL_VCS_LOCATION = 'VCS Location';
 const COL_HOST = 'Host';
+const COL_STATUS = 'Status';
 
 interface HistoryDocument extends history.Document<HistoryDocument> {};
 
@@ -39,6 +40,7 @@ interface Config {
   area: {[key: string]: string };
   owner: {[key: string]: string };
   statusDate: {[key: string]: string };
+  status: {[key: string]: string };
 };
 
 interface SWDataRow {
@@ -88,6 +90,7 @@ async function main() {
     area: {},
     owner: {},
     statusDate: {},
+    status: {},
   };
 
   rc('import-file', cfg);
@@ -310,7 +313,7 @@ function getXlsxJson(fileName: string, cfg: Config) {
               host: host,
               name: row[COL_NAME],
               area: cfg.area[row[COL_AREA]],
-              status: 'Ready for install',
+              status: cfg.status[row[COL_STATUS]],
               statusDate: cfg.statusDate[sheet],
               vvResultsLoc: row[COL_VCS_LOCATION],
               software: swKeyList.get(keyStr),
