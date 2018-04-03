@@ -309,6 +309,10 @@ function getXlsxJson(fileName: string, cfg: Config) {
               error('Unknown Area Name %s', row[COL_AREA]);
               process.exit(1);
             }
+            if ((cfg.status && !cfg.status[row[COL_STATUS]])) {
+              error('Unknown Status Name %s', row[COL_STATUS]);
+              process.exit(1);
+            }
             let instData: InstDataRow = {
               host: host,
               name: row[COL_NAME],
