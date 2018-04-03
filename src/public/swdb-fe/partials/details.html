@@ -249,15 +249,20 @@
     <a id="updateBtn" class="btn btn-info" href="#/update/{{formData._id}}"><span class="glyphicon glyphicon-edit"></span>      Update this document </a>
     <a id="bumpVerBtn" class="btn btn-default" ng-click="bumpVerBtnClk()"><span class="glyphicon glyphicon-plus-sign"></span>      New revision </a>
 
-    <hr>
-      <div class="well well-lg">
-        <label class="swdbSection">
+    <hr/>
+    <div class="row">
+      <div class="col-md-12">
+        <h2 class="swdbSection">
            History
-        </label>
-        <div ng-repeat="elem in rawHistory track by $index">
-          <div id="hist.{{$index}}" class="panel panel-default" ng-click="rawHistory[$index].isCollapsed = !rawHistory[$index].isCollapsed">
-            <label class="control-label swdbLinkLike">{{elem.at}} by {{elem.by}}</label>
-            <div id="histPath.{{$index}}" uib-collapse="rawHistory[$index].isCollapsed" ng-init="rawHistory[$index].isCollapsed=true">
+        </h2>
+        <div class="panel-group">
+          <div id="hist.{{$index}}" class="panel panel-default" ng-repeat="elem in rawHistory track by $index"
+                ng-click="rawHistory[$index].isCollapsed = !rawHistory[$index].isCollapsed">
+            <div class="panel-heading">
+              <a role="button" href="#" onclick="return false;">{{elem.at | date:"MMM d, yyyy 'at' H:mm:ss a"}}</a>
+              <span class="pull-right">{{elem.by}}</span>
+            </div>
+            <div id="histPath.{{$index}}" class="panel-collapse" uib-collapse="rawHistory[$index].isCollapsed" ng-init="rawHistory[$index].isCollapsed=true">
               <ol class="list-group">
     
                 <li class="list-group-item" ng-repeat="pathElem in elem.paths track by $index" ng-init="$parentIndex = $index">
@@ -270,6 +275,7 @@
           </div>
         </div>
       </div>
+    </div>
   </form>
 </div>
 </section>
