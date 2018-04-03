@@ -1,4 +1,9 @@
 
+/* extra padding to accommodate the fixed navigation bar */
+body {
+  padding-top: 60px;
+}
+
 swdb-top-div {
   padding: 10px;
 }

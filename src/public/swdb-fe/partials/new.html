@@ -1,25 +1,39 @@
 <section>
-  <div class="header swdb-top-div container-fluid">
-    <div class="row">
-      <ul class="nav nav-tabs">
-        <li>
-          <div class="swdbTitle">SWDB</div>
-        </li>
-        <li class="active">
-          <a id="swTab" class="nav-link active" href="#/list">Software</a>
-        </li>
-        <li class="nav-item">
-          <a id="instTab" class="nav-link" href="#/inst/list">Installations</a>
-        </li>
-        <a id="usrBtn" ng-click="usrBtnClk()" class="btn btn-primary" style="float:right">
-          <span class="glyphicon glyphicon-user" style="font-size: 1.5em"></span>
-          {{session.user.uid}} {{usrBtnTxt}}
-        </a>
-      </ul>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#/list">SWDB</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <li class="active">
+            <a id="swTab" href="#/list">Software</a>
+          </li>
+          <li>
+            <a id="instTab" href="#/inst/list">Installations</a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <span class="fa fa-user fa-3x"/>
+          </li>
+          <li>
+            <a id="usrBtn" ng-click="usrBtnClk()" href='#'>
+              {{session.user.uid}} {{usrBtnTxt}}
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
+  </nav>
 
-  <div class="container-fluid">
+  <div class="container">
     <form name="inputForm" class- "form-horizontal" ng-submit="processForm()">
       <!-- NAME -->
       <div class="row" ng-class="{ 'has-error' : inputForm.swNameInput.$invalid && !inputForm.swNameInput.$pristine }">
