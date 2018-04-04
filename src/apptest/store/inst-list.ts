@@ -1,4 +1,5 @@
-let app = require('../../app/server');
+import server = require('../../app/server');
+import express = require('express');
 import chai = require('chai');
 import supertest = require('supertest');
 import chaiAsPromised = require('chai-as-promised');
@@ -21,6 +22,8 @@ let until = webdriver.until;
 let testTools = new TestTools.TestTools();
 let Cookies: string;
 
+let app: express.Application;
+
 /**
  * inst-list.ts
  * Test suite for software installations list page
@@ -30,6 +33,7 @@ let chromeDriver;
 
 test.describe('Installations record tests', function() {
   before('Prep DB', async function () {
+    app = await server.start();
     debug('Prep DB');
     await testTools.clearTestCollections(debug);
     await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
@@ -40,6 +44,7 @@ test.describe('Installations record tests', function() {
     // clear the test collection.
     chromeDriver.quit();
     await testTools.clearTestCollections(debug);
+    await server.stop();
   });
 
 

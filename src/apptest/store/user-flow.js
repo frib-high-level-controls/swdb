@@ -1,7 +1,9 @@
-var app = require("../../app/server");
+let server = require("../../app/server");
+let app;
 var chai = require("chai");
 var expect = require("chai").expect;
-var supertest = require("supertest")(app);
+let Supertest = require("supertest");
+let supertest;
 chai.use(require("chai-as-promised"));
 var Be = require('../../app/lib/Db');
 let be = new Be.Db();
@@ -29,6 +31,8 @@ props = ctools.getConfiguration();
 test.describe("User flow tests", function() {
   var chromeDriver;
   before("Prep DB", async function () {
+    app = await server.start();
+    supertest = Supertest(app);
     debug("Prep DB");
     await testTools.clearTestCollections(debug);
     // testTools.testCollectionsStatus(debug);
@@ -40,6 +44,7 @@ test.describe("User flow tests", function() {
     // clear the test collection.
     chromeDriver.quit();
     await testTools.clearTestCollections(debug);
+    await server.stop();
   });
 
   var allCookies = null;

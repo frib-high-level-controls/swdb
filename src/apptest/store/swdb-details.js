@@ -1,7 +1,9 @@
-var app = require("../../app/server");
+let server = require("../../app/server");
+let app;
 var chai = require("chai");
 var expect = require("chai").expect;
-var supertest = require("supertest")(app);
+var Supertest = require("supertest");
+let supertest;
 chai.use(require("chai-as-promised"));
 var Be = require('../../app/lib/Db');
 let be = new Be.Db();
@@ -29,6 +31,8 @@ test.describe("Preload db record tests", function() {
   var chromeDriver;
 
   before("Prep DB", async function () {
+    app = await server.start();
+    supertest = Supertest(app);
     debug("Prep DB");
     await testTools.clearTestCollections(debug);
     // testTools.testCollectionsStatus(debug);
@@ -42,6 +46,7 @@ test.describe("Preload db record tests", function() {
     chromeDriver.quit();
     await testTools.clearTestCollections(debug);
     // done();
+    await server.stop();
   });
 
   var allCookies = null;

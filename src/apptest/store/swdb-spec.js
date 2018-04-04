@@ -1,6 +1,8 @@
-var app = require("../../app/server");
+var server = require("../../app/server");
+let app;
 var expect = require("chai").expect;
-var supertest = require("supertest")(app);
+var Supertest = require("supertest");
+let supertest;
 var tools = require("../../app/lib/swdblib");
 var Be = require('../../app/lib/Db');
 let be = new Be.Db();
@@ -26,6 +28,8 @@ var Cookies;
 describe("app", function() {
   before("Prep DB", async function () {
     this.timeout(8000);
+    app = await server.start();
+    supertest = Supertest(app);
     debug("Prep DB");
     await testTools.clearTestCollections(debug);
     await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
@@ -35,6 +39,7 @@ describe("app", function() {
     debug("Clear DB");
     // clear the test collection
     await testTools.clearTestCollections(debug);
+    await server.stop();
   });
 
   before("login as test user", function(done){

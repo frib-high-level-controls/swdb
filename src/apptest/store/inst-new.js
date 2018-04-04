@@ -1,7 +1,9 @@
-let app = require("../../app/server");
+let server = require("../../app/server");
+let app;
 let chai = require("chai");
 let expect = require("chai").expect;
-var supertest = require("supertest")(app);
+var Supertest = require("supertest");
+var supertest;
 chai.use(require("chai-as-promised"));
 let ObjectId = require('mongodb').ObjectID;
 let rc = require("rc");
@@ -26,6 +28,8 @@ props = ctools.getConfiguration();
 test.describe("Installations add screen tests", function() {
   let chromeDriver;
   before("Prep DB", async function () {
+    app = await server.start();
+    supertest = Supertest(app);
     debug("Prep DB");
     await testTools.clearTestCollections(debug);
     await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
@@ -36,6 +40,7 @@ test.describe("Installations add screen tests", function() {
     // clear the test collection.
     chromeDriver.quit();
     await testTools.clearTestCollections(debug);
+    await server.stop();
   });
 
 

@@ -30,7 +30,7 @@ export class InstDb {
   private static instSchema: mongoose.Schema;
   private static dbConnect: any;
 
-  constructor() {
+  constructor(noconnect?: boolean) {
     const ctools = new CommonTools.CommonTools();
     InstDb.props = ctools.getConfiguration();
     if (!InstDb.instSchema) {
@@ -58,14 +58,16 @@ export class InstDb {
       // InstDb.instDoc = mongoose.model('inst', InstDb.instSchema, 'instCollection');
       InstDb.instDoc = history.model<Model>('inst', InstDb.instSchema, 'instCollection');
 
-      InstDb.dbConnect = mongoose.connect(InstDb.props.mongodbUrl, (err: Error) => {
-        if (!err) {
-          // console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl);
-          // console.log("connected to mongo... " + JSON.stringify(props.mongodbUrl));
-        } else {
-          // console.log("Error: " + err);
-        }
-      });
+      if (!noconnect) {
+        InstDb.dbConnect = mongoose.connect(InstDb.props.mongodbUrl, (err: Error) => {
+          if (!err) {
+            // console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl);
+            // console.log("connected to mongo... " + JSON.stringify(props.mongodbUrl));
+          } else {
+            // console.log("Error: " + err);
+          }
+        });
+      }
     }
     // debug('InstDb.instSchema now:' + JSON.stringify(InstDb.instSchema));
     // debug('InstDb.instDoc now:' + JSON.stringify(InstDb.instDoc));
