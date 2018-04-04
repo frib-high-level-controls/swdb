@@ -115,7 +115,7 @@ test.describe("Installations detail screen tests", function() {
   test.it("should show the requested installation record software field", function() {
     chromeDriver.wait(until.elementLocated(By.id("software")),5000);
     chromeDriver.findElement(By.id("software")).getAttribute("value").then(function(result) {
-      expect(result).to.match(/^[0-9a-fA-F]{24}$/);
+      expect(result).to.equal('BEAST/b4/0.2');
     });
   });
 

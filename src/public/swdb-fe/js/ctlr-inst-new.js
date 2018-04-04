@@ -200,5 +200,4 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
   $scope.slotsSelected = [];
   $scope.areasSelected = [];
   $scope.swSelected = {item: {}};
-  console.log("at init $scope.formData.area is :" + JSON.stringify($scope.formData.area));
 }

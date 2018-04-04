@@ -244,6 +244,7 @@ test.describe("Installations update screen tests", function() {
     var input = chromeDriver.findElement(By.id("host"));
     input.clear();
     input.sendKeys("testHost2");
+    chromeDriver.wait(until.elementLocated(By.id('submitBtn')), 3000);
     chromeDriver.findElement(By.id("submitBtn")).click();
   });
 
@@ -275,7 +276,7 @@ test.describe("Installations update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("software")), 3000);
     chromeDriver.findElement(By.id("software")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("5947589458a6aa0face9a512");
+        expect(text).to.equal('BEAST/b12/0.2');
       });
   });
 

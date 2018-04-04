@@ -274,7 +274,7 @@ test.describe("Installations add screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("software")), 3000);
     chromeDriver.findElement(By.id("software")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("5947589458a6aa0face9a512");
+        expect(text).to.equal('BEAST/b12/0.2');
       });
   });
 

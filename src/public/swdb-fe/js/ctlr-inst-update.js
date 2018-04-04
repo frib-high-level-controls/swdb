@@ -150,6 +150,7 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
 
   // refresh the service list
   swService.refreshSwList();
+  instService.refreshInstList();
 
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
@@ -193,6 +194,7 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     // convert the retreived record software
     swService.promise.then(function(){
       let obj = swService.swIdsToObjects([$scope.formData.software])[0];
+
       $scope.swSelected = {item: obj};
     });
 

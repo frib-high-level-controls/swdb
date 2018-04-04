@@ -692,7 +692,7 @@ test.it("should show search page with username on logout button", function() {
     chromeDriver.wait(until.titleIs("SWDB - Installation Details"), 5000);
   });
 
-  test.it("should show the correct installtion host in details", function () {
+  test.it("should show the correct installation host in details", function () {
     this.timeout(8000);
     chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
     chromeDriver.findElement(By.id("host")).getAttribute("value").then(
@@ -715,7 +715,7 @@ test.it("should show search page with username on logout button", function() {
     chromeDriver.wait(until.elementLocated(By.id("software")), 3000);
     chromeDriver.findElement(By.id("software")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("5947589458a6aa0face9a512");
+        expect(text).to.equal('BEAST/b12/0.2');
       });
   });
 

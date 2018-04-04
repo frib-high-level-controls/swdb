@@ -3,8 +3,8 @@
  */
 
 appController.controller('InstDetailsController', InstDetailsPromiseCtrl);
-function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configService, userService,
-  instService) {
+function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService,
+  swService, instService) {
   $scope.$watch(function () {
     return $scope.session;
   }, function () {
@@ -24,6 +24,12 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configServ
     }
   };
 
+  $scope.updateBtnClk = function () {
+    // set the sw back to the id
+    $scope.formData.software = $scope.swSelected.item._id;
+    $location.path('/inst/update/' + $scope.formData._id);
+  };
+
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
   //update document fields with existing data
@@ -39,6 +45,14 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configServ
       $scope.formData.statusDate =  month + '/' + day + '/' + year;
     }
     $scope.whichItem = $routeParams.itemId;
+
+    // convert the retreived record software
+    swService.promise.then(function(){
+      let obj = swService.swIdsToObjects([$scope.formData.software])[0];
+      $scope.swSelected = {item: obj};
+      $scope.formData.software = $scope.swSelected.item.swName + '/' +
+        $scope.swSelected.item.branch + '/' + $scope.swSelected.item.version;
+    });
   });
   // get history
   url = "/api/v1/swdb/hist/" + $routeParams.itemId;
