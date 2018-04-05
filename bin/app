@@ -1,3 +1,192 @@
-#!/usr/bin/env bash
-DIRNAME=`dirname "$0"`
-node "$DIRNAME/../app/server.js" "$@"
+#!/usr/bin/env node
+
+/*
+ * Server launch script
+ */
+var http = require('http');
+
+var app = require('../app');
+
+var srv = null;
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+};
+
+/**
+ * Create a promise that is rejected after the given time limit.
+ */
+function timeout(limit) {
+  return new Promise(function (resolve, reject) {
+    setTimeout(function () {
+      reject(new Error('Time limit exceeded: ' + limit + 'ms'));
+    }, limit);
+  });
+};
+
+/**
+ * Start the application.
+ */
+function start() {
+  return app.start();
+}
+
+/**
+ * Stop the application with timeout.
+ */
+function stop(limit) {
+  return Promise.race([app.stop(), timeout(limit)]);
+}
+
+/**
+ * Create the HTTP server and start listening
+ */
+function listen(handler) {
+  /**
+   * Normalized port from environment or application or default
+   */
+  var port = normalizePort(process.env.NODE_APP_PORT || handler.get('port') || '3000');
+  /**
+   * Initialize the bind address from environment or application or default
+   */
+  var addr = process.env.NODE_APP_ADDR || handler.get('addr') || 'localhost';
+  /**
+   * Create the HTTP server.
+   */
+  srv = http.createServer(handler);
+
+  return new Promise(function (resolve, reject) {
+    /**
+     * Event listener for HTTP server "listening" event.
+     */
+    srv.on('listening', function () {
+      resolve();
+    });
+    /**
+     * Event listener for HTTP server "error" event.
+     */
+    srv.on('error', function onError(err) {
+      if (err.syscall !== 'listen') {
+        reject(err);
+      }
+      switch (err.code) {
+      case 'EACCES':
+        reject(new Error('Listen on port ' + port + ': permission denied'))
+        break;
+      case 'EADDRINUSE':
+        reject(new Error('Listen on port ' + port + ': already in use'))
+        break;
+      default:
+        reject(err);
+        break;
+      }
+    });
+    /**
+     * Listen on provided port, on all network interfaces.
+     */
+    srv.listen(port, addr);
+  })
+  .then(function () {
+    var addr = srv.address();
+    if (typeof addr === 'string') {
+      app.info('Server listening on pipe: ' + addr);
+    } else {
+      app.info('Server listening on port: ' + addr.address + ':' + addr.port);
+    }
+  });
+};
+
+/**
+ * Stop listening and wait for connections close with timeout.
+ */
+function close(limit) {
+  return Promise.race([
+    new Promise(function (resolve, reject) {
+      if (!srv) {
+        reject(new Error('Server not created'));
+        return;
+      }
+      srv.close(function(err) {
+        if (err) {
+          reject(err);
+        }
+        resolve(true);
+      });
+    }),
+    timeout(200).catch(function () {
+      // Ignore timeout because it is expected
+      // if 'keep-alive' connections are open.
+      return false;
+    })
+  ])
+  .then(function (closed) {
+    if (closed) {
+      app.info('Server close successful');
+    } else {
+      app.info('Server close timeout');
+    }
+  })
+  .catch(function (err) {
+    // Ignore error so that application
+    // shutdown will continue normally.
+    app.error('Server close failure');
+    app.error(err);
+  })
+};
+
+/**
+ * Wait for the specified shutdown signal(s).
+ */
+function wait(signals) {
+  app.info('Wait for shutdown signal');
+  return new Promise(function (resolve) {
+    for (var idx=0; idx < signals.length; idx++) {
+      process.once(signals[idx], resolve);
+    }
+  })
+  .then(function () {
+    app.info('Shutdown signal received');
+  });
+};
+
+/**
+ * Start the application and wait for shutdown signal
+ */
+start().catch(function (err) {
+  app.error(err);
+  process.exit(1);
+})
+.then(function (handler) {
+  return listen(handler);
+})
+.then(function () {
+  return wait(['SIGINT', 'SIGTERM']);
+})
+.then(function () {
+  return close(2000); //  2 second timeout
+})
+.then(function () {
+  return stop(30000); // 30 second timeout
+})
+.then(function () {
+  process.exit(0);
+})
+.catch(function (err) {
+  app.error(err);
+  process.exit(1);
+});

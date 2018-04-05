@@ -14,7 +14,7 @@ export class Db {
   public static props: any;
   private static schema: any;
   private static dbConnect: any;
-  constructor() {
+  constructor(noconnect?: boolean) {
     const tools = new commonTools.CommonTools();
     Db.props = tools.getConfiguration();
     if (!Db.schema) {
@@ -57,13 +57,15 @@ export class Db {
 
       Db.swDoc = history.model<Model>('swdb', Db.schema, 'swdbCollection');
 
-      Db.dbConnect = mongoose.connect(Db.props.mongodbUrl, (err: Error) => {
-        if (!err) {
-          debug('DB connected...');
-        } else {
-          debug('Error: ' + err);
-        }
-      });
+      if (!noconnect) {
+        Db.dbConnect = mongoose.connect(Db.props.mongodbUrl, (err: Error) => {
+          if (!err) {
+            debug('DB connected...');
+          } else {
+            debug('Error: ' + err);
+          }
+        });
+      }
     }
     debug('Db.schema now:' + JSON.stringify(Db.schema));
     debug('swDoc now:' + JSON.stringify(Db.swDoc));

@@ -1,7 +1,9 @@
-var app = require("../../app/server");
+var server = require("../../app/server");
+let app;
 const ObjectId = require('mongodb').ObjectID;
 var expect = require("chai").expect;
-var supertest = require("supertest")(app);
+var Supertest = require("supertest");
+let supertest;
 var tools = require("../../app/lib/swdblib");
 var Be = require('../../app/lib/Db');
 let be = new Be.Db();
@@ -27,6 +29,8 @@ var Cookies;
 //
 describe("History tests suite", function () {
   before("Prep DB", async function () {
+    app = await server.start();
+    supertest = Supertest(app);
     debug("Prep DB");
     await testTools.clearTestCollections(debug);
     await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
@@ -36,6 +40,7 @@ describe("History tests suite", function () {
     debug("Clear DB");
     // clear the test collection
     await testTools.clearTestCollections(debug);
+    await server.stop();
   });
 
   // describe("Login and perform history tests", function () {

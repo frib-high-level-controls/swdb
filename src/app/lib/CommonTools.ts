@@ -129,16 +129,24 @@ interface IProps {
   webPort: string;
   mongodbUrl: string;
   auth: {
-    cas: string;
-    service: string;
-    login_service: string;
+    cas: {
+      append_path: boolean;
+      version: string;
+      cas_url: string;
+      service_url: string;
+    };
+    forgapi: {
+      url: string;
+      agentOptions: {};
+    };
   };
   CORS: {
-    oringin: string;
-    method: string;
+    origin: string;
+    methods: string;
     headers: string;
   };
   test: {
+    testing: string;
     swTestDataFile: string;
     instTestDataFile: string;
   };

@@ -1,4 +1,4 @@
-import app = require('../../app/server');
+import server = require('../../app/server');
 import express = require('express');
 import chai = require('chai');
 let expect = chai.expect;
@@ -20,6 +20,7 @@ import path = require('path');
 import child_process = require('child_process');
 import { Express } from 'express-serve-static-core';
 
+let app: express.Application;
 
 /**
  * inst-spec.ts
@@ -38,6 +39,7 @@ describe('Installation api tests', () => {
   let chromeDriver;
   before('Prep DB', async  function() {
     this.timeout(5000);
+    app = await server.start();
     debug('Prep DB');
     await testTools.clearTestCollections(debug);
     await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
@@ -47,6 +49,7 @@ describe('Installation api tests', () => {
     debug('Clear DB');
     // clear the test collection.
     await testTools.clearTestCollections(debug);
+    await server.stop();
   });
 
   before('login as test user', function(done){
