@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "module": "none",
+        "target": "es5",
+        "allowJs": true,
+        "checkJs": false,
+        "alwaysStrict": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": false,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "skipLibCheck": true,
+        "sourceMap": false,
+        "lib": [ "dom", "es5", "scripthost", "es2015.promise" ]
+    }
+}

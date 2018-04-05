@@ -122,7 +122,7 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     }
   };
 
-  getEnums = function () {
+  var getEnums = function () {
     $scope.formData.levelOfCare = "NONE";
     $scope.formData.status = "DEVEL";
     $scope.formData.versionControl = "Other";

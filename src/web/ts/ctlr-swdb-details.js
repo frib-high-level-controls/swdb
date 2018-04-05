@@ -34,7 +34,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
     $location.path("/new");
   };
 
-  mkHistTable = function (data){
+  let mkHistTable = function (data){
     let table = '<table id="histTable" class="swdbHistTable">';
     data.map(function(elem, idx, arr){
       console.log("Parsing: " + JSON.stringify(elem));

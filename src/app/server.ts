@@ -14,7 +14,7 @@ import util = require('util');
 import auth = require('./shared/auth');
 import cfauth = require('./shared/forg-auth');
 import forgapi = require('./shared/forgapi');
-import * as mockforgapi from '../apptest/shared/mock-forgapi';
+import * as mockforgapi from './shared/mock-forgapi';
 import CommonTools = require('./lib/CommonTools');
 import Be = require('./lib/Db');
 import InstBe = require('./lib/instDb');
@@ -97,7 +97,7 @@ app.listen(props.webPort, function() {
 // handle incoming get requests
 app.get('/', function(req: express.Request, res: express.Response) {
   debug('GET / request');
-  res.sendFile('index.html', {root: path.join(__dirname, '../public/swdb-fe/')});
+  res.sendFile('index.html', {root: path.resolve(__dirname, '..', 'public')});
 });
 
 app.get('/login', cfAuthProvider.authenticate(), function(req: express.Request, res: express.Response) {
