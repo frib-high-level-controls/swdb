@@ -118,7 +118,7 @@ app.service('swService', function($http) {
        * @return array of sw objects from forg
        */
       swIdsToObjects: function(swIds) {
-        swObj = swIds.map(function(item, idx, array){
+        var swObj = swIds.map(function(item, idx, array){
           let node =  swData.find(function(elem) {
             return elem._id === item;
           });
@@ -204,7 +204,7 @@ app.service('forgUserService', function ($http) {
      * @return array of user objects from forg
      */
     userUidsToObjects: function(userUids) {
-      forgObj = userUids.map(function(item, idx, array){
+      var forgObj = userUids.map(function(item, idx, array){
         return userData.data.find(function(elem) {
           return elem.uid === item;
         })
@@ -239,7 +239,7 @@ app.service('forgGroupService', function ($http) {
      * @return array of group objects from forg
      */
     groupUidsToObjects: function(groupUids) {
-      forgObj = groupUids.map(function(item, idx, array){
+      var forgObj = groupUids.map(function(item, idx, array){
         return groupData.data.find(function(elem) {
           return elem.uid === item;
         })
@@ -274,6 +274,7 @@ app.service('forgAreaService', function ($http) {
      * @return array of area objects from forg
      */
     areaUidsToObjects: function(areaUids) {
+      var forgObj
       if (areaUids) {
         forgObj = areaUids.map(function (item, idx, array) {
           return areaData.data.find(function (elem) {

@@ -54,7 +54,7 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
   $scope.processForm = function () {
     // Prep any selected areas
     if ($scope.areasSelected) {
-      flattenedAreas = $scope.areasSelected.map(function (item, idx, array) {
+      let flattenedAreas = $scope.areasSelected.map(function (item, idx, array) {
         if (item) {
           return item.uid;
         }

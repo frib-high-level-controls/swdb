@@ -41,7 +41,7 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, configServ
     $scope.whichItem = $routeParams.itemId;
   });
   // get history
-  url = "/api/v1/swdb/hist/" + $routeParams.itemId;
+  let url = "/api/v1/swdb/hist/" + $routeParams.itemId;
   $http.get(url).then(function (data) {
     $scope.rawHistory = data.data;
   });

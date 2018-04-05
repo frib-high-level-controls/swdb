@@ -77,9 +77,9 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
   $scope.processForm = function () {
     delete $scope.formData.__v;
     $scope.formData.slots = $scope.slotsSelected;
-
+    
     // Prep any selected areas
-    flattenedAreas = $scope.areasSelected.map(function(item, idx, array) {
+    let flattenedAreas = $scope.areasSelected.map(function(item, idx, array) {
       return item.uid;
     });
     $scope.formData.area = flattenedAreas;
@@ -153,7 +153,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     }
   };
 
-  getEnums = function () {
+  var getEnums = function () {
     $scope.formData.status = "DEVEL";
     $scope.formData.area = "";
   };
