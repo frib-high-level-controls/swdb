@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title ng-bind="'SWDB - ' + $root.title">SWDB (Prototype Interface)</title>
+        <script src="swdb-fe/node_modules/es6-promise/dist/es6-promise.auto.min.js"></script>
         <script src="swdb-fe/node_modules/jquery/dist/jquery.min.js"></script>
         <script src="swdb-fe/node_modules/datatables.net/js/jquery.dataTables.js"></script>
         <script src="swdb-fe/node_modules/angular/angular.js"></script>
@@ -29,6 +30,7 @@
         <script src="swdb-fe/js/ctlr-inst-new.js"></script>
 
         <link rel="stylesheet" href="swdb-fe/css/bootstrap.css">
+        <link rel="stylesheet" href="swdb-fe/node_modules/font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="swdb-fe/node_modules/datatables.net-bs/css/dataTables.bootstrap.css">
         <link rel="stylesheet" href="swdb-fe/node_modules/angular-datatables/dist/css/angular-datatables.min.css">
         <link rel="stylesheet" href="swdb-fe/node_modules/ui-select/dist/select.css">
@@ -37,8 +39,8 @@
 
     </head>
     <body>
-        <div class="header swdb-top-div container-fluid">
-        </div>
+        <!-- <div class="header swdb-top-div container-fluid">
+        </div> -->
         <div class="main swdb-top-div swdb-bottom-div" ng-view> </div>
     </body>
 </html>
