@@ -18,16 +18,14 @@ npm-debug.log
 /app/
 
 # Ignore test directory
-/test
 /test/app/
 /test/apptest/
-/apptest
 
 # Ignore configuration files
 /config/
 
 # Ignore public
-/public/
+/public/js
 
 # Ignore test coverage results
 /.nyc_output

@@ -367,7 +367,7 @@ app.filter('areasNopromiseFilter', function () {
 app.config(['$routeProvider', function($routeProvider){
     $routeProvider.
         when('/list', {
-            templateUrl: 'swdb-fe/partials/list.html',
+            templateUrl: 'partials/list.html',
             controller: 'ListController',
             title: 'List',
             resolve:{
@@ -380,7 +380,7 @@ app.config(['$routeProvider', function($routeProvider){
             }
         })
         .when('/inst/list', {
-            templateUrl: 'swdb-fe/partials/instList.html',
+            templateUrl: 'partials/instList.html',
             controller: 'InstListController',
             title: 'Installations List',
             resolve:{
@@ -396,7 +396,7 @@ app.config(['$routeProvider', function($routeProvider){
             }
         })
         .when('/details/:itemId', {
-            templateUrl: 'swdb-fe/partials/details.html',
+            templateUrl: 'partials/details.html',
             controller: 'DetailsController',
             title: 'Details',
             resolve:{
@@ -412,7 +412,7 @@ app.config(['$routeProvider', function($routeProvider){
             }
         })
         .when('/inst/details/:itemId', {
-            templateUrl: 'swdb-fe/partials/instDetails.html',
+            templateUrl: 'partials/instDetails.html',
             controller: 'InstDetailsController',
             title: 'Installation Details',
             resolve:{
@@ -428,7 +428,7 @@ app.config(['$routeProvider', function($routeProvider){
             }
         })
         .when('/new', {
-            templateUrl: 'swdb-fe/partials/new.html',
+            templateUrl: 'partials/new.html',
             controller: 'NewController',
             title: 'New',
             resolve:{
@@ -441,7 +441,7 @@ app.config(['$routeProvider', function($routeProvider){
             }
         })
         .when('/inst/new', {
-            templateUrl: 'swdb-fe/partials/instNew.html',
+            templateUrl: 'partials/instNew.html',
             controller: 'InstNewController',
             title: 'New Installation',
             resolve:{
@@ -460,7 +460,7 @@ app.config(['$routeProvider', function($routeProvider){
             }
         })
         .when('/update/:itemId', {
-            templateUrl: 'swdb-fe/partials/new.html',
+            templateUrl: 'partials/new.html',
             controller: 'UpdateController',
             title: 'Update',
             resolve:{
@@ -479,7 +479,7 @@ app.config(['$routeProvider', function($routeProvider){
             }
         })
         .when('/inst/update/:itemId', {
-            templateUrl: 'swdb-fe/partials/instNew.html',
+            templateUrl: 'partials/instNew.html',
             controller: 'InstUpdateController',
             title: 'Update Installation',
             resolve:{
@@ -501,7 +501,7 @@ app.config(['$routeProvider', function($routeProvider){
             }
         })
         .when('/del/:itemId', {
-            templateUrl: 'swdb-fe/partials/del.html',
+            templateUrl: 'partials/del.html',
             controller: 'DelController',
             title: 'Delete'
         })

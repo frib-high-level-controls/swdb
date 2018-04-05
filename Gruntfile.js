@@ -1,15 +1,10 @@
-/*
- * Gruntfile for SWDB processing
- *
-*/
-
-
 module.exports = function(grunt) {
+  'use strict';
+
   grunt.initConfig({
     // setup jshint
     jshint: {
-      files: ["src/app/*.js", "src/app/lib/*.js", "src/apptest/*.js", "src/apptest/store/*.js", "public/swdb-fe/*.js",
-      "public/swdb-fe/js/*.js"],
+      files: ["src/app/*.js", "src/app/lib/*.js", "src/apptest/*.js", "src/apptest/store/*.js", "src/web/ts/*.js"],
       options: {
         esversion: 6,
         node: true,
@@ -29,7 +24,7 @@ module.exports = function(grunt) {
           // Typescript compiler fails for find the source files (grunt-ts v5.5.1).
           //outDir: './app',
           options: {
-              additionalFlags: '--outDir . --listEmittedFiles'
+              additionalFlags: '--outDir ./app --listEmittedFiles'
           },
       },
       apptest: {
@@ -41,18 +36,41 @@ module.exports = function(grunt) {
               additionalFlags: '--outDir ./test --listEmittedFiles'
           },
       },
+      web: {
+        tsconfig: {
+           tsconfig: './src/web/ts',
+           passThrough: true,
+        },
+        options: {
+            additionalFlags: '--outDir ./public/js --listEmittedFiles'
+        },
+      },
+  },
+  tslint: {
+    options: {
+        configuration: "tslint.json",
+        // If set to true, tslint errors will be reported, but not fail the task 
+        // If set to false, tslint errors will be reported, and the task will fail 
+        force: false,
+        fix: false
+    },
+    files: {
+      src: [
+          "src/**/*.ts"
+      ]
+    }
   },
   clean: {
     app: [ './app' ],
-    apptest: [ './test' ],
-    public: [ './public/swdb-fe' ]
+    test: [ './test/app', './test/apptest' ],
+    public: [ './public/js' ]
   },
   copy: {
     files: {
-      cwd: 'src/public/swdb-fe',  // set working folder / root to copy
-      src: '**/*',           // copy all files and subfolders
-      dest: 'public/swdb-fe',    // destination folder
-      expand: true           // required when using cwd
+      cwd: 'src/web/ts',  // set working folder / root to copy
+      src: '*.js',        // copy all files and subfolders
+      dest: 'public/js',  // destination folder
+      expand: true        // required when using cwd
     }
   },
   shell: {
@@ -64,11 +82,28 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks("grunt-ts");
-  grunt.loadNpmTasks("grunt-contrib-jshint");
   grunt.loadNpmTasks("grunt-tslint");
   grunt.loadNpmTasks("grunt-contrib-clean");
+  grunt.loadNpmTasks("grunt-contrib-jshint");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-shell");
-  grunt.registerTask("default", ["jshint"]);
-  grunt.registerTask("build", ["ts:app","ts:apptest", "copy", "shell:publicSoftlink"]);
+
+  grunt.registerTask("default", [
+    "ts:app",
+    "ts:web",
+    //"copy",
+  ]);
+
+  grunt.registerTask('lint', [
+    //"jshint",
+    "tslint",
+  ]);
+
+  grunt.registerTask("build", [
+    "ts:app",
+    "ts:web",
+    //"copy",
+    "ts:apptest",
+    //"shell:publicSoftlink",
+  ]);
 };
