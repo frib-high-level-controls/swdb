@@ -84,6 +84,7 @@
     "selenium-webdriver": "3.0.1",
     "supertest": "^3.0.0",
     "tslint": "^4.5.0",
-    "typescript": "^2.7.2"
+    "typescript": "^2.7.2",
+    "xlsx": "^0.12.2"
   }
 }
