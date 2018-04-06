@@ -1,6 +1,7 @@
 {
   "name": "swdb",
   "version": "1.0.0",
+  "private": true,
   "description": "SW DB",
   "main": "server.js",
   "scripts": {

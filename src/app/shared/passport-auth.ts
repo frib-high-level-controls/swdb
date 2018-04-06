@@ -53,7 +53,7 @@ export abstract class PassportAbstractProvider<S extends Strategy> extends auth.
     return router;
   };
 
-  public authenticate(options?: any): express.RequestHandler {
+  public authenticate(options?: any): RequestHandler {
     return passport.authenticate(this.getStrategy().name || 'undefined', options);
   };
 
@@ -142,7 +142,7 @@ export abstract class CasPassportAbstractProvider extends PassportAbstractProvid
     const strategyOptions: ppcas.StrategyOptions = {
       ssoBaseURL: options.casUrl,
       serviceURL: options.casAppendPath ? undefined : options.casServiceUrl,
-      serverBaseURL: options.casAppendPath ? options.casServiceUrl : undefined,
+      serverBaseURL: options.casServiceUrl,
       validateURL: options.casVersion === 'CAS2.0' ? '/serviceValidate' : undefined,
       version: version,
     };
@@ -154,6 +154,53 @@ export abstract class CasPassportAbstractProvider extends PassportAbstractProvid
       // (An arrow function is used here, but this.verify.bind(this) worked too.)
       this.verify(profile, done);
     });
+  };
+
+  public authenticate(options?: any): RequestHandler {
+    const prefix = 'CasPassportAbstractProvider_Param_';
+    const rememberParams = new Map<string, string>();
+    if (Array.isArray(options.rememberParams)) {
+      for (let param of options.rememberParams) {
+        if (typeof param === 'string') {
+          let key = prefix + param.replace(/\w/, '_');
+          if (!rememberParams.has(key)) {
+            rememberParams.set(key, param);
+          }
+        }
+      }
+    } else if (typeof options.rememberParams === 'string') {
+      let key = prefix + options.rememberParams.replace(/\w/, '_');
+      rememberParams.set(key, options.rememberParams);
+    }
+
+    const authenticate = super.authenticate(options);
+    return (req, res, next) => {
+      if (req.session) {
+        // store the query params in the session
+        for (let [key, param] of rememberParams) {
+          if (req.query[param]) {
+            debug('Remember query param: %s=%s', param, req.query[param]);
+            req.session[key] = req.query[param];
+          }
+        }
+      }
+      authenticate(req, res, (err) => {
+        if (req.session) {
+          // restore the query params from the session
+          for (let [key, param] of rememberParams) {
+            if (req.session[key]) {
+              if (!req.query[param]) {
+                req.query[param] = req.session[key];
+                debug('Restore query param: %s=%s', param, req.query[param]);
+              }
+              // cleanup the session
+              req.session[key] = undefined;
+            }
+          }
+        }
+        next(err);
+      });
+    };
   };
 
   public getCasLogoutUrl(service?: boolean): string {
