@@ -33,7 +33,14 @@ interface Config {
   configs?: string[];
   h?: {};
   help?: {};
-  user?: {};
+  mongo: {
+    user?: {};
+    pass?: {};
+    port: {};
+    addr: {};
+    db: {};
+    options: {};
+  };
   dryrun?: {};
   _?: Array<{}>;
   engineer: {[key: string]: string };
@@ -86,6 +93,15 @@ let instKeyList = new Map<string, boolean>();
 
 async function main() {
   let cfg: Config = {
+    mongo: {
+      port: '27017',
+      addr: 'localhost',
+      db: 'swdb-dev',
+      options: {
+        // see http://mongoosejs.com/docs/connections.html
+        useMongoClient: true,
+      },
+    },
     engineer: {},
     area: {},
     owner: {},
@@ -130,14 +146,9 @@ async function main() {
     combinedData.instData.push(...combinedDataLocal.instData);
   }
 
-  let connected = new Promise((resolve, reject) => {
-    mongoose.connection.once('error', reject);
-    mongoose.connection.once('connected', resolve);
-  });
-  
   let valid = true;
   let swDataDoc: HistoryDocument[] = [];
-  new Db(); // tslint:disable-line
+  new Db(true); // tslint:disable-line
   for (let d of combinedData.swData) {
     info('Create swDb and validate: %s', JSON.stringify(d));
     let doc: HistoryDocument = new Db.swDoc(d);
@@ -151,7 +162,7 @@ async function main() {
   }
 
   let instDataDoc: HistoryDocument[] = [];
-  new InstDb(); // tslint:disable-line
+  new InstDb(true); // tslint:disable-line
   for (let d of combinedData.instData) {
     info('Create instDB and validate: %s', JSON.stringify(d));
     let doc: HistoryDocument = new InstDb.instDoc(d);
@@ -165,19 +176,30 @@ async function main() {
   }
 
   if (!valid) {
-    await mongoose.disconnect();
     return;
   }
 
-  await connected; // wait for the connection
-  await Db.swDoc.init(); // wait for the createIndex
-  await InstDb.instDoc.init(); // wait for the createIndex
-  
   if (cfg.dryrun !== false && cfg.dryrun !== 'false') {
     info('DRYRUN DONE');
-    await mongoose.disconnect();
     return;
   }
+
+  // Configure Mongoose (MongoDB)
+  let mongoUrl = 'mongodb://';
+  if (cfg.mongo.user) {
+    mongoUrl += encodeURIComponent(String(cfg.mongo.user));
+    if (cfg.mongo.pass) {
+    mongoUrl += ':' + encodeURIComponent(String(cfg.mongo.pass));
+    }
+    mongoUrl += '@';
+  }
+  mongoUrl += cfg.mongo.addr + ':' + cfg.mongo.port + '/' + cfg.mongo.db;
+
+  // Connect and wait for autoIndex to complete
+  await mongoose.connect(mongoUrl, cfg.mongo.options);
+  await Db.swDoc.init();
+  await InstDb.instDoc.init();
+  info('Connected to database: mongodb://%s:%s/%s', cfg.mongo.addr, cfg.mongo.port, cfg.mongo.db);
 
   // Clean DB before saving data
   await mongoose.connection.db.dropDatabase();
@@ -191,6 +213,7 @@ async function main() {
       error(err);
     }
   }
+  info('Software documents saved with history: %s', swDataDoc.length);
 
   for (let doc of instDataDoc) {
     try {
@@ -199,6 +222,7 @@ async function main() {
       error(err);
     }
   }
+  info('Installation documents saved with history: %s', instDataDoc.length);
 
   await mongoose.disconnect();
 };
