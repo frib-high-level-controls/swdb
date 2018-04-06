@@ -45,6 +45,15 @@ module.exports = function(grunt) {
             additionalFlags: '--outDir ./public/js --listEmittedFiles'
         },
       },
+      tools: {
+        tsconfig: {
+            tsconfig: './src/tools',
+            passThrough: true,
+        },
+        options: {
+            additionalFlags: '--outDir ./tools'
+        },
+      },
   },
   tslint: {
     options: {
@@ -63,6 +72,7 @@ module.exports = function(grunt) {
   clean: {
     app: [ './app' ],
     test: [ './test/app', './test/apptest' ],
+    tools: [ './tools' ],
     public: [ './public/js' ]
   },
   copy: {
@@ -92,6 +102,7 @@ module.exports = function(grunt) {
     "ts:app",
     "ts:web",
     //"copy",
+    "ts:tools",
   ]);
 
   grunt.registerTask('lint', [
