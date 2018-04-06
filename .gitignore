@@ -16,6 +16,7 @@ npm-debug.log
 
 # Ignore build directory
 /app/
+/tools/
 
 # Ignore test directory
 /test/app/
