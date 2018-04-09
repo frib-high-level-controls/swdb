@@ -7,7 +7,8 @@ import * as passport from 'passport';
 import * as ppcas from 'passport-cas';
 import * as pphttp from 'passport-http';
 
-import * as auth from '../shared/auth';
+import * as auth from './auth';
+import * as log from './logging';
 
 type Request = express.Request;
 type RequestHandler = express.RequestHandler;
@@ -39,6 +40,7 @@ export abstract class PassportAbstractProvider<S extends Strategy, AO extends Au
     extends auth.AbstractProvider<AO> {
 
   public initialize(): RequestHandler {
+    log.info('Initialize %s', this.constructor.name);
     passport.use(this.getStrategy());
 
     // Warning: Ensure the value of `this` is properly captured.

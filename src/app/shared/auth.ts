@@ -161,8 +161,8 @@ export abstract class AbstractProvider<AO = {}> implements IProvider<AO> {
 class NullProvider extends AbstractProvider {
 
   public initialize(): RequestHandler {
+    log.warn('Initialize NullAuthProvider');
     return (req, res, next) => {
-      log.warn('Initialize NullAuthProvider');
       next();
     };
   };
