@@ -3,6 +3,7 @@
  */
 import * as dbg from 'debug';
 import * as express from 'express';
+import * as passport from 'passport';
 
 import * as auth from './auth';
 import * as forgapi from './forgapi';
@@ -10,6 +11,8 @@ import * as log from './logging';
 import * as ppauth from './passport-auth';
 
 type Request = express.Request;
+type AuthenticateOptions = passport.AuthenticateOptions;
+type CasAuthenticateOptions = ppauth.CasAuthenticateOptions;
 
 type VerifyPasswordCallback = (err: any, verified?: boolean) => void;
 
@@ -53,7 +56,7 @@ function verifyWithForg(forgClient: forgapi.IClient, username: string, done: ppa
 };
 
 
-export class ForgCasProvider extends ppauth.CasPassportAbstractProvider {
+export class ForgCasProvider extends ppauth.CasPassportAbstractProvider<CasAuthenticateOptions> {
 
   protected forgClient: forgapi.IClient;
 
@@ -81,7 +84,7 @@ export class ForgCasProvider extends ppauth.CasPassportAbstractProvider {
   };
 };
 
-export abstract class ForgBasicAbstractProvider extends ppauth.BasicPassportAbstractProvider {
+export abstract class ForgBasicAbstractProvider extends ppauth.BasicPassportAbstractProvider<AuthenticateOptions> {
 
   protected forgClient: forgapi.IClient;
 
