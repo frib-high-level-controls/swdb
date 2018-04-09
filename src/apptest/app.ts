@@ -47,11 +47,11 @@ export function start(): Promise<express.Application> {
 async function doStart(): Promise<express.Application> {
   app = express();
 
-  const forgClient = new forgapi.MockClient();
+  const forgClient = forgapi.MockClient.getInstance();
 
-  const cfAuthProvider = new forgauth.DevForgBasicProvider(forgClient, {});
+  const authProvider = new forgauth.DevForgBasicProvider(forgClient, {});
 
-  auth.setProvider(cfAuthProvider);
+  auth.setProvider(authProvider);
 
 
   // status monitor start

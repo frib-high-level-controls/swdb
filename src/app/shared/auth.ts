@@ -24,11 +24,11 @@ export interface IUser {
  * The IProvider interface is based on the Passport API.
  * See: http://passportjs.org
  */
-export interface IProvider {
+export interface IProvider<AO = {}> {
 
   initialize(): RequestHandler;
 
-  authenticate(options?: any): RequestHandler;
+  authenticate(options?: AO): RequestHandler;
 
   logout(req: Request): void;
 
@@ -48,11 +48,11 @@ export interface IProvider {
 const debug = dbg('webapp:auth');
 
 
-export abstract class AbstractProvider implements IProvider {
+export abstract class AbstractProvider<AO = {}> implements IProvider<AO> {
 
   public abstract initialize(): RequestHandler;
 
-  public abstract authenticate(options?: any): RequestHandler;
+  public abstract authenticate(options?: AO): RequestHandler;
 
   public abstract logout(req: Request): void;
 
@@ -161,13 +161,13 @@ export abstract class AbstractProvider implements IProvider {
 class NullProvider extends AbstractProvider {
 
   public initialize(): RequestHandler {
+    log.warn('Initialize NullAuthProvider');
     return (req, res, next) => {
-      log.warn('Initialize NullAuthProvider');
       next();
     };
   };
 
-  public authenticate(options: object): RequestHandler {
+  public authenticate(options?: {}): RequestHandler {
     return (req: Request, res: Response, next: NextFunction) => {
       sendForbidden(req, res);
     };
