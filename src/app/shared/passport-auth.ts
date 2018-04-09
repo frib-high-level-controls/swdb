@@ -12,6 +12,7 @@ import * as auth from '../shared/auth';
 type Request = express.Request;
 type RequestHandler = express.RequestHandler;
 type Strategy = passport.Strategy;
+type AuthenticateOptions = passport.AuthenticateOptions;
 
 export type CasProfile = ppcas.Profile;
 
@@ -28,10 +29,14 @@ export interface CasProviderOptions {
   casVersion?: string;
 };
 
+export interface CasAuthenticateOptions extends AuthenticateOptions {
+  rememberParams?: string | string[];
+};
 
 const debug = dbg('webapp:passport-auth');
 
-export abstract class PassportAbstractProvider<S extends Strategy> extends auth.AbstractProvider {
+export abstract class PassportAbstractProvider<S extends Strategy, AO extends AuthenticateOptions>
+    extends auth.AbstractProvider<AO> {
 
   public initialize(): RequestHandler {
     passport.use(this.getStrategy());
@@ -53,8 +58,8 @@ export abstract class PassportAbstractProvider<S extends Strategy> extends auth.
     return router;
   };
 
-  public authenticate(options?: any): RequestHandler {
-    return passport.authenticate(this.getStrategy().name || 'undefined', options);
+  public authenticate(options?: AO): RequestHandler {
+    return passport.authenticate(this.getStrategy().name || 'undefined', options || {});
   };
 
   public logout(req: Request): void {
@@ -88,7 +93,8 @@ export abstract class PassportAbstractProvider<S extends Strategy> extends auth.
   };
 };
 
-export abstract class BasicPassportAbstractProvider extends PassportAbstractProvider<pphttp.BasicStrategy> {
+export abstract class BasicPassportAbstractProvider<AO extends AuthenticateOptions>
+    extends PassportAbstractProvider<pphttp.BasicStrategy, AO> {
 
   protected strategy: pphttp.BasicStrategy;
 
@@ -109,7 +115,8 @@ export abstract class BasicPassportAbstractProvider extends PassportAbstractProv
   protected abstract verify(username: string, password: string, done: VerifyCallback): void;
 };
 
-export abstract class CasPassportAbstractProvider extends PassportAbstractProvider<ppcas.Strategy> {
+export abstract class CasPassportAbstractProvider<AO extends CasAuthenticateOptions>
+    extends PassportAbstractProvider<ppcas.Strategy, AO> {
 
   protected options: CasProviderOptions;
 
@@ -156,10 +163,10 @@ export abstract class CasPassportAbstractProvider extends PassportAbstractProvid
     });
   };
 
-  public authenticate(options?: any): RequestHandler {
+  public authenticate(options?: AO): RequestHandler {
     const prefix = 'CasPassportAbstractProvider_Param_';
     const rememberParams = new Map<string, string>();
-    if (Array.isArray(options.rememberParams)) {
+    if (options && Array.isArray(options.rememberParams)) {
       for (let param of options.rememberParams) {
         if (typeof param === 'string') {
           let key = prefix + param.replace(/\w/, '_');
@@ -168,7 +175,7 @@ export abstract class CasPassportAbstractProvider extends PassportAbstractProvid
           }
         }
       }
-    } else if (typeof options.rememberParams === 'string') {
+    } else if (options && typeof options.rememberParams === 'string') {
       let key = prefix + options.rememberParams.replace(/\w/, '_');
       rememberParams.set(key, options.rememberParams);
     }
