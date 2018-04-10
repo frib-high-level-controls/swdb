@@ -180,34 +180,7 @@ async function doStart(): Promise<express.Application> {
   app.set('view engine', 'pug');
   app.set('view cache', (env === 'production') ? true : false);
 
-  // favicon configuration
-  app.use(favicon(path.resolve(__dirname, '..', 'public', 'favicon.ico')));
-
-  // static file configuration
-  app.use(express.static(path.resolve(__dirname, '..', 'public')));
-
-  // morgan configuration
-  morgan.token('remote-user', function (req) {
-    if (req.session && req.session.userid) {
-      return req.session.userid;
-    } else {
-      return 'unknown';
-    }
-  });
-
-  if (env === 'production') {
-    app.use(morgan('short'));
-  } else {
-    app.use(morgan('dev'));
-  }
-
-  // body-parser configuration
-  app.use(bodyparser.json());
-  app.use(bodyparser.urlencoded({
-    extended: false,
-  }));
-
-  // session configuration
+  // Session configuration
   app.use(session({
     store: new session.MemoryStore(),
     resave: false,
@@ -218,8 +191,32 @@ async function doStart(): Promise<express.Application> {
     },
   }));
 
-  // Authentication handlers
+  // Authentication handlers (must follow session middleware)
   app.use(auth.getProvider().initialize());
+
+  // Request logging configuration (must follow authc middleware)
+  morgan.token('remote-user', function (req) {
+    let username = auth.getUsername(req);
+    return username || 'anonymous';
+  });
+
+  if (env === 'production') {
+    app.use(morgan('short'));
+  } else {
+    app.use(morgan('dev'));
+  }
+
+  // favicon configuration
+  app.use(favicon(path.resolve(__dirname, '..', 'public', 'favicon.ico')));
+
+  // static file configuration
+  app.use(express.static(path.resolve(__dirname, '..', 'public')));
+
+  // body-parser configuration
+  app.use(bodyparser.json());
+  app.use(bodyparser.urlencoded({
+    extended: false,
+  }));
 
   app.get('/login', auth.getProvider().authenticate({ rememberParams: [ 'bounce' ]}), (req, res) => {
     if (req.query.bounce) {
