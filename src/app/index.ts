@@ -33,6 +33,7 @@ interface Config {
   app: {
     port: {};
     addr: {};
+    trust_proxy: {};
     session_life: {};
     session_secret: {};
   };
@@ -154,6 +155,7 @@ async function doStart(): Promise<express.Application> {
     app: {
       port: '3000',
       addr: 'localhost',
+      trust_proxy: false,
       session_life: 28800000,
       session_secret: 'secret',
     },
@@ -170,6 +172,9 @@ async function doStart(): Promise<express.Application> {
 
   app.set('port', String(cfg.app.port));
   app.set('addr', String(cfg.app.addr));
+
+  // Proxy configuration (https://expressjs.com/en/guide/behind-proxies.html)
+  app.set('trust proxy', cfg.app.trust_proxy || false);
 
   // Status monitor start
   await status.monitor.start();
