@@ -1,6 +1,6 @@
 {
   "name": "webapp",
-  "version": "0.4.27",
+  "version": "0.4.28",
   "private": true,
   "scripts": {
     "start": "./bin/app",
@@ -37,7 +37,7 @@
     "@types/passport": "^0.4.2",
     "@types/passport-http": "^0.3.2",
     "@types/rc": "^0.0.1",
-    "@types/request": "^2.0.3",
+    "@types/request": "^2.47.0",
     "@types/serve-favicon": "^2.2.28",
     "@types/supertest": "^2.0.1",
     "chai": "^4.0.2",
