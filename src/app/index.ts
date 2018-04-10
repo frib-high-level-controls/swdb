@@ -183,6 +183,9 @@ async function doStart(): Promise<express.Application> {
   // favicon configuration
   app.use(favicon(path.resolve(__dirname, '..', 'public', 'favicon.ico')));
 
+  // static file configuration
+  app.use(express.static(path.resolve(__dirname, '..', 'public')));
+
   // morgan configuration
   morgan.token('remote-user', function (req) {
     if (req.session && req.session.userid) {
@@ -214,9 +217,6 @@ async function doStart(): Promise<express.Application> {
       maxAge: Number(cfg.app.session_life),
     },
   }));
-
-  app.use(express.static(path.resolve(__dirname, '..', 'public')));
-  app.use(express.static(path.resolve(__dirname, '..', 'bower_components')));
 
   // Authentication handlers
   app.use(auth.getProvider().initialize());
