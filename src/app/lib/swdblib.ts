@@ -294,8 +294,8 @@ export class SwdbLib {
           errorMessage: 'Level of care is required.',
         },
         isOneOf: {
-          options: [props.levelOfCareLabels],
-          errorMessage: 'Status must be one of ' + props.levelOfCareLabels,
+          options: [props.levelOfCareKeys],
+          errorMessage: 'Level of care must be one of ' + props.levelOfCareKeys,
         },
       },
       status: {
@@ -518,8 +518,8 @@ export class SwdbLib {
       levelOfCare: {
         optional: true,
         isOneOf: {
-          options: [props.levelOfCareLabels],
-          errorMessage: 'Level of care must be one of ' + props.levelOfCareLabels,
+          options: [props.levelOfCareKeys],
+          errorMessage: 'Level of care must be one of ' + props.levelOfCareKeys,
         },
       },
       status: {

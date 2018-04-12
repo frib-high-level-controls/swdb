@@ -1,6 +1,9 @@
 export enum  LevelOfCareEnum {
-  'NONE', 'LOW', 'MEDIUM', 'HIGH', 'SAFETY',
+ 'LOW' = 'Low',
+ 'MEDIUM' = 'Medium',
+ 'HIGH' = 'High',
 }
+
 export enum  StatusEnum {
   'Development', 'Ready for test', 'Ready for install', 'Retired',
 }

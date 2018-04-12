@@ -82,6 +82,16 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
       $scope.formData.statusDate = new Date($scope.formData.statusDate);
     }
 
+    $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).find( 
+      function (item) { 
+        console.log('checking ' + item);
+        return $scope.levelOfCareDisplay === $scope.props.LevelOfCareEnum[item];
+      });
+
+    console.log('Displayed loc: ' + JSON.stringify($scope.levelOfCareDisplay));
+    console.log('Enum loc: ' + JSON.stringify($scope.props.LevelOfCareEnum));
+    console.log('Updated formData loc: ' + JSON.stringify($scope.formData.levelOfCare));
+
     delete $scope.formData.__v;
     if (!$scope.formData.version) {
       // $scope.formData.version="";
@@ -123,7 +133,8 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
   };
 
   getEnums = function () {
-    $scope.formData.levelOfCare = "NONE";
+    $scope.levelOfCareDisplay = 'Low';
+    $scope.formData.levelOfCare = 'LOW';
     $scope.formData.status = "DEVEL";
     $scope.formData.versionControl = "Other";
   };
@@ -186,6 +197,9 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     $scope.formData.engineer = updateRec.formData.engineer;
     // $scope.engineerSelected = updateRec.formData.engineer;
     $scope.formData.levelOfCare = updateRec.formData.levelOfCare;
+    $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[updateRec.formData.levelOfCare];
+    console.log('Incoming loc: ' + JSON.stringify($scope.formData.levelOfCare));
+    console.log('Updated display loc: ' + JSON.stringify($scope.levelOfCareDisplay));
     $scope.formData.status = $scope.props.statusLabels[0];
     $scope.formData.statusDate = new Date();
     $scope.formData.platforms = updateRec.formData.platforms;

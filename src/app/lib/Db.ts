@@ -26,7 +26,7 @@ export class Db {
         desc: { type: String},
         owner: { type: String, required: true },
         engineer: { type: String, required: false },
-        levelOfCare: { type: String, enum: Db.props.levelOfCareLabels, required: true },
+        levelOfCare: { type: String, enum: Db.props.levelOfCareKeys, required: true },
         status: { type: String, enum: Db.props.statusLabels, required: true },
         statusDate: { type: Date, required: true },
         platforms: { type: String},

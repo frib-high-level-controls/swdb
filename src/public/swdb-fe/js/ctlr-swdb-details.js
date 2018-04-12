@@ -60,6 +60,9 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
   swService.refreshSwList().then(function () {
     let data = swService.getSwById($routeParams.itemId);    
     $scope.formData = data;
+    // convert level of care key to value
+    $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[data.levelOfCare];
+
     console.log('swdb details got :' + JSON.stringify(data, null, 2));
     // format dates for display
     if (data.statusDate) {

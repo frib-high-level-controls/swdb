@@ -166,7 +166,7 @@
         <div id="levelOfCare-group" class="form-group swdbFormRow">
           <label class="col-sm-2 control-label">Level of Care*</label>
           <div class="col-sm-8">
-            <select id="levelOfCare" ng-model="formData.levelOfCare" ng-options="o for o in props.levelOfCareLabels track by o"></select>
+            <select id="levelOfCare" ng-model="levelOfCareDisplay" ng-options="o for o in props.levelOfCareLabels track by o"></select>
           </div>
           <div class="col-sm-2" id="levelOfCareInputSts" ng-messages="inputForm.levelOfCareInput.$error" ng-if="inputForm.levelOfCareInput.$dirty">
           </div>

@@ -184,10 +184,13 @@ describe("app", function() {
        statusDate: "2017-04-21T00:00:00.000Z"})
     .expect(201)
     .end((err, result) => {
-      if (err) done(err);
+      if (err) {
+        debug('result: ' + JSON.stringify(result));
+        done(err)
+      }
       else {
+        debug('result: ' + JSON.stringify(result));
         if (result.headers.location.match(/^.*\/api\/v1\/swdb\/[0-9a-fA-F]{24}$/g)) {
-          debug('Location: ' + result.headers.location);
           done();
         } else {
           done(new Error("Location header is not set" + JSON.stringify(result.headers.location)));
@@ -1543,8 +1546,8 @@ describe("app", function() {
       {"type": "GET","res": {"msg": {"levelOfCare": "MEDIUM"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"levelOfCare": "ERRONEOUS_VALUE"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
       {"type": "GET","res": {"msg": {"levelOfCare": "MEDIUM"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"levelOfCare": "SAFETY"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"levelOfCare": "SAFETY"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"levelOfCare": "LOW"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"levelOfCare": "LOW"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"status": "Development"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"status": "Development"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"status": "ERRONEOUS_VALUE"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
@@ -1641,7 +1644,7 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '"param":"owner","msg":"Owner must be 2-80 characters."'}}},
       // test update levelOfCare enumerated
       {"type":"PUT", "req": {"msg": {"levelOfCare": "not-enumerated"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '{"param":"levelOfCare","msg":"Level of care must be one of NONE,LOW,MEDIUM,HIGH,SAFETY","value":"not-enumerated"}'}}},
+      "err": {"status": 400, "msgHas": '{"param":"levelOfCare","msg":"Level of care must be one of LOW,MEDIUM,HIGH","value":"not-enumerated"}'}}},
       // test update status enumerated
       {"type":"PUT", "req": {"msg": {"status": "not-enumerated"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of Development,Ready for test,Ready for install,Retired","value":"not-enumerated"}'}}},
