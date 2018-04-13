@@ -82,15 +82,19 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
       $scope.formData.statusDate = new Date($scope.formData.statusDate);
     }
 
+    // convert enum values to keys
     $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).find( 
       function (item) { 
-        console.log('checking ' + item);
         return $scope.levelOfCareDisplay === $scope.props.LevelOfCareEnum[item];
       });
+    $scope.formData.status = Object.keys($scope.props.StatusEnum).find( 
+      function (item) { 
+        return $scope.statusDisplay === $scope.props.StatusEnum[item];
+      });
 
-    console.log('Displayed loc: ' + JSON.stringify($scope.levelOfCareDisplay));
-    console.log('Enum loc: ' + JSON.stringify($scope.props.LevelOfCareEnum));
-    console.log('Updated formData loc: ' + JSON.stringify($scope.formData.levelOfCare));
+    console.log('Displayed enum: ' + JSON.stringify($scope.statusDisplay));
+    console.log('Enum : ' + JSON.stringify($scope.props.StatusEnum));
+    console.log('Updated formData inum: ' + JSON.stringify($scope.formData.status));
 
     delete $scope.formData.__v;
     if (!$scope.formData.version) {
@@ -135,6 +139,7 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
   getEnums = function () {
     $scope.levelOfCareDisplay = 'Low';
     $scope.formData.levelOfCare = 'LOW';
+    $scope.statusDisplay = 'Development';
     $scope.formData.status = "DEVEL";
     $scope.formData.versionControl = "Other";
   };
@@ -196,11 +201,12 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     // $scope.ownerSelected = updateRec.formData.owner;
     $scope.formData.engineer = updateRec.formData.engineer;
     // $scope.engineerSelected = updateRec.formData.engineer;
+
     $scope.formData.levelOfCare = updateRec.formData.levelOfCare;
     $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[updateRec.formData.levelOfCare];
-    console.log('Incoming loc: ' + JSON.stringify($scope.formData.levelOfCare));
-    console.log('Updated display loc: ' + JSON.stringify($scope.levelOfCareDisplay));
-    $scope.formData.status = $scope.props.statusLabels[0];
+    $scope.formData.status = 'DEVEL';
+    $scope.statusDisplay = $scope.props.StatusEnum[$scope.formData.status];
+
     $scope.formData.statusDate = new Date();
     $scope.formData.platforms = updateRec.formData.platforms;
     $scope.formData.designDescDocLoc = updateRec.formData.designDescDocLoc;

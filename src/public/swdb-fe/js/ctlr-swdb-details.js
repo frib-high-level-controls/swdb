@@ -62,6 +62,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
     $scope.formData = data;
     // convert level of care key to value
     $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[data.levelOfCare];
+    $scope.statusDisplay = $scope.props.StatusEnum[data.status];
 
     console.log('swdb details got :' + JSON.stringify(data, null, 2));
     // format dates for display

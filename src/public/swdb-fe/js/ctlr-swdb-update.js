@@ -86,11 +86,12 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
       // $scope.formData.levelOfCare = $scope.props.LevelOfCareEnum[$scope.levelOfCareDisplay];
       $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).find(
         function (item) {
-          console.log('checking ' + item);
           return $scope.levelOfCareDisplay === $scope.props.LevelOfCareEnum[item];
         });
-      console.log('Diplayed update writing loc: ' + JSON.stringify($scope.levelOfCareDisplay));
-      console.log('Updated update writing formData loc: ' + JSON.stringify($scope.formData.levelOfCare));
+      $scope.formData.status = Object.keys($scope.props.StatusEnum).find(
+        function (item) {
+          return $scope.statusDisplay === $scope.props.StatusEnum[item];
+        });
       $http({
         method: 'PUT',
         // url: $scope.props.apiUrl+$scope.formData._id,
@@ -184,10 +185,9 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     $scope.formData = data;
     $scope.whichItem = $routeParams.itemId;
 
-    // convert level of care enum to value
+    // convert enums to value
     $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[$scope.formData.levelOfCare];
-    console.log('Incoming update loc: ' + JSON.stringify($scope.formData.levelOfCare));
-    console.log('Updated update display loc: ' + JSON.stringify($scope.levelOfCareDisplay));
+    $scope.statusDisplay = $scope.props.StatusEnum[$scope.formData.status];
 
       // Setup field display based on status
     $scope.onStatusChange();

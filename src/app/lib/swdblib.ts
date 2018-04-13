@@ -303,8 +303,8 @@ export class SwdbLib {
           errorMessage: 'Status is required.',
         },
         isOneOf: {
-          options: [props.statusLabels],
-          errorMessage: 'Status must be one of ' + props.statusLabels,
+          options: [props.statusKeys],
+          errorMessage: 'Status must be one of ' + props.statusKeys,
         },
       },
       statusDate: {
@@ -525,8 +525,8 @@ export class SwdbLib {
       status: {
         optional: true,
         isOneOf: {
-          options: [props.statusLabels],
-          errorMessage: 'Status must be one of ' + props.statusLabels,
+          options: [props.statusKeys],
+          errorMessage: 'Status must be one of ' + props.statusKeys,
         },
       },
       statusDate: {

@@ -75,14 +75,14 @@ describe("History tests suite", function () {
       .post("/api/v1/swdb/")
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
-      .send({ swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "Development", statusDate: "date 1000" })
+      .send({ swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000" })
       .end(async (err, result) => {
         // get record id from the returned location and find records that match
         let id = result.headers.location.split(/\//).pop();
         wrapper.origId = id;
         debug('Got id ' + id);
         let canonObj =
-          { swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "Development", statusDate: new Date("date 1000") };
+          { swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: new Date("date 1000") };
         let response = null;
         try {
           expect(await testTools.checkHistory(debug, canonObj, id)).to.equal("History record matches");

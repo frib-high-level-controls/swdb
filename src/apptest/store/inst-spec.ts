@@ -645,8 +645,12 @@ describe('Installation api tests', () => {
       supertest(app)
         .post('/api/v1/inst/')
         .send({
-          host: 'Rule 2 test host', name: 'Test name', area: ['Global'], status: 'Ready for install',
-          statusDate: 'date 1000', software: '5947589458a6aa0face9a512',
+          host: 'Rule 2 test host',
+          name: 'Test name',
+          area: ['Global'],
+          status: 'Ready for install',
+          statusDate: 'date 1000',
+          software: '5947589458a6aa0face9a512',
         })
         .set('Accept', 'application/json')
         .set('Cookie', Cookies)
@@ -677,7 +681,7 @@ describe('Installation api tests', () => {
           owner: 'previous Test Owner',
           engineer: 'Test Engineer',
           levelOfCare: 'LOW',
-          status: 'Ready for install',
+          status: 'RDY_INST',
           statusDate: '0',
         })
         .expect(201)
@@ -753,8 +757,12 @@ describe('Installation api tests', () => {
       supertest(app)
         .post('/api/v1/inst/')
         .send({
-          host: 'Rule 3 test host', name: 'Test name', area: ['Global'], status: 'Ready for install',
-          statusDate: 'date 1000', software: '5947589458a6aa0face9a512',
+          host: 'Rule 3 test host',
+          name: 'Test name',
+          area: ['Global'],
+          status: 'Ready for install',
+          statusDate: 'date 1000',
+          software: '5947589458a6aa0face9a512',
         })
         .set('Accept', 'application/json')
         .set('Cookie', Cookies)
@@ -785,7 +793,7 @@ describe('Installation api tests', () => {
           owner: 'previous Test Owner',
           engineer: 'Test Engineer',
           levelOfCare: 'LOW',
-          status: 'Development',
+          status: 'DEVEL',
           statusDate: '0',
         })
         .expect(201)
@@ -810,8 +818,8 @@ describe('Installation api tests', () => {
         .send({ software: wrapper.swId })
         .expect(400)
         .expect('Worklow validation errors: [{"error":true,"data":"Software field must point to software ' +
-         'with status Ready for install.The given software, ' +
-         wrapper.swId + ', has status Development"}]')
+         'with status RDY_INST.The given software, ' +
+         wrapper.swId + ', has status DEVEL"}]')
         .end(function (err, res) {
           if (err) {
             debug(JSON.stringify(res));

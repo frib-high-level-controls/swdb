@@ -5,7 +5,10 @@ export enum  LevelOfCareEnum {
 }
 
 export enum  StatusEnum {
-  'Development', 'Ready for test', 'Ready for install', 'Retired',
+  'DEVEL' = 'Development',
+  'RDY_TEST' = 'Ready for test',
+  'RDY_INST' = 'Ready for install',
+  'DEP' = 'DEPRECATED',
 }
 export enum  InstStatusEnum {
   'Ready for install', 'Ready for verification', 'Ready for beam', 'Retired',

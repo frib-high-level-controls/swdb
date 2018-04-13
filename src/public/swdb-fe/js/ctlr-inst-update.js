@@ -156,7 +156,7 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
   $scope.session = userService.getUser();
   $scope.swList = swService.getSwList().filter(function (item, index, arr) {
     // filter for software that is in the "Ready for Install" state
-    return item.status.toUpperCase() === $scope.props.StatusEnum[2].toUpperCase();
+    return item.status === 'RDY_INST';
   });
 
   forgAreaService.promise.then(function () {

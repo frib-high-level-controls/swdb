@@ -178,7 +178,7 @@
         <div id="status-group" class="form-group swdbFormRow">
           <label class="col-sm-2 control-label">Status*</label>
           <div class="col-sm-10">
-            <select id="status" ng-model="formData.status" ng-options="o for o in props.statusLabels track by o"
+            <select id="status" ng-model="statusDisplay" ng-options="o for o in props.statusLabels track by o"
             ng-disabled="statusDisabled" ng-change="onStatusChange()"></select>
           </div>
           <div class="col-sm-2" id="statusInputSts" ng-messages="inputForm.statusInput.$error" ng-if="inputForm.statusInput.$dirty">

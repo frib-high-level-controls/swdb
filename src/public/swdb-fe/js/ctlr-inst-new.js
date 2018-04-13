@@ -161,7 +161,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
   $scope.refreshSw = () => {
     $scope.swList = swService.getSwList().filter(function(item, index, arr){
       // filter for software that is in the "Ready for Install" state
-      return item.status.toUpperCase() === $scope.props.StatusEnum[2].toUpperCase();
+      return item.status === 'RDY_INST';
     });
     console.log("inst-new: swList is now "+JSON.stringify($scope.swList));
   };

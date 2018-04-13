@@ -40,14 +40,13 @@ export class CommonTools {
       });
       debug('props.levelOfCareKeys: ' + JSON.stringify(rcw.levelOfCareKeys));
       debug('props.levelOfCareLabels: ' + JSON.stringify(rcw.levelOfCareLabels));
+      rcw.statusKeys = Object.keys(StatusEnum);
+      rcw.statusLabels = rcw.statusKeys.map(function (item, idx, arr) {
+        return StatusEnum[item];
+      });
+      debug('props.statusKeys: ' + JSON.stringify(rcw.statusKeys));
+      debug('props.statusLabels: ' + JSON.stringify(rcw.statusLabels));
 
-      rcw.statusLabels = [];
-      // Go through the enums and filter names for the select labels
-      for (const key in rcw.StatusEnum) {
-        if (!key.match(/^\d+/)) {
-          rcw.statusLabels.push(key);
-        }
-      }
       rcw.instStatusLabels = [];
       // Go through the enums and filter names for the select labels
       for (const key in rcw.InstStatusEnum) {

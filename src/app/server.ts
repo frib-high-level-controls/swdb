@@ -178,6 +178,7 @@ app.get('/api/v1/swdb', function(req: express.Request, res: express.Response, ne
 app.post('/api/v1/swdb', auth.ensureAuthenticated,
   function(req: express.Request, res: express.Response, next: express.NextFunction) {
   debug('POST /api/v1/swdb request');
+  // debug('POST /api/v1/swdb request: ' + JSON.stringify(req.body));
   // Do validation for  new records
 
   tools.SwdbLib.newValidation(req);
