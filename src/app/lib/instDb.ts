@@ -39,7 +39,7 @@ export class InstDb {
         name: { type: String , default: '' },
         area: { type: [String], enum: InstDb.props.areaLabels, required: true },
         slots: [String],
-        status: { type: String, enum: InstDb.props.instStatusLabels, required: true },
+        status: { type: String, enum: InstDb.props.instStatusKeys, required: true },
         statusDate: { type: Date, required: true },
         software: { type: mongoose.SchemaTypes.ObjectId, required: true },
         vvResultsLoc: { type: [String] },

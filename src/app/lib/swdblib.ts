@@ -357,8 +357,8 @@ export class SwdbLib {
       versionControl: {
         optional: true,
         isOneOf: {
-          options: [props.rcsLabels],
-          errorMessage: 'Revision control must be one of ' + props.rcsLabels,
+          options: [props.rcsKeys],
+          errorMessage: 'Revision control must be one of ' + props.rcsKeys,
         },
       },
       versionControlLoc: {
@@ -577,8 +577,8 @@ export class SwdbLib {
       versionControl: {
         optional: true,
         isOneOf: {
-          options: [props.rcsLabels],
-          errorMessage: 'Revision control must be one of ' + props.rcsLabels,
+          options: [props.rcsKeys],
+          errorMessage: 'Revision control must be one of ' + props.rcsKeys,
         },
       },
       versionControlLoc: {

@@ -10,9 +10,18 @@ export enum  StatusEnum {
   'RDY_INST' = 'Ready for install',
   'DEP' = 'DEPRECATED',
 }
+
 export enum  InstStatusEnum {
-  'Ready for install', 'Ready for verification', 'Ready for beam', 'Retired',
+  'RDY_INST' = 'Ready for install',
+  'RDY_VER' = 'Ready for verification',
+  'RDY_BEAM' = 'Ready for beam',
+  'RET' = 'Retired',
 }
+
 export enum  RcsEnum {
-  'Git', 'AssetCentre', 'Filesystem', 'Debian', 'Other',
+  'GIT' = 'Git',
+  'AC' = 'AssetCentre',
+  'FS' = 'Filesystem',
+  'DEB' = 'Debian',
+  'OTHER' = 'Other',
 }

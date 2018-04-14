@@ -1110,7 +1110,7 @@ describe("app", function() {
     .send({swName: "versionControl Test Record",
      owner: "versionControl Test Owner",
      engineer: "Test Engineer",
-     versionControl: "Git",
+     versionControl: "GIT",
      levelOfCare: "LOW",
      status: "DEVEL",
      statusDate: "1970-01-01T00:00:00.000Z"})
@@ -1156,7 +1156,7 @@ describe("app", function() {
         } else {
           expect(res.body).to.have.property("_id");
           expect(res.body.swName).to.equal("versionControl Test Record");
-          expect(res.body.versionControl).to.equal("Git");
+          expect(res.body.versionControl).to.equal("GIT");
           done();
         }
       });
@@ -1491,7 +1491,7 @@ describe("app", function() {
           host: 'Test host',
           name: 'Test name',
           area: ['Global'],
-          status: 'Ready for install',
+          status: 'RDY_INST',
           statusDate: '1970-01-01T00:00:00.000Z',
           software: wrapper.origId,
         })
@@ -1575,8 +1575,8 @@ describe("app", function() {
       {"type": "PUT","req": {"msg": {"vvResultsLoc": ["http://www.somehost/some-path/some-file3"]},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"vvResultsLoc": ["http://www.somehost/some-path/some-file3"]},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"vvResultsLoc": "http:some-malformed-url"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
-      {"type": "PUT","req": {"msg": {"versionControl": "Git"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"versionControl": "Git"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"versionControl": "GIT"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"versionControl": "GIT"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"versionControl": "Erroneous RCS"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
       {"type": "PUT","req": {"msg": {"versionControlLoc": "http://www.somehost/some-path/some-file"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"versionControlLoc": "http://www.somehost/some-path/some-file"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
@@ -1627,7 +1627,7 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '"param":"platforms","msg":"Platforms must be 4-30 characters."'}}},
       // test new versionControl min, max
       {"type":"POST", "req": {"msg": {"versionControl": "Erroneous RCS"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of Git,AssetCentre,Filesystem,Debian,Other"'}}},
+      "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of GIT,AC,FS,DEB,OTHER"'}}},
       // test new recertFreq min, max
       {"type":"POST", "req": {"msg": {"recertFreq": "N"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertFreq","msg":"Recertification frequency must be 4-30 characters."'}}},
@@ -1666,7 +1666,7 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '"param":"platforms","msg":"Platforms must be 4-30 characters."'}}},
       // test update versionControl min, max
       {"type":"PUT", "req": {"msg": {"versionControl": "Erroneous RCS"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of Git,AssetCentre,Filesystem,Debian,Other"'}}},
+      "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of GIT,AC,FS,DEB,OTHER"'}}},
       // test update recertFreq min, max
       {"type":"PUT", "req": {"msg": {"recertFreq": "N"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertFreq","msg":"Recertification frequency must be 4-30 characters."'}}},

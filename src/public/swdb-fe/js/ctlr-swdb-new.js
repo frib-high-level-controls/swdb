@@ -91,10 +91,11 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
       function (item) { 
         return $scope.statusDisplay === $scope.props.StatusEnum[item];
       });
-
-    console.log('Displayed enum: ' + JSON.stringify($scope.statusDisplay));
-    console.log('Enum : ' + JSON.stringify($scope.props.StatusEnum));
-    console.log('Updated formData inum: ' + JSON.stringify($scope.formData.status));
+    $scope.formData.versionControl = Object.keys($scope.props.RcsEnum).find( 
+      function (item) { 
+        return $scope.versionControlDisplay === $scope.props.RcsEnum[item];
+      });
+    console.log('formData.versionControl on submit: ' + $scope.formData.versionControl);
 
     delete $scope.formData.__v;
     if (!$scope.formData.version) {
@@ -212,7 +213,10 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     $scope.formData.designDescDocLoc = updateRec.formData.designDescDocLoc;
     $scope.formData.descDocLoc = updateRec.formData.descDocLoc;
     $scope.formData.vvProcLoc = updateRec.formData.vvProcLoc;
+
     $scope.formData.versionControl = updateRec.formData.versionControl;
+    $scope.versionControlDisplay = $scope.props.RcsEnum[updateRec.formData.versionControl];
+
     $scope.formData.versionControlLoc = updateRec.formData.versionControlLoc;
     $scope.formData.recertFreq = updateRec.formData.recertFreq;
     $scope.formData.previous = updateRedID;

@@ -38,28 +38,20 @@ export class CommonTools {
       rcw.levelOfCareLabels = rcw.levelOfCareKeys.map(function (item, idx, arr) {
         return LevelOfCareEnum[item];
       });
-      debug('props.levelOfCareKeys: ' + JSON.stringify(rcw.levelOfCareKeys));
-      debug('props.levelOfCareLabels: ' + JSON.stringify(rcw.levelOfCareLabels));
       rcw.statusKeys = Object.keys(StatusEnum);
       rcw.statusLabels = rcw.statusKeys.map(function (item, idx, arr) {
         return StatusEnum[item];
       });
-      debug('props.statusKeys: ' + JSON.stringify(rcw.statusKeys));
-      debug('props.statusLabels: ' + JSON.stringify(rcw.statusLabels));
+      rcw.instStatusKeys = Object.keys(InstStatusEnum);
+      rcw.instStatusLabels = rcw.instStatusKeys.map(function (item, idx, arr) {
+        return InstStatusEnum[item];
+      });
+      rcw.rcsKeys = Object.keys(RcsEnum);
+      rcw.rcsLabels = rcw.rcsKeys.map(function (item, idx, arr) {
+        return RcsEnum[item];
+      });
 
-      rcw.instStatusLabels = [];
       // Go through the enums and filter names for the select labels
-      for (const key in rcw.InstStatusEnum) {
-        if (!key.match(/^\d+/)) {
-          rcw.instStatusLabels.push(key);
-        }
-      }
-      rcw.rcsLabels = [];
-      for (const key in rcw.RcsEnum) {
-        if (!key.match(/^\d+/)) {
-          rcw.rcsLabels.push(key);
-        }
-      }
       rcw.areaLabels = [];
       for (const key in rcw.AreaEnum) {
         if (!key.match(/^\d+/)) {

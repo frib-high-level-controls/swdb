@@ -317,7 +317,7 @@
         <div id="versionControl-group" class="form-group swdbFormRow">
           <label class="col-sm-2 control-label">Version control</label>
           <div class="col-sm-8">
-            <select id="versionControl" ng-model="formData.versionControl" ng-options="o for o in props.rcsLabels track by o"></select>
+            <select id="versionControl" ng-model="versionControlDisplay" ng-options="o for o in props.rcsLabels track by o"></select>
           </div>
           <div class="col-sm-2" id="versionControlInputSts" ng-messages="inputForm.versionControlInput.$error" ng-if="inputForm.versionControlInput.$dirty">
           </div>

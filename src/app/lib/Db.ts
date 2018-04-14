@@ -34,7 +34,7 @@ export class Db {
         descDocLoc: { type: String},
         vvProcLoc: { type: Array },
         vvResultsLoc: { type: Array },
-        versionControl: { type: String, enum: Db.props.rcsLabels },
+        versionControl: { type: String, enum: Db.props.rcsKeys },
         versionControlLoc: { type: String},
         recertFreq: { type: String},
         recertStatus: { type: String},

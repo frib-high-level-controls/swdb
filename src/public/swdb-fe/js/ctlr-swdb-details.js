@@ -26,7 +26,6 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
   
   $scope.bumpVerBtnClk = function () {
     // set the recService and then transfer to the new 
-    console.log("got bumpVerBtnClk");
     recService.setRec({
       updateRecID: $routeParams.itemId,
       formData: $scope.formData,
@@ -37,8 +36,6 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
   mkHistTable = function (data){
     let table = '<table id="histTable" class="swdbHistTable">';
     data.map(function(elem, idx, arr){
-      console.log("Parsing: " + JSON.stringify(elem));
-      console.log("table now: " + table);
       table = table.concat('<tr class="swdbHistTr"><td class="swdbHistTdSection">'+
         new Date(elem.at) + '</td><td class="swdbHistTdSection">' + elem.by + '</td></tr>');
       elem.paths.map(function(pathElem, patIdx, pathArr){
@@ -47,7 +44,6 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
       });
     });
     table = table.concat("</table>");
-    console.log("Returning table: " + table);
     return table;
   };
 
@@ -63,8 +59,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
     // convert level of care key to value
     $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[data.levelOfCare];
     $scope.statusDisplay = $scope.props.StatusEnum[data.status];
-
-    console.log('swdb details got :' + JSON.stringify(data, null, 2));
+    $scope.versionControlDisplay = $scope.props.RcsEnum[data.versionControl];
     // format dates for display
     if (data.statusDate) {
       let thisDate = new Date(data.statusDate);
@@ -90,7 +85,6 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
     $scope.rawHistory.map = function(elem, idx, arr) {
       elem.isCollapsed = true;
     }
-    console.log("Got history: " + JSON.stringify(data.data, null, 2));
     $scope.isHistCollapsed = false;
     $scope.history = $sce.trustAsHtml(mkHistTable(data.data));
   });
