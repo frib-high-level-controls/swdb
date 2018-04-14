@@ -78,6 +78,12 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     delete $scope.formData.__v;
     $scope.formData.slots = $scope.slotsSelected;
 
+    // convert enum value to enum key
+    $scope.formData.status = Object.keys($scope.props.InstStatusEnum).find( 
+      function (item) { 
+        return $scope.statusDisplay === $scope.props.InstStatusEnum[item];
+      });
+
     // Prep any selected areas
     flattenedAreas = $scope.areasSelected.map(function(item, idx, array) {
       return item.uid;

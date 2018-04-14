@@ -52,6 +52,12 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
   };
 
   $scope.processForm = function () {
+    // convert enum value to enum key
+    $scope.formData.status = Object.keys($scope.props.InstStatusEnum).find( 
+      function (item) { 
+        return $scope.statusDisplay === $scope.props.InstStatusEnum[item];
+      });
+
     // Prep any selected areas
     if ($scope.areasSelected) {
       flattenedAreas = $scope.areasSelected.map(function (item, idx, array) {
@@ -180,6 +186,10 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
   instService.promise.then(function () {
     let data = instService.getInstById($routeParams.itemId);    
     $scope.formData = data;
+
+    // set enum values from keys
+    $scope.statusDisplay = $scope.props.InstStatusEnum[data.status];
+
     // set software field diable based on the given status
     $scope.onStatusChange();
 

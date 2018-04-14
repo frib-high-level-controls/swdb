@@ -246,7 +246,7 @@ export class CustomValidators {
       }
       if ((req.body.software) && (req.body.software !== queryPromise.software)) {
         debug('software from ' + JSON.stringify(queryPromise.software) + ' to ' + JSON.stringify(req.body.software));
-        if (queryPromise.status === props.InstStatusEnum[0]) {
+        if (queryPromise.status === 'RDY_INST') {
           // req is changing software, and in in Ready for installation
           return {
             error: false,
@@ -256,7 +256,7 @@ export class CustomValidators {
           // req is changing sw, and not in Ready for installation
           return {
             error: true,
-            data: 'Installation software field can only be changed in state ' + props.InstStatusEnum[0],
+            data: 'Installation software field can only be changed in state ' + 'RDY_INST',
           };
         }
       } else {

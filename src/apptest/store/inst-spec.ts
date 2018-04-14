@@ -113,8 +113,12 @@ describe('Installation api tests', () => {
       .post('/api/v1/inst/')
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
-      .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'Ready for install', statusDate: 'date 1000',
-        software: '5947589458a6aa0face9a512'})
+      .send({host: 'Test host',
+       name: 'Test name',
+       area: ['Global'],
+       status: 'RDY_INST',
+       statusDate: 'date 1000',
+       software: '5947589458a6aa0face9a512'})
       .expect(201)
       .end(done);
   });
@@ -124,8 +128,12 @@ describe('Installation api tests', () => {
       .post('/api/v1/inst/')
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
-      .send({ host: 'Header Test host', name: 'Header Test name', area: ['Global'], status: 'Ready for install',
-         statusDate: 'date 1000', software: '5947589458a6aa0face9a512' })
+      .send({ host: 'Header Test host',
+       name: 'Header Test name',
+       area: ['Global'],
+       status: 'RDY_INST',
+       statusDate: 'date 1000',
+       software: '5947589458a6aa0face9a512' })
       .expect(201)
       .end(done);
   });
@@ -219,7 +227,10 @@ describe('Installation api tests', () => {
         .set('Accept', 'application/json')
         .set('Cookie', Cookies)
         .send({
-          host: 'Hist Test host', name: 'Hist1 Test name', area: ['Global'], status: 'Ready for install',
+          host: 'Hist Test host',
+          name: 'Hist1 Test name',
+          area: ['Global'],
+          status: 'RDY_INST',
           statusDate: 'date 1000', software: '5947589458a6aa0face9a512',
         })
         .expect(201)
@@ -372,8 +383,12 @@ describe('Installation api tests', () => {
   it('Errors posting a bad status installation', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
-      .send({host: 'test host', name: 'Test name', area: ['Global'], status: 'BADENUM',
-         statusDate: 'date 1000', software: 'badbeefbadbeefbadbeefbad'})
+      .send({host: 'test host',
+       name: 'Test name',
+       area: ['Global'],
+       status: 'BADENUM',
+       statusDate: 'date 1000',
+       software: 'badbeefbadbeefbadbeefbad'})
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
       .expect(400)
@@ -381,8 +396,7 @@ describe('Installation api tests', () => {
         if (err) {
           done(err);
         } else {
-          let regex = 'Status must be one of {\\\\"0\\\\":\\\\"Ready for install\\\\",\\\\"1\\\\":\\\\"Ready for verification\\\\",\\\\"2\\\\":\\\\"Ready for beam\\\\",\\\\"3\\\\":\\\\"Retired\\\\",\\\\"Ready for install\\\\":0,\\\\"Ready for verification\\\\":1,\\\\"Ready for beam\\\\":2,\\\\"Retired\\\\":3}';
-          // 'Status must be one of {\\\\"0\\\\":\\\\"RDY_INSTALL\\\\",\\\\"1\\\\":\\\\"RDY_VERIFY\\\\",\\\\"2\\\\":\\\\"RDY_BEAM\\\\",\\\\"3\\\\":\\\\"RETIRED\\\\"';
+          let regex = 'Status must be one of {\\\\"RDY_INST\\\\":\\\\"Ready for install\\\\",\\\\"RDY_VER\\\\":\\\\"Ready for verification\\\\",\\\\"RDY_BEAM\\\\":\\\\"Ready for beam\\\\",\\\\"RET\\\\":\\\\"Retired\\\\"}';
           expect(res.text).to.match(new RegExp(regex));
           done();
         }
@@ -392,8 +406,14 @@ describe('Installation api tests', () => {
   it('Errors posting a duplicate installation record', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
-      .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'Ready for install', statusDate: 'date 1000',
-         software: '5947589458a6aa0face9a512'})
+      .send({
+       host: 'Test host',
+       name: 'Test name',
+       area: ['Global'],
+       status: 'RDY_INST',
+       statusDate: 'date 1000',
+       software: '5947589458a6aa0face9a512'
+      })
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
       .expect(500)
@@ -410,8 +430,13 @@ describe('Installation api tests', () => {
   it('Post a new record installation on a different host', (done) => {
     supertest(app)
       .post('/api/v1/inst/')
-      .send({host: 'Test host2', name: 'Test name', area: ['Global'], status: 'Ready for install',
-       statusDate: 'date 1000', software: '5947589458a6aa0face9a512'})
+      .send({
+        host: 'Test host2',
+        name: 'Test name',
+        area: ['Global'],
+        status: 'RDY_INST',
+        statusDate: 'date 1000',
+        software: '5947589458a6aa0face9a512'})
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
       .expect(201)
@@ -510,8 +535,8 @@ describe('Installation api tests', () => {
       {type: 'GET', res: {msg: {area: ['FE']}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'PUT', req: {msg: {drrs: 'Test DRR'}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'GET', res: {msg: {drrs: 'Test DRR'}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'PUT', req: {msg: {status: 'Ready for beam'}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {status: 'Ready for beam'}, url: '/api/v1/inst/', err: {status: 200}}},
+      {type: 'PUT', req: {msg: {status: 'RDY_BEAM'}, url: '/api/v1/inst/', err: {status: 200}}},
+      {type: 'GET', res: {msg: {status: 'RDY_BEAM'}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'PUT', req: {msg: {statusDate: '1997-01-01T08:00:00.000Z'}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'GET', res: {msg: {statusDate: '1997-01-01T08:00:00.000Z'}, url: '/api/v1/inst/',  err: {status: 200}}},
       {type: 'PUT', req: {msg: {vvResultsLoc: ['http://www.google.com']}, url: '/api/v1/inst/', err: {status: 200}}},
@@ -648,7 +673,7 @@ describe('Installation api tests', () => {
           host: 'Rule 2 test host',
           name: 'Test name',
           area: ['Global'],
-          status: 'Ready for install',
+          status: 'RDY_INST',
           statusDate: 'date 1000',
           software: '5947589458a6aa0face9a512',
         })
@@ -721,7 +746,7 @@ describe('Installation api tests', () => {
       supertest(app)
         .put('/api/v1/inst/' + wrapper.origId)
         .set('Cookie', Cookies)
-        .send({status: 'Ready for beam'})
+        .send({status: 'RDY_BEAM'})
         .expect(200)
         .end(done);
     });
@@ -732,7 +757,7 @@ describe('Installation api tests', () => {
         .set('Cookie', Cookies)
         .send({ software: '5947589458a6aa0face9a512' })
         .expect(400)
-        .expect('Worklow validation errors: [{\"error\":true,\"data\":\"Installation software field can only be changed in state Ready for install\"}]')
+        .expect('Worklow validation errors: [{\"error\":true,\"data\":\"Installation software field can only be changed in state RDY_INST\"}]')
         .end(function (err, res) {
           if (err) {
             debug(JSON.stringify(res));
@@ -760,7 +785,7 @@ describe('Installation api tests', () => {
           host: 'Rule 3 test host',
           name: 'Test name',
           area: ['Global'],
-          status: 'Ready for install',
+          status: 'RDY_INST',
           statusDate: 'date 1000',
           software: '5947589458a6aa0face9a512',
         })

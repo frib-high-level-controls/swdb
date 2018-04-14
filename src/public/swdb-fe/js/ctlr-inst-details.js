@@ -36,6 +36,7 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, $location,
   instService.refreshInstList().then(function () {
     let data = instService.getInstById($routeParams.itemId);    
     $scope.formData = data;
+    $scope.statusDisplay = $scope.props.InstStatusEnum[data.status];
     // format dates for display
     if (data.statusDate) {
       let thisDate = new Date(data.statusDate);
