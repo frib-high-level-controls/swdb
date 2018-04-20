@@ -113,7 +113,7 @@ export class Client implements IClient {
           reject(err);
           return;
         }
-        if (res.statusCode === 401) {
+        if (res.statusCode === 404) {
           resolve(null);
           return;
         }
@@ -204,7 +204,7 @@ export class Client implements IClient {
           reject(err);
           return;
         }
-        if (res.statusCode === 401) {
+        if (res.statusCode === 404) {
           resolve(null);
           return;
         }
