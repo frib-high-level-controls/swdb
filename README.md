@@ -17,7 +17,7 @@ sudo apt-get install -y nodejs
 # SWDB Installation
 ``` bash
 # install swdb
-git clone https://github.com/rellis6022/swdb
+git clone https://github.com/frib-high-level-controls/swdb
 cd swdb
 npm install
 npm run make
