@@ -77,7 +77,13 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
   $scope.processForm = function () {
     delete $scope.formData.__v;
     $scope.formData.slots = $scope.slotsSelected;
-    
+
+    // convert enum value to enum key
+    $scope.formData.status = Object.keys($scope.props.InstStatusEnum).find( 
+      function (item) { 
+        return $scope.statusDisplay === $scope.props.InstStatusEnum[item];
+      });
+
     // Prep any selected areas
     let flattenedAreas = $scope.areasSelected.map(function(item, idx, array) {
       return item.uid;
@@ -161,7 +167,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
   $scope.refreshSw = () => {
     $scope.swList = swService.getSwList().filter(function(item, index, arr){
       // filter for software that is in the "Ready for Install" state
-      return item.status.toUpperCase() === $scope.props.StatusEnum[2].toUpperCase();
+      return item.status === 'RDY_INST';
     });
     console.log("inst-new: swList is now "+JSON.stringify($scope.swList));
   };

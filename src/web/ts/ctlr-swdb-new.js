@@ -82,6 +82,21 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
       $scope.formData.statusDate = new Date($scope.formData.statusDate);
     }
 
+    // convert enum values to keys
+    $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).find( 
+      function (item) { 
+        return $scope.levelOfCareDisplay === $scope.props.LevelOfCareEnum[item];
+      });
+    $scope.formData.status = Object.keys($scope.props.StatusEnum).find( 
+      function (item) { 
+        return $scope.statusDisplay === $scope.props.StatusEnum[item];
+      });
+    $scope.formData.versionControl = Object.keys($scope.props.RcsEnum).find( 
+      function (item) { 
+        return $scope.versionControlDisplay === $scope.props.RcsEnum[item];
+      });
+    console.log('formData.versionControl on submit: ' + $scope.formData.versionControl);
+
     delete $scope.formData.__v;
     if (!$scope.formData.version) {
       // $scope.formData.version="";
@@ -123,7 +138,9 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
   };
 
   var getEnums = function () {
-    $scope.formData.levelOfCare = "NONE";
+    $scope.levelOfCareDisplay = 'Low';
+    $scope.formData.levelOfCare = 'LOW';
+    $scope.statusDisplay = 'Development';
     $scope.formData.status = "DEVEL";
     $scope.formData.versionControl = "Other";
   };
@@ -185,14 +202,21 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     // $scope.ownerSelected = updateRec.formData.owner;
     $scope.formData.engineer = updateRec.formData.engineer;
     // $scope.engineerSelected = updateRec.formData.engineer;
+
     $scope.formData.levelOfCare = updateRec.formData.levelOfCare;
-    $scope.formData.status = $scope.props.statusLabels[0];
+    $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[updateRec.formData.levelOfCare];
+    $scope.formData.status = 'DEVEL';
+    $scope.statusDisplay = $scope.props.StatusEnum[$scope.formData.status];
+
     $scope.formData.statusDate = new Date();
     $scope.formData.platforms = updateRec.formData.platforms;
     $scope.formData.designDescDocLoc = updateRec.formData.designDescDocLoc;
     $scope.formData.descDocLoc = updateRec.formData.descDocLoc;
     $scope.formData.vvProcLoc = updateRec.formData.vvProcLoc;
+
     $scope.formData.versionControl = updateRec.formData.versionControl;
+    $scope.versionControlDisplay = $scope.props.RcsEnum[updateRec.formData.versionControl];
+
     $scope.formData.versionControlLoc = updateRec.formData.versionControlLoc;
     $scope.formData.recertFreq = updateRec.formData.recertFreq;
     $scope.formData.previous = updateRedID;

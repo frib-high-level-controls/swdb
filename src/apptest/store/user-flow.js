@@ -439,7 +439,7 @@ test.describe("User flow tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("levelOfCare")), 3000);
     chromeDriver.findElement(By.id("levelOfCare")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("LOW");
+        expect(text).to.equal("Low");
       });
   });
 
@@ -527,7 +527,7 @@ test.it("should show search page with username on logout button", function() {
       props.test.username.toUpperCase()),5000);
   });
 
-  test.it("should show the requested installation record title", function() {
+  test.it("should show the new installation page title", function() {
     chromeDriver.wait(until.titleIs("SWDB - New Installation"), 5000);
   });
   test.it("Add new record - set host", function() {

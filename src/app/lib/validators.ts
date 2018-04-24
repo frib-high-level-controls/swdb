@@ -180,7 +180,7 @@ export class CustomValidators {
           data: 'Record id not found' + id,
         };
       }
-      if (queryPromise.status === props.StatusEnum[2]) {
+      if (queryPromise.status === 'RDY_INST') {
         // if the version or branch have changed
         // debug('swUpdateWorkflowValidation req: ' + JSON.stringify(req.body));
         if ((('version' in req.body) || ('branch' in req.body)) &&
@@ -188,7 +188,7 @@ export class CustomValidators {
           // debug('swUpdateWorkflowValidation version and/or branch changed');
           return {
             error: true,
-            data: 'Version and branch cannot change in state ' + props.StatusEnum[2],
+            data: 'Version and branch cannot change in state ' + props.StatusEnum['RDY_INST'],
           };
         }
         return {
@@ -246,7 +246,7 @@ export class CustomValidators {
       }
       if ((req.body.software) && (req.body.software !== queryPromise.software)) {
         debug('software from ' + JSON.stringify(queryPromise.software) + ' to ' + JSON.stringify(req.body.software));
-        if (queryPromise.status === props.InstStatusEnum[0]) {
+        if (queryPromise.status === 'RDY_INST') {
           // req is changing software, and in in Ready for installation
           return {
             error: false,
@@ -256,7 +256,7 @@ export class CustomValidators {
           // req is changing sw, and not in Ready for installation
           return {
             error: true,
-            data: 'Installation software field can only be changed in state ' + props.InstStatusEnum[0],
+            data: 'Installation software field can only be changed in state ' + 'RDY_INST',
           };
         }
       } else {
@@ -311,12 +311,11 @@ export class CustomValidators {
             data: 'Rule3 record id not found ' + id,
           };
         } else {
-          let sts: string = props.StatusEnum[2];
-          if (queryPromise.status !== sts) {
+          if (queryPromise.status !== 'RDY_INST') {
             debug('Rule3 Sw field status is incorrect, returning err');
             return {
               error: true,
-              data: 'Software field must point to software with status ' + sts + '.' +
+              data: 'Software field must point to software with status ' + 'RDY_INST' + '.' +
               'The given software, ' + id + ', has status ' + queryPromise.status,
             };
           } else {

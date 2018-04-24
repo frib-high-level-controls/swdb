@@ -180,7 +180,7 @@
         <div id="levelOfCare-group" class="form-group swdbFormRow">
           <label class="col-sm-2 control-label">Level of Care*</label>
           <div class="col-sm-8">
-            <select id="levelOfCare" ng-model="formData.levelOfCare" ng-options="o for o in props.levelOfCareLabels track by o"></select>
+            <select id="levelOfCare" ng-model="levelOfCareDisplay" ng-options="o for o in props.levelOfCareLabels track by o"></select>
           </div>
           <div class="col-sm-2" id="levelOfCareInputSts" ng-messages="inputForm.levelOfCareInput.$error" ng-if="inputForm.levelOfCareInput.$dirty">
           </div>
@@ -192,7 +192,7 @@
         <div id="status-group" class="form-group swdbFormRow">
           <label class="col-sm-2 control-label">Status*</label>
           <div class="col-sm-10">
-            <select id="status" ng-model="formData.status" ng-options="o for o in props.statusLabels track by o"
+            <select id="status" ng-model="statusDisplay" ng-options="o for o in props.statusLabels track by o"
             ng-disabled="statusDisabled" ng-change="onStatusChange()"></select>
           </div>
           <div class="col-sm-2" id="statusInputSts" ng-messages="inputForm.statusInput.$error" ng-if="inputForm.statusInput.$dirty">
@@ -331,7 +331,7 @@
         <div id="versionControl-group" class="form-group swdbFormRow">
           <label class="col-sm-2 control-label">Version control</label>
           <div class="col-sm-8">
-            <select id="versionControl" ng-model="formData.versionControl" ng-options="o for o in props.rcsLabels track by o"></select>
+            <select id="versionControl" ng-model="versionControlDisplay" ng-options="o for o in props.rcsLabels track by o"></select>
           </div>
           <div class="col-sm-2" id="versionControlInputSts" ng-messages="inputForm.versionControlInput.$error" ng-if="inputForm.versionControlInput.$dirty">
           </div>

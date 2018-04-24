@@ -105,42 +105,54 @@ test.describe("Software update screen tests", function () {
     chromeDriver.wait(until.titleIs("SWDB - New"), 5000);
   });
 
-  test.it("Add new record", function () {
-    this.timeout(35000);
+  test.it("Set software name", function () {
+    this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id('swName')), 3000);
     var input = chromeDriver.findElement(By.id('swName')).sendKeys("Test Record3");
+  });
 
-    // set version
+  test.it("Set version", function () {
+    this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id("version")), 3000);
     input = chromeDriver.findElement(By.id("version"));
     input.click();
     input.sendKeys("Test Version");
+  });
 
-    // set branch
+  test.it("Set software branch", function () {
+    this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id("branch")), 3000);
     input = chromeDriver.findElement(By.id("branch"));
     input.click();
     input.sendKeys("Test branch");
+  });
 
-    // set description
+  test.it("Set software description", function () {
+    this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id("desc")), 3000);
     input = chromeDriver.findElement(By.id("desc"));
     input.click();
     input.sendKeys("Test description");
+  });
 
-    // set description document
+  test.it("Set software description document", function () {
+    this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id("descDocLoc")), 3000);
     input = chromeDriver.findElement(By.id("descDocLoc"));
     input.click();
     input.sendKeys("http://www.google.com");
+  });
 
-    // set design description document
+  test.it("Set software design desciption document", function () {
+    this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id("designDescDocLoc")), 3000);
     input = chromeDriver.findElement(By.id("designDescDocLoc"));
     input.click();
     input.sendKeys("http://www.google.com");
+  });
 
-    // set owner 
+  test.it("Set software owner", function () {
+    this.timeout(15000);
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
     input = chromeDriver.findElement(By.id("owner"));
     input.click();
@@ -153,21 +165,27 @@ test.describe("Software update screen tests", function () {
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-0-2"]')));
     input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-2"]'));
     input.click();
+  });
 
 
-    // set level of care
+  test.it("Set software level of care", function () {
+    this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id("levelOfCare")), 3000);
     input = chromeDriver.findElement(By.id("levelOfCare"));
     input.click();
-    input.sendKeys("LOW");
+    input.sendKeys("Low");
+  });
 
-    // set status
+  test.it("Set software status", function () {
+    this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
     input = chromeDriver.findElement(By.id("status"));
     input.click();
     input.sendKeys("Development");
+  });
 
-    // set status date
+  test.it("Set software status date", function () {
+    this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
     input.click();
@@ -179,15 +197,19 @@ test.describe("Software update screen tests", function () {
     input.clear();
 
     input.sendKeys("10/1/2017");
+  });
 
 
-    // set platforms
+  test.it("Set software platforms", function () {
+    this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id("platforms")), 3000);
     input = chromeDriver.findElement(By.id("platforms"));
     input.click();
     input.sendKeys("Test platform");
+  });
 
-    // set vvProcLoc
+  test.it("Set software V&V procedure location", function () {
+    this.timeout(15000);
     chromeDriver.wait(until.elementLocated(By.id("add.vvProcLoc")), 3000);
     input = chromeDriver.findElement(By.id("add.vvProcLoc"));
     input.click();
@@ -206,9 +228,11 @@ test.describe("Software update screen tests", function () {
     chromeDriver.wait(until.elementLocated(By.id("rm.vvProcLoc.0")), 3000);
     input = chromeDriver.findElement(By.id("rm.vvProcLoc.0"));
     input.click();
+  });
 
 
-    // set vvResultsLoc
+  test.it("Set software V&V results location", function () {
+    this.timeout(15000);
     chromeDriver.wait(until.elementLocated(By.id("add.vvResultsLoc")), 3000);
     input = chromeDriver.findElement(By.id("add.vvResultsLoc"));
     input.click();
@@ -227,33 +251,44 @@ test.describe("Software update screen tests", function () {
     chromeDriver.wait(until.elementLocated(By.id("rm.vvResultsLoc.0")), 3000);
     input = chromeDriver.findElement(By.id("rm.vvResultsLoc.0"));
     input.click();
+  });
 
-    // set version control
+  test.it("Set software version control", function () {
+    this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id("versionControl")), 3000);
     input = chromeDriver.findElement(By.id("versionControl"));
     input.click();
     input.sendKeys("Git");
+  });
 
-    // set version control location
+  test.it("Set software version control location", function () {
+    this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id("versionControlLoc")), 3000);
     input = chromeDriver.findElement(By.id("versionControlLoc"));
     input.click();
     input.sendKeys("http://www.google.com");
+  });
 
-    // set recert freq
+  test.it("Set software recertification frequency", function () {
+    this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id("recertFreq")), 3000);
     input = chromeDriver.findElement(By.id("recertFreq"));
     input.click();
     input.sendKeys("Test recertification frequency");
+  });
 
-    // set recert date
+  test.it("Set software recertification date", function () {
+    this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="recertDate-group"]/div/p/span/button/i')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[@id="recertDate-group"]/div/p/span/button/i'));
     input.click();
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="recertDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[@id="recertDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
     input.click();
+  });
 
+  test.it("Set software engineer", function () {
+    this.timeout(15000);
     // set engineer
     chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
     input = chromeDriver.findElement(By.id("engineer"));
@@ -267,7 +302,6 @@ test.describe("Software update screen tests", function () {
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-1-0"]')));
     input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-1-0"]'));
     input.click();
-
 
     chromeDriver.findElement(By.id("submitBtn")).click();
     // chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("formStatus")),
@@ -347,7 +381,7 @@ test.describe("Software update screen tests", function () {
     chromeDriver.wait(until.elementLocated(By.id("levelOfCare")), 3000);
     chromeDriver.findElement(By.id("levelOfCare")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("LOW");
+        expect(text).to.equal("Low");
       });
   });
 

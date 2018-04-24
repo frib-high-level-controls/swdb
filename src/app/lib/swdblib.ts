@@ -294,8 +294,8 @@ export class SwdbLib {
           errorMessage: 'Level of care is required.',
         },
         isOneOf: {
-          options: [props.levelOfCareLabels],
-          errorMessage: 'Status must be one of ' + props.levelOfCareLabels,
+          options: [props.levelOfCareKeys],
+          errorMessage: 'Level of care must be one of ' + props.levelOfCareKeys,
         },
       },
       status: {
@@ -303,8 +303,8 @@ export class SwdbLib {
           errorMessage: 'Status is required.',
         },
         isOneOf: {
-          options: [props.statusLabels],
-          errorMessage: 'Status must be one of ' + props.statusLabels,
+          options: [props.statusKeys],
+          errorMessage: 'Status must be one of ' + props.statusKeys,
         },
       },
       statusDate: {
@@ -357,8 +357,8 @@ export class SwdbLib {
       versionControl: {
         optional: true,
         isOneOf: {
-          options: [props.rcsLabels],
-          errorMessage: 'Revision control must be one of ' + props.rcsLabels,
+          options: [props.rcsKeys],
+          errorMessage: 'Revision control must be one of ' + props.rcsKeys,
         },
       },
       versionControlLoc: {
@@ -518,15 +518,15 @@ export class SwdbLib {
       levelOfCare: {
         optional: true,
         isOneOf: {
-          options: [props.levelOfCareLabels],
-          errorMessage: 'Level of care must be one of ' + props.levelOfCareLabels,
+          options: [props.levelOfCareKeys],
+          errorMessage: 'Level of care must be one of ' + props.levelOfCareKeys,
         },
       },
       status: {
         optional: true,
         isOneOf: {
-          options: [props.statusLabels],
-          errorMessage: 'Status must be one of ' + props.statusLabels,
+          options: [props.statusKeys],
+          errorMessage: 'Status must be one of ' + props.statusKeys,
         },
       },
       statusDate: {
@@ -577,8 +577,8 @@ export class SwdbLib {
       versionControl: {
         optional: true,
         isOneOf: {
-          options: [props.rcsLabels],
-          errorMessage: 'Revision control must be one of ' + props.rcsLabels,
+          options: [props.rcsKeys],
+          errorMessage: 'Revision control must be one of ' + props.rcsKeys,
         },
       },
       versionControlLoc: {

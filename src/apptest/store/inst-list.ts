@@ -138,7 +138,7 @@ test.describe('Installations record tests', function() {
     let xpath = '//*[@id="instList"]/thead/tr[1]/th[7]';
     chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
     let field = chromeDriver.findElement(By.xpath(xpath));
-    return expect(Promise.resolve(field.getText())).to.eventually.equal('Status Date');
+    return expect(Promise.resolve(field.getText())).to.eventually.equal('Status date (m/d/y)');
   });
 
   // find an installation record

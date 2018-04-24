@@ -197,7 +197,7 @@ test.describe("Software update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("levelOfCare")), 3000);
     input = chromeDriver.findElement(By.id("levelOfCare"));
     input.click();
-    input.sendKeys("LOW");
+    input.sendKeys("Low");
   });
 
   test.it("set status for new sw record", function() {
@@ -460,7 +460,7 @@ test.describe("Software update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("levelOfCare")), 3000);
     chromeDriver.findElement(By.id("levelOfCare")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("LOW");
+        expect(text).to.equal("Low");
       });
   });
 
@@ -606,7 +606,7 @@ test.describe("Software update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("levelOfCare")), 3000);
     chromeDriver.findElement(By.id("levelOfCare")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("LOW");
+        expect(text).to.equal("Low");
       });
   });
 
@@ -763,7 +763,7 @@ test.describe("Software update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("levelOfCare")), 3000);
     chromeDriver.findElement(By.id("levelOfCare")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("LOW");
+        expect(text).to.equal("Low");
       });
   });
 

@@ -203,7 +203,7 @@ test.describe("Preload db record tests", function() {
     chromeDriver.wait(until.elementLocated(By.id("levelOfCare")), 3000);
     chromeDriver.findElement(By.id("levelOfCare")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal("MEDIUM");
+        expect(text).to.equal("Medium");
       });
   });
 

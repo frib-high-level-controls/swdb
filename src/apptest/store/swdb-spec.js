@@ -185,14 +185,17 @@ describe("app", function() {
        owner: "Owner 1000",
        engineer: "Engineer 1000",
        levelOfCare: "LOW",
-       status: "Development",
+       status: "DEVEL",
        statusDate: "2017-04-21T00:00:00.000Z"})
     .expect(201)
     .end((err, result) => {
-      if (err) done(err);
+      if (err) {
+        debug('result: ' + JSON.stringify(result));
+        done(err)
+      }
       else {
+        debug('result: ' + JSON.stringify(result));
         if (result.headers.location.match(/^.*\/api\/v1\/swdb\/[0-9a-fA-F]{24}$/g)) {
-          debug('Location: ' + result.headers.location);
           done();
         } else {
           done(new Error("Location header is not set" + JSON.stringify(result.headers.location)));
@@ -320,7 +323,7 @@ describe("app", function() {
          engineer: "Test Engineer",
          previous: "badbeefbadbeefbadbeefbad",
          levelOfCare: "LOW",
-         status: "Development",
+         status: "DEVEL",
          statusDate: "2017-04-21T00:00:00.000Z" })
         .set("Accept", "application/json")
         .set('Cookie', [Cookies])
@@ -451,7 +454,7 @@ describe("app", function() {
             debug("Err history (api test): " + JSON.stringify(err, null, 2));
             done(err);
           } else {
-            debug("got history (api test): " + JSON.stringify(res, null, 2));
+            debug("got history rapi test): " + JSON.stringify(res, null, 2));
             let arr = res.body;
             expect(arr.length).to.equal(1);
             arr = res.body[0];
@@ -474,7 +477,7 @@ describe("app", function() {
        owner: "Owner 1000",
        engineer: "Engineer 1000",
        levelOfCare: "LOW",
-       status: "Development",
+       status: "DEVEL",
        statusDate: "2017-04-21T00:00:00.000Z"})
     .expect(201)
     .end((end, result) => {
@@ -490,7 +493,7 @@ describe("app", function() {
      owner: "Owner 1000",
      engineer: "Engineer 1000",
      levelOfCare: "LOW",
-     status: "Development",
+     status: "DEVEL",
      statusDate: "2017-04-21T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -515,7 +518,7 @@ describe("app", function() {
      owner: "Owner 1002",
      engineer: "Engineer 1002",
      levelOfCare: "LOW",
-     status: "Development",
+     status: "DEVEL",
      statusDate: "1970-01-01T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -574,7 +577,7 @@ describe("app", function() {
      owner: "Owner 1002",
      engineer: "Engineer 1002",
      levelOfCare: "LOW",
-     status: "Development",
+     status: "DEVEL",
      statusDate: "2017-04-21T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -633,7 +636,7 @@ describe("app", function() {
      owner: "Owner 1002",
      engineer: "Any Engineer",
      levelOfCare: "LOW",
-     status: "Development",
+     status: "DEVEL",
      statusDate: "2017-04-21T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -694,7 +697,7 @@ describe("app", function() {
      engineer: "Test Engineer",
      versionControlLoc: "http://www.somehost/some-path/some-file",
      levelOfCare: "LOW",
-     status: "Development",
+     status: "DEVEL",
      statusDate: "2017-04-21T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -753,7 +756,7 @@ describe("app", function() {
      engineer: "Test Engineer",
      designDescDocLoc: "http://www.somehost/some-path/some-file",
      levelOfCare: "LOW",
-     status: "Development",
+     status: "DEVEL",
      statusDate: "2017-04-21T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -812,7 +815,7 @@ describe("app", function() {
      engineer: "Test Engineer",
      descDocLoc: "http://www.somehost/some-path/some-file",
      levelOfCare: "LOW",
-     status: "Development",
+     status: "DEVEL",
      statusDate: "2017-04-21T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -871,7 +874,7 @@ describe("app", function() {
      engineer: "Test Engineer",
      recertDate: "1970-01-01T00:00:00.000Z",
      levelOfCare: "LOW",
-     status: "Development",
+     status: "DEVEL",
      statusDate: "1970-01-01T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -931,7 +934,7 @@ describe("app", function() {
       engineer: "Test Engineer",
       vvProcLoc: ["http://www.somehost/some-path/some-file", "http://www.somehost/some-path/some-file2"],
       levelOfCare: "LOW",
-      status: "Development",
+      status: "DEVEL",
       statusDate: "1970-01-01T00:00:00.000Z"
     })
     .set("Accept", "application/json")
@@ -994,7 +997,7 @@ describe("app", function() {
       engineer: "Test Engineer",
       vvResultsLoc: [ "http://www.somehost/some-path/some-file3", "http://www.somehost/some-path/some-file4" ],
       levelOfCare: "LOW",
-      status: "Development",
+      status: "DEVEL",
       statusDate: "1970-01-01T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -1055,7 +1058,7 @@ describe("app", function() {
      engineer: "Test Engineer",
      branch: "New branch",
      levelOfCare: "LOW",
-     status: "Development",
+     status: "DEVEL",
      statusDate: "1970-01-01T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -1112,9 +1115,9 @@ describe("app", function() {
     .send({swName: "versionControl Test Record",
      owner: "versionControl Test Owner",
      engineer: "Test Engineer",
-     versionControl: "Git",
+     versionControl: "GIT",
      levelOfCare: "LOW",
-     status: "Development",
+     status: "DEVEL",
      statusDate: "1970-01-01T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -1158,7 +1161,7 @@ describe("app", function() {
         } else {
           expect(res.body).to.have.property("_id");
           expect(res.body.swName).to.equal("versionControl Test Record");
-          expect(res.body.versionControl).to.equal("Git");
+          expect(res.body.versionControl).to.equal("GIT");
           done();
         }
       });
@@ -1173,7 +1176,7 @@ describe("app", function() {
      engineer: "Test Engineer",
      previous: "badbeefbadbeefbadbeefbad",
      levelOfCare: "LOW",
-     status: "Development",
+     status: "DEVEL",
      statusDate: "1970-01-01T00:00:00.000Z"})
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
@@ -1286,7 +1289,7 @@ describe("app", function() {
       owner: "previous Test Owner",
       engineer: "Test Engineer",
       levelOfCare: "LOW",
-      status: "Development",
+      status: "DEVEL",
       statusDate: "1970-01-01T00:00:00.000Z"
     })
     .set("Accept", "application/json")
@@ -1358,7 +1361,7 @@ describe("app", function() {
       supertest
       .put("/api/v1/swdb/" + wrapper.origId)
       .send({ 
-        status: "Ready for install",
+        status: "RDY_INST",
        })
       .set('Cookie', [Cookies])
       .expect(200)
@@ -1380,7 +1383,7 @@ describe("app", function() {
           done(err);
         } else {
           expect(res.body).to.have.property("_id");
-          expect(res.body.status).to.equal("Ready for install");
+          expect(res.body.status).to.equal("RDY_INST");
           done();
         }
       });
@@ -1395,7 +1398,7 @@ describe("app", function() {
        })
       .set('Cookie', [Cookies])
       .expect(400)
-      .expect('Worklow validation errors: [{"error":true,"data":"Version and branch cannot change in state Ready for install"}]')
+      .expect('Worklow validation errors: "Version and branch cannot change in state Ready for install"')
       .end(function(err, res){
         if (err) {
           done(err);
@@ -1417,7 +1420,7 @@ describe("app", function() {
       owner: "previous Test Owner",
       engineer: "Test Engineer",
       levelOfCare: "LOW",
-      status: "Development",
+      status: "DEVEL",
       statusDate: "1970-01-01T00:00:00.000Z"
     })
     .set("Accept", "application/json")
@@ -1471,7 +1474,7 @@ describe("app", function() {
       supertest
       .put("/api/v1/swdb/" + wrapper.origId)
       .send({ 
-        status: "Ready for install",
+        status: "RDY_INST",
        })
       .set('Cookie', [Cookies])
       .expect(200)
@@ -1493,7 +1496,7 @@ describe("app", function() {
           host: 'Test host',
           name: 'Test name',
           area: ['Global'],
-          status: 'Ready for install',
+          status: 'RDY_INST',
           statusDate: '1970-01-01T00:00:00.000Z',
           software: wrapper.origId,
         })
@@ -1501,12 +1504,14 @@ describe("app", function() {
         // .end(done);
         .end(function (err, res) {
           if (err) {
+            debug("res: " + JSON.stringify(res, null, 2));
             done(err);
           } else {
             // grab the new installation id from the returned location header.
             // We use this later to verify the error message.
             id = res.header.location.split(/\//).pop();
             wrapper.instId = id;
+            debug("res: " + JSON.stringify(res, null, 2));
             done()
           }
         })
@@ -1516,12 +1521,12 @@ describe("app", function() {
       supertest
       .put("/api/v1/swdb/" + wrapper.origId)
       .send({ 
-        status: "Development",
+        status: "DEVEL",
        })
       .set('Cookie', [Cookies])
       .expect(400)
-      .expect('Worklow validation errors: [{"error":true,"data":"Software state cannot change while ' +
-       'there are active installations: ' + wrapper.instId + '"}]')
+      .expect('Worklow validation errors: "Software state cannot change while ' +
+       'there are active installations: ' + wrapper.instId + '"')
       .end(function(err, res){
         if (err) {
           done(err);
@@ -1548,12 +1553,12 @@ describe("app", function() {
       {"type": "GET","res": {"msg": {"levelOfCare": "MEDIUM"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"levelOfCare": "ERRONEOUS_VALUE"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
       {"type": "GET","res": {"msg": {"levelOfCare": "MEDIUM"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"levelOfCare": "SAFETY"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"levelOfCare": "SAFETY"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"status": "Development"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"status": "Development"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"levelOfCare": "LOW"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"levelOfCare": "LOW"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"status": "DEVEL"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"status": "DEVEL"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"status": "ERRONEOUS_VALUE"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
-      {"type": "GET","res": {"msg": {"status": "Development"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"status": "DEVEL"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"statusDate": "1970-01-01T00:00:00.000Z"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"statusDate": "1970-01-01T00:00:00.000Z"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"version": "NEW test version"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
@@ -1575,8 +1580,8 @@ describe("app", function() {
       {"type": "PUT","req": {"msg": {"vvResultsLoc": ["http://www.somehost/some-path/some-file3"]},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"vvResultsLoc": ["http://www.somehost/some-path/some-file3"]},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"vvResultsLoc": "http:some-malformed-url"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
-      {"type": "PUT","req": {"msg": {"versionControl": "Git"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"versionControl": "Git"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
+      {"type": "PUT","req": {"msg": {"versionControl": "GIT"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
+      {"type": "GET","res": {"msg": {"versionControl": "GIT"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"versionControl": "Erroneous RCS"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
       {"type": "PUT","req": {"msg": {"versionControlLoc": "http://www.somehost/some-path/some-file"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"versionControlLoc": "http://www.somehost/some-path/some-file"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
@@ -1593,7 +1598,7 @@ describe("app", function() {
       {"type": "PUT","req": {"msg": {"comment": "NEW test comment"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"comment": "NEW test comment"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       // test new record basic only required items
-      {"type":"POST", "req": {"msg": {"swName": "NEW-test-name-1", "status": "Ready for test", "statusDate": "1970-01-01T00:00:00.000Z", "owner": "test owner", "levelOfCare": "MEDIUM"}, "url": "/api/v1/swdb/",
+      {"type":"POST", "req": {"msg": {"swName": "NEW-test-name-1", "status": "RDY_TEST", "statusDate": "1970-01-01T00:00:00.000Z", "owner": "test owner", "levelOfCare": "MEDIUM"}, "url": "/api/v1/swdb/",
       "err": {"status": 201, "msgHas": ''}}},
       // test new swName is required, min, max
       {"type":"POST", "req": {"msg": {"owner": "test owner"}, "url": "/api/v1/swdb/",
@@ -1606,14 +1611,14 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '{"param":"levelOfCare","msg":"Level of care is required."}'}}},
       {"type":"POST", "req": {"msg": {"swName": "NEW Test name", "owner":"NEW OWNER", "levelOfCare": "LOW"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status is required."}'}}},
-      {"type":"POST", "req": {"msg": {"swName": "NEW Test name", "owner":"NEW OWNER", "levelOfCare": "LOW","status":"Development"}, "url": "/api/v1/swdb/",
+      {"type":"POST", "req": {"msg": {"swName": "NEW Test name", "owner":"NEW OWNER", "levelOfCare": "LOW","status":"DEVEL"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"statusDate","msg":"Status date is required."}'}}},
       // test new status enumerated
       {"type":"POST", "req": {"msg": {"status": "not-enumerated"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of Development,Ready for test,Ready for install,Retired","value":"not-enumerated"}'}}},
+      "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_TEST,RDY_INST,DEP","value":"not-enumerated"}'}}},
       // "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_INSTALL,RDY_INT_TEST,RDY_BEAM,RETIRED","value":"not-enumerated"}'}}},
       // test new statusDate with non-date
-      {"type":"POST", "req": {"msg": {"swName":"testing","owner":"test owner","levelOfCare":"LOW","status":"Development","statusDate": "non-date"}, "url": "/api/v1/swdb/",
+      {"type":"POST", "req": {"msg": {"swName":"testing","owner":"test owner","levelOfCare":"LOW","status":"DEVEL","statusDate": "non-date"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '{"param":"statusDate","msg":"Status date must be a date.","value":"non-date"}'}}},
       // test new version min, max
       {"type":"POST", "req": {"msg": {"version": ""}, "url": "/api/v1/swdb/",
@@ -1627,7 +1632,7 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '"param":"platforms","msg":"Platforms must be 4-30 characters."'}}},
       // test new versionControl min, max
       {"type":"POST", "req": {"msg": {"versionControl": "Erroneous RCS"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of Git,AssetCentre,Filesystem,Debian,Other"'}}},
+      "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of GIT,AC,FS,DEB,OTHER"'}}},
       // test new recertFreq min, max
       {"type":"POST", "req": {"msg": {"recertFreq": "N"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertFreq","msg":"Recertification frequency must be 4-30 characters."'}}},
@@ -1646,10 +1651,10 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '"param":"owner","msg":"Owner must be 2-80 characters."'}}},
       // test update levelOfCare enumerated
       {"type":"PUT", "req": {"msg": {"levelOfCare": "not-enumerated"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '{"param":"levelOfCare","msg":"Level of care must be one of NONE,LOW,MEDIUM,HIGH,SAFETY","value":"not-enumerated"}'}}},
+      "err": {"status": 400, "msgHas": '{"param":"levelOfCare","msg":"Level of care must be one of LOW,MEDIUM,HIGH","value":"not-enumerated"}'}}},
       // test update status enumerated
       {"type":"PUT", "req": {"msg": {"status": "not-enumerated"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of Development,Ready for test,Ready for install,Retired","value":"not-enumerated"}'}}},
+      "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_TEST,RDY_INST,DEP","value":"not-enumerated"}'}}},
       // "err": {"status": 400, "msgHas": '{"param":"status","msg":"Status must be one of DEVEL,RDY_INSTALL,RDY_INT_TEST,RDY_BEAM,RETIRED","value":"not-enumerated"}'}}},
       // test update statusDate with non-date
       {"type":"PUT", "req": {"msg": {"statusDate": "non-date"}, "url": "/api/v1/swdb/",
@@ -1666,7 +1671,7 @@ describe("app", function() {
       "err": {"status": 400, "msgHas": '"param":"platforms","msg":"Platforms must be 4-30 characters."'}}},
       // test update versionControl min, max
       {"type":"PUT", "req": {"msg": {"versionControl": "Erroneous RCS"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of Git,AssetCentre,Filesystem,Debian,Other"'}}},
+      "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of GIT,AC,FS,DEB,OTHER"'}}},
       // test update recertFreq min, max
       {"type":"PUT", "req": {"msg": {"recertFreq": "N"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"recertFreq","msg":"Recertification frequency must be 4-30 characters."'}}},
@@ -1790,7 +1795,7 @@ describe("app", function() {
       .set('Cookie', [Cookies])
       .send({swName: "Test Record4"})
       .expect(400)
-      .expect('Worklow validation errors: [{"error":true,"data":"Record id parse err: badbeef: {}"},{"error":true,"data":"Record id parse err: badbeef: {}"}]')
+      .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
       .end(function(err, res) {
         if (err) {
           done(err);
@@ -1806,7 +1811,7 @@ describe("app", function() {
       .set('Cookie', [Cookies])
       .send({swName: "Test Record4"})
       .expect(400)
-      .expect('Worklow validation errors: [{"error":true,"data":"Record id parse err: badbeef: {}"},{"error":true,"data":"Record id parse err: badbeef: {}"}]')
+      .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
       .end(function(err, res) {
         if (err) {
           done(err);

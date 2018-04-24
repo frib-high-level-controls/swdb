@@ -33,33 +33,25 @@ export class CommonTools {
       rcw.RcsEnum = RcsEnum;
 
       // Add the enum labels
-      rcw.levelOfCareLabels = [];
       // Go through the enums and filter names for the select labels
-      for (const key in rcw.LevelOfCareEnum) {
-        if (!key.match(/^\d+/)) {
-          rcw.levelOfCareLabels.push(key);
-        }
-      }
-      rcw.statusLabels = [];
+      rcw.levelOfCareKeys = Object.keys(LevelOfCareEnum);
+      rcw.levelOfCareLabels = rcw.levelOfCareKeys.map(function (item, idx, arr) {
+        return LevelOfCareEnum[item];
+      });
+      rcw.statusKeys = Object.keys(StatusEnum);
+      rcw.statusLabels = rcw.statusKeys.map(function (item, idx, arr) {
+        return StatusEnum[item];
+      });
+      rcw.instStatusKeys = Object.keys(InstStatusEnum);
+      rcw.instStatusLabels = rcw.instStatusKeys.map(function (item, idx, arr) {
+        return InstStatusEnum[item];
+      });
+      rcw.rcsKeys = Object.keys(RcsEnum);
+      rcw.rcsLabels = rcw.rcsKeys.map(function (item, idx, arr) {
+        return RcsEnum[item];
+      });
+
       // Go through the enums and filter names for the select labels
-      for (const key in rcw.StatusEnum) {
-        if (!key.match(/^\d+/)) {
-          rcw.statusLabels.push(key);
-        }
-      }
-      rcw.instStatusLabels = [];
-      // Go through the enums and filter names for the select labels
-      for (const key in rcw.InstStatusEnum) {
-        if (!key.match(/^\d+/)) {
-          rcw.instStatusLabels.push(key);
-        }
-      }
-      rcw.rcsLabels = [];
-      for (const key in rcw.RcsEnum) {
-        if (!key.match(/^\d+/)) {
-          rcw.rcsLabels.push(key);
-        }
-      }
       rcw.areaLabels = [];
       for (const key in rcw.AreaEnum) {
         if (!key.match(/^\d+/)) {
@@ -82,11 +74,11 @@ export class CommonTools {
   public getForgGroupsTestFile = (): forgapi.Group[] => {
     // Prepare the source location by looking at the properties useSource
     const source = CommonTools.props.forgGroupsDataSource[CommonTools.props.forgGroupsDataSource.useSource];
-    debug('forg group source is: ' + source);
+    // debug('forg group source is: ' + source);
     let groupdata: forgapi.Group[] = [];
     let raw = fs.readFileSync(source, { encoding: 'utf-8' });
     groupdata = JSON.parse(raw);
-    debug('forg group json data is: ' + JSON.stringify(groupdata));
+    // debug('forg group json data is: ' + JSON.stringify(groupdata));
     return groupdata;
   }
 
@@ -99,7 +91,7 @@ export class CommonTools {
     let userdata: forgapi.User[] = [];
     let raw = fs.readFileSync(source, { encoding: 'utf-8' });
     userdata = JSON.parse(raw);
-    debug('forg group json data is: ' + JSON.stringify(userdata));
+    // debug('forg group json data is: ' + JSON.stringify(userdata));
     return userdata;
   }
 }

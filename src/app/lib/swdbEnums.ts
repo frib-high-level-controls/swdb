@@ -1,12 +1,27 @@
 export enum  LevelOfCareEnum {
-  'NONE', 'LOW', 'MEDIUM', 'HIGH', 'SAFETY',
+ 'LOW' = 'Low',
+ 'MEDIUM' = 'Medium',
+ 'HIGH' = 'High',
 }
+
 export enum  StatusEnum {
-  'Development', 'Ready for test', 'Ready for install', 'Retired',
+  'DEVEL' = 'Development',
+  'RDY_TEST' = 'Ready for test',
+  'RDY_INST' = 'Ready for install',
+  'DEP' = 'DEPRECATED',
 }
+
 export enum  InstStatusEnum {
-  'Ready for install', 'Ready for verification', 'Ready for beam', 'Retired',
+  'RDY_INST' = 'Ready for install',
+  'RDY_VER' = 'Ready for verification',
+  'RDY_BEAM' = 'Ready for beam',
+  'RET' = 'Retired',
 }
+
 export enum  RcsEnum {
-  'Git', 'AssetCentre', 'Filesystem', 'Debian', 'Other',
+  'GIT' = 'Git',
+  'AC' = 'AssetCentre',
+  'FS' = 'Filesystem',
+  'DEB' = 'Debian',
+  'OTHER' = 'Other',
 }

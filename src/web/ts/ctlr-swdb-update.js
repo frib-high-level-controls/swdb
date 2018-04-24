@@ -81,6 +81,17 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
       delete $scope.formData.__v;
       let url = $window.location.origin;
       url = url + "/api/v1/swdb/" + $scope.formData._id;
+
+      // update formData lovel of care with enum key
+      // $scope.formData.levelOfCare = $scope.props.LevelOfCareEnum[$scope.levelOfCareDisplay];
+      $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).find(
+        function (item) {
+          return $scope.levelOfCareDisplay === $scope.props.LevelOfCareEnum[item];
+        });
+      $scope.formData.status = Object.keys($scope.props.StatusEnum).find(
+        function (item) {
+          return $scope.statusDisplay === $scope.props.StatusEnum[item];
+        });
       $http({
         method: 'PUT',
         // url: $scope.props.apiUrl+$scope.formData._id,
@@ -174,7 +185,11 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     $scope.formData = data;
     $scope.whichItem = $routeParams.itemId;
 
-    // Setup field display based on status
+    // convert enums to value
+    $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[$scope.formData.levelOfCare];
+    $scope.statusDisplay = $scope.props.StatusEnum[$scope.formData.status];
+
+      // Setup field display based on status
     $scope.onStatusChange();
 
     // make a Date object from this string

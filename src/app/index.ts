@@ -429,6 +429,7 @@ async function doStart(): Promise<express.Application> {
   app.post('/api/v1/swdb', auth.ensureAuthenticated,
     function(req: express.Request, res: express.Response, next: express.NextFunction) {
     debug('POST /api/v1/swdb request');
+    // debug('POST /api/v1/swdb request: ' + JSON.stringify(req.body));
     // Do validation for  new records
 
     tools.SwdbLib.newValidation(req);
@@ -485,7 +486,7 @@ async function doStart(): Promise<express.Application> {
 
         if (errors.length > 0) {
           debug('Workflow validation errors ' + JSON.stringify(errors));
-          res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors));
+          res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
           return;
         } else {
           be.updateDoc(auth.getUsername(req), req, res, next);
@@ -530,7 +531,7 @@ async function doStart(): Promise<express.Application> {
 
         if (errors.length > 0) {
           debug('Workflow validation errors ' + JSON.stringify(errors));
-          res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors));
+          res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
           return;
         } else {
           be.updateDoc(auth.getUsername(req), req, res, next);
@@ -575,7 +576,7 @@ async function doStart(): Promise<express.Application> {
           await customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall(req);
         if (wfResults.error) {
           debug('Workflow validation errors ' + JSON.stringify(wfResults));
-          res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults.data));
+          res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults[0].data));
           return;
         } else {
           debug('POST /api/v1/inst calling create...');
@@ -619,7 +620,7 @@ async function doStart(): Promise<express.Application> {
 
         if (errors.length > 0) {
           debug('Workflow validation errors ' + JSON.stringify(errors));
-          res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors));
+          res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
           return;
         } else {
           instBe.updateDoc(auth.getUsername(req), req, res, next);
@@ -663,7 +664,7 @@ async function doStart(): Promise<express.Application> {
 
         if (errors.length > 0) {
           debug('Workflow validation errors ' + JSON.stringify(errors));
-          res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors));
+          res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
           return;
         } else {
           instBe.updateDoc(auth.getUsername(req), req, res, next);
