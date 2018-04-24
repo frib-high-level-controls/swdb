@@ -1393,7 +1393,7 @@ describe("app", function() {
        })
       .set('Cookie', [Cookies])
       .expect(400)
-      .expect('Worklow validation errors: [{"error":true,"data":"Version and branch cannot change in state Ready for install"}]')
+      .expect('Worklow validation errors: "Version and branch cannot change in state Ready for install"')
       .end(function(err, res){
         if (err) {
           done(err);
@@ -1520,8 +1520,8 @@ describe("app", function() {
        })
       .set('Cookie', [Cookies])
       .expect(400)
-      .expect('Worklow validation errors: [{"error":true,"data":"Software state cannot change while ' +
-       'there are active installations: ' + wrapper.instId + '"}]')
+      .expect('Worklow validation errors: "Software state cannot change while ' +
+       'there are active installations: ' + wrapper.instId + '"')
       .end(function(err, res){
         if (err) {
           done(err);
@@ -1790,7 +1790,7 @@ describe("app", function() {
       .set('Cookie', [Cookies])
       .send({swName: "Test Record4"})
       .expect(400)
-      .expect('Worklow validation errors: [{"error":true,"data":"Record id parse err: badbeef: {}"},{"error":true,"data":"Record id parse err: badbeef: {}"}]')
+      .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
       .end(function(err, res) {
         if (err) {
           done(err);
@@ -1806,7 +1806,7 @@ describe("app", function() {
       .set('Cookie', [Cookies])
       .send({swName: "Test Record4"})
       .expect(400)
-      .expect('Worklow validation errors: [{"error":true,"data":"Record id parse err: badbeef: {}"},{"error":true,"data":"Record id parse err: badbeef: {}"}]')
+      .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
       .end(function(err, res) {
         if (err) {
           done(err);

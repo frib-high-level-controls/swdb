@@ -640,7 +640,7 @@ describe('Installation api tests', () => {
         .set('Cookie', Cookies)
         .send({swName: 'Test Record5'})
         .expect(400)
-        .expect('Worklow validation errors: [{"error":true,"data":"Record id parse err: badbeef: {}"}]')
+        .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
         .end(done);
     });
 
@@ -650,7 +650,7 @@ describe('Installation api tests', () => {
         .set('Cookie', Cookies)
         .send({swName: 'Test Record5'})
         .expect(400)
-        .expect('Worklow validation errors: [{"error":true,"data":"Record id parse err: badbeef: {}"}]')
+        .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
         .end(done);
     });
   });
@@ -757,7 +757,7 @@ describe('Installation api tests', () => {
         .set('Cookie', Cookies)
         .send({ software: '5947589458a6aa0face9a512' })
         .expect(400)
-        .expect('Worklow validation errors: [{\"error\":true,\"data\":\"Installation software field can only be changed in state RDY_INST\"}]')
+        .expect('Worklow validation errors: "Installation software field can only be changed in state RDY_INST"')
         .end(function (err, res) {
           if (err) {
             debug(JSON.stringify(res));
@@ -842,9 +842,9 @@ describe('Installation api tests', () => {
         .set('Cookie', Cookies)
         .send({ software: wrapper.swId })
         .expect(400)
-        .expect('Worklow validation errors: [{"error":true,"data":"Software field must point to software ' +
+        .expect('Worklow validation errors: "Software field must point to software ' +
          'with status RDY_INST.The given software, ' +
-         wrapper.swId + ', has status DEVEL"}]')
+         wrapper.swId + ', has status DEVEL"')
         .end(function (err, res) {
           if (err) {
             debug(JSON.stringify(res));

@@ -235,7 +235,7 @@ app.put('/api/v1/swdb/:id', auth.ensureAuthenticated,
 
       if (errors.length > 0) {
         debug('Workflow validation errors ' + JSON.stringify(errors));
-        res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors));
+        res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
         return;
       } else {
         be.updateDoc(auth.getUsername(req), req, res, next);
@@ -280,7 +280,7 @@ app.patch('/api/v1/swdb/:id', auth.ensureAuthenticated,
 
       if (errors.length > 0) {
         debug('Workflow validation errors ' + JSON.stringify(errors));
-        res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors));
+        res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
         return;
       } else {
         be.updateDoc(auth.getUsername(req), req, res, next);
@@ -325,7 +325,7 @@ app.post('/api/v1/inst', auth.ensureAuthenticated,
         await customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall(req);
       if (wfResults.error) {
         debug('Workflow validation errors ' + JSON.stringify(wfResults));
-        res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults.data));
+        res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults[0].data));
         return;
       } else {
         debug('POST /api/v1/inst calling create...');
@@ -369,7 +369,7 @@ app.put('/api/v1/inst/:id', auth.ensureAuthenticated,
 
       if (errors.length > 0) {
         debug('Workflow validation errors ' + JSON.stringify(errors));
-        res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors));
+        res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
         return;
       } else {
         instBe.updateDoc(auth.getUsername(req), req, res, next);
@@ -413,7 +413,7 @@ app.patch('/api/v1/inst/:id', auth.ensureAuthenticated,
 
       if (errors.length > 0) {
         debug('Workflow validation errors ' + JSON.stringify(errors));
-        res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors));
+        res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
         return;
       } else {
         instBe.updateDoc(auth.getUsername(req), req, res, next);
