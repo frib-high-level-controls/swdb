@@ -5,6 +5,7 @@
   "app": {
     "port": "3000",
     "addr": "localhost", /* use "0.0.0.0" to bind to all interfaces */
+    "trust_proxy": false, /* see details: https://expressjs.com/en/guide/behind-proxies.html */
     "session_life": 28800000,
     // For production generate a random string using python:
     // >>> import os, base64
