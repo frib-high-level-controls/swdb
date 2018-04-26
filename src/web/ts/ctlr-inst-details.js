@@ -56,7 +56,7 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, $location,
     });
   });
   // get history
-  let url = "/api/v1/swdb/hist/" + $routeParams.itemId;
+  let url = basePath + "/api/v1/swdb/hist/" + $routeParams.itemId;
   $http.get(url).then(function (data) {
     $scope.rawHistory = data.data;
   });

@@ -34,14 +34,12 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
   // promise resolved.
   vm.dtOptions = DTOptionsBuilder.fromFnPromise(function () {
     var defer = $q.defer();
-    let url = $window.location.origin;
-    url = url + "/api/v1/inst/";
+    let url = basePath + "/api/v1/inst/";
     // $http.get($scope.props.instApiUrl).then(function (result) {
     $http.get(url).then(function (result) {
       var innerDefer = $q.defer();
       var swIds = result.data.map(function (r) { return r.software; });
-      let url = $window.location.origin;
-      url = url + "/api/v1/swdb/list";
+      let url = basePath + "/api/v1/swdb/list";
       $http({
         url: url,
         // url: $scope.props.apiUrl + "list",

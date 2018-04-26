@@ -77,7 +77,7 @@ describe("History tests suite", function () {
 
   it("Post a new record with correct history", function (done) {
     supertest
-      .post("/api/v1/swdb/")
+      .post("/api/v1/swdb")
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
       .send({ swName: "Test Record", owner: "Owner 1000", engineer: "Engineer 1000", levelOfCare: "LOW", status: "DEVEL", statusDate: "date 1000" })

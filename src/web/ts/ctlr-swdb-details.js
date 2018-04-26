@@ -50,8 +50,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
   //update document fields with existing data
-  let url = $window.location.origin;
-  url = url + "/api/v1/swdb/" + $routeParams.itemId;
+  let url = basePath + "/api/v1/swdb/" + $routeParams.itemId;
 
   swService.refreshSwList().then(function () {
     let data = swService.getSwById($routeParams.itemId);    
@@ -79,7 +78,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
   });
 
   // get history
-  url = "/api/v1/swdb/hist/" + $routeParams.itemId;
+  url = basePath + "/api/v1/swdb/hist/" + $routeParams.itemId;
   $http.get(url).then(function (data) {
     $scope.rawHistory = data.data;
     $scope.rawHistory.map = function(elem, idx, arr) {

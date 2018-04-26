@@ -79,8 +79,7 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
       $scope.formData.engineer = $scope.engineerSelected.item.uid;
     }
       delete $scope.formData.__v;
-      let url = $window.location.origin;
-      url = url + "/api/v1/swdb/" + $scope.formData._id;
+      let url = basePath + "/api/v1/swdb/" + $scope.formData._id;
 
       // update formData lovel of care with enum key
       // $scope.formData.levelOfCare = $scope.props.LevelOfCareEnum[$scope.levelOfCareDisplay];

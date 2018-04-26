@@ -87,7 +87,7 @@ describe('Installation api tests', () => {
   });
   it('Returns all sw records', (done) => {
     supertest(app)
-      .get('/api/v1/swdb/')
+      .get('/api/v1/swdb')
       .expect(200)
       .end((err, res) => {
         if (err) {
@@ -100,7 +100,7 @@ describe('Installation api tests', () => {
   });
   it('Returns all installation records', (done) => {
     supertest(app)
-      .get('/api/v1/inst/')
+      .get('/api/v1/inst')
       .expect(200)
       .end((err, res) => {
         if (err) {
@@ -113,7 +113,7 @@ describe('Installation api tests', () => {
   });
   it('Post a new installation record', (done) => {
     supertest(app)
-      .post('/api/v1/inst/')
+      .post('/api/v1/inst')
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
       .send({host: 'Test host',
@@ -128,7 +128,7 @@ describe('Installation api tests', () => {
 
   it('Post a new header installation record',  (done) => {
     supertest(app)
-      .post('/api/v1/inst/')
+      .post('/api/v1/inst')
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
       .send({ host: 'Header Test host',
@@ -145,7 +145,7 @@ describe('Installation api tests', () => {
     let wrapper = { origId: null };
     before('Get ID record id:Test Record', (done) => {
       supertest(app)
-        .get('/api/v1/inst/')
+        .get('/api/v1/inst')
         .expect(200)
         .end( (err, res: supertest.Response & {length: any}) => {
           if (err) {
@@ -226,7 +226,7 @@ describe('Installation api tests', () => {
     let wrapper = { origId: null };
     before('Before test post and get id', function (done) {
       supertest(app)
-        .post('/api/v1/inst/')
+        .post('/api/v1/inst')
         .set('Accept', 'application/json')
         .set('Cookie', Cookies)
         .send({
@@ -385,7 +385,7 @@ describe('Installation api tests', () => {
 
   it('Errors posting a bad status installation', (done) => {
     supertest(app)
-      .post('/api/v1/inst/')
+      .post('/api/v1/inst')
       .send({host: 'test host',
        name: 'Test name',
        area: ['Global'],
@@ -408,7 +408,7 @@ describe('Installation api tests', () => {
 
   it('Errors posting a duplicate installation record', (done) => {
     supertest(app)
-      .post('/api/v1/inst/')
+      .post('/api/v1/inst')
       .send({
        host: 'Test host',
        name: 'Test name',
@@ -432,7 +432,7 @@ describe('Installation api tests', () => {
 
   it('Post a new record installation on a different host', (done) => {
     supertest(app)
-      .post('/api/v1/inst/')
+      .post('/api/v1/inst')
       .send({
         host: 'Test host2',
         name: 'Test name',
@@ -448,7 +448,7 @@ describe('Installation api tests', () => {
 
   // it('Post a new record installation with different sw ref', (done) => {
   //   supertest(app)
-  //     .post('/api/v1/inst/')
+  //     .post('/api/v1/inst')
   //     .send({host: 'Test host', name: 'Test name', area: ['Global'], status: 'Ready for install',
   //      statusDate: 'date 1000', software: 'badbeefbadbeefbadbeefbaa'})
   //     .set('Accept', 'application/json')
@@ -461,7 +461,7 @@ describe('Installation api tests', () => {
     let wrapper = {origId: null};
     before('Get ID record id:Test host test sw ref', (done) => {
       supertest(app)
-        .get('/api/v1/inst/')
+        .get('/api/v1/inst')
         .expect(200)
         .end((err, res: supertest.Response & {length: any}) => {
           if (err) {
@@ -671,7 +671,7 @@ describe('Installation api tests', () => {
     let wrapper = { origId: null, swId: null };
     it('Post a new installation record', (done) => {
       supertest(app)
-        .post('/api/v1/inst/')
+        .post('/api/v1/inst')
         .send({
           host: 'Rule 2 test host',
           name: 'Test name',
@@ -699,7 +699,7 @@ describe('Installation api tests', () => {
 
     it('Post a new software record', (done) => {
       supertest(app)
-        .post('/api/v1/swdb/')
+        .post('/api/v1/swdb')
         .set('Accept', 'application/json')
         .set('Cookie', Cookies)
         .send({
@@ -783,7 +783,7 @@ describe('Installation api tests', () => {
     let wrapper = { origId: null, swId: null };
     it('Post a new installation record', (done) => {
       supertest(app)
-        .post('/api/v1/inst/')
+        .post('/api/v1/inst')
         .send({
           host: 'Rule 3 test host',
           name: 'Test name',
@@ -811,7 +811,7 @@ describe('Installation api tests', () => {
 
     it('Post a new software record', (done) => {
       supertest(app)
-        .post('/api/v1/swdb/')
+        .post('/api/v1/swdb')
         .set('Accept', 'application/json')
         .set('Cookie', Cookies)
         .send({

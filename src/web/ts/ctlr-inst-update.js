@@ -74,8 +74,7 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     console.log('Got selectedAreas: ' + JSON.stringify($scope.selectedAreas, null, 2));
     if ($scope.inputForm.$valid) {
       delete $scope.formData.__v;
-      let url = $window.location.origin;
-      url = url + "/api/v1/inst/" + $scope.formData._id;
+      let url = basePath + "/api/v1/inst/" + $scope.formData._id;
 
       $http({
         method: 'PUT',

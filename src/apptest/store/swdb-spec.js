@@ -73,7 +73,7 @@ describe("app", function() {
   it("Returns all sw records", function(done) {
     this.timeout(5000);
     supertest
-    .get("/api/v1/swdb/")
+    .get("/api/v1/swdb")
     .expect(200)
     .end(function(err, res){
       if (err) {
@@ -178,7 +178,7 @@ describe("app", function() {
 
   it("Returns location header posting new record", function(done) {
     supertest
-    .post("/api/v1/swdb/")
+    .post("/api/v1/swdb")
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
       .send({swName: "Header Test Record",
@@ -238,7 +238,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id:Test Record", function(done) {
       supertest
-      .get("/api/v1/swdb/")
+      .get("/api/v1/swdb")
       .expect(200)
       .end(function(err,res){
         if (err) {
@@ -317,7 +317,7 @@ describe("app", function() {
     var wrapper = { origId: null };
     before("Before test post and get id", function (done) {
       supertest
-        .post("/api/v1/swdb/")
+        .post("/api/v1/swdb")
         .send({ swName: "Hist1 Test Record",
          owner: "Test Owner",
          engineer: "Test Engineer",
@@ -470,7 +470,7 @@ describe("app", function() {
 
   it("Post a new record", function(done) {
     supertest
-    .post("/api/v1/swdb/")
+    .post("/api/v1/swdb")
     .set("Accept", "application/json")
     .set('Cookie', [Cookies])
       .send({swName: "Test Record",
@@ -488,7 +488,7 @@ describe("app", function() {
 
   it("Errors posting a duplicate new record", function(done) {
     supertest
-    .post("/api/v1/swdb/")
+    .post("/api/v1/swdb")
     .send({swName: "Test Record",
      owner: "Owner 1000",
      engineer: "Engineer 1000",
@@ -513,7 +513,7 @@ describe("app", function() {
 
   it("Post a new record Test Record2", function(done) {
     supertest
-    .post("/api/v1/swdb/")
+    .post("/api/v1/swdb")
     .send({swName: "Test Record2",
      owner: "Owner 1002",
      engineer: "Engineer 1002",
@@ -537,7 +537,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id:Test Record", function(done) {
       supertest
-      .get("/api/v1/swdb/")
+      .get("/api/v1/swdb")
       .expect(200)
       .end(function(err,res){
         if (err) {
@@ -572,7 +572,7 @@ describe("app", function() {
 
   it("Post a new record Desc Test Record", function(done) {
     supertest
-    .post("/api/v1/swdb/")
+    .post("/api/v1/swdb")
     .send({swName: "Desc Test Record",
      owner: "Owner 1002",
      engineer: "Engineer 1002",
@@ -596,7 +596,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id: Desc Test Record", function(done) {
       supertest
-      .get("/api/v1/swdb/")
+      .get("/api/v1/swdb")
       .expect(200)
       .end(function(err,res){
         if (err) {
@@ -631,7 +631,7 @@ describe("app", function() {
 
   it("Post a new record Engineer Test Record", function(done) {
     supertest
-    .post("/api/v1/swdb/")
+    .post("/api/v1/swdb")
     .send({swName: "Engineer Test Record",
      owner: "Owner 1002",
      engineer: "Any Engineer",
@@ -655,7 +655,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id: Engineer Test Record", function(done) {
       supertest
-      .get("/api/v1/swdb/")
+      .get("/api/v1/swdb")
       .expect(200)
       .end(function(err,res){
         if (err) {
@@ -691,7 +691,7 @@ describe("app", function() {
 
   it("Post a new record versionControlLoc Test Record", function(done) {
     supertest
-    .post("/api/v1/swdb/")
+    .post("/api/v1/swdb")
     .send({swName: "versionControlLoc Test Record",
      owner: "versioControlLoc Test Owner",
      engineer: "Test Engineer",
@@ -716,7 +716,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id: versionControlLoc Test Record", function(done) {
       supertest
-      .get("/api/v1/swdb/")
+      .get("/api/v1/swdb")
       .expect(200)
       .end(function(err,res){
         if (err) {
@@ -750,7 +750,7 @@ describe("app", function() {
 
   it("Post a new record designDescDocLoc Test Record", function(done) {
     supertest
-    .post("/api/v1/swdb/")
+    .post("/api/v1/swdb")
     .send({swName: "designDescDocLoc Test Record",
      owner: "designDescDocLoc Test Owner",
      engineer: "Test Engineer",
@@ -775,7 +775,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id: designDescDocLoc Test Record", function(done) {
       supertest
-      .get("/api/v1/swdb/")
+      .get("/api/v1/swdb")
       .expect(200)
       .end(function(err,res){
         if (err) {
@@ -809,7 +809,7 @@ describe("app", function() {
 
   it("Post a new record descDocLoc Test Record", function(done) {
     supertest
-    .post("/api/v1/swdb/")
+    .post("/api/v1/swdb")
     .send({swName: "descDocLoc Test Record",
      owner: "descDocLoc Test Owner",
      engineer: "Test Engineer",
@@ -834,7 +834,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id: descDocLoc Test Record", function(done) {
       supertest
-      .get("/api/v1/swdb/")
+      .get("/api/v1/swdb")
       .expect(200)
       .end(function(err,res){
         if (err) {
@@ -868,7 +868,7 @@ describe("app", function() {
 
   it("Post a new record recertDate Test Record", function(done) {
     supertest
-    .post("/api/v1/swdb/")
+    .post("/api/v1/swdb")
     .send({swName: "recertDate Test Record",
      owner: "recertDate Test Owner",
      engineer: "Test Engineer",
@@ -893,7 +893,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id: recertDate Test Record", function(done) {
       supertest
-      .get("/api/v1/swdb/")
+      .get("/api/v1/swdb")
       .expect(200)
       .end(function(err,res){
         if (err) {
@@ -927,7 +927,7 @@ describe("app", function() {
 
   it("Post a new record vvProcLoc Test Record", function(done) {
     supertest
-    .post("/api/v1/swdb/")
+    .post("/api/v1/swdb")
     .send({
       swName: "vvProcLoc Test Record",
       owner: "vvProcLoc Test Owner",
@@ -954,7 +954,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id: vvProcLoc Test Record", function(done) {
       supertest
-      .get("/api/v1/swdb/")
+      .get("/api/v1/swdb")
       .expect(200)
       .end(function(err,res){
         if (err) {
@@ -990,7 +990,7 @@ describe("app", function() {
 
   it("Post a new record vvResultsLoc Test Record", function(done) {
     supertest
-    .post("/api/v1/swdb/")
+    .post("/api/v1/swdb")
     .send({
       swName: "vvResultsLoc Test Record",
       owner: "vvResultsLoc Test Owner",
@@ -1017,7 +1017,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id: vvResultsLoc Test Record", function(done) {
       supertest
-      .get("/api/v1/swdb/")
+      .get("/api/v1/swdb")
       .expect(200)
       .end(function(err,res){
         if (err) {
@@ -1052,7 +1052,7 @@ describe("app", function() {
 
   it("Post a new record branch Test Record", function(done) {
     supertest
-    .post("/api/v1/swdb/")
+    .post("/api/v1/swdb")
     .send({swName: "branch Test Record",
      owner: "branch Test Owner",
      engineer: "Test Engineer",
@@ -1077,7 +1077,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id: branch Test Record", function(done) {
       supertest
-      .get("/api/v1/swdb/")
+      .get("/api/v1/swdb")
       .expect(200)
       .end(function(err,res){
         if (err) {
@@ -1111,7 +1111,7 @@ describe("app", function() {
 
   it("Post a new record versionControl Test Record", function(done) {
     supertest
-      .post("/api/v1/swdb/")
+      .post("/api/v1/swdb")
     .send({swName: "versionControl Test Record",
      owner: "versionControl Test Owner",
      engineer: "Test Engineer",
@@ -1136,7 +1136,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID versionControl id: branch Test Record", function(done) {
       supertest
-      .get("/api/v1/swdb/")
+      .get("/api/v1/swdb")
       .expect(200)
       .end(function(err,res){
         if (err) {
@@ -1170,7 +1170,7 @@ describe("app", function() {
 
   it("Post a new record previous Test Record", function(done) {
     supertest
-    .post("/api/v1/swdb/")
+    .post("/api/v1/swdb")
     .send({swName: "previous Test Record",
      owner: "previous Test Owner",
      engineer: "Test Engineer",
@@ -1195,7 +1195,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID previous id: branch Test Record", function(done) {
       supertest
-      .get("/api/v1/swdb/")
+      .get("/api/v1/swdb")
       .expect(200)
       .end(function(err,res){
         if (err) {
@@ -1232,7 +1232,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID record id:Test Record2", function(done) {
       supertest
-      .get("/api/v1/swdb/")
+      .get("/api/v1/swdb")
       .expect(200)
       .end(function(err,res){
         if (err) {
@@ -1283,7 +1283,7 @@ describe("app", function() {
   // workflow rule1 tests
   it("Post a new record to test version/branch lock on Ready for install(rule 1)", function(done) {
     supertest
-    .post("/api/v1/swdb/")
+    .post("/api/v1/swdb")
     .send( {
       swName: "Rule 1 Test Record",
       owner: "previous Test Owner",
@@ -1309,7 +1309,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID previous id: rule 1 Test Record", function(done) {
       supertest
-      .get("/api/v1/swdb/")
+      .get("/api/v1/swdb")
       .expect(200)
       .end(function(err,res){
         if (err) {
@@ -1412,7 +1412,7 @@ describe("app", function() {
   // workflow rule4 tests
   it("Post a new record to test status lock if installations (rule 4)", function(done) {
     supertest
-    .post("/api/v1/swdb/")
+    .post("/api/v1/swdb")
     .send( {
       swName: "Rule 4 Test Record",
       version: "test version",
@@ -1440,7 +1440,7 @@ describe("app", function() {
     var wrapper = {origId:null};
     before("Get ID previous id: rule 4 Test Record", function(done) {
       supertest
-      .get("/api/v1/swdb/")
+      .get("/api/v1/swdb")
       .expect(200)
       .end(function(err,res){
         if (err) {
@@ -1489,7 +1489,7 @@ describe("app", function() {
 
     it('Rule 4 test - Post a new installation record', (done) => {
       supertest
-        .post('/api/v1/inst/')
+        .post('/api/v1/inst')
         .set('Accept', 'application/json')
         .set('Cookie', Cookies)
         .send({

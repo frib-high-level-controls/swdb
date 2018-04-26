@@ -95,8 +95,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     // console.log('Got areasSelected: ' + JSON.stringify($scope.areasSelected, null, 2));
 
     if ($scope.inputForm.$valid) {
-      let url = $window.location.origin;
-      url = url + "/api/v1/inst/";
+      let url = basePath + "/api/v1/inst/";
       $http({
         method: 'POST',
         url: url,

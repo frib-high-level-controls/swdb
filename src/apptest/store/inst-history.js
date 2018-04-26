@@ -76,7 +76,7 @@ describe("Installations history tests suite", function () {
 
   it("Post a new record with correct history", function (done) {
     supertest
-      .post("/api/v1/inst/")
+      .post("/api/v1/inst")
       .set("Accept", "application/json")
       .set('Cookie', [Cookies])
       .send({

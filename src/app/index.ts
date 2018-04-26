@@ -339,6 +339,9 @@ async function doStart(): Promise<express.Application> {
   // static file configuration
   app.use(express.static(path.resolve(__dirname, '..', 'public')));
 
+  // Redirect requests ending in '/' and set response locals 'basePath'
+  app.use(handlers.basePathHandler());
+
   // body-parser configuration
   app.use(bodyparser.json());
   app.use(bodyparser.urlencoded({

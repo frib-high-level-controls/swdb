@@ -102,8 +102,7 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
       // $scope.formData.version="";
     }
     if ($scope.inputForm.$valid) {
-      let url = $window.location.origin;
-      url = url + "/api/v1/swdb/";
+      let url = basePath + "/api/v1/swdb/";
       $http({
         method: 'POST',
         // url: $scope.props.apiUrl,

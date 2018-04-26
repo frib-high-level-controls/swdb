@@ -23,7 +23,7 @@ app.service('recService', function() {
 app.service('configService', function($http) {
     var configData = null;
 
-    var promise = 	$http({url: '/api/v1/swdb/config', method: "GET"}).success(function(data) {
+    var promise = 	$http({url: basePath + '/api/v1/swdb/config', method: "GET"}).success(function(data) {
         configData = data;
     });
 
@@ -42,7 +42,7 @@ app.service('configService', function($http) {
 app.service('userService', function($http) {
     var userData = null;
 
-    var promise = 	$http({url: '/api/v1/swdb/user',method: "GET"}).success(function(data) {
+    var promise = 	$http({url: basePath + '/api/v1/swdb/user',method: "GET"}).success(function(data) {
         userData = data;
     });
 
@@ -62,7 +62,7 @@ app.service('slotService', function($http) {
     var slotData = null;
 
     var promise = 	$http({
-      url: '/api/v1/swdb/slot',
+      url: basePath + '/api/v1/swdb/slot',
       method: "GET",
       headers: {
         'Content-Type': 'application/json'
@@ -85,7 +85,7 @@ app.service('slotService', function($http) {
 // Service to get sw data to controllers
 app.service('swService', function($http) {
     var swData = null;
-    var promise = 	$http({url: '/api/v1/swdb/',method: "GET"}).success(function(data) {
+    var promise = 	$http({url: basePath + '/api/v1/swdb/',method: "GET"}).success(function(data) {
         swData = data;
         // console.log('default swService load occurred: ' + JSON.stringify(data));
     });
@@ -96,7 +96,7 @@ app.service('swService', function($http) {
           return swData;
         },
       refreshSwList: function () {
-        promise = $http({ url: '/api/v1/swdb/', method: "GET" }).success(function (data) {
+        promise = $http({ url: basePath + '/api/v1/swdb/', method: "GET" }).success(function (data) {
           swData = data;
           // console.log('swService reload occurred: ' + JSON.stringify(data));
         });
@@ -134,7 +134,7 @@ app.service('swService', function($http) {
 app.service('instService', function($http) {
     var instData = null;
 
-    var promise = 	$http({url: '/api/v1/inst/',method: "GET"}).then(function(data) {
+    var promise = 	$http({url: basePath + '/api/v1/inst/',method: "GET"}).then(function(data) {
         instData = data.data;
     });
 
@@ -144,7 +144,7 @@ app.service('instService', function($http) {
           return instData;
         },
       refreshInstList: function () {
-        promise = $http({ url: '/api/v1/inst/', method: "GET" }).then(function (data) {
+        promise = $http({ url: basePath + '/api/v1/inst/', method: "GET" }).then(function (data) {
           instData = data.data;
         });
         return promise;
@@ -189,7 +189,7 @@ app.service('instService', function($http) {
 app.service('forgUserService', function ($http) {
   var userData = null;
 
-  var promise = $http({ url: '/api/v1/swdb/forgUsers', method: "GET" }).then(function (data) {
+  var promise = $http({ url: basePath + '/api/v1/swdb/forgUsers', method: "GET" }).then(function (data) {
     userData = data;
   });
 
@@ -199,7 +199,7 @@ app.service('forgUserService', function ($http) {
       return userData;
     },
     refreshUsersList: function () {
-      $http({ url: '/api/v1/swdb/forgUsers', method: "GET" }).then(function (data) {
+      $http({ url: basePath + '/api/v1/swdb/forgUsers', method: "GET" }).then(function (data) {
         userData = data;
         return userData;
       });
@@ -224,7 +224,7 @@ app.service('forgUserService', function ($http) {
 app.service('forgGroupService', function ($http) {
   var groupData = null;
 
-  var promise = $http({ url: '/api/v1/swdb/forgGroups', method: "GET" }).then(function (data) {
+  var promise = $http({ url: basePath + '/api/v1/swdb/forgGroups', method: "GET" }).then(function (data) {
     groupData = data;
   });
 
@@ -234,7 +234,7 @@ app.service('forgGroupService', function ($http) {
       return groupData;
     },
     refreshGroupsList: function () {
-      $http({ url: '/api/v1/swdb/forgGroups', method: "GET" }).then(function (data) {
+      $http({ url: basePath + '/api/v1/swdb/forgGroups', method: "GET" }).then(function (data) {
         groupData = data;
         return groupData;
       });
@@ -259,7 +259,7 @@ app.service('forgGroupService', function ($http) {
 app.service('forgAreaService', function ($http) {
   var areaData = null;
 
-  var promise = $http({ url: '/api/v1/swdb/forgAreas', method: "GET" }).then(function (data) {
+  var promise = $http({ url: basePath + '/api/v1/swdb/forgAreas', method: "GET" }).then(function (data) {
     areaData = data;
   });
 
@@ -269,7 +269,7 @@ app.service('forgAreaService', function ($http) {
       return areaData;
     },
     refreshAreasList: function () {
-      $http({ url: '/api/v1/swdb/forgAreas', method: "GET" }).then(function (data) {
+      $http({ url: basePath + '/api/v1/swdb/forgAreas', method: "GET" }).then(function (data) {
         areaData = data;
         return areaData;
       });
