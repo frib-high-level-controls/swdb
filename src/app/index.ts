@@ -316,6 +316,9 @@ async function doStart(): Promise<express.Application> {
     cookie: {
       maxAge: Number(cfg.app.session_life),
     },
+    // Calls req.session.destroy() if user has logged out
+    // (see: https://github.com/jaredhanson/passport/issues/216)
+    unset: 'destroy',
   }));
 
   // Authentication handlers (must follow session middleware)
@@ -368,9 +371,6 @@ async function doStart(): Promise<express.Application> {
   // logoff
   app.get('/logout', function(req: express.Request, res: express.Response, next: express.NextFunction) {
     debug('GET /logout request');
-    req.session!.destroy((err: Error) => { next(err); });
-    res.clearCookie('connect.sid', {path: '/'});
-
     delete req.query.ticket;
     cfAuthProvider.logout(req);
     res.redirect(props.auth.cas.cas_url + '/logout');
