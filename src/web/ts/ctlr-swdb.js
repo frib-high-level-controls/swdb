@@ -49,7 +49,7 @@ function ListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scope, $
   vm.dtOptions = DTOptionsBuilder
     .fromFnPromise(function () {
       var defer = $q.defer();
-      let url = basePath + "/api/v1/swdb/";
+      let url = basePath + "/api/v1/swdb";
       $http.get(url).then(function (result) {
         defer.resolve(result.data);
       });

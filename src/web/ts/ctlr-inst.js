@@ -34,7 +34,7 @@ function InstListPromiseCtrl(DTOptionsBuilder, DTColumnBuilder, $http, $q, $scop
   // promise resolved.
   vm.dtOptions = DTOptionsBuilder.fromFnPromise(function () {
     var defer = $q.defer();
-    let url = basePath + "/api/v1/inst/";
+    let url = basePath + "/api/v1/inst";
     // $http.get($scope.props.instApiUrl).then(function (result) {
     $http.get(url).then(function (result) {
       var innerDefer = $q.defer();

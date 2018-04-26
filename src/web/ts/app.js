@@ -85,7 +85,7 @@ app.service('slotService', function($http) {
 // Service to get sw data to controllers
 app.service('swService', function($http) {
     var swData = null;
-    var promise = 	$http({url: basePath + '/api/v1/swdb/',method: "GET"}).success(function(data) {
+    var promise = 	$http({url: basePath + '/api/v1/swdb',method: "GET"}).success(function(data) {
         swData = data;
         // console.log('default swService load occurred: ' + JSON.stringify(data));
     });
@@ -96,7 +96,7 @@ app.service('swService', function($http) {
           return swData;
         },
       refreshSwList: function () {
-        promise = $http({ url: basePath + '/api/v1/swdb/', method: "GET" }).success(function (data) {
+        promise = $http({ url: basePath + '/api/v1/swdb', method: "GET" }).success(function (data) {
           swData = data;
           // console.log('swService reload occurred: ' + JSON.stringify(data));
         });
@@ -134,7 +134,7 @@ app.service('swService', function($http) {
 app.service('instService', function($http) {
     var instData = null;
 
-    var promise = 	$http({url: basePath + '/api/v1/inst/',method: "GET"}).then(function(data) {
+    var promise = 	$http({url: basePath + '/api/v1/inst',method: "GET"}).then(function(data) {
         instData = data.data;
     });
 
@@ -144,7 +144,7 @@ app.service('instService', function($http) {
           return instData;
         },
       refreshInstList: function () {
-        promise = $http({ url: basePath + '/api/v1/inst/', method: "GET" }).then(function (data) {
+        promise = $http({ url: basePath + '/api/v1/inst', method: "GET" }).then(function (data) {
           instData = data.data;
         });
         return promise;
