@@ -350,7 +350,7 @@ async function doStart(): Promise<express.Application> {
   // handle incoming get requests
   app.get('/', function(req: express.Request, res: express.Response) {
     debug('GET / request');
-    res.sendFile('index.html', {root: path.resolve(__dirname, '..', 'public')});
+    res.render('index');
   });
 
   app.get('/login', cfAuthProvider.authenticate(), function(req: express.Request, res: express.Response) {
