@@ -298,6 +298,7 @@ test.describe("User flow tests", function() {
     // set engineer
     chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
     input = chromeDriver.findElement(By.id("engineer"));
+    chromeDriver.executeScript("scroll(0, -250);")
     input.click();
     //*[@id="engineer"]/input[1]
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="engineer"]/input[1]')));
