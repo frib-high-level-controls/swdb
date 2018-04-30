@@ -625,13 +625,14 @@ describe('Installation api tests', () => {
       supertest(app)
         .post('/api/v1/inst/badbeef')
         .set('Cookie', Cookies)
+        .set('Accept', 'application/json')
         .send({swName: 'Test Record5'})
         .expect(404)
         .end( (err, res) => {
           if (err) {
             done(err);
           } else {
-            expect(res.text).to.match(/Cannot POST \/api\/v1\/inst\/badbeef/);
+            expect(res.text).to.match(/Not Found/);
             done();
           }
         });

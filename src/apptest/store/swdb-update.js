@@ -191,23 +191,6 @@ test.describe("Software update screen tests", function() {
     input.click();
   });
 
-  test.it("set engineer for new sw record", function() {
-    // set engineer
-    this.timeout(10000);
-    chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
-    input = chromeDriver.findElement(By.id("engineer"));
-    input.click();
-    //*[@id="engineer"]/input[1]
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="engineer"]/input[1]')));
-    input = chromeDriver.findElement(By.xpath('//*[@id="engineer"]/input[1]'));
-    input.sendKeys("ellisr");
-    //*[@id="ui-select-choices-row-1-0"]/span/div
-    //*[@id="ui-select-choices-row-1-0"]/span
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-1-0"]')));
-    input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-1-0"]'));
-    input.click();
-  });
-
   test.it("set level of care for new sw record", function() {
     // set level of care
     this.timeout(5000);
@@ -328,6 +311,24 @@ test.describe("Software update screen tests", function() {
     input.click();
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="recertDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[@id="recertDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
+    input.click();
+  });
+
+  test.it("set engineer for new sw record", function() {
+    // set engineer
+    this.timeout(10000);
+    chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
+    input = chromeDriver.findElement(By.id("engineer"));
+    chromeDriver.executeScript("scroll(0, -250);")
+    input.click();
+    //*[@id="engineer"]/input[1]
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="engineer"]/input[1]')));
+    input = chromeDriver.findElement(By.xpath('//*[@id="engineer"]/input[1]'));
+    input.sendKeys("ellisr");
+    //*[@id="ui-select-choices-row-1-0"]/span/div
+    //*[@id="ui-select-choices-row-1-0"]/span
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-1-0"]')));
+    input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-1-0"]'));
     input.click();
   });
 
