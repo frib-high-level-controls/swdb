@@ -167,7 +167,6 @@ test.describe("Software update screen tests", function () {
     input.click();
   });
 
-
   test.it("Set software level of care", function () {
     this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id("levelOfCare")), 3000);
@@ -292,6 +291,7 @@ test.describe("Software update screen tests", function () {
     // set engineer
     chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
     input = chromeDriver.findElement(By.id("engineer"));
+    chromeDriver.executeScript("scroll(0, -250);")
     input.click();
     //*[@id="engineer"]/input[1]
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="engineer"]/input[1]')));
@@ -302,7 +302,10 @@ test.describe("Software update screen tests", function () {
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-1-0"]')));
     input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-1-0"]'));
     input.click();
+  });
 
+  test.it("Submit", function () {
+    this.timeout(5000);
     chromeDriver.findElement(By.id("submitBtn")).click();
     // chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("formStatus")),
     //   "Document posted"), 5000);

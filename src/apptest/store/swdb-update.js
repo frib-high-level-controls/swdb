@@ -319,6 +319,7 @@ test.describe("Software update screen tests", function() {
     this.timeout(10000);
     chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
     input = chromeDriver.findElement(By.id("engineer"));
+    chromeDriver.executeScript("scroll(0, -250);")
     input.click();
     //*[@id="engineer"]/input[1]
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="engineer"]/input[1]')));
@@ -329,11 +330,10 @@ test.describe("Software update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-1-0"]')));
     input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-1-0"]'));
     input.click();
+  });
 
-    // submit and check result
+  test.it("Submit", function () {
     chromeDriver.findElement(By.id("submitBtn")).click();
-    // chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id("formStatus")),
-    //   "Document posted"),5000);
   });
 
   test.it("should show the details record", function () {
@@ -682,12 +682,14 @@ test.describe("Software update screen tests", function() {
     // set version
     chromeDriver.wait(until.elementLocated(By.id("version")), 3000);
     input = chromeDriver.findElement(By.id("version"));
+    chromeDriver.executeScript("scroll(0, -250);")
     input.click();
     input.sendKeys("Bumped Version");
 
     // set branch
     chromeDriver.wait(until.elementLocated(By.id("branch")), 3000);
     input = chromeDriver.findElement(By.id("branch"));
+    chromeDriver.executeScript("scroll(0, -250);")
     input.click();
     input.sendKeys("Bumped Branch");
     chromeDriver.wait(until.elementLocated(By.id("submitBtn")),

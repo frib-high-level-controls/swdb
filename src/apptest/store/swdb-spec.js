@@ -1777,13 +1777,14 @@ describe("app", function() {
       supertest
       .post("/api/v1/swdb/badbeef")
       .set('Cookie', [Cookies])
+      .set('Accept', 'application/json')
       .send({swName: "Test Record4"})
       .expect(404)
       .end(function(err, res) {
         if (err) {
           done(err);
         } else {
-          expect(res.text).to.match(/Cannot POST \/api\/v1\/swdb\/badbeef/);
+          expect(res.text).to.match(/Not Found/);
           debug('Location: ' + res.headers.location);
           done();
         }
