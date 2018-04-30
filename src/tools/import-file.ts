@@ -43,11 +43,12 @@ interface Config {
   };
   dryrun?: {};
   _?: Array<{}>;
-  engineer: {[key: string]: string };
-  area: {[key: string]: string };
-  owner: {[key: string]: string };
-  statusDate: {[key: string]: string };
-  status: {[key: string]: string };
+  engineer: {[key: string]: {}};
+  area: {[key: string]: {}};
+  owner: {[key: string]: {}};
+  statusDate: {[key: string]: {}};
+  status: {[key: string]: {}};
+  vcs: {[key: string]: {}};
 };
 
 interface SWDataRow {
@@ -107,6 +108,7 @@ async function main() {
     owner: {},
     statusDate: {},
     status: {},
+    vcs: {},
   };
 
   rc('import-file', cfg);
@@ -150,7 +152,7 @@ async function main() {
   let swDataDoc: HistoryDocument[] = [];
   new Db(true); // tslint:disable-line
   for (let d of combinedData.swData) {
-    info('Create swDb and validate: %s', JSON.stringify(d));
+    info('Create swDoc and validate: %s', JSON.stringify(d));
     let doc: HistoryDocument = new Db.swDoc(d);
     try {
       await doc.validate();
@@ -164,7 +166,7 @@ async function main() {
   let instDataDoc: HistoryDocument[] = [];
   new InstDb(true); // tslint:disable-line
   for (let d of combinedData.instData) {
-    info('Create instDB and validate: %s', JSON.stringify(d));
+    info('Create instDoc and validate: %s', JSON.stringify(d));
     let doc: HistoryDocument = new InstDb.instDoc(d);
     try {
       await doc.validate();
@@ -304,19 +306,23 @@ function getXlsxJson(fileName: string, cfg: Config) {
           error('Unknown Engineer Name %s', row[COL_ENGINEER]);
           process.exit(1);
         }
+        if (!cfg.vcs[row[COL_VCS_TYPE]]) {
+          error('Unknown VCS Name %s', row[COL_VCS_TYPE]);
+          process.exit(1);
+        }
         let swData: SWDataRow = {
           swName: row[COL_NAME_1],
           desc: row[COL_DESCRIPTION],
-          status: 'Ready for install',
+          status: 'RDY_INST',
           version: row[COL_VERSION],
-          owner: cfg.owner[row[COL_OWNER]],
-          engineer: cfg.engineer[row[COL_ENGINEER]],
+          owner: String(cfg.owner[row[COL_OWNER]]),
+          engineer: String(cfg.engineer[row[COL_ENGINEER]]),
           levelOfCare: (String(row[COL_LOC])).toUpperCase(),
           platforms: row[COL_PLATFORMS],
-          versionControl: row[COL_VCS_TYPE] === 'Archive' ? 'Other' : row[COL_VCS_TYPE],
+          versionControl: String(cfg.vcs[row[COL_VCS_TYPE]]), // === 'Archive' ? 'Other' : row[COL_VCS_TYPE],
           versionControlLoc: row[COL_VCS_LOCATION],
           _id: swKeyList.get(keyStr),
-          statusDate: cfg.statusDate[sheet],
+          statusDate: String(cfg.statusDate[sheet]),
         };
         swDataArray.push(swData);
       }
@@ -340,9 +346,9 @@ function getXlsxJson(fileName: string, cfg: Config) {
             let instData: InstDataRow = {
               host: host,
               name: row[COL_NAME],
-              area: cfg.area[row[COL_AREA]],
-              status: cfg.status[row[COL_STATUS]],
-              statusDate: cfg.statusDate[sheet],
+              area: String(cfg.area[row[COL_AREA]]),
+              status: String(cfg.status[row[COL_STATUS]]),
+              statusDate: String(cfg.statusDate[sheet]),
               vvResultsLoc: row[COL_VCS_LOCATION],
               software: swKeyList.get(keyStr),
               drrs: sheet,
