@@ -26,6 +26,7 @@ const COL_VCS_TYPE = 'VCS Type';
 const COL_VCS_LOCATION = 'VCS Location';
 const COL_HOST = 'Host';
 const COL_STATUS = 'Status';
+const COL_VV_RESULTS = 'V&V Results';
 
 interface HistoryDocument extends history.Document<HistoryDocument> {};
 
@@ -349,7 +350,7 @@ function getXlsxJson(fileName: string, cfg: Config) {
               area: String(cfg.area[row[COL_AREA]]),
               status: String(cfg.status[row[COL_STATUS]]),
               statusDate: String(cfg.statusDate[sheet]),
-              vvResultsLoc: row[COL_VCS_LOCATION],
+              vvResultsLoc: row[COL_VV_RESULTS],
               software: swKeyList.get(keyStr),
               drrs: sheet,
             };
