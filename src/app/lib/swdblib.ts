@@ -7,9 +7,6 @@ import forgApi = require('../shared/forgapi');
 import dbg = require('debug');
 const debug = dbg('swdb:swdblib');
 
-const swdb = []; // storage
-const reqLog = []; // log of change requests
-
 import CommonTools = require('./CommonTools');
 const ctools = new CommonTools.CommonTools();
 const props: any = ctools.getConfiguration();
@@ -20,10 +17,6 @@ const props: any = ctools.getConfiguration();
  * for more information.
  */
 
-// class levelOfCareEnum extends enumify.Enum {}
-// levelOfCareEnum.initEnum(props.levelOfCareEnums);
-// class swStatus extends enumify.Enum {}
-// swStatus.initEnum(props.statusEnums);
 export class SwdbLib {
 
   /**
@@ -131,7 +124,7 @@ export class SwdbLib {
               });
               debug('GET forg areas got: ' + JSON.stringify(areasBody));
               res.send(areasBody);
-          } catch(err) {
+          } catch (err) {
             debug('caouft error: ' + err);
           }
           }

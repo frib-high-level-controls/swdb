@@ -1,12 +1,8 @@
 /* jslint node: true */
 'use strict';
 import express = require('express');
-import expressValidator = require('express-validator');
 import fs = require('fs');
 import request = require('request');
-import util = require('util');
-import instBe = require('./instDb.js');
-import swdbTools = require('./swdblib');
 import url = require('url');
 
 import CommonTools = require('./CommonTools');

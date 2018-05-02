@@ -3,7 +3,6 @@
  */
 import fs = require('fs');
 import path = require('path');
-import http = require('http');
 
 import rc = require('rc');
 import dbg = require('debug');
@@ -31,8 +30,6 @@ import InstBe = require('./lib/instDb');
 import instTools = require('./lib/instLib');
 import tools = require('./lib/swdblib');
 import customValidators = require('./lib/validators');
-import cJSON = require('circular-json');
-import validate = require('validate.js');
 
 // package metadata
 interface Package {
@@ -74,7 +71,6 @@ const debug = dbg('swdb:index');
 const be = new Be.Db(true);
 const instBe = new InstBe.InstDb(true);
 
-let server: http.Server;
 let ctools = new CommonTools.CommonTools();
 let props = ctools.getConfiguration();
 debug('props at startup: ' + JSON.stringify(props, null, 2));
