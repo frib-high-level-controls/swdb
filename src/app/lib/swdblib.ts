@@ -26,7 +26,7 @@ export class SwdbLib {
    * @returns id The ID of the item found in the request
    */
   public static getReqId = (req: express.Request) => {
-    let id = null;
+    let id: String | null = null;
     let path = url.parse(req.url).pathname;
     if (url.parse(req.url).pathname) {
       if (path!.match(/[^v][\da-fA-F]+$/) !== null) {

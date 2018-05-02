@@ -471,7 +471,7 @@ async function doStart(): Promise<express.Application> {
           customValidators.CustomValidators.noSwStateChgIfReferringInst,
         ];
 
-        let errors = [];
+        let errors: customValidators.IValResult[] = [];
         let wfResultArr = await Promise.all(
           wfValArr.map(async function (item, idx, arr) {
             let r = await item(req);
@@ -516,7 +516,7 @@ async function doStart(): Promise<express.Application> {
           customValidators.CustomValidators.noSwStateChgIfReferringInst,
         ];
 
-        let errors = [];
+        let errors: customValidators.IValResult[] = [];
         let wfResultArr = await Promise.all(
           wfValArr.map(async function (item, idx, arr) {
             let r = await item(req);
@@ -606,7 +606,7 @@ async function doStart(): Promise<express.Application> {
           customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall,
         ];
 
-        let errors = [];
+        let errors: customValidators.IValResult[] = [];
         let wfResultArr = await Promise.all(wfValArr.map(async function (item, idx, arr) {
           let r = await item(req);
           if (r.error) {
@@ -649,7 +649,7 @@ async function doStart(): Promise<express.Application> {
           customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall,
         ];
 
-        let errors = [];
+        let errors: customValidators.IValResult[] = [];
         let wfResultArr = await Promise.all(
           wfValArr.map(async function (item, idx, arr) {
             let r = await item(req);
