@@ -34,19 +34,19 @@ export class CommonTools {
       // Add the enum labels
       // Go through the enums and filter names for the select labels
       rcw.levelOfCareKeys = Object.keys(LevelOfCareEnum);
-      rcw.levelOfCareLabels = rcw.levelOfCareKeys.map(function (item, idx, arr) {
+      rcw.levelOfCareLabels = rcw.levelOfCareKeys.map(function (item: number) {
         return LevelOfCareEnum[item];
       });
       rcw.statusKeys = Object.keys(StatusEnum);
-      rcw.statusLabels = rcw.statusKeys.map(function (item, idx, arr) {
+      rcw.statusLabels = rcw.statusKeys.map(function (item: number) {
         return StatusEnum[item];
       });
       rcw.instStatusKeys = Object.keys(InstStatusEnum);
-      rcw.instStatusLabels = rcw.instStatusKeys.map(function (item, idx, arr) {
+      rcw.instStatusLabels = rcw.instStatusKeys.map(function (item: number) {
         return InstStatusEnum[item];
       });
       rcw.rcsKeys = Object.keys(RcsEnum);
-      rcw.rcsLabels = rcw.rcsKeys.map(function (item, idx, arr) {
+      rcw.rcsLabels = rcw.rcsKeys.map(function (item: number) {
         return RcsEnum[item];
       });
 
@@ -73,7 +73,8 @@ export class CommonTools {
  */
   public getForgGroupsTestFile = (): forgapi.Group[] => {
     // Prepare the source location by looking at the properties useSource
-    const source = CommonTools.props.forgGroupsDataSource[CommonTools.props.forgGroupsDataSource.useSource];
+    const source =
+      CommonTools.props.forgGroupsDataSource[CommonTools.props.forgGroupsDataSource.useSource];
     // debug('forg group source is: ' + source);
     let groupdata: forgapi.Group[] = [];
     let raw = fs.readFileSync(source, { encoding: 'utf-8' });
@@ -87,7 +88,7 @@ export class CommonTools {
    */
   public getForgUsersTestFile = (): forgapi.User[] => {
     // Prepare the source location by looking at the properties useSource
-    const source = CommonTools.props.forgUsersDataSource[CommonTools.props.forgUsersDataSource.useSource];
+    const source: string  = CommonTools.props.forgUsersDataSource[CommonTools.props.forgUsersDataSource.useSource];
     let userdata: forgapi.User[] = [];
     let raw = fs.readFileSync(source, { encoding: 'utf-8' });
     userdata = JSON.parse(raw);
@@ -101,16 +102,19 @@ interface IProps {
   instApiUrl: string;
   ccdbApiUrl: string;
   slotsDataSource: {
+    [index: string]: string;
     useSource: string;
     test: string;
     production: string;
   };
   forgGroupsDataSource: {
+    [index: string]: string;
     useSource: string;
     testFile: string;
     production: string;
   };
   forgUsersDataSource: {
+    [index: string]: string;
     useSource: string;
     testFile: string;
     production: string;
@@ -143,10 +147,10 @@ interface IProps {
     instTestDataFile: string;
   };
 
-  LevelOfCareEnum: Enumerator;
-  StatusEnum: Enumerator;
-  InstStatusEnum: Enumerator;
-  RcsEnum: Enumerator;
+  LevelOfCareEnum: {[index: string]: LevelOfCareEnum};
+  StatusEnum: {[index: string]: StatusEnum};
+  InstStatusEnum: {[index: string]: InstStatusEnum};
+  RcsEnum: {[index: string]: RcsEnum};
 
   levelOfCareLabels: [string];
   statusLabels: [string];

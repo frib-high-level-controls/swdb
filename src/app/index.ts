@@ -573,11 +573,11 @@ async function doStart(): Promise<express.Application> {
         res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
         return;
       } else {
-        let wfResults =
+        let wfResults: customValidators.IValResult =
           await customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall(req);
         if (wfResults.error) {
           debug('Workflow validation errors ' + JSON.stringify(wfResults));
-          res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults[0].data));
+          res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults.data));
           return;
         } else {
           debug('POST /api/v1/inst calling create...');

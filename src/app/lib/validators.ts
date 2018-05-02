@@ -384,7 +384,7 @@ export class CustomValidators {
           return {
             error: true,
             data: 'Software state cannot change while there are active installations: ' +
-              queryPromise.map(function (item){
+              queryPromise.map(function (item: any){
                 return item._id;
               }),
           };

@@ -35,7 +35,7 @@ export function stop(): Promise<void> {
         resolve();
         return;
       }
-      server.close((err) => {
+      server.close((err: string) => {
         if (err) {
             app.warn('HTTP Serve close error: %s', err);
             resolve();
