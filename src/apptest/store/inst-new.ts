@@ -3,12 +3,9 @@ import express = require('express');
 import chai = require('chai');
 import Supertest = require('supertest');
 import chaiAsPromised = require('chai-as-promised');
-import rc = require('rc');
 import TestTools = require('./TestTools');
 import webdriver = require('selenium-webdriver');
 import test = require('selenium-webdriver/testing');
-import fs = require('fs');
-import path = require('path');
 import dbg = require('debug');
 import CommonTools = require('../../app/lib/CommonTools');
 
@@ -45,8 +42,6 @@ test.describe('Installations add screen tests', function() {
     await server.stop();
   });
 
-
-  let allCookies = null;
 
   test.it('should show search page with login button', function() {
     this.timeout(8000);

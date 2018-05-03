@@ -3,11 +3,9 @@ import express = require('express');
 import chai = require('chai');
 import supertest = require('supertest');
 import chaiAsPromised = require('chai-as-promised');
-import mongodb = require('mongodb');
 import  webdriver = require('selenium-webdriver');
 import test = require('selenium-webdriver/testing');
 import TestTools = require('./TestTools');
-import fs = require('fs');
 import dbg = require('debug');
 const debug = dbg('swdb:inst-list-tests');
 
@@ -47,8 +45,6 @@ test.describe('Installations record tests', function() {
     await server.stop();
   });
 
-
-  let allCookies = null;
 
   test.it('should show search page with login button', function() {
     this.timeout(8000);
