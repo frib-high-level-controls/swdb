@@ -239,7 +239,7 @@ export class TestTools {
     }
   }
 
-  public async checkHistory(sdebug: debug.IDebugger, canonObj, id) {
+  public async checkHistory(sdebug: debug.IDebugger, canonObj: {[key: string]: object}, id: number) {
   /**
    * Search history for id as an rid field. Sort that list by date and take the latest.
    * Take the original object data as canonical, compare each field to the history,

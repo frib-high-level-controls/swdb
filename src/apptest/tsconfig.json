@@ -4,7 +4,7 @@
         "module": "commonjs",
         "target": "es2016",
         //"alwaysStrict": true,
-        //"noImplicitAny": true,
+        "noImplicitAny": true,
         "noImplicitThis": true,
         "strictNullChecks": true,
         "noUnusedLocals": true,

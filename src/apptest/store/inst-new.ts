@@ -11,7 +11,7 @@ import CommonTools = require('../../app/lib/CommonTools');
 
 chai.use(chaiAsPromised);
 let testTools = new TestTools.TestTools();
-let supertest;
+let supertest: any;
 let expect = chai.expect;
 let By = webdriver.By;
 let until = webdriver.until;
@@ -25,7 +25,7 @@ let app: express.Application;
 
 
 test.describe('Installations add screen tests', function() {
-  let chromeDriver;
+  let chromeDriver: any;
   before('Prep DB', async function () {
     app = await server.start();
     supertest = Supertest(app);
@@ -43,7 +43,7 @@ test.describe('Installations add screen tests', function() {
   });
 
 
-  test.it('should show search page with login button', function(this: typeof test) {
+  test.it('should show search page with login button', function(this: any) {
     this.timeout(8000);
 
     chromeDriver = new webdriver.Builder()
@@ -57,14 +57,14 @@ test.describe('Installations add screen tests', function() {
       'Log in'), 5000);
   });
 
-  test.it('login as test user', function(this: typeof test, done) {
+  test.it('login as test user', function(this: any, done: MochaDone) {
     this.timeout(8000);
     supertest
     .get('/login')
     .auth(props.test.username, props.test.password)
     .timeout(8000)
     .expect(302)
-    .end(function(err, res){
+    .end(function(err: Error, res: Express.Session){
       if (err) {
         done(err);
       } else {
@@ -78,7 +78,7 @@ test.describe('Installations add screen tests', function() {
     });
   });
 
-  test.it('should show search page with username on logout button', function(this: typeof test) {
+  test.it('should show search page with username on logout button', function(this: any) {
     this.timeout(8000);
     chromeDriver.get(props.webUrl + '#/inst/list');
     chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
@@ -86,7 +86,7 @@ test.describe('Installations add screen tests', function() {
       props.test.username.toUpperCase()), 5000);
   });
 
-  test.it('should show new page with username on logout button', function(this: typeof test) {
+  test.it('should show new page with username on logout button', function(this: any) {
     this.timeout(8000);
     chromeDriver.get(props.webUrl + '#/inst/new');
     chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
@@ -99,14 +99,14 @@ test.describe('Installations add screen tests', function() {
     chromeDriver.wait(until.titleIs('SWDB - New Installation'), 5000);
   });
 
-  test.it('Add new record - set host', function(this: typeof test) {
+  test.it('Add new record - set host', function(this: any) {
     this.timeout(15000);
     chromeDriver.wait(until.elementLocated(By.id('host')), 3000);
     let input = chromeDriver.findElement(By.id('host'));
     input.sendKeys('testHost1');
   });
 
-  test.it('Add new record - set software', function(this: typeof test) {
+  test.it('Add new record - set software', function(this: any) {
     this.timeout(15000);
     // set software
     chromeDriver.wait(until.elementLocated(By.id('software')), 3000);
@@ -134,7 +134,7 @@ test.describe('Installations add screen tests', function() {
     input.sendKeys('Test name');
   });
 
-  test.it('Add new record - set area 0', function(this: typeof test) {
+  test.it('Add new record - set area 0', function(this: any) {
     this.timeout(6000);
     // set area
     // add controls room, operator area, nscl control room
@@ -154,7 +154,7 @@ test.describe('Installations add screen tests', function() {
       'IFS:LAB.FRIB.ASD.CONTROLS.HLCO'), 5000);
     });
 
-  test.it('Add new record - set area 1', function(this: typeof test) {
+  test.it('Add new record - set area 1', function(this: any) {
     this.timeout(6000);
     chromeDriver.wait(until.elementLocated(By.id('add.area')), 3000);
     let input = chromeDriver.findElement(By.id('add.area'));
@@ -171,7 +171,7 @@ test.describe('Installations add screen tests', function() {
       'IFS:LAB.FRIB.ASD.ACCELERATOROPS.MACHINEOPERATORS'), 5000);
     });
 
-  test.it('Add new record - set area 2', function(this: typeof test) {
+  test.it('Add new record - set area 2', function(this: any) {
     this.timeout(6000);
     chromeDriver.wait(until.elementLocated(By.id('add.area')), 3000);
     let input = chromeDriver.findElement(By.id('add.area'));
@@ -223,7 +223,7 @@ test.describe('Installations add screen tests', function() {
     input.click();
   });
 
-  test.it('Add new record - set vvResultsLoc', function(this: typeof test) {
+  test.it('Add new record - set vvResultsLoc', function(this: any) {
     this.timeout(10000);
     // set vvResultsLoc
     chromeDriver.wait(until.elementLocated(By.id('add.vvResultsLoc')), 3000);
@@ -249,61 +249,61 @@ test.describe('Installations add screen tests', function() {
   });
 
 
-  test.it('should show the details record', function (this: typeof test) {
+  test.it('should show the details record', function (this: any) {
     this.timeout(8000);
     chromeDriver.wait(until.titleIs('SWDB - Installation Details'), 5000);
   });
 
-  test.it('should show the correct installtion host in details', function (this: typeof test) {
+  test.it('should show the correct installtion host in details', function (this: any) {
     this.timeout(8000);
     chromeDriver.wait(until.elementLocated(By.id('host')), 3000);
     chromeDriver.findElement(By.id('host')).getAttribute('value').then(
-      function (text) {
+      function (text: string) {
         expect(text).to.equal('testHost1');
       });
   });
 
-  test.it('should show the correct installtion name in details', function (this: typeof test) {
+  test.it('should show the correct installtion name in details', function (this: any) {
     this.timeout(8000);
     chromeDriver.wait(until.elementLocated(By.id('name')), 3000);
     chromeDriver.findElement(By.id('name')).getAttribute('value').then(
-      function (text) {
+      function (text: string) {
         expect(text).to.equal('Test name');
       });
   });
 
-  test.it('should show the correct installtion software in details', function (this: typeof test) {
+  test.it('should show the correct installtion software in details', function (this: any) {
     this.timeout(8000);
     chromeDriver.wait(until.elementLocated(By.id('software')), 3000);
     chromeDriver.findElement(By.id('software')).getAttribute('value').then(
-      function (text) {
+      function (text: string) {
         expect(text).to.equal('BEAST/b12/0.2');
       });
   });
 
-  test.it('should show the correct installtion area in details', function (this: typeof test) {
+  test.it('should show the correct installtion area in details', function (this: any) {
     this.timeout(8000);
     chromeDriver.wait(until.elementLocated(By.id('area')), 3000);
     chromeDriver.findElement(By.id('area')).getAttribute('value').then(
-      function (text) {
+      function (text: string) {
         expect(text).to.equal('IFS:LAB.FRIB.ASD.ACCELERATOROPS.MACHINEOPERATORS,ADB:AREA.NSCL.CONTROLRM');
       });
   });
 
-  test.it('should show the correct installtion DRR in details', function (this: typeof test) {
+  test.it('should show the correct installtion DRR in details', function (this: any) {
     this.timeout(8000);
     chromeDriver.wait(until.elementLocated(By.id('drrs')), 3000);
     chromeDriver.findElement(By.id('drrs')).getAttribute('value').then(
-      function (text) {
+      function (text: string) {
         expect(text).to.equal('TestDRR');
       });
   });
 
-  test.it('should show the correct installtion status in details', function (this: typeof test) {
+  test.it('should show the correct installtion status in details', function (this: any) {
     this.timeout(8000);
     chromeDriver.wait(until.elementLocated(By.id('status')), 3000);
     chromeDriver.findElement(By.id('status')).getAttribute('value').then(
-      function (text) {
+      function (text: string) {
         expect(text).to.equal('Ready for beam');
       });
   });
@@ -320,7 +320,7 @@ test.describe('Installations add screen tests', function() {
   test.it('should show the correct vvResultsLoc in details', function () {
     chromeDriver.wait(until.elementLocated(By.id('vvResultsLoc')), 3000);
     chromeDriver.findElement(By.id('vvResultsLoc')).getAttribute('value').then(
-      function (text) {
+      function (text: string) {
         expect(text).to.equal('http://resultservtest.com/resultsdoc1,http://resultservtest.com/resultdoc2');
       });
   });

@@ -27,7 +27,7 @@ let app: express.Application;
  * Test suite for software installations list page
  */
 
-let chromeDriver;
+let chromeDriver: any;
 
 test.describe('Installations record tests', function() {
   before('Prep DB', async function () {
@@ -46,7 +46,7 @@ test.describe('Installations record tests', function() {
   });
 
 
-  test.it('should show search page with login button', function(this: typeof test) {
+  test.it('should show search page with login button', function(this: any) {
     this.timeout(8000);
 
     chromeDriver = new webdriver.Builder()
@@ -60,7 +60,7 @@ test.describe('Installations record tests', function() {
       'Log in'), 8000);
   });
 
-  test.it('login as test user', function(this: typeof test, done){
+  test.it('login as test user', function(this: any, done: MochaDone){
     this.timeout(8000);
     supertest(app)
     .get('/login')
@@ -81,7 +81,7 @@ test.describe('Installations record tests', function() {
     });
   });
 
-  test.it('should show search page with username on logout button', function(this: typeof test) {
+  test.it('should show search page with username on logout button', function(this: any) {
     this.timeout(8000);
     chromeDriver.get(props.webUrl + '#/inst/list');
     chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
@@ -138,7 +138,7 @@ test.describe('Installations record tests', function() {
   });
 
   // find an installation record
-  test.it('should find a record', function(this: typeof test) {
+  test.it('should find a record', function(this: any) {
     this.timeout(8000);
     chromeDriver.get(props.webUrl + '#/inst/list');
     chromeDriver.wait(until.elementLocated(By.id('hostSrch')), 8000)
