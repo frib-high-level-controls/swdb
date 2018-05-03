@@ -1,12 +1,8 @@
 /* jslint node: true */
 'use strict';
 import express = require('express');
-import expressValidator = require('express-validator');
 import fs = require('fs');
 import request = require('request');
-import util = require('util');
-import instBe = require('./instDb.js');
-import swdbTools = require('./swdblib');
 import url = require('url');
 
 import CommonTools = require('./CommonTools');
@@ -35,7 +31,7 @@ export class InstLib {
    * @returns id The ID of the item found in the request
    */
   public static getReqId = (req: express.Request) => {
-    let id = null;
+    let id: String | null = null;
     let path = url.parse(req.url).pathname;
     if (url.parse(req.url).pathname) {
       if (path!.match(/[^v][\da-fA-F]+$/) !== null) {

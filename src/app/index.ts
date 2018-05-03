@@ -3,7 +3,6 @@
  */
 import fs = require('fs');
 import path = require('path');
-import http = require('http');
 
 import rc = require('rc');
 import dbg = require('debug');
@@ -31,8 +30,6 @@ import InstBe = require('./lib/instDb');
 import instTools = require('./lib/instLib');
 import tools = require('./lib/swdblib');
 import customValidators = require('./lib/validators');
-import cJSON = require('circular-json');
-import validate = require('validate.js');
 
 // package metadata
 interface Package {
@@ -74,7 +71,6 @@ const debug = dbg('swdb:index');
 const be = new Be.Db(true);
 const instBe = new InstBe.InstDb(true);
 
-let server: http.Server;
 let ctools = new CommonTools.CommonTools();
 let props = ctools.getConfiguration();
 debug('props at startup: ' + JSON.stringify(props, null, 2));
@@ -475,7 +471,7 @@ async function doStart(): Promise<express.Application> {
           customValidators.CustomValidators.noSwStateChgIfReferringInst,
         ];
 
-        let errors = [];
+        let errors: customValidators.IValResult[] = [];
         let wfResultArr = await Promise.all(
           wfValArr.map(async function (item, idx, arr) {
             let r = await item(req);
@@ -520,7 +516,7 @@ async function doStart(): Promise<express.Application> {
           customValidators.CustomValidators.noSwStateChgIfReferringInst,
         ];
 
-        let errors = [];
+        let errors: customValidators.IValResult[] = [];
         let wfResultArr = await Promise.all(
           wfValArr.map(async function (item, idx, arr) {
             let r = await item(req);
@@ -577,11 +573,11 @@ async function doStart(): Promise<express.Application> {
         res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
         return;
       } else {
-        let wfResults =
+        let wfResults: customValidators.IValResult =
           await customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall(req);
         if (wfResults.error) {
           debug('Workflow validation errors ' + JSON.stringify(wfResults));
-          res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults[0].data));
+          res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults.data));
           return;
         } else {
           debug('POST /api/v1/inst calling create...');
@@ -610,7 +606,7 @@ async function doStart(): Promise<express.Application> {
           customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall,
         ];
 
-        let errors = [];
+        let errors: customValidators.IValResult[] = [];
         let wfResultArr = await Promise.all(wfValArr.map(async function (item, idx, arr) {
           let r = await item(req);
           if (r.error) {
@@ -653,7 +649,7 @@ async function doStart(): Promise<express.Application> {
           customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall,
         ];
 
-        let errors = [];
+        let errors: customValidators.IValResult[] = [];
         let wfResultArr = await Promise.all(
           wfValArr.map(async function (item, idx, arr) {
             let r = await item(req);

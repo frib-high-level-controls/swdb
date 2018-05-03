@@ -1,11 +1,6 @@
 import express = require('express');
-import fs = require('fs');
 import mongodb = require('mongodb');
 import mongoose = require('mongoose');
-import util = require('util');
-import instTools = require('./instLib');
-import swdbEnums = require('./swdbEnums');
-import swdbTools = require('./swdblib');
 import * as history from '../shared/history';
 
 import CommonTools = require('./CommonTools');
@@ -61,10 +56,9 @@ export class InstDb {
       if (!noconnect) {
         InstDb.dbConnect = mongoose.connect(InstDb.props.mongodbUrl, (err: Error) => {
           if (!err) {
-            // console.log("connected to mongo... " + JSON.stringify(this.props.mongodbUrl);
-            // console.log("connected to mongo... " + JSON.stringify(props.mongodbUrl));
+            debug('DB connected...' + JSON.stringify(InstDb.dbConnect));
           } else {
-            // console.log("Error: " + err);
+            debug('Error: ' + err);
           }
         });
       }
@@ -92,7 +86,7 @@ export class InstDb {
 
   /**
    * createDocByRecord - crates a new record given a single sw record
-   * 
+   *
    * @param user The user making the request (String)
    * @param req The requested sw record to save
    */
@@ -174,7 +168,7 @@ export class InstDb {
     req: express.Request, res: express.Response, next: express.NextFunction) => {
     const id = req.params.id;
     if (id) {
-      const doc = InstDb.instDoc.findOne({ _id: id }, async (err: Error, founddoc: any) => {
+      InstDb.instDoc.findOne({ _id: id }, async (err: Error, founddoc: any) => {
         if (founddoc) {
           for (const prop in req.body) {
             if (req.body.hasOwnProperty(prop)) {

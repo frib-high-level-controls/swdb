@@ -1,16 +1,11 @@
 import express = require('express');
-import expressSession = require('express-session');
-import expressValidator = require('express-validator');
 import cJSON = require('circular-json');
 import validate = require('validate.js');
 import dbg = require('debug');
 import Be = require('./Db');
 import InstBe = require('./instDb');
 import commonTools = require('./CommonTools');
-import mongodb = require('mongodb');
 import  mongoose = require('mongoose');
-import  history = require('../shared/history');
-let objectID = mongodb.ObjectID;
 const tools = new commonTools.CommonTools();
 const props = tools.getConfiguration();
 const debug = dbg('swdb:validators');
@@ -164,6 +159,7 @@ export class CustomValidators {
     let id = req.params.id;
     try {
       let idObj = new mongoose.mongo.ObjectId(req.params.id);
+      debug('id:' + idObj);
     } catch (err) {
       return {
         error: true,
@@ -228,6 +224,7 @@ export class CustomValidators {
     try {
       debug('Rule 2 id: ' + id);
       let idObj = new mongoose.mongo.ObjectId(req.params.id);
+      debug('id:' + idObj);
     } catch (err) {
       return {
         error: true,
@@ -238,7 +235,7 @@ export class CustomValidators {
       let queryPromise = await InstBe.InstDb.instDoc.findOne({ _id: id }).exec();
       // if old status was Ready for install
       // first, see if there was eve a  record to update
-      if (!queryPromise){
+      if (!queryPromise) {
         return {
           error: true,
           data: 'Rule2 record id not found ' + id,
@@ -278,7 +275,7 @@ export class CustomValidators {
    * noInstSwUnlessSwIsReadyForInstall  - method to detect installations attempting to point to software that is not
    * in state Ready for install
    * @param req - express request
-   * 
+   *
    * @returns Promise<IValResult>
    */
   public static noInstSwUnlessSwIsReadyForInstall = 
@@ -292,6 +289,7 @@ export class CustomValidators {
       let id = req.body.software;
       try {
         let idObj = new mongoose.mongo.ObjectId(id);
+        debug('id:' + idObj);
       } catch (err) {
         return {
           error: true,
@@ -299,7 +297,7 @@ export class CustomValidators {
         };
       }
       try {
-        let queryPromise1  = await Be.Db.swDoc.find().exec();
+        await Be.Db.swDoc.find().exec();
         // debug('Rule3 sees swDocs: ' + JSON.stringify(queryPromise1));
         let queryPromise  = await Be.Db.swDoc.findOne({ _id: id }).exec();
         // if old status was Ready for install
@@ -346,7 +344,7 @@ export class CustomValidators {
    * noSwStateChgIfReferringInst  - method to detect software attempting to change state
    * when there are installations referring to it.
    * @param req - express request
-   * 
+   *
    * @returns Promise<IValResult>
    */
   public static noSwStateChgIfReferringInst = async function(req: express.Request): Promise<IValResult> {
@@ -356,6 +354,7 @@ export class CustomValidators {
     let id = req.params.id;
     try {
       let idObj = new mongoose.mongo.ObjectId(req.params.id);
+      debug('id:' + idObj);
     } catch (err) {
       return {
         error: true,
@@ -366,7 +365,7 @@ export class CustomValidators {
       let queryPromise = await Be.Db.swDoc.findOne({ _id: id }).exec();
       // if old status was Ready for install
       // first, see if there was eve a  record to update
-      if (!queryPromise){
+      if (!queryPromise) {
         return {
           error: true,
           data: 'Record id not found' + id,
@@ -385,7 +384,7 @@ export class CustomValidators {
           return {
             error: true,
             data: 'Software state cannot change while there are active installations: ' +
-              queryPromise.map(function (item){
+              queryPromise.map(function (item: any){
                 return item._id;
               }),
           };
@@ -406,7 +405,7 @@ export class CustomValidators {
   };
 };
 
-interface IValResult {
+export interface IValResult {
     error: boolean;
     data: string;
 }
