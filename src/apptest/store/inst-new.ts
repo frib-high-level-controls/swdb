@@ -43,7 +43,7 @@ test.describe('Installations add screen tests', function() {
   });
 
 
-  test.it('should show search page with login button', function() {
+  test.it('should show search page with login button', function(this: typeof test) {
     this.timeout(8000);
 
     chromeDriver = new webdriver.Builder()
@@ -57,7 +57,7 @@ test.describe('Installations add screen tests', function() {
       'Log in'), 5000);
   });
 
-  test.it('login as test user', function(done) {
+  test.it('login as test user', function(this: typeof test, done) {
     this.timeout(8000);
     supertest
     .get('/login')
@@ -78,7 +78,7 @@ test.describe('Installations add screen tests', function() {
     });
   });
 
-  test.it('should show search page with username on logout button', function() {
+  test.it('should show search page with username on logout button', function(this: typeof test) {
     this.timeout(8000);
     chromeDriver.get(props.webUrl + '#/inst/list');
     chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
@@ -86,7 +86,7 @@ test.describe('Installations add screen tests', function() {
       props.test.username.toUpperCase()), 5000);
   });
 
-  test.it('should show new page with username on logout button', function() {
+  test.it('should show new page with username on logout button', function(this: typeof test) {
     this.timeout(8000);
     chromeDriver.get(props.webUrl + '#/inst/new');
     chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
@@ -99,14 +99,14 @@ test.describe('Installations add screen tests', function() {
     chromeDriver.wait(until.titleIs('SWDB - New Installation'), 5000);
   });
 
-  test.it('Add new record - set host', function() {
+  test.it('Add new record - set host', function(this: typeof test) {
     this.timeout(15000);
     chromeDriver.wait(until.elementLocated(By.id('host')), 3000);
     let input = chromeDriver.findElement(By.id('host'));
     input.sendKeys('testHost1');
   });
 
-  test.it('Add new record - set software', function() {
+  test.it('Add new record - set software', function(this: typeof test) {
     this.timeout(15000);
     // set software
     chromeDriver.wait(until.elementLocated(By.id('software')), 3000);
@@ -134,7 +134,7 @@ test.describe('Installations add screen tests', function() {
     input.sendKeys('Test name');
   });
 
-  test.it('Add new record - set area 0', function() {
+  test.it('Add new record - set area 0', function(this: typeof test) {
     this.timeout(6000);
     // set area
     // add controls room, operator area, nscl control room
@@ -154,7 +154,7 @@ test.describe('Installations add screen tests', function() {
       'IFS:LAB.FRIB.ASD.CONTROLS.HLCO'), 5000);
     });
 
-  test.it('Add new record - set area 1', function() {
+  test.it('Add new record - set area 1', function(this: typeof test) {
     this.timeout(6000);
     chromeDriver.wait(until.elementLocated(By.id('add.area')), 3000);
     let input = chromeDriver.findElement(By.id('add.area'));
@@ -171,7 +171,7 @@ test.describe('Installations add screen tests', function() {
       'IFS:LAB.FRIB.ASD.ACCELERATOROPS.MACHINEOPERATORS'), 5000);
     });
 
-  test.it('Add new record - set area 2', function() {
+  test.it('Add new record - set area 2', function(this: typeof test) {
     this.timeout(6000);
     chromeDriver.wait(until.elementLocated(By.id('add.area')), 3000);
     let input = chromeDriver.findElement(By.id('add.area'));
@@ -223,7 +223,7 @@ test.describe('Installations add screen tests', function() {
     input.click();
   });
 
-  test.it('Add new record - set vvResultsLoc', function() {
+  test.it('Add new record - set vvResultsLoc', function(this: typeof test) {
     this.timeout(10000);
     // set vvResultsLoc
     chromeDriver.wait(until.elementLocated(By.id('add.vvResultsLoc')), 3000);
@@ -249,12 +249,12 @@ test.describe('Installations add screen tests', function() {
   });
 
 
-  test.it('should show the details record', function () {
+  test.it('should show the details record', function (this: typeof test) {
     this.timeout(8000);
     chromeDriver.wait(until.titleIs('SWDB - Installation Details'), 5000);
   });
 
-  test.it('should show the correct installtion host in details', function () {
+  test.it('should show the correct installtion host in details', function (this: typeof test) {
     this.timeout(8000);
     chromeDriver.wait(until.elementLocated(By.id('host')), 3000);
     chromeDriver.findElement(By.id('host')).getAttribute('value').then(
@@ -263,7 +263,7 @@ test.describe('Installations add screen tests', function() {
       });
   });
 
-  test.it('should show the correct installtion name in details', function () {
+  test.it('should show the correct installtion name in details', function (this: typeof test) {
     this.timeout(8000);
     chromeDriver.wait(until.elementLocated(By.id('name')), 3000);
     chromeDriver.findElement(By.id('name')).getAttribute('value').then(
@@ -272,7 +272,7 @@ test.describe('Installations add screen tests', function() {
       });
   });
 
-  test.it('should show the correct installtion software in details', function () {
+  test.it('should show the correct installtion software in details', function (this: typeof test) {
     this.timeout(8000);
     chromeDriver.wait(until.elementLocated(By.id('software')), 3000);
     chromeDriver.findElement(By.id('software')).getAttribute('value').then(
@@ -281,7 +281,7 @@ test.describe('Installations add screen tests', function() {
       });
   });
 
-  test.it('should show the correct installtion area in details', function () {
+  test.it('should show the correct installtion area in details', function (this: typeof test) {
     this.timeout(8000);
     chromeDriver.wait(until.elementLocated(By.id('area')), 3000);
     chromeDriver.findElement(By.id('area')).getAttribute('value').then(
@@ -290,7 +290,7 @@ test.describe('Installations add screen tests', function() {
       });
   });
 
-  test.it('should show the correct installtion DRR in details', function () {
+  test.it('should show the correct installtion DRR in details', function (this: typeof test) {
     this.timeout(8000);
     chromeDriver.wait(until.elementLocated(By.id('drrs')), 3000);
     chromeDriver.findElement(By.id('drrs')).getAttribute('value').then(
@@ -299,7 +299,7 @@ test.describe('Installations add screen tests', function() {
       });
   });
 
-  test.it('should show the correct installtion status in details', function () {
+  test.it('should show the correct installtion status in details', function (this: typeof test) {
     this.timeout(8000);
     chromeDriver.wait(until.elementLocated(By.id('status')), 3000);
     chromeDriver.findElement(By.id('status')).getAttribute('value').then(

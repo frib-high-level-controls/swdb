@@ -19,8 +19,8 @@ export class TestTools {
   public async loadTestCollectionsStandard(sdebug: debug.IDebugger, swFile: string, instFile: string) {
     await be.chkConn();
     await instBe.chkConn();
-    let testInstData = [];
-    let testSwData = [];
+    let testInstData: any[] = [];
+    let testSwData: any[] = [];
     sdebug('loading test DB');
     try {
       testInstData = JSON.parse(fs.readFileSync(instFile, 'utf-8'));
@@ -80,8 +80,8 @@ export class TestTools {
   public async loadCollectionsWithHistory(sdebug: debug.IDebugger, swFile: string, instFile: string) {
     await be.chkConn();
     await instBe.chkConn();
-    let testInstData = [];
-    let testSwData = [];
+    let testInstData: any[] = [];
+    let testSwData: any[] = [];
     sdebug('loading DB with history');
     try {
       testInstData = JSON.parse(fs.readFileSync(instFile, 'utf-8'));
