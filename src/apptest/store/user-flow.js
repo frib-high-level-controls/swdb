@@ -15,8 +15,8 @@ let testTools = new TestTools.TestTools();
 
 var webdriver = require("selenium-webdriver"),
   By = webdriver.By,
-  until = webdriver.until,
-  test = require("selenium-webdriver/testing");
+  until = webdriver.until;
+var test = require("selenium-webdriver/testing");
 var fs = require('fs');
 var path = require('path');
 let dbg = require('debug');
@@ -73,7 +73,7 @@ test.describe("User flow tests", function() {
     .end(function(err,res){
       if (err) done(err);
       else {
-        Cookies = res.headers['set-cookie'].pop().split(';')[0];
+        let Cookies = res.headers['set-cookie'].pop().split(';')[0];
         debug('test login cookies: ' + Cookies);
         let parts = Cookies.split('=');
         debug('setting driver cookie ' + parts[0] + ' ' + parts[1]);
@@ -107,14 +107,14 @@ test.describe("User flow tests", function() {
   test.it("Add new record - set name", function() {
     this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id('swName')), 3000);
-    var input = chromeDriver.findElement(By.id('swName')).sendKeys("Test UserRecord");
+    let input = chromeDriver.findElement(By.id('swName')).sendKeys("Test UserRecord");
   });
 
   test.it("Add new record - set version", function() {
     this.timeout(5000);
     // set version
     chromeDriver.wait(until.elementLocated(By.id("version")), 3000);
-    input = chromeDriver.findElement(By.id("version"));
+    let input = chromeDriver.findElement(By.id("version"));
     input.click();
     input.sendKeys("Test Version");
   });
@@ -123,7 +123,7 @@ test.describe("User flow tests", function() {
     this.timeout(5000);
     // set branch
     chromeDriver.wait(until.elementLocated(By.id("branch")), 3000);
-    input = chromeDriver.findElement(By.id("branch"));
+    let input = chromeDriver.findElement(By.id("branch"));
     input.click();
     input.sendKeys("Test branch");
   });
@@ -132,7 +132,7 @@ test.describe("User flow tests", function() {
     this.timeout(5000);
     // set description
     chromeDriver.wait(until.elementLocated(By.id("desc")), 3000);
-    input = chromeDriver.findElement(By.id("desc"));
+    let input = chromeDriver.findElement(By.id("desc"));
     input.click();
     input.sendKeys("Test description");
   });
@@ -140,7 +140,7 @@ test.describe("User flow tests", function() {
   test.it("Add new record - set desc doc", function() {
     // set description document
     chromeDriver.wait(until.elementLocated(By.id("descDocLoc")), 3000);
-    input = chromeDriver.findElement(By.id("descDocLoc"));
+    let input = chromeDriver.findElement(By.id("descDocLoc"));
     input.click();
     input.sendKeys("http://www.google.com");
   });
@@ -149,7 +149,7 @@ test.describe("User flow tests", function() {
     this.timeout(5000);
     // set design description document
     chromeDriver.wait(until.elementLocated(By.id("designDescDocLoc")), 3000);
-    input = chromeDriver.findElement(By.id("designDescDocLoc"));
+    let input = chromeDriver.findElement(By.id("designDescDocLoc"));
     input.click();
     input.sendKeys("http://www.google.com");
   });
@@ -158,7 +158,7 @@ test.describe("User flow tests", function() {
     this.timeout(5000);
     // set owner 
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
-    input = chromeDriver.findElement(By.id("owner"));
+    let input = chromeDriver.findElement(By.id("owner"));
     input.click();
     //*[@id="owner"]/input[1]
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="owner"]/input[1]')));
@@ -175,7 +175,7 @@ test.describe("User flow tests", function() {
     this.timeout(5000);
     // set level of care
     chromeDriver.wait(until.elementLocated(By.id("levelOfCare")), 3000);
-    input = chromeDriver.findElement(By.id("levelOfCare"));
+    let input = chromeDriver.findElement(By.id("levelOfCare"));
     input.click();
     input.sendKeys("LOW");
   });
@@ -184,7 +184,7 @@ test.describe("User flow tests", function() {
     this.timeout(5000);
     // set status
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
-    input = chromeDriver.findElement(By.id("status"));
+    let input = chromeDriver.findElement(By.id("status"));
     input.click();
     input.sendKeys("Development");
   });
@@ -193,7 +193,7 @@ test.describe("User flow tests", function() {
     this.timeout(5000);
     // set status date
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')), 3000);
-    input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
+    let input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
     input.click();
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
@@ -204,7 +204,7 @@ test.describe("User flow tests", function() {
     this.timeout(5000);
     // set platforms
     chromeDriver.wait(until.elementLocated(By.id("platforms")), 3000);
-    input = chromeDriver.findElement(By.id("platforms"));
+    let input = chromeDriver.findElement(By.id("platforms"));
     input.click();
     input.sendKeys("Test platform");
   });
@@ -213,18 +213,18 @@ test.describe("User flow tests", function() {
     this.timeout(5000);
     // set vvProcLoc
     chromeDriver.wait(until.elementLocated(By.id("add.vvProcLoc")), 3000);
-    input = chromeDriver.findElement(By.id("add.vvProcLoc"));
+    let input = chromeDriver.findElement(By.id("add.vvProcLoc"));
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("vvProcLoc.0")), 3000);
-    input0 = chromeDriver.findElement(By.id("vvProcLoc.0"));
+    let input0 = chromeDriver.findElement(By.id("vvProcLoc.0"));
     input0.sendKeys("http://procservtest.com/procdoc0");
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("vvProcLoc.1")), 3000);
-    input1 = chromeDriver.findElement(By.id("vvProcLoc.1"));
+    let input1 = chromeDriver.findElement(By.id("vvProcLoc.1"));
     input1.sendKeys("http://procservtest.com/procdoc1");
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("vvProcLoc.2")), 3000);
-    input2 = chromeDriver.findElement(By.id("vvProcLoc.2"));
+    let input2 = chromeDriver.findElement(By.id("vvProcLoc.2"));
     input2.sendKeys("http://procservtest.com/procdoc2");
     // remove the first entry
     chromeDriver.wait(until.elementLocated(By.id("rm.vvProcLoc.0")), 3000);
@@ -237,18 +237,18 @@ test.describe("User flow tests", function() {
     this.timeout(7000);
     // set vvResultsLoc
     chromeDriver.wait(until.elementLocated(By.id("add.vvResultsLoc")), 3000);
-    input = chromeDriver.findElement(By.id("add.vvResultsLoc"));
+    let input = chromeDriver.findElement(By.id("add.vvResultsLoc"));
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc.0")), 3000);
-    input0 = chromeDriver.findElement(By.id("vvResultsLoc.0"));
+    let input0 = chromeDriver.findElement(By.id("vvResultsLoc.0"));
     input0.sendKeys("http://resultservtest.com/resultsdoc0");
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc.1")), 3000);
-    input1 = chromeDriver.findElement(By.id("vvResultsLoc.1"));
+    let input1 = chromeDriver.findElement(By.id("vvResultsLoc.1"));
     input1.sendKeys("http://resultservtest.com/resultsdoc1");
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc.2")), 3000);
-    input2 = chromeDriver.findElement(By.id("vvResultsLoc.2"));
+    let input2 = chromeDriver.findElement(By.id("vvResultsLoc.2"));
     input2.sendKeys("http://resultservtest.com/resultdoc2");
     // remove the first entry
     chromeDriver.wait(until.elementLocated(By.id("rm.vvResultsLoc.0")), 3000);
@@ -260,7 +260,7 @@ test.describe("User flow tests", function() {
     this.timeout(5000);
     // set version control
     chromeDriver.wait(until.elementLocated(By.id("versionControl")), 3000);
-    input = chromeDriver.findElement(By.id("versionControl"));
+    let input = chromeDriver.findElement(By.id("versionControl"));
     input.click();
     input.sendKeys("Git");
   });
@@ -268,7 +268,7 @@ test.describe("User flow tests", function() {
   test.it("Add new record - set version control loc", function() {
     // set version control location
     chromeDriver.wait(until.elementLocated(By.id("versionControlLoc")), 3000);
-    input = chromeDriver.findElement(By.id("versionControlLoc"));
+    let input = chromeDriver.findElement(By.id("versionControlLoc"));
     input.click();
     input.sendKeys("http://www.google.com");
   });
@@ -277,7 +277,7 @@ test.describe("User flow tests", function() {
     this.timeout(5000);
     // set recert freq
     chromeDriver.wait(until.elementLocated(By.id("recertFreq")), 3000);
-    input = chromeDriver.findElement(By.id("recertFreq"));
+    let input = chromeDriver.findElement(By.id("recertFreq"));
     input.click();
     input.sendKeys("Test recertification frequency");
   });
@@ -286,7 +286,7 @@ test.describe("User flow tests", function() {
     this.timeout(5000);
     // set recert date
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="recertDate-group"]/div/p/span/button/i')), 3000);
-    input = chromeDriver.findElement(By.xpath('//*[@id="recertDate-group"]/div/p/span/button/i'));
+    let input = chromeDriver.findElement(By.xpath('//*[@id="recertDate-group"]/div/p/span/button/i'));
     input.click();
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="recertDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[@id="recertDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
@@ -297,7 +297,7 @@ test.describe("User flow tests", function() {
     this.timeout(10000);
     // set engineer
     chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
-    input = chromeDriver.findElement(By.id("engineer"));
+    let input = chromeDriver.findElement(By.id("engineer"));
     chromeDriver.executeScript("scroll(0, -250);")
     input.click();
     //*[@id="engineer"]/input[1]
@@ -534,7 +534,7 @@ test.it("should show search page with username on logout button", function() {
   test.it("Add new record - set host", function() {
     this.timeout(15000);
     chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
-    var input = chromeDriver.findElement(By.id("host"));
+    let input = chromeDriver.findElement(By.id("host"));
     input.sendKeys("testHost1");
   });
 
@@ -542,7 +542,7 @@ test.it("should show search page with username on logout button", function() {
     this.timeout(15000);
     // set software
     chromeDriver.wait(until.elementLocated(By.id("software")), 3000);
-    searchInput = chromeDriver.findElement(By.id("software"));
+    let searchInput = chromeDriver.findElement(By.id("software"));
     searchInput.click();
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="software"]/input[1]')));
     searchInput = chromeDriver.findElement(By.xpath('//*[@id="software"]/input[1]'));
@@ -556,9 +556,10 @@ test.it("should show search page with username on logout button", function() {
   });
   test.it("Add new record - click row", function() {
     this.timeout(5000);
-    input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-4-0"]/span'));
+    let input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-4-0"]/span'));
     input.click();
   });
+
   test.it("Add new record - check input", function() {
     this.timeout(5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
@@ -573,7 +574,7 @@ test.it("should show search page with username on logout button", function() {
   test.it("Add new record - set name", function() {
     // set name
     chromeDriver.wait(until.elementLocated(By.id("name")), 3000);
-    input = chromeDriver.findElement(By.id("name"));
+    let input = chromeDriver.findElement(By.id("name"));
     input.click();
     input.sendKeys("Test name");
   });
@@ -584,14 +585,14 @@ test.it("should show search page with username on logout button", function() {
     // add controls room, operator area, nscl control room
     // then delete the controls room
     chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
-    input = chromeDriver.findElement(By.id("add.area"));
+    let input = chromeDriver.findElement(By.id("add.area"));
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("area.0")), 3000);
-    input0 = chromeDriver.findElement(By.id("area.0"));
+    let input0 = chromeDriver.findElement(By.id("area.0"));
     input0.click();
 
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.0"]/input[1]')), 3000);
-    input0b = chromeDriver.findElement(By.xpath('//*[@id="area.0"]/input[1]'));
+    let input0b = chromeDriver.findElement(By.xpath('//*[@id="area.0"]/input[1]'));
     input0b.sendKeys("controls\n");
 
     chromeDriver.wait(until.elementTextContains(input0,
@@ -601,14 +602,14 @@ test.it("should show search page with username on logout button", function() {
   test.it("Add new record - set area 1", function() {
     this.timeout(6000);
     chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
-    input = chromeDriver.findElement(By.id("add.area"));
+    let input = chromeDriver.findElement(By.id("add.area"));
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("area.1")), 3000);
-    input1 = chromeDriver.findElement(By.id("area.1"));
+    let input1 = chromeDriver.findElement(By.id("area.1"));
     input1.click();
 
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.1"]/input[1]')), 3000);
-    input1b = chromeDriver.findElement(By.xpath('//*[@id="area.1"]/input[1]'));
+    let input1b = chromeDriver.findElement(By.xpath('//*[@id="area.1"]/input[1]'));
     input1b.sendKeys("operator\n");
 
     chromeDriver.wait(until.elementTextContains(input1,
@@ -618,14 +619,14 @@ test.it("should show search page with username on logout button", function() {
   test.it("Add new record - set area 2", function() {
     this.timeout(6000);
     chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
-    input = chromeDriver.findElement(By.id("add.area"));
+    let input = chromeDriver.findElement(By.id("add.area"));
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("area.2")), 3000);
-    input2 = chromeDriver.findElement(By.id("area.2"));
+    let input2 = chromeDriver.findElement(By.id("area.2"));
     input2.click();
 
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.2"]/input[1]')), 3000);
-    input2b = chromeDriver.findElement(By.xpath('//*[@id="area.2"]/input[1]'));
+    let input2b = chromeDriver.findElement(By.xpath('//*[@id="area.2"]/input[1]'));
     input2b.sendKeys("control room\n");
 
     chromeDriver.wait(until.elementTextContains(input2,
@@ -634,7 +635,7 @@ test.it("should show search page with username on logout button", function() {
 
   test.it("Add new record - remove area 0", function() {
     chromeDriver.wait(until.elementLocated(By.id("rm.area.0")), 3000);
-    input = chromeDriver.findElement(By.id("rm.area.0"));
+    let input = chromeDriver.findElement(By.id("rm.area.0"));
     input.click();
   });
 
@@ -642,7 +643,7 @@ test.it("should show search page with username on logout button", function() {
     this.timeout(5000);
     // set drrs
     chromeDriver.wait(until.elementLocated(By.id("drrs")), 3000);
-    input = chromeDriver.findElement(By.id("drrs"));
+    let input = chromeDriver.findElement(By.id("drrs"));
     input.click();
     input.sendKeys("TestDRR");
   });
@@ -651,7 +652,7 @@ test.it("should show search page with username on logout button", function() {
     this.timeout(5000);
     // set the status
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
-    input = chromeDriver.findElement(By.id("status"));
+    let input = chromeDriver.findElement(By.id("status"));
     input.click();
     input.sendKeys("Ready for beam");
 
@@ -662,7 +663,7 @@ test.it("should show search page with username on logout button", function() {
     this.timeout(5000);
     // set status date
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')), 3000);
-    input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
+    let input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
     input.click();
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
@@ -673,18 +674,18 @@ test.it("should show search page with username on logout button", function() {
     this.timeout(5000);
     // set vvResultsLoc
     chromeDriver.wait(until.elementLocated(By.id("add.vvResultsLoc")), 3000);
-    input = chromeDriver.findElement(By.id("add.vvResultsLoc"));
+    let input = chromeDriver.findElement(By.id("add.vvResultsLoc"));
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc.0")), 3000);
-    input0 = chromeDriver.findElement(By.id("vvResultsLoc.0"));
+    let input0 = chromeDriver.findElement(By.id("vvResultsLoc.0"));
     input0.sendKeys("http://resultservtest.com/resultsdoc0");
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc.1")), 3000);
-    input1 = chromeDriver.findElement(By.id("vvResultsLoc.1"));
+    let input1 = chromeDriver.findElement(By.id("vvResultsLoc.1"));
     input1.sendKeys("http://resultservtest.com/resultsdoc1");
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc.2")), 3000);
-    input2 = chromeDriver.findElement(By.id("vvResultsLoc.2"));
+    let input2 = chromeDriver.findElement(By.id("vvResultsLoc.2"));
     input2.sendKeys("http://resultservtest.com/resultdoc2");
     // remove the first entry
     chromeDriver.wait(until.elementLocated(By.id("rm.vvResultsLoc.0")), 3000);

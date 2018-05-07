@@ -12,8 +12,8 @@ let testTools = new TestTools.TestTools();
 
 let webdriver = require("selenium-webdriver"),
   By = webdriver.By,
-  until = webdriver.until,
-  test = require("selenium-webdriver/testing");
+  until = webdriver.until;
+var test = require("selenium-webdriver/testing");
 let fs = require('fs');
 let dbg = require('debug');
 const debug = dbg('swdb:inst-details-tests');
@@ -26,6 +26,7 @@ props = ctools.getConfiguration();
 
 test.describe("Installations detail screen tests", function() {
   let allCookies = null;
+  let chromeDriver = null;
   before("Prep DB", async function () {
     app = await server.start();
     supertest = Supertest(app);
@@ -65,7 +66,7 @@ test.describe("Installations detail screen tests", function() {
     .end(function(err,res){
       if (err) done(err);
       else {
-        Cookies = res.headers['set-cookie'].pop().split(';')[0];
+        let Cookies = res.headers['set-cookie'].pop().split(';')[0];
         debug('test login cookies: ' + Cookies);
         let parts = Cookies.split('=');
         debug('setting driver cookie ' + parts[0] + ' ' + parts[1]);
