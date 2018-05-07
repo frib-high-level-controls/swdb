@@ -15,8 +15,8 @@ let testTools = new TestTools.TestTools();
 
 var webdriver = require("selenium-webdriver"),
   By = webdriver.By,
-  until = webdriver.until,
-  test = require("selenium-webdriver/testing");
+  until = webdriver.until;
+var test = require("selenium-webdriver/testing");
 var fs = require('fs');
 var path = require('path');
 let dbg = require('debug');
@@ -72,7 +72,7 @@ test.describe("Installations record tests", function() {
     .end(function(err,res){
       if (err) done(err);
       else {
-        Cookies = res.headers['set-cookie'].pop().split(';')[0];
+        let Cookies = res.headers['set-cookie'].pop().split(';')[0];
         debug('test login cookies: ' + Cookies);
         let parts = Cookies.split('=');
         debug('setting driver cookie ' + parts[0] + ' ' + parts[1]);
@@ -120,44 +120,44 @@ test.describe("Installations record tests", function() {
   });
 
   test.it("should show Status column names in proper order", function() {
-    xpath = '//*[@id="swdbList"]/thead/tr[1]/th[2]';
+    let xpath = '//*[@id="swdbList"]/thead/tr[1]/th[2]';
     chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    var field = chromeDriver.findElement(By.xpath(xpath));
+    let field = chromeDriver.findElement(By.xpath(xpath));
     return expect(Promise.resolve(field.getText())).to.eventually.equal("Branch");
   });
 
   test.it("should show Version column names in proper order", function() {
-    xpath = '//*[@id="swdbList"]/thead/tr[1]/th[3]';
+    let xpath = '//*[@id="swdbList"]/thead/tr[1]/th[3]';
     chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    var field = chromeDriver.findElement(By.xpath(xpath));
+    let field = chromeDriver.findElement(By.xpath(xpath));
     return expect(Promise.resolve(field.getText())).to.eventually.equal("Version");
   });
 
   test.it("should show Owner column names in proper order", function() {
-    xpath = '//*[@id="swdbList"]/thead/tr[1]/th[4]';
+    let xpath = '//*[@id="swdbList"]/thead/tr[1]/th[4]';
     chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    var field = chromeDriver.findElement(By.xpath(xpath));
+    let field = chromeDriver.findElement(By.xpath(xpath));
     return expect(Promise.resolve(field.getText())).to.eventually.equal("Owner");
   });
 
   test.it("should show Engineer column names in proper order", function() {
-    xpath = '//*[@id="swdbList"]/thead/tr[1]/th[5]';
+    let xpath = '//*[@id="swdbList"]/thead/tr[1]/th[5]';
     chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    var field = chromeDriver.findElement(By.xpath(xpath));
+    let field = chromeDriver.findElement(By.xpath(xpath));
     return expect(Promise.resolve(field.getText())).to.eventually.equal("Engineer");
   });
 
   test.it("should show Status column names in proper order", function() {
-    xpath = '//*[@id="swdbList"]/thead/tr[1]/th[6]';
+    let xpath = '//*[@id="swdbList"]/thead/tr[1]/th[6]';
     chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    var field = chromeDriver.findElement(By.xpath(xpath));
+    let field = chromeDriver.findElement(By.xpath(xpath));
     return expect(Promise.resolve(field.getText())).to.eventually.equal("Status");
   });
 
   test.it("should show Status date column names in proper order", function() {
-    xpath = '//*[@id="swdbList"]/thead/tr[1]/th[7]';
+    let xpath = '//*[@id="swdbList"]/thead/tr[1]/th[7]';
     chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    var field = chromeDriver.findElement(By.xpath(xpath));
+    let field = chromeDriver.findElement(By.xpath(xpath));
     return expect(Promise.resolve(field.getText())).to.eventually.equal("Status date (m/d/y)");
   });
 
@@ -168,7 +168,7 @@ test.describe("Installations record tests", function() {
     ////*[@id="swdbList"]/tbody/tr[4]/td[1]/a
     //
     chromeDriver.wait(until.elementLocated(By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]')), 8000);
-    var link = chromeDriver.findElement(By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]'));
+    let link = chromeDriver.findElement(By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]'));
     return expect(Promise.resolve(link.getText())).to.eventually.equal("BEAST");
   });
 
@@ -184,7 +184,7 @@ test.describe("Installations record tests", function() {
       .sendKeys("b4");
     chromeDriver.wait(until.elementLocated(By.linkText("BEAST")),
       8000);
-    var link = chromeDriver.findElement(By.linkText("BEAST"));
+    let link = chromeDriver.findElement(By.linkText("BEAST"));
     link.getAttribute("href").then(function(result){
       expect(result).to.equal(props.webUrl+"#/details/5947589458a6aa0face9a554");
     });
