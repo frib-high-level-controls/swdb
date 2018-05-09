@@ -95,7 +95,7 @@ describe("app", function() {
         done(err);
       } else {
         try {
-          sub = JSON.parse(res.text).filter((element, idx, array) => {
+          let sub = JSON.parse(res.text).filter((element, idx, array) => {
             return element.uid === "ELLISR";
           });
           if (sub.length === 1) {
@@ -123,7 +123,7 @@ describe("app", function() {
         done(err);
       } else {
         try {
-          sub = JSON.parse(res.text).filter((element, idx, array) => {
+          let sub = JSON.parse(res.text).filter((element, idx, array) => {
             return element.uid === "IFS:LAB.FRIB.ASD.CONTROLS";
           });
           if (sub.length === 1) {
@@ -151,7 +151,7 @@ describe("app", function() {
         done(err);
       } else {
         try {
-          sub = JSON.parse(res.text).filter((element, idx, array) => {
+          let sub = JSON.parse(res.text).filter((element, idx, array) => {
             return element.uid === "ADB:AREA.FRIB.CTRLITIDF";
           });
           if (sub.length === 1) {
@@ -1509,7 +1509,7 @@ describe("app", function() {
           } else {
             // grab the new installation id from the returned location header.
             // We use this later to verify the error message.
-            id = res.header.location.split(/\//).pop();
+            let id = res.header.location.split(/\//).pop();
             wrapper.instId = id;
             debug("res: " + JSON.stringify(res, null, 2));
             done()

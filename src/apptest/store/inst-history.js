@@ -28,6 +28,7 @@ const debug = dbg('swdb:inst-history-tests');
 var Cookies;
 //
 describe("Installations history tests suite", function () {
+  let supertest = null;
   before("Prep DB", async function () {
     app = await server.start();
     supertest = Supertest(app);

@@ -14,8 +14,8 @@ let testTools = new TestTools.TestTools();
 
 var webdriver = require("selenium-webdriver"),
   By = webdriver.By,
-  until = webdriver.until,
-  test = require("selenium-webdriver/testing");
+  until = webdriver.until;
+var test = require("selenium-webdriver/testing");
 var fs = require('fs');
 var path = require('path');
 let dbg = require('debug');
@@ -71,7 +71,7 @@ test.describe("Installations update screen tests", function() {
     .end(function(err,res){
       if (err) done(err);
       else {
-        Cookies = res.headers['set-cookie'].pop().split(';')[0];
+        let Cookies = res.headers['set-cookie'].pop().split(';')[0];
         debug('test login cookies: ' + Cookies);
         let parts = Cookies.split('=');
         debug('setting driver cookie ' + parts[0] + ' ' + parts[1]);
@@ -104,14 +104,14 @@ test.describe("Installations update screen tests", function() {
 
   test.it("Set the host", function() {
     chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
-    var input = chromeDriver.findElement(By.id("host"));
+    let input = chromeDriver.findElement(By.id("host"));
     input.sendKeys("testHost1");
   });
 
   test.it("Add new record - set name", function() {
     // set name
     chromeDriver.wait(until.elementLocated(By.id("name")), 3000);
-    input = chromeDriver.findElement(By.id("name"));
+    let input = chromeDriver.findElement(By.id("name"));
     input.click();
     input.sendKeys("Test name");
   });
@@ -122,14 +122,14 @@ test.describe("Installations update screen tests", function() {
     // add controls room, operator area, nscl control room
     // then delete the controls room
     chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
-    input = chromeDriver.findElement(By.id("add.area"));
+    let input = chromeDriver.findElement(By.id("add.area"));
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("area.0")), 3000);
-    input0 = chromeDriver.findElement(By.id("area.0"));
+    let input0 = chromeDriver.findElement(By.id("area.0"));
     input0.click();
 
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.0"]/input[1]')), 3000);
-    input0b = chromeDriver.findElement(By.xpath('//*[@id="area.0"]/input[1]'));
+    let input0b = chromeDriver.findElement(By.xpath('//*[@id="area.0"]/input[1]'));
     input0b.sendKeys("controls\n");
 
     chromeDriver.wait(until.elementTextContains(input0,
@@ -139,14 +139,14 @@ test.describe("Installations update screen tests", function() {
   test.it("Add new record - set area 1", function() {
     this.timeout(6000);
     chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
-    input = chromeDriver.findElement(By.id("add.area"));
+    let input = chromeDriver.findElement(By.id("add.area"));
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("area.1")), 3000);
-    input1 = chromeDriver.findElement(By.id("area.1"));
+    let input1 = chromeDriver.findElement(By.id("area.1"));
     input1.click();
 
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.1"]/input[1]')), 3000);
-    input1b = chromeDriver.findElement(By.xpath('//*[@id="area.1"]/input[1]'));
+    let input1b = chromeDriver.findElement(By.xpath('//*[@id="area.1"]/input[1]'));
     input1b.sendKeys("operator\n");
 
     chromeDriver.wait(until.elementTextContains(input1,
@@ -156,14 +156,14 @@ test.describe("Installations update screen tests", function() {
   test.it("Add new record - set area 2", function() {
     this.timeout(6000);
     chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
-    input = chromeDriver.findElement(By.id("add.area"));
+    let input = chromeDriver.findElement(By.id("add.area"));
     input.click();
     chromeDriver.wait(until.elementLocated(By.id("area.2")), 3000);
-    input2 = chromeDriver.findElement(By.id("area.2"));
+    let input2 = chromeDriver.findElement(By.id("area.2"));
     input2.click();
 
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.2"]/input[1]')), 3000);
-    input2b = chromeDriver.findElement(By.xpath('//*[@id="area.2"]/input[1]'));
+    let input2b = chromeDriver.findElement(By.xpath('//*[@id="area.2"]/input[1]'));
     input2b.sendKeys("control room\n");
 
     chromeDriver.wait(until.elementTextContains(input2,
@@ -172,14 +172,14 @@ test.describe("Installations update screen tests", function() {
 
   test.it("Add new record - remove area 0", function() {
     chromeDriver.wait(until.elementLocated(By.id("rm.area.0")), 3000);
-    input = chromeDriver.findElement(By.id("rm.area.0"));
+    let input = chromeDriver.findElement(By.id("rm.area.0"));
     input.click();
   });
 
   test.it("Set the status", function() {
     // set status
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
-    input = chromeDriver.findElement(By.id("status"));
+    let input = chromeDriver.findElement(By.id("status"));
     input.click();
     input.sendKeys("Ready for install");
 
@@ -190,7 +190,7 @@ test.describe("Installations update screen tests", function() {
     this.timeout(10000);
     // set status date
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')), 3000);
-    input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
+    let input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
     input.click();
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
@@ -201,7 +201,7 @@ test.describe("Installations update screen tests", function() {
     this.timeout(15000);
     // set software
     chromeDriver.wait(until.elementLocated(By.id("software")), 3000);
-    searchInput = chromeDriver.findElement(By.id("software"));
+    let searchInput = chromeDriver.findElement(By.id("software"));
     searchInput.click();
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="software"]/input[1]')));
     searchInput = chromeDriver.findElement(By.xpath('//*[@id="software"]/input[1]'));
@@ -209,7 +209,7 @@ test.describe("Installations update screen tests", function() {
     //*[@id="ui-select-choices-row-1-2"]/span
     //*[@id="ui-select-choices-row-0-2"]/span/div/span
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-0-0"]/span')));
-    input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-0"]/span'));
+    let input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-0"]/span'));
     input.click();
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
       By.id('software')),
@@ -246,7 +246,7 @@ test.describe("Installations update screen tests", function() {
   test.it("should update host", function () {
     chromeDriver.wait(until.titleIs("SWDB - Update Installation"), 5000);
     chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
-    var input = chromeDriver.findElement(By.id("host"));
+    let input = chromeDriver.findElement(By.id("host"));
     input.clear();
     input.sendKeys("testHost2");
     chromeDriver.wait(until.elementLocated(By.id('submitBtn')), 3000);
@@ -334,7 +334,7 @@ test.describe("Installations update screen tests", function() {
     this.timeout(20000);
     //*[@id="histTable"]/tbody/tr[2]/td[2] shold be "New Test Description2"
     chromeDriver.wait(until.elementLocated(By.id("hist.0")), 3000);
-    input = chromeDriver.findElement(By.id("hist.0"));
+    let input = chromeDriver.findElement(By.id("hist.0"));
     input.click();
     chromeDriver.wait(until.elementLocated(By.id('histPathName.0.0')), 3000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(

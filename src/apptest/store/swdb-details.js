@@ -75,7 +75,7 @@ test.describe("Preload db record tests", function() {
     .end(function(err,res){
       if (err) done(err);
       else {
-        Cookies = res.headers['set-cookie'].pop().split(';')[0];
+        let Cookies = res.headers['set-cookie'].pop().split(';')[0];
         debug('test login cookies: ' + Cookies);
         let parts = Cookies.split('=');
         debug('setting driver cookie ' + parts[0] + ' ' + parts[1]);
@@ -102,7 +102,7 @@ test.describe("Preload db record tests", function() {
   test.it("should show a known record", function() {
     this.timeout(8000);
     chromeDriver.wait(until.elementLocated(By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]')), 8000);
-    var link = chromeDriver.findElement(By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]'));
+    let link = chromeDriver.findElement(By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]'));
     expect(Promise.resolve(link.getText())).to.eventually.equal("BEAST");
     link.click();
   });

@@ -19,8 +19,8 @@ export class TestTools {
   public async loadTestCollectionsStandard(sdebug: debug.IDebugger, swFile: string, instFile: string) {
     await be.chkConn();
     await instBe.chkConn();
-    let testInstData = [];
-    let testSwData = [];
+    let testInstData: any[] = [];
+    let testSwData: any[] = [];
     sdebug('loading test DB');
     try {
       testInstData = JSON.parse(fs.readFileSync(instFile, 'utf-8'));
@@ -80,8 +80,8 @@ export class TestTools {
   public async loadCollectionsWithHistory(sdebug: debug.IDebugger, swFile: string, instFile: string) {
     await be.chkConn();
     await instBe.chkConn();
-    let testInstData = [];
-    let testSwData = [];
+    let testInstData: any[] = [];
+    let testSwData: any[] = [];
     sdebug('loading DB with history');
     try {
       testInstData = JSON.parse(fs.readFileSync(instFile, 'utf-8'));
@@ -239,7 +239,7 @@ export class TestTools {
     }
   }
 
-  public async checkHistory(sdebug: debug.IDebugger, canonObj, id) {
+  public async checkHistory(sdebug: debug.IDebugger, canonObj: {[key: string]: object}, id: number) {
   /**
    * Search history for id as an rid field. Sort that list by date and take the latest.
    * Take the original object data as canonical, compare each field to the history,
