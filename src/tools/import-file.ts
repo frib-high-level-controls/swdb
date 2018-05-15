@@ -286,7 +286,7 @@ function getXlsxJson(fileName: string, cfg: Config) {
               error('Duplicate found for SW %s version %s, but platforms do not match !!!',
               row[COL_NAME_1], row[COL_VERSION]);
             }
-            if (data.versionControl !== (row[COL_VCS_TYPE] === 'Archive' ? 'Other' : row[COL_VCS_TYPE])) {
+            if (data.versionControl !== String(cfg.vcs[row[COL_VCS_TYPE]])) {
               error('Duplicate found for SW %s version %s, but version control types do not match !!!',
               row[COL_NAME_1], row[COL_VERSION]);
             }
@@ -320,7 +320,7 @@ function getXlsxJson(fileName: string, cfg: Config) {
           engineer: String(cfg.engineer[row[COL_ENGINEER]]),
           levelOfCare: (String(row[COL_LOC])).toUpperCase(),
           platforms: row[COL_PLATFORMS],
-          versionControl: String(cfg.vcs[row[COL_VCS_TYPE]]), // === 'Archive' ? 'Other' : row[COL_VCS_TYPE],
+          versionControl: String(cfg.vcs[row[COL_VCS_TYPE]]),
           versionControlLoc: row[COL_VCS_LOCATION],
           _id: swKeyList.get(keyStr),
           statusDate: String(cfg.statusDate[sheet]),
