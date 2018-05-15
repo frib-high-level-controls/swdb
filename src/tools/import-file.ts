@@ -153,13 +153,14 @@ async function main() {
   let swDataDoc: HistoryDocument[] = [];
   new Db(true); // tslint:disable-line
   for (let d of combinedData.swData) {
-    info('Create swDoc and validate: %s', JSON.stringify(d));
+    info('Create swDoc and validate: %s (Version: %s)', d.swName, d.version);
     let doc: HistoryDocument = new Db.swDoc(d);
     try {
       await doc.validate();
     } catch (err) {
       valid = false;
       error(err);
+      error(JSON.stringify(d, null, 4));
     }
     swDataDoc.push(doc);
   }
@@ -167,13 +168,14 @@ async function main() {
   let instDataDoc: HistoryDocument[] = [];
   new InstDb(true); // tslint:disable-line
   for (let d of combinedData.instData) {
-    info('Create instDoc and validate: %s', JSON.stringify(d));
+    info('Create instDoc and validate: %s (Host: %s)', d.name, d.host);
     let doc: HistoryDocument = new InstDb.instDoc(d);
     try {
       await doc.validate();
     } catch (err) {
       valid = false;
       error(err);
+      error(JSON.stringify(d, null, 4));
     }
     instDataDoc.push(doc);
   }
