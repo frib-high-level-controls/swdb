@@ -273,26 +273,6 @@ test.describe("User flow tests", function() {
     input.sendKeys("http://www.google.com");
   });
 
-  test.it("Add new record - set recert frequency", function() {
-    this.timeout(5000);
-    // set recert freq
-    chromeDriver.wait(until.elementLocated(By.id("recertFreq")), 3000);
-    let input = chromeDriver.findElement(By.id("recertFreq"));
-    input.click();
-    input.sendKeys("Test recertification frequency");
-  });
-
-  test.it("Add new record - set recert date", function() {
-    this.timeout(5000);
-    // set recert date
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="recertDate-group"]/div/p/span/button/i')), 3000);
-    let input = chromeDriver.findElement(By.xpath('//*[@id="recertDate-group"]/div/p/span/button/i'));
-    input.click();
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="recertDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
-    input = chromeDriver.findElement(By.xpath('//*[@id="recertDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
-    input.click();
-  });
-
   test.it("Add new record - set engineer", function() {
     this.timeout(10000);
     // set engineer
@@ -499,22 +479,6 @@ test.describe("User flow tests", function() {
         expect(text).to.equal("http://www.google.com");
       });
   });
-
-  test.it("should show the correct recertFreq in details", function () {
-    chromeDriver.wait(until.elementLocated(By.id("recertFreq")), 3000);
-    chromeDriver.findElement(By.id("recertFreq")).getAttribute("value").then(
-      function (text) {
-        expect(text).to.equal("Test recertification frequency");
-      });
-  });
-
-  // test.it("should show the correct recertDate in details", function () {
-  //   chromeDriver.wait(until.elementLocated(By.id("recertDate")), 3000);
-  //   chromeDriver.findElement(By.id("recertDate")).getAttribute("value").then(
-  //     function (text) {
-  //       expect(text).to.equal("2017-09-30T07:00:00.000Z");
-  //     });
-  // });
 
 
 

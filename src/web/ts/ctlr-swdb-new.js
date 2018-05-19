@@ -217,7 +217,6 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     $scope.versionControlDisplay = $scope.props.RcsEnum[updateRec.formData.versionControl];
 
     $scope.formData.versionControlLoc = updateRec.formData.versionControlLoc;
-    $scope.formData.recertFreq = updateRec.formData.recertFreq;
     $scope.formData.previous = updateRedID;
 
     // got the new data, now clear the service for next time.

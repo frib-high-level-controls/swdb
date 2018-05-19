@@ -195,9 +195,6 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     if ($scope.formData.statusDate) {
       $scope.formData.statusDate = new Date($scope.formData.statusDate);
     }
-    if ($scope.formData.recertDate) {
-      $scope.formData.recertDate = new Date($scope.formData.recertDate);
-    }
     // set selctor to current swName value
     $scope.selectedItem = { name: $scope.formData.swName };
     // convert the retreived record owner

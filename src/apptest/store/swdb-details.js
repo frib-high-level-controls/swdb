@@ -262,20 +262,4 @@ test.describe("Preload db record tests", function() {
         expect(text).to.equal("");
       });
   });
-
-  test.it("should show the correct recertFreq in details", function () {
-    chromeDriver.wait(until.elementLocated(By.id("recertFreq")), 3000);
-    chromeDriver.findElement(By.id("recertFreq")).getAttribute("value").then(
-      function (text) {
-        expect(text).to.equal("");
-      });
-  });
-
-  test.it("should show the correct recertDate in details", function () {
-    chromeDriver.wait(until.elementLocated(By.id("recertDate")), 3000);
-    chromeDriver.findElement(By.id("recertDate")).getAttribute("value").then(
-      function (text) {
-        expect(text).to.equal("");
-      });
-  });
 });
