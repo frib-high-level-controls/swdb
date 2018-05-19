@@ -33,9 +33,6 @@ export class Db {
         vvResultsLoc: { type: Array },
         versionControl: { type: String, enum: Db.props.rcsKeys },
         versionControlLoc: { type: String},
-        recertFreq: { type: String},
-        recertStatus: { type: String},
-        recertDate: Date,
         previous: { type: mongoose.SchemaTypes.ObjectId },
         comment: { type: String},
       }, { emitIndexErrors: true });
@@ -48,8 +45,8 @@ export class Db {
       history.addHistory(Db.schema, {
         pathsToWatch: ['swName', 'version', 'branch', 'desc', 'owner', 'engineer',
           'levelOfCare', 'status', 'statusDate', 'platforms', 'designDescDocLoc', 'descDocLoc',
-          'vvProcLoc', 'vvResultsLoc', 'versionControl', 'versionControlLoc', 'recertFreq',
-          'recertStatus', 'recertDate', 'previous', 'comment'],
+          'vvProcLoc', 'vvResultsLoc', 'versionControl', 'versionControlLoc',
+          'previous', 'comment'],
         });
 
       Db.swDoc = history.model<Model>('swdb', Db.schema, 'swdbCollection');
@@ -278,9 +275,6 @@ interface ISwdbModel extends history.IHistory {
   vvResultsLoc?: string;
   versionControl?: string;
   versionControlLoc?: string;
-  recertFreq?: string;
-  recertStatus?: string;
-  recertDate?: Date;
   previous?: string;
   comment?: string;
 }

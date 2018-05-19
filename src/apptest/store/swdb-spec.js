@@ -866,65 +866,6 @@ describe("app", function() {
     });
   });
 
-  it("Post a new record recertDate Test Record", function(done) {
-    supertest
-    .post("/api/v1/swdb")
-    .send({swName: "recertDate Test Record",
-     owner: "recertDate Test Owner",
-     engineer: "Test Engineer",
-     recertDate: "1970-01-01T00:00:00.000Z",
-     levelOfCare: "LOW",
-     status: "DEVEL",
-     statusDate: "1970-01-01T00:00:00.000Z"})
-    .set("Accept", "application/json")
-    .set('Cookie', [Cookies])
-    .expect(201)
-    .end((err, result) => {
-      if (err) {
-        done(err);
-      } else {
-        debug('Location: ' + result.headers.location);
-        done();
-      }
-    });
-  });
-
-  describe('get id for recertDate Test Record', function() {
-    var wrapper = {origId:null};
-    before("Get ID record id: recertDate Test Record", function(done) {
-      supertest
-      .get("/api/v1/swdb")
-      .expect(200)
-      .end(function(err,res){
-        if (err) {
-          done(err);
-        } else {
-          res = JSON.parse(res.text);
-          for (var i = 0, iLen = res.length; i < iLen; i++) {
-            if (res[i].swName == "recertDate Test Record") wrapper.origId = res[i]._id;
-          }
-          done();
-        }
-      });
-    });
-
-    it("Returns test record id: recertDate Test Record", function(done) {
-      supertest
-      .get("/api/v1/swdb/"+wrapper.origId)
-      .expect(200)
-      .end(function(err, res){
-        if (err) {
-          done(err);
-        } else {
-          expect(res.body).to.have.property("_id");
-          expect(res.body.swName).to.equal("recertDate Test Record");
-          expect(res.body.recertDate).to.equal("1970-01-01T00:00:00.000Z");
-          done();
-        }
-      });
-    });
-  });
-
   it("Post a new record vvProcLoc Test Record", function(done) {
     supertest
     .post("/api/v1/swdb")
@@ -1585,13 +1526,6 @@ describe("app", function() {
       {"type": "PUT","req": {"msg": {"versionControl": "Erroneous RCS"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
       {"type": "PUT","req": {"msg": {"versionControlLoc": "http://www.somehost/some-path/some-file"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"versionControlLoc": "http://www.somehost/some-path/some-file"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"recertFreq": "NEW test recert frequency"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"recertFreq": "NEW test recert frequency"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"recertStatus": "NEW test recert status"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"recertStatus": "NEW test recert status"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"recertDate": "2017-04-21T00:00:00.000Z"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
-      {"type": "GET","res": {"msg": {"recertDate": "2017-04-21T00:00:00.000Z"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
-      {"type": "PUT","req": {"msg": {"recertDate": "Not a date"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
       {"type": "PUT","req": {"msg": {"previous": "badbeefbadbeefbadbeefbad"},"url": "/api/v1/swdb/", "err": {"status": 200}}},
       {"type": "GET","res": {"msg": {"previous": "badbeefbadbeefbadbeefbad"},"url": "/api/v1/swdb/",  "err": {"status": 200}}},
       {"type": "PUT","req": {"msg": {"previous": "bad reference is way to long for this"},"url": "/api/v1/swdb/", "err": {"status": 400}}},
@@ -1633,16 +1567,6 @@ describe("app", function() {
       // test new versionControl min, max
       {"type":"POST", "req": {"msg": {"versionControl": "Erroneous RCS"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of GIT,AC,FS,DEB,OTHER"'}}},
-      // test new recertFreq min, max
-      {"type":"POST", "req": {"msg": {"recertFreq": "N"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"recertFreq","msg":"Recertification frequency must be 4-30 characters."'}}},
-      {"type":"POST", "req": {"msg": {"recertFreq": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"recertFreq","msg":"Recertification frequency must be 4-30 characters."'}}},
-      // test new recertStatus min, max
-      // {"type":"POST", "req": {"msg": {"recertStatus": "N"}, "url": "/api/v1/swdb/",
-      // "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 4-30 characters."'}}},
-      {"type":"POST", "req": {"msg": {"recertStatus": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 0-30 characters."'}}},
 
       // test update owner min, max
       {"type":"PUT", "req": {"msg": {"swName": "NEW Test name", "owner": "N"}, "url": "/api/v1/swdb/",
@@ -1672,16 +1596,6 @@ describe("app", function() {
       // test update versionControl min, max
       {"type":"PUT", "req": {"msg": {"versionControl": "Erroneous RCS"}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"versionControl","msg":"Revision control must be one of GIT,AC,FS,DEB,OTHER"'}}},
-      // test update recertFreq min, max
-      {"type":"PUT", "req": {"msg": {"recertFreq": "N"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"recertFreq","msg":"Recertification frequency must be 4-30 characters."'}}},
-      {"type":"PUT", "req": {"msg": {"recertFreq": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"recertFreq","msg":"Recertification frequency must be 4-30 characters."'}}},
-      // test update recertStatus min, max
-      // {"type":"PUT", "req": {"msg": {"recertStatus": "N"}, "url": "/api/v1/swdb/",
-      // "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 4-30 characters."'}}},
-      {"type":"PUT", "req": {"msg": {"recertStatus": "0123456789012345678901234567890"}, "url": "/api/v1/swdb/",
-      "err": {"status": 400, "msgHas": '"param":"recertStatus","msg":"Recertification status must be 0-30 characters."'}}},
       // test update comment
       {"type":"PUT", "req": {"msg": {"comment": ["NE"]}, "url": "/api/v1/swdb/",
       "err": {"status": 400, "msgHas": '"param":"comment","msg":"Comment must be a string"'}}},
