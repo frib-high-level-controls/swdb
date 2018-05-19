@@ -360,38 +360,6 @@ export class SwdbLib {
           errorMessage: 'Version control location must be a URL.',
         },
       },
-      recertFreq: {
-        optional: true,
-        isString: {
-          errorMessage: 'Recertification frequency must be a string.',
-        },
-        isAscii: {
-          errorMessage: 'Recertification frequency must be ASCII characters.',
-        },
-        isLength: {
-          options: [{ min: 4, max: 30 }],
-          errorMessage: 'Recertification frequency must be 4-30 characters.',
-        },
-      },
-      recertStatus: {
-        optional: true,
-        isString: {
-          errorMessage: 'Recertification status must be a string.',
-        },
-        isAscii: {
-          errorMessage: 'Recertification status must be ASCII characters.',
-        },
-        isLength: {
-          options: [{ min: 0, max: 30 }],
-          errorMessage: 'Recertification status must be 0-30 characters.',
-        },
-      },
-      recertDate: {
-        optional: true,
-        isDate: {
-          errorMessage: 'Recertification date must be a date.',
-        },
-      },
       previous: {
         optional: true,
         isAscii: {
@@ -578,35 +546,6 @@ export class SwdbLib {
         optional: true,
         isURL: {
           errorMessage: 'Version control location must be a URL.',
-        },
-      },
-      recertFreq: {
-        optional: true,
-        isString: {
-          errorMessage: 'Recertification frequency must be a string.',
-        },
-        isAscii: {
-          errorMessage: 'Recertification frequency must be ASCII characters.',
-        },
-        isLength: {
-          options: [{ min: 4, max: 30 }],
-          errorMessage: 'Recertification frequency must be 4-30 characters.',
-        },
-      },
-      recertStatus: {
-        optional: true,
-        isString: {
-          errorMessage: 'Recertification status must be a string.',
-        },
-        isLength: {
-          options: [{ min: 0, max: 30 }],
-          errorMessage: 'Recertification status must be 0-30 characters.',
-        },
-      },
-      recertDate: {
-        optional: true,
-        isDate: {
-          errorMessage: 'Recertification date must be a date.',
         },
       },
       previous: {

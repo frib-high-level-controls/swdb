@@ -67,13 +67,6 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
       let year = thisDate.getFullYear();
       $scope.formData.statusDate =  month + '/' + day + '/' + year;
     }
-    if (data.recertDate) {
-      let thisDate = new Date(data.recertDate);
-      let month = thisDate.getMonth()+1;
-      let day = thisDate.getDate();
-      let year = thisDate.getFullYear();
-      $scope.formData.recertDate = month + '/' + day + '/' + year;
-    }
     $scope.whichItem = $routeParams.itemId;
   });
 

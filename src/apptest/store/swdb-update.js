@@ -294,26 +294,6 @@ test.describe("Software update screen tests", function() {
     input.sendKeys("http://www.google.com");
   });
 
-  test.it("set recert freq for new sw record", function() {
-    // set recert freq
-    this.timeout(5000);
-    chromeDriver.wait(until.elementLocated(By.id("recertFreq")), 3000);
-    let input = chromeDriver.findElement(By.id("recertFreq"));
-    input.click();
-    input.sendKeys("Test recertification frequency");
-  });
-
-  test.it("set recert date for new sw record", function() {
-    // set recert date
-    this.timeout(5000);
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="recertDate-group"]/div/p/span/button/i')), 3000);
-    let input = chromeDriver.findElement(By.xpath('//*[@id="recertDate-group"]/div/p/span/button/i'));
-    input.click();
-    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="recertDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
-    input = chromeDriver.findElement(By.xpath('//*[@id="recertDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
-    input.click();
-  });
-
   test.it("set engineer for new sw record", function() {
     // set engineer
     this.timeout(10000);
@@ -520,14 +500,6 @@ test.describe("Software update screen tests", function() {
       });
   });
 
-  test.it("should show the correct recertFreq in details", function () {
-    chromeDriver.wait(until.elementLocated(By.id("recertFreq")), 3000);
-    chromeDriver.findElement(By.id("recertFreq")).getAttribute("value").then(
-      function (text) {
-        expect(text).to.equal("Test recertification frequency");
-      });
-  });
-
 /**
  * Click the version update button on the details page and check field defaults on 
  * the resulting new record page.
@@ -666,13 +638,6 @@ test.describe("Software update screen tests", function() {
       });
   });
 
-  test.it("should show the correct recertFreq in bump version new", function () {
-    chromeDriver.wait(until.elementLocated(By.id("recertFreq")), 3000);
-    chromeDriver.findElement(By.id("recertFreq")).getAttribute("value").then(
-      function (text) {
-        expect(text).to.equal("Test recertification frequency");
-      });
-  });
 
 /**
  * Update the branch and version and check the resulting details screen 
@@ -822,14 +787,6 @@ test.describe("Software update screen tests", function() {
     chromeDriver.findElement(By.id("versionControlLoc")).getAttribute("value").then(
       function (text) {
         expect(text).to.equal("http://www.google.com");
-      });
-  });
-
-  test.it("should show the correct recertFreq in details", function () {
-    chromeDriver.wait(until.elementLocated(By.id("recertFreq")), 3000);
-    chromeDriver.findElement(By.id("recertFreq")).getAttribute("value").then(
-      function (text) {
-        expect(text).to.equal("Test recertification frequency");
       });
   });
 

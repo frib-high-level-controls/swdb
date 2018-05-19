@@ -226,39 +226,6 @@
     </label>
     <hr>
 
-    <!-- RECERT FREQ -->
-    <div class="row swdbFormRow">
-      <div id="status-group" class="form-group">
-        <label class="col-sm-2 control-label">Recert Frequency</label>
-        <div class="col-sm-10">
-          <input id="recertFreq" type="text" name="recertFreq" class="form-control" ng-model="formData.recertFreq" ng-readonly="true">
-          </input>
-        </div>
-      </div>
-    </div>
-
-    <!-- RECERT STATUS -->
-    <div class="row swdbFormRow">
-      <div id="status-group" class="form-group">
-        <label class="col-sm-2 control-label">Recert Status</label>
-        <div class="col-sm-10">
-          <input id="recertStatus" type="text" name="recertStatus" class="form-control" ng-model="formData.recertStatus" ng-readonly="true">
-          </input>
-        </div>
-      </div>
-    </div>
-
-    <!-- RECERT DATE -->
-    <div class="row swdbFormRow">
-      <div id="status-group" class="form-group">
-        <label class="col-sm-2 control-label">Recert Date</label>
-        <div class="col-sm-10">
-          <input id="recertDate" type="text" name="recertDate" class="form-control" ng-model="formData.recertDate" ng-readonly="true">
-          </input>
-        </div>
-      </div>
-    </div>
-
     <a id="cancelBtn" class="btn btn-success" href="#/list"><span class="glyphicon glyphicon-backward"></span> Back to    search </a>
     <a id="updateBtn" class="btn btn-info" href="#/update/{{formData._id}}"><span class="glyphicon glyphicon-edit"></span>      Update this document </a>
     <a id="bumpVerBtn" class="btn btn-default" ng-click="bumpVerBtnClk()"><span class="glyphicon glyphicon-plus-sign"></span>      New revision </a>
