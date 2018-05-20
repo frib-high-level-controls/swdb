@@ -81,6 +81,9 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     if ($scope.formData.statusDate instanceof String) {
       $scope.formData.statusDate = new Date($scope.formData.statusDate);
     }
+    if ($scope.formData.vvApprovalDate instanceof String) {
+      $scope.formData.vvApprovalDate = new Date($scope.formData.vvApprovalDate);
+    }
 
     // convert enum values to keys
     $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).find( 
