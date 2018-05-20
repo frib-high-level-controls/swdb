@@ -45,6 +45,13 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, $location,
       let year = thisDate.getFullYear();
       $scope.formData.statusDate =  month + '/' + day + '/' + year;
     }
+    if (data.vvApprovalDate) {
+      let thisDate = new Date(data.vvApprovalDate);
+      let month = thisDate.getMonth()+1;
+      let day = thisDate.getDate();
+      let year = thisDate.getFullYear();
+      $scope.formData.vvApprovalDate =  month + '/' + day + '/' + year;
+    }
     $scope.whichItem = $routeParams.itemId;
 
     // convert the retreived record software
