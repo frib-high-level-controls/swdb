@@ -104,13 +104,13 @@ test.describe("User flow tests", function() {
     chromeDriver.wait(until.titleIs("SWDB - New"), 5000);
   });
 
-  test.it("Add new record - set name", function() {
+  test.it("Add new sw record - set name", function() {
     this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id('swName')), 3000);
     let input = chromeDriver.findElement(By.id('swName')).sendKeys("Test UserRecord");
   });
 
-  test.it("Add new record - set version", function() {
+  test.it("Add new sw record - set version", function() {
     this.timeout(5000);
     // set version
     chromeDriver.wait(until.elementLocated(By.id("version")), 3000);
@@ -119,7 +119,7 @@ test.describe("User flow tests", function() {
     input.sendKeys("Test Version");
   });
 
-  test.it("Add new record - set branch", function() {
+  test.it("Add new sw record - set branch", function() {
     this.timeout(5000);
     // set branch
     chromeDriver.wait(until.elementLocated(By.id("branch")), 3000);
@@ -128,7 +128,7 @@ test.describe("User flow tests", function() {
     input.sendKeys("Test branch");
   });
 
-  test.it("Add new record - set description", function() {
+  test.it("Add new sw record - set description", function() {
     this.timeout(5000);
     // set description
     chromeDriver.wait(until.elementLocated(By.id("desc")), 3000);
@@ -137,7 +137,7 @@ test.describe("User flow tests", function() {
     input.sendKeys("Test description");
   });
 
-  test.it("Add new record - set desc doc", function() {
+  test.it("Add new sw record - set desc doc", function() {
     // set description document
     chromeDriver.wait(until.elementLocated(By.id("descDocLoc")), 3000);
     let input = chromeDriver.findElement(By.id("descDocLoc"));
@@ -145,7 +145,7 @@ test.describe("User flow tests", function() {
     input.sendKeys("http://www.google.com");
   });
 
-  test.it("Add new record - set design desc doc", function() {
+  test.it("Add new sw record - set design desc doc", function() {
     this.timeout(5000);
     // set design description document
     chromeDriver.wait(until.elementLocated(By.id("designDescDocLoc")), 3000);
@@ -154,7 +154,7 @@ test.describe("User flow tests", function() {
     input.sendKeys("http://www.google.com");
   });
 
-  test.it("Add new record - set owner", function() {
+  test.it("Add new sw record - set owner", function() {
     this.timeout(5000);
     // set owner 
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
@@ -171,7 +171,7 @@ test.describe("User flow tests", function() {
     input.click();
   });
 
-  test.it("Add new record - set level of care", function() {
+  test.it("Add new sw record - set level of care", function() {
     this.timeout(5000);
     // set level of care
     chromeDriver.wait(until.elementLocated(By.id("levelOfCare")), 3000);
@@ -180,7 +180,7 @@ test.describe("User flow tests", function() {
     input.sendKeys("LOW");
   });
 
-  test.it("Add new record - set status", function() {
+  test.it("Add new sw record - set status", function() {
     this.timeout(5000);
     // set status
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
@@ -189,7 +189,7 @@ test.describe("User flow tests", function() {
     input.sendKeys("Development");
   });
 
-  test.it("Add new record - set status date", function() {
+  test.it("Add new sw record - set status date", function() {
     this.timeout(5000);
     // set status date
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')), 3000);
@@ -200,7 +200,7 @@ test.describe("User flow tests", function() {
     input.click();
   });
 
-  test.it("Add new record - set platforms", function() {
+  test.it("Add new sw record - set platforms", function() {
     this.timeout(5000);
     // set platforms
     chromeDriver.wait(until.elementLocated(By.id("platforms")), 3000);
@@ -209,7 +209,7 @@ test.describe("User flow tests", function() {
     input.sendKeys("Test platform");
   });
 
-  test.it("Add new record - set vvProcLoc", function() {
+  test.it("Add new sw record - set vvProcLoc", function() {
     this.timeout(5000);
     // set vvProcLoc
     chromeDriver.wait(until.elementLocated(By.id("add.vvProcLoc")), 3000);
@@ -233,7 +233,7 @@ test.describe("User flow tests", function() {
   });
 
 
-  test.it("Add new record - set vvResultsLoc", function() {
+  test.it("Add new sw record - set vvResultsLoc", function() {
     this.timeout(7000);
     // set vvResultsLoc
     chromeDriver.wait(until.elementLocated(By.id("add.vvResultsLoc")), 3000);
@@ -256,7 +256,7 @@ test.describe("User flow tests", function() {
     input.click();
   });
 
-  test.it("Add new record - set version control", function() {
+  test.it("Add new sw record - set version control", function() {
     this.timeout(5000);
     // set version control
     chromeDriver.wait(until.elementLocated(By.id("versionControl")), 3000);
@@ -265,7 +265,7 @@ test.describe("User flow tests", function() {
     input.sendKeys("Git");
   });
 
-  test.it("Add new record - set version control loc", function() {
+  test.it("Add new sw record - set version control loc", function() {
     // set version control location
     chromeDriver.wait(until.elementLocated(By.id("versionControlLoc")), 3000);
     let input = chromeDriver.findElement(By.id("versionControlLoc"));
@@ -273,7 +273,7 @@ test.describe("User flow tests", function() {
     input.sendKeys("http://www.google.com");
   });
 
-  test.it("Add new record - set engineer", function() {
+  test.it("Add new sw record - set engineer", function() {
     this.timeout(10000);
     // set engineer
     chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
@@ -291,7 +291,7 @@ test.describe("User flow tests", function() {
     input.click();
   });
 
-  test.it("should show the details record", function () {
+  test.it("should show the sw details record", function () {
     this.timeout(5000);
     // submit and check result
     chromeDriver.findElement(By.id("submitBtn")).click();
@@ -312,7 +312,7 @@ test.describe("User flow tests", function() {
   });
 
   // find the created record
-  test.it("should find a record", function() {
+  test.it("should find a sw record", function() {
     this.timeout(8000);
     chromeDriver.get(props.webUrl+"#/list");
     chromeDriver.wait(until.elementLocated(By.id("swNameSrch")), 8000)
@@ -324,7 +324,7 @@ test.describe("User flow tests", function() {
   });
 
   // find the created record and click update
-  test.it("should show record details", function() {
+  test.it("should show sw record details", function() {
     this.timeout(8000);
     chromeDriver.wait(until.elementLocated(By.linkText("Test UserRecord")),
       8000).click();
@@ -333,11 +333,11 @@ test.describe("User flow tests", function() {
       8000).click();
   });
 
-  test.it("should show the update title", function() {
+  test.it("should show the sw update title", function() {
     chromeDriver.wait(until.titleIs("SWDB - Update"), 5000);
   });
 
-  test.it("should update a record", function() {
+  test.it("should update a sw record", function() {
     this.timeout(20000);
     chromeDriver.wait(until.elementLocated(By.id("desc")), 8000)
       .clear();
@@ -347,12 +347,12 @@ test.describe("User flow tests", function() {
       .click();
   });
 
-  test.it("should show the details record", function () {
+  test.it("should show the sw details record", function () {
     this.timeout(20000);
     chromeDriver.wait(until.titleIs("SWDB - Details"), 20000);
   });
 
-  test.it("should show the correct description in details", function () {
+  test.it("should show the correct sw description in details", function () {
     chromeDriver.wait(until.elementLocated(By.id("desc")), 3000);
     chromeDriver.findElement(By.id("desc")).getAttribute("value").then(
       function (text) {
@@ -384,7 +384,7 @@ test.describe("User flow tests", function() {
       });
   });
 
-  test.it("should show the correct description doc in details", function () {
+  test.it("should show the correct sw description doc in details", function () {
     chromeDriver.wait(until.elementLocated(By.id("descDocLoc")), 3000);
     chromeDriver.findElement(By.id("descDocLoc")).getAttribute("value").then(
       function (text) {
@@ -392,7 +392,7 @@ test.describe("User flow tests", function() {
       });
   });
 
-  test.it("should show the correct design description doc in details", function () {
+  test.it("should show the correct sw design description doc in details", function () {
     chromeDriver.wait(until.elementLocated(By.id("designDescDocLoc")), 3000);
     chromeDriver.findElement(By.id("designDescDocLoc")).getAttribute("value").then(
       function (text) {
@@ -400,7 +400,7 @@ test.describe("User flow tests", function() {
       });
   });
 
-  test.it("should show the correct owner in details", function () {
+  test.it("should show the correct sw owner in details", function () {
     chromeDriver.wait(until.elementLocated(By.id("owner")), 3000);
     chromeDriver.findElement(By.id("owner")).getAttribute("value").then(
       function (text) {
@@ -408,7 +408,7 @@ test.describe("User flow tests", function() {
       });
   });
 
-  test.it("should show the correct engineer in details", function () {
+  test.it("should show the correct sw engineer in details", function () {
     chromeDriver.wait(until.elementLocated(By.id("engineer")), 3000);
     chromeDriver.findElement(By.id("engineer")).getAttribute("value").then(
       function (text) {
@@ -416,7 +416,7 @@ test.describe("User flow tests", function() {
       });
   });
 
-  test.it("should show the correct levelOfCare in details", function () {
+  test.it("should show the correct sw levelOfCare in details", function () {
     chromeDriver.wait(until.elementLocated(By.id("levelOfCare")), 3000);
     chromeDriver.findElement(By.id("levelOfCare")).getAttribute("value").then(
       function (text) {
@@ -424,7 +424,7 @@ test.describe("User flow tests", function() {
       });
   });
 
-  test.it("should show the correct status in details", function () {
+  test.it("should show the correct sw status in details", function () {
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
     chromeDriver.findElement(By.id("status")).getAttribute("value").then(
       function (text) {
@@ -440,7 +440,7 @@ test.describe("User flow tests", function() {
   //     });
   // });
 
-  test.it("should show the correct platforms in details", function () {
+  test.it("should show the correct sw platforms in details", function () {
     chromeDriver.wait(until.elementLocated(By.id("platforms")), 3000);
     chromeDriver.findElement(By.id("platforms")).getAttribute("value").then(
       function (text) {
@@ -448,7 +448,7 @@ test.describe("User flow tests", function() {
       });
   });
 
-  test.it("should show the correct vvProcLoc in details", function () {
+  test.it("should show the correct sw vvProcLoc in details", function () {
     chromeDriver.wait(until.elementLocated(By.id("vvProcLoc")), 3000);
     chromeDriver.findElement(By.id("vvProcLoc")).getAttribute("value").then(
       function (text) {
@@ -456,7 +456,7 @@ test.describe("User flow tests", function() {
       });
   });
 
-  test.it("should show the correct vvResultsLoc in details", function () {
+  test.it("should show the correct sw vvResultsLoc in details", function () {
     chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc")), 3000);
     chromeDriver.findElement(By.id("vvResultsLoc")).getAttribute("value").then(
       function (text) {
@@ -464,7 +464,7 @@ test.describe("User flow tests", function() {
       });
   });
 
-  test.it("should show the correct versionControl in details", function () {
+  test.it("should show the correct sw versionControl in details", function () {
     chromeDriver.wait(until.elementLocated(By.id("versionControl")), 3000);
     chromeDriver.findElement(By.id("versionControl")).getAttribute("value").then(
       function (text) {
@@ -472,7 +472,7 @@ test.describe("User flow tests", function() {
       });
   });
 
-  test.it("should show the correct versionControlLoc in details", function () {
+  test.it("should show the correct sw versionControlLoc in details", function () {
     chromeDriver.wait(until.elementLocated(By.id("versionControlLoc")), 3000);
     chromeDriver.findElement(By.id("versionControlLoc")).getAttribute("value").then(
       function (text) {
@@ -495,14 +495,14 @@ test.it("should show search page with username on logout button", function() {
   test.it("should show the new installation page title", function() {
     chromeDriver.wait(until.titleIs("SWDB - New Installation"), 5000);
   });
-  test.it("Add new record - set host", function() {
+  test.it("Add new inst record - set host", function() {
     this.timeout(15000);
     chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
     let input = chromeDriver.findElement(By.id("host"));
     input.sendKeys("testHost1");
   });
 
-  test.it("Add new record - set software", function() {
+  test.it("Add new inst record - set software", function() {
     this.timeout(15000);
     // set software
     chromeDriver.wait(until.elementLocated(By.id("software")), 3000);
@@ -518,13 +518,13 @@ test.it("should show search page with username on logout button", function() {
     //   console.log("inner html: " + result);
     // });
   });
-  test.it("Add new record - click row", function() {
+  test.it("Add new inst record - click row", function() {
     this.timeout(5000);
     let input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-4-0"]/span'));
     input.click();
   });
 
-  test.it("Add new record - check input", function() {
+  test.it("Add new inst record - check input", function() {
     this.timeout(5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
       By.id('software')),
@@ -535,7 +535,7 @@ test.it("should show search page with username on logout button", function() {
     // chromeDriver.pause(2000);
   });
 
-  test.it("Add new record - set name", function() {
+  test.it("Add new inst record - set name", function() {
     // set name
     chromeDriver.wait(until.elementLocated(By.id("name")), 3000);
     let input = chromeDriver.findElement(By.id("name"));
@@ -543,7 +543,7 @@ test.it("should show search page with username on logout button", function() {
     input.sendKeys("Test name");
   });
 
-  test.it("Add new record - set area 0", function() {
+  test.it("Add new inst record - set area 0", function() {
     this.timeout(6000);
     // set area
     // add controls room, operator area, nscl control room
@@ -563,7 +563,7 @@ test.it("should show search page with username on logout button", function() {
       "IFS:LAB.FRIB.ASD.CONTROLS.HLCO"), 5000);
     });
 
-  test.it("Add new record - set area 1", function() {
+  test.it("Add new inst record - set area 1", function() {
     this.timeout(6000);
     chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
     let input = chromeDriver.findElement(By.id("add.area"));
@@ -580,7 +580,7 @@ test.it("should show search page with username on logout button", function() {
       "IFS:LAB.FRIB.ASD.ACCELERATOROPS.MACHINEOPERATORS"), 5000);
     });
 
-  test.it("Add new record - set area 2", function() {
+  test.it("Add new inst record - set area 2", function() {
     this.timeout(6000);
     chromeDriver.wait(until.elementLocated(By.id("add.area")), 3000);
     let input = chromeDriver.findElement(By.id("add.area"));
@@ -597,13 +597,13 @@ test.it("should show search page with username on logout button", function() {
       "ADB:AREA.NSCL.CONTROLRM"), 5000);
     });
 
-  test.it("Add new record - remove area 0", function() {
+  test.it("Add new inst record - remove area 0", function() {
     chromeDriver.wait(until.elementLocated(By.id("rm.area.0")), 3000);
     let input = chromeDriver.findElement(By.id("rm.area.0"));
     input.click();
   });
 
-  test.it("Add new installation - set drr", function() {
+  test.it("Add new inst installation - set drr", function() {
     this.timeout(5000);
     // set drrs
     chromeDriver.wait(until.elementLocated(By.id("drrs")), 3000);
@@ -612,7 +612,7 @@ test.it("should show search page with username on logout button", function() {
     input.sendKeys("TestDRR");
   });
 
-  test.it("Add new installation - set status", function() {
+  test.it("Add new inst installation - set status", function() {
     this.timeout(5000);
     // set the status
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
@@ -623,7 +623,7 @@ test.it("should show search page with username on logout button", function() {
     chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
   });
 
-  test.it("Add new installation - set status date", function() {
+  test.it("Add new inst installation - set status date", function() {
     this.timeout(5000);
     // set status date
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')), 3000);
@@ -634,7 +634,17 @@ test.it("should show search page with username on logout button", function() {
     input.click();
   });
 
-  test.it("Add new installation - set vvResultsLoc", function() {
+  test.it("Add new inst installation - set V&V approval date", function() {
+    this.timeout(5000);
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="vvApprovalDate-group"]/div/p/span/button/i')), 3000);
+    let input = chromeDriver.findElement(By.xpath('//*[@id="vvApprovalDate-group"]/div/p/span/button/i'));
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="vvApprovalDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
+    input = chromeDriver.findElement(By.xpath('//*[@id="vvApprovalDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
+    input.click();
+  });
+
+  test.it("Add new inst installation - set vvResultsLoc", function() {
     this.timeout(5000);
     // set vvResultsLoc
     chromeDriver.wait(until.elementLocated(By.id("add.vvResultsLoc")), 3000);
@@ -657,7 +667,7 @@ test.it("should show search page with username on logout button", function() {
     input.click();
   });
 
-  test.it("should show the details record", function () {
+  test.it("should show the inst details record", function () {
     this.timeout(8000);
     chromeDriver.findElement(By.id("submitBtn")).click();
     chromeDriver.wait(until.titleIs("SWDB - Installation Details"), 5000);
@@ -726,7 +736,7 @@ test.it("should show search page with username on logout button", function() {
   //     });
   // });
 
-  test.it("should show the correct vvResultsLoc in details", function () {
+  test.it("should show the correct inst vvResultsLoc in details", function () {
     chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc")), 3000);
     chromeDriver.findElement(By.id("vvResultsLoc")).getAttribute("value").then(
       function (text) {
