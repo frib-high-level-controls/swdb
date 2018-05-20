@@ -224,7 +224,6 @@ test.describe('Installations add screen tests', function() {
   });
 
   test.it('Add new record - set V&V Approval date', function() {
-    // set status date
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="vvApprovalDate-group"]/div/p/span/button/i')), 3000);
     let input = chromeDriver.findElement(By.xpath('//*[@id="vvApprovalDate-group"]/div/p/span/button/i'));
     input.click();
