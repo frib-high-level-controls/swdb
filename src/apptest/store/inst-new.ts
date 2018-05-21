@@ -223,6 +223,16 @@ test.describe('Installations add screen tests', function() {
     input.click();
   });
 
+  test.it('Add new record - set V&V Approval date', function() {
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="vvApprovalDate-group"]/div/p/span/button/i')), 3000);
+    let input = chromeDriver.findElement(By.xpath('//*[@id="vvApprovalDate-group"]/div/p/span/button/i'));
+    input.click();
+    chromeDriver.wait(until.elementLocated(
+      By.xpath('//*[@id="vvApprovalDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
+    input = chromeDriver.findElement(By.xpath('//*[@id="vvApprovalDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
+    input.click();
+  });
+
   test.it('Add new record - set vvResultsLoc', function(this: any) {
     this.timeout(10000);
     // set vvResultsLoc

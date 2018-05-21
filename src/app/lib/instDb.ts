@@ -7,18 +7,6 @@ import CommonTools = require('./CommonTools');
 import dbg = require('debug');
 const debug = dbg('swdb:instDb');
 
-// interface InstSchema extends mongoose.Document {
-//   host: string;
-//   name?: string;
-//   area: swdbEnums.AreaEnum;
-//   slots?: string;
-//   status: swdbEnums.InstStatusEnum;
-//   statusDate: Date;
-//   software: string;
-//   vvResultLoc?: string;
-//   drrs?: string;
-// }
-
 export class InstDb {
   public static instDoc: any;
   public static props: any;
@@ -38,6 +26,7 @@ export class InstDb {
         statusDate: { type: Date, required: true },
         software: { type: mongoose.SchemaTypes.ObjectId, required: true },
         vvResultsLoc: { type: [String] },
+        vvApprovalDate: { type: Date },
         drrs: { type: String, default: '' },
       }, { emitIndexErrors: true });
 
@@ -47,7 +36,7 @@ export class InstDb {
       InstDb.instSchema.index({ host: 1, name: 1, software: 1 }, { unique: true });
       history.addHistory(InstDb.instSchema, {
         pathsToWatch: ['host', 'name', 'area', 'slots', 'status', 'statusDate',
-          'software', 'vvResultsLoc', 'drrs' ],
+          'software', 'vvResultsLoc', 'vvApprovalDate', 'drrs' ],
         });
 
       // InstDb.instDoc = mongoose.model('inst', InstDb.instSchema, 'instCollection');
@@ -249,6 +238,7 @@ interface IInstModel extends history.IHistory {
   statusDate: Date;
   software: string;
   vvResultsLoc?: string;
+  vvApprovalDate?: Date;
   drrs?: Date;
 }
 

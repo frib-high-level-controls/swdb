@@ -153,6 +153,13 @@ test.describe("Installations detail screen tests", function() {
     });
   });
 
+  test.it("should show the requested installation record VV approval date field", function() {
+    chromeDriver.wait(until.elementLocated(By.id("vvApprovalDate")),5000);
+    chromeDriver.findElement(By.id("vvApprovalDate")).getAttribute("value").then(function(result) {
+      expect(result).to.match(/9\/22\/2016/);
+    });
+  });
+
   test.it("should show the requested installation record drrs field", function() {
     chromeDriver.wait(until.elementLocated(By.id("drrs")),5000);
     chromeDriver.findElement(By.id("drrs")).getAttribute("value").then(function(result) {

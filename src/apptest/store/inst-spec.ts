@@ -107,6 +107,7 @@ describe('Installation api tests', () => {
        area: ['Global'],
        status: 'RDY_INST',
        statusDate: 'date 1000',
+       vvApprovalDate: 'date 1000',
        software: '5947589458a6aa0face9a512'})
       .expect(201)
       .end(done);
@@ -528,6 +529,8 @@ describe('Installation api tests', () => {
       {type: 'GET', res: {msg: {status: 'RDY_BEAM'}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'PUT', req: {msg: {statusDate: '1997-01-01T08:00:00.000Z'}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'GET', res: {msg: {statusDate: '1997-01-01T08:00:00.000Z'}, url: '/api/v1/inst/',  err: {status: 200}}},
+      {type: 'PUT', req: {msg: {vvApprovalDate: '1997-01-01T08:00:00.000Z'}, url: '/api/v1/inst/', err: {status: 200}}},
+      {type: 'GET', res: {msg: {vvApprovalDate: '1997-01-01T08:00:00.000Z'}, url: '/api/v1/inst/',  err: {status: 200}}},
       {type: 'PUT', req: {msg: {vvResultsLoc: ['http://www.google.com']}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'GET', res: {msg: {vvResultsLoc: ['http://www.google.com']}, url: '/api/v1/inst/',  err: {status: 200}}},
     ];
