@@ -21,18 +21,18 @@ export type VerifyCallback = (err: any, user?: auth.IUser | false) => void;
 
 export interface BasicProviderOptions {
   realm?: string;
-};
+}
 
 export interface CasProviderOptions {
   casUrl: string;
   casServiceUrl: string;
   casAppendPath?: boolean;
   casVersion?: string;
-};
+}
 
 export interface CasAuthenticateOptions extends AuthenticateOptions {
   rememberParams?: string | string[];
-};
+}
 
 const debug = dbg('webapp:passport-auth');
 
@@ -58,19 +58,19 @@ export abstract class PassportAbstractProvider<S extends Strategy, AO extends Au
     router.use(passport.session());
     router.use(this.locals());
     return router;
-  };
+  }
 
   public authenticate(options?: AO): RequestHandler {
     return passport.authenticate(this.getStrategy().name || 'undefined', options || {});
-  };
+  }
 
   public logout(req: Request): void {
     req.logout();
-  };
+  }
 
   public getUser(req: Request): auth.IUser | undefined {
     return req.user;
-  };
+  }
 
   protected abstract getStrategy(): S;
 
@@ -82,7 +82,7 @@ export abstract class PassportAbstractProvider<S extends Strategy, AO extends Au
     } catch (err) {
       done(err);
     }
-  };
+  }
 
   // Simply deserialize the user from a JSON string from the session.
   // Override this methods if your application uses a databases, etc.
@@ -92,8 +92,8 @@ export abstract class PassportAbstractProvider<S extends Strategy, AO extends Au
     } catch (err) {
       done(err);
     }
-  };
-};
+  }
+}
 
 export abstract class BasicPassportAbstractProvider<AO extends AuthenticateOptions>
     extends PassportAbstractProvider<pphttp.BasicStrategy, AO> {
@@ -108,14 +108,14 @@ export abstract class BasicPassportAbstractProvider<AO extends AuthenticateOptio
     this.strategy = new pphttp.BasicStrategy(options, (username, password, done) => {
       this.verify(username, password, done);
     });
-  };
+  }
 
   protected getStrategy(): pphttp.BasicStrategy {
     return this.strategy;
   }
 
   protected abstract verify(username: string, password: string, done: VerifyCallback): void;
-};
+}
 
 export abstract class CasPassportAbstractProvider<AO extends CasAuthenticateOptions>
     extends PassportAbstractProvider<ppcas.Strategy, AO> {
@@ -163,22 +163,22 @@ export abstract class CasPassportAbstractProvider<AO extends CasAuthenticateOpti
       // (An arrow function is used here, but this.verify.bind(this) worked too.)
       this.verify(profile, done);
     });
-  };
+  }
 
   public authenticate(options?: AO): RequestHandler {
     const prefix = 'CasPassportAbstractProvider_Param_';
     const rememberParams = new Map<string, string>();
     if (options && Array.isArray(options.rememberParams)) {
-      for (let param of options.rememberParams) {
+      for (const param of options.rememberParams) {
         if (typeof param === 'string') {
-          let key = prefix + param.replace(/\w/, '_');
+          const key = prefix + param.replace(/\w/, '_');
           if (!rememberParams.has(key)) {
             rememberParams.set(key, param);
           }
         }
       }
     } else if (options && typeof options.rememberParams === 'string') {
-      let key = prefix + options.rememberParams.replace(/\w/, '_');
+      const key = prefix + options.rememberParams.replace(/\w/, '_');
       rememberParams.set(key, options.rememberParams);
     }
 
@@ -186,7 +186,7 @@ export abstract class CasPassportAbstractProvider<AO extends CasAuthenticateOpti
     return (req, res, next) => {
       if (req.session) {
         // store the query params in the session
-        for (let [key, param] of rememberParams) {
+        for (const [key, param] of rememberParams) {
           if (req.query[param]) {
             debug('Remember query param: %s=%s', param, req.query[param]);
             req.session[key] = req.query[param];
@@ -196,7 +196,7 @@ export abstract class CasPassportAbstractProvider<AO extends CasAuthenticateOpti
       authenticate(req, res, (err) => {
         if (req.session) {
           // restore the query params from the session
-          for (let [key, param] of rememberParams) {
+          for (const [key, param] of rememberParams) {
             if (req.session[key]) {
               if (!req.query[param]) {
                 req.query[param] = req.session[key];
@@ -210,7 +210,7 @@ export abstract class CasPassportAbstractProvider<AO extends CasAuthenticateOpti
         next(err);
       });
     };
-  };
+  }
 
   public getCasLogoutUrl(service?: boolean): string {
     // Redirect to CAS logout. CAS v3 uses 'service' parameter and
@@ -226,11 +226,11 @@ export abstract class CasPassportAbstractProvider<AO extends CasAuthenticateOpti
       }
     }
     return url;
-  };
+  }
 
   protected getStrategy(): ppcas.Strategy {
     return this.strategy;
   }
 
   protected abstract verify(profile: string | CasProfile, done: VerifyCallback): void;
-};
+}

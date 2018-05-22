@@ -18,7 +18,7 @@ type RequestHandler = express.RequestHandler;
 
 export interface IUser {
   [key: string]: {} | undefined;
-};
+}
 
 /**
  * The IProvider interface is based on the Passport API.
@@ -43,7 +43,7 @@ export interface IProvider<AO = {}> {
   hasRole(req: Request, ...role: Array<string | string[]>): boolean;
 
   hasAnyRole(req: Request, ...role: Array<string | string[]>): boolean;
-};
+}
 
 const debug = dbg('webapp:auth');
 
@@ -69,9 +69,9 @@ export abstract class AbstractProvider<AO = {}> implements IProvider<AO> {
     }
 
     name = name.toUpperCase();
-    for (let username of usernames) {
+    for (const username of usernames) {
       if (Array.isArray(username)) {
-        for (let n of username) {
+        for (const n of username) {
           if (name === n.toUpperCase()) {
             return true;
           }
@@ -83,7 +83,7 @@ export abstract class AbstractProvider<AO = {}> implements IProvider<AO> {
       }
     }
     return false;
-  };
+  }
 
   public hasRole(req: Request, ...roles: Array<(string | string[])>): boolean {
     const userRoles = this.getRoles(req);
@@ -92,13 +92,13 @@ export abstract class AbstractProvider<AO = {}> implements IProvider<AO> {
     }
 
     const userRoleSet = new Set<string>();
-    for (let ur of userRoles) {
+    for (const ur of userRoles) {
       userRoleSet.add(ur.toUpperCase());
     }
 
-    for (let role of roles) {
+    for (const role of roles) {
       if (Array.isArray(role)) {
-        for (let r of role) {
+        for (const r of role) {
           if (!userRoleSet.has(r.toUpperCase())) {
             return false;
           }
@@ -110,7 +110,7 @@ export abstract class AbstractProvider<AO = {}> implements IProvider<AO> {
       }
     }
     return true;
-  };
+  }
 
   public hasAnyRole(req: Request, ...roles: Array<(string | string[])>): boolean {
     const userRoles = this.getRoles(req);
@@ -119,13 +119,13 @@ export abstract class AbstractProvider<AO = {}> implements IProvider<AO> {
     }
 
     const userRoleSet = new Set<string>();
-    for (let ur of userRoles) {
+    for (const ur of userRoles) {
       userRoleSet.add(ur.toUpperCase());
     }
 
-    for (let role of roles) {
+    for (const role of roles) {
       if (Array.isArray(role)) {
-        for (let r of role) {
+        for (const r of role) {
           if (userRoleSet.has(r.toUpperCase())) {
             return true;
           }
@@ -137,7 +137,7 @@ export abstract class AbstractProvider<AO = {}> implements IProvider<AO> {
       }
     }
     return false;
-  };
+  }
 
   protected locals(): RequestHandler {
     return (req: Request, res: Response, next: NextFunction) => {
@@ -154,8 +154,8 @@ export abstract class AbstractProvider<AO = {}> implements IProvider<AO> {
       };
       next();
     };
-  };
-};
+  }
+}
 
 
 class NullProvider extends AbstractProvider {
@@ -165,13 +165,13 @@ class NullProvider extends AbstractProvider {
     return (req, res, next) => {
       next();
     };
-  };
+  }
 
   public authenticate(options?: {}): RequestHandler {
     return (req: Request, res: Response, next: NextFunction) => {
       sendForbidden(req, res);
     };
-  };
+  }
 
   public logout(req: Request): void {
     return;
@@ -188,18 +188,18 @@ class NullProvider extends AbstractProvider {
   public getRoles(req: Request): string[] | undefined {
     return;
   }
-};
+}
 
 export function sendUnauthorized(req: Request, res: Response, type: string, realm: string, msg?: string) {
   res.header('WWW-Authenticate', util.format('%s realm="%s"', type, realm));
   res.status(HttpStatus.UNAUTHORIZED);
   res.send(msg ? msg : HttpStatus.getStatusText(HttpStatus.UNAUTHORIZED));
-};
+}
 
 export function sendForbidden(req: Request, res: Response, msg?: string) {
   res.status(HttpStatus.FORBIDDEN);
   res.send(msg ? msg : HttpStatus.getStatusText(HttpStatus.FORBIDDEN));
-};
+}
 
 
 const nullProvider = new NullProvider();
@@ -208,27 +208,27 @@ let defaultProvider: IProvider | undefined;
 
 export function getProvider(): IProvider {
   return defaultProvider || nullProvider;
-};
+}
 
 export function setProvider(provider: IProvider) {
   defaultProvider = provider;
-};
+}
 
 export function getUsername(req: Request): string | undefined {
   return getProvider().getUsername(req);
-};
+}
 
 export function hasUsername(req: Request, ...usernames: Array<string | string[]>): boolean {
   return getProvider().hasUsername(req, ...usernames);
-};
+}
 
 export function hasRole(req: Request, ...roles: Array<string | string[]>): boolean {
   return getProvider().hasRole(req, ...roles);
-};
+}
 
 export function hasAnyRole(req: Request, ...roles: Array<string | string[]>): boolean {
   return getProvider().hasAnyRole(req, ...roles);
-};
+}
 
 export function ensureAuthc(): RequestHandler {
   return (req, res, next) => {
@@ -241,7 +241,7 @@ export function ensureAuthc(): RequestHandler {
     }
     next();
   };
-};
+}
 
 // Retained for backwards compatibility
 export const ensureAuthenticated = ensureAuthc();
@@ -257,7 +257,7 @@ export function ensureHasUsername(...usernames: Array<string | string[]>): Reque
       next();
     });
   };
-};
+}
 
 export function ensureHasRole(...roles: Array<string | string[]>): RequestHandler {
   const authc = ensureAuthc();
@@ -270,7 +270,7 @@ export function ensureHasRole(...roles: Array<string | string[]>): RequestHandle
       next();
     });
   };
-};
+}
 
 export function ensureHasAnyRole(...roles: Array<string | string[]>): RequestHandler {
   const authc = ensureAuthc();
@@ -283,19 +283,23 @@ export function ensureHasAnyRole(...roles: Array<string | string[]>): RequestHan
       next();
     });
   };
-};
+}
 
 
 type RoleScheme = 'USR' | 'GRP' | 'VAR' | 'SYS' | 'ADM';
 
-type RoleComponents = { scheme: RoleScheme, identifier: string, qualifier?: string };
+interface RoleComponents {
+  scheme: RoleScheme;
+  identifier: string;
+  qualifier?: string;
+}
 
 export function equalRole(role1: string, role2: string): boolean {
   if (!role1 || !role2) {
     return false;
   }
   return (role1.toUpperCase() === role2.toUpperCase());
-};
+}
 
 export function parseRole(role: string): RoleComponents | undefined {
   const uri = URI.parse(role);
@@ -315,7 +319,7 @@ export function parseRole(role: string): RoleComponents | undefined {
     identifier: uri.path ? uri.path.toUpperCase() : '',
     qualifier: uri.fragment ? uri.fragment.toUpperCase() : undefined,
   };
-};
+}
 
 export function formatRole(role: RoleComponents): string;
 export function formatRole(scheme: RoleScheme, identifier: string, qualifier?: string): string;
@@ -332,4 +336,4 @@ export function formatRole(scheme: RoleScheme | RoleComponents, identifier?: str
     path: scheme.identifier,
     fragment: scheme.qualifier,
   }).toUpperCase();
-};
+}
