@@ -28,40 +28,40 @@ class TestProvider extends auth.AbstractProvider  {
     return (req, res, next) => {
       next();
     };
-  };
+  }
 
   public authenticate(options?: any): RequestHandler {
     return (req, res, next) => {
       next();
     };
-  };
+  }
 
   public getUser(req: Request): auth.IUser {
     return {
       username: this.username,
       roles: this.roles,
     };
-  };
+  }
 
   public getRoles(req: Request): string[] | undefined {
     return this.roles;
-  };
+  }
 
   public logout(req: Request): void {
     this.logout(req);
-  };
+  }
 
   public getUsername(req: Request): string | undefined {
     return this.username;
-  };
+  }
 }
 
-describe('Auth Library', function () {
+describe('Auth Library', () => {
 
-  describe('parseRole()', function () {
+  describe('parseRole()', () => {
 
-    it('Parse Role: grp:LAB.example.team', function() {
-      let role = auth.parseRole('grp:LAB.example.team');
+    it('Parse Role: grp:LAB.example.team', () => {
+      const role = auth.parseRole('grp:LAB.example.team');
       assert.isDefined(role);
       if (role) {
         assert.deepEqual(role.scheme, 'GRP');
@@ -70,8 +70,8 @@ describe('Auth Library', function () {
       }
     });
 
-    it('Parse Role: grp:LAB.example.team#leader', function() {
-      let role = auth.parseRole('grp:LAB.example.team#leader');
+    it('Parse Role: grp:LAB.example.team#leader', () => {
+      const role = auth.parseRole('grp:LAB.example.team#leader');
       assert.isDefined(role);
       if (role) {
         assert.deepEqual(role.scheme, 'GRP');
@@ -80,21 +80,21 @@ describe('Auth Library', function () {
       }
     });
 
-    it('Parse Role: fake:lab.example.team', function () {
+    it('Parse Role: fake:lab.example.team', () => {
       assert.isUndefined(auth.parseRole('fake:lab.example.team'));
     });
   });
 
-  describe('formatRole()', function () {
+  describe('formatRole()', () => {
 
-    it('Format Role: GRP:LAB.EXAMPLE.TEAM', function () {
-      let expected = 'GRP:LAB.EXAMPLE.TEAM';
+    it('Format Role: GRP:LAB.EXAMPLE.TEAM', () => {
+      const expected = 'GRP:LAB.EXAMPLE.TEAM';
       assert.deepEqual(auth.formatRole('GRP', 'lab.example.team'), expected);
       assert.deepEqual(auth.formatRole({ scheme: 'GRP', identifier: 'lab.example.team' }), expected);
     });
 
-    it('Format Role: GRP:LAB.EXAMPLE.TEAM#LEADER', function () {
-      let expected = 'GRP:LAB.EXAMPLE.TEAM#LEADER';
+    it('Format Role: GRP:LAB.EXAMPLE.TEAM#LEADER', () => {
+      const expected = 'GRP:LAB.EXAMPLE.TEAM#LEADER';
       assert.deepEqual(auth.formatRole('GRP', 'lab.example.team', 'leader'), expected);
       assert.deepEqual(auth.formatRole({scheme: 'GRP', identifier: 'lab.example.team', qualifier: 'leader'}), expected);
     });
@@ -102,108 +102,108 @@ describe('Auth Library', function () {
 
   auth.setProvider(new TestProvider('andrew', ['ADM:FORG', 'SYS:GEN', 'grp:irs']));
 
-  describe('hasRole()', function() {
-    it('One Role', function () {
-      assert.isTrue(auth.hasRole(<Request> {}, 'ADM:FORG'));
-      assert.isTrue(auth.hasRole(<Request> {}, ['ADM:FORG']));
+  describe('hasRole()', () => {
+    it('One Role', () => {
+      assert.isTrue(auth.hasRole({} as any, 'ADM:FORG'));
+      assert.isTrue(auth.hasRole({} as any, ['ADM:FORG']));
     });
-    it('Two Roles', function () {
-      assert.isTrue(auth.hasRole(<Request> {}, 'ADM:FORG', 'GRP:IRS'));
-      assert.isTrue(auth.hasRole(<Request> {}, ['ADM:FORG', 'GRP:IRS']));
-      assert.isTrue(auth.hasRole(<Request> {}, 'ADM:FORG', ['GRP:IRS']));
-      assert.isTrue(auth.hasRole(<Request> {}, ['ADM:FORG'], 'GRP:IRS'));
+    it('Two Roles', () => {
+      assert.isTrue(auth.hasRole({} as any, 'ADM:FORG', 'GRP:IRS'));
+      assert.isTrue(auth.hasRole({} as any, ['ADM:FORG', 'GRP:IRS']));
+      assert.isTrue(auth.hasRole({} as any, 'ADM:FORG', ['GRP:IRS']));
+      assert.isTrue(auth.hasRole({} as any, ['ADM:FORG'], 'GRP:IRS'));
     });
-    it('Negative One Role', function () {
-      assert.isFalse(auth.hasRole(<Request> {}, 'ADM:FUN'));
-      assert.isFalse(auth.hasRole(<Request> {}, ['ADM:FUN']));
+    it('Negative One Role', () => {
+      assert.isFalse(auth.hasRole({} as any, 'ADM:FUN'));
+      assert.isFalse(auth.hasRole({} as any, ['ADM:FUN']));
     });
-    it('Negative One of Two Roles', function () {
-      assert.isFalse(auth.hasRole(<Request> {}, 'ADM:FORG', 'SYS:FUN'));
-      assert.isFalse(auth.hasRole(<Request> {}, ['ADM:FORG', 'SYS:FUN']));
-      assert.isFalse(auth.hasRole(<Request> {}, 'ADM:FORG', ['SYS:FUN']));
-      assert.isFalse(auth.hasRole(<Request> {}, ['ADM:FORG'], 'SYS:FUN'));
+    it('Negative One of Two Roles', () => {
+      assert.isFalse(auth.hasRole({} as any, 'ADM:FORG', 'SYS:FUN'));
+      assert.isFalse(auth.hasRole({} as any, ['ADM:FORG', 'SYS:FUN']));
+      assert.isFalse(auth.hasRole({} as any, 'ADM:FORG', ['SYS:FUN']));
+      assert.isFalse(auth.hasRole({} as any, ['ADM:FORG'], 'SYS:FUN'));
     });
-    it('Negative Two of Three Roles', function () {
-      assert.isFalse(auth.hasRole(<Request> {}, 'SYS:GEN', 'ADM:FORD', 'GRP:IRS'));
-      assert.isFalse(auth.hasRole(<Request> {}, ['SYS:GEN', 'ADM:FORD', 'GRP:IRS']));
-      assert.isFalse(auth.hasRole(<Request> {}, 'SYS:GEN', ['ADM:FORD',  'GRP:IRS']));
-      assert.isFalse(auth.hasRole(<Request> {}, ['SYS:GEN'], 'ADM:FORD', 'GRP:IRS'));
-      assert.isFalse(auth.hasRole(<Request> {}, ['SYS:GEN'], ['ADM:FORD'], ['GRP:IRS']));
+    it('Negative Two of Three Roles', () => {
+      assert.isFalse(auth.hasRole({} as any, 'SYS:GEN', 'ADM:FORD', 'GRP:IRS'));
+      assert.isFalse(auth.hasRole({} as any, ['SYS:GEN', 'ADM:FORD', 'GRP:IRS']));
+      assert.isFalse(auth.hasRole({} as any, 'SYS:GEN', ['ADM:FORD',  'GRP:IRS']));
+      assert.isFalse(auth.hasRole({} as any, ['SYS:GEN'], 'ADM:FORD', 'GRP:IRS'));
+      assert.isFalse(auth.hasRole({} as any, ['SYS:GEN'], ['ADM:FORD'], ['GRP:IRS']));
     });
-    it('One Role (Case Sensitivity)', function () {
-      assert.isTrue(auth.hasRole(<Request> {}, 'aDM:forG'));
-      assert.isTrue(auth.hasRole(<Request> {}, ['aDM:forG']));
+    it('One Role (Case Sensitivity)', () => {
+      assert.isTrue(auth.hasRole({} as any, 'aDM:forG'));
+      assert.isTrue(auth.hasRole({} as any, ['aDM:forG']));
     });
   });
 
-  describe('hasAnyRole()', function () {
-    let req = <Request> {};
-    it('One Role', function() {
+  describe('hasAnyRole()', () => {
+    const req = {} as any;
+    it('One Role', () => {
       assert.isTrue(auth.hasAnyRole(req, 'ADM:FORG'));
       assert.isTrue(auth.hasAnyRole(req, ['ADM:FORG']));
     });
-    it('One of Two Roles', function () {
+    it('One of Two Roles', () => {
       assert.isTrue(auth.hasAnyRole(req, 'ADM:FORG', 'ADM:FUN'));
       assert.isTrue(auth.hasAnyRole(req, ['ADM:FORG', 'ADM:FUN']));
       assert.isTrue(auth.hasAnyRole(req, 'ADM:FORG', ['ADM:FUN']));
       assert.isTrue(auth.hasAnyRole(req, ['ADM:FORG'], 'ADM:FUN'));
       assert.isTrue(auth.hasAnyRole(req, ['ADM:FORG'], ['ADM:FUN']));
     });
-    it('Two of Three Roles', function () {
+    it('Two of Three Roles', () => {
       assert.isTrue(auth.hasAnyRole(req, 'ADM:FORG', 'GRP:IRS', 'ADM:FUN'));
       assert.isTrue(auth.hasAnyRole(req, ['ADM:FORG', 'GRP:IRS', 'ADM:FUN']));
       assert.isTrue(auth.hasAnyRole(req, ['ADM:FORG', 'GRP:IRS'], 'ADM:FUN'));
       assert.isTrue(auth.hasAnyRole(req, 'ADM:FORG', ['GRP:IRS', 'ADM:FUN']));
       assert.isTrue(auth.hasAnyRole(req, ['ADM:FORG'], ['GRP:IRS'], ['ADM:FUN']));
     });
-    it('One of Three Roles', function () {
+    it('One of Three Roles', () => {
       assert.isTrue(auth.hasAnyRole(req, 'ADM:FORG', 'GRP:JKE', 'ADM:FUN'));
       assert.isTrue(auth.hasAnyRole(req, ['ADM:FORG', 'GRP:JKE', 'ADM:FUN']));
       assert.isTrue(auth.hasAnyRole(req, ['ADM:FORG', 'GRP:JKE'], ['ADM:FUN']));
       assert.isTrue(auth.hasAnyRole(req, ['ADM:FORG'], ['GRP:JKE', 'ADM:FUN']));
     });
-    it('Negative all of Three Roles', function () {
+    it('Negative all of Three Roles', () => {
       assert.isFalse(auth.hasAnyRole(req, 'ADM:FAKE', 'GRP:JKE', 'ADM:FUN'));
       assert.isFalse(auth.hasAnyRole(req, ['ADM:FAKE', 'GRP:JKE', 'ADM:FUN']));
       assert.isFalse(auth.hasAnyRole(req, ['ADM:FAKE', 'GRP:JKE'], 'ADM:FUN'));
       assert.isFalse(auth.hasAnyRole(req, 'ADM:FAKE', ['GRP:JKE', 'ADM:FUN']));
       assert.isFalse(auth.hasAnyRole(req, ['ADM:FAKE'], ['GRP:JKE'], ['ADM:FUN']));
     });
-    it('Negative One Role', function() {
+    it('Negative One Role', () => {
       assert.isFalse(auth.hasAnyRole(req, 'ADM:FAKE'));
       assert.isFalse(auth.hasAnyRole(req, ['ADM:FAKE']));
     });
-    it('One Role (Case Sensitivity)', function () {
+    it('One Role (Case Sensitivity)', () => {
       assert.isTrue(auth.hasAnyRole(req, 'adm:forg'));
       assert.isTrue(auth.hasAnyRole(req, ['adm:forg']));
     });
   });
 
-  describe('hasUsername()', function () {
-    let req = <Request> {};
-    it('One Username', function () {
+  describe('hasUsername()', () => {
+    const req = {} as any;
+    it('One Username', () => {
       assert.isTrue(auth.hasUsername(req, 'andrew'));
       assert.isTrue(auth.hasUsername(req, ['andrew']));
     });
-    it('Three of Usernames', function () {
+    it('Three of Usernames', () => {
       assert.isTrue(auth.hasUsername(req, 'andrew', 'dylan', 'matt'));
       assert.isTrue(auth.hasUsername(req, ['andrew', 'dylan', 'matt']));
       assert.isTrue(auth.hasUsername(req, ['andrew', 'dylan'], 'matt'));
       assert.isTrue(auth.hasUsername(req, 'andrew', ['dylan', 'matt']));
       assert.isTrue(auth.hasUsername(req, ['andrew'], ['dylan'], ['matt']));
     });
-    it('Negative One Username', function () {
+    it('Negative One Username', () => {
       assert.isFalse(auth.hasUsername(req, 'matt'));
       assert.isFalse(auth.hasUsername(req, ['matt']));
     });
-    it('Negative Three Usernames', function () {
+    it('Negative Three Usernames', () => {
       assert.isFalse(auth.hasUsername(req, 'matt', 'dylan', 'jeb'));
       assert.isFalse(auth.hasUsername(req, ['matt', 'dylan', 'jeb']));
       assert.isFalse(auth.hasUsername(req, ['matt', 'dylan'], ['jeb']));
       assert.isFalse(auth.hasUsername(req, ['matt', 'dylan'], ['jeb']));
       assert.isFalse(auth.hasUsername(req, ['matt'], ['dylan'], ['jeb']));
     });
-    it('One Username (Case Sensitivity)', function () {
+    it('One Username (Case Sensitivity)', () => {
       assert.isTrue(auth.hasUsername(req, 'anDreW'));
       assert.isTrue(auth.hasUsername(req, ['anDreW']));
     });

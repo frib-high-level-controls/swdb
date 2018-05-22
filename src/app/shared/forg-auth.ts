@@ -25,7 +25,7 @@ function getUsername(provider: auth.IProvider, req: Request): string | undefined
     return;
   }
   return user.uid ? String(user.uid) : undefined;
-};
+}
 
 
 function getRoles(provider: auth.IProvider, req: Request): string[] | undefined {
@@ -34,7 +34,7 @@ function getRoles(provider: auth.IProvider, req: Request): string[] | undefined 
     return;
   }
   return Array.isArray(user.roles) ? user.roles.map(String) : undefined;
-};
+}
 
 
 function verifyWithForg(forgClient: forgapi.IClient, username: string, done: ppauth.VerifyCallback): void {
@@ -53,7 +53,7 @@ function verifyWithForg(forgClient: forgapi.IClient, username: string, done: ppa
   .catch((err) => {
     done(err);
   });
-};
+}
 
 
 export class ForgCasProvider extends ppauth.CasPassportAbstractProvider<CasAuthenticateOptions> {
@@ -63,15 +63,15 @@ export class ForgCasProvider extends ppauth.CasPassportAbstractProvider<CasAuthe
   constructor(forgClient: forgapi.IClient, options: ppauth.CasProviderOptions) {
     super(options);
     this.forgClient = forgClient;
-  };
+  }
 
   public getUsername(req: Request): string | undefined {
     return getUsername(this, req);
-  };
+  }
 
   public getRoles(req: Request): string[] | undefined {
     return getRoles(this, req);
-  };
+  }
 
   protected verify(profile: string | ppauth.CasProfile, done: ppauth.VerifyCallback): void {
     let username: string;
@@ -81,8 +81,8 @@ export class ForgCasProvider extends ppauth.CasPassportAbstractProvider<CasAuthe
       username = profile.user;
     }
     verifyWithForg(this.forgClient, username, done);
-  };
-};
+  }
+}
 
 export abstract class ForgBasicAbstractProvider extends ppauth.BasicPassportAbstractProvider<AuthenticateOptions> {
 
@@ -91,15 +91,15 @@ export abstract class ForgBasicAbstractProvider extends ppauth.BasicPassportAbst
   constructor(forgClient: forgapi.IClient, options: ppauth.BasicProviderOptions) {
     super(options);
     this.forgClient = forgClient;
-  };
+  }
 
   public getUsername(req: Request): string | undefined {
     return getUsername(this, req);
-  };
+  }
 
   public getRoles(req: Request): string[] | undefined {
     return getRoles(this, req);
-  };
+  }
 
   protected verify(username: string, password: string, done: ppauth.VerifyCallback): void {
     this.verifyPassword(username, password, (err, verified) => {
@@ -113,10 +113,10 @@ export abstract class ForgBasicAbstractProvider extends ppauth.BasicPassportAbst
       }
       verifyWithForg(this.forgClient, username, done);
     });
-  };
+  }
 
   protected abstract verifyPassword(username: string, password: string, done: VerifyPasswordCallback): void;
-};
+}
 
 
 export class DevForgBasicProvider extends ForgBasicAbstractProvider {
@@ -125,7 +125,7 @@ export class DevForgBasicProvider extends ForgBasicAbstractProvider {
   constructor(forgClient: forgapi.IClient, options: ppauth.BasicProviderOptions) {
     log.warn('Authentication provider for DEVELOPMENT use only!');
     super(forgClient, options);
-  };
+  }
 
   protected verifyPassword(username: string, password: string, done: (err: any, verified?: boolean) => void): void {
     const env = process.env.NODE_ENV;
@@ -135,5 +135,5 @@ export class DevForgBasicProvider extends ForgBasicAbstractProvider {
     }
     log.warn('Development use only: PASSWORD VERIFICATION DISABLED');
     done(null, true);
-  };
-};
+  }
+}
