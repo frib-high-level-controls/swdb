@@ -3,11 +3,11 @@
     "defaultSeverity": "warning",
     "rules": {
         "quotemark": [ true, "single", "avoid-escape" ],
-        "only-arrow-functions": [ false ],
         "object-literal-sort-keys": false,
         "no-consecutive-blank-lines": [ false ],
         "interface-name": [ false ],
         "object-literal-shorthand": false,
-        "max-classes-per-file": false
+        "max-classes-per-file": false,
+        "no-object-literal-type-assertion": true
     }
 }
