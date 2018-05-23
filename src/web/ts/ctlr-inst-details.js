@@ -58,6 +58,12 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, $location,
     swService.promise.then(function(){
       let obj = swService.swIdsToObjects([$scope.formData.software])[0];
       $scope.swSelected = {item: obj};
+      if (typeof $scope.swSelected.item.branch == 'undefined'){
+        $scope.swSelected.item.branch = "";
+      } 
+      if (typeof $scope.swSelected.item.version == 'undefined'){
+        $scope.swSelected.item.version = "";
+      }
       $scope.formData.software = $scope.swSelected.item.swName + '/' +
         $scope.swSelected.item.branch + '/' + $scope.swSelected.item.version;
     });
