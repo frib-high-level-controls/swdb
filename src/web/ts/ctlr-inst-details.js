@@ -60,10 +60,7 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, $location,
       $scope.swSelected = {item: obj};
       if (typeof $scope.swSelected.item.branch == 'undefined'){
         $scope.swSelected.item.branch = "";
-        console.log("setting branch to \"\"");
-      } else {
-        console.log("NOT setting branch to \"\"");
-      }
+      } 
       if (typeof $scope.swSelected.item.version == 'undefined'){
         $scope.swSelected.item.version = "";
       }
