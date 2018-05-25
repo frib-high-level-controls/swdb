@@ -361,7 +361,7 @@ async function doStart(): Promise<express.Application> {
       res.redirect(req.query.bounce);
       return;
     }
-    res.redirect('/');
+    res.redirect(res.locals.basePath || '/');
   });
 
   // logoff
