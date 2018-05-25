@@ -1,6 +1,8 @@
 import express = require('express');
 import mongodb = require('mongodb');
 import mongoose = require('mongoose');
+
+import * as auth from '../shared/auth';
 import * as history from '../shared/history';
 
 import CommonTools = require('./CommonTools');
@@ -58,11 +60,11 @@ export class InstDb {
   }
 
   // Create a new record in the backend storage
-  public createDoc = async (user: string | undefined,
+  public createDoc = async (user: string,
     req: express.Request, res: express.Response, next: express.NextFunction) => {
     const doc = new InstDb.instDoc(req.body);
     try {
-      await doc.saveWithHistory(user);
+      await doc.saveWithHistory(auth.formatRole('USR', user));
       debug('Created installation ' + doc._id + ' as ' + req.session!.username);
       res.location(InstDb.props.instApiUrl + doc._id);
       res.status(201);
@@ -79,14 +81,12 @@ export class InstDb {
    * @param user The user making the request (String)
    * @param req The requested sw record to save
    */
-  public createDocByRecord = async (user: string | undefined,
-    req: any ) => {
-
+  public createDocByRecord = async (user: string, req: express.Request) => {
     const doc = new InstDb.instDoc(req);
 
     try {
-      await doc.saveWithHistory(user);
-      debug('Created nstallation ' + doc._id + ' as ' + user);
+      await doc.saveWithHistory(auth.formatRole('USR', user));
+      debug('Created installation ' + doc._id + ' as ' + user);
     } catch (err) {
         debug('Error creating installation ' + doc._id + ': ' + err);
     }
@@ -153,7 +153,7 @@ export class InstDb {
     }
   }
 
-  public updateDoc = async (user: string | undefined,
+  public updateDoc = async (user: string,
     req: express.Request, res: express.Response, next: express.NextFunction) => {
     const id = req.params.id;
     if (id) {
@@ -169,7 +169,7 @@ export class InstDb {
             }
           }
           try {
-            await founddoc.saveWithHistory(user);
+            await founddoc.saveWithHistory(auth.formatRole('USR', user));
             debug('Updated installation ' + founddoc._id + ' as ' + req.session!.username);
             res.location(InstDb.props.instApiUrl + founddoc._id);
             res.end();

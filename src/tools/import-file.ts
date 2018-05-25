@@ -10,6 +10,7 @@ import XLSX = require('xlsx');
 
 import { Db } from '../app/lib/Db';
 import { InstDb } from '../app/lib/instDb';
+import * as auth from '../app/shared/auth';
 import * as history from '../app/shared/history';
 
 // Constants correspond to column names in xlsx file
@@ -209,7 +210,7 @@ async function main() {
   // Clean DB before saving data
   await mongoose.connection.db.dropDatabase();
 
-  const updatedBy = 'system';
+  const updatedBy = auth.formatRole('SYS', 'IMPORTXLSX');
 
   for (let doc of swDataDoc) {
     try {

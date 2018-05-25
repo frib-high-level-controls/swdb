@@ -441,7 +441,12 @@ async function doStart(): Promise<express.Application> {
         res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
         return;
       } else {
-        be.createDoc(auth.getUsername(req), req, res, next);
+        const username = auth.getUsername(req);
+        if (!username) {
+          res.status(500).send('Ensure authenticated failed');
+          return;
+        }
+        be.createDoc(username, req, res, next);
       }
     });
   });
@@ -490,7 +495,12 @@ async function doStart(): Promise<express.Application> {
           res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
           return;
         } else {
-          be.updateDoc(auth.getUsername(req), req, res, next);
+          const username = auth.getUsername(req);
+          if (!username) {
+            res.status(500).send('Ensure authenticated failed');
+            return;
+          }
+          be.updateDoc(username, req, res, next);
         }
       }
     });
@@ -535,7 +545,12 @@ async function doStart(): Promise<express.Application> {
           res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
           return;
         } else {
-          be.updateDoc(auth.getUsername(req), req, res, next);
+          const username = auth.getUsername(req);
+          if (!username) {
+            res.status(500).send('Ensure authenticated failed');
+            return;
+          }
+          be.updateDoc(username, req, res, next);
         }
       }
     });
@@ -581,7 +596,12 @@ async function doStart(): Promise<express.Application> {
           return;
         } else {
           debug('POST /api/v1/inst calling create...');
-          instBe.createDoc(auth.getUsername(req), req, res, next);
+          const username = auth.getUsername(req);
+          if (!username) {
+            res.status(500).send('Ensure authenticated failed');
+            return;
+          }
+          instBe.createDoc(username, req, res, next);
         }
       }
     });
@@ -624,7 +644,12 @@ async function doStart(): Promise<express.Application> {
           res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
           return;
         } else {
-          instBe.updateDoc(auth.getUsername(req), req, res, next);
+          const username = auth.getUsername(req);
+          if (!username) {
+            res.status(500).send('Ensure authenticated failed');
+            return;
+          }
+          instBe.updateDoc(username, req, res, next);
         }
       }
     });
@@ -668,7 +693,12 @@ async function doStart(): Promise<express.Application> {
           res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
           return;
         } else {
-          instBe.updateDoc(auth.getUsername(req), req, res, next);
+          const username = auth.getUsername(req);
+          if (!username) {
+            res.status(500).send('Ensure authenticated failed');
+            return;
+          }
+          instBe.updateDoc(username, req, res, next);
         }
       }
     });
