@@ -4,6 +4,9 @@ import * as history from '../shared/history';
 import commonTools = require('./CommonTools');
 import express = require('express');
 import dbg = require('debug');
+
+import * as auth from '../shared/auth';
+
 const debug = dbg('swdb:Db');
 
 export class Db {
@@ -66,13 +69,13 @@ export class Db {
   }
 
   // Create a new record in the backend storage
-  public createDoc = async (user: string | undefined,
+  public createDoc = async (user: string,
     req: express.Request, res: express.Response, next: express.NextFunction) => {
 
     const doc = new Db.swDoc(req.body);
 
     try {
-      await doc.saveWithHistory(user);
+      await doc.saveWithHistory(auth.formatRole('USR', user));
       debug('Created sw ' + doc._id + ' as ' + user);
       res.location(Db.props.apiUrl + doc._id);
       res.status(201);
@@ -88,13 +91,11 @@ export class Db {
    * @param user The user making the request (String)
    * @param req The requested sw record to save
    */
-  public createDocByRecord = async (user: string | undefined,
-    req: any ) => {
-
+  public createDocByRecord = async (user: string, req: express.Request) => {
     const doc = new Db.swDoc(req);
 
     try {
-      await doc.saveWithHistory(user);
+      await doc.saveWithHistory(auth.formatRole('USR', user));
       debug('Created sw ' + doc._id + ' as ' + user);
     } catch (err) {
         debug('Error creating sw ' + doc._id + ': ' + err);
@@ -161,7 +162,7 @@ export class Db {
     }
   }
 
-  public updateDoc = (user: string | undefined, req: express.Request, res: express.Response,
+  public updateDoc = (user: string, req: express.Request, res: express.Response,
      next: express.NextFunction) => {
     const id = req.params.id;
     if (id) {
@@ -177,7 +178,7 @@ export class Db {
             }
           }
           try {
-            await doc.saveWithHistory(user);
+            await doc.saveWithHistory(auth.formatRole('USR', user));
             debug('Updated sw ' + doc._id + ' as ' + user);
             res.location(Db.props.apiUrl + doc._id);
             res.end();
