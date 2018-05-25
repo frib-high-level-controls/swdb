@@ -372,6 +372,8 @@ async function doStart(): Promise<express.Application> {
     res.redirect(props.auth.cas.cas_url + '/logout');
   });
 
+  app.use('/status', status.router);
+
   // for get requests that are not specific return all
   app.get('/api/v1/swdb/user', function(req: express.Request, res: express.Response, next: express.NextFunction) {
     debug('GET /api/v1/swdb/user request');
