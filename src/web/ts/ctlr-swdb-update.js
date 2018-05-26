@@ -91,6 +91,10 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
         function (item) {
           return $scope.statusDisplay === $scope.props.StatusEnum[item];
         });
+      $scope.formData.versionControl = Object.keys($scope.props.RcsEnum).find(
+        function (item) {
+          return $scope.versionControlDisplay === $scope.props.RcsEnum[item];
+        });
       $http({
         method: 'PUT',
         // url: $scope.props.apiUrl+$scope.formData._id,
@@ -187,6 +191,7 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     // convert enums to value
     $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[$scope.formData.levelOfCare];
     $scope.statusDisplay = $scope.props.StatusEnum[$scope.formData.status];
+    $scope.versionControlDisplay = $scope.props.RcsEnum[$scope.formData.versionControl];
 
       // Setup field display based on status
     $scope.onStatusChange();
