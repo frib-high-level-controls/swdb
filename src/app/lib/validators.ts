@@ -241,7 +241,8 @@ export class CustomValidators {
           data: 'Rule2 record id not found ' + id,
         };
       }
-      if ((req.body.software) && (req.body.software !== queryPromise.software)) {
+      if ((req.body.software) &&
+        (JSON.stringify(req.body.software) !== JSON.stringify(queryPromise.software))) {
         debug('software from ' + JSON.stringify(queryPromise.software) + ' to ' + JSON.stringify(req.body.software));
         if (queryPromise.status === 'RDY_INST') {
           // req is changing software, and in in Ready for installation
