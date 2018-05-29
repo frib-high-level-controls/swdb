@@ -1,6 +1,6 @@
 {
   "name": "swdb",
-  "version": "1.0.1-1",
+  "version": "1.0.1",
   "private": true,
   "description": "SW DB",
   "main": "server.js",
