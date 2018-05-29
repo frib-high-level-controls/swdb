@@ -28,6 +28,7 @@ const COL_VCS_LOCATION = 'VCS Location';
 const COL_HOST = 'Host';
 const COL_STATUS = 'Status';
 const COL_VV_RESULTS = 'V&V Results';
+const COL_VV_APRDATE = 'V&V Date';
 
 interface HistoryDocument extends history.Document<HistoryDocument> {};
 
@@ -75,6 +76,7 @@ interface InstDataRow {
   status: string;
   statusDate: string;
   vvResultsLoc: string;
+  vvApprovalDate?: string;
   software: mongoose.Types.ObjectId | undefined;
   drrs: string;
 }
@@ -267,6 +269,9 @@ function getXlsxJson(fileName: string, cfg: Config) {
 
       let keyStr: string = row[COL_NAME_1] + '-' + row[COL_VERSION];
 
+      let vvApprovalDate =  row[COL_VV_APRDATE] ? String(row[COL_VV_APRDATE]) : undefined;
+      let statusDate = vvApprovalDate || String(cfg.statusDate[sheet]);
+
       if (swKeyList.get(keyStr)) {
         // Duplicate exists
         for (let data of swDataArray) {
@@ -326,7 +331,7 @@ function getXlsxJson(fileName: string, cfg: Config) {
           versionControl: String(cfg.vcs[row[COL_VCS_TYPE]]),
           versionControlLoc: row[COL_VCS_LOCATION],
           _id: swKeyList.get(keyStr),
-          statusDate: String(cfg.statusDate[sheet]),
+          statusDate: statusDate,
         };
         swDataArray.push(swData);
       }
@@ -352,8 +357,9 @@ function getXlsxJson(fileName: string, cfg: Config) {
               name: row[COL_NAME],
               area: String(cfg.area[row[COL_AREA]]),
               status: String(cfg.status[row[COL_STATUS]]),
-              statusDate: String(cfg.statusDate[sheet]),
-              vvResultsLoc: row[COL_VV_RESULTS],
+              statusDate: statusDate,
+              vvResultsLoc: String(row[COL_VV_RESULTS]),
+              vvApprovalDate: vvApprovalDate,
               software: swKeyList.get(keyStr),
               drrs: sheet,
             };
