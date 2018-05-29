@@ -70,8 +70,8 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
 
     $scope.formData.software = $scope.swSelected.item._id;
 
-    console.log('Got formData: ' + JSON.stringify($scope.formData, null, 2));
-    console.log('Got selectedAreas: ' + JSON.stringify($scope.selectedAreas, null, 2));
+    // console.log('Got formData: ' + JSON.stringify($scope.formData, null, 2));
+    // console.log('Got selectedAreas: ' + JSON.stringify($scope.selectedAreas, null, 2));
     if ($scope.inputForm.$valid) {
       delete $scope.formData.__v;
       let url = basePath + "/api/v1/inst/" + $scope.formData._id;
@@ -89,7 +89,7 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
           let headers = response.headers();
           if (headers.location) {
             // if location header is present extract the id
-            console.log('Got header.location: ' + headers.location);
+            // console.log('Got header.location: ' + headers.location);
             let id = headers.location.split('/').pop();
             $location.path('/inst/details/' + id);
           }
@@ -108,7 +108,7 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
 
   $scope.newItem = function (event) {
     var parts = event.currentTarget.id.split('.');
-    console.log("got add: " + parts);
+    // console.log("got add: " + parts);
     if (parts[1] === 'area') {
       $scope.areasSelected.push("");
     } else if (parts[1] === 'slots') {
@@ -142,7 +142,7 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
   };
 
   $scope.onStatusChange = function ($item, $model, $label) {
-    if ($scope.formData.status !== $scope.props.instStatusLabels[0]) {
+    if ($scope.statusDisplay !== $scope.props.InstStatusEnum['RDY_INST']) {
       $scope.softwareDisabled = true;
       $scope.softwareMouseover = "Software can only change when status is '" + 
         $scope.props.instStatusLabels[0] + "'";
