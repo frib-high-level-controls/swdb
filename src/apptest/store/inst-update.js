@@ -28,6 +28,9 @@ props = ctools.getConfiguration();
 
 test.describe("Installations update screen tests", function() {
   var chromeDriver;
+  let tmpStatusDate;
+  let tmpVvApprovalDate;
+
   before("Prep DB", async function () {
     app = await server.start();
     supertest = Supertest(app);
@@ -195,6 +198,7 @@ test.describe("Installations update screen tests", function() {
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
     input.click();
+    tmpStatusDate = new Date();
   });
 
   test.it('Add new record - set V&V Approval date', function() {
@@ -205,6 +209,7 @@ test.describe("Installations update screen tests", function() {
       By.xpath('//*[@id="vvApprovalDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[@id="vvApprovalDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
     input.click();
+    tmpVvApprovalDate = new Date();
   });
 
   test.it("Set the software", function() {
@@ -253,12 +258,73 @@ test.describe("Installations update screen tests", function() {
     chromeDriver.wait(until.titleIs("SWDB - Update Installation"), 5000);
   });
 
-  test.it("should update host", function () {
+  test.it("should show the correct host in update", function () {
+    chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
+    chromeDriver.findElement(By.id("host")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("testHost1");
+      });
+  });
+
+  test.it("should update installation host", function () {
     chromeDriver.wait(until.titleIs("SWDB - Update Installation"), 5000);
     chromeDriver.wait(until.elementLocated(By.id("host")), 3000);
     let input = chromeDriver.findElement(By.id("host"));
     input.clear();
     input.sendKeys("testHost2");
+  });
+
+  test.it("should show the correct name in update", function () {
+    chromeDriver.wait(until.elementLocated(By.id("name")), 3000);
+    chromeDriver.findElement(By.id("name")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Test name");
+      });
+  });
+
+  test.it("should show the correct area.0 in update", function () {
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.0"]/div[1]/span/span[2]/span')), 3000);
+    chromeDriver.findElement(By.xpath('//*[@id="area.0"]/div[1]/span/span[2]/span')).getText().then(
+      function (text) {
+        expect(text).to.equal("IFS:LAB.FRIB.ASD.ACCELERATOROPS.MACHINEOPERATORS");
+      });
+  });
+
+  test.it("should show the correct area.1 in update", function () {
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.1"]/div[1]/span/span[2]/span')), 3000);
+    chromeDriver.findElement(By.xpath('//*[@id="area.1"]/div[1]/span/span[2]/span')).getText().then(
+      function (text) {
+        expect(text).to.equal("ADB:AREA.NSCL.CONTROLRM");
+      });
+  });
+
+  test.it("should show the correct status in update", function () {
+    chromeDriver.wait(until.elementLocated(By.id("status")), 3000);
+    chromeDriver.findElement(By.id("status")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal("Ready for install");
+      });
+  });
+
+  test.it("should show the status date in update", function () {
+    chromeDriver.wait(until.elementLocated(By.id("statusDate")), 3000);
+    chromeDriver.findElement(By.id("statusDate")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal(('0' + (tmpStatusDate.getMonth() + 1)).slice(-2) + "/" +
+         tmpStatusDate.getDate() + "/" + tmpStatusDate.getFullYear());
+      });
+  });
+
+  test.it("should show the vvApprovalDate in update", function () {
+    chromeDriver.wait(until.elementLocated(By.id("vvApprovalDate")), 3000);
+    chromeDriver.findElement(By.id("vvApprovalDate")).getAttribute("value").then(
+      function (text) {
+        expect(text).to.equal(('0' + (tmpVvApprovalDate.getMonth() + 1)).slice(-2) + "/" +
+         tmpVvApprovalDate.getDate() + "/" + tmpVvApprovalDate.getFullYear());
+      });
+  });
+
+  test.it("submit update form", function () {
     chromeDriver.wait(until.elementLocated(By.id('submitBtn')), 3000);
     chromeDriver.findElement(By.id("submitBtn")).click();
   });
