@@ -129,7 +129,10 @@ function InstListPromiseCtrl(
     DTColumnBuilder.newColumn('drrs')
       .withTitle('DRR').withOption('defaultContent', ''),
     DTColumnBuilder.newColumn('status')
-      .withTitle('Status').withOption('defaultContent', ''),
+      .withTitle('Status')
+      .renderWith(function (data, type, full, meta) {
+        return $scope.props.InstStatusEnum[data] || '';
+      }),
     DTColumnBuilder.newColumn('statusDate')
       // .withTitle('Status Date').withOption('defaultContent', '')
       .withTitle('Status date (m/d/y)')
