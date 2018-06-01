@@ -12,6 +12,7 @@ interface IAppRoute extends ng.route.IRoute {
 
 interface IConfigProps {
   webUrl: string;
+  StatusEnum: { [key: string]: string | undefined };
 }
 
 interface IConfigService {
@@ -131,7 +132,10 @@ function ListPromiseCtrl(
     DTColumnBuilder.newColumn('engineer')
       .withTitle('Engineer').withOption('defaultContent', ''),
     DTColumnBuilder.newColumn('status')
-      .withTitle('Status').withOption('defaultContent', ''),
+      .withTitle('Status')
+      .renderWith(function (data, type, full, meta) {
+        return $scope.props.StatusEnum[data] || '';
+      }),
     DTColumnBuilder.newColumn('statusDate')
       .withTitle('Status date (m/d/y)')
       .renderWith(function (data, type, full, meta) {
