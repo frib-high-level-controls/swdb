@@ -691,12 +691,12 @@ test.it("should show search page with username on logout button", function() {
       });
   });
 
-  test.it("should show the correct installtion software in details", function () {
+  test.it("should show the correct installation software in details", function () {
     this.timeout(8000);
     chromeDriver.wait(until.elementLocated(By.id("software")), 3000);
     chromeDriver.findElement(By.id("software")).getAttribute("value").then(
       function (text) {
-        expect(text).to.equal('BEAST/b12/0.2');
+        expect(text).to.equal('BEAST / b12 / 0.2');
       });
   });
 

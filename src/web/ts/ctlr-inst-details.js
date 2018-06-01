@@ -64,8 +64,14 @@ function InstDetailsPromiseCtrl($scope, $http, $routeParams, $window, $location,
       if (typeof $scope.swSelected.item.version == 'undefined'){
         $scope.swSelected.item.version = "";
       }
-      $scope.formData.software = $scope.swSelected.item.swName + '/' +
-        $scope.swSelected.item.branch + '/' + $scope.swSelected.item.version;
+
+      let software = $scope.swSelected.item.swName;
+      if ($scope.swSelected.item.branch) {
+        software += ' / ' + $scope.swSelected.item.branch + ' / ' + $scope.swSelected.item.version;
+      } else {
+        software += ' / / ' + $scope.swSelected.item.version;
+      }
+      $scope.formData.software = software;
     });
   });
   // get history
