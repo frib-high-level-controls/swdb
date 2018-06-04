@@ -40,6 +40,15 @@ module.exports = function(grunt) {
           ],
         },
       },
+      copy: {
+        pkg: {
+          files: [{
+            expand: true,
+            src: 'package.json',
+            dest: 'app/'
+          }],
+        }
+      },
       clean: {
         app: [ './app' ],
         test: [ './test' ],
@@ -49,9 +58,20 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-ts');
     grunt.loadNpmTasks('grunt-tslint');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-copy');
 
     grunt.registerTask('default', [
-      'ts:app'
+      'build',
+    ]);
+
+    grunt.registerTask('build', [
+      'ts:app',
+      'copy:pkg',
+    ]);
+
+    grunt.registerTask('deploy', [
+      'clean',
+      'build',
     ]);
 
     grunt.registerTask('lint', [

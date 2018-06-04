@@ -3,6 +3,7 @@
  */
 import fs = require('fs');
 import path = require('path');
+import util = require('util');
 
 import bodyparser = require('body-parser');
 import express = require('express');
@@ -66,37 +67,31 @@ function updateActivityStatus(): void {
   }
 }
 
-// read file with path resolution
-function readFile(...pathSegments: string[]): Promise<Buffer> {
-  return new Promise((resolve, reject) => {
-    fs.readFile(path.resolve(...pathSegments), (err, data) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(data);
-    });
-  });
-}
+const readFile = util.promisify(fs.readFile);
 
 // read the application name and version
 async function readNameVersion(): Promise<[string | undefined, string | undefined]> {
   // first look for application name and version in the environment
   let name = process.env.NODE_APP_NAME;
   let version = process.env.NODE_APP_VERSION;
-  // second look for application name and verison in packge.json
+  // second look for application name and verison in package.json
   if (!name || !version) {
+    const pkgPath = path.resolve(__dirname, 'package.json');
+    let pkg: Package | undefined;
     try {
-      const data = await readFile(__dirname, '..', 'package.json');
-      const pkg: Package = JSON.parse(data.toString('UTF-8'));
-      if (!name && pkg && pkg.name) {
-        name = String(pkg.name);
-      }
-      if (!version && pkg && pkg.version) {
-        version = String(pkg.version);
-      }
-    } catch (ierr) {
-      // ignore //
+      pkg = JSON.parse(await readFile(pkgPath, 'UTF-8'));
+    } catch (err) {
+      warn('Missing or invalid package metadata: %s: %s', pkgPath, err);
+    }
+    if (!name && pkg && pkg.name) {
+      name = String(pkg.name);
+    } else {
+      name = String(name);
+    }
+    if (!version && pkg && pkg.version) {
+      version = String(pkg.version);
+    } else {
+      version = String(version);
     }
   }
   return [name, version];
