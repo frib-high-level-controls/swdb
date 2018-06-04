@@ -29,32 +29,52 @@ module.exports = function(grunt) {
     tslint: {
       options: {
         configuration: 'tslint.json',
-          // If set to true, tslint errors will be reported, but not fail the task 
-          // If set to false, tslint errors will be reported, and the task will fail 
-          force: false,
-          fix: false
-        },
-        files: {
-          src: [
-            'src/**/*.ts'
-          ],
-        },
+        // If set to true, tslint errors will be reported, but not fail the task 
+        // If set to false, tslint errors will be reported, and the task will fail 
+        force: false,
+        fix: false
       },
-      clean: {
-        app: [ './app' ],
-        test: [ './test' ],
-      }
-    });
+      files: {
+        src: [
+          'src/**/*.ts'
+        ],
+      },
+    },
+    copy: {
+      pkg: {
+        files: [{
+          expand: true,
+          src: 'package.json',
+          dest: 'app/'
+        }],
+      },
+    },
+    clean: {
+      app: [ './app' ],
+      test: [ './test' ],
+    },
+  });
 
-    grunt.loadNpmTasks('grunt-ts');
-    grunt.loadNpmTasks('grunt-tslint');
-    grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-ts');
+  grunt.loadNpmTasks('grunt-tslint');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
-    grunt.registerTask('default', [
-      'ts:app'
-    ]);
+  grunt.registerTask('default', [
+    'build',
+  ]);
 
-    grunt.registerTask('lint', [
-      'tslint',
-    ]);
+  grunt.registerTask('build', [
+    'ts:app',
+    'copy:pkg',
+  ]);
+
+  grunt.registerTask('deploy', [
+    'clean',
+    'build',
+  ]);
+
+  grunt.registerTask('lint', [
+    'tslint',
+  ]);
 };
