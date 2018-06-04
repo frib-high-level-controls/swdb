@@ -29,52 +29,52 @@ module.exports = function(grunt) {
     tslint: {
       options: {
         configuration: 'tslint.json',
-          // If set to true, tslint errors will be reported, but not fail the task 
-          // If set to false, tslint errors will be reported, and the task will fail 
-          force: false,
-          fix: false
-        },
-        files: {
-          src: [
-            'src/**/*.ts'
-          ],
-        },
+        // If set to true, tslint errors will be reported, but not fail the task 
+        // If set to false, tslint errors will be reported, and the task will fail 
+        force: false,
+        fix: false
       },
-      copy: {
-        pkg: {
-          files: [{
-            expand: true,
-            src: 'package.json',
-            dest: 'app/'
-          }],
-        }
+      files: {
+        src: [
+          'src/**/*.ts'
+        ],
       },
-      clean: {
-        app: [ './app' ],
-        test: [ './test' ],
-      }
-    });
+    },
+    copy: {
+      pkg: {
+        files: [{
+          expand: true,
+          src: 'package.json',
+          dest: 'app/'
+        }],
+      },
+    },
+    clean: {
+      app: [ './app' ],
+      test: [ './test' ],
+    },
+  });
 
-    grunt.loadNpmTasks('grunt-ts');
-    grunt.loadNpmTasks('grunt-tslint');
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-ts');
+  grunt.loadNpmTasks('grunt-tslint');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
-    grunt.registerTask('default', [
-      'build',
-    ]);
+  grunt.registerTask('default', [
+    'build',
+  ]);
 
-    grunt.registerTask('build', [
-      'ts:app',
-      'copy:pkg',
-    ]);
+  grunt.registerTask('build', [
+    'ts:app',
+    'copy:pkg',
+  ]);
 
-    grunt.registerTask('deploy', [
-      'clean',
-      'build',
-    ]);
+  grunt.registerTask('deploy', [
+    'clean',
+    'build',
+  ]);
 
-    grunt.registerTask('lint', [
-      'tslint',
-    ]);
+  grunt.registerTask('lint', [
+    'tslint',
+  ]);
 };
