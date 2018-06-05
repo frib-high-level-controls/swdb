@@ -4,8 +4,8 @@
 import * as path from 'path';
 
 import * as dbg from 'debug';
-import rc = require('rc');
 import mongoose = require('mongoose');
+import rc = require('rc');
 import XLSX = require('xlsx');
 
 import { Db } from '../app/lib/Db';
@@ -30,7 +30,7 @@ const COL_STATUS = 'Status';
 const COL_VV_RESULTS = 'V&V Results';
 const COL_VV_APRDATE = 'V&V Date';
 
-interface HistoryDocument extends history.Document<HistoryDocument> {};
+interface HistoryDocument extends history.Document<HistoryDocument> {}
 
 interface Config {
   configs?: string[];
@@ -52,7 +52,7 @@ interface Config {
   statusDate: {[key: string]: {}};
   status: {[key: string]: {}};
   vcs: {[key: string]: {}};
-};
+}
 
 interface SWDataRow {
   swName: string;
@@ -93,11 +93,11 @@ const debug = dbg('import-file');
 const info = console.info;
 const error = console.error;
 
-let swKeyList = new Map<string, mongoose.Types.ObjectId>();
-let instKeyList = new Map<string, boolean>();
+const swKeyList = new Map<string, mongoose.Types.ObjectId>();
+const instKeyList = new Map<string, boolean>();
 
 async function main() {
-  let cfg: Config = {
+  const cfg: Config = {
     mongo: {
       port: '27017',
       addr: 'localhost',
@@ -117,7 +117,7 @@ async function main() {
 
   rc('import-file', cfg);
   if (cfg.configs) {
-    for (let file of cfg.configs) {
+    for (const file of cfg.configs) {
       info('Load configuration: %s', file);
     }
   }
@@ -142,22 +142,22 @@ async function main() {
     return;
   }
 
-  let combinedData: CombinedJson = {swData: [], instData: []};
-  for (let filePath of cfg._) {
-    let absFilePath = path.resolve(String(filePath));
+  const combinedData: CombinedJson = {swData: [], instData: []};
+  for (const filePath of cfg._) {
+    const absFilePath = path.resolve(String(filePath));
     info('filepath %s', absFilePath);
     // Convert xlsx to json
-    let combinedDataLocal = getXlsxJson(absFilePath, cfg);
+    const combinedDataLocal = getXlsxJson(absFilePath, cfg);
     combinedData.swData.push(...combinedDataLocal.swData);
     combinedData.instData.push(...combinedDataLocal.instData);
   }
 
   let valid = true;
-  let swDataDoc: HistoryDocument[] = [];
+  const swDataDoc: HistoryDocument[] = [];
   new Db(true); // tslint:disable-line
-  for (let d of combinedData.swData) {
+  for (const d of combinedData.swData) {
     info('Create swDoc and validate: %s (Version: %s)', d.swName, d.version);
-    let doc: HistoryDocument = new Db.swDoc(d);
+    const doc: HistoryDocument = new Db.swDoc(d);
     try {
       await doc.validate();
     } catch (err) {
@@ -168,11 +168,11 @@ async function main() {
     swDataDoc.push(doc);
   }
 
-  let instDataDoc: HistoryDocument[] = [];
+  const instDataDoc: HistoryDocument[] = [];
   new InstDb(true); // tslint:disable-line
-  for (let d of combinedData.instData) {
+  for (const d of combinedData.instData) {
     info('Create instDoc and validate: %s (Host: %s)', d.name, d.host);
-    let doc: HistoryDocument = new InstDb.instDoc(d);
+    const doc: HistoryDocument = new InstDb.instDoc(d);
     try {
       await doc.validate();
     } catch (err) {
@@ -214,7 +214,7 @@ async function main() {
 
   const updatedBy = auth.formatRole('SYS', 'IMPORTXLSX');
 
-  for (let doc of swDataDoc) {
+  for (const doc of swDataDoc) {
     try {
       await doc.saveWithHistory(updatedBy);
     } catch (err) {
@@ -223,7 +223,7 @@ async function main() {
   }
   info('Software documents saved with history: %s', swDataDoc.length);
 
-  for (let doc of instDataDoc) {
+  for (const doc of instDataDoc) {
     try {
       await doc.saveWithHistory(updatedBy);
     } catch (err) {
@@ -233,7 +233,7 @@ async function main() {
   info('Installation documents saved with history: %s', instDataDoc.length);
 
   await mongoose.disconnect();
-};
+}
 
 /**
  * convert data in xlsx to json format, each sheet will be handled
@@ -242,18 +242,18 @@ async function main() {
  */
 function getXlsxJson(fileName: string, cfg: Config) {
   // Read data from sheet
-  let workbook = XLSX.readFile(fileName);
-  let swDataArray: SWDataRow[] = [];
-  let instDataArray: InstDataRow[] = [];
+  const workbook = XLSX.readFile(fileName);
+  const swDataArray: SWDataRow[] = [];
+  const instDataArray: InstDataRow[] = [];
 
-  for (let sheet of workbook.SheetNames) {
-    let worksheet = workbook.Sheets[sheet];
+  for (const sheet of workbook.SheetNames) {
+    const worksheet = workbook.Sheets[sheet];
     info('Looking at sheet %s', sheet);
     if (!worksheet) {
       error('Cannot read data from sheet ' + sheet + ', please check the config file.');
       process.exit(1);
     }
-    let combinedData = XLSX.utils.sheet_to_json(worksheet);
+    const combinedData = XLSX.utils.sheet_to_json(worksheet);
     if (combinedData.length === 0) {
       error('Cannot convert data to json for worksheet ' + sheet);
       process.exit(1);
@@ -262,19 +262,19 @@ function getXlsxJson(fileName: string, cfg: Config) {
       error('No Status Date available for sheet %s', sheet);
       process.exit(1);
     }
-    for (let row of combinedData) {
+    for (const row of combinedData) {
       if (!row[COL_NAME]) {
         continue;
       }
 
-      let keyStr: string = row[COL_NAME_1] + '-' + row[COL_VERSION];
+      const keyStr: string = row[COL_NAME_1] + '-' + row[COL_VERSION];
 
-      let vvApprovalDate =  row[COL_VV_APRDATE] ? String(row[COL_VV_APRDATE]) : undefined;
-      let statusDate = vvApprovalDate || String(cfg.statusDate[sheet]);
+      const vvApprovalDate =  row[COL_VV_APRDATE] ? String(row[COL_VV_APRDATE]) : undefined;
+      const statusDate = vvApprovalDate || String(cfg.statusDate[sheet]);
 
       if (swKeyList.get(keyStr)) {
         // Duplicate exists
-        for (let data of swDataArray) {
+        for (const data of swDataArray) {
           // Find the original row to which this row is a duplicate of
           if (data._id === swKeyList.get(keyStr)) {
             // Check if rest of the fields match
@@ -319,7 +319,7 @@ function getXlsxJson(fileName: string, cfg: Config) {
           error('Unknown VCS Name %s', row[COL_VCS_TYPE]);
           process.exit(1);
         }
-        let swData: SWDataRow = {
+        const swData: SWDataRow = {
           swName: row[COL_NAME_1],
           desc: row[COL_DESCRIPTION],
           status: 'RDY_INST',
@@ -336,9 +336,9 @@ function getXlsxJson(fileName: string, cfg: Config) {
         swDataArray.push(swData);
       }
       if (row[COL_HOST]) {
-        let hosts: string[] = row[COL_HOST].split(',');
-        for (let host of hosts) {
-          let instKeyStr = host + '-' + row[COL_NAME] + '-' + swKeyList.get(keyStr);
+        const hosts: string[] = row[COL_HOST].split(',');
+        for (const host of hosts) {
+          const instKeyStr = host + '-' + row[COL_NAME] + '-' + swKeyList.get(keyStr);
           if (instKeyList.get(instKeyStr)) {
             info('Found existing installation %s, exiting !!', instKeyStr);
             process.exit(1);
@@ -352,7 +352,7 @@ function getXlsxJson(fileName: string, cfg: Config) {
               error('Unknown Status Name %s', row[COL_STATUS]);
               process.exit(1);
             }
-            let instData: InstDataRow = {
+            const instData: InstDataRow = {
               host: host,
               name: row[COL_NAME],
               area: String(cfg.area[row[COL_AREA]]),

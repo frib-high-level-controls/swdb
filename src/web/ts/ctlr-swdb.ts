@@ -35,7 +35,7 @@ let appController = angular.module('appController', [
 ]);
 
 appController.run(['$rootScope', '$route', '$http', '$routeParams', '$location', 'configService',
-  function (
+  (
     $rootScope: IAppRootScopeService,
     $route: ng.route.IRouteService,
     $http: ng.IHttpService,
@@ -43,17 +43,16 @@ appController.run(['$rootScope', '$route', '$http', '$routeParams', '$location',
     $location: ng.ILocationService,
     configService: {},
     slotService: {},
-  ) {
-    $rootScope.$on('$routeChangeSuccess', function (event, currentRoute: IAppRoute) {
+  ) => {
+    $rootScope.$on('$routeChangeSuccess', (event, currentRoute: IAppRoute) => {
       // Change page title, based on Route information
       $rootScope.title = currentRoute.title;
-
     });
   },
 ]);
 
 // expose system status to all controllers via service.
-appController.factory('StatusService', function () {
+appController.factory('StatusService', () => {
   return {
     dbConnected: 'false',
   };
@@ -66,10 +65,9 @@ interface IListControllerScope extends ng.IScope {
   props: IConfigProps;
   usrBtnTxt?: string;
   usrBtnClk(): void;
-};
+}
 
-appController.controller('ListController', ListPromiseCtrl);
-function ListPromiseCtrl(
+appController.controller('ListController', function(
   this: { dtOptions: {}, dtColumns: {} },
   DTOptionsBuilder: ng.datatables.DTOptionsBuilderService,
   DTColumnBuilder: ng.datatables.DTColumnBuilderService,
@@ -81,9 +79,10 @@ function ListPromiseCtrl(
   configService: IConfigService,
   userService: IUserService,
 ) {
-  $scope.$watch(function () {
+  $scope.$watch(() => {
     return $scope.session;
-  }, function () {
+  },
+  () => {
     // prep for login button
     if ($scope.session && $scope.session.user) {
       $scope.usrBtnTxt = '';
@@ -92,7 +91,7 @@ function ListPromiseCtrl(
     }
   }, true);
 
-  $scope.usrBtnClk = function () {
+  $scope.usrBtnClk = () => {
     if ($scope.session.user) {
       $window.location.href = $scope.props.webUrl + 'logout';
     } else {
@@ -103,12 +102,12 @@ function ListPromiseCtrl(
   // get intitialization info
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
-  let vm = this;
+  const vm = this;
   vm.dtOptions = DTOptionsBuilder
-    .fromFnPromise(function () {
-      let defer = $q.defer();
-      let url = basePath + '/api/v1/swdb';
-      $http.get<{data: {}}>(url).then(function (result) {
+    .fromFnPromise(() => {
+      const defer = $q.defer();
+      const url = basePath + '/api/v1/swdb';
+      $http.get<{data: {}}>(url).then((result) => {
         defer.resolve(result.data);
       });
       return defer.promise;
@@ -120,7 +119,7 @@ function ListPromiseCtrl(
   vm.dtColumns = [
     DTColumnBuilder.newColumn('swName')
       .withTitle('Software name')
-      .renderWith(function (data, type, full, meta) {
+      .renderWith((data, type, full, meta) => {
         return '<a href="#/details/' + full._id + '">' +
           full.swName + '</a>';
       }),
@@ -134,49 +133,49 @@ function ListPromiseCtrl(
       .withTitle('Engineer').withOption('defaultContent', ''),
     DTColumnBuilder.newColumn('status')
       .withTitle('Status')
-      .renderWith(function (data, type, full, meta) {
+      .renderWith((data, type, full, meta) => {
         return $scope.props.StatusEnum[data] || '';
       }),
     DTColumnBuilder.newColumn('statusDate')
       .withTitle('Status date (m/d/y)')
-      .renderWith(function (data, type, full, meta) {
-        let thisDate = new Date(full.statusDate);
-        let month = thisDate.getMonth() + 1;
-        let day = thisDate.getDate();
-        let year = thisDate.getFullYear();
+      .renderWith((data, type, full, meta) => {
+        const thisDate = new Date(full.statusDate);
+        const month = thisDate.getMonth() + 1;
+        const day = thisDate.getDate();
+        const year = thisDate.getFullYear();
         return month + '/' + day + '/' + year;
       }),
   ];
 
-  angular.element('#swdbList').on('init.dt', function (event, loadedDT) {
+  angular.element('#swdbList').on('init.dt', (event, loadedDT) => {
     // wait for the init event from the datatable
     // (then it is done loading)
     // Handle multiple init notifications
-    let id = '#' + $(event.target).attr('id');
-    let num = $(id).find('thead').find('tr').length;
+    const id = '#' + $(event.target).attr('id');
+    const num = $(id).find('thead').find('tr').length;
     if (num === 1) {
-      let table = $(id).DataTable();
-      let tr = $('<tr/>').appendTo($(id).find('thead'));
+      const table = $(id).DataTable();
+      const tr = $('<tr/>').appendTo($(id).find('thead'));
 
       // Apply the search
-      table.columns().eq(0).each(function (colIdx) {
-        let th = $('<th></th>').appendTo(tr);
-        let column = table.column(colIdx);
+      table.columns().eq(0).each((colIdx) => {
+        const th = $('<th></th>').appendTo(tr);
+        const column = table.column(colIdx);
         if (true) {
           // append column search with id derived from column init data
           th.append('<input class="swdbTableHeaderSearch" id="' + column.dataSrc() + 'Srch'
             + '" type="text" placeholder="' + ((table.column(colIdx) as any).placeholder || '')
             + '" style="width:80%;" autocomplete="off">');
-          th.on('keyup', 'input', function (evt) {
-            let elem = evt.target;
+          th.on('keyup', 'input', (evt) => {
+            const elem = evt.target;
             if (elem instanceof HTMLInputElement) {
               table.column(colIdx).search(elem.value).draw();
             }
           });
 
           // Now apply filter routines to each column
-          $('input', table.column(colIdx).header()).on('keyup change', function (evt) {
-            let v = $(evt.target).val();
+          $('input', table.column(colIdx).header()).on('keyup change', (evt) => {
+            const v = $(evt.target).val();
             table
               .column(colIdx)
               .search(v ? String(v) : '')
@@ -186,4 +185,4 @@ function ListPromiseCtrl(
       });
     }
   });
-}
+});

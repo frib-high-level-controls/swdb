@@ -24,10 +24,9 @@ interface IInstListControllerScope extends ng.IScope {
   swMeta: SWMeta;
   usrBtnTxt?: string;
   usrBtnClk(): void;
-};
+}
 
-appController.controller('InstListController', InstListPromiseCtrl);
-function InstListPromiseCtrl(
+appController.controller('InstListController', function(
   this: { dtOptions: {}, dtColumns: {} },
   DTOptionsBuilder: ng.datatables.DTOptionsBuilderService,
   DTColumnBuilder: ng.datatables.DTColumnBuilderService,
@@ -40,10 +39,10 @@ function InstListPromiseCtrl(
   userService: IUserService,
   swService: {},
 ) {
-
-  $scope.$watch(function () {
+  $scope.$watch(() => {
     return $scope.session;
-  }, function () {
+  },
+  () => {
     // prep for login button
     if ($scope.session && $scope.session.user) {
       $scope.usrBtnTxt = '';
@@ -52,7 +51,7 @@ function InstListPromiseCtrl(
     }
   }, true);
 
-  $scope.usrBtnClk = function () {
+  $scope.usrBtnClk = () => {
     if ($scope.session.user) {
       $window.location.href = $scope.props.webUrl + 'logout';
     } else {
@@ -63,25 +62,25 @@ function InstListPromiseCtrl(
   // get initialization info
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
-  let vm = this;
+  const vm = this;
   // set the options. Note that installations promise fires
   // first then inner promise uses installation data to get
   // sw metadata. Only after inner promise sets the data is outer
   // promise resolved.
-  vm.dtOptions = DTOptionsBuilder.fromFnPromise(function () {
-    let defer = $q.defer();
-    let url = basePath + '/api/v1/inst';
+  vm.dtOptions = DTOptionsBuilder.fromFnPromise(() => {
+    const defer = $q.defer();
+    const url = basePath + '/api/v1/inst';
     // $http.get($scope.props.instApiUrl).then(function (result) {
-    $http.get<SWInst[]>(url).then(function (result) {
-      let innerDefer = $q.defer();
-      let swIds = result.data.map(function (r) { return r.software; });
-      let swurl = basePath + '/api/v1/swdb/list';
+    $http.get<SWInst[]>(url).then((result) => {
+      const innerDefer = $q.defer();
+      const swIds = result.data.map((r) => r.software);
+      const swurl = basePath + '/api/v1/swdb/list';
       $http<SWMeta>({
         url: swurl,
         // url: $scope.props.apiUrl + "list",
         method: 'POST',
         data: JSON.stringify(swIds),
-      }).then(function (innerResult) {
+      }).then((innerResult) => {
         $scope.swMeta = innerResult.data;
         innerDefer.resolve(innerResult.data);
         defer.resolve(result.data);
@@ -100,15 +99,15 @@ function InstListPromiseCtrl(
   vm.dtColumns = [
     DTColumnBuilder.newColumn('host')
       .withTitle('Host').withOption('defaultContent', '')
-      .renderWith(function (data, type, full, meta) {
+      .renderWith((data, type, full, meta) => {
         return '<a href="#/inst/details/' + full._id + '">' + full.host + '</a>';
       }),
     DTColumnBuilder.newColumn('name')
       .withTitle('Name').withOption('defaultContent', ''),
     DTColumnBuilder.newColumn('software')
       .withTitle('Software').withOption('defaultContent', '')
-      .renderWith(function (data, type, full, meta) {
-        let sw = $scope.swMeta[full.software];
+      .renderWith((data, type, full, meta) => {
+        const sw = $scope.swMeta[full.software];
         if (!sw) {
           return '';
         }
@@ -130,52 +129,52 @@ function InstListPromiseCtrl(
       .withTitle('DRR').withOption('defaultContent', ''),
     DTColumnBuilder.newColumn('status')
       .withTitle('Status')
-      .renderWith(function (data, type, full, meta) {
+      .renderWith((data, type, full, meta) => {
         return $scope.props.InstStatusEnum[data] || '';
       }),
     DTColumnBuilder.newColumn('statusDate')
       // .withTitle('Status Date').withOption('defaultContent', '')
       .withTitle('Status date (m/d/y)')
-      .renderWith(function (data, type, full, meta) {
-        let thisDate = new Date(full.statusDate);
-        let month = thisDate.getMonth() + 1;
-        let day = thisDate.getDate();
-        let year = thisDate.getFullYear();
+      .renderWith((data, type, full, meta) => {
+        const thisDate = new Date(full.statusDate);
+        const month = thisDate.getMonth() + 1;
+        const day = thisDate.getDate();
+        const year = thisDate.getFullYear();
         return month + '/' + day + '/' + year;
       }),
   ];
 
-  angular.element('#instList').on('init.dt', function (event, loadedDT) {
+  angular.element('#instList').on('init.dt', (event, loadedDT) => {
     // wait for the init event from the datatable
     // (then it is done loading)
     // Handle multiple init notifications
-    let id = '#' + $(event.target).attr('id');
-    let num = $(id).find('thead').find('tr').length;
+    const id = '#' + $(event.target).attr('id');
+    const num = $(id).find('thead').find('tr').length;
     if (num === 1) {
-      let table = $(id).DataTable();
-      let tr = $('<tr/>').appendTo($(id).find('thead'));
+      const table = $(id).DataTable();
+      const tr = $('<tr/>').appendTo($(id).find('thead'));
 
       // Apply the search
-      table.columns().eq(0).each(function (colIdx) {
-        let th = $('<th></th>').appendTo(tr);
-        let column = table.column(colIdx);
+      table.columns().eq(0).each((colIdx) => {
+        const th = $('<th></th>').appendTo(tr);
+        const column = table.column(colIdx);
         // if (table.column(colIdx).searching) {
         // append column search with id derived from column init data
         th.append('<input id="' + column.dataSrc() + 'Srch'
           + '" type="text" placeholder="' + ((table.column(colIdx) as any).placeholder || '')
           // th.append('<input type="text" placeholder="' + (table.column(colIdx).placeholder || '')
           + '" style="width:80%;" autocomplete="off">');
-        th.on('keyup', 'input', function (evt) {
-          let elem = evt.target;
+        th.on('keyup', 'input', (evt) => {
+          const elem = evt.target;
           if (elem instanceof HTMLInputElement) {
             table.column(colIdx).search(elem.value).draw();
           }
         });
 
         // Now apply filter routines to each column
-        $('input', table.column(colIdx).header()).on('keyup change', function (evt) {
+        $('input', table.column(colIdx).header()).on('keyup change', (evt) => {
           console.log('searching column ' + colIdx);
-          let v = $(evt.target).val();
+          const v = $(evt.target).val();
           table
             .column(colIdx)
             .search(v ? String(v) : '')
@@ -185,4 +184,4 @@ function InstListPromiseCtrl(
       });
     }
   });
-}
+});
