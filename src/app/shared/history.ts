@@ -258,7 +258,9 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
       if (this.history) {
         this.history.updatedAt = updatedAt;
         this.history.updatedBy = updatedBy;
-        this.history.updateIds.push(update._id);
+        // Using 'updateIds.push(update._id)' causes duplicate IDs when
+        // calling saveWithHistory() repeatedly on a model (v4.13.11)!
+        this.history.updateIds = this.history.updateIds.concat(update._id);
       } else {
         // TODO: Consider removing this branch
         //       as this.history *should* be
