@@ -192,16 +192,15 @@
             <p class="input-group">
               <input id="vvApprovalDate" name="vvApprovalDateInput" type="text" class="form-control" uib-datepicker-popup="{{datePicker.format}}"
                 ng-model="formData.vvApprovalDate" is-open="datePicker.instances['vvApprovalDate']" datepicker-options="datePicker.options"
-                ng-required="false" close-text="Close" alt-input-formats="altInputFormats" 
+                close-text="Close" alt-input-formats="altInputFormats" 
               />
               <span class="input-group-btn">
             <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'vvApprovalDate')"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>
             </p>
-
-            <!-- </input> -->
           </div>
           <div class="col-sm-2" id="vvApprovalDateInputSts" ng-messages="inputForm.vvApprovalDateInput.$error" ng-if="inputForm.vvApprovalDateInput.$dirty">
+            <div ng-message="required">Date is required</div>
             <div ng-message="pattern">Use date format YYYY/MM/DD</div>
           </div>
         </div>
