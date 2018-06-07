@@ -75,27 +75,12 @@ module.exports = function(grunt) {
       tools: [ './tools' ],
       public: [ './public/js' ],
     },
-    copy: {
-      files: {
-        cwd: 'src/web/ts',  // set working folder / root to copy
-        src: '*.js',        // copy all files and subfolders
-        dest: 'public/js',  // destination folder
-        expand: true,       // required when using cwd
-      },
-    },
-    shell: {
-      publicSoftlink: {
-        command: '[ -e ./test/public ] || ln -s ../public test',
-      },
-    },
   });
 
   grunt.loadNpmTasks('grunt-ts');
   grunt.loadNpmTasks('grunt-tslint');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-shell');
 
   grunt.registerTask('save_version_file', 'Save version information to app/verison.json', function () {
     var pkg = grunt.file.readJSON('package.json');
@@ -150,10 +135,8 @@ module.exports = function(grunt) {
     'save_version_file',
     'ts:app',
     'ts:web',
-    //'copy',
     'ts:tools',
     'ts:apptest',
-    //'shell:publicSoftlink',
   ]);
 
   grunt.registerTask('deploy', [
