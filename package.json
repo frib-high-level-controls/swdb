@@ -5,7 +5,7 @@
   "description": "SW DB",
   "main": "server.js",
   "scripts": {
-    "make": "grunt clean; grunt build",
+    "make": "grunt clean build build_test",
     "test-all": "./node_modules/.bin/mocha ./test/apptest/tests.js --config ./config/swdbrc --test.testing true",
     "postinstall": "cd ./public; npm install",
     "load-db-test": "node test/apptest/store/load-db-test.js --config config/swdbrc",

@@ -136,6 +136,9 @@ module.exports = function(grunt) {
     'ts:app',
     'ts:web',
     'ts:tools',
+  ]);
+
+  grunt.registerTask('build_test', [
     'ts:apptest',
   ]);
 
