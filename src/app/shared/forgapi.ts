@@ -13,7 +13,7 @@ export interface User extends auth.IUser {
   uid: string;
   fullname: string;
   roles: string[];
-};
+}
 
 export interface SearchUser {
   uid: string;
@@ -24,7 +24,7 @@ export interface SearchUser {
 export interface SearchUsersOptions {
   fullname?: string;
   role?: string;
-};
+}
 
 export type GroupType = 'LAB' | 'UNIT' | 'DIV' | 'DEPT' | 'GROUP' | 'TEAM' | 'AREA' | 'UNKNOWN';
 
@@ -35,7 +35,7 @@ export interface Group {
   leader: string;
   source: string;
   type: GroupType;
-};
+}
 
 export interface SearchGroup {
   uid: string;
@@ -44,7 +44,7 @@ export interface SearchGroup {
   source: string;
   type: GroupType;
   role: string;
-};
+}
 
 export interface SearchGroupsOptions {
   srcname?: string;
@@ -52,7 +52,7 @@ export interface SearchGroupsOptions {
   leader?: string;
   source?: string;
   type?: string;
-};
+}
 
 export interface IClient {
   findUsers(): Promise<User[]>;
@@ -61,7 +61,7 @@ export interface IClient {
   findGroup(uid: string): Promise<Group | null>;
   searchUsers(opts: SearchUsersOptions): Promise<SearchUser[]>;
   searchGroups(opts: SearchGroupsOptions): Promise<SearchGroup[]>;
-};
+}
 
 export interface ClientOptions {
   url: string;
@@ -101,7 +101,7 @@ export class Client implements IClient {
     if (options.httpClient) {
       this.httpClient = options.httpClient;
     }
-  };
+  }
 
   public async findUser(uid: string): Promise<User | null> {
     const reqopts = this.getBaseOptions();
@@ -122,7 +122,7 @@ export class Client implements IClient {
           return;
         }
         try {
-          let user: User = JSON.parse(body);
+          const user: User = JSON.parse(body);
           // TODO: JSON schema validate!
           resolve(user);
         } catch (err) {
@@ -130,7 +130,7 @@ export class Client implements IClient {
         }
       });
     });
-  };
+  }
 
   public async findUsers(): Promise<User[]> {
     const reqopts = this.getBaseOptions();
@@ -147,7 +147,7 @@ export class Client implements IClient {
           return;
         }
         try {
-          let users: User[] = JSON.parse(body);
+          const users: User[] = JSON.parse(body);
           // TODO: JSON schema validate!
           resolve(users);
         } catch (err) {
@@ -155,7 +155,7 @@ export class Client implements IClient {
         }
       });
     });
-  };
+  }
 
   public async searchUsers(opts?: SearchUsersOptions): Promise<SearchUser[]> {
     const reqopts = this.getBaseOptions();
@@ -184,7 +184,7 @@ export class Client implements IClient {
           return;
         }
         try {
-          let users: SearchUser[] = JSON.parse(body);
+          const users: SearchUser[] = JSON.parse(body);
           // TODO: JSON schema validate!
           resolve(users);
         } catch (err) {
@@ -192,7 +192,7 @@ export class Client implements IClient {
         }
       });
     });
-  };
+  }
 
   public async findGroup(uid: string): Promise<Group | null> {
     const reqopts = this.getBaseOptions();
@@ -213,7 +213,7 @@ export class Client implements IClient {
           return;
         }
         try {
-          let group: Group = JSON.parse(body);
+          const group: Group = JSON.parse(body);
           // TODO: JSON schema validate!
           resolve(group);
         } catch (err) {
@@ -238,7 +238,7 @@ export class Client implements IClient {
           return;
         }
         try {
-          let groups: Group[] = JSON.parse(body);
+          const groups: Group[] = JSON.parse(body);
           // TODO: JSON schema validate!
           resolve(groups);
         } catch (err) {
@@ -246,7 +246,7 @@ export class Client implements IClient {
         }
       });
     });
-  };
+  }
 
   public async searchGroups(opts?: SearchGroupsOptions): Promise<SearchGroup[]> {
     const reqopts = this.getBaseOptions();
@@ -284,7 +284,7 @@ export class Client implements IClient {
           return;
         }
         try {
-          let groups: SearchGroup[] = JSON.parse(body);
+          const groups: SearchGroup[] = JSON.parse(body);
           // TODO: JSON schema validate!
           resolve(groups);
         } catch (err) {
@@ -292,7 +292,7 @@ export class Client implements IClient {
         }
       });
     });
-  };
+  }
 
   public async findStatus(): Promise<status.ApiApplicationStatus> {
     const reqopts = this.getBaseOptions();
@@ -305,15 +305,15 @@ export class Client implements IClient {
           return;
         }
         try {
-          let status: status.ApiApplicationStatus = JSON.parse(body);
+          const apiAppStatus: status.ApiApplicationStatus = JSON.parse(body);
           // TODO: JSON schema validate!
-          resolve(status);
+          resolve(apiAppStatus);
         } catch (err) {
           reject(err);
         }
       });
     });
-  };
+  }
 
   protected getBaseOptions(): HttpClientOptions {
     if (!this.options.url) {
@@ -327,5 +327,5 @@ export class Client implements IClient {
       },
       agentOptions: this.options.agentOptions || {},
     };
-  };
-};
+  }
+}

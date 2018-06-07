@@ -83,13 +83,13 @@
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-jshint": "1.1.0",
     "grunt-ts": "^5.5.1",
-    "grunt-tslint": "^4.0.1",
+    "grunt-tslint": "^5.0.2",
     "jsonschema": "^1.1.1",
     "mocha": "^5.0.0",
     "nyc": "^11.4.1",
     "selenium-webdriver": "3.0.1",
     "supertest": "^3.0.0",
-    "tslint": "^4.5.0",
+    "tslint": "^5.10.0",
     "typescript": "^2.7.2",
     "xlsx": "^0.12.2"
   }

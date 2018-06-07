@@ -19,7 +19,7 @@ export async function requestFor(app: express.Application, username?: string, pa
     .expect(302);
   }
   return agent;
-};
+}
 
 
 /**
@@ -28,7 +28,7 @@ export async function requestFor(app: express.Application, username?: string, pa
 export function expectPackage(data?: {}) {
   return (res: supertest.Response) => {
     if (res.status < 300 || res.status >= 400) {
-      let pkg = <webapi.Pkg<{}>> res.body;
+      const pkg = res.body as webapi.Pkg<{}>;
       assert.isObject(pkg);
       if (res.status < 300) {
         if (!Array.isArray(pkg.data)) {
@@ -38,7 +38,7 @@ export function expectPackage(data?: {}) {
         if (data) {
           // For some reason this function, deepInclude(),
           // is not in the type definitions (@types/chai@4.0.5)!
-          (<any> assert).deepInclude(pkg.data, data);
+          (assert as any).deepInclude(pkg.data, data);
         }
       } else {
         assert.isObject(pkg.error);
@@ -46,9 +46,9 @@ export function expectPackage(data?: {}) {
           assert.isNumber(pkg.error.code);
           assert.isString(pkg.error.message);
           assert.isNotEmpty(pkg.error.message);
-          console.error(pkg.error.message);
+          console.error(pkg.error.message); // tslint:disable-line
         }
       }
     }
   };
-};
+}

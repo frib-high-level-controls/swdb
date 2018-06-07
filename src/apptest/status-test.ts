@@ -13,19 +13,19 @@ import * as jsonschema from './shared/jsonschema';
 import * as status from '../app/shared/status';
 
 
-describe('Application status API', function() {
+describe('Application status API', () => {
 
   let handler: express.Application;
 
-  before(async function() {
+  before(async () => {
     handler = await app.start();
   });
 
-  after(async function() {
+  after(async () => {
     await app.stop();
   });
 
-  it('Get application status', function() {
+  it('Get application status', () => {
     return request(handler)
       .get('/status')
       .set('Accept', 'application/json')
@@ -33,12 +33,12 @@ describe('Application status API', function() {
       .expect('Content-Type', /json/)
       .expect(jsonschema.checkValid('/status'))
       .expect((res: request.Response) => {
-        let data = <status.ApplicationStatus> res.body;
+        const data = res.body as status.ApplicationStatus;
         assert.equal(data.status, 'OK', 'Expected application status is "OK"');
       });
   });
 
-  it('Set component status "OK"', function() {
+  it('Set component status "OK"', () => {
     const COMP_NAME = 'Test Comp';
     const COMP_MFORMAT = 'Test Message: %s';
     const COMP_MPARAM1 = 'OK';
@@ -51,10 +51,10 @@ describe('Application status API', function() {
       .set('Accept', 'application/json')
       .expect(jsonschema.checkValid('/status'))
       .expect((res: request.Response) => {
-        let data = <status.ApplicationStatus> res.body;
+        const data = res.body as status.ApplicationStatus;
         assert.equal(data.status, 'OK', 'Expected application status is "OK"');
         let found = 0;
-        for (let comp of data.components) {
+        for (const comp of data.components) {
           if (comp.name === COMP_NAME) {
             found += 1;
             assert.equal(comp.status, 'OK', 'Expected component status is "OK"');
@@ -65,7 +65,7 @@ describe('Application status API', function() {
       });
   });
 
-  it('Set component status "ERROR"', function() {
+  it('Set component status "ERROR"', () => {
     const COMP_NAME = 'Test Comp';
     const COMP_MFORMAT = 'Test Message: %s';
     const COMP_MPARAM1 = 'ERROR';
@@ -78,10 +78,10 @@ describe('Application status API', function() {
       .set('Accept', 'application/json')
       .expect(jsonschema.checkValid('/status'))
       .expect((res: request.Response) => {
-        let data = <status.ApplicationStatus> res.body;
+        const data = res.body as status.ApplicationStatus;
         assert.equal(data.status, 'ERROR', 'Expected application status is "ERROR"');
         let found = 0;
-        for (let comp of data.components) {
+        for (const comp of data.components) {
           if (comp.name === COMP_NAME) {
             found += 1;
             assert.equal(comp.status, 'ERROR', 'Expected component status is "ERROR"');
@@ -92,7 +92,7 @@ describe('Application status API', function() {
       });
   });
 
-  it('Restore component status "OK"', function() {
+  it('Restore component status "OK"', () => {
     const COMP_NAME = 'Test Comp';
     const COMP_MFORMAT = 'Test Message: %s';
     const COMP_MPARAM1 = 'OK (again)';
@@ -105,10 +105,10 @@ describe('Application status API', function() {
       .set('Accept', 'application/json')
       .expect(jsonschema.checkValid('/status'))
       .expect((res: request.Response) => {
-        let data = <status.ApplicationStatus> res.body;
+        const data = res.body as status.ApplicationStatus;
         assert.equal(data.status, 'OK', 'Expected application status is "OK"');
         let found = 0;
-        for (let comp of data.components) {
+        for (const comp of data.components) {
           if (comp.name === COMP_NAME) {
             found += 1;
             assert.equal(comp.status, 'OK', 'Expected component status is "OK"');

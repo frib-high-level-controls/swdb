@@ -19,11 +19,9 @@ export const HttpStatus = HttpStatusCodes;
 
 export interface HttpStatusError extends Error {
   status: number;
-};
+}
 
-export interface RequestPromiseHandler {
-  (req: Request, res: Response, next?: NextFunction): PromiseLike<void>;
-};
+export type RequestPromiseHandler = (req: Request, res: Response, next?: NextFunction) => PromiseLike<void>;
 
 export function catchAll(handler: RequestPromiseHandler): RequestHandler {
   return (req, res, next) => {
@@ -33,7 +31,7 @@ export function catchAll(handler: RequestPromiseHandler): RequestHandler {
       next(err);
     }
   };
-};
+}
 
 /**
  * Find the query parameter with the specified name using case-insensitive search.
@@ -55,7 +53,7 @@ export function findQueryParam(req: Request, name: string, caseSensitive?: boole
   }
   if (!caseSensitive) {
     name = name.toUpperCase();
-    for (let key in req.query) {
+    for (const key in req.query) {
       if (req.query.hasOwnProperty(key)) {
         if (key.toUpperCase() === name) {
           return safeToString(req.query[key]);
@@ -83,8 +81,8 @@ export function format(res: Response, cbs: { [key: string]: () => Promise<void> 
       };
     };
 
-    let fcbs: { [key: string]: () => void } = {};
-    for (let cb in cbs) {
+    const fcbs: { [key: string]: () => void } = {};
+    for (const cb in cbs) {
       if (cbs.hasOwnProperty(cb)) {
         fcbs[cb] = wrapper(cbs[cb]);
       }
@@ -96,7 +94,7 @@ export function format(res: Response, cbs: { [key: string]: () => Promise<void> 
     }
     res.format(fcbs);
   });
-};
+}
 
 type RequestErrorDetails = webapi.PkgError;
 
@@ -120,9 +118,7 @@ export class RequestError extends Error implements HttpStatusError  {
     message: DEFAULT_ERROR_MESSAGE,
   };
 
-  constructor()
-  constructor(msg: string, details?: RequestErrorDetails)
-  constructor(status: number, details?: RequestErrorDetails);
+  constructor(msg?: string | number, details?: RequestErrorDetails)
   constructor(msg: string, status: number, details?: RequestErrorDetails);
   constructor(msg?: string | number, status?: number | RequestErrorDetails, details?: RequestErrorDetails) {
     super(DEFAULT_ERROR_MESSAGE);
@@ -153,7 +149,7 @@ export class RequestError extends Error implements HttpStatusError  {
       this.details = details;
     }
   }
-};
+}
 
 /**
  * Ensure the request contains a valid web API package.
@@ -165,27 +161,33 @@ export function ensurePackage(allowError?: boolean) {
     }
     next();
   };
-};
+}
 
-export function ensureAccepts(type: string): RequestHandler;
-export function ensureAccepts(type: string[]): RequestHandler;
+// export function ensureAccepts(type: string): RequestHandler;
+export function ensureAccepts(type: string | string[]): RequestHandler;
 export function ensureAccepts(...type: string[]): RequestHandler;
-export function ensureAccepts(type: any): RequestHandler {
+export function ensureAccepts(type: string | string[]): RequestHandler {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (!req.accepts(type)) {
+    let accepts: string | false = false;
+    if (Array.isArray(type)) {
+      accepts = req.accepts(type);
+    } else {
+      accepts = req.accepts(type);
+    }
+    if (!accepts) {
       next(new RequestError(HttpStatus.getStatusText(HttpStatus.NOT_ACCEPTABLE), HttpStatus.NOT_ACCEPTABLE));
     }
     next();
   };
-};
+}
 
 export function notFoundHandler(): RequestHandler {
   return (req: Request, res: Response, next: NextFunction) => {
-    let status = HttpStatus.NOT_FOUND;
-    let message = HttpStatus.getStatusText(status);
+    const status = HttpStatus.NOT_FOUND;
+    const message = HttpStatus.getStatusText(status);
     next(new RequestError(message, status));
   };
-};
+}
 
 export function requestErrorHandler(): ErrorRequestHandler {
   return (err: any, req: Request, res: Response, next: NextFunction) => {
@@ -232,7 +234,7 @@ export function requestErrorHandler(): ErrorRequestHandler {
       },
     }).catch(next);
   };
-};
+}
 
 /**
  * Set the response local 'basePath' to relative
@@ -241,15 +243,15 @@ export function requestErrorHandler(): ErrorRequestHandler {
  */
 export function basePathHandler(): RequestHandler {
   return (req, res, next) => {
-    let basePaths: string[] = [ '.' ];
+    const basePaths: string[] = [ '.' ];
 
-    let url = req.url.split('?');
-    let segments = url[0].split('/');
+    const url = req.url.split('?');
+    const segments = url[0].split('/');
     for (let idx = 0; idx < (segments.length - 2); idx += 1) {
       basePaths.push('..');
     }
 
-    let basePath = basePaths.join('/');
+    const basePath = basePaths.join('/');
 
     // Redirect to remove trailing slash (GET requests only)
     if ((req.method === 'GET') && (url[0] !== '/') && url[0].endsWith('/')) {

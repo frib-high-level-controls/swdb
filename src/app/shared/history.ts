@@ -17,7 +17,7 @@ type ObjectId = mongoose.Types.ObjectId;
 export interface IPath {
   name: string;
   value: object;
-};
+}
 
 export interface IUpdate {
     at: Date;
@@ -43,21 +43,21 @@ export type DocumentQuery<T, DocType extends Document<DocType>> = mongoose.Docum
 export interface Document<T extends Document<T>> extends mongoose.Document, IHistory {
   saveWithHistory(by: string): Promise<T>;
   populateUpdates(): Promise<void>;
-};
+}
 
 export interface Model<T extends Document<T>> extends mongoose.Model<T> {
   findByIdWithHistory(id: string | number | ObjectId): Promise<T | null>;
   findOneWithHistory(conditions?: object): Promise<T | null>;
   findWithHistory(conditions?: object): Promise<T[]>;
-  execWithHistory<T extends Document<T>>(this: Model<T>, query: mongoose.DocumentQuery<T | null, T>): Promise<T | null>;
-  execWithHistory<T extends Document<T>>(this: Model<T>, query: mongoose.DocumentQuery<T[], T>): Promise<T[]>;
-};
+  execWithHistory(this: Model<T>, query: mongoose.DocumentQuery<T | null, T>): Promise<T | null>;
+  execWithHistory(this: Model<T>, query: mongoose.DocumentQuery<T[], T>): Promise<T[]>;
+}
 
 export interface HistoryOptions {
   watchAll?: boolean;
   pathsToWatch?: string[];
   deduplicate?: boolean;
-};
+}
 
 const debug = dbg('webapp:history');
 
@@ -142,11 +142,11 @@ export function model<T extends Document<T>>(name: string, schema: Schema, colle
   if (!type) {
     debug('Path \'history\' not found, adding history support now');
     addHistory(schema);
-  } else if ((<any> type).schema !== historySchema) {
+  } else if ((type as any).schema !== historySchema) {
     throw new Error('Path \'history\' does not have the expected schema');
   }
-  return <Model<T>> mongoose.model<Document<T>>(name, schema, collection);
-};
+  return mongoose.model<Document<T>>(name, schema, collection) as Model<T>;
+}
 
 /**
  * Helper to register hisitory plugin with the specified schema.
@@ -186,7 +186,7 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
   } else {
     const paths = options.pathsToWatch;
     if (paths) {
-      for (let path of paths) {
+      for (const path of paths) {
         if (!pathsToIgnore.includes(path) && !pathsToWatch.includes(path) && schema.path(path)) {
           pathsToWatch.push(path);
         }
@@ -209,7 +209,7 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
    *
    * @param  {String}  userid the user making this update
    */
-  schema.method('saveWithHistory', function (this: T, updatedBy: string): Promise<T> {
+  schema.method('saveWithHistory', function(this: T, updatedBy: string): Promise<T> {
     if (!updatedBy) {
       return Promise.reject(new Error('UpdatedBy argument is required'));
     }
@@ -219,13 +219,13 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
       return this.save();
     }
 
-    let paths: IPath[] = [];
+    const paths: IPath[] = [];
 
     if (debug.enabled) {
       debug('Paths to watch: [%s]', pathsToWatch.join(','));
     }
 
-    for (let name of pathsToWatch) {
+    for (const name of pathsToWatch) {
       if ((this.isNew && this.get(name)) || this.isModified(name)) {
         const value = this.get(name);
         paths.push({
@@ -258,7 +258,9 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
       if (this.history) {
         this.history.updatedAt = updatedAt;
         this.history.updatedBy = updatedBy;
-        this.history.updateIds.push(update._id);
+        // Using 'updateIds.push(update._id)' causes duplicate IDs when
+        // calling saveWithHistory() repeatedly on a model (v4.13.11)!
+        this.history.updateIds = this.history.updateIds.concat(update._id);
       } else {
         // TODO: Consider removing this branch
         //       as this.history *should* be
@@ -281,7 +283,7 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
   /**
    * Populate the updates for this document.
    */
-  schema.method('populateUpdates', function (this: T): Promise<void> {
+  schema.method('populateUpdates', function(this: T): Promise<void> {
     return Update.find({ _id: { $in: this.history.updateIds }}).exec().then((updates) => {
       this.history.updates = models.pickById(updates, this.history.updateIds);
     });
@@ -290,7 +292,7 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
   /**
    * Find document and its history by ID. This method does both concurrently!
    */
-  schema.static('findByIdWithHistory', function (this: Model<T>, id: string | number | ObjectId): Promise<T | null> {
+  schema.static('findByIdWithHistory', function(this: Model<T>, id: string | number | ObjectId): Promise<T | null> {
     return Promise.all([
       this.findById(id).exec(),
       Update.find({ ref: this.modelName, rid: id }).exec(),
@@ -306,28 +308,28 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
   /**
    * Find document and its history. NOTE This method requires TWO database queries!
    */
-  schema.static('findOneWithHistory', function (this: Model<T>, conditions?: object): Promise<T | null> {
+  schema.static('findOneWithHistory', function(this: Model<T>, conditions?: object): Promise<T | null> {
     return this.execWithHistory(this.findOne(conditions));
   });
 
   /**
    * Find documents and their history. NOTE This method requires TWO database queries!
    */
-  schema.static('findWithHistory', function (this: Model<T>, conditions?: object): Promise<T[]> {
+  schema.static('findWithHistory', function(this: Model<T>, conditions?: object): Promise<T[]> {
     return this.execWithHistory(this.find(conditions || {}));
   });
 
   /**
    * Execute the query and then the document history. NOTE This method requires TWO database queries!
    */
-  schema.static('execWithHistory', function (this: Model<T>, query: DocumentQuery<QR<T>, T>): Promise<QR<T>> {
+  schema.static('execWithHistory', function(this: Model<T>, query: DocumentQuery<QR<T>, T>): Promise<QR<T>> {
     return query.exec().then((docs) => {
       if (!docs) {
         return null;
       }
       let ids: ObjectId[] = [];
       if (Array.isArray(docs)) {
-        for (let doc of docs) {
+        for (const doc of docs) {
           ids = ids.concat(doc.history.updateIds);
         }
       } else {
@@ -338,7 +340,7 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
           return null;
         }
         if (Array.isArray(docs)) {
-          for (let doc of docs) {
+          for (const doc of docs) {
             doc.history.updates = models.pickById(updates, doc.history.updateIds);
           }
         } else {
@@ -349,4 +351,4 @@ export function historyPlugin<T extends Document<T>>(schema: Schema, options?: H
     });
   });
 
-};
+}

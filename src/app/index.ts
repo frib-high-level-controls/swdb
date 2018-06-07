@@ -3,6 +3,7 @@
  */
 import fs = require('fs');
 import path = require('path');
+import util = require('util');
 
 import rc = require('rc');
 import dbg = require('debug');
@@ -35,7 +36,7 @@ import customValidators = require('./lib/validators');
 interface Package {
   name?: {};
   version?: {};
-};
+}
 
 // application configuration
 interface Config {
@@ -59,7 +60,7 @@ interface Config {
     db: {};
     options: {};
   };
-};
+}
 
 // application states (same as tasks.State, but avoids the dependency)
 export type State = 'STARTING' | 'STARTED' | 'STOPPING' | 'STOPPED';
@@ -85,11 +86,11 @@ export let warn = logging.warn;
 export let error = logging.error;
 
 // application lifecycle
-let task = new tasks.StandardTask<express.Application>(doStart, doStop);
+const task = new tasks.StandardTask<express.Application>(doStart, doStop);
 
 // application activity
 let activeCount = 0;
-let activeLimit = 100;
+const activeLimit = 100;
 let activeStopped = Promise.resolve();
 
 function updateActivityStatus(): void {
@@ -98,53 +99,47 @@ function updateActivityStatus(): void {
   } else {
     status.setComponentError('Activity', activeCount + ' > ' + activeLimit);
   }
-};
+}
 
-// read file with path resolution
-function readFile(...pathSegments: string[]): Promise<Buffer> {
-  return new Promise((resolve, reject) => {
-    fs.readFile(path.resolve(...pathSegments), (err, data) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(data);
-    });
-  });
-};
+const readFile = util.promisify(fs.readFile);
 
 // read the application name and version
 async function readNameVersion(): Promise<[string | undefined, string | undefined]> {
   // first look for application name and version in the environment
   let name = process.env.NODE_APP_NAME;
   let version = process.env.NODE_APP_VERSION;
-  // second look for application name and verison in packge.json
+  // second look for application name and verison in package.json
   if (!name || !version) {
+    const pkgPath = path.resolve(__dirname, 'version.json');
+    let pkg: Package | undefined;
     try {
-      let data = await readFile(__dirname, '..', 'package.json');
-      let pkg: Package = JSON.parse(data.toString('UTF-8'));
-      if (!name && pkg && pkg.name) {
-        name = String(pkg.name);
-      }
-      if (!version && pkg && pkg.version) {
-        version = String(pkg.version);
-      }
-    } catch (ierr) {
-      // ignore //
+      pkg = JSON.parse(await readFile(pkgPath, 'UTF-8'));
+    } catch (err) {
+      warn('Missing or invalid package metadata: %s: %s', pkgPath, err);
+    }
+    if (!name && pkg && pkg.name) {
+      name = String(pkg.name);
+    } else {
+      name = String(name);
+    }
+    if (!version && pkg && pkg.version) {
+      version = String(pkg.version);
+    } else {
+      version = String(version);
     }
   }
   return [name, version];
-};
+}
 
 // get the application state
 export function getState(): State {
   return task.getState();
-};
+}
 
 // asynchronously start the application
 export function start(): Promise<express.Application> {
   return task.start();
-};
+}
 
 // asynchronously configure the application
 async function doStart(): Promise<express.Application> {
@@ -154,7 +149,7 @@ async function doStart(): Promise<express.Application> {
   info('Application starting');
 
   activeCount = 0;
-  activeStopped = new Promise<void>(function (resolve) {
+  activeStopped = new Promise<void>((resolve) => {
     activeFinished = resolve;
   });
 
@@ -162,7 +157,7 @@ async function doStart(): Promise<express.Application> {
 
   app = express();
 
-  let [name, version] = await readNameVersion();
+  const [name, version] = await readNameVersion();
   app.set('name', name);
   app.set('version', version);
 
@@ -183,9 +178,9 @@ async function doStart(): Promise<express.Application> {
     next();
   });
 
-  let env: {} | undefined = app.get('env');
+  const env: {} | undefined = app.get('env');
 
-  let cfg: Config = {
+  const cfg: Config = {
     app: {
       port: '3000',
       addr: 'localhost',
@@ -207,7 +202,7 @@ async function doStart(): Promise<express.Application> {
   if (name && (typeof name === 'string')) {
     rc(name, cfg);
     if (cfg.configs) {
-      for (let file of cfg.configs) {
+      for (const file of cfg.configs) {
         info('Load configuration: %s', file);
       }
     }
@@ -321,8 +316,8 @@ async function doStart(): Promise<express.Application> {
   app.use(auth.getProvider().initialize());
 
   // Request logging configuration (must follow authc middleware)
-  morgan.token('remote-user', function (req) {
-    let username = auth.getUsername(req);
+  morgan.token('remote-user', (req) => {
+    const username = auth.getUsername(req);
     return username || 'anonymous';
   });
 
@@ -734,7 +729,7 @@ async function doStart(): Promise<express.Application> {
 
   info('Application started');
   return app;
-};
+}
 
 // asynchronously stop the application
 export function stop(): Promise<void> {
@@ -766,4 +761,4 @@ async function doStop(): Promise<void> {
   }
 
   info('Application stopped');
-};
+}
