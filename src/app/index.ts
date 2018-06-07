@@ -85,7 +85,7 @@ async function readNameVersion(): Promise<[string | undefined, string | undefine
   let version = process.env.NODE_APP_VERSION;
   // second look for application name and verison in package.json
   if (!name || !version) {
-    const pkgPath = path.resolve(__dirname, 'package.json');
+    const pkgPath = path.resolve(__dirname, 'version.json');
     let pkg: Package | undefined;
     try {
       pkg = JSON.parse(await readFile(pkgPath, 'UTF-8'));
