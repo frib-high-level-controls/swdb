@@ -7,6 +7,10 @@ var http = require('http');
 
 var app = require('../app');
 
+var info = app.info || console.info;
+var warn = app.warn || console.warn;
+var error = app.error || console.error;
+
 var srv = null;
 
 /**
@@ -35,7 +39,7 @@ function timeout(limit) {
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
       reject(new Error('Time limit exceeded: ' + limit + 'ms'));
-    }, limit);
+    }, limit).unref();
   });
 };
 
@@ -104,9 +108,9 @@ function listen(handler) {
   .then(function () {
     var addr = srv.address();
     if (typeof addr === 'string') {
-      app.info('Server listening on pipe: ' + addr);
+      info('Server listening on pipe: ' + addr);
     } else {
-      app.info('Server listening on port: ' + addr.address + ':' + addr.port);
+      info('Server listening on port: ' + addr.address + ':' + addr.port);
     }
   });
 };
@@ -114,7 +118,7 @@ function listen(handler) {
 /**
  * Stop listening and wait for connections close with timeout.
  */
-function close(limit) {
+function close() {
   return Promise.race([
     new Promise(function (resolve, reject) {
       if (!srv) {
@@ -136,16 +140,16 @@ function close(limit) {
   ])
   .then(function (closed) {
     if (closed) {
-      app.info('Server close successful');
+      info('Server close successful');
     } else {
-      app.info('Server close timeout');
+      info('Server close timeout');
     }
   })
   .catch(function (err) {
     // Ignore error so that application
     // shutdown will continue normally.
-    app.error('Server close failure');
-    app.error(err);
+    error('Server close failure');
+    error(err);
   })
 };
 
@@ -153,40 +157,50 @@ function close(limit) {
  * Wait for the specified shutdown signal(s).
  */
 function wait(signals) {
-  app.info('Wait for shutdown signal');
+  info('Wait for shutdown signal');
   return new Promise(function (resolve) {
     for (var idx=0; idx < signals.length; idx++) {
       process.once(signals[idx], resolve);
     }
   })
   .then(function () {
-    app.info('Shutdown signal received');
+    info('Shutdown signal received');
   });
 };
 
 /**
  * Start the application and wait for shutdown signal
  */
-start().catch(function (err) {
-  app.error(err);
-  process.exit(1);
-})
-.then(function (handler) {
+start().then(function (handler) {
   return listen(handler);
 })
 .then(function () {
   return wait(['SIGINT', 'SIGTERM']);
 })
 .then(function () {
-  return close(2000); //  2 second timeout
-})
-.then(function () {
-  return stop(30000); // 30 second timeout
-})
-.then(function () {
-  process.exit(0);
+  return close();
 })
 .catch(function (err) {
-  app.error(err);
-  process.exit(1);
+  // Ensure stop() is always called,
+  // but propagate the original error.
+  return err;
+})
+.then(function (orig) {
+  return stop(28000).catch(function (err) { // 28 second timeout
+    return orig ? Promise.reject(orig) : Promise.reject(err);
+  })
+  .then(function () {
+    return orig ? Promise.reject(orig) : Promise.resolve();
+  });
+})
+.catch(function (err) {
+  error(err);
+  process.exitCode = 1;
+})
+.then(function () {
+  return timeout(2000); // 5 second timeout
+})
+.catch(function (err) {
+  warn('Force process termination');
+  process.exit(2);
 });
