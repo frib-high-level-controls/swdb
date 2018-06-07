@@ -40,15 +40,6 @@ module.exports = function(grunt) {
         ],
       },
     },
-    copy: {
-      pkg: {
-        files: [{
-          expand: true,
-          src: 'package.json',
-          dest: 'app/'
-        }],
-      },
-    },
     clean: {
       app: [ './app' ],
       test: [ './test' ],
@@ -58,7 +49,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-ts');
   grunt.loadNpmTasks('grunt-tslint');
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-copy');
 
   grunt.registerTask('save_version_file', 'Save version information to app/verison.json', function () {
     var pkg = grunt.file.readJSON('package.json');
