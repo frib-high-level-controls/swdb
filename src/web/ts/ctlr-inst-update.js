@@ -199,7 +199,9 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     })
     // make a Date object from this string
     $scope.formData.statusDate = new Date($scope.formData.statusDate);
-    $scope.formData.vvApprovalDate = new Date($scope.formData.vvApprovalDate);
+    if (($scope.formData.vvApprovalDate) && ($scope.formData.vvApprovalDate != "")){
+      $scope.formData.vvApprovalDate = new Date($scope.formData.vvApprovalDate);
+    }
 
     // convert the retreived record software
     swService.promise.then(function(){
