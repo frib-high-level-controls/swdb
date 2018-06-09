@@ -97,7 +97,7 @@ export class CommonTools {
   }
 }
 
-interface IProps {
+export interface IProps {
   apiUrl: string;
   instApiUrl: string;
   ccdbApiUrl: string;
@@ -145,6 +145,8 @@ interface IProps {
     testing: string;
     swTestDataFile: string;
     instTestDataFile: string;
+    username: string;
+    password: string;
   };
 
   LevelOfCareEnum: {[index: string]: LevelOfCareEnum};
