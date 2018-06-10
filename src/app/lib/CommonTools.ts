@@ -147,6 +147,7 @@ export interface IProps {
     instTestDataFile: string;
     username: string;
     password: string;
+    showLogs: string;
   };
 
   LevelOfCareEnum: {[index: string]: LevelOfCareEnum};
