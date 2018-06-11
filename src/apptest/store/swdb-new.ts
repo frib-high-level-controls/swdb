@@ -16,7 +16,7 @@ let expect = chai.expect;
 let By = webdriver.By;
 let until = webdriver.until;
 let testTools = new TestTools.TestTools();
-let supertest: Supertest.SuperTest<any>;
+let supertest: Supertest.SuperTest<Supertest.Test>;
 let app;
 
 
@@ -40,7 +40,7 @@ test.describe('Software update screen tests', () => {
   });
 
 
-  test.it('should show search page with login button', function (this: Mocha) {
+  test.it('should show search page with login button', function (this: Mocha.ITestCallbackContext) {
     this.timeout(15000);
 
     chromeDriver = new webdriver.Builder()
@@ -61,11 +61,11 @@ test.describe('Software update screen tests', () => {
     .auth(props.test.username, props.test.password)
     .timeout(8000)
     .expect(302)
-    .end((err: Error, res: Express.Session) => {
+    .end((err: Error, res: Supertest.Response) => {
       if (err) {
         done(err);
       } else {
-        let Cookies = res.headers['set-cookie'].pop().split(';')[0];
+        let Cookies = res.header['set-cookie'].pop().split(';')[0];
         debug('test login cookies: ' + Cookies);
         let parts = Cookies.split('=');
         debug('setting driver cookie ' + parts[0] + ' ' + parts[1]);
@@ -75,7 +75,7 @@ test.describe('Software update screen tests', () => {
     });
   });
 
-  test.it('should show search page with username on logout button', function(this: Mocha) {
+  test.it('should show search page with username on logout button', function(this: Mocha.ITestCallbackContext) {
     this.timeout(8000);
     chromeDriver.get(props.webUrl + '#/list');
     chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
@@ -83,7 +83,7 @@ test.describe('Software update screen tests', () => {
       props.test.username.toUpperCase()), 5000);
   });
 
-  test.it('should show search page with username on logout button', function(this: Mocha) {
+  test.it('should show search page with username on logout button', function(this: Mocha.ITestCallbackContext) {
     this.timeout(8000);
     chromeDriver.get(props.webUrl + '#/new');
     chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
@@ -96,13 +96,13 @@ test.describe('Software update screen tests', () => {
     chromeDriver.wait(until.titleIs('SWDB - New'), 5000);
   });
 
-  test.it('Set software name', function(this: Mocha) {
+  test.it('Set software name', function(this: Mocha.ITestCallbackContext) {
     this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id('swName')), 3000);
     chromeDriver.findElement(By.id('swName')).sendKeys('Test Record3');
   });
 
-  test.it('Set version', function (this: Mocha) {
+  test.it('Set version', function (this: Mocha.ITestCallbackContext) {
     this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id('version')), 3000);
     let input = chromeDriver.findElement(By.id('version'));
@@ -110,7 +110,7 @@ test.describe('Software update screen tests', () => {
     input.sendKeys('Test Version');
   });
 
-  test.it('Set software branch', function (this: Mocha) {
+  test.it('Set software branch', function (this: Mocha.ITestCallbackContext) {
     this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id('branch')), 3000);
     let input = chromeDriver.findElement(By.id('branch'));
@@ -118,7 +118,7 @@ test.describe('Software update screen tests', () => {
     input.sendKeys('Test branch');
   });
 
-  test.it('Set software description', function (this: Mocha) {
+  test.it('Set software description', function (this: Mocha.ITestCallbackContext) {
     this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id('desc')), 3000);
     let input = chromeDriver.findElement(By.id('desc'));
@@ -126,7 +126,7 @@ test.describe('Software update screen tests', () => {
     input.sendKeys('Test description');
   });
 
-  test.it('Set software description document', function (this: Mocha) {
+  test.it('Set software description document', function (this: Mocha.ITestCallbackContext) {
     this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id('descDocLoc')), 3000);
     let input = chromeDriver.findElement(By.id('descDocLoc'));
@@ -134,7 +134,7 @@ test.describe('Software update screen tests', () => {
     input.sendKeys('http://www.google.com');
   });
 
-  test.it('Set software design desciption document', function (this: Mocha) {
+  test.it('Set software design desciption document', function (this: Mocha.ITestCallbackContext) {
     this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id('designDescDocLoc')), 3000);
     let input = chromeDriver.findElement(By.id('designDescDocLoc'));
@@ -142,7 +142,7 @@ test.describe('Software update screen tests', () => {
     input.sendKeys('http://www.google.com');
   });
 
-  test.it('Set software owner', function (this: Mocha) {
+  test.it('Set software owner', function (this: Mocha.ITestCallbackContext) {
     this.timeout(15000);
     chromeDriver.wait(until.elementLocated(By.id('owner')), 3000);
     let input = chromeDriver.findElement(By.id('owner'));
@@ -155,7 +155,7 @@ test.describe('Software update screen tests', () => {
     input.click();
   });
 
-  test.it('Set software level of care', function (this: Mocha) {
+  test.it('Set software level of care', function (this: Mocha.ITestCallbackContext) {
     this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id('levelOfCare')), 3000);
     let input = chromeDriver.findElement(By.id('levelOfCare'));
@@ -163,7 +163,7 @@ test.describe('Software update screen tests', () => {
     input.sendKeys('Low');
   });
 
-  test.it('Set software status', function (this: Mocha) {
+  test.it('Set software status', function (this: Mocha.ITestCallbackContext) {
     this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id('status')), 3000);
     let input = chromeDriver.findElement(By.id('status'));
@@ -171,7 +171,7 @@ test.describe('Software update screen tests', () => {
     input.sendKeys('Development');
   });
 
-  test.it('Set software status date', function (this: Mocha) {
+  test.it('Set software status date', function (this: Mocha.ITestCallbackContext) {
     this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')), 3000);
     let input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
@@ -189,7 +189,7 @@ test.describe('Software update screen tests', () => {
   });
 
 
-  test.it('Set software platforms', function (this: Mocha) {
+  test.it('Set software platforms', function (this: Mocha.ITestCallbackContext) {
     this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id('platforms')), 3000);
     let input = chromeDriver.findElement(By.id('platforms'));
@@ -197,7 +197,7 @@ test.describe('Software update screen tests', () => {
     input.sendKeys('Test platform');
   });
 
-  test.it('Set software V&V procedure location', function (this: Mocha) {
+  test.it('Set software V&V procedure location', function (this: Mocha.ITestCallbackContext) {
     this.timeout(15000);
     chromeDriver.wait(until.elementLocated(By.id('add.vvProcLoc')), 3000);
     let input = chromeDriver.findElement(By.id('add.vvProcLoc'));
@@ -220,7 +220,7 @@ test.describe('Software update screen tests', () => {
   });
 
 
-  test.it('Set software V&V results location', function (this: Mocha) {
+  test.it('Set software V&V results location', function (this: Mocha.ITestCallbackContext) {
     this.timeout(15000);
     chromeDriver.wait(until.elementLocated(By.id('add.vvResultsLoc')), 3000);
     let input = chromeDriver.findElement(By.id('add.vvResultsLoc'));
@@ -242,7 +242,7 @@ test.describe('Software update screen tests', () => {
     input.click();
   });
 
-  test.it('Set software version control', function (this: Mocha) {
+  test.it('Set software version control', function (this: Mocha.ITestCallbackContext) {
     this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id('versionControl')), 3000);
     let input = chromeDriver.findElement(By.id('versionControl'));
@@ -250,7 +250,7 @@ test.describe('Software update screen tests', () => {
     input.sendKeys('Git');
   });
 
-  test.it('Set software version control location', function (this: Mocha) {
+  test.it('Set software version control location', function (this: Mocha.ITestCallbackContext) {
     this.timeout(5000);
     chromeDriver.wait(until.elementLocated(By.id('versionControlLoc')), 3000);
     let input = chromeDriver.findElement(By.id('versionControlLoc'));
@@ -258,7 +258,7 @@ test.describe('Software update screen tests', () => {
     input.sendKeys('http://www.google.com');
   });
 
-  test.it('Set software engineer', function (this: Mocha) {
+  test.it('Set software engineer', function (this: Mocha.ITestCallbackContext) {
     this.timeout(15000);
     // set engineer
     chromeDriver.wait(until.elementLocated(By.id('engineer')), 3000);
@@ -273,17 +273,17 @@ test.describe('Software update screen tests', () => {
     input.click();
   });
 
-  test.it('Submit', function (this: Mocha) {
+  test.it('Submit', function (this: Mocha.ITestCallbackContext) {
     this.timeout(5000);
     chromeDriver.findElement(By.id('submitBtn')).click();
   });
 
-  test.it('should show the details record', function (this: Mocha) {
+  test.it('should show the details record', function (this: Mocha.ITestCallbackContext) {
     this.timeout(5000);
     chromeDriver.wait(until.titleIs('SWDB - Details'), 5000);
   });
 
-  test.it('should show the correct software name in details', function (this: Mocha) {
+  test.it('should show the correct software name in details', function (this: Mocha.ITestCallbackContext) {
     chromeDriver.wait(until.elementLocated(By.id('swName')), 3000);
     chromeDriver.findElement(By.id('swName')).getAttribute('value').then(
       (text: string) => {
@@ -291,7 +291,7 @@ test.describe('Software update screen tests', () => {
       });
   });
 
-  test.it('should show the correct version in details', function (this: Mocha) {
+  test.it('should show the correct version in details', function (this: Mocha.ITestCallbackContext) {
     chromeDriver.wait(until.elementLocated(By.id('version')), 3000);
     chromeDriver.findElement(By.id('version')).getAttribute('value').then(
       (text: string) => {
@@ -299,7 +299,7 @@ test.describe('Software update screen tests', () => {
       });
   });
 
-  test.it('should show the correct branch in details', function (this: Mocha) {
+  test.it('should show the correct branch in details', function (this: Mocha.ITestCallbackContext) {
     chromeDriver.wait(until.elementLocated(By.id('branch')), 3000);
     chromeDriver.findElement(By.id('branch')).getAttribute('value').then(
       (text: string) => {
@@ -307,7 +307,7 @@ test.describe('Software update screen tests', () => {
       });
   });
 
-  test.it('should show the correct descption in details', function (this: Mocha) {
+  test.it('should show the correct descption in details', function (this: Mocha.ITestCallbackContext) {
     chromeDriver.wait(until.elementLocated(By.id('desc')), 3000);
     chromeDriver.findElement(By.id('desc')).getAttribute('value').then(
       (text: string) => {
@@ -315,7 +315,7 @@ test.describe('Software update screen tests', () => {
       });
   });
 
-  test.it('should show the correct descption doc location in details', function (this: Mocha) {
+  test.it('should show the correct descption doc location in details', function (this: Mocha.ITestCallbackContext) {
     chromeDriver.wait(until.elementLocated(By.id('descDocLoc')), 3000);
     chromeDriver.findElement(By.id('descDocLoc')).getAttribute('value').then(
       (text: string) => {
@@ -323,7 +323,7 @@ test.describe('Software update screen tests', () => {
       });
   });
 
-  test.it('should show the correct design descption doc location in details', function (this: Mocha) {
+  test.it('should show the correct design descption doc location in details', function (this: Mocha.ITestCallbackContext) {
     chromeDriver.wait(until.elementLocated(By.id('designDescDocLoc')), 3000);
     chromeDriver.findElement(By.id('designDescDocLoc')).getAttribute('value').then(
       (text: string) => {
@@ -331,7 +331,7 @@ test.describe('Software update screen tests', () => {
       });
   });
 
-  test.it('should show the correct owner in details', function (this: Mocha) {
+  test.it('should show the correct owner in details', function (this: Mocha.ITestCallbackContext) {
     chromeDriver.wait(until.elementLocated(By.id('owner')), 3000);
     chromeDriver.findElement(By.id('owner')).getAttribute('value').then(
       (text: string) => {
@@ -339,7 +339,7 @@ test.describe('Software update screen tests', () => {
       });
   });
 
-  test.it('should show the correct engineer in details', function (this: Mocha) {
+  test.it('should show the correct engineer in details', function (this: Mocha.ITestCallbackContext) {
     chromeDriver.wait(until.elementLocated(By.id('engineer')), 3000);
     chromeDriver.findElement(By.id('engineer')).getAttribute('value').then(
       (text: string) => {
@@ -347,7 +347,7 @@ test.describe('Software update screen tests', () => {
       });
   });
 
-  test.it('should show the correct level of care in details', function (this: Mocha) {
+  test.it('should show the correct level of care in details', function (this: Mocha.ITestCallbackContext) {
     chromeDriver.wait(until.elementLocated(By.id('levelOfCare')), 3000);
     chromeDriver.findElement(By.id('levelOfCare')).getAttribute('value').then(
       (text: string) => {
@@ -355,7 +355,7 @@ test.describe('Software update screen tests', () => {
       });
   });
 
-  test.it('should show the correct status in details', function (this: Mocha) {
+  test.it('should show the correct status in details', function (this: Mocha.ITestCallbackContext) {
     chromeDriver.wait(until.elementLocated(By.id('status')), 3000);
     chromeDriver.findElement(By.id('status')).getAttribute('value').then(
       (text: string) => {
@@ -363,7 +363,15 @@ test.describe('Software update screen tests', () => {
       });
   });
 
-  test.it('should show the correct platforms in details', function (this: Mocha) {
+  test.it('should show the status date in details', () => {
+    chromeDriver.wait(until.elementLocated(By.id('statusDate')), 3000);
+    chromeDriver.findElement(By.id('statusDate')).getAttribute('value').then(
+      (text: String) => {
+        expect(text).to.equal('10/1/2017');
+      });
+  });
+
+  test.it('should show the correct platforms in details', function (this: Mocha.ITestCallbackContext) {
     chromeDriver.wait(until.elementLocated(By.id('platforms')), 3000);
     chromeDriver.findElement(By.id('platforms')).getAttribute('value').then(
       (text: string) => {
@@ -371,7 +379,7 @@ test.describe('Software update screen tests', () => {
       });
   });
 
-  test.it('should show the correct vvProcLoc in details', function (this: Mocha) {
+  test.it('should show the correct vvProcLoc in details', function (this: Mocha.ITestCallbackContext) {
     chromeDriver.wait(until.elementLocated(By.id('vvProcLoc')), 3000);
     chromeDriver.findElement(By.id('vvProcLoc')).getAttribute('value').then(
       (text: string) => {
@@ -379,7 +387,7 @@ test.describe('Software update screen tests', () => {
       });
   });
 
-  test.it('should show the correct vvResultsLoc in details', function (this: Mocha) {
+  test.it('should show the correct vvResultsLoc in details', function (this: Mocha.ITestCallbackContext) {
     chromeDriver.wait(until.elementLocated(By.id('vvResultsLoc')), 3000);
     chromeDriver.findElement(By.id('vvResultsLoc')).getAttribute('value').then(
       (text: string) => {
@@ -387,7 +395,7 @@ test.describe('Software update screen tests', () => {
       });
   });
 
-  test.it('should show the correct version control location in details', function (this: Mocha) {
+  test.it('should show the correct version control location in details', function (this: Mocha.ITestCallbackContext) {
     chromeDriver.wait(until.elementLocated(By.id('versionControl')), 3000);
     chromeDriver.findElement(By.id('versionControl')).getAttribute('value').then(
       (text: string) => {
@@ -395,7 +403,7 @@ test.describe('Software update screen tests', () => {
       });
   });
 
-  test.it('should show the correct version control location in details', function (this: Mocha) {
+  test.it('should show the correct version control location in details', function (this: Mocha.ITestCallbackContext) {
     chromeDriver.wait(until.elementLocated(By.id('versionControlLoc')), 3000);
     chromeDriver.findElement(By.id('versionControlLoc')).getAttribute('value').then(
       (text: string) => {

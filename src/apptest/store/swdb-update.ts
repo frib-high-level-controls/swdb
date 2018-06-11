@@ -77,11 +77,11 @@ test.describe('Software update screen tests', () => {
     .auth(props.test.username, props.test.password)
     .timeout(8000)
     .expect(302)
-    .end((err: Error, res: Supertest.Response & Express.Session) => {
+    .end((err: Error, res: Supertest.Response) => {
       if (err) {
         done(err);
       } else {
-        let Cookies = res.headers['set-cookie'].pop().split(';')[0];
+        let Cookies = res.header['set-cookie'].pop().split(';')[0];
         debug('test login cookies: ' + Cookies);
         let parts = Cookies.split('=');
         debug('setting driver cookie ' + parts[0] + ' ' + parts[1]);
