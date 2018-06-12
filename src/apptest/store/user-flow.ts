@@ -23,6 +23,8 @@ let until = webdriver.until;
 
 test.describe('User flow tests', () => {
   let chromeDriver: webdriver.WebDriver;
+  let tmpStatusDate: Date;
+  let tmpInstStatusDate: Date;
   before('Prep DB', async () => {
     app = await server.start();
     supertest = Supertest(app);
@@ -187,6 +189,7 @@ test.describe('User flow tests', () => {
       By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
     input.click();
+    tmpStatusDate = new Date();
   });
 
   test.it('Add new sw record - set platforms', function(this: Mocha.ITestCallbackContext) {
@@ -418,13 +421,16 @@ test.describe('User flow tests', () => {
       });
   });
 
-  // test.it("should show the correct statusDate in details", function () {
-  //   chromeDriver.wait(until.elementLocated(By.id("statusDate")), 3000);
-  //   chromeDriver.findElement(By.id("statusDate")).getAttribute("value").then(
-  //     function (text) {
-  //       expect(text).to.equal("2017-09-30T07:00:00.000Z");
-  //     });
-  // });
+  test.it('should show the status date in details', () => {
+    chromeDriver.wait(until.elementLocated(By.id('statusDate')), 3000);
+    chromeDriver.findElement(By.id('statusDate')).getAttribute('value').then(
+      (text: String) => {
+        expect(text).to.equal(
+          (tmpStatusDate.getMonth() + 1) + '/' +
+          tmpStatusDate.getDate() + '/' +
+          tmpStatusDate.getFullYear());
+      });
+  });
 
   test.it('should show the correct sw platforms in details', () => {
     chromeDriver.wait(until.elementLocated(By.id('platforms')), 3000);
@@ -466,9 +472,6 @@ test.describe('User flow tests', () => {
       });
   });
 
-
-
-
   // Begin making a new installation and link to the previous sw record we made
   test.it('should show search page with username on logout button', function (this: Mocha.ITestCallbackContext) {
     this.timeout(8000);
@@ -498,11 +501,6 @@ test.describe('User flow tests', () => {
     searchInput = chromeDriver.findElement(By.xpath('//*[@id="software"]/input[1]'));
     searchInput.sendKeys('BEAST');
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-4-0"]/span')), 5000);
-    // chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="software"]')), 5000);
-    // input = chromeDriver.findElement(By.xpath('//*[@id="software"]'));
-    // input.getAttribute("innerHTML").then(function(result) {
-    //   console.log("inner html: " + result);
-    // });
   });
   test.it('Add new inst record - click row', function(this: Mocha.ITestCallbackContext) {
     this.timeout(5000);
@@ -618,6 +616,8 @@ test.describe('User flow tests', () => {
       By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
     input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
     input.click();
+    tmpInstStatusDate = new Date();
+
   });
 
   test.it('Add new inst installation - set V&V approval date', function(this: Mocha.ITestCallbackContext) {
@@ -713,15 +713,17 @@ test.describe('User flow tests', () => {
         expect(text).to.equal('Ready for beam');
       });
   });
-  // need date test
-  // test.it("should show the correct installtion status date in details", function () {
-  //   this.timeout(8000);
-  //   chromeDriver.wait(until.elementLocated(By.id("statusDate")), 3000);
-  //   chromeDriver.findElement(By.id("statusDate")).getAttribute("value").then(
-  //     function (text) {
-  //       expect(text).to.equal("2017-09-30T07:00:00.000Z");
-  //     });
-  // });
+
+  test.it('should show the installation status date in details', () => {
+    chromeDriver.wait(until.elementLocated(By.id('statusDate')), 3000);
+    chromeDriver.findElement(By.id('statusDate')).getAttribute('value').then(
+      (text: String) => {
+        expect(text).to.equal(
+          (tmpInstStatusDate.getMonth() + 1) + '/' +
+          tmpInstStatusDate.getDate() + '/' +
+          tmpInstStatusDate.getFullYear());
+      });
+  });
 
   test.it('should show the correct inst vvResultsLoc in details', () => {
     chromeDriver.wait(until.elementLocated(By.id('vvResultsLoc')), 3000);
