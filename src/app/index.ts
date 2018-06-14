@@ -309,19 +309,19 @@ async function doStop(): Promise<void> {
     await activeStopped;
   }
 
-  try {
-    await status.monitor.stop();
-    info('Status monitor stopped');
-  } catch (err) {
-    warn('Status monitor stop failure: %s', err);
-  }
-
   // disconnect Mongoose (MongoDB)
   try {
     await mongoose.disconnect();
     info('Mongoose disconnected');
   } catch (err) {
     warn('Mongoose disconnect failure: %s', err);
+  }
+
+  try {
+    await status.monitor.stop();
+    info('Status monitor stopped');
+  } catch (err) {
+    warn('Status monitor stop failure: %s', err);
   }
 
   info('Application stopped');
