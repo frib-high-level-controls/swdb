@@ -21,7 +21,7 @@ export interface HttpStatusError extends Error {
   status: number;
 }
 
-export type RequestPromiseHandler = (req: Request, res: Response, next?: NextFunction) => PromiseLike<void>;
+export type RequestPromiseHandler = (req: Request, res: Response, next: NextFunction) => PromiseLike<void>;
 
 export function catchAll(handler: RequestPromiseHandler): RequestHandler {
   return (req, res, next) => {
