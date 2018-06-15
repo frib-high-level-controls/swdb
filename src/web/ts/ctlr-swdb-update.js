@@ -138,7 +138,8 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
   };
 
   $scope.onStatusChange = function ($item, $model, $label) {
-    if ($scope.formData.status === $scope.props.statusLabels[2]) {
+    // console.log("status display now " + $scope.statusDisplay);
+    if ($scope.statusDisplay === $scope.props.statusLabels[2]) {
       $scope.branchDisabled = true;
       $scope.versionDisabled = true;
       $scope.branchMouseover = "Branch cannot change when status is '" +
