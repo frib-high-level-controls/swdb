@@ -123,17 +123,19 @@ export class DevForgBasicProvider extends ForgBasicAbstractProvider {
 
   protected forgClient: forgapi.IClient;
   constructor(forgClient: forgapi.IClient, options: ppauth.BasicProviderOptions) {
-    log.warn('Authentication provider for DEVELOPMENT use only!');
     super(forgClient, options);
   }
 
   protected verifyPassword(username: string, password: string, done: (err: any, verified?: boolean) => void): void {
-    const env = process.env.NODE_ENV;
-    if (env && (env.toUpperCase() === 'PRODUCTION')) {
+    const env = process.env.NODE_ENV ? process.env.NODE_ENV.toLowerCase() : undefined;
+    if (env === 'production') {
       log.warn('Development use only: PRODUCTION ENVIRONMENT DETECTED');
       done(null, false);
+      return;
     }
-    log.warn('Development use only: PASSWORD VERIFICATION DISABLED');
+    if (env !== 'test') {
+      log.warn('Development use only: PASSWORD VERIFICATION DISABLED');
+    }
     done(null, true);
   }
 }
