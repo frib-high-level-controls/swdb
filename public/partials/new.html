@@ -99,15 +99,14 @@
       <!-- Description document location-->
       <div class="row" ng-class="{ 'has-error' : inputForm.descDocLocInput.$invalid && !inputForm.descDocLocInput.$pristine }">
         <div id="descDocLoc-group" class="form-group swdbFormRow">
-          <label class="col-sm-2 control-label">Description Doc (DCC URL)</label>
+          <label class="col-sm-2 control-label">Description Doc</label>
           <div class="col-sm-8">
-            <input id="descDocLoc" type="url" name="descDocLocInput" class="form-control" placeholder="Description document location"
+            <input id="descDocLoc" type="text" name="descDocLocInput" class="form-control" placeholder="Description document location"
               ng-model="formData.descDocLoc" ng-minlength="2">
             </input>
           </div>
           <div class="col-sm-2" id="descDocLocInputSts" ng-messages="inputForm.descDocLocInput.$error" ng-if="inputForm.descDocLocInput.$dirty">
             <div ng-message="minlength">Minimum 2 characters</div>
-            <div ng-message="url">Enter a valid URL</div>
           </div>
         </div>
       </div>
@@ -115,15 +114,14 @@
       <!-- Design description document location-->
       <div class="row" ng-class="{ 'has-error' : inputForm.designDescDocLocInput.$invalid && !inputForm.designDescDocLocInput.$pristine }">
         <div id="designDescDocLoc-group" class="form-group swdbFormRow">
-          <label class="col-sm-2 control-label">Design Description Doc (DCC URL)</label>
+          <label class="col-sm-2 control-label">Design Description Doc</label>
           <div class="col-sm-8">
-            <input id="designDescDocLoc" type="url" name="designDescDocLocInput" class="form-control" placeholder="Design description document location"
+            <input id="designDescDocLoc" type="text" name="designDescDocLocInput" class="form-control" placeholder="Design description document location"
               ng-model="formData.designDescDocLoc" ng-minlength="2">
             </input>
           </div>
           <div class="col-sm-2" id="designDescDocLocInputSts" ng-messages="inputForm.designDescDocLocInput.$error" ng-if="inputForm.designDescDocLocInput.$dirty">
             <div ng-message="minlength">Minimum 2 characters</div>
-            <div ng-message="url">Enter a valid URL</div>
           </div>
         </div>
       </div>
@@ -273,7 +271,7 @@
           <a id="add.vvProcLoc" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)">
             <span class="glyphicon glyphicon-plus"></span>
           </a>
-          V&V Procedure Locations(URLs)</label>
+          V&V Procedure Locations</label>
         <span class="col-sm-10"></span>
       </div>
       <div id="vvProcLoc-group" class="form-group">
@@ -304,7 +302,7 @@
           <a id="add.vvResultsLoc" class="btn btn-primary btn-xs" data-nodrag="" ng-click="newItem($event)">
             <span class="glyphicon glyphicon-plus"></span>
           </a>
-          V&V Results Locations(URLs)</label>
+          V&V Results Locations</label>
         <span class="col-sm-10"></span>
       </div>
       <div id="vvResultsLoc-group" class="form-group">
