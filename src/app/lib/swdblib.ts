@@ -49,7 +49,7 @@ export class SwdbLib {
    * @params res Express.Response
    * @params next Express.NextFunction
    */
-  public static getForgGroups = function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public static getForgGroups = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // Prepare the source location by looking at the properties useSource
     const source = props.forgGroupsDataSource[props.forgGroupsDataSource.useSource];
     debug('Using forg groups source: ' + source);
@@ -63,7 +63,7 @@ export class SwdbLib {
           'DISCS-Authorization': 'key:pass',
         },
         timeout: 5 * 1000,
-      }, function(error, response, body) {
+      }, (error, response, body) => {
         if (error) {
           debug('GET forg groups got error: ' + error);
           next(error);
@@ -76,7 +76,7 @@ export class SwdbLib {
       });
     } else {
       // try to open the slot source as a file
-      fs.readFile(source, { encoding: 'utf-8' }, function(err, data) {
+      fs.readFile(source, { encoding: 'utf-8' }, (err, data) => {
         if (!err) {
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.write(data);
@@ -88,7 +88,7 @@ export class SwdbLib {
         }
       });
     }
-  };
+  }
 
   /**
    * getForgAreas gets FORG area data from the source specified in the properties file
@@ -97,7 +97,7 @@ export class SwdbLib {
    * @params res Express.Response
    * @params next Express.NextFunction
    */
-  public static getForgAreas = function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public static getForgAreas = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // Prepare the source location by looking at the properties useSource
     const source = props.forgGroupsDataSource[props.forgGroupsDataSource.useSource];
     debug('Using forg groups source: ' + source);
@@ -111,7 +111,7 @@ export class SwdbLib {
           'DISCS-Authorization': 'key:pass',
         },
         timeout: 5 * 1000,
-      }, function(error, response, body) {
+      }, (error, response, body) => {
         if (error) {
           debug('GET forg areas got error: ' + error);
           next(error);
@@ -132,7 +132,7 @@ export class SwdbLib {
       });
     } else {
       // try to open the areas source as a file
-      fs.readFile(source, { encoding: 'utf-8' }, function(err, data) {
+      fs.readFile(source, { encoding: 'utf-8' }, (err, data) => {
         if (!err) {
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.write(data);
@@ -144,7 +144,7 @@ export class SwdbLib {
         }
       });
     }
-  };
+  }
 
   /**
    * getForgUsers gets FORG user data from the source specified in the properties file
@@ -153,7 +153,7 @@ export class SwdbLib {
    * @params res Express.Response
    * @params next Express.NextFunction
    */
-  public static getForgUsers = function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public static getForgUsers = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // Prepare the source location by looking at the properties useSource
     const source = props.forgUsersDataSource[props.forgUsersDataSource.useSource];
     debug('Using forg users source: ' + source);
@@ -167,7 +167,7 @@ export class SwdbLib {
           'DISCS-Authorization': 'key:pass',
         },
         timeout: 5 * 1000,
-      }, function(error, response, body) {
+      }, (error, response, body) => {
         if (error) {
           debug('GET forg users got error: ' + error);
           next(error);
@@ -180,7 +180,7 @@ export class SwdbLib {
       });
     } else {
       // try to open the slot source as a file
-      fs.readFile(source, { encoding: 'utf-8' }, function(err, data) {
+      fs.readFile(source, { encoding: 'utf-8' }, (err, data) => {
         if (!err) {
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.write(data);
@@ -190,7 +190,7 @@ export class SwdbLib {
         }
       });
     }
-  };
+  }
 
   /**
    * newValidation checks validation on new swdb records
@@ -198,7 +198,7 @@ export class SwdbLib {
    *
    * @params req Express.Request
    */
-  public static newValidation = function(req: express.Request) {
+  public static newValidation = (req: express.Request) => {
     req.checkBody({
       swName: {
         notEmpty: {
@@ -323,28 +323,28 @@ export class SwdbLib {
       },
       designDescDocLoc: {
         optional: true,
-        isURL: {
-          errorMessage: 'Design description document location must be a URL.',
+        isString: {
+          errorMessage: 'Design description document location must be a string.',
         },
       },
       descDocLoc: {
         optional: true,
-        isURL: {
-          errorMessage: 'Description document location must be a URL.',
+        isString: {
+          errorMessage: 'Description document location must be a string.',
         },
       },
       vvProcLoc: {
         optional: true,
         isVvProcLoc: {
           options: [req],
-          errorMessage: 'V&V procedure location must be an array of URLs.',
+          errorMessage: 'V&V procedure location must be an array of strings.',
         },
       },
       vvResultsLoc: {
         optional: true,
         isVvResultsLoc: {
           options: [req],
-          errorMessage: 'V&V results location must be an array of URLs.',
+          errorMessage: 'V&V results location must be an array of strings.',
         },
       },
       versionControl: {
@@ -356,8 +356,8 @@ export class SwdbLib {
       },
       versionControlLoc: {
         optional: true,
-        isURL: {
-          errorMessage: 'Version control location must be a URL.',
+        isString: {
+          errorMessage: 'Version control location must be a string.',
         },
       },
       previous: {
@@ -388,7 +388,7 @@ export class SwdbLib {
       },
     });
 
-  };
+  }
 
   /**
    * updateValidation checks validation on swdb record updates
@@ -396,7 +396,7 @@ export class SwdbLib {
    *
    * @params req Express.Request
    */
-  public static updateValidation = function(req: express.Request) {
+  public static updateValidation = (req: express.Request) => {
     req.checkBody({
       swName: {
         optional: true,
@@ -511,28 +511,28 @@ export class SwdbLib {
       },
       designDescDocLoc: {
         optional: true,
-        isURL: {
-          errorMessage: 'Design description document location must be a URL.',
+        isString: {
+          errorMessage: 'Design description document location must be a string.',
         },
       },
       descDocLoc: {
         optional: true,
-        isURL: {
-          errorMessage: 'Description document location must be a URL.',
+        isString: {
+          errorMessage: 'Description document location must be a string.',
         },
       },
       vvProcLoc: {
         optional: true,
         isVvProcLoc: {
           options: [req],
-          errorMessage: 'V&V procedure location must be an array of URLs.',
+          errorMessage: 'V&V procedure location must be an array of strings.',
         },
       },
       vvResultsLoc: {
         optional: true,
         isVvResultsLoc: {
           options: [req],
-          errorMessage: 'V&V results location must be an array of URLs.',
+          errorMessage: 'V&V results location must be an array of strings.',
         },
       },
       versionControl: {
@@ -544,8 +544,8 @@ export class SwdbLib {
       },
       versionControlLoc: {
         optional: true,
-        isURL: {
-          errorMessage: 'Version control location must be a URL.',
+        isString: {
+          errorMessage: 'Version control location must be a string.',
         },
       },
       previous: {
@@ -574,7 +574,7 @@ export class SwdbLib {
     });
   };
 
-  public static updateSanitization = function(req: express.Request) {
+  public static updateSanitization = (req: express.Request) => {
     return;
-  };
+  }
 }

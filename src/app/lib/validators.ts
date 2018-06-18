@@ -197,7 +197,7 @@ export class CustomValidators {
         data: err,
       };
     }
-  };
+  }
 
   /**
    * instUpdateWorflowValidation - method to detect workflow issues with installation updates
