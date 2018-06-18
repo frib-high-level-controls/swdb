@@ -321,6 +321,12 @@ test.describe('User flow2 tests', () => {
     chromeDriver.findElement(By.id('submitBtn')).click();
   });
 
+  test.it('should show the sw details record', function (this: Mocha.ITestCallbackContext) {
+    this.timeout(10000);
+    // check result
+    chromeDriver.wait(until.titleIs('SWDB - Details'), 10000);
+  });
+
   /**
    * Make a new installation record
    */
@@ -358,5 +364,87 @@ test.describe('User flow2 tests', () => {
     let input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-4-0"]/span'));
     input.click();
   });
+
+  test.it('Add new inst record - set status date', function (this: Mocha.ITestCallbackContext) {
+    this.timeout(5000);
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')), 3000);
+    let input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
+    input.click();
+    chromeDriver.wait(until.elementLocated(
+      By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
+    input = chromeDriver.findElement(
+      By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id('statusDate')), 3000);
+    input = chromeDriver.findElement(By.id('statusDate'));
+    input.clear();
+
+    input.sendKeys('6/13/2018');
+  });
+
+  test.it('Add new inst record - set area 0', function(this: any) {
+    this.timeout(6000);
+    // set area
+    // add controls room, operator area, nscl control room
+    // then delete the controls room
+    chromeDriver.wait(until.elementLocated(By.id('add.area')), 3000);
+    let input = chromeDriver.findElement(By.id('add.area'));
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id('area.0')), 3000);
+    let input0 = chromeDriver.findElement(By.id('area.0'));
+    input0.click();
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.0"]/input[1]')), 3000);
+    let input0b = chromeDriver.findElement(By.xpath('//*[@id="area.0"]/input[1]'));
+    input0b.sendKeys('FRIB.FRONTEND');
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-5-0"]/span')));
+    let inputZero = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-5-0"]/span'));
+    inputZero.click();
+    });
+
+  test.it('Add new inst record - set area 1', function(this: any) {
+    this.timeout(6000);
+    chromeDriver.wait(until.elementLocated(By.id('add.area')), 3000);
+    let input = chromeDriver.findElement(By.id('add.area'));
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id('area.1')), 3000);
+    let input1 = chromeDriver.findElement(By.id('area.1'));
+    input1.click();
+
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.1"]/input[1]')), 3000);
+    let input1b = chromeDriver.findElement(By.xpath('//*[@id="area.1"]/input[1]'));
+    input1b.sendKeys('FRIB.LINACSEG');
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-6-0"]/span')));
+    let inputOne = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-6-0"]/span'));
+    inputOne.click();
+    });
+
+  test.it('Add new record - set drr', function() {
+    // set drrs
+    chromeDriver.wait(until.elementLocated(By.id('drrs')), 3000);
+    let input = chromeDriver.findElement(By.id('drrs'));
+    input.click();
+    input.sendKeys('DDR05');
+  });
+
+  test.it('Add new record - set status', function() {
+    // set the status
+    chromeDriver.wait(until.elementLocated(By.id('status')), 3000);
+    let input = chromeDriver.findElement(By.id('status'));
+    input.click();
+    input.sendKeys('Ready for install');
+
+    chromeDriver.wait(until.elementLocated(By.id('status')), 3000);
+  });
+
+  test.it('Submit',  () => {
+    chromeDriver.findElement(By.id('submitBtn')).click();
+  });
+
+  test.it('should show the inst details record', function (this: Mocha.ITestCallbackContext) {
+    this.timeout(10000);
+    // check result
+    chromeDriver.wait(until.titleIs('SWDB - Installation Details'), 10000);
+  });
+
 
 });
