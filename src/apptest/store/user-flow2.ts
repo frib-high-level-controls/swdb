@@ -137,7 +137,7 @@ test.describe('User flow2 tests', () => {
     input = chromeDriver.findElement(By.id('statusDate'));
     input.clear();
 
-    input.sendKeys('6/13/2018');
+    input.sendKeys('06/13/2018');
   });
 
   test.it('Submit',  () => {
@@ -379,7 +379,7 @@ test.describe('User flow2 tests', () => {
     input = chromeDriver.findElement(By.id('statusDate'));
     input.clear();
 
-    input.sendKeys('6/13/2018');
+    input.sendKeys('06/13/2018');
   });
 
   test.it('Add new inst record - set area 0', function(this: any) {
@@ -418,7 +418,7 @@ test.describe('User flow2 tests', () => {
     inputOne.click();
     });
 
-  test.it('Add new record - set drr', function() {
+  test.it('Add new record - set drr', () => {
     // set drrs
     chromeDriver.wait(until.elementLocated(By.id('drrs')), 3000);
     let input = chromeDriver.findElement(By.id('drrs'));
@@ -426,7 +426,7 @@ test.describe('User flow2 tests', () => {
     input.sendKeys('DDR05');
   });
 
-  test.it('Add new record - set status', function() {
+  test.it('Add new record - set status', () => {
     // set the status
     chromeDriver.wait(until.elementLocated(By.id('status')), 3000);
     let input = chromeDriver.findElement(By.id('status'));
@@ -437,6 +437,112 @@ test.describe('User flow2 tests', () => {
   });
 
   test.it('Submit',  () => {
+    chromeDriver.findElement(By.id('submitBtn')).click();
+  });
+
+  test.it('should show the inst details record', function (this: Mocha.ITestCallbackContext) {
+    this.timeout(10000);
+    // check result
+    chromeDriver.wait(until.titleIs('SWDB - Installation Details'), 10000);
+  });
+
+  test.it('update this inst record', function (this: Mocha.ITestCallbackContext) {
+    this.timeout(5000);
+    chromeDriver.wait(until.elementLocated(By.id('updateBtn')),
+      8000).click();
+  });
+
+  test.it('Update inst record - set name', () => {
+    // set drrs
+    chromeDriver.wait(until.elementLocated(By.id('name')), 3000);
+    let input = chromeDriver.findElement(By.id('name'));
+    input.click();
+    input.sendKeys('FE EXTA IOC');
+  });
+
+  test.it('Update inst record - set status', () => {
+    // set the status
+    chromeDriver.wait(until.elementLocated(By.id('status')), 3000);
+    let input = chromeDriver.findElement(By.id('status'));
+    input.click();
+    input.sendKeys('Ready for verification');
+
+  });
+
+  test.it('Update inst record - set status date', function (this: Mocha.ITestCallbackContext) {
+    this.timeout(5000);
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')), 3000);
+    let input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
+    input.click();
+    chromeDriver.wait(until.elementLocated(
+      By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
+    input = chromeDriver.findElement(
+      By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id('statusDate')), 3000);
+    input = chromeDriver.findElement(By.id('statusDate'));
+    input.clear();
+
+    input.sendKeys('06/14/2018');
+  });
+
+  test.it('Submit "Ready for verification" update',  () => {
+    chromeDriver.findElement(By.id('submitBtn')).click();
+  });
+
+  test.it('should show the inst details record', function (this: Mocha.ITestCallbackContext) {
+    this.timeout(10000);
+    // check result
+    chromeDriver.wait(until.titleIs('SWDB - Installation Details'), 10000);
+  });
+
+  test.it('update this inst record 2', function (this: Mocha.ITestCallbackContext) {
+    this.timeout(5000);
+    chromeDriver.wait(until.elementLocated(By.id('updateBtn')),
+      8000).click();
+  });
+
+  test.it('Update2 inst record - set status', () => {
+    // set the status
+    chromeDriver.wait(until.elementLocated(By.id('status')), 3000);
+    let input = chromeDriver.findElement(By.id('status'));
+    input.click();
+    input.sendKeys('Ready for beam');
+
+  });
+
+  test.it('Update inst record - set status date', function (this: Mocha.ITestCallbackContext) {
+    this.timeout(5000);
+    chromeDriver.wait(until.elementLocated(By.id('statusDate')), 3000);
+    let input = chromeDriver.findElement(By.id('statusDate'));
+    input.clear();
+    input.sendKeys('06/15/2018');
+  });
+
+  test.it('Update inst record - set V&V apprval date', function (this: Mocha.ITestCallbackContext) {
+    this.timeout(5000);
+    chromeDriver.wait(until.elementLocated(By.id('vvApprovalDate')), 3000);
+    let input = chromeDriver.findElement(By.id('vvApprovalDate'));
+    input.clear();
+    input.sendKeys('06/15/2018');
+  });
+
+  test.it('Update inst record - set vvResultsLoc', function(this: Mocha.ITestCallbackContext) {
+    this.timeout(5000);
+    // set vvResultsLoc
+    chromeDriver.wait(until.elementLocated(By.id('add.vvResultsLoc')), 3000);
+    let input = chromeDriver.findElement(By.id('add.vvResultsLoc'));
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id('vvResultsLoc.0')), 3000);
+    let input0 = chromeDriver.findElement(By.id('vvResultsLoc.0'));
+    input0.sendKeys('FRIB-T10384-TP-000942-001');
+    input.click();
+    chromeDriver.wait(until.elementLocated(By.id('vvResultsLoc.1')), 3000);
+    let input1 = chromeDriver.findElement(By.id('vvResultsLoc.1'));
+    input1.sendKeys('http://example.com/docs/FRIB-T10384-TP-00942-001.pdf');
+  });
+
+  test.it('Submit "Ready for beam" update',  () => {
     chromeDriver.findElement(By.id('submitBtn')).click();
   });
 
