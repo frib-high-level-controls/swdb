@@ -105,17 +105,18 @@ export function stop(): Promise<void> {
 }
 
 async function doStop(): Promise<void> {
-  try {
-    await status.monitor.stop();
-  } catch (err) {
-    warn('Status monitor stop failure: %s', err);
-  }
 
   // disconnect Mongoose (MongoDB)
   try {
     await mongoose.disconnect();
   } catch (err) {
     warn('Mongoose disconnect failure: %s', err);
+  }
+
+  try {
+    await status.monitor.stop();
+  } catch (err) {
+    warn('Status monitor stop failure: %s', err);
   }
 
   return;
