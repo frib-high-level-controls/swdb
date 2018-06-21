@@ -358,6 +358,7 @@ test.describe('User flow2 tests', () => {
     searchInput.sendKeys('EXTA IOC');
     chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-4-0"]/span')), 5000);
   });
+
   test.it('Add new inst record - click row', function(this: Mocha.ITestCallbackContext) {
     this.timeout(5000);
     let input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-4-0"]/span'));
@@ -730,4 +731,118 @@ test.describe('User flow2 tests', () => {
   test.it('Submit "update software version" request',  () => {
     chromeDriver.findElement(By.id('submitBtn')).click();
   });
+
+  /**
+   * 12. Update installation status as Ready for install
+   */
+
+  test.it('should find the installation record', function(this: Mocha.ITestCallbackContext) {
+    this.timeout(8000);
+    chromeDriver.get(props.webUrl + '#/inst/list');
+    chromeDriver.wait(until.elementLocated(By.id('hostSrch')), 8000)
+      .sendKeys('vmachine01');
+    chromeDriver.wait(until.elementLocated(By.linkText('vmachine01')),
+      8000).click();
+  });
+
+  test.it('should show installation record details', function(this: Mocha.ITestCallbackContext) {
+    this.timeout(8000);
+    chromeDriver.wait(until.titleIs('SWDB - Installation Details'), 5000);
+    chromeDriver.wait(until.elementLocated(By.id('updateBtn')),
+      8000).click();
+  });
+
+  test.it('should show the update title', () => {
+    chromeDriver.wait(until.titleIs('SWDB - Update Installation'), 5000);
+  });
+
+  test.it('Update inst record - set status', () => {
+    chromeDriver.wait(until.elementLocated(By.id('status')), 3000);
+    let input = chromeDriver.findElement(By.id('status'));
+    input.click();
+    input.sendKeys('Ready for install');
+  });
+
+  test.it('Update inst record - set status date', function (this: Mocha.ITestCallbackContext) {
+    this.timeout(5000);
+    chromeDriver.wait(until.elementLocated(By.id('statusDate')), 3000);
+    let input = chromeDriver.findElement(By.id('statusDate'));
+    input.clear();
+    input.sendKeys('06/20/2018');
+  });
+
+  test.it('Update inst record - set vvResultsLoc', function(this: Mocha.ITestCallbackContext) {
+    this.timeout(5000);
+    chromeDriver.wait(until.elementLocated(By.id('rm.vvResultsLoc.1')), 3000);
+    let input1 = chromeDriver.findElement(By.id('rm.vvResultsLoc.1'));
+    input1.click();
+    chromeDriver.wait(until.elementLocated(By.id('rm.vvResultsLoc.0')), 3000);
+    let input0 = chromeDriver.findElement(By.id('rm.vvResultsLoc.0'));
+    input0.click();
+  });
+
+  test.it('Update inst record - software field should be disabled',
+   function(this: Mocha.ITestCallbackContext) {
+    this.timeout(5000);
+    chromeDriver.wait(until.elementLocated(By.id('software')), 3000);
+    let input = chromeDriver.findElement(By.id('software'));
+    chromeDriver.wait(until.elementIsDisabled(input), 3000);
+  });
+
+  /**
+   * 13. Update installation status as Ready for install
+   */
+  test.it('Add new inst record - set software', async function(this: Mocha.ITestCallbackContext) {
+    this.timeout(15000);
+    // set software
+    chromeDriver.wait(until.elementLocated(By.id('software')), 3000);
+    let searchInput = chromeDriver.findElement(By.id('software'));
+    searchInput.click();
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="software"]/input[1]')));
+    searchInput = chromeDriver.findElement(By.xpath('//*[@id="software"]/input[1]'));
+    searchInput.sendKeys('2.3.6');
+    chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-19-0"]/span')), 5000);
+  });
+
+  test.it('Submit "update installation version" request',  () => {
+    chromeDriver.findElement(By.id('submitBtn')).click();
+  });
+
+  test.it('should show the details title', () => {
+    chromeDriver.wait(until.titleIs('SWDB - Installation Details'), 5000);
+  });
+
+  /**
+   * 14. Update installation status as Ready for verification
+   */
+  test.it('should show installation record details', function(this: Mocha.ITestCallbackContext) {
+    this.timeout(8000);
+    chromeDriver.wait(until.titleIs('SWDB - Installation Details'), 5000);
+    chromeDriver.wait(until.elementLocated(By.id('updateBtn')),
+      8000).click();
+  });
+
+  test.it('Update inst record - set status', () => {
+    chromeDriver.wait(until.elementLocated(By.id('status')), 3000);
+    let input = chromeDriver.findElement(By.id('status'));
+    input.click();
+    input.sendKeys('Ready for verification');
+  });
+
+  test.it('Update inst record - set status date', function (this: Mocha.ITestCallbackContext) {
+    this.timeout(5000);
+    chromeDriver.wait(until.elementLocated(By.id('statusDate')), 3000);
+    let input = chromeDriver.findElement(By.id('statusDate'));
+    input.clear();
+    input.sendKeys('06/21/2018');
+  });
+
+  test.it('Submit "update installation version" request',  () => {
+    chromeDriver.findElement(By.id('submitBtn')).click();
+  });
+
+  test.it('should show the details title', () => {
+    chromeDriver.wait(until.titleIs('SWDB - Installation Details'), 5000);
+  });
+
 });
