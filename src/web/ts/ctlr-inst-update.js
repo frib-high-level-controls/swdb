@@ -68,9 +68,7 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
       $scope.formData.area = flattenedAreas;
     }
 
-    $scope.formData.software = $scope.swSelected.item._id;
-
-    // console.log('Got formData: ' + JSON.stringify($scope.formData, null, 2));
+    // console.log('Inst update got formData: ' + JSON.stringify($scope.formData, null, 2));
     // console.log('Got selectedAreas: ' + JSON.stringify($scope.selectedAreas, null, 2));
     if ($scope.inputForm.$valid) {
       delete $scope.formData.__v;
@@ -152,6 +150,11 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
       $scope.softwareMouseover = "";
     }
   }
+
+  $scope.swSelect = function ($item, $model, $label) {
+    $scope.formData.software = $item._id;
+    // console.log("Inst update software is now:"+$scope.formData.software);
+  };
 
   // refresh the service list
   swService.refreshSwList();
