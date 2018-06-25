@@ -67,13 +67,9 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
   };
 
   $scope.processForm = function () {
-    console.log("pre ownerSelected: " + JSON.stringify($scope.ownerSelected, null, 2));
-    console.log("pre engineerSelected: " + JSON.stringify($scope.engineerSelected, null, 2));
     // Prep any selected owner
-    console.log("ownerSelected: " + JSON.stringify($scope.ownerSelected, null, 2));
     $scope.formData.owner = $scope.ownerSelected.item.uid;
     // Prep any selected engineer
-    console.log("engineerSelected: " + JSON.stringify($scope.engineerSelected, null, 2));
     if ($scope.engineerSelected.item) {
       $scope.formData.engineer = $scope.engineerSelected.item.uid;
     }
@@ -98,7 +94,6 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
       function (item) { 
         return $scope.versionControlDisplay === $scope.props.RcsEnum[item];
       });
-    console.log('formData.versionControl on submit: ' + $scope.formData.versionControl);
 
     delete $scope.formData.__v;
     if (!$scope.formData.version) {
@@ -160,12 +155,10 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
   $scope.session = userService.getUser();
   forgUserService.promise.then(function(){
     $scope.forgUsersList = forgUserService.getUsers().data;
-    //console.log("forgUsersList promise updated just now");
   });
 
   forgGroupService.promise.then(function(){
     $scope.forgGroupsList = forgGroupService.getGroups().data;
-    //console.log("forgGroupsList promise updated just now");
   });
 
   $scope.itemArray = $scope.props.validSwNamesGUIList;
@@ -196,7 +189,6 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
   // expect recService to provide ID and formdata
   let updateRec = recService.getRec();
   if (updateRec) {
-    console.log("Found update record, setting defaults: " + JSON.stringify(updateRec,null,2));
     let updateRedID = updateRec.updateRecId;
     $scope.formData.swName = updateRec.formData.swName;
     $scope.formData.desc = updateRec.formData.desc;
@@ -229,14 +221,12 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
       let thisOwner = [$scope.formData.owner];
       let forgObjs = forgGroupService.groupUidsToObjects(thisOwner)[0];
       $scope.ownerSelected.item = forgObjs;
-      console.log("ownerSelected.item now: " + JSON.stringify(forgObjs, null, 2));
     })
     // convert the retreived record engineer
     forgUserService.promise.then(function(){
       let thisEngineer = [$scope.formData.engineer];
       let forgObjs = forgUserService.userUidsToObjects(thisEngineer)[0];
       $scope.engineerSelected.item = forgObjs;
-      console.log("engineerSelected.item now: " + JSON.stringify(forgObjs, null, 2));
     })
   };
 }

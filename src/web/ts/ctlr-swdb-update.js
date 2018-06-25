@@ -75,14 +75,13 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
       $scope.formData.owner = $scope.ownerSelected.item.uid;
     }
     // Prep any selected engineer
-    if ($scope.formData.engineer) {
+    if ($scope.engineerSelected.item.uid) {
       $scope.formData.engineer = $scope.engineerSelected.item.uid;
     }
       delete $scope.formData.__v;
       let url = basePath + "/api/v1/swdb/" + $scope.formData._id;
 
       // update formData lovel of care with enum key
-      // $scope.formData.levelOfCare = $scope.props.LevelOfCareEnum[$scope.levelOfCareDisplay];
       $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).find(
         function (item) {
           return $scope.levelOfCareDisplay === $scope.props.LevelOfCareEnum[item];
@@ -97,7 +96,6 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
         });
       $http({
         method: 'PUT',
-        // url: $scope.props.apiUrl+$scope.formData._id,
         url: url,
         data: $scope.formData,
         headers: { 'Content-Type': 'application/json' }
@@ -138,7 +136,6 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
   };
 
   $scope.onStatusChange = function ($item, $model, $label) {
-    // console.log("status display now " + $scope.statusDisplay);
     if ($scope.statusDisplay === $scope.props.statusLabels[2]) {
       $scope.branchDisabled = true;
       $scope.versionDisabled = true;
@@ -194,7 +191,7 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     $scope.statusDisplay = $scope.props.StatusEnum[$scope.formData.status];
     $scope.versionControlDisplay = $scope.props.RcsEnum[$scope.formData.versionControl];
 
-      // Setup field display based on status
+    // Setup field display based on status
     $scope.onStatusChange();
 
     // make a Date object from this string
@@ -215,7 +212,6 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     // disable status field if there are installations referring to this sw
     instService.promise.then(() => {
       let instsReferring = instService.getInstsBySw($routeParams.itemId);
-      // console.log('instsReferring: ' + JSON.stringify(instsReferring));
       if ((instsReferring.length >= 1) && (instsReferring !== [null])) {
         $scope.statusDisabled = true;
       } else {

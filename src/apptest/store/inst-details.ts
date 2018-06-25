@@ -24,9 +24,9 @@ let supertest: any;
 props = ctools.getConfiguration();
 
 
-test.describe('Installations detail screen tests', function() {
+test.describe('Installations detail screen tests', () => {
   let chromeDriver: any = null;
-  before('Prep DB', async function () {
+  before('Prep DB', async () => {
     app = await server.start();
     supertest = Supertest(app);
     debug('Prep DB');
@@ -34,7 +34,7 @@ test.describe('Installations detail screen tests', function() {
     await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
   });
 
-  after('clear db', async function () {
+  after('clear db', async () => {
     debug('Clear DB');
     // clear the test collection.
     chromeDriver.quit();
@@ -62,7 +62,7 @@ test.describe('Installations detail screen tests', function() {
     .auth(props.test.username, props.test.password)
     .timeout(8000)
     .expect(302)
-    .end(function(err: Error, res: Express.Session){
+    .end((err: Error, res: Express.Session) => {
       if (err) {
         done(err);
       } else {
@@ -93,76 +93,76 @@ test.describe('Installations detail screen tests', function() {
       8000);
   });
 
-  test.it('should show the requested installation record title', function() {
+  test.it('should show the requested installation record title', () => {
     chromeDriver.findElement(By.linkText('host2')).click();
     chromeDriver.wait(until.titleIs('SWDB - Installation Details'), 5000);
   });
 
-  test.it('should show the requested installation record user button', function() {
+  test.it('should show the requested installation record user button', () => {
     chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
       props.test.username.toUpperCase()), 5000);
   });
 
-  test.it('should show the requested installation record host field', function() {
+  test.it('should show the requested installation record host field', () => {
     chromeDriver.wait(until.elementLocated(By.id('host')), 5000);
-    chromeDriver.findElement(By.id('host')).getAttribute('value').then(function(result: String) {
+    chromeDriver.findElement(By.id('host')).getAttribute('value').then((result: String) => {
       expect(result).to.match(/host2/);
     });
   });
 
-  test.it('should show the requested installation record name field', function() {
+  test.it('should show the requested installation record name field', () => {
     chromeDriver.wait(until.elementLocated(By.id('name')), 5000);
-    chromeDriver.findElement(By.id('name')).getAttribute('value').then(function(result: String) {
+    chromeDriver.findElement(By.id('name')).getAttribute('value').then((result: String) => {
       expect(result).to.equal('Installation name2');
     });
   });
 
-  test.it('should show the requested installation record software field', function() {
+  test.it('should show the requested installation record software field', () => {
     chromeDriver.wait(until.elementLocated(By.id('software')), 5000);
-    chromeDriver.findElement(By.id('software')).getAttribute('value').then(function(result: String) {
+    chromeDriver.findElement(By.id('software')).getAttribute('value').then((result: String) => {
       expect(result).to.equal('BEAST / b4 / 0.2');
     });
   });
 
-  test.it('should show the requested installation record area field', function() {
+  test.it('should show the requested installation record area field', () => {
     chromeDriver.wait(until.elementLocated(By.id('area')), 5000);
-    chromeDriver.findElement(By.id('area')).getAttribute('value').then(function(result: String) {
+    chromeDriver.findElement(By.id('area')).getAttribute('value').then((result: String) => {
       expect(result).to.match(/LS1/);
     });
   });
 
-  test.it('should show the requested installation record status field', function() {
+  test.it('should show the requested installation record status field', () => {
     chromeDriver.wait(until.elementLocated(By.id('status')), 5000);
-    chromeDriver.findElement(By.id('status')).getAttribute('value').then(function(result: String) {
+    chromeDriver.findElement(By.id('status')).getAttribute('value').then((result: String) => {
       expect(result).to.match(/Ready for install/);
     });
   });
 
-  test.it('should show the requested installation record status date field', function() {
+  test.it('should show the requested installation record status date field', () => {
     chromeDriver.wait(until.elementLocated(By.id('statusDate')), 5000);
-    chromeDriver.findElement(By.id('statusDate')).getAttribute('value').then(function(result: String) {
+    chromeDriver.findElement(By.id('statusDate')).getAttribute('value').then((result: String) => {
       expect(result).to.match(/9\/21\/2016/);
     });
   });
 
-  test.it('should show the requested installation record vvResults field', function() {
+  test.it('should show the requested installation record vvResults field', () => {
     chromeDriver.wait(until.elementLocated(By.id('vvResultsLoc')), 5000);
-    chromeDriver.findElement(By.id('vvResultsLoc')).getAttribute('value').then(function(result: String) {
+    chromeDriver.findElement(By.id('vvResultsLoc')).getAttribute('value').then((result: String) => {
       expect(result).to.match(/vvResultsLoc2/);
     });
   });
 
-  test.it('should show the requested installation record VV approval date field', function() {
+  test.it('should show the requested installation record VV approval date field', () => {
     chromeDriver.wait(until.elementLocated(By.id('vvApprovalDate')), 5000);
-    chromeDriver.findElement(By.id('vvApprovalDate')).getAttribute('value').then(function(result: String) {
+    chromeDriver.findElement(By.id('vvApprovalDate')).getAttribute('value').then((result: String) => {
       expect(result).to.match(/9\/22\/2016/);
     });
   });
 
-  test.it('should show the requested installation record drrs field', function() {
+  test.it('should show the requested installation record drrs field', () => {
     chromeDriver.wait(until.elementLocated(By.id('drrs')), 5000);
-    chromeDriver.findElement(By.id('drrs')).getAttribute('value').then(function(result: String) {
+    chromeDriver.findElement(By.id('drrs')).getAttribute('value').then((result: String) => {
       expect(result).to.match(/^$/);
     });
   });

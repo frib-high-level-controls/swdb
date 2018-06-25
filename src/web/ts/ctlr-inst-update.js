@@ -68,10 +68,6 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
       $scope.formData.area = flattenedAreas;
     }
 
-    $scope.formData.software = $scope.swSelected.item._id;
-
-    // console.log('Got formData: ' + JSON.stringify($scope.formData, null, 2));
-    // console.log('Got selectedAreas: ' + JSON.stringify($scope.selectedAreas, null, 2));
     if ($scope.inputForm.$valid) {
       delete $scope.formData.__v;
       let url = basePath + "/api/v1/inst/" + $scope.formData._id;
@@ -89,7 +85,6 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
           let headers = response.headers();
           if (headers.location) {
             // if location header is present extract the id
-            // console.log('Got header.location: ' + headers.location);
             let id = headers.location.split('/').pop();
             $location.path('/inst/details/' + id);
           }
@@ -142,16 +137,20 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
   };
 
   $scope.onStatusChange = function ($item, $model, $label) {
-    if ($scope.statusDisplay !== $scope.props.InstStatusEnum['RDY_INST']) {
-      $scope.softwareDisabled = true;
-      $scope.softwareMouseover = "Software can only change when status is '" + 
-        $scope.props.instStatusLabels[0] + "'";
-    }
-    else {
-      $scope.softwareDisabled = false;
-      $scope.softwareMouseover = "";
-    }
+    // if ($scope.statusDisplay !== $scope.props.InstStatusEnum['RDY_INST']) {
+    //   $scope.softwareDisabled = true;
+    //   $scope.softwareMouseover = "Software can only change when status is '" + 
+    //     $scope.props.instStatusLabels[0] + "'";
+    // }
+    // else {
+    //   $scope.softwareDisabled = false;
+    //   $scope.softwareMouseover = "";
+    // }
   }
+
+  $scope.swSelect = function ($item, $model, $label) {
+    $scope.formData.software = $item._id;
+  };
 
   // refresh the service list
   swService.refreshSwList();
@@ -189,8 +188,13 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     // set enum values from keys
     $scope.statusDisplay = $scope.props.InstStatusEnum[data.status];
 
-    // set software field diable based on the given status
-    $scope.onStatusChange();
+    // set software field disable based on the given status
+    if ($scope.statusDisplay !== $scope.props.InstStatusEnum['RDY_INST']) {
+      $scope.softwareDisabled = true;
+      $scope.softwareMouseover = "Software can only change when the record status is '" + 
+        $scope.props.instStatusLabels[0] + "'";
+    }
+    //$scope.onStatusChange();
 
     $scope.whichItem = $routeParams.itemId;
     // convert the retreived record areas

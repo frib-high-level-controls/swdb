@@ -91,7 +91,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     $scope.formData.area = flattenedAreas;
 
     $scope.formData.software = $scope.swSelected.item._id;
-    console.log('Got formData: ' + JSON.stringify($scope.formData, null, 2));
+    // console.log('Got formData: ' + JSON.stringify($scope.formData, null, 2));
     // console.log('Got areasSelected: ' + JSON.stringify($scope.areasSelected, null, 2));
 
     if ($scope.inputForm.$valid) {
@@ -168,7 +168,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
       // filter for software that is in the "Ready for Install" state
       return item.status === 'RDY_INST';
     });
-    console.log("inst-new: swList is now "+JSON.stringify($scope.swList));
+    // console.log("inst-new: swList is now "+JSON.stringify($scope.swList));
   };
 
   $scope.props = configService.getConfig();
