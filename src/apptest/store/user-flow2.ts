@@ -813,7 +813,10 @@ test.describe('User flow2 tests', () => {
         this.timeout(5000);
         chromeDriver.wait(until.elementLocated(By.id('software')), 3000);
         let input = chromeDriver.findElement(By.id('software'));
-        chromeDriver.wait(until.elementIsDisabled(input), 3000);
+        input.getAttribute('disabled').then(
+          (text) => {
+            expect(text).to.equal('true');
+          });
       });
 
     test.it('Submit "update installation version" request', () => {
