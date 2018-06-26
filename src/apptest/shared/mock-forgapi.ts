@@ -107,7 +107,7 @@ export class MockClient implements forgapi.IClient {
         users.push({
           uid: user.uid,
           fullname: user.fullname,
-          role: auth.formatRole('USR', user.uid),
+          role: auth.formatRole(auth.RoleScheme.USR, user.uid),
         });
       }
     }
@@ -193,7 +193,7 @@ export class MockClient implements forgapi.IClient {
           fullname: group.fullname,
           source: group.source,
           type: group.type,
-          role: auth.formatRole('GRP', group.uid),
+          role: auth.formatRole(auth.RoleScheme.GRP, group.uid),
         });
       }
     }

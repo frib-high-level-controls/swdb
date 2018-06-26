@@ -89,14 +89,16 @@ describe('Auth Library', () => {
 
     it('Format Role: GRP:LAB.EXAMPLE.TEAM', () => {
       const expected = 'GRP:LAB.EXAMPLE.TEAM';
-      assert.deepEqual(auth.formatRole('GRP', 'lab.example.team'), expected);
-      assert.deepEqual(auth.formatRole({ scheme: 'GRP', identifier: 'lab.example.team' }), expected);
+      const role = { scheme: auth.RoleScheme.GRP, identifier: 'lab.example.team' };
+      assert.deepEqual(auth.formatRole(role.scheme, role.identifier), expected);
+      assert.deepEqual(auth.formatRole(role), expected);
     });
 
     it('Format Role: GRP:LAB.EXAMPLE.TEAM#LEADER', () => {
       const expected = 'GRP:LAB.EXAMPLE.TEAM#LEADER';
-      assert.deepEqual(auth.formatRole('GRP', 'lab.example.team', 'leader'), expected);
-      assert.deepEqual(auth.formatRole({scheme: 'GRP', identifier: 'lab.example.team', qualifier: 'leader'}), expected);
+      const role = { scheme: auth.RoleScheme.GRP, identifier: 'lab.example.team', qualifier: 'leader' };
+      assert.deepEqual(auth.formatRole(role.scheme, role.identifier, role.qualifier), expected);
+      assert.deepEqual(auth.formatRole(role), expected);
     });
   });
 

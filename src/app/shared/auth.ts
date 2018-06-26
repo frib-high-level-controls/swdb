@@ -286,13 +286,27 @@ export function ensureHasAnyRole(...roles: Array<string | string[]>): RequestHan
 }
 
 
-type RoleScheme = 'USR' | 'GRP' | 'VAR' | 'SYS' | 'ADM';
+export enum RoleScheme {
+  USR = 'USR',
+  GRP = 'GRP',
+  VAR = 'VAR',
+  ADM = 'ADM',
+  SYS = 'SYS',
+}
 
-interface RoleComponents {
+export interface RoleComponents {
   scheme: RoleScheme;
   identifier: string;
   qualifier?: string;
 }
+
+export const ROLE_SCHEMES = [
+  RoleScheme.USR,
+  RoleScheme.GRP,
+  RoleScheme.VAR,
+  RoleScheme.ADM,
+  RoleScheme.SYS,
+];
 
 export function equalRole(role1: string, role2: string): boolean {
   if (!role1 || !role2) {
@@ -303,16 +317,18 @@ export function equalRole(role1: string, role2: string): boolean {
 
 export function parseRole(role: string): RoleComponents | undefined {
   const uri = URI.parse(role);
-  const scheme = uri.scheme ? uri.scheme.toUpperCase() : '';
-  switch (scheme) {
-    case 'USR':
-    case 'GRP':
-    case 'VAR':
-    case 'SYS':
-    case 'ADM':
-       break;
-    default:
-      return;
+  let scheme: RoleScheme | undefined;
+  if (uri.scheme) {
+    uri.scheme = uri.scheme.toUpperCase();
+    for (const s of ROLE_SCHEMES) {
+      if (s === uri.scheme) {
+        scheme = s;
+        break;
+      }
+    }
+  }
+  if (!scheme) {
+    return;
   }
   return {
     scheme: scheme,
