@@ -174,7 +174,15 @@ export class Db {
               if (prop === '_id') {
                 continue;
               }
-              doc[prop] = req.body[prop];
+              // watch for incoming deletes
+              if (req.body[prop] === '') {
+                if (doc[prop]) {
+                  doc[prop] = undefined;
+                }
+                continue;
+              } else {
+                doc[prop] = req.body[prop];
+              }
             }
           }
           try {

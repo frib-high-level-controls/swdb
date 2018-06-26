@@ -416,11 +416,8 @@ export class SwdbLib {
         isString: {
           errorMessage: 'Version must be a string.',
         },
-        isAscii: {
-          errorMessage: 'Version must be ASCII characters.',
-        },
         isLength: {
-          options: [{ min: 1, max: 30 }],
+          options: [{ min: 0, max: 30 }],
           errorMessage: 'Version must be 1-30 characters.',
         },
       },
@@ -429,11 +426,8 @@ export class SwdbLib {
         isString: {
           errorMessage: 'Branch must be a string.',
         },
-        isAscii: {
-          errorMessage: 'Branch must be ASCII characters.',
-        },
         isLength: {
-          options: [{ min: 1, max: 30 }],
+          options: [{ min: 0, max: 30 }],
           errorMessage: 'Branch must be 1-30 characters.',
         },
       },
@@ -442,16 +436,13 @@ export class SwdbLib {
         isString: {
           errorMessage: 'Description must be a string',
         },
-        isAscii: {
-          errorMessage: 'Description must be ASCII characters',
-        },
         isLength: {
-          options: [{ min: 1, max: 2048 }],
+          options: [{ min: 0, max: 2048 }],
           errorMessage: 'Description must be 0-2048 characters',
         },
       },
       owner: {
-        optional: true,
+        optional: false,
         isString: {
           errorMessage: 'Owner must be a string.',
         },
@@ -468,11 +459,8 @@ export class SwdbLib {
         isString: {
           errorMessage: 'Engineer must be a string.',
         },
-        isAscii: {
-          errorMessage: 'Engineer must be ASCII characters.',
-        },
         isLength: {
-          options: [{ min: 2, max: 30 }],
+          options: [{ min: 0, max: 30 }],
           errorMessage: 'Engineer must be 2-30 characters.',
         },
       },
@@ -501,11 +489,8 @@ export class SwdbLib {
         isString: {
           errorMessage: 'Platforms must be a string.',
         },
-        isAscii: {
-          errorMessage: 'Platforms must be ASCII characters.',
-        },
         isLength: {
-          options: [{ min: 4, max: 30 }],
+          options: [{ min: 0, max: 30 }],
           errorMessage: 'Platforms must be 4-30 characters.',
         },
       },
@@ -572,7 +557,7 @@ export class SwdbLib {
         },
       },
     });
-  };
+  }
 
   public static updateSanitization = (req: express.Request) => {
     return;

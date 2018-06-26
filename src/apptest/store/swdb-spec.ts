@@ -1616,13 +1616,9 @@ describe('app', function() {
       {type: 'PUT', req: {msg: {statusDate: 'non-date'}, url: '/api/v1/swdb/',
       err: {status: 400, msgHas: '{"param":"statusDate","msg":"Status date must be a date.","value":"non-date"}'}}},
       // test update version min, max
-      {type: 'PUT', req: {msg: {version: ''}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas: '"param":"version","msg":"Version must be 1-30 characters."'}}},
       {type: 'PUT', req: {msg: {version: '0123456789012345678901234567890'}, url: '/api/v1/swdb/',
       err: {status: 400, msgHas: '"param":"version","msg":"Version must be 1-30 characters."'}}},
       // test update platforms min, max
-      {type: 'PUT', req: {msg: {platforms: 'NEW'}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas: '"param":"platforms","msg":"Platforms must be 4-30 characters."'}}},
       {type: 'PUT', req: {msg: {platforms: '0123456789012345678901234567890'}, url: '/api/v1/swdb/',
       err: {status: 400, msgHas: '"param":"platforms","msg":"Platforms must be 4-30 characters."'}}},
       // test update versionControl min, max
