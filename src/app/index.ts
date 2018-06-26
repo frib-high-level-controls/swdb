@@ -145,6 +145,7 @@ async function doStart(): Promise<express.Application> {
   });
 
   const env: {} | undefined = app.get('env');
+  info('Deployment environment: \'%s\'', env);
 
   const cfg: Config = {
     app: {
