@@ -70,14 +70,15 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
 
   $scope.processForm = function () {
     if ($scope.inputForm.$valid) {
-    // Prep any selected owner
-    if ($scope.formData.owner) {
-      $scope.formData.owner = $scope.ownerSelected.item.uid;
-    }
-    // Prep any selected engineer
-    if ($scope.engineerSelected.item.uid) {
-      $scope.formData.engineer = $scope.engineerSelected.item.uid;
-    }
+      // Prep any selected owner
+      if ($scope.formData.owner) {
+        $scope.formData.owner = $scope.ownerSelected.item.uid;
+      }
+
+      // Prep any selected engineer
+      if ($scope.engineerSelected && $scope.engineerSelected.item && $scope.engineerSelected.item.uid) {
+        $scope.formData.engineer = $scope.engineerSelected.item.uid;
+      }
       delete $scope.formData.__v;
       let url = basePath + "/api/v1/swdb/" + $scope.formData._id;
 
