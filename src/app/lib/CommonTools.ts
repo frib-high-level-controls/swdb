@@ -9,6 +9,7 @@ import dbg = require('debug');
 const debug = dbg('swdb:CommonTools');
 
 export class CommonTools {
+  public static mockForgLoaded: Boolean;
   private static props: IProps;
 
   public constructor() {

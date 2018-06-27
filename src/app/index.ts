@@ -270,14 +270,16 @@ async function doStart(): Promise<express.Application> {
   // check whether we are testing and set the auth
   if (props.test.testing === 'true') {
     debug('TEST mode is active!');
-    let gdata: forgapi.Group[] = ctools.getForgGroupsTestFile();
     const forgClient = mockforgapi.MockClient.getInstance();
-    // debug('loading mock forg groups for with: ' + JSON.stringify(gdata, null, 2));
-    forgClient.addGroup(gdata);
-    let udata: forgapi.User[] = ctools.getForgUsersTestFile();
-    // debug('loading mock forg users for with: ' + JSON.stringify(udata, null, 2));
-    forgClient.addUser(udata);
-
+    if (!CommonTools.CommonTools.mockForgLoaded) {
+      let gdata: forgapi.Group[] = ctools.getForgGroupsTestFile();
+      // debug('loading mock forg groups for with: ' + JSON.stringify(gdata, null, 2));
+      forgClient.addGroup(gdata);
+      let udata: forgapi.User[] = ctools.getForgUsersTestFile();
+      // debug('loading mock forg users for with: ' + JSON.stringify(udata, null, 2));
+      forgClient.addUser(udata);
+      CommonTools.CommonTools.mockForgLoaded = true;
+    }
     cfAuthProvider = new cfauth.DevForgBasicProvider(forgClient, {});
   } else {
     debug('Normal authentication mode is active!');
@@ -323,7 +325,7 @@ async function doStart(): Promise<express.Application> {
 
   if (env === 'production') {
     app.use(morgan('short'));
-  } else {
+  } else if (props.test.testing !== 'true') {
     app.use(morgan('dev'));
   }
 
