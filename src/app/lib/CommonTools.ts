@@ -34,19 +34,19 @@ export class CommonTools {
       // Add the enum labels
       // Go through the enums and filter names for the select labels
       rcw.levelOfCareKeys = Object.keys(LevelOfCareEnum);
-      rcw.levelOfCareLabels = rcw.levelOfCareKeys.map(function (item: number) {
+      rcw.levelOfCareLabels = rcw.levelOfCareKeys.map((item: number) => {
         return LevelOfCareEnum[item];
       });
       rcw.statusKeys = Object.keys(StatusEnum);
-      rcw.statusLabels = rcw.statusKeys.map(function (item: number) {
+      rcw.statusLabels = rcw.statusKeys.map((item: number) => {
         return StatusEnum[item];
       });
       rcw.instStatusKeys = Object.keys(InstStatusEnum);
-      rcw.instStatusLabels = rcw.instStatusKeys.map(function (item: number) {
+      rcw.instStatusLabels = rcw.instStatusKeys.map((item: number) => {
         return InstStatusEnum[item];
       });
       rcw.rcsKeys = Object.keys(RcsEnum);
-      rcw.rcsLabels = rcw.rcsKeys.map(function (item: number) {
+      rcw.rcsLabels = rcw.rcsKeys.map((item: number) => {
         return RcsEnum[item];
       });
 

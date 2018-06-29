@@ -123,7 +123,7 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
         }, function error(response) {
           let headers = response.headers();
           $scope.swdbParams.error = { message: response.statusText + response.data, status: response.status };
-          $scope.swdbParams.formErr = "Error: " + $scope.swdbParams.error.message + "(" + response.status + ")";
+          $scope.swdbParams.formErr = "Error: " + JSON.stringify($scope.swdbParams.error.message) + "(" + response.status + ")";
           $scope.swdbParams.formShowStatus = false;
           $scope.swdbParams.formShowErr = true;
         });
