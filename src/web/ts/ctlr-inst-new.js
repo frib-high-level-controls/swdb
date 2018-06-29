@@ -115,7 +115,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
             $location.path('/inst/details/' + id);
           }
         }, function error(response) {
-          $scope.swdbParams.error = { message: response.statusText + response.data, status: response.status };
+          $scope.swdbParams.error = { message: response.statusText + JSON.stringify(response.data), status: response.status };
           $scope.swdbParams.formErr = "Error: " + $scope.swdbParams.error.message + "(" + response.status + ")";
           $scope.swdbParams.formShowStatus = false;
           $scope.swdbParams.formShowErr = true;
