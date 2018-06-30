@@ -73,6 +73,17 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     return method;
   }());
 
+  $scope.formErrors = function (form){
+    var errors = [];
+    for(var key in form.$error){
+      errors.push(key + "=" + form.$error);
+    }
+    if(errors.length > 0){
+      console.log("Form Has Errors");
+      console.log(form.$error);
+    }
+  };
+
 
   $scope.processForm = function () {
     delete $scope.formData.__v;
@@ -84,7 +95,6 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
         return $scope.statusDisplay === $scope.props.InstStatusEnum[item];
       });
 
-    // Prep any selected areas
     let flattenedAreas = $scope.areasSelected.map(function(item, idx, array) {
       return item.uid;
     });
@@ -115,13 +125,12 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
             $location.path('/inst/details/' + id);
           }
         }, function error(response) {
-          $scope.swdbParams.error = { message: response.statusText + JSON.stringify(response.data), status: response.status };
-          $scope.swdbParams.formErr = "Error: " + $scope.swdbParams.error.message + "(" + response.status + ")";
+          $scope.swdbParams.formErr = "Error: " + response.data.message + "(" + response.status + ")";
           $scope.swdbParams.formShowStatus = false;
           $scope.swdbParams.formShowErr = true;
         });
     } else {
-      $scope.swdbParams.formErr = "Error: clear errors before submission";
+      $scope.swdbParams.formErr = "Error: clear errors before submission"; 
       $scope.swdbParams.formShowStatus = false;
       $scope.swdbParams.formShowErr = true;
     }
@@ -205,4 +214,5 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
   $scope.slotsSelected = [];
   $scope.areasSelected = [];
   $scope.swSelected = {item: {}};
+
 }
