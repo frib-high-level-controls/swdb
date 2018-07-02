@@ -35,7 +35,6 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     method.open = function ($event, instance) {
       $event.preventDefault();
       $event.stopPropagation();
-
       method.instances[instance] = true;
     };
 
@@ -97,13 +96,11 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
 
     delete $scope.formData.__v;
     if (!$scope.formData.version) {
-      // $scope.formData.version="";
     }
     if ($scope.inputForm.$valid) {
       let url = basePath + "/api/v1/swdb";
       $http({
         method: 'POST',
-        // url: $scope.props.apiUrl,
         url: url,
         data: $scope.formData,
         headers: { 'Content-Type': 'application/json' }
@@ -121,9 +118,7 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
             $location.path('/details/' + id);
           }
         }, function error(response) {
-          let headers = response.headers();
-          $scope.swdbParams.error = { message: response.statusText + response.data, status: response.status };
-          $scope.swdbParams.formErr = "Error: " + JSON.stringify($scope.swdbParams.error.message) + "(" + response.status + ")";
+          $scope.swdbParams.formErr = "Error: " + response.data.message + "(" + response.status + ")";
           $scope.swdbParams.formShowStatus = false;
           $scope.swdbParams.formShowErr = true;
         });
@@ -193,9 +188,7 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     $scope.formData.swName = updateRec.formData.swName;
     $scope.formData.desc = updateRec.formData.desc;
     $scope.formData.owner = updateRec.formData.owner;
-    // $scope.ownerSelected = updateRec.formData.owner;
     $scope.formData.engineer = updateRec.formData.engineer;
-    // $scope.engineerSelected = updateRec.formData.engineer;
 
     $scope.formData.levelOfCare = updateRec.formData.levelOfCare;
     $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[updateRec.formData.levelOfCare];
