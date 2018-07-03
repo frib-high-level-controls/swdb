@@ -953,4 +953,138 @@ test.describe('Software update screen tests', () => {
         'New Test Description2'), 3000);
     });
   });
+
+  test.describe('11. should clear all optional fields', () => {
+    test.it('should find new record', function (this: Mocha.ITestCallbackContext) {
+      this.timeout(8000);
+      chromeDriver.get(props.webUrl + '#/list');
+      chromeDriver.wait(until.elementLocated(By.id('swNameSrch')), 8000)
+        .sendKeys('Record3');
+      chromeDriver.wait(until.elementLocated(By.id('versionSrch')), 8000)
+        .sendKeys('Test version');
+      chromeDriver.wait(until.elementLocated(By.linkText('Test Record3')),
+        8000);
+    });
+    // find the created record and click update
+    test.it('should show record details', function (this: Mocha.ITestCallbackContext) {
+      this.timeout(8000);
+      chromeDriver.wait(until.elementLocated(By.linkText('Test Record3')),
+        8000).click();
+      chromeDriver.wait(until.titleIs('SWDB - Details'), 5000);
+      chromeDriver.wait(until.elementLocated(By.id('updateBtn')),
+        8000).click();
+    });
+    test.it('should show the update title', () => {
+      chromeDriver.wait(until.titleIs('SWDB - Update'), 5000);
+    });
+
+    test.it('should clear the description field', function (this: Mocha.ITestCallbackContext) {
+      this.timeout(20000);
+      chromeDriver.wait(until.elementLocated(By.id('desc')), 8000)
+        .clear();
+    });
+    test.it('should clear the branch field', function (this: Mocha.ITestCallbackContext) {
+      this.timeout(20000);
+      chromeDriver.wait(until.elementLocated(By.id('branch')), 8000)
+        .clear();
+    });
+    test.it('should clear the version field', function (this: Mocha.ITestCallbackContext) {
+      this.timeout(20000);
+      chromeDriver.wait(until.elementLocated(By.id('version')), 8000)
+        .clear();
+    });
+    test.it('should clear the engineer field', function (this: Mocha.ITestCallbackContext) {
+      this.timeout(20000);
+      chromeDriver.wait(until.elementLocated(By.id('engineer')), 8000)
+        .clear();
+    });
+    test.it('should clear the platforms field', function (this: Mocha.ITestCallbackContext) {
+      this.timeout(20000);
+      chromeDriver.wait(until.elementLocated(By.id('platforms')), 8000)
+        .clear();
+    });
+    test.it('should clear the design desc doc field', function (this: Mocha.ITestCallbackContext) {
+      this.timeout(20000);
+      chromeDriver.wait(until.elementLocated(By.id('designDescDocLoc')), 8000)
+        .clear();
+    });
+    test.it('should clear the desc doc field', function (this: Mocha.ITestCallbackContext) {
+      this.timeout(20000);
+      chromeDriver.wait(until.elementLocated(By.id('descDocLoc')), 8000)
+        .clear();
+    });
+    test.it('should clear the V&V procedure location field', function (this: Mocha.ITestCallbackContext) {
+      this.timeout(20000);
+      chromeDriver.findElement(By.id('rm.vvProcLoc.1')).click();
+      chromeDriver.findElement(By.id('rm.vvProcLoc.0')).click();
+    });
+    test.it('should clear the V&V results location field', function (this: Mocha.ITestCallbackContext) {
+      this.timeout(20000);
+      chromeDriver.findElement(By.id('rm.vvResultsLoc.1')).click();
+      chromeDriver.findElement(By.id('rm.vvResultsLoc.0')).click();
+    });
+    test.it('should clear the version control field', function (this: Mocha.ITestCallbackContext) {
+      this.timeout(20000);
+      chromeDriver.wait(until.elementLocated(By.id('versionControl')), 8000)
+        .clear();
+    });
+    test.it('should clear the version control location field', function (this: Mocha.ITestCallbackContext) {
+      this.timeout(20000);
+      chromeDriver.wait(until.elementLocated(By.id('versionControlLoc')), 8000)
+        .clear();
+    });
+    test.it('Submit', () => {
+      chromeDriver.findElement(By.id('submitBtn')).click();
+    });
+    test.it('should show the update title', () => {
+      chromeDriver.wait(until.titleIs('SWDB - Details'), 5000);
+    });
+    test.it('should show the correct description in details', () => {
+      chromeDriver.wait(until.elementLocated(By.id('desc')), 3000);
+      chromeDriver.findElement(By.id('desc')).getAttribute('value').then(
+        (text) => {
+          expect(text).to.equal('');
+        });
+      chromeDriver.findElement(By.id('branch')).getAttribute('value').then(
+        (text) => {
+          expect(text).to.equal('');
+        });
+      chromeDriver.findElement(By.id('version')).getAttribute('value').then(
+        (text) => {
+          expect(text).to.equal('');
+        });
+      chromeDriver.findElement(By.id('engineer')).getAttribute('value').then(
+        (text) => {
+          expect(text).to.equal('');
+        });
+      chromeDriver.findElement(By.id('platforms')).getAttribute('value').then(
+        (text) => {
+          expect(text).to.equal('');
+        });
+      chromeDriver.findElement(By.id('designDescDocLoc')).getAttribute('value').then(
+        (text) => {
+          expect(text).to.equal('');
+        });
+      chromeDriver.findElement(By.id('descDocLoc')).getAttribute('value').then(
+        (text) => {
+          expect(text).to.equal('');
+        });
+      chromeDriver.findElement(By.id('vvProcLoc')).getAttribute('value').then(
+        (text) => {
+          expect(text).to.equal('');
+        });
+      chromeDriver.findElement(By.id('vvResultsLoc')).getAttribute('value').then(
+        (text) => {
+          expect(text).to.equal('');
+        });
+      chromeDriver.findElement(By.id('versionControl')).getAttribute('value').then(
+        (text) => {
+          expect(text).to.equal('');
+        });
+      chromeDriver.findElement(By.id('versionControlLoc')).getAttribute('value').then(
+        (text) => {
+          expect(text).to.equal('');
+        });
+    });
+  });
 });
