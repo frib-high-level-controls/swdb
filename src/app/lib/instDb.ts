@@ -227,7 +227,7 @@ export class InstDb {
   };
 }
 
-interface IInstModel extends history.IHistory {
+export interface IInstModel extends history.IHistory {
   [key: string]: any;
 
   host: string;
