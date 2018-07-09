@@ -174,9 +174,10 @@ export class CustomValidators {
         if ((('version' in req.body) || ('branch' in req.body)) &&
          ((req.body.version !== queryPromise.version) || (req.body.branch !== queryPromise.branch))) {
           // debug('swUpdateWorkflowValidation version and/or branch changed');
+          let status = 'RDY_INST';
           return {
             error: true,
-            data: 'Version and branch cannot change in state ' + props.StatusEnum['RDY_INST'],
+            data: 'Version and branch cannot change in state ' + props.StatusEnum[status],
           };
         }
         return {
