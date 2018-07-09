@@ -93,21 +93,37 @@ export class InstDb {
   }
 
   public getDocs = function(req: express.Request, res: express.Response, next: express.NextFunction) {
+    // Convert DB Model to Web API
+    function toAPI(doc: IInstModel): webapi.Inst {
+      return {
+        id: String(doc._id),
+        host: doc.host,
+        name: doc.name,
+        area: doc.area,
+        slots: doc.slots,
+        status: doc.status,
+        statusDate: doc.statusDate.toISOString(),
+        software: doc.software,
+        vvResultsLoc: doc.vvResultsLoc,
+        vvApprovalDate: doc.vvApprovalDate ? doc.vvApprovalDate.toISOString() : undefined,
+        drrs: doc.drrs ? doc.drrs.toISOString() : undefined,
+      };
+    }
     const id = req.params.id;
     if (!id) {
       // return all
-      InstDb.instDoc.find({}, function(err: Error, docs: mongoose.Document[]) {
+      InstDb.instDoc.find({}, function(err: Error, docs: IInstModel[]) {
         if (!err) {
-          res.send(docs);
+          res.json(docs.map(toAPI));
         } else {
           next(err);
         }
       });
     } else {
       // return specified item`
-      InstDb.instDoc.findOne({ _id: id }, function(err: Error, docs: mongoose.Document[]) {
+      InstDb.instDoc.findOne({ _id: id }, function(err: Error, docs: IInstModel) {
         if (!err) {
-          res.send(docs);
+          res.send(toAPI(docs));
         } else {
           next(err);
         }

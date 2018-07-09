@@ -1,8 +1,6 @@
 /*
  * This is the Angular details controller for installations
  */
-import { IPromise } from 'angular';
-import { IInstModel } from '../../app/lib/instDb';
 
 interface IInstDetailsControllerScope extends ng.IScope {
   session: {
@@ -11,8 +9,8 @@ interface IInstDetailsControllerScope extends ng.IScope {
   props: IConfigProps;
   swMeta: SWMeta;
   usrBtnTxt?: string;
-  formData: IInstModel;
-  swSelected: IInstModel;
+  formData: webapi.Inst;
+  swSelected: webapi.Inst;
   statusDisplay: string | undefined;
   statusDateDisplay: string;
   vvApprovalDateDisplay: string;
@@ -26,13 +24,13 @@ interface IRouteParams extends ng.route.IRouteParamsService {
 }
 
 interface IInstService {
-  refreshInstList(): IPromise<void>;
-  getInstById(id: string): IInstModel;
+  refreshInstList(): ng.IPromise<void>;
+  getInstById(id: string): webapi.Inst;
 }
 
 interface ISwService {
-  promise: IPromise<void>;
-  swIdsToObjects(id: string): IInstModel;
+  promise: ng.IPromise<void>;
+  swIdsToObjects(id: string): webapi.Inst;
 }
 
 appController.controller('InstDetailsController', InstDetailsPromiseCtrl);
