@@ -85,6 +85,12 @@ export let info = logging.info;
 export let warn = logging.warn;
 export let error = logging.error;
 
+if (process.env.NODE_ENV === 'test') {
+  info = () => { return; };
+  warn = () => { return; };
+  error = () => { return; };
+}
+
 // application lifecycle
 const task = new tasks.StandardTask<express.Application>(doStart, doStop);
 
@@ -266,9 +272,9 @@ async function doStart(): Promise<express.Application> {
   });
 
   // Authentication handlers
-  let cfAuthProvider: any;
+  let cfAuthProvider: auth.IProvider;
   // check whether we are testing and set the auth
-  if (props.test.testing === 'true') {
+  if (env !== 'production' && (props.test.testing === 'true' || process.env.WEBAPP_AUTHC_DISABLED === 'true')) {
     debug('TEST mode is active!');
     let gdata: forgapi.Group[] = ctools.getForgGroupsTestFile();
     const forgClient = mockforgapi.MockClient.getInstance();
