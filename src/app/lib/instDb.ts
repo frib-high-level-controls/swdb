@@ -7,6 +7,7 @@ import * as history from '../shared/history';
 
 import CommonTools = require('./CommonTools');
 import dbg = require('debug');
+
 const debug = dbg('swdb:instDb');
 
 export class InstDb {
@@ -91,10 +92,9 @@ export class InstDb {
         debug('Error creating installation ' + doc._id + ': ' + err);
     }
   }
-
   public getDocs = function(req: express.Request, res: express.Response, next: express.NextFunction) {
     // Convert DB Model to Web API
-    function toAPI(doc: IInstModel): webapi.Inst {
+    function toAPI(doc: IInstModel): webapi.Inst{
       return {
         id: String(doc._id),
         host: doc.host,
@@ -243,7 +243,7 @@ export class InstDb {
   };
 }
 
-export interface IInstModel extends history.IHistory {
+interface IInstModel extends history.IHistory {
   [key: string]: any;
 
   host: string;

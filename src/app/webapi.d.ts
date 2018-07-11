@@ -47,4 +47,26 @@ declare namespace webapi {
     vvApprovalDate?: string;
     drrs?: string;
   }
+
+  export interface ISwdb {
+    id: string;
+    swName: string;
+    version?: string;
+    branch?: string;
+    desc?: string;
+    owner: string;
+    engineer?: string;
+    levelOfCare: string;
+    status: string;
+    statusDate: string;
+    platforms?: string;
+    designDescDocLoc?: string;
+    descDocLoc?: string;
+    vvProcLoc?: [string];
+    vvResultsLoc?: string;
+    versionControl?: string;
+    versionControlLoc?: string;
+    previous?: string;
+    comment?: string;
+  }
 }

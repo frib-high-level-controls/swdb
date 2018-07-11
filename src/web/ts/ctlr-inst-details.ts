@@ -10,7 +10,7 @@ interface IInstDetailsControllerScope extends ng.IScope {
   swMeta: SWMeta;
   usrBtnTxt?: string;
   formData: webapi.Inst;
-  swSelected: webapi.Inst;
+  swSelected: webapi.ISwdb;
   statusDisplay: string | undefined;
   statusDateDisplay: string;
   vvApprovalDateDisplay: string;
@@ -30,7 +30,7 @@ interface IInstService {
 
 interface ISwService {
   promise: ng.IPromise<void>;
-  swIdsToObjects(id: string): webapi.Inst;
+  swIdsToObjects(id: string): webapi.ISwdb;
 }
 
 appController.controller('InstDetailsController', InstDetailsPromiseCtrl);
@@ -65,8 +65,8 @@ function InstDetailsPromiseCtrl(
 
   $scope.updateBtnClk =  () => {
     // set the sw back to the id
-    $scope.formData.software = $scope.swSelected.item._id;
-    $location.path('/inst/update/' + $scope.formData._id);
+    $scope.formData.software = $scope.swSelected.id;
+    $location.path('/inst/update/' + $scope.formData.id);
   };
 
   $scope.props = configService.getConfig();
@@ -78,14 +78,14 @@ function InstDetailsPromiseCtrl(
     $scope.statusDisplay = $scope.props.InstStatusEnum[data.status];
     // format dates for display
     if (data.statusDate) {
-      let thisDate: Date = new Date(data.statusDate.getVarDate());
+      let thisDate: Date = new Date(data.statusDate);
       let month = thisDate.getMonth() + 1;
       let day = thisDate.getDate();
       let year = thisDate.getFullYear();
       $scope.statusDateDisplay =  month + '/' + day + '/' + year;
     }
     if (data.vvApprovalDate) {
-      let thisDate = new Date(data.vvApprovalDate.getVarDate());
+      let thisDate = new Date(data.vvApprovalDate);
       let month = thisDate.getMonth() + 1;
       let day = thisDate.getDate();
       let year = thisDate.getFullYear();
@@ -96,18 +96,18 @@ function InstDetailsPromiseCtrl(
     swService.promise.then(() => {
       let obj = swService.swIdsToObjects($scope.formData.software);
       $scope.swSelected =  obj;
-      if (typeof $scope.swSelected.item.branch === 'undefined') {
-        $scope.swSelected.item.branch = '';
+      if (typeof $scope.swSelected.branch === 'undefined') {
+        $scope.swSelected.branch = '';
       }
-      if (typeof $scope.swSelected.item.version === 'undefined') {
-        $scope.swSelected.item.version = '';
+      if (typeof $scope.swSelected.version === 'undefined') {
+        $scope.swSelected.version = '';
       }
 
-      let software = $scope.swSelected.item.swName;
-      if ($scope.swSelected.item.branch) {
-        software += ' / ' + $scope.swSelected.item.branch + ' / ' + $scope.swSelected.item.version;
+      let software = $scope.swSelected.swName;
+      if ($scope.swSelected.branch) {
+        software += ' / ' + $scope.swSelected.branch + ' / ' + $scope.swSelected.version;
       } else {
-        software += ' / / ' + $scope.swSelected.item.version;
+        software += ' / / ' + $scope.swSelected.version;
       }
       $scope.formData.software = software;
     });
