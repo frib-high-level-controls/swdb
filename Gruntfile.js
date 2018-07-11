@@ -53,7 +53,7 @@ module.exports = function(grunt) {
   grunt.registerTask('save_version_file', 'Save version information to app/verison.json', function () {
     var pkg = grunt.file.readJSON('package.json');
     var gitCommitCmd = {cmd:'git', args:['rev-parse', 'HEAD']};
-    var gitVersionCmd = {cmd:'git', args:['describe', '--long', '--always', '--dirty']};
+    var gitVersionCmd = {cmd:'git', args:['describe', '--match', 'v[0-9]*', '--always', '--dirty', '--long']};
     var template = '<%= pkg_version %> (Build Date: <%= build_date %>, Commit: <%= git_commit.substring(0,7) %>)';
     var done = this.async();
 
@@ -79,7 +79,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('ensure_version_tag', 'Ensure package version and git tag match', function () {
     var pkg = grunt.file.readJSON('package.json');
-    var gitVersionCmd = {cmd:'git', args:['describe', '--always', '--dirty']};
+    var gitVersionCmd = {cmd:'git', args:['describe', '--match', 'v[0-9]*', '--always', '--dirty', '--exact-match']};
     var done = this.async();
 
     grunt.util.spawn(gitVersionCmd, function (err, gitVersion) {
