@@ -34,7 +34,7 @@
     "@types/express-session": "^1.15.0",
     "@types/express-validator": "^3.0.0",
     "@types/http-status-codes": "^1.0.29",
-    "@types/mocha": "^2.2.41",
+    "@types/mocha": "^5.0.0",
     "@types/morgan": "^1.7.32",
     "@types/passport": "^0.4.2",
     "@types/passport-http": "^0.3.2",
