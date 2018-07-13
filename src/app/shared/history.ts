@@ -77,6 +77,8 @@ const pathSchema = new Schema({
   value: {
     type: Mixed,
   },
+}, {
+  usePushEach: true,
 });
 
 
@@ -109,6 +111,8 @@ const updateSchema = new Schema({
   paths: {
     type: [pathSchema],
   },
+}, {
+  usePushEach: true,
 });
 
 // Note the collection name is explicitly specified for this model.
@@ -127,6 +131,8 @@ const historySchema = new Schema({
     type: ObjectId,
     ref: Update.modelName,
   }],
+}, {
+  usePushEach: true,
 });
 
 /**
