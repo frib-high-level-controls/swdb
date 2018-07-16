@@ -38,12 +38,12 @@ declare namespace webapi {
     _id: string;
     host: string;
     name?: string;
-    area: string;
-    slots?: [string];
+    area: string[];
+    slots?: string[];
     status: string;
     statusDate: string;
     software: string;
-    vvResultsLoc?: string;
+    vvResultsLoc?: string[];
     vvApprovalDate?: string;
     drrs?: string;
   }
@@ -62,8 +62,8 @@ declare namespace webapi {
     platforms?: string;
     designDescDocLoc?: string;
     descDocLoc?: string;
-    vvProcLoc?: [string];
-    vvResultsLoc?: string;
+    vvProcLoc?: string[];
+    vvResultsLoc?: string[];
     versionControl?: string;
     versionControlLoc?: string;
     previous?: string;

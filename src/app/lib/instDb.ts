@@ -246,12 +246,12 @@ interface IInstModel extends history.IHistory {
 
   host: string;
   name?: string;
-  area: string;
-  slots?: [string];
+  area: string[];
+  slots?: string[];
   status: string;
   statusDate: Date;
   software: string;
-  vvResultsLoc?: string;
+  vvResultsLoc?: string[];
   vvApprovalDate?: Date;
   drrs?: string;
 }
