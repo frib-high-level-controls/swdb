@@ -211,7 +211,7 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     swService.promise.then(function(){
       let obj = swService.swIdsToObjects([$scope.formData.software])[0];
 
-      $scope.swSelected = {item: obj};
+      $scope.swSelected = obj;
     });
 
   });

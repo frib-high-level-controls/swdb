@@ -30,7 +30,7 @@ interface IInstService {
 
 interface ISwService {
   promise: ng.IPromise<void>;
-  swIdsToObjects(id: string): webapi.ISwdb;
+  swIdsToObjects(id: [string]): [webapi.ISwdb];
 }
 
 appController.controller('InstDetailsController', InstDetailsPromiseCtrl);
@@ -65,37 +65,37 @@ function InstDetailsPromiseCtrl(
 
   $scope.updateBtnClk =  () => {
     // set the sw back to the id
-    $scope.formData.software = $scope.swSelected.id;
-    $location.path('/inst/update/' + $scope.formData.id);
+    $scope.formData.software = $scope.swSelected._id;
+    $location.path('/inst/update/' + $scope.formData._id);
   };
 
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
   // update document fields with existing data
   instService.refreshInstList().then( () => {
-    let data = instService.getInstById($routeParams.itemId);
+    const data = instService.getInstById($routeParams.itemId);
     $scope.formData = data;
     $scope.statusDisplay = $scope.props.InstStatusEnum[data.status];
     // format dates for display
     if (data.statusDate) {
-      let thisDate: Date = new Date(data.statusDate);
-      let month = thisDate.getMonth() + 1;
-      let day = thisDate.getDate();
-      let year = thisDate.getFullYear();
+      const thisDate: Date = new Date(data.statusDate);
+      const month = thisDate.getMonth() + 1;
+      const day = thisDate.getDate();
+      const year = thisDate.getFullYear();
       $scope.statusDateDisplay =  month + '/' + day + '/' + year;
     }
     if (data.vvApprovalDate) {
-      let thisDate = new Date(data.vvApprovalDate);
-      let month = thisDate.getMonth() + 1;
-      let day = thisDate.getDate();
-      let year = thisDate.getFullYear();
+      const thisDate = new Date(data.vvApprovalDate);
+      const month = thisDate.getMonth() + 1;
+      const day = thisDate.getDate();
+      const year = thisDate.getFullYear();
       $scope.vvApprovalDateDisplay =  month + '/' + day + '/' + year;
     }
 
     // convert the retreived record software
     swService.promise.then(() => {
-      let obj = swService.swIdsToObjects($scope.formData.software);
-      $scope.swSelected =  obj;
+      const obj = swService.swIdsToObjects([$scope.formData.software]);
+      $scope.swSelected =  obj[0];
       if (typeof $scope.swSelected.branch === 'undefined') {
         $scope.swSelected.branch = '';
       }
@@ -113,7 +113,7 @@ function InstDetailsPromiseCtrl(
     });
   });
   // get history
-  let url = basePath + '/api/v1/swdb/hist/' + $routeParams.itemId;
+  const url = basePath + '/api/v1/swdb/hist/' + $routeParams.itemId;
   $http.get(url).then( (data) => {
     $scope.rawHistory = data.data;
   });

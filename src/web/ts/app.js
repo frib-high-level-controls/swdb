@@ -87,7 +87,6 @@ app.service('swService', function($http) {
     var swData = null;
     var promise = 	$http({url: basePath + '/api/v1/swdb',method: "GET"}).success(function(data) {
         swData = data;
-        // console.log('default swService load occurred: ' + JSON.stringify(data));
     });
 
     return {
@@ -98,7 +97,6 @@ app.service('swService', function($http) {
       refreshSwList: function () {
         promise = $http({ url: basePath + '/api/v1/swdb', method: "GET" }).success(function (data) {
           swData = data;
-          // console.log('swService reload occurred: ' + JSON.stringify(data));
         });
         return promise;
       },
@@ -118,7 +116,6 @@ app.service('swService', function($http) {
        * @return array of sw objects from forg
        */
       swIdsToObjects: function(swIds) {
-        // console.log('Looking for ' + JSON.stringify(swIds) + 'in sw: ' + JSON.stringify(swData));
         var swObj = swIds.map(function(item, idx, array){
           let node =  swData.find(function(elem) {
             return elem._id === item;
@@ -155,7 +152,6 @@ app.service('instService', function($http) {
        * @return matching inst object
        */
       getInstById: function (instId) {
-        // console.log('ALL instService records: ' + JSON.stringify(instData));
         return instData.find(function (item, idx){
           if (item._id === instId) {
             return true;

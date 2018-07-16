@@ -5,8 +5,8 @@ import mongoose = require('mongoose');
 import * as auth from '../shared/auth';
 import * as history from '../shared/history';
 
-import CommonTools = require('./CommonTools');
 import dbg = require('debug');
+import CommonTools = require('./CommonTools');
 
 const debug = dbg('swdb:instDb');
 
@@ -61,8 +61,7 @@ export class InstDb {
   }
 
   // Create a new record in the backend storage
-  public createDoc = async (user: string,
-    req: express.Request, res: express.Response, next: express.NextFunction) => {
+  public createDoc = async (user: string, req: express.Request, res: express.Response, next: express.NextFunction) => {
     const doc = new InstDb.instDoc(req.body);
     try {
       await doc.saveWithHistory(auth.formatRole('USR', user));
@@ -92,11 +91,11 @@ export class InstDb {
         debug('Error creating installation ' + doc._id + ': ' + err);
     }
   }
-  public getDocs = function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public getDocs = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // Convert DB Model to Web API
-    function toAPI(doc: IInstModel): webapi.Inst{
+    function toAPI(doc: IInstModel): webapi.Inst {
       return {
-        id: String(doc._id),
+        _id: String(doc._id),
         host: doc.host,
         name: doc.name,
         area: doc.area,
@@ -106,13 +105,13 @@ export class InstDb {
         software: doc.software,
         vvResultsLoc: doc.vvResultsLoc,
         vvApprovalDate: doc.vvApprovalDate ? doc.vvApprovalDate.toISOString() : undefined,
-        drrs: doc.drrs ? doc.drrs.toISOString() : undefined,
+        drrs: doc.drrs,
       };
     }
     const id = req.params.id;
     if (!id) {
       // return all
-      InstDb.instDoc.find({}, function(err: Error, docs: IInstModel[]) {
+      InstDb.instDoc.find({}, (err: Error, docs: IInstModel[]) => {
         if (!err) {
           res.json(docs.map(toAPI));
         } else {
@@ -120,8 +119,8 @@ export class InstDb {
         }
       });
     } else {
-      // return specified item`
-      InstDb.instDoc.findOne({ _id: id }, function(err: Error, docs: IInstModel) {
+      // return specified item
+      InstDb.instDoc.findOne({ _id: id }, (err: Error, docs: IInstModel) => {
         if (!err) {
           res.send(toAPI(docs));
         } else {
@@ -129,7 +128,7 @@ export class InstDb {
         }
       });
     }
-  };
+  }
 
   public  getHist = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
   /**
@@ -157,10 +156,10 @@ export class InstDb {
         skip = 0;
       }
       debug('looking for history on ' + id + ' limit is ' + limit + ' skip is ' + skip);
-      let cursor = InstDb.instDoc.db.collections.history.find({ rid: new mongodb.ObjectID(id) })
+      const cursor = InstDb.instDoc.db.collections.history.find({ rid: new mongodb.ObjectID(id) })
         .sort({at: -1}).limit(Number(limit)).skip(Number(skip));
       try {
-        let arr = await cursor.toArray();
+        const arr = await cursor.toArray();
         debug('found history ' + JSON.stringify(arr, null, 2));
         res.send(arr);
       } catch (err) {
@@ -169,8 +168,7 @@ export class InstDb {
     }
   }
 
-  public updateDoc = async (user: string,
-    req: express.Request, res: express.Response, next: express.NextFunction) => {
+  public updateDoc = async (user: string, req: express.Request, res: express.Response, next: express.NextFunction) => {
     const id = req.params.id;
     if (id) {
       InstDb.instDoc.findOne({ _id: id }, async (err: Error, founddoc: any) => {
@@ -223,13 +221,13 @@ export class InstDb {
   }
 
 
-  public deleteDoc = function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public deleteDoc = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const id = req.params.id;
 
     // mongoose does not error if deleting something that does not exist
-    InstDb.instDoc.findOne({ _id: id }, function(err: Error, doc: mongoose.Document) {
+    InstDb.instDoc.findOne({ _id: id }, (err: Error, doc: mongoose.Document) => {
       if (doc) {
-        exports.instDoc.remove({ _id: id }, function(rmerr: Error) {
+        exports.instDoc.remove({ _id: id }, (rmerr: Error) => {
           if (!rmerr) {
             res.end();
           } else {
@@ -240,7 +238,7 @@ export class InstDb {
         return next(err);
       }
     });
-  };
+  }
 }
 
 interface IInstModel extends history.IHistory {
@@ -255,7 +253,7 @@ interface IInstModel extends history.IHistory {
   software: string;
   vvResultsLoc?: string;
   vvApprovalDate?: Date;
-  drrs?: Date;
+  drrs?: string;
 }
 
 interface Model extends IInstModel, history.Document<Model> {}

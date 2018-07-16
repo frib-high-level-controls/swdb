@@ -35,7 +35,7 @@ declare namespace webapi {
   // Application specific types defined below.
 
   export interface Inst {
-    id: string;
+    _id: string;
     host: string;
     name?: string;
     area: string;
@@ -49,7 +49,7 @@ declare namespace webapi {
   }
 
   export interface ISwdb {
-    id: string;
+    _id: string;
     swName: string;
     version?: string;
     branch?: string;
