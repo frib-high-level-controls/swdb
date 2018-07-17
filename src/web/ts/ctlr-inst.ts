@@ -70,14 +70,12 @@ appController.controller('InstListController', function(
   vm.dtOptions = DTOptionsBuilder.fromFnPromise(() => {
     const defer = $q.defer();
     const url = basePath + '/api/v1/inst';
-    // $http.get($scope.props.instApiUrl).then(function (result) {
     $http.get<SWInst[]>(url).then((result) => {
       const innerDefer = $q.defer();
       const swIds = result.data.map((r) => r.software);
       const swurl = basePath + '/api/v1/swdb/list';
       $http<SWMeta>({
         url: swurl,
-        // url: $scope.props.apiUrl + "list",
         method: 'POST',
         data: JSON.stringify(swIds),
       }).then((innerResult) => {
@@ -91,7 +89,6 @@ appController.controller('InstListController', function(
     .withBootstrap()
     .withPaginationType('full_numbers')
     .withDOM('<"row"<"col-sm-8"l><"col-sm-4"B>>rtip');
-  // vm.dtOptions.searching = true;
 
   // Build the column specs
   // Set the titles to include search input field
@@ -133,7 +130,6 @@ appController.controller('InstListController', function(
         return $scope.props.InstStatusEnum[data] || '';
       }),
     DTColumnBuilder.newColumn('statusDate')
-      // .withTitle('Status Date').withOption('defaultContent', '')
       .withTitle('Status date (m/d/y)')
       .renderWith((data, type, full, meta) => {
         const thisDate = new Date(full.statusDate);
@@ -158,11 +154,9 @@ appController.controller('InstListController', function(
       table.columns().eq(0).each((colIdx) => {
         const th = $('<th></th>').appendTo(tr);
         const column = table.column(colIdx);
-        // if (table.column(colIdx).searching) {
         // append column search with id derived from column init data
         th.append('<input id="' + column.dataSrc() + 'Srch'
           + '" type="text" placeholder="' + ((table.column(colIdx) as any).placeholder || '')
-          // th.append('<input type="text" placeholder="' + (table.column(colIdx).placeholder || '')
           + '" style="width:80%;" autocomplete="off">');
         th.on('keyup', 'input', (evt) => {
           const elem = evt.target;
@@ -173,14 +167,12 @@ appController.controller('InstListController', function(
 
         // Now apply filter routines to each column
         $('input', table.column(colIdx).header()).on('keyup change', (evt) => {
-          console.log('searching column ' + colIdx);
           const v = $(evt.target).val();
           table
             .column(colIdx)
             .search(v ? String(v) : '')
             .draw();
         });
-        // }
       });
     }
   });

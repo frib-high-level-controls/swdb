@@ -1,9 +1,9 @@
+import dbg = require('debug');
+import express = require('express');
 import mongodb = require('mongodb');
 import mongoose = require('mongoose');
 import * as history from '../shared/history';
 import commonTools = require('./CommonTools');
-import express = require('express');
-import dbg = require('debug');
 
 import * as auth from '../shared/auth';
 
@@ -32,8 +32,8 @@ export class Db {
         platforms: { type: String},
         designDescDocLoc: { type: String},
         descDocLoc: { type: String},
-        vvProcLoc: { type: Array },
-        vvResultsLoc: { type: Array },
+        vvProcLoc: { type: [String] },
+        vvResultsLoc: { type: [String] },
         versionControl: { type: String, enum: Db.props.rcsKeys },
         versionControlLoc: { type: String},
         previous: { type: mongoose.SchemaTypes.ObjectId },
@@ -69,8 +69,7 @@ export class Db {
   }
 
   // Create a new record in the backend storage
-  public createDoc = async (user: string,
-    req: express.Request, res: express.Response, next: express.NextFunction) => {
+  public createDoc = async (user: string, req: express.Request, res: express.Response, next: express.NextFunction) => {
 
     const doc = new Db.swDoc(req.body);
 
@@ -150,10 +149,10 @@ export class Db {
         skip = 0;
       }
       debug('looking for history on ' + id + ' limit is ' + limit + ' skip is ' + skip);
-      let cursor = Db.swDoc.db.collections.history.find({ rid: new mongodb.ObjectID(id) })
+      const cursor = Db.swDoc.db.collections.history.find({ rid: new mongodb.ObjectID(id) })
         .sort({at: -1}).limit(Number(limit)).skip(Number(skip));
       try {
-        let arr = await cursor.toArray();
+        const arr = await cursor.toArray();
         debug('found history ' + JSON.stringify(arr, null, 2));
         res.send(arr);
       } catch (err) {
@@ -162,8 +161,7 @@ export class Db {
     }
   }
 
-  public updateDoc = (user: string, req: express.Request, res: express.Response,
-     next: express.NextFunction) => {
+  public updateDoc = (user: string, req: express.Request, res: express.Response, next: express.NextFunction) => {
     const id = req.params.id;
     if (id) {
       Db.swDoc.findOne({ _id: id }, async (err: Error, doc: any) => {
@@ -280,8 +278,8 @@ interface ISwdbModel extends history.IHistory {
   platforms?: string;
   designDescDocLoc?: string;
   descDocLoc?: string;
-  vvProcLoc?: [string];
-  vvResultsLoc?: string;
+  vvProcLoc?: string[];
+  vvResultsLoc?: string[];
   versionControl?: string;
   versionControlLoc?: string;
   previous?: string;

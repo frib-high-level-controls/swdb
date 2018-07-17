@@ -1,13 +1,13 @@
-import server = require('../../app/server');
-import express = require('express');
 import chai = require('chai');
-let expect = chai.expect;
-import supertest = require('supertest');
-import expect2 = require('expect');
-import TestTools = require('./TestTools');
 import dbg = require('debug');
-const debug = dbg('swdb:inst-spec-tests');
+import expect2 = require('expect');
+import express = require('express');
+import supertest = require('supertest');
 import CommonTools = require('../../app/lib/CommonTools');
+const expect = chai.expect;
+import server = require('../../app/server');
+import TestTools = require('./TestTools');
+const debug = dbg('swdb:inst-spec-tests');
 
 let app: express.Application;
 
@@ -16,9 +16,9 @@ let app: express.Application;
  * Test suite for software installations api
  */
 
-let testTools = new TestTools.TestTools();
+const testTools = new TestTools.TestTools();
 let Cookies: string;
-let ctools = new CommonTools.CommonTools();
+const ctools = new CommonTools.CommonTools();
 let props: any = {};
 props = ctools.getConfiguration();
 
@@ -38,14 +38,14 @@ describe('Installation api tests', () => {
     await server.stop();
   });
 
-  before('login as test user', function(done){
+  before('login as test user', function(done) {
     this.timeout(8000);
     supertest(app)
     .get('/login')
     .auth(props.test.username, props.test.password)
     .timeout(8000)
     .expect(302)
-    .end(function(err, res){
+    .end((err, res) => {
       if (err) {
         done(err);
       } else {
@@ -129,7 +129,7 @@ describe('Installation api tests', () => {
   });
 
   describe('Check location headers',  () => {
-    let wrapper = { origId: null };
+    const wrapper = { origId: null };
     before('Get ID record id:Test Record', (done) => {
       supertest(app)
         .get('/api/v1/inst')
@@ -157,10 +157,10 @@ describe('Installation api tests', () => {
           if (err) {
             done(err);
           } else {
+            debug('res.body' + JSON.stringify(res.body));
             expect(res.body).to.have.property('_id');
             expect(res.body.host).to.equal('Header Test host');
             expect(res.body._id).to.match(/.{24}/);
-            expect(res.body.__v).to.match(/\d+/);
             done();
           }
         });
@@ -177,7 +177,7 @@ describe('Installation api tests', () => {
           if (err) {
             done(err);
           } else {
-            let re = new RegExp('^.*/api/v1/inst/' + wrapper.origId + '$');
+            const re = new RegExp('^.*/api/v1/inst/' + wrapper.origId + '$');
             if (result.headers.location.match(re)) {
               done();
             } else {
@@ -198,7 +198,7 @@ describe('Installation api tests', () => {
           if (err) {
             done(err);
           } else {
-            let re = new RegExp('^.*/api/v1/inst/' + wrapper.origId + '$');
+            const re = new RegExp('^.*/api/v1/inst/' + wrapper.origId + '$');
             if (result.headers.location.match(re)) {
               done();
             } else {
@@ -209,9 +209,9 @@ describe('Installation api tests', () => {
     });
   });
 
-  describe('Check history calls', function () {
-    let wrapper = { origId: null };
-    before('Before test post and get id', function (done) {
+  describe('Check history calls', () => {
+    const wrapper = { origId: null };
+    before('Before test post and get id', (done) => {
       supertest(app)
         .post('/api/v1/inst')
         .set('Accept', 'application/json')
@@ -235,7 +235,7 @@ describe('Installation api tests', () => {
           }
         });
     });
-    before('Before modify test record (history2)', function (done) {
+    before('Before modify test record (history2)', (done) => {
       supertest(app)
         .put('/api/v1/inst/' + wrapper.origId)
         .set('Accept', 'application/json')
@@ -250,7 +250,7 @@ describe('Installation api tests', () => {
           }
         });
     });
-    before('Before modify test record (history3)', function (done) {
+    before('Before modify test record (history3)', (done) => {
       supertest(app)
         .put('/api/v1/inst/' + wrapper.origId)
         .set('Accept', 'application/json')
@@ -265,7 +265,7 @@ describe('Installation api tests', () => {
           }
         });
     });
-    before('Before modify test record (history4)', function (done) {
+    before('Before modify test record (history4)', (done) => {
       supertest(app)
         .put('/api/v1/inst/' + wrapper.origId)
         .set('Accept', 'application/json')
@@ -280,7 +280,7 @@ describe('Installation api tests', () => {
           }
         });
     });
-    before('Before modify test record (history5)', function (done) {
+    before('Before modify test record (history5)', (done) => {
       supertest(app)
         .put('/api/v1/inst/' + wrapper.origId)
         .set('Accept', 'application/json')
@@ -295,7 +295,7 @@ describe('Installation api tests', () => {
           }
         });
     });
-    before('Before modify test record (history6)', function (done) {
+    before('Before modify test record (history6)', (done) => {
       supertest(app)
         .put('/api/v1/inst/' + wrapper.origId)
         .set('Accept', 'application/json')
@@ -310,7 +310,7 @@ describe('Installation api tests', () => {
           }
         });
     });
-    before('Before modify test record (history7)', function (done) {
+    before('Before modify test record (history7)', (done) => {
       supertest(app)
         .put('/api/v1/inst/' + wrapper.origId)
         .set('Accept', 'application/json')
@@ -326,11 +326,11 @@ describe('Installation api tests', () => {
         });
     });
 
-    it('The API default history entry is correct', function (done) {
+    it('The API default history entry is correct', (done) => {
       supertest(app)
         .get('/api/v1/inst/hist/' + wrapper.origId)
         .expect(200)
-        .end(function (err, res) {
+        .end((err, res) => {
           if (err) {
             debug('Err history (inst api test): ' + JSON.stringify(err, null, 2));
             done(err);
@@ -347,11 +347,11 @@ describe('Installation api tests', () => {
           }
         });
     });
-    it('The API history (limit 1, skip1) entry is correct', function (done) {
+    it('The API history (limit 1, skip1) entry is correct', (done) => {
       supertest(app)
         .get('/api/v1/swdb/hist/' + wrapper.origId + '?limit=1&skip=1')
         .expect(200)
-        .end(function (err, res) {
+        .end((err, res) => {
           if (err) {
             debug('Err history (inst api test): ' + JSON.stringify(err, null, 2));
             done(err);
@@ -386,7 +386,10 @@ describe('Installation api tests', () => {
         if (err) {
           done(err);
         } else {
-          let regex = 'Status must be one of {\\\\"RDY_INST\\\\":\\\\"Ready for install\\\\",\\\\"RDY_VER\\\\":\\\\"Ready for verification\\\\",\\\\"RDY_BEAM\\\\":\\\\"Ready for beam\\\\",\\\\"RET\\\\":\\\\"Retired\\\\"}';
+          const regex =
+            'Status must be one of {\\\\"RDY_INST\\\\":\\\\"Ready for install\\\\",' +
+            '\\\\"RDY_VER\\\\":\\\\"Ready for verification\\\\",\\\\"RDY_BEAM\\\\":\\\\"Ready for beam\\\\",' +
+            '\\\\"RET\\\\":\\\\"Retired\\\\"}';
           expect(res.text).to.match(new RegExp(regex));
           done();
         }
@@ -402,7 +405,7 @@ describe('Installation api tests', () => {
        area: ['Global'],
        status: 'RDY_INST',
        statusDate: 'date 1000',
-       software: '5947589458a6aa0face9a512'
+       software: '5947589458a6aa0face9a512',
       })
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
@@ -445,7 +448,7 @@ describe('Installation api tests', () => {
   // });
 
   describe('get id for installation Test host test sw ref', () => {
-    let wrapper = {origId: null};
+    const wrapper = {origId: null};
     before('Get ID record id:Test host test sw ref', (done) => {
       supertest(app)
         .get('/api/v1/inst')
@@ -477,7 +480,6 @@ describe('Installation api tests', () => {
             expect(res.body).to.have.property('_id');
             expect(res.body.host).to.equal('Test host');
             expect(res.body._id).to.match(/.{24}/);
-            expect(res.body.__v).to.match(/\d+/);
             done();
           }
         });
@@ -514,7 +516,7 @@ describe('Installation api tests', () => {
     // {req:{msg:,url:,type:,err{status:}}
     //  res:{msg:,url:,type:,err{status:}}
     //  }
-    let testUpdateParams = [
+    const testUpdateParams = [
       {type: 'PUT', req: {msg: {host: 'Test host4'}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'GET', res: {msg: {host: 'Test host4'}, url: '/api/v1/inst/',  err: {status: 200}}},
       {type: 'PUT', req: {msg: {name: 'Test name4'}, url: '/api/v1/inst/', err: {status: 200}}},
@@ -530,7 +532,8 @@ describe('Installation api tests', () => {
       {type: 'PUT', req: {msg: {statusDate: '1997-01-01T08:00:00.000Z'}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'GET', res: {msg: {statusDate: '1997-01-01T08:00:00.000Z'}, url: '/api/v1/inst/',  err: {status: 200}}},
       {type: 'PUT', req: {msg: {vvApprovalDate: '1997-01-01T08:00:00.000Z'}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {vvApprovalDate: '1997-01-01T08:00:00.000Z'}, url: '/api/v1/inst/',  err: {status: 200}}},
+      {type: 'GET', res: {msg: {vvApprovalDate: '1997-01-01T08:00:00.000Z'},
+       url: '/api/v1/inst/',  err: {status: 200}}},
       {type: 'PUT', req: {msg: {vvResultsLoc: ['http://www.google.com']}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'GET', res: {msg: {vvResultsLoc: ['http://www.google.com']}, url: '/api/v1/inst/',  err: {status: 200}}},
     ];
@@ -596,7 +599,7 @@ describe('Installation api tests', () => {
                 if (value.res.err.status) {
                   expect(res.status).to.equal(value.res.err.status);
                 }
-                for (let prop of Object.keys(value.res.msg)) {
+                for (const prop of Object.keys(value.res.msg)) {
                   expect(res.body).to.have.property(prop);
                   // This is to allow sloppy matching on whole objects.
                   // See the npm "expect" module for more
@@ -657,7 +660,7 @@ describe('Installation api tests', () => {
      * 5) Try to set installation back to the original software
      *  (this should fail with the proper error listed)
      */
-    let wrapper = { origId: null, swId: null };
+    const wrapper = { origId: null, swId: null };
     it('Post a new installation record', (done) => {
       supertest(app)
         .post('/api/v1/inst')
@@ -672,13 +675,13 @@ describe('Installation api tests', () => {
         .set('Accept', 'application/json')
         .set('Cookie', Cookies)
         .expect(201)
-        .end(function (err, res) {
+        .end((err, res) => {
           if (err) {
             done(err);
           } else {
             // grab the new installation id from the returned location header.
             // We use this later to verify the error message.
-            let id = res.header.location.split(/\//).pop();
+            const id = res.header.location.split(/\//).pop();
             wrapper.origId = id;
             done();
           }
@@ -701,13 +704,13 @@ describe('Installation api tests', () => {
           statusDate: '0',
         })
         .expect(201)
-        .end(function (err, res) {
+        .end((err, res) => {
           if (err) {
             done(err);
           } else {
             // grab the new installation id from the returned location header.
             // We use this later to verify the error message.
-            let id = res.header.location.split(/\//).pop();
+            const id = res.header.location.split(/\//).pop();
             wrapper.swId = id;
             done();
           }
@@ -720,7 +723,7 @@ describe('Installation api tests', () => {
         .send({ software: wrapper.swId })
         .set('Cookie', Cookies)
         .expect(200)
-        .end(function (err, res) {
+        .end((err, res) => {
           if (err) {
             debug('in err wrapper.origId = ' + wrapper.origId);
             debug('in err wrapper.swId = ' + wrapper.swId);
@@ -748,7 +751,7 @@ describe('Installation api tests', () => {
         .send({ software: '5947589458a6aa0face9a512' })
         .expect(400)
         .expect('Worklow validation errors: "Installation software field can only be changed in state RDY_INST"')
-        .end(function (err, res) {
+        .end((err, res) => {
           if (err) {
             debug(JSON.stringify(res));
             done(err);
@@ -767,7 +770,7 @@ describe('Installation api tests', () => {
      * 3) Try to set installation to the new software record in state Development
      *  (this should fail with the proper error listed)
      */
-    let wrapper = { origId: null, swId: null };
+    const wrapper = { origId: null, swId: null };
     it('Post a new installation record', (done) => {
       supertest(app)
         .post('/api/v1/inst')
@@ -782,13 +785,13 @@ describe('Installation api tests', () => {
         .set('Accept', 'application/json')
         .set('Cookie', Cookies)
         .expect(201)
-        .end(function (err, res) {
+        .end((err, res) => {
           if (err) {
             done(err);
           } else {
             // grab the new installation id from the returned location header.
             // We use this later to verify the error message.
-            let id = res.header.location.split(/\//).pop();
+            const id = res.header.location.split(/\//).pop();
             wrapper.origId = id;
             done();
           }
@@ -811,13 +814,13 @@ describe('Installation api tests', () => {
           statusDate: '0',
         })
         .expect(201)
-        .end(function (err, res) {
+        .end((err, res) => {
           if (err) {
             done(err);
           } else {
             // grab the new installation id from the returned location header.
             // We use this later to verify the error message.
-            let id = res.header.location.split(/\//).pop();
+            const id = res.header.location.split(/\//).pop();
             wrapper.swId = id;
             done();
           }
@@ -833,7 +836,7 @@ describe('Installation api tests', () => {
         .expect('Worklow validation errors: "Software field must point to software ' +
          'with status RDY_INST.The given software, ' +
          wrapper.swId + ', has status DEVEL"')
-        .end(function (err, res) {
+        .end((err, res) => {
           if (err) {
             debug(JSON.stringify(res));
             done(err);
