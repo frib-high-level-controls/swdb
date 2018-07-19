@@ -43,7 +43,7 @@ test.describe('Software update screen tests', () => {
   });
 
   test.describe('1. Test basic error handling', () => {
-    test.it('should show search page with login button', function (this: Mocha.ITestCallbackContext) {
+    test.it('should show search page with login button', function(this: Mocha.ITestCallbackContext) {
       this.timeout(8000);
       prefs.setLevel(webdriver.logging.Type.BROWSER, webdriver.logging.Level.ALL);
       options.setLoggingPrefs(prefs);
@@ -141,7 +141,7 @@ test.describe('Software update screen tests', () => {
         });
     });
 
-    test.it('Submit should fail again with software name required error', function(this: Mocha.ITestCallbackContext) {
+    test.it('Submit should fail with software name required error', function(this: Mocha.ITestCallbackContext) {
       this.timeout(5000);
       chromeDriver.findElement(By.id('submitBtn')).click();
       chromeDriver.wait(until.titleIs('SWDB - New'), 5000);
@@ -158,7 +158,7 @@ test.describe('Software update screen tests', () => {
       chromeDriver.findElement(By.id('swName')).sendKeys('testswname');
     });
 
-    test.it('Submit should fail again with software owner required error', function(this: Mocha.ITestCallbackContext) {
+    test.it('Submit should fail with software owner required error', function(this: Mocha.ITestCallbackContext) {
       this.timeout(5000);
       chromeDriver.findElement(By.id('submitBtn')).click();
       chromeDriver.wait(until.titleIs('SWDB - New'), 5000);
