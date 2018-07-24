@@ -141,6 +141,58 @@ test.describe('Installations add screen tests', () => {
           expect(text).to.match(/ng-invalid-required/);
         });
     });
+
+    test.it('Add new record - set status date', () => {
+      // set status date
+      chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')), 3000);
+      let input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
+      input.click();
+      chromeDriver.wait(until.elementLocated(
+        By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
+      input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
+      input.click();
+    });
+
+    test.it('Submit should fail with software name required error', function(this: Mocha.ITestCallbackContext) {
+      this.timeout(5000);
+      chromeDriver.findElement(By.id('submitBtn')).click();
+      chromeDriver.wait(until.titleIs('SWDB - New Installation'), 5000);
+      chromeDriver.wait(until.elementLocated(By.id('formError')), 3000);
+      chromeDriver.findElement(By.id('formError')).getText().then(
+        (text) => {
+          expect(text).to.match(/Software reference is required/);
+        });
+    });
+
+    test.it('set software', async function(this: any) {
+      this.timeout(15000);
+      chromeDriver.wait(until.elementLocated(By.id('software')), 3000);
+      let searchInput = chromeDriver.findElement(By.id('software'));
+      searchInput.click();
+      chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="software"]/input[1]')));
+      searchInput = chromeDriver.findElement(By.xpath('//*[@id="software"]/input[1]'));
+      searchInput.sendKeys('BEAST');
+      chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-0-0"]/span')));
+      const input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-0"]/span'));
+      input.click();
+      chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
+        By.id('software')),
+        'BEAST/b12/0.2'), 3000);
+      chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
+        By.id('software')),
+        'BEAST/b12/0.2'), 3000);
+    });
+
+    test.it('Submit should fail with area required error', function(this: Mocha.ITestCallbackContext) {
+      this.timeout(5000);
+      chromeDriver.findElement(By.id('submitBtn')).click();
+      chromeDriver.wait(until.titleIs('SWDB - New Installation'), 5000);
+      chromeDriver.wait(until.elementLocated(By.id('formError')), 3000);
+      chromeDriver.findElement(By.id('formError')).getText().then(
+        (text) => {
+          expect(text).to.match(/Path `status` is required\./);
+        });
+    });
   });
 
 
