@@ -42,6 +42,7 @@ interface Config {
   mongo: {
     user?: {};
     pass?: {};
+    host?: {};
     port: {};
     addr: {};
     db: {};
@@ -203,7 +204,10 @@ async function doStart(): Promise<express.Application> {
     }
     mongoUrl += '@';
   }
-  mongoUrl += cfg.mongo.addr + ':' + cfg.mongo.port + '/' + cfg.mongo.db;
+  if (!cfg.mongo.host) {
+    cfg.mongo.host = `${cfg.mongo.addr}:${cfg.mongo.port}`;
+  }
+  mongoUrl +=  `${cfg.mongo.host}/${cfg.mongo.db}`;
 
   mongoose.Promise = global.Promise;
 
@@ -224,7 +228,7 @@ async function doStart(): Promise<express.Application> {
 
   status.setComponentError('MongoDB', 'Never Connected');
   // Remove password from the mongoUrl to avoid logging the password!
-  const safeMongoUrl = mongoUrl.replace(/\/\/(.*):(.*)@/, '//$1:******@');
+  const safeMongoUrl = mongoUrl.replace(/\/\/(.*):(.*)@/, '//$1:<password>@');
   info('Mongoose default connection: %s', safeMongoUrl);
   await mongoose.connect(mongoUrl, cfg.mongo.options);
 
