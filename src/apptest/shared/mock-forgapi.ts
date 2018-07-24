@@ -78,11 +78,13 @@ export class MockClient implements forgapi.IClient {
     if (!user) {
       return Promise.resolve(null);
     }
-    return Promise.resolve(user);
+    // Deep copy result to avoid incidental modification
+    return Promise.resolve(JSON.parse(JSON.stringify(user)));
   }
 
   public findUsers(): Promise<User[]> {
-    return Promise.resolve(Array.from(this.users.values()));
+    // Deep copy result to avoid incidental modification
+    return Promise.resolve(JSON.parse(JSON.stringify(Array.from(this.users.values()))));
   }
 
   public searchUsers(opts: SearchUsersOptions): Promise<SearchUser[]> {
@@ -111,7 +113,8 @@ export class MockClient implements forgapi.IClient {
         });
       }
     }
-    return Promise.resolve(users);
+    // Deep copy result to avoid incidental modification
+    return Promise.resolve(JSON.parse(JSON.stringify(users)));
   }
 
   public addGroup(group: Group | Group[]) {
@@ -143,11 +146,13 @@ export class MockClient implements forgapi.IClient {
     if (!group) {
       return Promise.resolve(null);
     }
-    return Promise.resolve(group);
+    // Deep copy result to avoid incidental modification
+    return Promise.resolve(JSON.parse(JSON.stringify(group)));
   }
 
   public findGroups(): Promise<Group[]> {
-    return Promise.resolve(Array.from(this.groups.values()));
+    // Deep copy result to avoid incidental modification
+    return Promise.resolve(JSON.parse(JSON.stringify(Array.from(this.groups.values()))));
   }
 
   public searchGroups(opts: SearchGroupsOptions): Promise<SearchGroup[]> {
@@ -197,6 +202,7 @@ export class MockClient implements forgapi.IClient {
         });
       }
     }
-    return Promise.resolve(groups);
+    // Deep copy result to avoid incidental modification
+    return Promise.resolve(JSON.parse(JSON.stringify(groups)));
   }
 }
