@@ -121,9 +121,19 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
             $location.path('/inst/details/' + id);
           }
         }, function error(response) {
-          $scope.swdbParams.formErr = "Error: " + response.data.message + "(" + response.status + ")";
+          if (response.data.message) {
+            $scope.swdbParams.formErr = "Error: " + response.data.message + " (" + response.status + ")";
+          } else if (response.data.match(/^Validation errors: /g)){
+            // unpack the validation errors and print the first
+            const parts = response.data.split('Validation errors: ')
+            const errors = JSON.parse(parts[1]);
+            $scope.swdbParams.formErr = "Error: " + errors[0].msg + " (" + response.status + ")";
+          } else {
+            $scope.swdbParams.formErr = "Error: " + JSON.stringify(response.data) + " (" + response.status + ")";
+          }
           $scope.swdbParams.formShowStatus = false;
           $scope.swdbParams.formShowErr = true;
+
         });
     } else {
       $scope.swdbParams.formErr = "Error: clear errors before submission"; 
