@@ -16,14 +16,16 @@
     "session_secret": "secret"
   },
   "cas": {
-    // Append the request path to the service URL
-    //"append_path": false,
     // The CAS protocol version (CAS1.0 | CAS2.0 | CAS3.0)
     //"version": "CAS1.0",
-    // The base URL for CAS service
+    // The base URL for the CAS service
     "cas_url": "https://example.com/cas",
     // The application service URL used in the CAS protocol
-    "service_url": "http://webapp.service.com"
+    //"service_url": "/cas"
+    // The application service base URL. The service_url will be
+    // resolved against this base URL. If the service_url is not
+    // provided then the original request URL will be used instead.
+    "service_base_url": "http://webapp.service.com"
   },
   "forgapi": {
     // The base URL for the FORG API
