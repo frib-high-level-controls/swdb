@@ -79,24 +79,6 @@ function InstNewPromiseCtrl(
     $location.path('/inst/list');
   };
 
-
-  // $scope.slotSelect = function ($item, $model, $label) {
-  //   var index = $scope.slotsSelected.indexOf($model);
-  //   if (index == -1) {
-  //     $scope.slotsSelected.unshift($model);
-  //     $('#slots').focus();
-  //   }
-  //   else {
-  //   }
-  // };
-
-  // $scope.removeSelectedSlot = function ($item) {
-  //   var index = $scope.slotsSelected.indexOf($item);
-  //   if (index > -1) {
-  //     $scope.slotsSelected.splice(index, 1);
-  //   }
-  // };
-
   $scope.swSelect =  ($item) => {
     $scope.formData.software = $item._id;
   };
@@ -121,18 +103,6 @@ function InstNewPromiseCtrl(
 
     return method;
   })();
-
-  // $scope.formErrors =  (form) => {
-  //   const errors = [];
-  //   for ( const key in form.$error) {
-  //     errors.push(key + '=' + form.$error);
-  //   }
-  //   if (errors.length > 0) {
-  //     debug('Form Has Errors');
-  //     debug(form.$error);
-  //   }
-  // };
-
 
   $scope.processForm =  () => {
     $scope.formData.slots = $scope.slotsSelected;
