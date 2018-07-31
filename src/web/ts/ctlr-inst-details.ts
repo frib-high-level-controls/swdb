@@ -30,7 +30,8 @@ interface IInstService {
 
 interface ISwService {
   promise: ng.IPromise<void>;
-  swIdsToObjects(id: [string]): [webapi.ISwdb];
+  swIdsToObjects(id: [string]): webapi.ISwdb[];
+  getSwList(): webapi.ISwdb[];
 }
 
 appController.controller('InstDetailsController', InstDetailsPromiseCtrl);
@@ -75,7 +76,9 @@ function InstDetailsPromiseCtrl(
   instService.refreshInstList().then( () => {
     const data = instService.getInstById($routeParams.itemId);
     $scope.formData = data;
-    $scope.statusDisplay = $scope.props.InstStatusEnum[data.status];
+    if (data.status) {
+      $scope.statusDisplay = $scope.props.InstStatusEnum[data.status];
+    }
     // format dates for display
     if (data.statusDate) {
       const thisDate: Date = new Date(data.statusDate);
@@ -94,8 +97,10 @@ function InstDetailsPromiseCtrl(
 
     // convert the retreived record software
     swService.promise.then(() => {
-      const obj = swService.swIdsToObjects([$scope.formData.software]);
-      $scope.swSelected =  obj[0];
+      if ($scope.formData.software){
+        const obj = swService.swIdsToObjects([$scope.formData.software]);
+        $scope.swSelected = obj[0];
+      }
       if (typeof $scope.swSelected.branch === 'undefined') {
         $scope.swSelected.branch = '';
       }

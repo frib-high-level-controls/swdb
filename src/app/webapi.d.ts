@@ -35,14 +35,14 @@ declare namespace webapi {
   // Application specific types defined below.
 
   export interface Inst {
-    _id: string;
-    host: string;
+    _id?: string;
+    host?: string;
     name?: string;
-    area: string[];
+    area?: string[];
     slots?: string[];
-    status: string;
-    statusDate: string;
-    software: string;
+    status?: string;
+    statusDate?: string;
+    software?: string;
     vvResultsLoc?: string[];
     vvApprovalDate?: string;
     drrs?: string;

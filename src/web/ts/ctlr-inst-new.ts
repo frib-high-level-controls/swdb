@@ -2,8 +2,59 @@
  * new controller for installations
  */
 
+interface IInstNewControllerScope extends ng.IScope {
+  session: {
+    user?: {};
+  };
+  props: IConfigProps;
+  swMeta: SWMeta;
+  usrBtnTxt?: string;
+  formData: webapi.Inst;
+  // swSelected: webapi.ISwdb;
+  slotsSelected: string[];
+  statusDisplay: string | undefined;
+  areasSelected: IForgArea[],
+  statusDateDisplay: string;
+  vvApprovalDateDisplay: string;
+  rawHistory: {};
+  datePicker: any;
+  inputForm: any;
+  swList: webapi.ISwdb[];
+  forgAreasList: IForgArea[];
+  swdbParams: {
+    formStatus: string,
+    formErr: string,
+    formShowErr: boolean,
+    formShowStatus: boolean,
+  };
+  usrBtnClk(): void;
+  updateBtnClk(): void;
+  bckBtnClk(): void;
+  swSelect(item: webapi.Inst): void;
+  formErrors(form: any): void;
+  newItem(event: {currentTarget: HTMLInputElement}): void;
+  removeItem(event: {currentTarget: HTMLInputElement}): void;
+  processForm(): void;
+  refreshSw(): void;
+}
+interface IForgAreaService {
+  promise: ng.IPromise<void>;
+  getAreas(): any;
+}
+interface IForgArea {
+  uid: string;
+}
+
 appController.controller('InstNewController', InstNewPromiseCtrl);
-function InstNewPromiseCtrl($scope, $http, $window, $location, configService, userService, slotService, swService, forgAreaService) {
+function InstNewPromiseCtrl(
+  $scope: IInstNewControllerScope,
+  $http: ng.IHttpService,
+  $window: ng.IWindowService,
+  $location: ng.ILocationService,
+  configService: IConfigService,
+  userService: IUserService,
+  swService: ISwService,
+  forgAreaService: IForgAreaService) {
 
   $scope.$watch(function () {
     return $scope.session;
@@ -30,32 +81,32 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
   };
 
 
-  $scope.slotSelect = function ($item, $model, $label) {
-    var index = $scope.slotsSelected.indexOf($model);
-    if (index == -1) {
-      $scope.slotsSelected.unshift($model);
-      $('#slots').focus();
-    }
-    else {
-    }
-  };
+  // $scope.slotSelect = function ($item, $model, $label) {
+  //   var index = $scope.slotsSelected.indexOf($model);
+  //   if (index == -1) {
+  //     $scope.slotsSelected.unshift($model);
+  //     $('#slots').focus();
+  //   }
+  //   else {
+  //   }
+  // };
 
-  $scope.removeSelectedSlot = function ($item) {
-    var index = $scope.slotsSelected.indexOf($item);
-    if (index > -1) {
-      $scope.slotsSelected.splice(index, 1);
-    }
-  };
+  // $scope.removeSelectedSlot = function ($item) {
+  //   var index = $scope.slotsSelected.indexOf($item);
+  //   if (index > -1) {
+  //     $scope.slotsSelected.splice(index, 1);
+  //   }
+  // };
 
-  $scope.swSelect = function ($item, $model, $label) {
+  $scope.swSelect = function ($item) {
     $scope.formData.software = $item._id;
   };
 
   $scope.datePicker = (function () {
-    var method = {};
+    var method: any = {};
     method.instances = [];
 
-    method.open = function ($event, instance) {
+    method.open = function ($event: any, instance: any) {
       $event.preventDefault();
       $event.stopPropagation();
 
@@ -85,21 +136,19 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
 
 
   $scope.processForm = function () {
-    delete $scope.formData.__v;
+    // delete $scope.formData.__v;
     $scope.formData.slots = $scope.slotsSelected;
 
     // convert enum value to enum key
-    $scope.formData.status = Object.keys($scope.props.InstStatusEnum).find( 
-      function (item) { 
+    $scope.formData.status = Object.keys($scope.props.InstStatusEnum).filter( 
+      function (item: string) { 
         return $scope.statusDisplay === $scope.props.InstStatusEnum[item];
-      });
+      })[0];
 
-    let flattenedAreas = $scope.areasSelected.map(function(item, idx, array) {
+    let flattenedAreas = $scope.areasSelected.map(function(item: IForgArea) {
       return item.uid;
     });
     $scope.formData.area = flattenedAreas;
-
-    $scope.formData.software = $scope.swSelected.item._id;
 
     if ($scope.inputForm.$valid) {
       let url = basePath + "/api/v1/inst";
@@ -142,10 +191,10 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     }
   };
 
-  $scope.newItem = function (event) {
+  $scope.newItem = function (event: {currentTarget: HTMLInputElement}) {
     var parts = event.currentTarget.id.split('.');
     if (parts[1] === 'slots') {
-      $scope.formData.slots.push("");
+      // $scope.formData.slots.push("");
     } else if (parts[1] === 'vvResultsLoc') {
       if (!$scope.formData.vvResultsLoc) {
         $scope.formData.vvResultsLoc = [];
@@ -156,25 +205,28 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
       if (!$scope.areasSelected) {
         $scope.areasSelected = [];
       }
-      $scope.areasSelected.push("");
+      $scope.areasSelected.push({ uid: ''});
     }
   };
 
-  $scope.removeItem = function (event) {
+  $scope.removeItem = function (event: {currentTarget: HTMLInputElement}) {
     var parts = event.currentTarget.id.split('.');
     if (parts[1] === 'slots') {
-      $scope.formData.slots.splice(parts[2], 1);
+      // $scope.formData.slots.splice(parts[2], 1);
     } else if (parts[1] === 'vvResultsLoc') {
-      $scope.formData.vvResultsLoc.splice(parts[2], 1);
+      if (!$scope.formData.vvResultsLoc){
+        $scope.formData.vvResultsLoc = [];
+      }
+      $scope.formData.vvResultsLoc.splice(Number(parts[2]), 1);
     } else if (parts[1] === 'area') {
       // $scope.formData.area.splice(parts[2], 1);
-      $scope.areasSelected.splice(parts[2], 1);
+      $scope.areasSelected.splice(Number(parts[2]), 1);
     }
   };
 
   var getEnums = function () {
     $scope.formData.status = "DEVEL";
-    $scope.formData.area = "";
+    $scope.formData.area = [];
   };
 
   $scope.refreshSw = () => {
@@ -186,7 +238,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
 
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
-  $scope.slots = slotService.getSlot();
+  // $scope.slots = slotService.getSlot();
   $scope.refreshSw();
 
   forgAreaService.promise.then(function () {
@@ -201,11 +253,12 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
 
   // initialize this record
   $scope.formData = {
-    //versionControl: "",
-    slots: [],
-    vvResultLoc: [],
     area: [],
-  };
+    status: 'DEVEL',
+    vvResultsLoc: [],
+    slots: [],
+  }
+  getEnums();
 
   $scope.swdbParams = {
     formShowErr: false,
@@ -213,9 +266,7 @@ function InstNewPromiseCtrl($scope, $http, $window, $location, configService, us
     formStatus: "",
     formErr: ""
   };
-  getEnums();
   $scope.slotsSelected = [];
   $scope.areasSelected = [];
-  $scope.swSelected = {item: {}};
 
 }
