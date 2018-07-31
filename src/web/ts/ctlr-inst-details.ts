@@ -97,7 +97,7 @@ function InstDetailsPromiseCtrl(
 
     // convert the retreived record software
     swService.promise.then(() => {
-      if ($scope.formData.software){
+      if ($scope.formData.software) {
         const obj = swService.swIdsToObjects([$scope.formData.software]);
         $scope.swSelected = obj[0];
       }
