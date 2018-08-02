@@ -24,13 +24,15 @@ interface IRouteParams extends ng.route.IRouteParamsService {
 }
 
 interface IInstService {
+  promise: ng.IPromise<void>;
   refreshInstList(): ng.IPromise<void>;
   getInstById(id: string): webapi.Inst;
 }
 
 interface ISwService {
   promise: ng.IPromise<void>;
-  swIdsToObjects(id: [string]): webapi.ISwdb[];
+  refreshSwList(): ng.IPromise<void>;
+  swIdsToObjects(id: string[]): webapi.ISwdb[];
   getSwList(): webapi.ISwdb[];
 }
 

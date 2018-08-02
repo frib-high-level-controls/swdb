@@ -2,9 +2,61 @@
  * update controller for installations
  */
 
+interface IInstUpdateControllerScope extends ng.IScope {
+  session: {
+    user?: {};
+  };
+  props: IConfigProps;
+  swMeta: SWMeta;
+  usrBtnTxt?: string;
+  formData: webapi.Inst;
+  slotsSelected: string[];
+  statusDisplay: string | undefined;
+  areasSelected: IForgArea[];
+  swSelected: webapi.ISwdb;
+  statusDateDisplay: Date;
+  vvApprovalDateDisplay: Date;
+  rawHistory: {};
+  datePicker: any;
+  inputForm: any;
+  swList: webapi.ISwdb[];
+  forgAreasList: IForgArea[];
+  softwareDisabled: boolean;
+  softwareMouseover: string;
+  swdbParams: {
+    error: {
+      message: string,
+      status: string,
+    }
+    formStatus: string,
+    formErr: string,
+    formShowErr: boolean,
+    formShowStatus: boolean,
+  };
+  usrBtnClk(): void;
+  updateBtnClk(): void;
+  bckBtnClk(): void;
+  swSelect(item: webapi.Inst): void;
+  // formErrors(form: any): void;
+  newItem(event: { currentTarget: HTMLInputElement }): void;
+  removeItem(event: { currentTarget: HTMLInputElement }): void;
+  processForm(): void;
+  refreshSw(): void;
+}
+
 appController.controller('InstUpdateController', InstUpdatePromiseCtrl);
-function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService,
-  userService, instService, swService, forgAreaService) {
+function InstUpdatePromiseCtrl(
+  $scope: IInstUpdateControllerScope,
+  $http: ng.IHttpService,
+  $routeParams: ng.route.IRouteParamsService,
+  $window: ng.IWindowService,
+  $location: ng.ILocationService,
+  configService: IConfigService,
+  userService: IUserService,
+  instService: IInstService,
+  swService: ISwService,
+  forgAreaService: IForgAreaService,
+) {
 
   $scope.$watch(function () {
     return $scope.session;
@@ -17,11 +69,11 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     }
   }, true);
 
-  $scope.datePicker = (function () {
-    var method = {};
+  $scope.datePicker = ( () => {
+    const method: any = {};
     method.instances = [];
 
-    method.open = function ($event, instance) {
+    method.open =  ($event: any, instance: any) => {
       $event.preventDefault();
       $event.stopPropagation();
 
@@ -30,13 +82,13 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
 
     method.options = {
       'show-weeks': false,
-      startingDay: 0
+      'startingDay': 0,
     };
 
-    method.format = 'MM/dd/yyyy';
+    method.format = 'M!/d!/yyyy';
 
     return method;
-  }());
+  })();
 
   $scope.bckBtnClk = function () {
     // Go back to details
@@ -53,23 +105,32 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
 
   $scope.processForm = function () {
     // convert enum value to enum key
-    $scope.formData.status = Object.keys($scope.props.InstStatusEnum).find( 
-      function (item) { 
+    $scope.formData.status = Object.keys($scope.props.InstStatusEnum).filter( 
+      function (item: string) {
         return $scope.statusDisplay === $scope.props.InstStatusEnum[item];
-      });
+      })[0];
 
     // Prep any selected areas
     if ($scope.areasSelected) {
-      let flattenedAreas = $scope.areasSelected.map(function (item, idx, array) {
-        if (item) {
+      let flattenedAreas = $scope.areasSelected.map(function (item: IForgArea) {
           return item.uid;
-        }
       });
       $scope.formData.area = flattenedAreas;
     }
 
+    // prep form dates
+    if ($scope.statusDateDisplay) {
+      $scope.formData.statusDate = $scope.statusDateDisplay.toISOString();
+    } else {
+      $scope.formData.statusDate = '';
+    }
+    if ($scope.vvApprovalDateDisplay) {
+      $scope.formData.vvApprovalDate = $scope.vvApprovalDateDisplay.toISOString();
+    } else {
+      $scope.formData.vvApprovalDate = '';
+    }
+
     if ($scope.inputForm.$valid) {
-      delete $scope.formData.__v;
       let url = basePath + "/api/v1/inst/" + $scope.formData._id;
 
       $http({
@@ -105,50 +166,37 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     var parts = event.currentTarget.id.split('.');
     // console.log("got add: " + parts);
     if (parts[1] === 'area') {
-      $scope.areasSelected.push("");
-    } else if (parts[1] === 'slots') {
-      $scope.formData.slots.push("");
-    } else if (parts[1] === 'vvResultsLoc') {
-      $scope.formData.vvResultsLoc.push("");
-    } else if (parts[1] === 'drrs') {
-      $scope.formData.drrs.push("");
-    } else if (parts[1] === 'area') {
       // check to see if area needs initialization
       if (!$scope.areasSelected) {
         $scope.areasSelected = [];
       }
-      $scope.areasSelected.push("");
-    }
+      $scope.areasSelected.push({ uid: ''});
+    } else if (parts[1] === 'slots') {
+      // $scope.formData.slots.push("");
+    } else if (parts[1] === 'vvResultsLoc') {
+      if (!$scope.formData.vvResultsLoc) {
+        $scope.formData.vvResultsLoc = [];
+      }
+      $scope.formData.vvResultsLoc.push('');
+    } 
   };
 
   $scope.removeItem = function (event) {
     var parts = event.currentTarget.id.split('.');
     if (parts[1] === 'area') {
-      $scope.areasSelected.splice(parts[2], 1);
+      $scope.areasSelected.splice(Number(parts[2]), 1);
     } else if (parts[1] === 'slots') {
-      $scope.formData.slots.splice(parts[2], 1);
+      // $scope.formData.slots.splice(parts[2], 1);
     } else if (parts[1] === 'vvResultsLoc') {
-      $scope.formData.vvResultsLoc.splice(parts[2], 1);
-    } else if (parts[1] === 'drrs') {
-      $scope.formData.drrs.splice(parts[2], 1);
-    } else if (parts[1] === 'area') {
-      $scope.formData.area.splice(parts[2], 1);
+      if (!$scope.formData.vvResultsLoc) {
+        $scope.formData.vvResultsLoc = [];
+      }
+      $scope.formData.vvResultsLoc.splice(Number(parts[2]), 1);
     }
   };
 
-  $scope.onStatusChange = function ($item, $model, $label) {
-    // if ($scope.statusDisplay !== $scope.props.InstStatusEnum['RDY_INST']) {
-    //   $scope.softwareDisabled = true;
-    //   $scope.softwareMouseover = "Software can only change when status is '" + 
-    //     $scope.props.instStatusLabels[0] + "'";
-    // }
-    // else {
-    //   $scope.softwareDisabled = false;
-    //   $scope.softwareMouseover = "";
-    // }
-  }
 
-  $scope.swSelect = function ($item, $model, $label) {
+  $scope.swSelect = function ($item) {
     $scope.formData.software = $item._id;
   };
 
@@ -174,6 +222,10 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
   }
 
   $scope.swdbParams = {
+    error: {
+      message: '',
+      status: '',
+    },
     formShowErr: false,
     formShowStatus: false,
     formStatus: "",
@@ -186,32 +238,37 @@ function InstUpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, 
     $scope.formData = data;
 
     // set enum values from keys
-    $scope.statusDisplay = $scope.props.InstStatusEnum[data.status];
-
+    if (data.status) {
+      $scope.statusDisplay = $scope.props.InstStatusEnum[data.status];
+    }
     // set software field disable based on the given status
     if ($scope.statusDisplay !== $scope.props.InstStatusEnum['RDY_INST']) {
       $scope.softwareDisabled = true;
       $scope.softwareMouseover = "Software can only change when the record status is '" + 
         $scope.props.instStatusLabels[0] + "'";
     }
-    //$scope.onStatusChange();
 
-    $scope.whichItem = $routeParams.itemId;
     // convert the retreived record areas
     forgAreaService.promise.then(function(){
-      $scope.areasSelected =  forgAreaService.areaUidsToObjects($scope.formData.area);
+      if ($scope.formData.area) {
+        $scope.areasSelected = forgAreaService.areaUidsToObjects($scope.formData.area);
+      }
     })
+    
     // make a Date object from this string
-    $scope.formData.statusDate = new Date($scope.formData.statusDate);
+    if ($scope.formData.statusDate){
+      $scope.statusDateDisplay = new Date($scope.formData.statusDate);
+    }
     if (($scope.formData.vvApprovalDate) && ($scope.formData.vvApprovalDate != "")){
-      $scope.formData.vvApprovalDate = new Date($scope.formData.vvApprovalDate);
+      $scope.vvApprovalDateDisplay = new Date($scope.formData.vvApprovalDate);
     }
 
     // convert the retreived record software
     swService.promise.then(function(){
-      let obj = swService.swIdsToObjects([$scope.formData.software])[0];
 
-      $scope.swSelected = obj;
+      if ($scope.formData.software){
+        $scope.swSelected = swService.swIdsToObjects([$scope.formData.software])[0];
+      }
     });
 
   });

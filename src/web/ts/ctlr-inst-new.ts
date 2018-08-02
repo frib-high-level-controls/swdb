@@ -13,8 +13,8 @@ interface IInstNewControllerScope extends ng.IScope {
   slotsSelected: string[];
   statusDisplay: string | undefined;
   areasSelected: IForgArea[];
-  statusDateDisplay: string;
-  vvApprovalDateDisplay: string;
+  statusDateDisplay: Date;
+  vvApprovalDateDisplay: Date;
   rawHistory: {};
   datePicker: any;
   inputForm: any;
@@ -39,6 +39,7 @@ interface IInstNewControllerScope extends ng.IScope {
 interface IForgAreaService {
   promise: ng.IPromise<void>;
   getAreas(): any;
+  areaUidsToObjects(id: string[]): IForgArea[];
 }
 interface IForgArea {
   uid: string;
@@ -117,6 +118,18 @@ function InstNewPromiseCtrl(
       return item.uid;
     });
     $scope.formData.area = flattenedAreas;
+
+    // prep form dates
+    if ($scope.statusDateDisplay) {
+      $scope.formData.statusDate = $scope.statusDateDisplay.toISOString();
+    } else {
+      $scope.formData.statusDate = '';
+    }
+    if ($scope.vvApprovalDateDisplay) {
+      $scope.formData.vvApprovalDate = $scope.vvApprovalDateDisplay.toISOString();
+    } else {
+      $scope.formData.vvApprovalDate = '';
+    }
 
     if ($scope.inputForm.$valid) {
       const url = basePath + '/api/v1/inst';
