@@ -58,12 +58,12 @@ function InstUpdatePromiseCtrl(
   forgAreaService: IForgAreaService,
 ) {
 
-  $scope.$watch(function () {
+  $scope.$watch( () => {
     return $scope.session;
-  }, function () {
+  },  () => {
     // prep for login button
     if ($scope.session && $scope.session.user) {
-      $scope.usrBtnTxt = "";
+      $scope.usrBtnTxt = '';
     } else {
       $scope.usrBtnTxt = 'Log in';
     }
@@ -90,12 +90,12 @@ function InstUpdatePromiseCtrl(
     return method;
   })();
 
-  $scope.bckBtnClk = function () {
+  $scope.bckBtnClk =  () => {
     // Go back to details
-    $location.path("/inst/details/" + $scope.formData._id);
+    $location.path('/inst/details/' + $scope.formData._id);
   };
 
-  $scope.usrBtnClk = function () {
+  $scope.usrBtnClk =  () => {
     if ($scope.session.user) {
       $window.location.href = $scope.props.webUrl + 'logout';
     } else {
@@ -103,16 +103,16 @@ function InstUpdatePromiseCtrl(
     }
   };
 
-  $scope.processForm = function () {
+  $scope.processForm =  () => {
     // convert enum value to enum key
-    $scope.formData.status = Object.keys($scope.props.InstStatusEnum).filter( 
-      function (item: string) {
+    $scope.formData.status = Object.keys($scope.props.InstStatusEnum).filter(
+       (item: string) => {
         return $scope.statusDisplay === $scope.props.InstStatusEnum[item];
       })[0];
 
     // Prep any selected areas
     if ($scope.areasSelected) {
-      let flattenedAreas = $scope.areasSelected.map(function (item: IForgArea) {
+      const flattenedAreas = $scope.areasSelected.map( (item: IForgArea) => {
           return item.uid;
       });
       $scope.formData.area = flattenedAreas;
@@ -131,39 +131,39 @@ function InstUpdatePromiseCtrl(
     }
 
     if ($scope.inputForm.$valid) {
-      let url = basePath + "/api/v1/inst/" + $scope.formData._id;
+      const url = basePath + '/api/v1/inst/' + $scope.formData._id;
 
       $http({
         method: 'PUT',
         url: url,
         data: $scope.formData,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       })
         .then(function success(response) {
-          $scope.swdbParams.formStatus = "Document updates successfully posted";
+          $scope.swdbParams.formStatus = 'Document updates successfully posted';
           $scope.swdbParams.formShowErr = false;
           $scope.swdbParams.formShowStatus = true;
-          let headers = response.headers();
+          const headers = response.headers();
           if (headers.location) {
             // if location header is present extract the id
-            let id = headers.location.split('/').pop();
+            const id = headers.location.split('/').pop();
             $location.path('/inst/details/' + id);
           }
         }, function error(response) {
           $scope.swdbParams.error = { message: response.statusText + response.data, status: response.status };
-          $scope.swdbParams.formErr = "Error: " + $scope.swdbParams.error.message + "(" + response.status + ")";
+          $scope.swdbParams.formErr = 'Error: ' + $scope.swdbParams.error.message + '(' + response.status + ')';
           $scope.swdbParams.formShowStatus = false;
           $scope.swdbParams.formShowErr = true;
         });
     } else {
-      $scope.swdbParams.formErr = "Error: clear errors before submission";
+      $scope.swdbParams.formErr = 'Error: clear errors before submission';
       $scope.swdbParams.formShowStatus = false;
       $scope.swdbParams.formShowErr = true;
     }
   };
 
-  $scope.newItem = function (event) {
-    var parts = event.currentTarget.id.split('.');
+  $scope.newItem =  (event) => {
+    const parts = event.currentTarget.id.split('.');
     // console.log("got add: " + parts);
     if (parts[1] === 'area') {
       // check to see if area needs initialization
@@ -178,11 +178,11 @@ function InstUpdatePromiseCtrl(
         $scope.formData.vvResultsLoc = [];
       }
       $scope.formData.vvResultsLoc.push('');
-    } 
+    }
   };
 
-  $scope.removeItem = function (event) {
-    var parts = event.currentTarget.id.split('.');
+  $scope.removeItem =  (event) => {
+    const parts = event.currentTarget.id.split('.');
     if (parts[1] === 'area') {
       $scope.areasSelected.splice(Number(parts[2]), 1);
     } else if (parts[1] === 'slots') {
@@ -196,7 +196,7 @@ function InstUpdatePromiseCtrl(
   };
 
 
-  $scope.swSelect = function ($item) {
+  $scope.swSelect =  ($item) => {
     $scope.formData.software = $item._id;
   };
 
@@ -206,18 +206,18 @@ function InstUpdatePromiseCtrl(
 
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
-  $scope.swList = swService.getSwList().filter(function (item, index, arr) {
+  $scope.swList = swService.getSwList().filter( (item, index, arr) => {
     // filter for software that is in the "Ready for Install" state
     return item.status === 'RDY_INST';
   });
 
-  forgAreaService.promise.then(function () {
+  forgAreaService.promise.then( () => {
     $scope.forgAreasList = forgAreaService.getAreas().data;
   });
 
   // check our user session and redirect if needed
   if (!$scope.session.user) {
-    //go to cas
+    // go to cas
     $window.location.href = $scope.props.webUrl + 'login';
   }
 
@@ -228,13 +228,13 @@ function InstUpdatePromiseCtrl(
     },
     formShowErr: false,
     formShowStatus: false,
-    formStatus: "",
-    formErr: ""
+    formStatus: '',
+    formErr: '',
   };
 
-  //update document fields with existing data
-  instService.promise.then(function () {
-    let data = instService.getInstById($routeParams.itemId);    
+  // update document fields with existing data
+  instService.promise.then( () => {
+    const data = instService.getInstById($routeParams.itemId);
     $scope.formData = data;
 
     // set enum values from keys
@@ -242,31 +242,32 @@ function InstUpdatePromiseCtrl(
       $scope.statusDisplay = $scope.props.InstStatusEnum[data.status];
     }
     // set software field disable based on the given status
-    if ($scope.statusDisplay !== $scope.props.InstStatusEnum['RDY_INST']) {
+    const index = 'RDY_INST';
+    if ($scope.statusDisplay !== $scope.props.InstStatusEnum[index]) {
       $scope.softwareDisabled = true;
-      $scope.softwareMouseover = "Software can only change when the record status is '" + 
+      $scope.softwareMouseover = "Software can only change when the record status is '" +
         $scope.props.instStatusLabels[0] + "'";
     }
 
     // convert the retreived record areas
-    forgAreaService.promise.then(function(){
+    forgAreaService.promise.then(() => {
       if ($scope.formData.area) {
         $scope.areasSelected = forgAreaService.areaUidsToObjects($scope.formData.area);
       }
-    })
-    
+    });
+
     // make a Date object from this string
-    if ($scope.formData.statusDate){
+    if ($scope.formData.statusDate) {
       $scope.statusDateDisplay = new Date($scope.formData.statusDate);
     }
-    if (($scope.formData.vvApprovalDate) && ($scope.formData.vvApprovalDate != "")){
+    if (($scope.formData.vvApprovalDate) && ($scope.formData.vvApprovalDate !== '')) {
       $scope.vvApprovalDateDisplay = new Date($scope.formData.vvApprovalDate);
     }
 
     // convert the retreived record software
-    swService.promise.then(function(){
+    swService.promise.then(() => {
 
-      if ($scope.formData.software){
+      if ($scope.formData.software) {
         $scope.swSelected = swService.swIdsToObjects([$scope.formData.software])[0];
       }
     });
