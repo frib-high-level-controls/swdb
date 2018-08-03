@@ -14,6 +14,7 @@ interface IConfigProps {
   webUrl: string;
   StatusEnum: { [key: string]: string | undefined };
   InstStatusEnum: { [key: string]: string | undefined };
+  instStatusLabels: string[];
 }
 
 interface IConfigService {

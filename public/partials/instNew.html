@@ -163,7 +163,7 @@
 
             <p class="input-group">
               <input id="statusDate" name="statusDateInput" type="text" class="form-control" uib-datepicker-popup="{{datePicker.format}}"
-                ng-model="formData.statusDate" is-open="datePicker.instances['statusDate']" datepicker-options="datePicker.options"
+                ng-model="statusDateDisplay" is-open="datePicker.instances['statusDate']" datepicker-options="datePicker.options"
                 ng-required="true" close-text="Close" alt-input-formats="altInputFormats" 
               />
               <span class="input-group-btn">
@@ -188,7 +188,7 @@
 
             <p class="input-group">
               <input id="vvApprovalDate" name="vvApprovalDateInput" type="text" class="form-control" uib-datepicker-popup="{{datePicker.format}}"
-                ng-model="formData.vvApprovalDate" is-open="datePicker.instances['vvApprovalDate']" datepicker-options="datePicker.options"
+                ng-model="vvApprovalDateDisplay" is-open="datePicker.instances['vvApprovalDate']" datepicker-options="datePicker.options"
                 close-text="Close" alt-input-formats="altInputFormats" 
               />
               <span class="input-group-btn">
