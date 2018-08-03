@@ -2,9 +2,60 @@
  * angular detail controller for swdb
  */
 
+interface ISwdbDetailsControllerScope extends ng.IScope {
+  session: {
+    user?: {};
+  };
+  props: IConfigProps;
+  swMeta: SWMeta;
+  usrBtnTxt?: string;
+  formData: webapi.ISwdb;
+  statusDisplay: string | undefined;
+  statusDateDisplay: string | undefined;
+  levelOfCareDisplay: string | undefined;
+  versionControlDisplay: string | undefined;
+  rawHistory: IHistory[];
+  isHistCollapsed: boolean;
+  history: string;
+  usrBtnClk(): void;
+  updateBtnClk(): void;
+  bumpVerBtnClk(): void;
+}
+
+interface IRecData {
+  updateRecID: string;
+  formData: webapi.ISwdb;
+}
+
+interface IRecService {
+  getUser(): {};
+  setRec(obj: IRecData): void;
+}
+
+interface IHistory {
+  at: string;
+  by: string;
+  isCollapsed: boolean;
+  paths: Array<
+  {
+    name: string;
+    value: string;
+  }>;
+}
+
 appController.controller('DetailsController', DetailsPromiseCtrl);
-function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sce, configService,
-  swService, userService, recService) {
+function DetailsPromiseCtrl(
+  $scope: ISwdbDetailsControllerScope,
+  $http: ng.IHttpService,
+  $routeParams: IRouteParams,
+  $window: ng.IWindowService,
+  $location: ng.IWindowService,
+  $sce: ng.ISCEService,
+  configService: IConfigService,
+  swService: ISwService,
+  userService: IUserService,
+  recService: IRecService,
+) {
   $scope.$watch(function () {
     return $scope.session;
   }, function () {
@@ -33,7 +84,7 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
     $location.path("/new");
   };
 
-  let mkHistTable = function (data){
+  let mkHistTable = function (data: IHistory[]){
     let table = '<table id="histTable" class="swdbHistTable">';
     data.map(function(elem, idx, arr){
       table = table.concat('<tr class="swdbHistTr"><td class="swdbHistTdSection">'+
@@ -53,12 +104,14 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
   let url = basePath + "/api/v1/swdb/" + $routeParams.itemId;
 
   swService.refreshSwList().then(function () {
-    let data = swService.getSwById($routeParams.itemId);    
+    let data = swService.getSwById($routeParams.itemId);
     $scope.formData = data;
     // convert level of care key to value
     $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[data.levelOfCare];
     $scope.statusDisplay = $scope.props.StatusEnum[data.status];
-    $scope.versionControlDisplay = $scope.props.RcsEnum[data.versionControl];
+    if (data.versionControl) {
+      $scope.versionControlDisplay = $scope.props.RcsEnum[data.versionControl];
+    }
     // format dates for display
     if (data.statusDate) {
       let thisDate = new Date(data.statusDate);
@@ -67,17 +120,16 @@ function DetailsPromiseCtrl($scope, $http, $routeParams, $window, $location, $sc
       let year = thisDate.getFullYear();
       $scope.formData.statusDate =  month + '/' + day + '/' + year;
     }
-    $scope.whichItem = $routeParams.itemId;
   });
 
   // get history
   url = basePath + "/api/v1/swdb/hist/" + $routeParams.itemId;
   $http.get(url).then(function (data) {
-    $scope.rawHistory = data.data;
-    $scope.rawHistory.map = function(elem, idx, arr) {
+    $scope.rawHistory = data.data as IHistory[];
+    $scope.rawHistory.map(function(elem: IHistory, idx: number, arr: IHistory[]) {
       elem.isCollapsed = true;
-    }
+    });
     $scope.isHistCollapsed = false;
-    $scope.history = $sce.trustAsHtml(mkHistTable(data.data));
+    $scope.history = $sce.trustAsHtml(mkHistTable(data.data as IHistory[]));
   });
 }

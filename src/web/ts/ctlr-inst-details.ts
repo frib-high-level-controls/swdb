@@ -34,6 +34,7 @@ interface ISwService {
   refreshSwList(): ng.IPromise<void>;
   swIdsToObjects(id: string[]): webapi.ISwdb[];
   getSwList(): webapi.ISwdb[];
+  getSwById(item: string): webapi.ISwdb;
 }
 
 appController.controller('InstDetailsController', InstDetailsPromiseCtrl);

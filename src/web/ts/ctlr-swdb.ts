@@ -14,6 +14,8 @@ interface IConfigProps {
   webUrl: string;
   StatusEnum: { [key: string]: string | undefined };
   InstStatusEnum: { [key: string]: string | undefined };
+  LevelOfCareEnum: { [key: string]: string | undefined };
+  RcsEnum: { [key: string]: string | undefined };
   instStatusLabels: string[];
 }
 
