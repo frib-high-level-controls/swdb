@@ -2,8 +2,77 @@
  * angular new controller for swdb
  */
 
+interface ISwdbNewControllerScope extends ng.IScope {
+  session: {
+    user?: {};
+  };
+  props: IConfigProps;
+  swMeta: SWMeta;
+  usrBtnTxt?: string;
+  formData: webapi.ISwdb;
+  inputForm: any;
+  datePicker: any;
+  ownerSelected: { item: IForgGroup | undefined };
+  engineerSelected: { item: IForgUser | undefined };
+  forgUsersList: IForgUser[];
+  forgGroupsList: IForgGroup[];
+  statusDisplay: string | undefined;
+  statusDateDisplay: Date;
+  levelOfCareDisplay: string | undefined;
+  versionControlDisplay: string | undefined;
+  rawHistory: IHistory[];
+  isHistCollapsed: boolean;
+  history: string;
+  swdbParams: {
+    formStatus: string,
+    formErr: string,
+    formShowErr: boolean,
+    formShowStatus: boolean,
+  };
+  newItem(event: {currentTarget: HTMLInputElement}): void;
+  removeItem(event: {currentTarget: HTMLInputElement}): void;
+  usrBtnClk(): void;
+  bckBtnClk(): void;
+  processForm(): void;
+  updateBtnClk(): void;
+  bumpVerBtnClk(): void;
+  onEngineerSelect(item: webapi.ISwdb, model: IForgUser, array: any[]): void;
+  onOwnerSelect(item: webapi.ISwdb, model: IForgGroup, array: any[]): void;
+}
+
+interface IForgUserService {
+  promise: ng.IPromise<void>;
+  getUsers(): any;
+  userUidsToObjects(arr: string[]): IForgUser[];
+}
+
+interface IForgUser {
+    uid: string;
+}
+
+interface IForgGroupService {
+  promise: ng.IPromise<void>;
+  getGroups(): any;
+  groupUidsToObjects(arr: string[]): IForgGroup[];
+}
+
+interface IForgGroup {
+    uid: string;
+}
+
 appController.controller('NewController', NewPromiseCtrl);
-function NewPromiseCtrl($scope, $http, $window, $location, configService, userService, swService, forgUserService, forgGroupService, recService) {
+function NewPromiseCtrl(
+  $scope: ISwdbNewControllerScope,
+  $http: ng.IHttpService,
+  $window: ng.IHttpService,
+  $location: ng.ILocationService,
+  configService: IConfigService,
+  userService: IUserService,
+  swService: ISwService,
+  forgUserService: IForgUserService,
+  forgGroupService: IForgGroupService,
+  recService: IRecService,
+) {
 
   $scope.$watch(function () {
     return $scope.session;
@@ -18,9 +87,11 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
 
   $scope.usrBtnClk = function () {
     if ($scope.session.user) {
-      $window.location.href = $scope.props.webUrl + 'logout';
+      // $window.location.href = $scope.props.webUrl + 'logout';
+      $location.path($scope.props.webUrl + 'logout');
     } else {
-      $window.location.href = $scope.props.webUrl + 'login';
+      // $window.location.href = $scope.props.webUrl + 'login';
+      $location.path($scope.props.webUrl + 'login');
     }
   };
 
@@ -29,10 +100,10 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
   };
 
   $scope.datePicker = (function () {
-    var method = {};
+    var method: any = {};
     method.instances = [];
 
-    method.open = function ($event, instance) {
+    method.open = function ($event: any, instance: any) {
       $event.preventDefault();
       $event.stopPropagation();
       method.instances[instance] = true;
@@ -47,54 +118,58 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     return method;
   }());
 
-  $scope.newItem = function (event) {
+  $scope.newItem = function (event: {currentTarget: HTMLInputElement}) {
     var parts = event.currentTarget.id.split('.');
     if (parts[1] === 'vvProcLoc') {
+      if ($scope.formData.vvProcLoc){
       $scope.formData.vvProcLoc.push("");
+      }
     } else if (parts[1] === 'vvResultsLoc') {
+      if ($scope.formData.vvResultsLoc){
       $scope.formData.vvResultsLoc.push("");
+    }
     }
   };
 
   $scope.removeItem = function (event) {
     var parts = event.currentTarget.id.split('.');
     if (parts[1] === 'vvProcLoc') {
-      $scope.formData.vvProcLoc.splice(parts[2], 1);
+      if ($scope.formData.vvProcLoc){
+        $scope.formData.vvProcLoc.splice(Number(parts[2]), 1);
+      }
     } else if (parts[1] === 'vvResultsLoc') {
-      $scope.formData.vvResultsLoc.splice(parts[2], 1);
+      if ($scope.formData.vvResultsLoc){
+        $scope.formData.vvResultsLoc.splice(Number(parts[2]), 1);
+      }
     }
   };
 
   $scope.processForm = function () {
     // Prep any selected owner
-    $scope.formData.owner = $scope.ownerSelected.item.uid;
+    if ($scope.ownerSelected.item) {
+      $scope.formData.owner = $scope.ownerSelected.item.uid;
+    }
     // Prep any selected engineer
-    if ($scope.engineerSelected.item) {
+    if (($scope.engineerSelected.item) && ($scope.engineerSelected.item.uid)) {
       $scope.formData.engineer = $scope.engineerSelected.item.uid;
     }
 
-    if ($scope.formData.statusDate instanceof String) {
-      $scope.formData.statusDate = new Date($scope.formData.statusDate);
-    }
-    if ($scope.formData.vvApprovalDate instanceof String) {
-      $scope.formData.vvApprovalDate = new Date($scope.formData.vvApprovalDate);
-    }
+    $scope.formData.statusDate = $scope.statusDateDisplay.toISOString();
 
     // convert enum values to keys
-    $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).find( 
+    $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).filter( 
       function (item) { 
         return $scope.levelOfCareDisplay === $scope.props.LevelOfCareEnum[item];
-      });
-    $scope.formData.status = Object.keys($scope.props.StatusEnum).find( 
+      })[0];
+    $scope.formData.status = Object.keys($scope.props.StatusEnum).filter( 
       function (item) { 
         return $scope.statusDisplay === $scope.props.StatusEnum[item];
-      });
-    $scope.formData.versionControl = Object.keys($scope.props.RcsEnum).find( 
+      })[0];
+    $scope.formData.versionControl = Object.keys($scope.props.RcsEnum).filter( 
       function (item) { 
         return $scope.versionControlDisplay === $scope.props.RcsEnum[item];
-      });
+      })[0];
 
-    delete $scope.formData.__v;
     if (!$scope.formData.version) {
     }
     if ($scope.inputForm.$valid) {
@@ -144,14 +219,14 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     $scope.formData.versionControl = "Other";
   };
 
-  // set the engineer field to the selected user
-  $scope.onEngineerSelect = function ($item, $model, $label) {
-    $scope.formData.engineer = $model;
-  };
-  // set the owner field to the selected user
-  $scope.onOwnerSelect = function ($item, $model, $label) {
-    $scope.formData.owner = $model;
-  };
+  // // set the engineer field to the selected user
+  // $scope.onEngineerSelect = function ($item, $model, $label) {
+  //   $scope.formData.engineer = $model.uid;
+  // };
+  // // set the owner field to the selected user
+  // $scope.onOwnerSelect = function ($item, $model, $label) {
+  //   $scope.formData.owner = $model.uid;
+  // };
 
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
@@ -163,23 +238,25 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     $scope.forgGroupsList = forgGroupService.getGroups().data;
   });
 
-  $scope.itemArray = $scope.props.validSwNamesGUIList;
+  // $scope.itemArray = $scope.props.validSwNamesGUIList;
 
   // check our user session and redirect if needed
   if (!$scope.session.user) {
     //go to cas
-    $window.location.href = $scope.props.webUrl + 'login';
+    // $window.location.href = $scope.props.webUrl + 'login';
+    $location.path($scope.props.webUrl + 'login');
   }
 
   //initialize selected owner and engineer
-  $scope.ownerSelected = {item: {}};
-  $scope.engineerSelected = {item: {}};
+  $scope.ownerSelected = {item: undefined};
+  $scope.engineerSelected = {item: undefined};
 
   // initialize this record
   $scope.formData = {
     vvProcLoc: [],
     vvResultsLoc: [],
   };
+
   $scope.swdbParams = {
     formShowErr: false,
     formShowStatus: false,
@@ -191,25 +268,29 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
   // expect recService to provide ID and formdata
   let updateRec = recService.getRec();
   if (updateRec) {
-    let updateRedID = updateRec.updateRecId;
+    let updateRedID = updateRec.updateRecID;
     $scope.formData.swName = updateRec.formData.swName;
     $scope.formData.desc = updateRec.formData.desc;
     $scope.formData.owner = updateRec.formData.owner;
     $scope.formData.engineer = updateRec.formData.engineer;
 
     $scope.formData.levelOfCare = updateRec.formData.levelOfCare;
+    if (updateRec.formData.levelOfCare) {
     $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[updateRec.formData.levelOfCare];
+    }
     $scope.formData.status = 'DEVEL';
     $scope.statusDisplay = $scope.props.StatusEnum[$scope.formData.status];
 
-    $scope.formData.statusDate = new Date();
+    $scope.statusDateDisplay = new Date();
     $scope.formData.platforms = updateRec.formData.platforms;
     $scope.formData.designDescDocLoc = updateRec.formData.designDescDocLoc;
     $scope.formData.descDocLoc = updateRec.formData.descDocLoc;
     $scope.formData.vvProcLoc = updateRec.formData.vvProcLoc;
 
     $scope.formData.versionControl = updateRec.formData.versionControl;
+    if (updateRec.formData.versionControl){
     $scope.versionControlDisplay = $scope.props.RcsEnum[updateRec.formData.versionControl];
+    }
 
     $scope.formData.versionControlLoc = updateRec.formData.versionControlLoc;
     $scope.formData.previous = updateRedID;
@@ -218,15 +299,19 @@ function NewPromiseCtrl($scope, $http, $window, $location, configService, userSe
     recService.setRec(null);
     // convert the retreived record owner
     forgGroupService.promise.then(function(){
+      if ($scope.formData.owner) {
       let thisOwner = [$scope.formData.owner];
       let forgObjs = forgGroupService.groupUidsToObjects(thisOwner)[0];
-      $scope.ownerSelected.item = forgObjs;
+        $scope.ownerSelected = { item: forgObjs };
+      }
     })
     // convert the retreived record engineer
     forgUserService.promise.then(function(){
+      if ($scope.formData.engineer) {
       let thisEngineer = [$scope.formData.engineer];
       let forgObjs = forgUserService.userUidsToObjects(thisEngineer)[0];
-      $scope.engineerSelected.item = forgObjs;
+        $scope.engineerSelected = { item: forgObjs };
+      }
     })
   };
 }

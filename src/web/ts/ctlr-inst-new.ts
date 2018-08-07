@@ -36,11 +36,13 @@ interface IInstNewControllerScope extends ng.IScope {
   processForm(): void;
   refreshSw(): void;
 }
+
 interface IForgAreaService {
   promise: ng.IPromise<void>;
   getAreas(): any;
   areaUidsToObjects(id: string[]): IForgArea[];
 }
+
 interface IForgArea {
   uid: string;
 }
