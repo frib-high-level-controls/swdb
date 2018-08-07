@@ -75,6 +75,8 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
         $scope.formData.owner = $scope.ownerSelected.item.uid;
       }
 
+      $scope.formData.statusDate = $scope.statusDateDisplay.toISOString();
+
       // Prep any selected engineer
       if ($scope.engineerSelected && $scope.engineerSelected.item && $scope.engineerSelected.item.uid) {
         $scope.formData.engineer = $scope.engineerSelected.item.uid;
@@ -197,7 +199,8 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
 
     // make a Date object from this string
     if ($scope.formData.statusDate) {
-      $scope.formData.statusDate = new Date($scope.formData.statusDate);
+      // $scope.formData.statusDate = new Date($scope.formData.statusDate);
+      $scope.statusDateDisplay = new Date($scope.formData.statusDate);
     }
     // set selctor to current swName value
     $scope.selectedItem = { name: $scope.formData.swName };
