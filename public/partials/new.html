@@ -151,13 +151,6 @@
         <div id="engineer-group" class="form-group swdbFormRow">
           <label class="col-sm-2 control-label">Engineer</label>
           <div class="col-sm-8">
-            <!-- <input name="engineer" id="engineer" type="text" ng-model="engineerSelected" placeholder="type to search" uib-typeahead="eng.uid as (eng.uid + ': ' + eng.fullname) for eng in forgUsersList | engNopromiseFilter:$viewValue | limitTo:8"
-              typeahead-on-select='onEngineerSelect($item, $model, $label)' typeahead-loading="engLoadingLocations" typeahead-no-results="engNoResults" typeahead-editable="false"
-              class="form-control">
-            <i ng-show="engLoadingLocations" class="glyphicon glyphicon-refresh"></i>
-            <div ng-show="engNoResults">
-              <i class="glyphicon glyphicon-remove"></i> No Results Found
-            </div> -->
             <ui-select id="engineer" ng-model="engineerSelected.item" theme="bootstrap">
               <ui-select-match placeholder="Select or search area in the list...">{{$select.selected.uid}}</ui-select-match>
               <ui-select-choices repeat="item in forgUsersList | filter: $select.search">
@@ -206,7 +199,7 @@
 
             <p class="input-group">
               <input id="statusDate" name="statusDateInput" type="text" class="form-control" placeholder="Status Date (mm/dd/yyy)" uib-datepicker-popup="{{datePicker.format}}"
-                ng-model="formData.statusDate" is-open="datePicker.instances['statusDate']" datepicker-options="datePicker.options"
+                ng-model="statusDateDisplay" is-open="datePicker.instances['statusDate']" datepicker-options="datePicker.options"
                 ng-disabled="statusDisabled" ng-required="true" close-text="Close" 
               />
               <span class="input-group-btn">

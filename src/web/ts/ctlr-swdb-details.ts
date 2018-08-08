@@ -28,8 +28,8 @@ interface IRecData {
 }
 
 interface IRecService {
-  getUser(): {};
-  setRec(obj: IRecData): void;
+  getRec(): IRecData;
+  setRec(obj: IRecData | null ): void;
 }
 
 interface IHistory {
@@ -107,8 +107,12 @@ function DetailsPromiseCtrl(
     const data = swService.getSwById($routeParams.itemId);
     $scope.formData = data;
     // convert level of care key to value
-    $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[data.levelOfCare];
-    $scope.statusDisplay = $scope.props.StatusEnum[data.status];
+    if (data.levelOfCare){
+      $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[data.levelOfCare];
+    }
+    if (data.status) {
+      $scope.statusDisplay = $scope.props.StatusEnum[data.status];
+    }
     if (data.versionControl) {
       $scope.versionControlDisplay = $scope.props.RcsEnum[data.versionControl];
     }

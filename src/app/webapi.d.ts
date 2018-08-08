@@ -49,16 +49,16 @@ declare namespace webapi {
   }
 
   export interface ISwdb {
-    _id: string;
-    swName: string;
+    _id?: string;
+    swName?: string;
     version?: string;
     branch?: string;
     desc?: string;
-    owner: string;
+    owner?: string;
     engineer?: string;
-    levelOfCare: string;
-    status: string;
-    statusDate: string;
+    levelOfCare?: string;
+    status?: string;
+    statusDate?: string;
     platforms?: string;
     designDescDocLoc?: string;
     descDocLoc?: string;
