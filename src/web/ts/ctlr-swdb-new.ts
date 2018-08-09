@@ -36,8 +36,6 @@ interface ISwdbNewControllerScope extends ng.IScope {
   processForm(): void;
   updateBtnClk(): void;
   bumpVerBtnClk(): void;
-  onEngineerSelect(item: webapi.ISwdb, model: IForgUser, array: any[]): void;
-  onOwnerSelect(item: webapi.ISwdb, model: IForgGroup, array: any[]): void;
 }
 
 interface IForgUserService {

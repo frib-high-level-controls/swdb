@@ -1,10 +1,63 @@
 /*
  * update controller for swdb
  */
+interface ISwdbUpdateControllerScope extends ng.IScope {
+  session: {
+    user?: {};
+  };
+  props: IConfigProps;
+  swMeta: SWMeta;
+  usrBtnTxt?: string;
+  formData: webapi.ISwdb;
+  inputForm: any;
+  datePicker: any;
+  ownerSelected: { item: IForgGroup | undefined };
+  engineerSelected: { item: IForgUser | undefined };
+  selectedItem: { name: string | undefined };
+  forgUsersList: IForgUser[];
+  forgGroupsList: IForgGroup[];
+  statusDisplay: string | undefined;
+  statusDateDisplay: Date;
+  levelOfCareDisplay: string | undefined;
+  versionControlDisplay: string | undefined;
+  rawHistory: IHistory[];
+  isHistCollapsed: boolean;
+  statusDisabled: boolean;
+  branchDisabled: boolean;
+  versionDisabled: boolean;
+  branchMouseover: string;
+  versionMouseover: string;
+  history: string;
+  swdbParams: {
+    formStatus: string,
+    formErr: string,
+    formShowErr: boolean,
+    formShowStatus: boolean,
+  };
+  newItem(event: {currentTarget: HTMLInputElement}): void;
+  removeItem(event: {currentTarget: HTMLInputElement}): void;
+  onStatusChange(): void;
+  usrBtnClk(): void;
+  bckBtnClk(): void;
+  processForm(): void;
+  updateBtnClk(): void;
+  bumpVerBtnClk(): void;
+}
 
 appController.controller('UpdateController', UpdatePromiseCtrl);
-function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, configService, userService,
-   swService, instService, forgUserService, forgGroupService) {
+function UpdatePromiseCtrl(
+  $scope: ISwdbUpdateControllerScope,
+  $http: ng.IHttpService,
+  $routeParams: ng.route.IRouteParamsService,
+  $window: ng.IWindowService,
+  $location: ng.ILocationService,
+  configService: IConfigService,
+  userService: IUserService,
+  swService: ISwService,
+  instService: IInstService,
+  forgUserService: IForgUserService,
+  forgGroupService: IForgGroupService,
+) {
   $scope.$watch(function () {
     return $scope.session;
   }, function () {
@@ -29,49 +82,55 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     $location.path("/details/" + $scope.formData._id);
   };
 
-  $scope.datePicker = (function () {
-    var method = {};
+  $scope.datePicker = ( () => {
+    const method: any = {};
     method.instances = [];
 
-    method.open = function ($event, instance) {
+    method.open =  ($event: any, instance: any) => {
       $event.preventDefault();
       $event.stopPropagation();
-
       method.instances[instance] = true;
     };
 
     method.options = {
       'show-weeks': false,
-      startingDay: 0
+      'startingDay': 0,
     };
 
     method.format = 'M!/d!/yyyy';
-
     return method;
-  }());
+  })();
 
-  $scope.newItem = function (event) {
-    var parts = event.currentTarget.id.split('.');
+  $scope.newItem =  (event: {currentTarget: HTMLInputElement}) => {
+    const parts = event.currentTarget.id.split('.');
     if (parts[1] === 'vvProcLoc') {
-      $scope.formData.vvProcLoc.push("");
+      if ($scope.formData.vvProcLoc) {
+      $scope.formData.vvProcLoc.push('');
+      }
     } else if (parts[1] === 'vvResultsLoc') {
-      $scope.formData.vvResultsLoc.push("");
+      if ($scope.formData.vvResultsLoc) {
+      $scope.formData.vvResultsLoc.push('');
+    }
     }
   };
 
-  $scope.removeItem = function (event) {
-    var parts = event.currentTarget.id.split('.');
+  $scope.removeItem =  (event) => {
+    const parts = event.currentTarget.id.split('.');
     if (parts[1] === 'vvProcLoc') {
-      $scope.formData.vvProcLoc.splice(parts[2], 1);
+      if ($scope.formData.vvProcLoc) {
+        $scope.formData.vvProcLoc.splice(Number(parts[2]), 1);
+      }
     } else if (parts[1] === 'vvResultsLoc') {
-      $scope.formData.vvResultsLoc.splice(parts[2], 1);
+      if ($scope.formData.vvResultsLoc) {
+        $scope.formData.vvResultsLoc.splice(Number(parts[2]), 1);
+      }
     }
   };
 
   $scope.processForm = function () {
     if ($scope.inputForm.$valid) {
       // Prep any selected owner
-      if ($scope.formData.owner) {
+      if ($scope.ownerSelected.item) {
         $scope.formData.owner = $scope.ownerSelected.item.uid;
       }
 
@@ -81,22 +140,21 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
       if ($scope.engineerSelected && $scope.engineerSelected.item && $scope.engineerSelected.item.uid) {
         $scope.formData.engineer = $scope.engineerSelected.item.uid;
       }
-      delete $scope.formData.__v;
       let url = basePath + "/api/v1/swdb/" + $scope.formData._id;
 
       // update formData lovel of care with enum key
-      $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).find(
+      $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).filter(
         function (item) {
           return $scope.levelOfCareDisplay === $scope.props.LevelOfCareEnum[item];
-        });
-      $scope.formData.status = Object.keys($scope.props.StatusEnum).find(
+        })[0];
+      $scope.formData.status = Object.keys($scope.props.StatusEnum).filter(
         function (item) {
           return $scope.statusDisplay === $scope.props.StatusEnum[item];
-        });
-      $scope.formData.versionControl = Object.keys($scope.props.RcsEnum).find(
+        })[0];
+      $scope.formData.versionControl = Object.keys($scope.props.RcsEnum).filter(
         function (item) {
           return $scope.versionControlDisplay === $scope.props.RcsEnum[item];
-        });
+        })[0];
       $http({
         method: 'PUT',
         url: url,
@@ -116,9 +174,14 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
             $location.path('/details/' + id);
           }
         }, function error(response) {
-          let headers = response.headers();
-          $scope.swdbParams.error = { message: response.statusText + response.data, status: response.status };
-          $scope.swdbParams.formErr = "Error: " + $scope.swdbParams.error.message + "(" + response.status + ")";
+          if (response.data.match(/^Validation errors: /g)) {
+            // unpack the validation errors and print the first
+            const parts = response.data.split('Validation errors: ');
+            const errors = JSON.parse(parts[1]);
+            $scope.swdbParams.formErr = 'Error: ' + errors[0].msg + ' (' + response.status + ')';
+          } else {
+            $scope.swdbParams.formErr = 'Error: ' + JSON.stringify(response.data) + ' (' + response.status + ')';
+          }
           $scope.swdbParams.formShowStatus = false;
           $scope.swdbParams.formShowErr = true;
         });
@@ -129,16 +192,7 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     }
   };
 
-  // set the engineer field to the selected user
-  $scope.onEngineerSelect = function ($item, $model, $label) {
-    $scope.formData.engineer = $model;
-  };
-  // set the owner field to the selected user
-  $scope.onOwnerSelect = function ($item, $model, $label) {
-    $scope.formData.owner = $model;
-  };
-
-  $scope.onStatusChange = function ($item, $model, $label) {
+  $scope.onStatusChange = function () {
     if ($scope.statusDisplay === $scope.props.statusLabels[2]) {
       $scope.branchDisabled = true;
       $scope.versionDisabled = true;
@@ -171,8 +225,8 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
   }
 
   //initialize selected owner and engineer
-  $scope.ownerSelected = {item: {}};
-  $scope.engineerSelected = {item: {}};
+  $scope.ownerSelected = {item: undefined};
+  $scope.engineerSelected = {item: undefined};
 
   $scope.swdbParams = {
     formShowErr: false,
@@ -185,14 +239,18 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
   swService.promise.then(function () {
     let data = swService.getSwById($routeParams.itemId);    
     // console.log('update data for ' + $routeParams.itemId + ' is now ' + JSON.stringify(data));
-    $scope.itemArray = $scope.props.validSwNamesGUIList;
     $scope.formData = data;
-    $scope.whichItem = $routeParams.itemId;
 
     // convert enums to value
-    $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[$scope.formData.levelOfCare];
-    $scope.statusDisplay = $scope.props.StatusEnum[$scope.formData.status];
-    $scope.versionControlDisplay = $scope.props.RcsEnum[$scope.formData.versionControl];
+    if (data.levelOfCare) {
+      $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[data.levelOfCare];
+    }
+    if (data.status) {
+      $scope.statusDisplay = $scope.props.StatusEnum[data.status];
+    }
+    if (data.versionControl) {
+      $scope.versionControlDisplay = $scope.props.RcsEnum[data.versionControl];
+    }
 
     // Setup field display based on status
     $scope.onStatusChange();
@@ -205,18 +263,26 @@ function UpdatePromiseCtrl($scope, $http, $routeParams, $window, $location, conf
     // set selctor to current swName value
     $scope.selectedItem = { name: $scope.formData.swName };
     // convert the retreived record owner
-    forgGroupService.promise.then(function(){
-      $scope.ownerSelected.item =  forgGroupService.groupUidsToObjects([$scope.formData.owner])[0];
-    })
+    forgGroupService.promise.then(() => {
+      if ($scope.formData.owner) {
+        const thisOwner = [$scope.formData.owner];
+        const forgObjs = forgGroupService.groupUidsToObjects(thisOwner)[0];
+        $scope.ownerSelected = { item: forgObjs };
+      }
+    });
     // convert the retreived record engineer
-    forgUserService.promise.then(function(){
-      $scope.engineerSelected.item =  forgUserService.userUidsToObjects([$scope.formData.engineer])[0];
-    })
+    forgUserService.promise.then(() => {
+      if ($scope.formData.engineer) {
+        const thisEngineer = [$scope.formData.engineer];
+        const forgObjs = forgUserService.userUidsToObjects(thisEngineer)[0];
+        $scope.engineerSelected = { item: forgObjs };
+      }
+    });
 
     // disable status field if there are installations referring to this sw
     instService.promise.then(() => {
       let instsReferring = instService.getInstsBySw($routeParams.itemId);
-      if ((instsReferring.length >= 1) && (instsReferring !== [null])) {
+      if ((instsReferring.length >= 1) && (instsReferring !== null)) {
         $scope.statusDisabled = true;
       } else {
         $scope.statusDisabled = false;

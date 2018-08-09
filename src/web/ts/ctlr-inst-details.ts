@@ -27,6 +27,7 @@ interface IInstService {
   promise: ng.IPromise<void>;
   refreshInstList(): ng.IPromise<void>;
   getInstById(id: string): webapi.Inst;
+  getInstsBySw(id: string): webapi.Inst[];
 }
 
 interface ISwService {

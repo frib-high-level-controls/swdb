@@ -116,7 +116,7 @@ test.describe('Software update screen tests', () => {
     test.it('Add new record', function (this: Mocha.ITestCallbackContext) {
       this.timeout(5000);
       chromeDriver.wait(until.elementLocated(By.id('swName')), 3000);
-      chromeDriver.findElement(By.id('swName')).sendKeys('Test Record3');
+      chromeDriver.findElement(By.id('swName')).sendKeys('swdb-update-test');
     });
 
     test.it('set version for new sw record', function (this: Mocha.ITestCallbackContext) {
@@ -313,7 +313,23 @@ test.describe('Software update screen tests', () => {
       chromeDriver.wait(until.elementLocated(By.id('swName')), 3000);
       chromeDriver.findElement(By.id('swName')).getAttribute('value').then(
         (text) => {
-          expect(text).to.equal('Test Record3');
+          expect(text).to.equal('swdb-update-test');
+        });
+    });
+
+    test.it('should show the correct owner in details', () => {
+      chromeDriver.wait(until.elementLocated(By.id('owner')), 3000);
+      chromeDriver.findElement(By.id('owner')).getAttribute('value').then(
+        (text) => {
+          expect(text).to.equal('IFS:LAB.FRIB.ASD.CONTROLS.EBC');
+        });
+    });
+
+    test.it('should show the correct engineer in details', () => {
+      chromeDriver.wait(until.elementLocated(By.id('engineer')), 3000);
+      chromeDriver.findElement(By.id('engineer')).getAttribute('value').then(
+        (text) => {
+          expect(text).to.equal('ELLISR');
         });
     });
   });
@@ -324,17 +340,17 @@ test.describe('Software update screen tests', () => {
       this.timeout(8000);
       chromeDriver.get(props.webUrl + '#/list');
       chromeDriver.wait(until.elementLocated(By.id('swNameSrch')), 8000)
-        .sendKeys('Record3');
+        .sendKeys('swdb-update-test');
       chromeDriver.wait(until.elementLocated(By.id('versionSrch')), 8000)
         .sendKeys('Test version');
-      chromeDriver.wait(until.elementLocated(By.linkText('Test Record3')),
+      chromeDriver.wait(until.elementLocated(By.linkText('swdb-update-test')),
         8000);
     });
 
     // find the created record and click update
     test.it('should show record details', function (this: Mocha.ITestCallbackContext) {
       this.timeout(8000);
-      chromeDriver.wait(until.elementLocated(By.linkText('Test Record3')),
+      chromeDriver.wait(until.elementLocated(By.linkText('swdb-update-test')),
         8000).click();
       chromeDriver.wait(until.titleIs('SWDB - Details'), 5000);
       chromeDriver.wait(until.elementLocated(By.id('updateBtn')),
@@ -351,7 +367,7 @@ test.describe('Software update screen tests', () => {
       chromeDriver.wait(until.elementLocated(By.id('swName')), 3000);
       chromeDriver.findElement(By.id('swName')).getAttribute('value').then(
         (text) => {
-          expect(text).to.equal('Test Record3');
+          expect(text).to.equal('swdb-update-test');
         });
     });
 
@@ -493,7 +509,7 @@ test.describe('Software update screen tests', () => {
       chromeDriver.wait(until.elementLocated(By.id('swName')), 3000);
       chromeDriver.findElement(By.id('swName')).getAttribute('value').then(
         (text) => {
-          expect(text).to.equal('Test Record3');
+          expect(text).to.equal('swdb-update-test');
         });
     });
 
@@ -636,7 +652,7 @@ test.describe('Software update screen tests', () => {
       chromeDriver.wait(until.elementLocated(By.id('swName')), 3000);
       chromeDriver.findElement(By.id('swName')).getAttribute('value').then(
         (text) => {
-          expect(text).to.equal('Test Record3');
+          expect(text).to.equal('swdb-update-test');
         });
     });
 
@@ -792,7 +808,7 @@ test.describe('Software update screen tests', () => {
       chromeDriver.wait(until.elementLocated(By.id('swName')), 3000);
       chromeDriver.findElement(By.id('swName')).getAttribute('value').then(
         (text) => {
-          expect(text).to.equal('Test Record3');
+          expect(text).to.equal('swdb-update-test');
         });
     });
 
@@ -959,16 +975,16 @@ test.describe('Software update screen tests', () => {
       this.timeout(8000);
       chromeDriver.get(props.webUrl + '#/list');
       chromeDriver.wait(until.elementLocated(By.id('swNameSrch')), 8000)
-        .sendKeys('Record3');
+        .sendKeys('swdb-update-test');
       chromeDriver.wait(until.elementLocated(By.id('versionSrch')), 8000)
         .sendKeys('Test version');
-      chromeDriver.wait(until.elementLocated(By.linkText('Test Record3')),
+      chromeDriver.wait(until.elementLocated(By.linkText('swdb-update-test')),
         8000);
     });
     // find the created record and click update
     test.it('should show record details', function (this: Mocha.ITestCallbackContext) {
       this.timeout(8000);
-      chromeDriver.wait(until.elementLocated(By.linkText('Test Record3')),
+      chromeDriver.wait(until.elementLocated(By.linkText('swdb-update-test')),
         8000).click();
       chromeDriver.wait(until.titleIs('SWDB - Details'), 5000);
       chromeDriver.wait(until.elementLocated(By.id('updateBtn')),
