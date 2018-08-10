@@ -1,8 +1,7 @@
 /*
- * angular new controller for swdb
+ * update controller for swdb
  */
-
-interface ISwdbNewControllerScope extends ng.IScope {
+interface ISwdbUpdateControllerScope extends ng.IScope {
   session: {
     user?: {};
   };
@@ -14,6 +13,7 @@ interface ISwdbNewControllerScope extends ng.IScope {
   datePicker: any;
   ownerSelected: { item: IForgGroup | undefined };
   engineerSelected: { item: IForgUser | undefined };
+  selectedItem: { name: string | undefined };
   forgUsersList: IForgUser[];
   forgGroupsList: IForgGroup[];
   statusDisplay: string | undefined;
@@ -22,6 +22,11 @@ interface ISwdbNewControllerScope extends ng.IScope {
   versionControlDisplay: string | undefined;
   rawHistory: IHistory[];
   isHistCollapsed: boolean;
+  statusDisabled: boolean;
+  branchDisabled: boolean;
+  versionDisabled: boolean;
+  branchMouseover: string;
+  versionMouseover: string;
   history: string;
   swdbParams: {
     formStatus: string,
@@ -31,6 +36,7 @@ interface ISwdbNewControllerScope extends ng.IScope {
   };
   newItem(event: {currentTarget: HTMLInputElement}): void;
   removeItem(event: {currentTarget: HTMLInputElement}): void;
+  onStatusChange(): void;
   usrBtnClk(): void;
   bckBtnClk(): void;
   processForm(): void;
@@ -38,40 +44,20 @@ interface ISwdbNewControllerScope extends ng.IScope {
   bumpVerBtnClk(): void;
 }
 
-interface IForgUserService {
-  promise: ng.IPromise<void>;
-  getUsers(): any;
-  userUidsToObjects(arr: string[]): IForgUser[];
-}
-
-interface IForgUser {
-    uid: string;
-}
-
-interface IForgGroupService {
-  promise: ng.IPromise<void>;
-  getGroups(): any;
-  groupUidsToObjects(arr: string[]): IForgGroup[];
-}
-
-interface IForgGroup {
-    uid: string;
-}
-
-appController.controller('NewController', NewPromiseCtrl);
-function NewPromiseCtrl(
-  $scope: ISwdbNewControllerScope,
+appController.controller('UpdateController', UpdatePromiseCtrl);
+function UpdatePromiseCtrl(
+  $scope: ISwdbUpdateControllerScope,
   $http: ng.IHttpService,
-  $window: ng.IHttpService,
+  $routeParams: ng.route.IRouteParamsService,
+  $window: ng.IWindowService,
   $location: ng.ILocationService,
   configService: IConfigService,
   userService: IUserService,
   swService: ISwService,
+  instService: IInstService,
   forgUserService: IForgUserService,
   forgGroupService: IForgGroupService,
-  recService: IRecService,
 ) {
-
   $scope.$watch( () => {
     return $scope.session;
   },  () => {
@@ -85,14 +71,15 @@ function NewPromiseCtrl(
 
   $scope.usrBtnClk =  () => {
     if ($scope.session.user) {
-      $location.path($scope.props.webUrl + 'logout');
+      $window.location.href = $scope.props.webUrl + 'logout';
     } else {
-      $location.path($scope.props.webUrl + 'login');
+      $window.location.href = $scope.props.webUrl + 'login';
     }
   };
 
   $scope.bckBtnClk =  () => {
-    $location.path('/list');
+    // Go back to details
+    $location.path('/details/' + $scope.formData._id);
   };
 
   $scope.datePicker = ( () => {
@@ -141,46 +128,46 @@ function NewPromiseCtrl(
   };
 
   $scope.processForm =  () => {
-    // Prep any selected owner
-    if ($scope.ownerSelected.item) {
-      $scope.formData.owner = $scope.ownerSelected.item.uid;
-    }
-    // Prep any selected engineer
-    if (($scope.engineerSelected.item) && ($scope.engineerSelected.item.uid)) {
-      $scope.formData.engineer = $scope.engineerSelected.item.uid;
-    }
-
-    $scope.formData.statusDate = $scope.statusDateDisplay.toISOString();
-
-    // convert enum values to keys
-    $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).filter(
-       (item) => {
-        return $scope.levelOfCareDisplay === $scope.props.LevelOfCareEnum[item];
-      })[0];
-    $scope.formData.status = Object.keys($scope.props.StatusEnum).filter(
-       (item) => {
-        return $scope.statusDisplay === $scope.props.StatusEnum[item];
-      })[0];
-    $scope.formData.versionControl = Object.keys($scope.props.RcsEnum).filter(
-       (item) => {
-        return $scope.versionControlDisplay === $scope.props.RcsEnum[item];
-      })[0];
-
     if ($scope.inputForm.$valid) {
-      const url = basePath + '/api/v1/swdb';
+      // Prep any selected owner
+      if ($scope.ownerSelected.item) {
+        $scope.formData.owner = $scope.ownerSelected.item.uid;
+      }
+
+      $scope.formData.statusDate = $scope.statusDateDisplay.toISOString();
+
+      // Prep any selected engineer
+      if ($scope.engineerSelected && $scope.engineerSelected.item && $scope.engineerSelected.item.uid) {
+        $scope.formData.engineer = $scope.engineerSelected.item.uid;
+      }
+      const url = basePath + '/api/v1/swdb/' + $scope.formData._id;
+
+      // update formData lovel of care with enum key
+      $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).filter(
+         (item) => {
+          return $scope.levelOfCareDisplay === $scope.props.LevelOfCareEnum[item];
+        })[0];
+      $scope.formData.status = Object.keys($scope.props.StatusEnum).filter(
+         (item) => {
+          return $scope.statusDisplay === $scope.props.StatusEnum[item];
+        })[0];
+      $scope.formData.versionControl = Object.keys($scope.props.RcsEnum).filter(
+         (item) => {
+          return $scope.versionControlDisplay === $scope.props.RcsEnum[item];
+        })[0];
       $http({
-        method: 'POST',
+        method: 'PUT',
         url: url,
         data: $scope.formData,
         headers: { 'Content-Type': 'application/json' },
       })
         .then(function success(response) {
-          $scope.swdbParams.formStatus = 'Document posted';
+          $scope.swdbParams.formStatus = 'Document updates successfully posted';
           $scope.swdbParams.formShowErr = false;
           $scope.swdbParams.formShowStatus = true;
-          const headers = response.headers();
           // sw just updated, refresh the service list
           swService.refreshSwList();
+          const headers = response.headers();
           if (headers.location) {
             // if location header is present extract the id
             const id = headers.location.split('/').pop();
@@ -205,12 +192,20 @@ function NewPromiseCtrl(
     }
   };
 
-  const getEnums = () => {
-    $scope.levelOfCareDisplay = 'Low';
-    $scope.formData.levelOfCare = 'LOW';
-    $scope.statusDisplay = 'Development';
-    $scope.formData.status = 'DEVEL';
-    $scope.formData.versionControl = 'Other';
+  $scope.onStatusChange =  () => {
+    if ($scope.statusDisplay === $scope.props.statusLabels[2]) {
+      $scope.branchDisabled = true;
+      $scope.versionDisabled = true;
+      $scope.branchMouseover = "Branch cannot change when status is '" +
+        $scope.props.statusLabels[2] + "'";
+      $scope.versionMouseover = "Version cannot change when status is '" +
+        $scope.props.statusLabels[2] + "'";
+    } else {
+      $scope.branchDisabled = false;
+      $scope.versionDisabled = false;
+      $scope.branchMouseover = '';
+      $scope.versionMouseover = '';
+    }
   };
 
   $scope.props = configService.getConfig();
@@ -218,7 +213,6 @@ function NewPromiseCtrl(
   forgUserService.promise.then(() => {
     $scope.forgUsersList = forgUserService.getUsers().data;
   });
-
   forgGroupService.promise.then(() => {
     $scope.forgGroupsList = forgGroupService.getGroups().data;
   });
@@ -226,18 +220,12 @@ function NewPromiseCtrl(
   // check our user session and redirect if needed
   if (!$scope.session.user) {
     // go to cas
-    $location.path($scope.props.webUrl + 'login');
+    $window.location.href = $scope.props.webUrl + 'login';
   }
 
   // initialize selected owner and engineer
   $scope.ownerSelected = {item: undefined};
   $scope.engineerSelected = {item: undefined};
-
-  // initialize this record
-  $scope.formData = {
-    vvProcLoc: [],
-    vvResultsLoc: [],
-  };
 
   $scope.swdbParams = {
     formShowErr: false,
@@ -245,40 +233,33 @@ function NewPromiseCtrl(
     formStatus: '',
     formErr: '',
   };
-  getEnums();
 
-  // expect recService to provide ID and formdata
-  const updateRec = recService.getRec();
-  if (updateRec) {
-    const updateRedID = updateRec.updateRecID;
-    $scope.formData.swName = updateRec.formData.swName;
-    $scope.formData.desc = updateRec.formData.desc;
-    $scope.formData.owner = updateRec.formData.owner;
-    $scope.formData.engineer = updateRec.formData.engineer;
+  // update document fields with existing data
+  swService.promise.then( () => {
+    const data = swService.getSwById($routeParams.itemId);
+    $scope.formData = data;
 
-    $scope.formData.levelOfCare = updateRec.formData.levelOfCare;
-    if (updateRec.formData.levelOfCare) {
-    $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[updateRec.formData.levelOfCare];
+    // convert enums to value
+    if (data.levelOfCare) {
+      $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[data.levelOfCare];
     }
-    $scope.formData.status = 'DEVEL';
-    $scope.statusDisplay = $scope.props.StatusEnum[$scope.formData.status];
-
-    $scope.statusDateDisplay = new Date();
-    $scope.formData.platforms = updateRec.formData.platforms;
-    $scope.formData.designDescDocLoc = updateRec.formData.designDescDocLoc;
-    $scope.formData.descDocLoc = updateRec.formData.descDocLoc;
-    $scope.formData.vvProcLoc = updateRec.formData.vvProcLoc;
-
-    $scope.formData.versionControl = updateRec.formData.versionControl;
-    if (updateRec.formData.versionControl) {
-    $scope.versionControlDisplay = $scope.props.RcsEnum[updateRec.formData.versionControl];
+    if (data.status) {
+      $scope.statusDisplay = $scope.props.StatusEnum[data.status];
+    }
+    if (data.versionControl) {
+      $scope.versionControlDisplay = $scope.props.RcsEnum[data.versionControl];
     }
 
-    $scope.formData.versionControlLoc = updateRec.formData.versionControlLoc;
-    $scope.formData.previous = updateRedID;
+    // Setup field display based on status
+    $scope.onStatusChange();
 
-    // got the new data, now clear the service for next time.
-    recService.setRec(null);
+    // make a Date object from this string
+    if ($scope.formData.statusDate) {
+      // $scope.formData.statusDate = new Date($scope.formData.statusDate);
+      $scope.statusDateDisplay = new Date($scope.formData.statusDate);
+    }
+    // set selctor to current swName value
+    $scope.selectedItem = { name: $scope.formData.swName };
     // convert the retreived record owner
     forgGroupService.promise.then(() => {
       if ($scope.formData.owner) {
@@ -295,5 +276,16 @@ function NewPromiseCtrl(
         $scope.engineerSelected = { item: forgObjs };
       }
     });
-  }
+
+    // disable status field if there are installations referring to this sw
+    instService.promise.then(() => {
+      const instsReferring = instService.getInstsBySw($routeParams.itemId);
+      if ((instsReferring.length >= 1) && (instsReferring !== null)) {
+        $scope.statusDisabled = true;
+      } else {
+        $scope.statusDisabled = false;
+      }
+
+    });
+  });
 }

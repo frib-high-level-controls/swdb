@@ -16,7 +16,9 @@ interface IConfigProps {
   InstStatusEnum: { [key: string]: string | undefined };
   LevelOfCareEnum: { [key: string]: string | undefined };
   RcsEnum: { [key: string]: string | undefined };
+  VersionControlEnum: { [key: string]: string | undefined };
   instStatusLabels: string[];
+  statusLabels: string[];
 }
 
 interface IConfigService {
