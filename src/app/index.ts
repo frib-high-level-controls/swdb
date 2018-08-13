@@ -172,7 +172,7 @@ async function doStart(): Promise<express.Application> {
       db: 'webapp-dev',
       options: {
         // see http://mongoosejs.com/docs/connections.html
-        useMongoClient: true,
+        useNewUrlParser: true,
       },
     },
   };
@@ -210,7 +210,10 @@ async function doStart(): Promise<express.Application> {
   }
   mongoUrl +=  `${cfg.mongo.host}/${cfg.mongo.db}`;
 
-  mongoose.Promise = global.Promise;
+  if (mongoose.Promise !== global.Promise) {
+    // Mongoose 5.x should use ES6 Promises by default!
+    throw new Error('Mongoose is not using native ES6 Promises!');
+  }
 
   mongoose.connection.on('connected', () => {
     status.setComponentOk('MongoDB', 'Connected');
