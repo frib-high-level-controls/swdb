@@ -23,11 +23,14 @@ export async function requestFor(app: express.Application, username?: string, pa
   return agent;
 }
 
+type CheckPackageData = {} | ((d: {}) => Promise<void> | void);
+type CheckPackageChecker = (res: supertest.Response) => Promise<void> | void;
+interface CheckPackageOpts { equal?: boolean; ordered?: boolean; }
 
 /**
  * Utility to assert the response is a valid webapi data package.
  */
-export function expectPackage(data?: {}, options?: { equal?: boolean, ordered?: boolean }) {
+export function checkPackage(data?: CheckPackageData, options?: CheckPackageOpts): CheckPackageChecker {
   return (res: supertest.Response) => {
     options = options || {};
 
@@ -86,6 +89,10 @@ export function expectPackage(data?: {}, options?: { equal?: boolean, ordered?: 
       return;
     }
 
+    if (typeof data === 'function') {
+      return data(pkg.data);
+    }
+
     if (data !== undefined) {
       if (options.equal) {
         assert.deepEqual(pkg.data, data);
@@ -96,3 +103,9 @@ export function expectPackage(data?: {}, options?: { equal?: boolean, ordered?: 
     }
   };
 }
+
+
+/**
+ * Maintained for compatiblity
+ */
+export const expectPackage = checkPackage;

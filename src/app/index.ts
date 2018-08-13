@@ -1,6 +1,7 @@
 /**
  * Start and configure the web application.
  */
+import crypto = require('crypto');
 import fs = require('fs');
 import path = require('path');
 import util = require('util');
@@ -162,8 +163,8 @@ async function doStart(): Promise<express.Application> {
       port: '3000',
       addr: 'localhost',
       trust_proxy: false,
-      session_life: 28800000,
-      session_secret: 'secret',
+      session_life: 3600000,
+      session_secret: crypto.randomBytes(50).toString('base64'),
     },
     mongo: {
       port: '27017',

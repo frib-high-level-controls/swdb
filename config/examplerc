@@ -6,14 +6,14 @@
     "port": "3000",
     "addr": "localhost", /* use "0.0.0.0" to bind to all interfaces */
     "trust_proxy": false, /* see details: https://expressjs.com/en/guide/behind-proxies.html */
-    "session_life": 28800000,
+    //"session_life": 3600000,
     // For production generate a random string using python:
     // >>> import os, base64
     // >>> print base64.b64encode(os.urandom(50)).decode('ascii')
     // Or using JavaScript (NodeJS)
     // > var crypto = require('crypto');
     // > console.log(crypto.randomBytes(50).toString('base64'));
-    "session_secret": "secret"
+    //"session_secret": "secret"
   },
   // MongoDB connection configuration using JavaScript client library
   // (For available options see: http://mongodb.github.io/node-mongodb-native/3.1/api/MongoClient.html)

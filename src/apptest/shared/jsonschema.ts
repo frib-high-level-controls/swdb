@@ -4,14 +4,17 @@
 import { AssertionError } from 'assert';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as url from 'url';
 
 import * as jsonschema from 'jsonschema';
 import * as supertest from 'supertest';
 
+const schemaBasePath = path.resolve(__dirname, '..', '..', '..', 'public', 'schema');
+
 export const validator = new jsonschema.Validator();
 
 export function validate(instance: any, uri: string): jsonschema.ValidatorResult {
-  const schema = validator.schemas[uri];
+  let schema = validator.schemas[uri];
   if (schema) {
     return validator.validate(instance, schema);
   }
@@ -19,10 +22,17 @@ export function validate(instance: any, uri: string): jsonschema.ValidatorResult
   while (validator.unresolvedRefs.length > 0) {
     const ref = validator.unresolvedRefs.shift();
     if (ref) {
-      const name = ref.replace('/', path.sep) + '.json';
-      const schemaPath = path.join(__dirname, '..', '..', '..', 'public', 'schema', name);
-      const schemaData = JSON.parse(fs.readFileSync(schemaPath, 'UTF-8'));
-      validator.addSchema(schemaData as jsonschema.Schema, ref);
+      let pathname = url.parse(ref).pathname;
+      if (!pathname) {
+        throw new Error(`Path name missing for schema ref: ${ref}`);
+      }
+      if (!pathname.endsWith('.json')) {
+        pathname += '.json';
+      }
+      const schemaPath = path.resolve(schemaBasePath, ...pathname.split('/'));
+      const schemaData = fs.readFileSync(schemaPath, 'UTF-8');
+      schema = JSON.parse(schemaData);
+      validator.addSchema(schema, ref);
     }
   }
   return validator.validate(instance, validator.schemas[uri]);
