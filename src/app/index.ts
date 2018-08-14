@@ -3,6 +3,7 @@
  */
 import crypto = require('crypto');
 import fs = require('fs');
+import net = require('net');
 import path = require('path');
 import util = require('util');
 
@@ -16,6 +17,7 @@ import favicon = require('serve-favicon');
 import auth = require('./shared/auth');
 import handlers = require('./shared/handlers');
 import logging = require('./shared/logging');
+import promises = require('./shared/promises');
 import status = require('./shared/status');
 import tasks = require('./shared/tasks');
 
@@ -56,17 +58,10 @@ export let error = logging.error;
 const task = new tasks.StandardTask<express.Application>(doStart, doStop);
 
 // application activity
-let activeCount = 0;
 const activeLimit = 100;
-let activeStopped = Promise.resolve();
-
-function updateActivityStatus(): void {
-  if (activeCount <= activeLimit) {
-    status.setComponentOk('Activity', activeCount + ' <= ' + activeLimit);
-  } else {
-    status.setComponentError('Activity', activeCount + ' > ' + activeLimit);
-  }
-}
+const activeResponses = new Set<express.Response>();
+const activeSockets = new Set<net.Socket>();
+let activeFinished = Promise.resolve();
 
 const readFile = util.promisify(fs.readFile);
 
@@ -111,16 +106,7 @@ export function start(): Promise<express.Application> {
 // asynchronously configure the application
 async function doStart(): Promise<express.Application> {
 
-  let activeFinished: () => void;
-
   info('Application starting');
-
-  activeCount = 0;
-  activeStopped = new Promise<void>((resolve) => {
-    activeFinished = resolve;
-  });
-
-  updateActivityStatus();
 
   app = express();
 
@@ -128,21 +114,52 @@ async function doStart(): Promise<express.Application> {
   app.set('name', name);
   app.set('version', version);
 
-  app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (task.getState() !== 'STARTED') {
-      res.status(503).end('Application ' + task.getState());
-      return;
+  activeSockets.clear();
+  activeResponses.clear();
+
+  function updateActivityStatus(): void {
+    if (activeResponses.size <= activeLimit) {
+      status.setComponentOk('Activity', activeResponses.size + ' <= ' + activeLimit);
+    } else {
+      status.setComponentError('Activity', activeResponses.size + ' > ' + activeLimit);
     }
-    res.on('finish', () => {
-      activeCount -= 1;
-      updateActivityStatus();
-      if (task.getState() === 'STOPPING' && activeCount <= 0) {
-        activeFinished();
+  }
+
+  activeFinished = new Promise((resolve) => {
+    app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+      if (task.getState() !== 'STARTED') {
+        res.status(503).end('Application ' + task.getState());
+        return;
       }
+
+      if (!activeResponses.has(res)) {
+        activeResponses.add(res);
+        updateActivityStatus();
+        res.on('finish', () => {
+          if (!activeResponses.delete(res)) {
+            warn('Response is NOT active!');
+          }
+          updateActivityStatus();
+          if (task.getState() === 'STOPPING' && activeResponses.size <= 0) {
+            resolve();
+          }
+        });
+      } else {
+        warn('Response is ALREADY active!');
+      }
+
+      const socket = res.connection;
+      if (!activeSockets.has(socket)) {
+        activeSockets.add(socket);
+        socket.on('close', () => {
+          if (!activeSockets.delete(socket)) {
+            warn('Socket is NOT active!');
+          }
+        });
+      }
+
+      next();
     });
-    activeCount += 1;
-    updateActivityStatus();
-    next();
   });
 
   const env: {} | undefined = app.get('env');
@@ -254,9 +271,23 @@ export function stop(): Promise<void> {
 async function doStop(): Promise<void> {
   info('Application stopping');
 
-  if (activeCount > 0) {
-    info('Waiting for active requests to stop');
-    await activeStopped;
+  if (activeResponses.size > 0) {
+    info('Wait for %s active response(s)', activeResponses.size);
+    try {
+      await Promise.race([activeFinished, promises.rejectTimeout(15000)]);
+    } catch (err) {
+      warn('Timeout: End %s active response(s)', activeResponses.size);
+      for (const res of activeResponses) {
+        res.end();
+      }
+    }
+  }
+
+  if (activeSockets.size > 0) {
+    warn('Destroy %s active socket(s)', activeSockets.size);
+    for (const soc of activeSockets) {
+      soc.destroy();
+    }
   }
 
   try {
