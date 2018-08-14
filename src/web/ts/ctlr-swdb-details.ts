@@ -104,7 +104,7 @@ function DetailsPromiseCtrl(
   let url = basePath + '/api/v1/swdb/' + $routeParams.itemId;
 
   swService.refreshSwList().then(() => {
-    const data = swService.getSwById($routeParams.itemId);
+    const data = swService.getSwById($routeParams.itemId)[0];
     $scope.formData = data;
     // convert level of care key to value
     if (data.levelOfCare){

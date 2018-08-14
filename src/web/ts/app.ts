@@ -7,10 +7,10 @@ var app = angular.module('app', [
 // record xfer service
 // for transferring records between routes
 app.service('recService', function() {
-    var recData = null;
+    var recData: webapi.ISwdb | null = null;
 
     return {
-        setRec: function (data) {
+        setRec: function (data: webapi.ISwdb) {
             recData = data;
         },
         getRec: function () {
@@ -20,16 +20,17 @@ app.service('recService', function() {
 });
 
 // Service to get config data to controllers
-app.service('configService', function($http) {
-    var configData = null;
+app.service('configService', function($http: ng.IHttpService) {
+    var configData: IConfigProps | null = null;
 
-    var promise = 	$http({url: basePath + '/api/v1/swdb/config', method: "GET"}).success(function(data) {
-        configData = data;
+    var promise = 	$http({url: basePath + '/api/v1/swdb/config', method: "GET"})
+    .then(function(data: {data: IConfigProps} & angular.IHttpResponse<any>) {
+        configData = data.data;
     });
 
     return {
         promise: promise,
-        setData: function (data) {
+        setData: function (data: IConfigProps) {
             configData = data;
         },
         getConfig: function () {
@@ -39,16 +40,17 @@ app.service('configService', function($http) {
 });
 
 // Service to get user data to controllers
-app.service('userService', function($http) {
-    var userData = null;
+app.service('userService', function($http: ng.IHttpService) {
+    var userData: IForgUser | null = null;
 
-    var promise = 	$http({url: basePath + '/api/v1/swdb/user',method: "GET"}).success(function(data) {
-        userData = data;
+    var promise = 	$http({url: basePath + '/api/v1/swdb/user',method: "GET"})
+      .then(function (data: {data: IForgUser} & angular.IHttpResponse<any>) {
+        userData = data.data;
     });
 
     return {
         promise: promise,
-        setData: function (data) {
+        setData: function (data: IForgUser) {
             userData = data;
         },
         getUser: function () {
@@ -58,8 +60,8 @@ app.service('userService', function($http) {
 });
 
 // Service to get ccdb slots to controllers
-app.service('slotService', function($http) {
-    var slotData = null;
+app.service('slotService', function($http: ng.IHttpService) {
+    var slotData: IForgSlot | null = null;
 
     var promise = 	$http({
       url: basePath + '/api/v1/swdb/slot',
@@ -67,13 +69,13 @@ app.service('slotService', function($http) {
       headers: {
         'Content-Type': 'application/json'
       }
-    }).success(function(data) {
+    }).then(function(data: IForgSlot & angular.IHttpResponse<any>) {
         slotData = data;
     });
 
     return {
         promise: promise,
-        setData: function (data) {
+        setData: function (data: IForgSlot) {
             slotData = data;
         },
         getSlot: function () {
@@ -83,10 +85,11 @@ app.service('slotService', function($http) {
 });
 
 // Service to get sw data to controllers
-app.service('swService', function($http) {
-    var swData = null;
-    var promise = 	$http({url: basePath + '/api/v1/swdb',method: "GET"}).success(function(data) {
-        swData = data;
+app.service('swService', function($http: ng.IHttpService) {
+    var swData: webapi.ISwdb[] | null = null;
+    var promise = 	$http({url: basePath + '/api/v1/swdb',method: "GET"})
+    .then(function(data: {data: webapi.ISwdb[]} & angular.IHttpResponse<any>) {
+        swData = data.data;
     });
 
     return {
@@ -95,8 +98,9 @@ app.service('swService', function($http) {
           return swData;
         },
       refreshSwList: function () {
-        promise = $http({ url: basePath + '/api/v1/swdb', method: "GET" }).success(function (data) {
-          swData = data;
+        promise = $http({ url: basePath + '/api/v1/swdb', method: "GET" })
+        .then(function (data: {data: webapi.ISwdb[]} & angular.IHttpResponse<any>) {
+          swData = data.data;
         });
         return promise;
       },
@@ -105,35 +109,42 @@ app.service('swService', function($http) {
        * @param swId id user ID string
        * @return matching sw objects
        */
-      getSwById: function (swId) {
-        return swData.find(function (item, idx){
-          return item._id === swId;
-        })
+      getSwById: function (swId: string) {
+        if (swData) {
+          return swData.filter(function (item: webapi.ISwdb) {
+            return item._id === swId;
+          });
+        }
       },
       /**
        * userUidsToObjects
        * @param swIds array id user ID strings
        * @return array of sw objects from forg
        */
-      swIdsToObjects: function(swIds) {
+      swIdsToObjects: function(swIds: string[]) {
         var swObj = swIds.map(function(item, idx, array){
-          let node =  swData.find(function(elem) {
-            return elem._id === item;
-          });
-          return node;
-        }); 
-        return swObj;
+          if (swData) {
+            let node = swData.filter(function (elem) {
+              return elem._id === item;
+            });
+            return node;
+          } else {
+            return [];
+          }
+        });
+        return swObj[0];
       }
     };
 });
 
 // Service to get inst data to controllers
-app.service('instService', function($http) {
-    var instData = null;
+app.service('instService', function($http: ng.IHttpService) {
+    var instData: webapi.Inst[] | null = null;
 
-    var promise = 	$http({url: basePath + '/api/v1/inst',method: "GET"}).then(function(data) {
+    var promise = 	$http({url: basePath + '/api/v1/inst',method: "GET"})
+      .then(function (data: {data: webapi.Inst[]} & angular.IHttpResponse<any>) {
         instData = data.data;
-    });
+      });
 
     return {
       promise: promise,
@@ -141,9 +152,10 @@ app.service('instService', function($http) {
           return instData;
         },
       refreshInstList: function () {
-        promise = $http({ url: basePath + '/api/v1/inst', method: "GET" }).then(function (data) {
-          instData = data.data;
-        });
+        promise = $http({ url: basePath + '/api/v1/inst', method: "GET" })
+          .then(function (data: {data: webapi.Inst[]} & angular.IHttpResponse<any>) {
+            instData = data.data;
+          });
         return promise;
       },
       /**
@@ -151,26 +163,33 @@ app.service('instService', function($http) {
        * @param instId installation ID string
        * @return matching inst object
        */
-      getInstById: function (instId) {
-        return instData.find(function (item, idx){
-          if (item._id === instId) {
-            return true;
-          } else {
-           //  
-          }
-        })
+      getInstById: function (instId: string) {
+        if (instData) {
+          return instData.filter(function (item, idx) {
+            if (item._id === instId) {
+              return true;
+            } else {
+              //
+            }
+          });
+        }
       },
       /**
        * getInstBySw
        * @param swId software ID string
        * @return list of matching installation objects
        */
-      getInstsBySw: function (swId) {
-        let arr = instData.map(function (item, idx, arr){
-          if (item.software === swId) {
-            return item
-          }
-        });
+      getInstsBySw: function (swId: string) {
+        let arr: Array<webapi.Inst| undefined> = [];
+        if (instData) {
+          arr = instData.map(function (item) {
+            if (item.software === swId) {
+              return item
+            }
+          });
+        } else {
+          arr = [];
+        }
         // map returns [null] if nothing matches. make it [].
         if (arr[0] == null) {
           return [];
@@ -182,12 +201,13 @@ app.service('instService', function($http) {
 });
 
 // Service to get FORG user data to controllers
-app.service('forgUserService', function ($http) {
-  var userData = null;
+app.service('forgUserService', function ($http: ng.IHttpService) {
+  var userData: {data: IForgUser[]} | null = null;
 
-  var promise = $http({ url: basePath + '/api/v1/swdb/forgUsers', method: "GET" }).then(function (data) {
-    userData = data;
-  });
+  var promise = $http({ url: basePath + '/api/v1/swdb/forgUsers', method: "GET" })
+    .then(function (data: IForgUser[] & angular.IHttpResponse<any>) {
+      userData = data;
+    });
 
   return {
     promise: promise,
@@ -195,34 +215,38 @@ app.service('forgUserService', function ($http) {
       return userData;
     },
     refreshUsersList: function () {
-      $http({ url: basePath + '/api/v1/swdb/forgUsers', method: "GET" }).then(function (data) {
-        userData = data;
-        return userData;
-      });
+      $http({ url: basePath + '/api/v1/swdb/forgUsers', method: "GET" })
+        .then(function (data: IForgUser[] & angular.IHttpResponse<any>) {
+          userData = data;
+          return userData;
+        });
     },
     /**
      * userUidsToObjects
      * @param userUids array id user UID strings
      * @return array of user objects from forg
      */
-    userUidsToObjects: function(userUids) {
+    userUidsToObjects: function(userUids: string[]) {
       var forgObj = userUids.map(function(item, idx, array){
-        return userData.data.find(function(elem) {
-          return elem.uid === item;
-        })
+        if (userData) {
+          return userData.data.filter(function (elem: IForgUser) {
+            return elem.uid === item;
+          })
+        }
       }) 
-      return forgObj;
+      return forgObj[0];
     }
   };
 });
 
 // Service to get FORG group data to controllers
-app.service('forgGroupService', function ($http) {
-  var groupData = null;
+app.service('forgGroupService', function ($http: ng.IHttpService) {
+  var groupData: {data: IForgGroup[]} | null = null;
 
-  var promise = $http({ url: basePath + '/api/v1/swdb/forgGroups', method: "GET" }).then(function (data) {
-    groupData = data;
-  });
+  var promise = $http({ url: basePath + '/api/v1/swdb/forgGroups', method: "GET" })
+    .then(function (data: IForgGroup[] & angular.IHttpResponse<any>) {
+      groupData = data;
+    });
 
   return {
     promise: promise,
@@ -230,7 +254,8 @@ app.service('forgGroupService', function ($http) {
       return groupData;
     },
     refreshGroupsList: function () {
-      $http({ url: basePath + '/api/v1/swdb/forgGroups', method: "GET" }).then(function (data) {
+      $http({ url: basePath + '/api/v1/swdb/forgGroups', method: "GET" })
+        .then(function (data: IForgGroup[] & angular.IHttpResponse<any>) {
         groupData = data;
         return groupData;
       });
@@ -240,24 +265,27 @@ app.service('forgGroupService', function ($http) {
      * @param groupUids array id group UID strings
      * @return array of group objects from forg
      */
-    groupUidsToObjects: function(groupUids) {
-      var forgObj = groupUids.map(function(item, idx, array){
-        return groupData.data.find(function(elem) {
-          return elem.uid === item;
-        })
+    groupUidsToObjects: function (groupUids: string[]) {
+      var forgObj = groupUids.map(function (item, idx, array) {
+        if (groupData) {
+          return groupData.data.filter(function (elem) {
+            return elem.uid === item;
+          })
+        }
       }) 
-      return forgObj;
+      return forgObj[0];
     }
   };
 });
 
 // Service to get FORG area data to controllers
-app.service('forgAreaService', function ($http) {
-  var areaData = null;
+app.service('forgAreaService', function ($http: ng.IHttpService) {
+  var areaData: {data: IForgArea[]} | null = null;
 
-  var promise = $http({ url: basePath + '/api/v1/swdb/forgAreas', method: "GET" }).then(function (data) {
-    areaData = data;
-  });
+  var promise = $http({ url: basePath + '/api/v1/swdb/forgAreas', method: "GET" })
+    .then(function (data: IForgArea[] & angular.IHttpResponse<any>) {
+      areaData = data;
+    });
 
   return {
     promise: promise,
@@ -265,43 +293,60 @@ app.service('forgAreaService', function ($http) {
       return areaData;
     },
     refreshAreasList: function () {
-      $http({ url: basePath + '/api/v1/swdb/forgAreas', method: "GET" }).then(function (data) {
-        areaData = data;
-        return areaData;
-      });
+      $http({ url: basePath + '/api/v1/swdb/forgAreas', method: "GET" })
+        .then(function (data: IForgArea[] & angular.IHttpResponse<any>) {
+          if (areaData){
+            areaData = data;
+            return areaData;
+          }
+        });
     },
     /**
      * areaUIidsToObjects
      * @param areaUids array id area UID strings
      * @return array of area objects from forg
      */
-    areaUidsToObjects: function(areaUids) {
+    areaUidsToObjects: function(areaUids: string[]) {
       var forgObj
       if (areaUids) {
         forgObj = areaUids.map(function (item, idx, array) {
-          return areaData.data.find(function (elem) {
-            return elem.uid === item;
-          })
+          if (areaData) {
+            return areaData.data.filter(function (elem) {
+              return elem.uid === item;
+            })[0]
+          }
         })
       } else {
         forgObj = null;
       }
-      return forgObj;
+      if (forgObj){
+        return forgObj;
+      } else {
+        return [];
+      }
     }
   };
 });
 
 app.filter('swFilt', function () {
-  // custom filter for sw records  
-  return function (swIn, srchTxt) {
-    swOut = [];
-    if (typeof srchTxt === 'string' || srchTxt instanceof String) {
+  // custom filter for sw records
+  return function (swIn: webapi.ISwdb[], srchTxt: string) {
+    let swOut: webapi.ISwdb[] = [];
+    if (typeof srchTxt === 'string') {
       // make sure we have a real search string
       let re = new RegExp(srchTxt, 'gi'); // precompile regex first
       swIn.forEach((element) => {
         if (!element.branch) {
           // set branch to empty string if it does not exist
           element.branch = "";
+        }
+        if (!element.swName) {
+          // set branch to empty string if it does not exist
+          element.swName = "";
+        }
+        if (!element.version) {
+          // set branch to empty string if it does not exist
+          element.version = "";
         }
         if (element.swName.match(re) || element.branch.match(re) || element.version.match(re)) {
           swOut.push(element);
@@ -318,9 +363,9 @@ app.filter('swFilt', function () {
 });
 
 app.filter('engNopromiseFilter', function () {
-  return function (forgUserIn, srchTxt) {
+  return function (forgUserIn: IForgUser[], srchTxt: string) {
     let re = new RegExp(srchTxt, 'i');
-    filtered = forgUserIn.filter(function (element, idx, arr) {
+    const filtered = forgUserIn.filter(function (element, idx, arr) {
       if (element.uid.match(re)) {
         return element;
       }
@@ -330,9 +375,9 @@ app.filter('engNopromiseFilter', function () {
 });
 
 app.filter('ownNopromiseFilter', function () {
-  return function (forgGroupIn, srchTxt) {
+  return function (forgGroupIn: IForgGroup[], srchTxt: string) {
     let re = new RegExp(srchTxt, 'i');
-    filtered = forgGroupIn.filter(function (element, idx, arr) {
+    const filtered = forgGroupIn.filter(function (element, idx, arr) {
       if (element.uid.match(re)) {
         return element;
       }
@@ -342,23 +387,9 @@ app.filter('ownNopromiseFilter', function () {
 });
 
 app.filter('engFilter', function() {
-  return function (forgUserIn, srchTxt) {
-    return forgUserIn.then(function(forgUserIn) {
-      let re = new RegExp(srchTxt, 'i');
-      filtered = forgUserIn.filter(function(element, idx, arr) {
-        if (element.uid.match(re)) {
-          return element;
-        }
-      });
-      return filtered;
-    });
-  };
-});
-
-app.filter('areasNopromiseFilter', function () {
-  return function (forgAreaIn, srchTxt) {
+  return function (forgUserIn: IForgUser[], srchTxt: string) {
     let re = new RegExp(srchTxt, 'i');
-    filtered = forgAreaIn.filter(function (element, idx, arr) {
+    const filtered = forgUserIn.filter(function (element, idx, arr) {
       if (element.uid.match(re)) {
         return element;
       }
@@ -367,17 +398,29 @@ app.filter('areasNopromiseFilter', function () {
   };
 });
 
-app.config(['$routeProvider', function($routeProvider){
+app.filter('areasNopromiseFilter', function () {
+  return function (forgAreaIn: IForgArea[], srchTxt: string) {
+    let re = new RegExp(srchTxt, 'i');
+    const filtered = forgAreaIn.filter(function (element, idx, arr) {
+      if (element.uid.match(re)) {
+        return element;
+      }
+    });
+    return filtered;
+  };
+});
+
+app.config(['$routeProvider', function($routeProvider: ng.route.IRouteParamsService){
     $routeProvider.
         when('/list', {
             templateUrl: 'partials/list.html',
             controller: 'ListController',
             title: 'List',
             resolve:{
-                'configServiceData': function(configService){
+                'configServiceData': function(configService: IConfigService){
                     return configService.promise;
                 },
-                'userServiceData': function(userService){
+                'userServiceData': function(userService: IUserService){
                     return userService.promise;
                 },
             }
@@ -387,10 +430,10 @@ app.config(['$routeProvider', function($routeProvider){
             controller: 'InstListController',
             title: 'Installations List',
             resolve:{
-                'configServiceData': function(configService){
+                'configServiceData': function(configService: IConfigService){
                     return configService.promise;
                 },
-                'userServiceData': function(userService){
+                'userServiceData': function(userService: IUserService){
                     return userService.promise;
                 },
                 //'swServiceData': function(swService){
@@ -403,13 +446,13 @@ app.config(['$routeProvider', function($routeProvider){
             controller: 'DetailsController',
             title: 'Details',
             resolve:{
-                'configServiceData': function(configService){
+                'configServiceData': function(configService: IConfigService){
                     return configService.promise;
                 },
-                'userServiceData': function(userService){
+                'userServiceData': function(userService: IUserService){
                     return userService.promise;
                 },
-                'swServiceData': function(swService){
+                'swServiceData': function(swService: ISwService){
                     return swService.promise;
                 },
             }
@@ -419,13 +462,13 @@ app.config(['$routeProvider', function($routeProvider){
             controller: 'InstDetailsController',
             title: 'Installation Details',
             resolve:{
-                'configServiceData': function(configService){
+                'configServiceData': function(configService: IConfigService){
                     return configService.promise;
                 },
-                'userServiceData': function(userService){
+                'userServiceData': function(userService: IUserService){
                     return userService.promise;
                 },
-                'instServiceData': function(instService){
+                'instServiceData': function(instService: IInstService){
                     return instService.promise;
                 },
             }
@@ -435,10 +478,10 @@ app.config(['$routeProvider', function($routeProvider){
             controller: 'NewController',
             title: 'New',
             resolve:{
-                'configServiceData': function(configService){
+                'configServiceData': function(configService: IConfigService){
                     return configService.promise;
                 },
-                'userServiceData': function(userService){
+                'userServiceData': function(userService: IUserService){
                     return userService.promise;
                 }
             }
@@ -448,18 +491,18 @@ app.config(['$routeProvider', function($routeProvider){
             controller: 'InstNewController',
             title: 'New Installation',
             resolve:{
-                'configServiceData': function(configService){
+                'configServiceData': function(configService: IUserService){
                     return configService.promise;
                 },
-                'userServiceData': function(userService){
+                'userServiceData': function(userService: IUserService){
                     return userService.promise;
                 },
-                'swServiceData': function(swService){
+                'swServiceData': function(swService: ISwService){
                     return swService.promise;
                 },
-                'slotServiceData': function(slotService){
-                    return slotService.promise;
-                }
+                // 'slotServiceData': function(slotService: ISlotService){
+                //     return slotService.promise;
+                // }
             }
         })
         .when('/update/:itemId', {
@@ -467,16 +510,16 @@ app.config(['$routeProvider', function($routeProvider){
             controller: 'UpdateController',
             title: 'Update',
             resolve:{
-                'configServiceData': function(configService){
+                'configServiceData': function(configService: IUserService){
                     return configService.promise;
                 },
-                'userServiceData': function(userService){
+                'userServiceData': function(userService: IUserService){
                     return userService.promise;
                 },
-                'swServiceData': function(swService){
+                'swServiceData': function(swService: ISwService){
                     return swService.promise;
                 },
-                'instServiceData': function(instService){
+                'instServiceData': function(instService: IInstService){
                     return instService.promise;
                 }
             }
@@ -486,19 +529,19 @@ app.config(['$routeProvider', function($routeProvider){
             controller: 'InstUpdateController',
             title: 'Update Installation',
             resolve:{
-                'configServiceData': function(configService){
+                'configServiceData': function(configService: IConfigService){
                     return configService.promise;
                 },
-                'userServiceData': function(userService){
+                'userServiceData': function(userService: IUserService){
                     return userService.promise;
                 },
-                'slotServiceData': function(slotService){
-                    return slotService.promise;
-                },
-                'swServiceData': function(swService){
+                // 'slotServiceData': function(slotService){
+                //     return slotService.promise;
+                // },
+                'swServiceData': function(swService: ISwService){
                     return swService.promise;
                 },
-                'instServiceData': function(instService){
+                'instServiceData': function(instService: IInstService){
                     return instService.promise;
                 }
             }

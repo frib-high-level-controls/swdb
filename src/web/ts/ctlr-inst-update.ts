@@ -13,7 +13,7 @@ interface IInstUpdateControllerScope extends ng.IScope {
   slotsSelected: string[];
   statusDisplay: string | undefined;
   areasSelected: IForgArea[];
-  swSelected: webapi.ISwdb;
+  swSelected: {item: webapi.ISwdb};
   statusDateDisplay: Date;
   vvApprovalDateDisplay: Date;
   rawHistory: {};
@@ -234,7 +234,7 @@ function InstUpdatePromiseCtrl(
 
   // update document fields with existing data
   instService.promise.then( () => {
-    const data = instService.getInstById($routeParams.itemId);
+    const data = instService.getInstById($routeParams.itemId)[0];
     $scope.formData = data;
 
     // set enum values from keys
@@ -268,7 +268,7 @@ function InstUpdatePromiseCtrl(
     swService.promise.then(() => {
 
       if ($scope.formData.software) {
-        $scope.swSelected = swService.swIdsToObjects([$scope.formData.software])[0];
+        $scope.swSelected = {item: swService.swIdsToObjects([$scope.formData.software])[0]};
       }
     });
 

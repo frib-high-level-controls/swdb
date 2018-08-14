@@ -48,6 +48,10 @@ interface IForgUser {
     uid: string;
 }
 
+interface IForgSlot {
+    uid: string;
+}
+
 interface IForgGroupService {
   promise: ng.IPromise<void>;
   getGroups(): any;
