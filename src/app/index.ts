@@ -210,31 +210,64 @@ async function doStart(): Promise<express.Application> {
   }
   mongoUrl +=  `${cfg.mongo.host}/${cfg.mongo.db}`;
 
+  // Remove password from the MongoDB URL to avoid logging the password!
+  info('Mongoose connection URL: %s', mongoUrl.replace(/\/\/(.*):(.*)@/, '//$1:<password>@'));
+
   if (mongoose.Promise !== global.Promise) {
     // Mongoose 5.x should use ES6 Promises by default!
     throw new Error('Mongoose is not using native ES6 Promises!');
   }
 
+  status.setComponentError('MongoDB', 'Never Connected');
+  info('Mongoose connection: Never Connected');
+
+  // NOTE: Registering a listener for the 'error' event
+  // suppresses error reporting from the connect() method.
+  // Therefore call connect() BEFORE registering listeners!
+  await mongoose.connect(mongoUrl, cfg.mongo.options);
+
+  status.setComponentOk('MongoDB', 'Connected');
+  info('Mongoose connection: Connected');
+
   mongoose.connection.on('connected', () => {
     status.setComponentOk('MongoDB', 'Connected');
-    info('Mongoose default connection opened.');
+    info('Mongoose connection: Connected');
   });
 
   mongoose.connection.on('disconnected', () => {
     status.setComponentError('MongoDB', 'Disconnected');
-    warn('Mongoose default connection closed');
+    warn('Mongoose connection: Disconnected');
+  });
+
+  mongoose.connection.on('timeout', () => {
+    status.setComponentError('MongoDB', 'Timeout');
+    info('Mongoose connection: Timeout');
+  });
+
+  mongoose.connection.on('reconnect', () => {
+    status.setComponentError('MongoDB', 'Reconnected');
+    info('Mongoose connection: Reconnected');
+  });
+
+  mongoose.connection.on('close', () => {
+    status.setComponentError('MongoDB', 'Closed');
+    warn('Mongoose connection: Closed');
+  });
+
+  mongoose.connection.on('reconnectFailed', () => {
+    status.setComponentError('MongoDB', 'Reconnect Failed (Restart Required)');
+    error('Mongoose connection: Reconnect Failed');
+    // Mongoose has stopped attempting to reconnect,
+    // so initiate appliction shutdown with the
+    // expectation that systemd will auto restart.
+    error('Sending Shutdown signal: SIGINT');
+    process.kill(process.pid, 'SIGINT');
   });
 
   mongoose.connection.on('error', (err) => {
-    status.setComponentError('MongoDB', err.message || 'Unknown Error');
-    error('Mongoose default connection error: %s', err);
+    status.setComponentError('MongoDB', '%s', err);
+    error('Mongoose connection error: %s', err);
   });
-
-  status.setComponentError('MongoDB', 'Never Connected');
-  // Remove password from the mongoUrl to avoid logging the password!
-  const safeMongoUrl = mongoUrl.replace(/\/\/(.*):(.*)@/, '//$1:<password>@');
-  info('Mongoose default connection: %s', safeMongoUrl);
-  await mongoose.connect(mongoUrl, cfg.mongo.options);
 
   // view engine configuration
   app.set('views', path.resolve(__dirname, '..', 'views'));
