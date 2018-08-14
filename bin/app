@@ -186,7 +186,7 @@ start().then(function (handler) {
   return err;
 })
 .then(function (orig) {
-  return stop(28000).catch(function (err) { // 28 second timeout
+  return stop(30000).catch(function (err) { // 30 second timeout
     return orig ? Promise.reject(orig) : Promise.reject(err);
   })
   .then(function () {
@@ -198,7 +198,7 @@ start().then(function (handler) {
   process.exitCode = 1;
 })
 .then(function () {
-  return timeout(2000); // 5 second timeout
+  return timeout(10000); // 10 second timeout
 })
 .catch(function (err) {
   warn('Force process termination');
