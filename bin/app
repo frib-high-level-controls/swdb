@@ -51,10 +51,10 @@ function start() {
 }
 
 /**
- * Stop the application with timeout.
+ * Stop the application.
  */
-function stop(limit) {
-  return Promise.race([app.stop(), timeout(limit)]);
+function stop() {
+  return app.stop();
 }
 
 /**
@@ -119,38 +119,20 @@ function listen(handler) {
  * Stop listening and wait for connections close with timeout.
  */
 function close() {
-  return Promise.race([
-    new Promise(function (resolve, reject) {
-      if (!srv) {
-        reject(new Error('Server not created'));
-        return;
-      }
-      srv.close(function(err) {
-        if (err) {
-          reject(err);
-        }
-        resolve(true);
-      });
-    }),
-    timeout(200).catch(function () {
-      // Ignore timeout because it is expected
-      // if 'keep-alive' connections are open.
-      return false;
-    })
-  ])
-  .then(function (closed) {
-    if (closed) {
-      info('Server close successful');
-    } else {
-      info('Server close timeout');
+  return new Promise(function (resolve, reject) {
+    if (!srv) {
+      reject(new Error('Server not created'));
+      return;
     }
-  })
-  .catch(function (err) {
-    // Ignore error so that application
-    // shutdown will continue normally.
-    error('Server close failure');
-    error(err);
-  })
+    srv.close(function(err) {
+      if (err) {
+        error('Server close failure');
+        reject(err);
+      }
+      info('Server close successful');
+      resolve();
+    });
+  });
 };
 
 /**
@@ -177,21 +159,19 @@ start().then(function (handler) {
 .then(function () {
   return wait(['SIGINT', 'SIGTERM']);
 })
-.then(function () {
-  return close();
-})
 .catch(function (err) {
-  // Ensure stop() is always called,
-  // but propagate the original error.
+  // Ensure stop() is always called, but propagate the original error.
   return err;
 })
 .then(function (orig) {
-  return stop(30000).catch(function (err) { // 30 second timeout
-    return orig ? Promise.reject(orig) : Promise.reject(err);
-  })
-  .then(function () {
-    return orig ? Promise.reject(orig) : Promise.resolve();
-  });
+  // Close server and stop application in parallel with 30 second timeout.
+  return Promise.race([Promise.all([close(), stop()]), timeout(30000)])
+    .catch(function (err) {
+      return orig ? Promise.reject(orig) : Promise.reject(err);
+    })
+    .then(function () {
+      return orig ? Promise.reject(orig) : Promise.resolve();
+    });
 })
 .catch(function (err) {
   error(err);
