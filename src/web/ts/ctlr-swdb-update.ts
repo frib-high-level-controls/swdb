@@ -236,7 +236,7 @@ function UpdatePromiseCtrl(
 
   // update document fields with existing data
   swService.promise.then( () => {
-    const data = swService.getSwById($routeParams.itemId);
+    const data = swService.getSwById($routeParams.itemId)[0];
     $scope.formData = data;
 
     // convert enums to value
@@ -264,7 +264,8 @@ function UpdatePromiseCtrl(
     forgGroupService.promise.then(() => {
       if ($scope.formData.owner) {
         const thisOwner = [$scope.formData.owner];
-        const forgObjs = forgGroupService.groupUidsToObjects(thisOwner)[0];
+        const objsArray = forgGroupService.groupUidsToObjects(thisOwner);
+        const forgObjs = objsArray[0];
         $scope.ownerSelected = { item: forgObjs };
       }
     });

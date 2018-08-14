@@ -22,10 +22,12 @@ interface IConfigProps {
 }
 
 interface IConfigService {
+  promise: Promise<void>;
   getConfig(): IConfigProps;
 }
 
 interface IUserService {
+  promise: Promise<void>;
   getUser(): {};
 }
 

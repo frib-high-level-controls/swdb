@@ -26,7 +26,7 @@ interface IRouteParams extends ng.route.IRouteParamsService {
 interface IInstService {
   promise: ng.IPromise<void>;
   refreshInstList(): ng.IPromise<void>;
-  getInstById(id: string): webapi.Inst;
+  getInstById(id: string): webapi.Inst[];
   getInstsBySw(id: string): webapi.Inst[];
 }
 
@@ -35,7 +35,7 @@ interface ISwService {
   refreshSwList(): ng.IPromise<void>;
   swIdsToObjects(id: string[]): webapi.ISwdb[];
   getSwList(): webapi.ISwdb[];
-  getSwById(item: string): webapi.ISwdb;
+  getSwById(item: string): webapi.ISwdb[];
 }
 
 appController.controller('InstDetailsController', InstDetailsPromiseCtrl);
@@ -78,7 +78,7 @@ function InstDetailsPromiseCtrl(
   $scope.session = userService.getUser();
   // update document fields with existing data
   instService.refreshInstList().then( () => {
-    const data = instService.getInstById($routeParams.itemId);
+    const data = instService.getInstById($routeParams.itemId)[0];
     $scope.formData = data;
     if (data.status) {
       $scope.statusDisplay = $scope.props.InstStatusEnum[data.status];
