@@ -189,10 +189,10 @@ export class TestTools {
   public async testCollectionsStatus(sdebug: debug.IDebugger) {
     sdebug('Test collections report:');
     if (Be.Db.swDoc.db.collections.history) {
-      let cursor = Be.Db.swDoc.db.collections.history.find();
-      if (cursor) {
+      const cursor2 = Be.Db.swDoc.db.collections.history.find();
+      if (cursor2) {
         try {
-          let count = await cursor.count();
+          const count = await cursor2.count();
           sdebug('SW history reports ' + count + ' items');
         } catch (err) {
           sdebug(err);
@@ -205,7 +205,7 @@ export class TestTools {
     let cursor = Be.Db.swDoc.db.collections.swdbCollection.find();
     if (cursor) {
       try {
-        let count = await cursor.count();
+        const count = await cursor.count();
         sdebug('SW collection reports ' + count + ' items');
       } catch (err) {
         sdebug(err);
@@ -217,7 +217,7 @@ export class TestTools {
     cursor = InstBe.InstDb.instDoc.db.collections.instCollection.find();
     if (cursor) {
       try {
-        let count = await cursor.count();
+        const count = await cursor.count();
         sdebug('Installation collection reports ' + count + ' items');
       } catch (err) {
         sdebug(err);
@@ -229,7 +229,7 @@ export class TestTools {
 
   public async dumpCollection(sdebug: debug.IDebugger, coll: mongo.Collection, search: any) {
     sdebug('Test collections dump(' + JSON.stringify(search) + '):');
-    let cursor = coll.find(search).sort({at: -1});
+    const cursor = coll.find(search).sort({at: -1});
     try {
       for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
         sdebug('Dumped Record ' + JSON.stringify(doc));
@@ -252,25 +252,26 @@ export class TestTools {
    * @params canonObj Desription The object submitted to the db.
    * @params id Description The db id returned from the object submission.
    */
-    let canonCheckList = canonObj;
-    let cursor = Be.Db.swDoc.db.collections.history.find({ rid: ObjectId(id) }).sort({at: -1}).limit(1);
+    const canonCheckList = canonObj;
+    const cursor = Be.Db.swDoc.db.collections.history.find({ rid: ObjectId(id) }).sort({at: -1}).limit(1);
     // let cursor = Be.Db.swDoc.db.collections.history.find();
     let msg = '';
     try {
       for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
         sdebug('Got history ' + doc._id + ' with  rid ' + id + JSON.stringify(doc));
-        for (let canonKey of Object.keys(canonObj)) {
+        for (const canonKey of Object.keys(canonObj)) {
           // we should find an paths array object where name: "swName" and value: value
-          for (let item of doc.paths) {
+          for (const item of doc.paths) {
             // sdebug('searching element ' + JSON.stringify(item) + ' for ' + canonKey);
-            if (item['name'] === canonKey) {
-              // sdebug('Found name = ' + canonKey);
-              // if (item['value'] === canonObj[canonKey]) {
-              if (_.isEqual(item['value'], canonObj[canonKey])) {
+            const keyName = 'name';
+            if (item[keyName] === canonKey) {
+              const val = 'value';
+              if (_.isEqual(item[val], canonObj[canonKey])) {
                 sdebug('Found name = ' + canonKey + ' AND value = ' + canonObj[canonKey]);
                 delete canonCheckList[canonKey];
               } else {
-                msg = 'History item ' + canonKey + ': ' + item['value'] + ' does not match ' + canonObj[canonKey];
+                const val2 = 'value';
+                msg = 'History item ' + canonKey + ': ' + item[val2] + ' does not match ' + canonObj[canonKey];
                 sdebug(msg);
               }
             }

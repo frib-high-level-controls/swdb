@@ -1,11 +1,11 @@
-import express = require('express');
 import cJSON = require('circular-json');
-import validate = require('validate.js');
 import dbg = require('debug');
+import express = require('express');
+import  mongoose = require('mongoose');
+import validate = require('validate.js');
+import commonTools = require('./CommonTools');
 import Be = require('./Db');
 import InstBe = require('./instDb');
-import commonTools = require('./CommonTools');
-import  mongoose = require('mongoose');
 const tools = new commonTools.CommonTools();
 const props = tools.getConfiguration();
 const debug = dbg('swdb:validators');
@@ -25,12 +25,12 @@ export class CustomValidators {
       },
       isArea: (val: string, req: express.Request) => {
         // Must be an array of strings
-        let result: string[] = [];
+        const result: string[] = [];
         if (Array.isArray(val)) {
           debug('body is ' + cJSON.stringify(req.body, null, 2));
           debug('val is ' + cJSON.stringify(val, null, 2));
           val.forEach((element, idx, arr) => {
-            let thisResult = validate.isString(element);
+            const thisResult = validate.isString(element);
             // debug('validation for element: ' + thisResult);
             if (!thisResult) {
               // record all failed fields
@@ -47,13 +47,13 @@ export class CustomValidators {
          * Case 2: The String is an array, but the listed items are not valid strings.
          * Case 3: The string is an array and all listed items are valid strings
          */
-        let result: string[] = [];
+        const result: string[] = [];
         if (Array.isArray(val)) {
           debug('body is ' + cJSON.stringify(req.body, null, 2));
           val.forEach((element: string, idx: number, arr: any[]) => {
             debug('checking element ' + element);
             debug('checking element(by index) ' + req.body.vvProcLoc[idx]);
-            let thisResult = validate.isString(element);
+            const thisResult = validate.isString(element);
             if (!thisResult) {
               // record all failed fields
               result.push(String(element) + ' must be a string');
@@ -75,13 +75,13 @@ export class CustomValidators {
          * Case 2: The String is an array, but the listed items are not valid urls.
          * Case 3: The string is an array and all listed items are valif urls
          */
-        let result: string[] = [];
+        const result: string[] = [];
         if (Array.isArray(val)) {
           debug('body is ' + cJSON.stringify(req.body, null, 2));
           val.forEach((element: string, idx: number, arr: any[]) => {
             debug('checking element ' + element);
             debug('checking element(by index) ' + req.body.vvResultsLoc[idx]);
-            let thisResult = validate.isString(element);
+            const thisResult = validate.isString(element);
             if (!thisResult) {
               // record all failed fields
               result.push(String(element) + ' must be a string');
@@ -148,9 +148,9 @@ export class CustomValidators {
     // get the id of the record which is wanting update
     // go get the existing record
     debug('Checking wfRuler1');
-    let id = req.params.id;
+    const id = req.params.id;
     try {
-      let idObj = new mongoose.mongo.ObjectId(req.params.id);
+      const idObj = new mongoose.mongo.ObjectId(req.params.id);
       debug('id:' + idObj);
     } catch (err) {
       return {
@@ -159,7 +159,7 @@ export class CustomValidators {
       };
     }
     try {
-      let queryPromise = await Be.Db.swDoc.findOne({ _id: id }).exec();
+      const queryPromise = await Be.Db.swDoc.findOne({ _id: id }).exec();
       // if old status was Ready for install
       // first, see if there was eve a  record to update
       if (!queryPromise) {
@@ -174,7 +174,7 @@ export class CustomValidators {
         if ((('version' in req.body) || ('branch' in req.body)) &&
          ((req.body.version !== queryPromise.version) || (req.body.branch !== queryPromise.branch))) {
           // debug('swUpdateWorkflowValidation version and/or branch changed');
-          let status = 'RDY_INST';
+          const status = 'RDY_INST';
           return {
             error: true,
             data: 'Version and branch cannot change in state ' + props.StatusEnum[status],
@@ -213,10 +213,10 @@ export class CustomValidators {
     // get the id of the record which is wanting update
     // go get the existing record
     debug('Checking wfRuler2');
-    let id = req.params.id;
+    const id = req.params.id;
     try {
       debug('Rule 2 id: ' + id);
-      let idObj = new mongoose.mongo.ObjectId(req.params.id);
+      const idObj = new mongoose.mongo.ObjectId(req.params.id);
       debug('id:' + idObj);
     } catch (err) {
       return {
@@ -225,7 +225,7 @@ export class CustomValidators {
       };
     }
     try {
-      let queryPromise = await InstBe.InstDb.instDoc.findOne({ _id: id }).exec();
+      const queryPromise = await InstBe.InstDb.instDoc.findOne({ _id: id }).exec();
       // if old status was Ready for install
       // first, see if there was eve a  record to update
       if (!queryPromise) {
@@ -280,9 +280,9 @@ export class CustomValidators {
     // check that the id is parsable
     debug('Checking wfRule3');
     if (req.body.software) {
-      let id = req.body.software;
+      const id = req.body.software;
       try {
-        let idObj = new mongoose.mongo.ObjectId(id);
+        const idObj = new mongoose.mongo.ObjectId(id);
         debug('id:' + idObj);
       } catch (err) {
         return {
@@ -293,7 +293,7 @@ export class CustomValidators {
       try {
         await Be.Db.swDoc.find().exec();
         // debug('Rule3 sees swDocs: ' + JSON.stringify(queryPromise1));
-        let queryPromise  = await Be.Db.swDoc.findOne({ _id: id }).exec();
+        const queryPromise  = await Be.Db.swDoc.findOne({ _id: id }).exec();
         // if old status was Ready for install
         // first, see if there was eve a  record to update
         if (!queryPromise) {
@@ -345,9 +345,9 @@ export class CustomValidators {
     // check that the id is parsable
     debug('Checking wfRule4');
     // go get the existing record
-    let id = req.params.id;
+    const id = req.params.id;
     try {
-      let idObj = new mongoose.mongo.ObjectId(req.params.id);
+      const idObj = new mongoose.mongo.ObjectId(req.params.id);
       debug('id:' + idObj);
     } catch (err) {
       return {
@@ -397,7 +397,7 @@ export class CustomValidators {
       };
     }
   }
-};
+}
 
 export interface IValResult {
     error: boolean;

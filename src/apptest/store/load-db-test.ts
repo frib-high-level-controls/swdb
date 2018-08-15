@@ -1,5 +1,5 @@
-import myTestTools = require('./TestTools.js');
 import dbg = require('debug');
+import myTestTools = require('./TestTools.js');
 
 /**
  * Load-test-db.ts
@@ -7,7 +7,7 @@ import dbg = require('debug');
  */
 
 const debug = dbg('swdb:load-db');
-let a = new myTestTools.TestTools();
+const a = new myTestTools.TestTools();
 a.loadTestCollectionsStandard(debug,
   a.props.test.swTestDataFile,
   a.props.test.instTestDataFile);

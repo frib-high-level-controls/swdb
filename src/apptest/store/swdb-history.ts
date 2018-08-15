@@ -1,4 +1,3 @@
-import server = require('../../app/server');
 import Chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 import Supertest = require('supertest');
@@ -7,16 +6,17 @@ import TestTools = require('./TestTools');
 // const circJSON = require('circular-json');
 
 import CommonTools = require('../../app/lib/CommonTools');
-let ctools = new CommonTools.CommonTools();
+import server = require('../../app/server');
+const ctools = new CommonTools.CommonTools();
 let props: CommonTools.IProps;
 props = ctools.getConfiguration();
 import dbg = require('debug');
 const debug = dbg('swdb:swdb-history-tests');
 let app;
 let supertest: Supertest.SuperTest<Supertest.Test>;
-let testTools = new TestTools.TestTools();
+const testTools = new TestTools.TestTools();
 Chai.use(chaiAsPromised);
-let expect = Chai.expect;
+const expect = Chai.expect;
 
 let Cookies: string;
 //
@@ -37,9 +37,9 @@ describe('History tests suite', () => {
   });
 
   // describe("Login and perform history tests", function () {
-  let wrapper = { origId: null };
+  const wrapper = { origId: null };
 
-  before('login as test user', function (this, done) {
+  before('login as test user', function(this, done) {
     this.timeout(8000);
     supertest
     .get('/login')
@@ -58,8 +58,8 @@ describe('History tests suite', () => {
   });
 
   it('Has the blank history', async () => {
-    let cursor = Be.Db.swDoc.db.collections.history.find();
-    let count: number = await cursor.count();
+    const cursor = Be.Db.swDoc.db.collections.history.find();
+    const count: number = await cursor.count();
     debug('Found ' + count + ' history items');
     expect(count).to.equal(0);
   });
@@ -73,10 +73,10 @@ describe('History tests suite', () => {
        levelOfCare: 'LOW', status: 'DEVEL', statusDate: 'date 1000' })
       .end(async (err: Error, result: Supertest.Response) => {
         // get record id from the returned location and find records that match
-        let id = result.header.location.split(/\//).pop();
+        const id = result.header.location.split(/\//).pop();
         wrapper.origId = id;
         debug('Got id ' + id);
-        let canonObj = {
+        const canonObj = {
           swName: 'Test Record', owner: 'Owner 1000', engineer: 'Engineer 1000',
           levelOfCare: 'LOW', status: 'DEVEL', statusDate: new Date('date 1000'),
         };
@@ -97,10 +97,10 @@ describe('History tests suite', () => {
       .send( { owner: 'New test owner' } )
       .end(async (err: Error, result: Supertest.Response) => {
         // get record id from the returned location and find records that match
-        let id = result.header.location.split(/\//).pop();
+        const id = result.header.location.split(/\//).pop();
         wrapper.origId = id;
         debug('Got id ' + id);
-        let canonObj = {
+        const canonObj = {
             owner: 'New test owner',
           };
         try {

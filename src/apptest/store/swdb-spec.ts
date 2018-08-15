@@ -1,25 +1,25 @@
-import server = require('../../app/server');
 import chai = require('chai');
-import Supertest = require('supertest');
-import Be = require('../../app/lib/Db');
-import TestTools = require('./TestTools');
+import dbg = require('debug');
 import expect2 = require('expect');
+import Supertest = require('supertest');
+import TestTools = require('./TestTools');
 
 import CommonTools = require('../../app/lib/CommonTools');
-import dbg = require('debug');
+import Be = require('../../app/lib/Db');
+import server = require('../../app/server');
 const debug = dbg('swdb:swdb-spec-tests');
 
-let expect = chai.expect;
-let ctools = new CommonTools.CommonTools();
+const expect = chai.expect;
+const ctools = new CommonTools.CommonTools();
 let props: any = {};
 props = ctools.getConfiguration();
-let testTools = new TestTools.TestTools();
+const testTools = new TestTools.TestTools();
 let supertest: any;
 let app;
 let Cookies: any;
 //
-describe('app', function() {
-  before('Prep DB', async function () {
+describe('app', () => {
+  before('Prep DB', async function() {
     this.timeout(8000);
     app = await server.start();
     supertest = Supertest(app);
@@ -29,21 +29,21 @@ describe('app', function() {
       props.test.instTestDataFile);
   });
 
-  after('clear db', async function () {
+  after('clear db', async () => {
     debug('Clear DB');
     // clear the test collection
     await testTools.clearTestCollections(debug);
     await server.stop();
   });
 
-  before('login as test user', function(done){
+  before('login as test user', function(done) {
     this.timeout(8000);
     supertest
     .get('/login')
     .auth(props.test.username, props.test.password)
     .timeout(8000)
     .expect(302)
-    .end(function(err: Error, res: Express.Session){
+    .end((err: Error, res: Express.Session) => {
       if (err) {
          done(err);
       } else {
@@ -56,11 +56,11 @@ describe('app', function() {
 
   // web facing tests
   //
-  it('Respond with welcome', function(done) {
+  it('Respond with welcome', (done) => {
     supertest
     .get('/')
     .expect(200)
-    .end(function(err: Error, res: Express.Session){
+    .end((err: Error, res: Express.Session) => {
       expect(res.res.text).to.match(/SWDB \(Prototype Interface\)/);
       done(err);
     });
@@ -70,7 +70,7 @@ describe('app', function() {
     supertest
     .get('/api/v1/swdb')
     .expect(200)
-    .end(function(err: Error, res: Express.Session){
+    .end((err: Error, res: Express.Session) => {
       if (err) {
         done(err);
       } else {
@@ -85,12 +85,12 @@ describe('app', function() {
     supertest
     .get('/api/v1/swdb/forgUsers')
     .expect(200)
-    .end(function(err: Error, res: Express.Session){
+    .end((err: Error, res: Express.Session) => {
       if (err) {
         done(err);
       } else {
         try {
-          let sub = JSON.parse(res.text).filter((element: any, idx: number, array: Array<object>) => {
+          const sub = JSON.parse(res.text).filter((element: any, idx: number, array: object[]) => {
             return element.uid === 'ELLISR';
           });
           if (sub.length === 1) {
@@ -111,12 +111,12 @@ describe('app', function() {
     supertest
     .get('/api/v1/swdb/forgGroups')
     .expect(200)
-    .end(function(err: Error, res: Express.Session){
+    .end((err: Error, res: Express.Session) => {
       if (err) {
         done(err);
       } else {
         try {
-          let sub = JSON.parse(res.text).filter((element: any, idx: number, array: Array<object>) => {
+          const sub = JSON.parse(res.text).filter((element: any, idx: number, array: object[]) => {
             return element.uid === 'IFS:LAB.FRIB.ASD.CONTROLS';
           });
           if (sub.length === 1) {
@@ -137,12 +137,12 @@ describe('app', function() {
     supertest
     .get('/api/v1/swdb/forgAreas')
     .expect(200)
-    .end(function(err: Error, res: Express.Session){
+    .end((err: Error, res: Express.Session) => {
       if (err) {
         done(err);
       } else {
         try {
-          let sub = JSON.parse(res.text).filter((element: any, idx: number, array: Array<object>) => {
+          const sub = JSON.parse(res.text).filter((element: any, idx: number, array: object[]) => {
             return element.uid === 'ADB:AREA.FRIB.CTRLITIDF';
           });
           if (sub.length === 1) {
@@ -158,14 +158,14 @@ describe('app', function() {
     });
   });
 
-  it('Has the blank history', async function() {
-      let cursor = Be.Db.swDoc.db.collections.history.find();
-      let count = await cursor.count();
+  it('Has the blank history', async () => {
+      const cursor = Be.Db.swDoc.db.collections.history.find();
+      const count = await cursor.count();
       debug('Found ' + count + ' items');
       expect(count).to.equal(0);
   });
 
-  it('Returns location header posting new record', function(done) {
+  it('Returns location header posting new record', (done) => {
     supertest
     .post('/api/v1/swdb')
     .set('Accept', 'application/json')
@@ -192,15 +192,15 @@ describe('app', function() {
     });
   });
 
-  it('Has the correct number of history entries', async function () {
-    let cursor = Be.Db.swDoc.db.collections.history.find();
-    let count: number = await cursor.count();
+  it('Has the correct number of history entries', async () => {
+    const cursor = Be.Db.swDoc.db.collections.history.find();
+    const count: number = await cursor.count();
     debug('Found ' + count + ' items');
     expect(count).to.equal(1);
   });
 
-  it('Has the swName history entry', async function () {
-    let cursor = Be.Db.swDoc.db.collections.history.find();
+  it('Has the swName history entry', async () => {
+    const cursor = Be.Db.swDoc.db.collections.history.find();
     // try {
     for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
       debug('Document history: ' + JSON.stringify(doc));
@@ -208,21 +208,21 @@ describe('app', function() {
     }
   });
 
-  it('Has the correct swName history entry', async function () {
-    let cursor = Be.Db.swDoc.db.collections.history.find();
+  it('Has the correct swName history entry', async () => {
+    const cursor = Be.Db.swDoc.db.collections.history.find();
     for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
       expect(doc.paths[0].value = 'Header Test Record');
     }
   });
 
 
-  describe('Check location headers', function() {
-    let wrapper = {origId: null};
-    before('Get ID record id:Test Record', function(done) {
+  describe('Check location headers', () => {
+    const wrapper = {origId: null};
+    before('Get ID record id:Test Record', (done) => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -237,11 +237,11 @@ describe('app', function() {
       });
     });
 
-    it('Returns test record id:Header Test Record', function(done) {
+    it('Returns test record id:Header Test Record', (done) => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -254,7 +254,7 @@ describe('app', function() {
       });
     });
 
-    it('Returns the correct location header PUT existing record', function (done) {
+    it('Returns the correct location header PUT existing record', (done) => {
       supertest
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
@@ -265,7 +265,7 @@ describe('app', function() {
           if (err) {
             done(err);
           } else {
-            let re = new RegExp('^.*/api/v1/swdb/' + wrapper.origId + '$');
+            const re = new RegExp('^.*/api/v1/swdb/' + wrapper.origId + '$');
             if (result.headers.location.match(re)) {
               debug('Location: ' + result.headers.location);
               done();
@@ -276,7 +276,7 @@ describe('app', function() {
         });
     });
 
-    it('Returns the correct location header PATCH existing record', function (done) {
+    it('Returns the correct location header PATCH existing record', (done) => {
       supertest
         .patch('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
@@ -287,7 +287,7 @@ describe('app', function() {
           if (err) {
             done(err);
           } else {
-            let re = new RegExp('^.*/api/v1/swdb/' + wrapper.origId + '$');
+            const re = new RegExp('^.*/api/v1/swdb/' + wrapper.origId + '$');
             if (result.headers.location.match(re)) {
               debug('Location: ' + result.headers.location);
               done();
@@ -299,9 +299,9 @@ describe('app', function() {
     });
   });
 
-  describe('Check history calls', function () {
-    let wrapper = { origId: null };
-    before('Before test post and get id', function (done) {
+  describe('Check history calls', () => {
+    const wrapper = { origId: null };
+    before('Before test post and get id', (done) => {
       supertest
         .post('/api/v1/swdb')
         .send({ swName: 'Hist1 Test Record',
@@ -325,7 +325,7 @@ describe('app', function() {
           }
         });
     });
-    before('Before modify test record (history2)', function (done) {
+    before('Before modify test record (history2)', (done) => {
       supertest
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
@@ -340,7 +340,7 @@ describe('app', function() {
           }
         });
     });
-    before('Before modify test record (history 3)', function (done) {
+    before('Before modify test record (history 3)', (done) => {
       supertest
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
@@ -355,7 +355,7 @@ describe('app', function() {
           }
         });
     });
-    before('Before modify test record (history 4)', function (done) {
+    before('Before modify test record (history 4)', (done) => {
       supertest
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
@@ -370,7 +370,7 @@ describe('app', function() {
           }
         });
     });
-    before('Before modify test record (history 5)', function (done) {
+    before('Before modify test record (history 5)', (done) => {
       supertest
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
@@ -385,7 +385,7 @@ describe('app', function() {
           }
         });
     });
-    before('Before modify test record (history 6)', function (done) {
+    before('Before modify test record (history 6)', (done) => {
       supertest
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
@@ -400,7 +400,7 @@ describe('app', function() {
           }
         });
     });
-    before('Before modify test record (history 7)', function (done) {
+    before('Before modify test record (history 7)', (done) => {
       supertest
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
@@ -416,11 +416,11 @@ describe('app', function() {
         });
     });
 
-    it('The API default history entry is correct', function (done) {
+    it('The API default history entry is correct',  (done) => {
       supertest
         .get('/api/v1/swdb/hist/' + wrapper.origId)
         .expect(200)
-        .end(function (err: Error, res: Express.Session) {
+        .end( (err: Error, res: Express.Session) => {
           if (err) {
             debug('Err history (api test): ' + JSON.stringify(err, null, 2));
             done(err);
@@ -437,11 +437,11 @@ describe('app', function() {
           }
         });
     });
-    it('The API history (limit 1, skip1) entry is correct', function (done) {
+    it('The API history (limit 1, skip1) entry is correct', (done) => {
       supertest
         .get('/api/v1/swdb/hist/' + wrapper.origId + '?limit=1&skip=1')
         .expect(200)
-        .end(function (err: Error, res: Express.Session) {
+        .end((err: Error, res: Express.Session) => {
           if (err) {
             debug('Err history (api test): ' + JSON.stringify(err, null, 2));
             done(err);
@@ -460,7 +460,7 @@ describe('app', function() {
     });
   });
 
-  it('Post a new record', function(done) {
+  it('Post a new record', (done) => {
     supertest
     .post('/api/v1/swdb')
     .set('Accept', 'application/json')
@@ -478,7 +478,7 @@ describe('app', function() {
     });
   });
 
-  it('Errors posting a duplicate new record', function(done) {
+  it('Errors posting a duplicate new record', (done) => {
     supertest
     .post('/api/v1/swdb')
     .send({swName: 'Test Record',
@@ -503,7 +503,7 @@ describe('app', function() {
     });
   });
 
-  it('Post a new record Test Record2', function(done) {
+  it('Post a new record Test Record2', (done) => {
     supertest
     .post('/api/v1/swdb')
     .send({swName: 'Test Record2',
@@ -525,13 +525,13 @@ describe('app', function() {
     });
   });
 
-  describe('get id for Test Record', function() {
-    let wrapper = {origId: null};
-    before('Get ID record id:Test Record', function(done) {
+  describe('get id for Test Record', () => {
+    const wrapper = {origId: null};
+    before('Get ID record id:Test Record', (done) => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -546,11 +546,11 @@ describe('app', function() {
       });
     });
 
-    it('Returns test record id:Test Record', function(done) {
+    it('Returns test record id:Test Record', (done) => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -564,7 +564,7 @@ describe('app', function() {
     });
   });
 
-  it('Post a new record Desc Test Record', function(done) {
+  it('Post a new record Desc Test Record', (done) => {
     supertest
     .post('/api/v1/swdb')
     .send({swName: 'Desc Test Record',
@@ -586,13 +586,13 @@ describe('app', function() {
     });
   });
 
-  describe('get id for Desc Test Record', function() {
-    let wrapper = {origId: null};
-    before('Get ID record id: Desc Test Record', function(done) {
+  describe('get id for Desc Test Record', () => {
+    const wrapper = {origId: null};
+    before('Get ID record id: Desc Test Record', (done) => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -607,11 +607,11 @@ describe('app', function() {
       });
     });
 
-    it('Returns test record id: Desc Test Record', function(done) {
+    it('Returns test record id: Desc Test Record', (done) => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -625,7 +625,7 @@ describe('app', function() {
     });
   });
 
-  it('Post a new record Engineer Test Record', function(done) {
+  it('Post a new record Engineer Test Record', (done) => {
     supertest
     .post('/api/v1/swdb')
     .send({swName: 'Engineer Test Record',
@@ -647,13 +647,13 @@ describe('app', function() {
     });
   });
 
-  describe('get id for Engineer Test Record', function() {
-    let wrapper = {origId: null};
-    before('Get ID record id: Engineer Test Record', function(done) {
+  describe('get id for Engineer Test Record', () => {
+    const wrapper = {origId: null};
+    before('Get ID record id: Engineer Test Record', (done) => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -668,11 +668,11 @@ describe('app', function() {
       });
     });
 
-    it('Returns test record id: Engineer Test Record', function(done) {
+    it('Returns test record id: Engineer Test Record', (done) => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -687,7 +687,7 @@ describe('app', function() {
     });
   });
 
-  it('Post a new record versionControlLoc Test Record', function(done) {
+  it('Post a new record versionControlLoc Test Record', (done) => {
     supertest
     .post('/api/v1/swdb')
     .send({swName: 'versionControlLoc Test Record',
@@ -710,13 +710,13 @@ describe('app', function() {
     });
   });
 
-  describe('get id for versionControlLoc Test Record', function() {
-    let wrapper = {origId: null};
-    before('Get ID record id: versionControlLoc Test Record', function(done) {
+  describe('get id for versionControlLoc Test Record', () => {
+    const wrapper = {origId: null};
+    before('Get ID record id: versionControlLoc Test Record', (done) => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -731,11 +731,11 @@ describe('app', function() {
       });
     });
 
-    it('Returns test record id: versionControlLoc Test Record', function(done) {
+    it('Returns test record id: versionControlLoc Test Record', (done) => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -748,7 +748,7 @@ describe('app', function() {
     });
   });
 
-  it('Post a new record designDescDocLoc Test Record', function(done) {
+  it('Post a new record designDescDocLoc Test Record', (done) => {
     supertest
     .post('/api/v1/swdb')
     .send({swName: 'designDescDocLoc Test Record',
@@ -771,13 +771,13 @@ describe('app', function() {
     });
   });
 
-  describe('get id for designDescDocLoc Test Record', function() {
-    let wrapper = {origId: null};
-    before('Get ID record id: designDescDocLoc Test Record', function(done) {
+  describe('get id for designDescDocLoc Test Record', () => {
+    const wrapper = {origId: null};
+    before('Get ID record id: designDescDocLoc Test Record', (done) => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -792,11 +792,11 @@ describe('app', function() {
       });
     });
 
-    it('Returns test record id: designDescDocLoc Test Record', function(done) {
+    it('Returns test record id: designDescDocLoc Test Record', (done) => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -809,7 +809,7 @@ describe('app', function() {
     });
   });
 
-  it('Post a new record descDocLoc Test Record', function(done) {
+  it('Post a new record descDocLoc Test Record', (done) => {
     supertest
     .post('/api/v1/swdb')
     .send({swName: 'descDocLoc Test Record',
@@ -832,13 +832,13 @@ describe('app', function() {
     });
   });
 
-  describe('get id for descDocLoc Test Record', function() {
-    let wrapper = {origId: null};
-    before('Get ID record id: descDocLoc Test Record', function(done) {
+  describe('get id for descDocLoc Test Record', () => {
+    const wrapper = {origId: null};
+    before('Get ID record id: descDocLoc Test Record', (done) => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -853,11 +853,11 @@ describe('app', function() {
       });
     });
 
-    it('Returns test record id: descDocLoc Test Record', function(done) {
+    it('Returns test record id: descDocLoc Test Record', (done) => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -870,7 +870,7 @@ describe('app', function() {
     });
   });
 
-  it('Post a new record vvProcLoc Test Record', function(done) {
+  it('Post a new record vvProcLoc Test Record', (done) => {
     supertest
     .post('/api/v1/swdb')
     .send({
@@ -895,13 +895,13 @@ describe('app', function() {
     });
   });
 
-  describe('get id for vvProcLoc Test Record', function() {
-    let wrapper = {origId: null};
-    before('Get ID record id: vvProcLoc Test Record', function(done) {
+  describe('get id for vvProcLoc Test Record', () => {
+    const wrapper = {origId: null};
+    before('Get ID record id: vvProcLoc Test Record', (done) => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -916,11 +916,11 @@ describe('app', function() {
       });
     });
 
-    it('Returns test record id: vvProcLoc Test Record', function(done) {
+    it('Returns test record id: vvProcLoc Test Record', (done) => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -935,7 +935,7 @@ describe('app', function() {
     });
   });
 
-  it('Post a new record vvResultsLoc Test Record', function(done) {
+  it('Post a new record vvResultsLoc Test Record', (done) => {
     supertest
     .post('/api/v1/swdb')
     .send({
@@ -959,13 +959,13 @@ describe('app', function() {
     });
   });
 
-  describe('get id for vvResultsLoc Test Record', function() {
-    let wrapper = {origId: null};
-    before('Get ID record id: vvResultsLoc Test Record', function(done) {
+  describe('get id for vvResultsLoc Test Record', () => {
+    const wrapper = {origId: null};
+    before('Get ID record id: vvResultsLoc Test Record', (done) => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -980,11 +980,11 @@ describe('app', function() {
       });
     });
 
-    it('Returns test record id: vvResultsLoc Test Record', function(done) {
+    it('Returns test record id: vvResultsLoc Test Record', (done) => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -998,7 +998,7 @@ describe('app', function() {
     });
   });
 
-  it('Post a new record branch Test Record', function(done) {
+  it('Post a new record branch Test Record', (done) => {
     supertest
     .post('/api/v1/swdb')
     .send({swName: 'branch Test Record',
@@ -1021,13 +1021,13 @@ describe('app', function() {
     });
   });
 
-  describe('get id for branch Test Record', function() {
-    let wrapper = {origId: null};
-    before('Get ID record id: branch Test Record', function(done) {
+  describe('get id for branch Test Record', () => {
+    const wrapper = {origId: null};
+    before('Get ID record id: branch Test Record', (done) => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -1042,11 +1042,11 @@ describe('app', function() {
       });
     });
 
-    it('Returns test record id: branch Test Record', function(done) {
+    it('Returns test record id: branch Test Record', (done) => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -1059,7 +1059,7 @@ describe('app', function() {
     });
   });
 
-  it('Post a new record versionControl Test Record', function(done) {
+  it('Post a new record versionControl Test Record', (done) => {
     supertest
       .post('/api/v1/swdb')
     .send({swName: 'versionControl Test Record',
@@ -1082,13 +1082,13 @@ describe('app', function() {
     });
   });
 
-  describe('get id for versionControl Test Record', function() {
-    let wrapper = {origId: null};
-    before('Get ID versionControl id: branch Test Record', function(done) {
+  describe('get id for versionControl Test Record', () => {
+    const wrapper = {origId: null};
+    before('Get ID versionControl id: branch Test Record', (done) => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -1103,11 +1103,11 @@ describe('app', function() {
       });
     });
 
-    it('Returns test record id: versionControl Test Record', function(done) {
+    it('Returns test record id: versionControl Test Record', (done) => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -1120,7 +1120,7 @@ describe('app', function() {
     });
   });
 
-  it('Post a new record previous Test Record', function(done) {
+  it('Post a new record previous Test Record', (done) => {
     supertest
     .post('/api/v1/swdb')
     .send({swName: 'previous Test Record',
@@ -1143,13 +1143,13 @@ describe('app', function() {
     });
   });
 
-  describe('get id for previous Test Record', function() {
-    let wrapper = {origId: null};
-    before('Get ID previous id: branch Test Record', function(done) {
+  describe('get id for previous Test Record', () => {
+    const wrapper = {origId: null};
+    before('Get ID previous id: branch Test Record', (done) => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -1164,11 +1164,11 @@ describe('app', function() {
       });
     });
 
-    it('Returns test record id: previous Test Record', function(done) {
+    it('Returns test record id: previous Test Record', (done) => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -1182,13 +1182,13 @@ describe('app', function() {
   });
 
 
-  describe('get id for Test Record2', function() {
+  describe('get id for Test Record2', () => {
     let wrapper: any = {origId: null};
-    before('Get ID record id:Test Record2', function(done) {
+    before('Get ID record id:Test Record2', (done) => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -1203,7 +1203,7 @@ describe('app', function() {
       });
     });
 
-    it('Can update a record via PUT swName id:Test Record3', function (done) {
+    it('Can update a record via PUT swName id:Test Record3', (done) => {
       supertest
         .put('/api/v1/swdb/' + wrapper.origId)
         .send({ swName: 'Test Record3' })
@@ -1219,11 +1219,11 @@ describe('app', function() {
         });
     });
 
-    it('Returns test record 1d:Test Record3', function(done) {
+    it('Returns test record 1d:Test Record3', (done) => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end(function(err: Error, res: Express.Session){
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -1235,7 +1235,7 @@ describe('app', function() {
     });
 
     // workflow rule1 tests
-    it('Post a new record to test version/branch lock on Ready for install(rule 1)', function (done) {
+    it('Post a new record to test version/branch lock on Ready for install(rule 1)', (done) => {
       supertest
         .post('/api/v1/swdb')
         .send({
@@ -1259,13 +1259,13 @@ describe('app', function() {
         });
     });
 
-    describe('get id for rule 1 record', function () {
+    describe('get id for rule 1 record', () => {
       wrapper = { origId: null };
-      before('Get ID previous id: rule 1 Test Record', function (done) {
+      before('Get ID previous id: rule 1 Test Record', (done) => {
         supertest
           .get('/api/v1/swdb')
           .expect(200)
-          .end(function (err: Error, res: Express.Session) {
+          .end((err: Error, res: Express.Session) => {
             if (err) {
               done(err);
             } else {
@@ -1280,11 +1280,11 @@ describe('app', function() {
           });
       });
 
-      it('Returns test record id: previous Test Record', function (done) {
+      it('Returns test record id: previous Test Record', (done) => {
         supertest
           .get('/api/v1/swdb/' + wrapper.origId)
           .expect(200)
-          .end(function (err: Error, res: Express.Session) {
+          .end((err: Error, res: Express.Session) => {
             if (err) {
               done(err);
             } else {
@@ -1295,7 +1295,7 @@ describe('app', function() {
           });
       });
 
-      it('set version branch in rule 1 Test Record', function (done) {
+      it('set version branch in rule 1 Test Record', (done) => {
         supertest
           .put('/api/v1/swdb/' + wrapper.origId)
           .send({
@@ -1304,7 +1304,7 @@ describe('app', function() {
           })
           .set('Cookie', [Cookies])
           .expect(200)
-          .end(function (err: Error, res: Express.Session) {
+          .end((err: Error, res: Express.Session) => {
             if (err) {
               done(err);
             } else {
@@ -1313,7 +1313,7 @@ describe('app', function() {
           });
       });
 
-      it('set status in rule 1 Test Record', function (done) {
+      it('set status in rule 1 Test Record', (done) => {
         supertest
           .put('/api/v1/swdb/' + wrapper.origId)
           .send({
@@ -1321,7 +1321,7 @@ describe('app', function() {
           })
           .set('Cookie', [Cookies])
           .expect(200)
-          .end(function (err: Error, res: Express.Session) {
+          .end((err: Error, res: Express.Session) => {
             if (err) {
               done(err);
             } else {
@@ -1330,11 +1330,11 @@ describe('app', function() {
           });
       });
 
-      it('Returns test record id: previous Test Record', function (done) {
+      it('Returns test record id: previous Test Record', (done) => {
         supertest
           .get('/api/v1/swdb/' + wrapper.origId)
           .expect(200)
-          .end(function (err: Error, res: Express.Session) {
+          .end((err: Error, res: Express.Session) => {
             if (err) {
               done(err);
             } else {
@@ -1345,7 +1345,7 @@ describe('app', function() {
           });
       });
 
-      it('set version/branch in rule 1 Test Record', function (done) {
+      it('set version/branch in rule 1 Test Record', (done) => {
         supertest
           .put('/api/v1/swdb/' + wrapper.origId)
           .send({
@@ -1355,7 +1355,7 @@ describe('app', function() {
           .set('Cookie', [Cookies])
           .expect(400)
           .expect('Worklow validation errors: "Version and branch cannot change in state Ready for install"')
-          .end(function (err: Error, res: Express.Session) {
+          .end((err: Error, res: Express.Session) => {
             if (err) {
               done(err);
             } else {
@@ -1366,7 +1366,7 @@ describe('app', function() {
     });
 
     // workflow rule4 tests
-    it('Post a new record to test status lock if installations (rule 4)', function (done) {
+    it('Post a new record to test status lock if installations (rule 4)', (done) => {
       supertest
         .post('/api/v1/swdb')
         .send({
@@ -1392,13 +1392,13 @@ describe('app', function() {
         });
     });
 
-    describe('get id for rule 4 record', function () {
+    describe('get id for rule 4 record', () => {
       wrapper = { origId: null };
-      before('Get ID previous id: rule 4 Test Record', function (done) {
+      before('Get ID previous id: rule 4 Test Record', (done) => {
         supertest
           .get('/api/v1/swdb')
           .expect(200)
-          .end(function (err: Error, res: Express.Session) {
+          .end((err: Error, res: Express.Session) => {
             if (err) {
               done(err);
             } else {
@@ -1413,11 +1413,11 @@ describe('app', function() {
           });
       });
 
-      it('Returns test record id: Rule 4 Test Record', function (done) {
+      it('Returns test record id: Rule 4 Test Record', (done) => {
         supertest
           .get('/api/v1/swdb/' + wrapper.origId)
           .expect(200)
-          .end(function (err: Error, res: Express.Session) {
+          .end((err: Error, res: Express.Session) => {
             if (err) {
               done(err);
             } else {
@@ -1428,7 +1428,7 @@ describe('app', function() {
           });
       });
 
-      it('set status in rule 4 Test Record', function (done) {
+      it('set status in rule 4 Test Record', (done) => {
         supertest
           .put('/api/v1/swdb/' + wrapper.origId)
           .send({
@@ -1436,7 +1436,7 @@ describe('app', function() {
           })
           .set('Cookie', [Cookies])
           .expect(200)
-          .end(function (err: Error, res: Express.Session) {
+          .end((err: Error, res: Express.Session) => {
             if (err) {
               done(err);
             } else {
@@ -1460,14 +1460,14 @@ describe('app', function() {
           })
           .expect(201)
           // .end(done);
-          .end(function (err: Error, res: Express.Session) {
+          .end((err: Error, res: Express.Session) => {
             if (err) {
               debug('res: ' + JSON.stringify(res, null, 2));
               done(err);
             } else {
               // grab the new installation id from the returned location header.
               // We use this later to verify the error message.
-              let id = res.header.location.split(/\//).pop();
+              const id = res.header.location.split(/\//).pop();
               wrapper.instId = id;
               debug('res: ' + JSON.stringify(res, null, 2));
               done();
@@ -1475,7 +1475,7 @@ describe('app', function() {
           });
       });
 
-      it('Rule 4 test - errors setting status having installations', function (done) {
+      it('Rule 4 test - errors setting status having installations', (done) => {
         supertest
           .put('/api/v1/swdb/' + wrapper.origId)
           .send({
@@ -1485,7 +1485,7 @@ describe('app', function() {
           .expect(400)
           .expect('Worklow validation errors: "Software state cannot change while ' +
             'there are active installations: ' + wrapper.instId + '"')
-          .end(function (err: Error, res: Express.Session) {
+          .end((err: Error, res: Express.Session) => {
             if (err) {
               done(err);
             } else {
@@ -1500,7 +1500,7 @@ describe('app', function() {
     // {req:{msg:,url:,type:,err{status:}}
     //  res:{msg:,url:,type:,err{status:}}
     //  }
-    let testUpdateParams = [
+    const testUpdateParams = [
       {type: 'PUT', req: {msg: {swName: 'Test Record4'}, url: '/api/v1/swdb/', err: {status: 200}}},
       {type: 'GET', res: {msg: {swName: 'Test Record4'}, url: '/api/v1/swdb/',  err: {status: 200}}},
       {type: 'PUT', req: {msg: {owner: 'New test owner 1002'}, url: '/api/v1/swdb/', err: {status: 200}}},
@@ -1581,7 +1581,10 @@ describe('app', function() {
       err: {status: 400,
          // tslint:disable-next-line:max-line-length
          msgHas: '{"param":"status","msg":"Status must be one of DEVEL,RDY_TEST,RDY_INST,DEP","value":"not-enumerated"}'}}},
-      {type: 'POST', req: {msg: {swName: 'testing', owner: 'test owner', levelOfCare: 'LOW', status: 'DEVEL', statusDate: 'non-date'},
+      {type: 'POST',
+       req:
+        {msg:
+          {swName: 'testing', owner: 'test owner', levelOfCare: 'LOW', status: 'DEVEL', statusDate: 'non-date'},
        url: '/api/v1/swdb/',
       err: {status: 400, msgHas: '{"param":"statusDate","msg":"Status date must be a date.","value":"non-date"}'}}},
       // test new version min, max
@@ -1643,16 +1646,16 @@ describe('app', function() {
     ];
 
     // go through the table and check the given parameters
-    testUpdateParams.forEach(function(value: any, i) {
+    testUpdateParams.forEach((value: any, i) => {
       // handle PUT
       if (value.type === 'PUT') {
         it(value!.req!.err.status + ' ' + value.type + ' msg: ' +
-        JSON.stringify(JSON.stringify(value!.req!.msg)), function(done) {
+        JSON.stringify(JSON.stringify(value!.req!.msg)), (done) => {
           supertest
           .put(value!.req!.url + wrapper.origId)
           .send(value!.req!.msg)
           .set('Cookie', [Cookies])
-          .end(function(err: Error, res: Express.Session){
+          .end((err: Error, res: Express.Session) => {
             if (err) {
               done(err);
             } else {
@@ -1672,12 +1675,12 @@ describe('app', function() {
       if (value.type === 'POST') {
         // tslint:disable-next-line:max-line-length
         it(value!.req!.err.status + ' ' + value.type + ' ' +
-          JSON.stringify(JSON.stringify(value!.req!.msg)), function (done) {
+          JSON.stringify(JSON.stringify(value!.req!.msg)), (done) => {
           supertest
           .post(value!.req!.url)
           .send(value!.req!.msg)
           .set('Cookie', [Cookies])
-          .end(function(err: Error, res: Express.Session){
+          .end((err: Error, res: Express.Session) => {
             if (err) {
               done(err);
             } else {
@@ -1696,17 +1699,17 @@ describe('app', function() {
 
       // handle GET
       if (value.type === 'GET') {
-        it(value!.res!.err.status + ' ' + JSON.stringify(value!.res!.msg), function(done) {
+        it(value!.res!.err.status + ' ' + JSON.stringify(value!.res!.msg), (done) => {
           supertest
           .get(value!.res!.url + wrapper.origId)
-          .end(function(err: Error, res: Express.Session) {
+          .end((err: Error, res: Express.Session) => {
             if (err) {
               done(err);
             } else {
               if (value!.res.err.status) {
                 expect(res.status).to.equal(value.res.err.status);
               }
-              for (let prop of Object.keys(value.res.msg)) {
+              for (const prop of Object.keys(value.res.msg)) {
                 expect(res.body).to.have.property(prop);
                 // This is to allow sloppy matching on whole objects.
                 // See the npm "expect" module for more
@@ -1718,14 +1721,14 @@ describe('app', function() {
         });
       }
     });
-    it('Errors on update a nonexistent record via POST swName id:badbeef', function(done) {
+    it('Errors on update a nonexistent record via POST swName id:badbeef', (done) => {
       supertest
       .post('/api/v1/swdb/badbeef')
       .set('Cookie', [Cookies])
       .set('Accept', 'application/json')
       .send({swName: 'Test Record4'})
       .expect(404)
-      .end(function(err: Error, res: Express.Session) {
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -1735,14 +1738,14 @@ describe('app', function() {
         }
       });
     });
-    it('Errors on update a nonexistent record via PUT swName id:badbeef', function(done) {
+    it('Errors on update a nonexistent record via PUT swName id:badbeef', (done) => {
       supertest
       .put('/api/v1/swdb/badbeef')
       .set('Cookie', [Cookies])
       .send({swName: 'Test Record4'})
       .expect(400)
       .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
-      .end(function(err: Error, res: Express.Session) {
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {
@@ -1751,14 +1754,14 @@ describe('app', function() {
         }
       });
     });
-    it('Errors on update a nonexistent record via PATCH swName id:badbeef', function(done) {
+    it('Errors on update a nonexistent record via PATCH swName id:badbeef', (done) => {
       supertest
       .patch('/api/v1/swdb/badbeef')
       .set('Cookie', [Cookies])
       .send({swName: 'Test Record4'})
       .expect(400)
       .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
-      .end(function(err: Error, res: Express.Session) {
+      .end((err: Error, res: Express.Session) => {
         if (err) {
           done(err);
         } else {

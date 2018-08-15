@@ -1,5 +1,6 @@
 /* jslint node: true */
 'use strict';
+import dbg = require('debug');
 import express = require('express');
 import fs = require('fs');
 import request = require('request');
@@ -7,7 +8,6 @@ import url = require('url');
 
 import CommonTools = require('./CommonTools');
 import {InstStatusEnum} from './swdbEnums';
-import dbg = require('debug');
 const debug = dbg('swdb:instlib');
 const ctools = new CommonTools.CommonTools();
 let props: any = {};
@@ -31,8 +31,8 @@ export class InstLib {
    * @returns id The ID of the item found in the request
    */
   public static getReqId = (req: express.Request) => {
-    let id: String | null = null;
-    let path = url.parse(req.url).pathname;
+    let id: string | null = null;
+    const path = url.parse(req.url).pathname;
     if (url.parse(req.url).pathname) {
       if (path!.match(/[^v][\da-fA-F]+$/) !== null) {
         const urlParts = path!.split('/');
@@ -48,7 +48,7 @@ export class InstLib {
   }
 
   // go get ccdb slot info on behalf of browsers
-  public static getSlot = function(req: express.Request, res: express.Response, next: express.NextFunction) {
+  public static getSlot = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // Prepare the source location by looking at the properties useSource
     const source = props.slotsDataSource[props.slotsDataSource.useSource];
     // if the location is http:// then open the URL
@@ -61,7 +61,7 @@ export class InstLib {
           'DISCS-Authorization': 'key:pass',
         },
         timeout: 5 * 1000,
-      }, function(error, response, body) {
+      }, (error, response, body) => {
         if (error) {
           next(error);
         } else {
@@ -72,7 +72,7 @@ export class InstLib {
       });
     } else {
       // try to open the slot source as a file
-      fs.readFile(source, { encoding: 'utf-8' }, function(err, data) {
+      fs.readFile(source, { encoding: 'utf-8' }, (err, data) => {
         if (!err) {
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.write(data);
@@ -83,9 +83,9 @@ export class InstLib {
       });
 
     }
-  };
+  }
 
-  public static newValidation = function(req: express.Request) {
+  public static newValidation = (req: express.Request) => {
     req.checkBody({
       host: {
         notEmpty: {
@@ -161,9 +161,9 @@ export class InstLib {
       },
 
     });
-  };
+  }
 
-  public static updateValidation = function(req: express.Request) {
+  public static updateValidation = (req: express.Request) => {
     req.checkBody({
       host: {
         optional: true,
@@ -233,11 +233,12 @@ export class InstLib {
         },
       },
     });
-  };
+  }
 
 
-  public static updateSanitization = function(req: express.Request){
-  };
+  public static updateSanitization = (req: express.Request) => {
+    // update field sanitization
+  }
 
 }
 

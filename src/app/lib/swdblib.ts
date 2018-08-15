@@ -1,10 +1,10 @@
 'use strict';
+import dbg = require('debug');
 import express = require('express');
 import fs = require('fs');
-import url = require('url');
 import request = require('request');
+import url = require('url');
 import forgApi = require('../shared/forgapi');
-import dbg = require('debug');
 const debug = dbg('swdb:swdblib');
 
 import CommonTools = require('./CommonTools');
@@ -26,8 +26,8 @@ export class SwdbLib {
    * @returns id The ID of the item found in the request
    */
   public static getReqId = (req: express.Request) => {
-    let id: String | null = null;
-    let path = url.parse(req.url).pathname;
+    let id: string | null = null;
+    const path = url.parse(req.url).pathname;
     if (url.parse(req.url).pathname) {
       if (path!.match(/[^v][\da-fA-F]+$/) !== null) {
         const urlParts = path!.split('/');
@@ -118,7 +118,8 @@ export class SwdbLib {
         } else {
           if (response.statusCode === 200) {
             try {
-              const areasBody = JSON.parse(body).filter((element: forgApi.Group,
+              const areasBody = JSON.parse(body).filter((
+                element: forgApi.Group,
                 idx: number, array: forgApi.Group[]) => {
                 return element.type === 'AREA';
               });
