@@ -1,11 +1,11 @@
+import dbg = require('debug');
 import fs = require('fs');
 import rc = require('rc');
+import forgapi = require('../shared/forgapi');
 import {LevelOfCareEnum} from './swdbEnums';
 import {StatusEnum} from './swdbEnums';
 import {InstStatusEnum} from './swdbEnums';
 import {RcsEnum} from './swdbEnums';
-import forgapi = require('../shared/forgapi');
-import dbg = require('debug');
 const debug = dbg('swdb:CommonTools');
 
 export class CommonTools {
@@ -77,7 +77,7 @@ export class CommonTools {
       CommonTools.props.forgGroupsDataSource[CommonTools.props.forgGroupsDataSource.useSource];
     // debug('forg group source is: ' + source);
     let groupdata: forgapi.Group[] = [];
-    let raw = fs.readFileSync(source, { encoding: 'utf-8' });
+    const raw = fs.readFileSync(source, { encoding: 'utf-8' });
     groupdata = JSON.parse(raw);
     // debug('forg group json data is: ' + JSON.stringify(groupdata));
     return groupdata;
@@ -90,7 +90,7 @@ export class CommonTools {
     // Prepare the source location by looking at the properties useSource
     const source: string  = CommonTools.props.forgUsersDataSource[CommonTools.props.forgUsersDataSource.useSource];
     let userdata: forgapi.User[] = [];
-    let raw = fs.readFileSync(source, { encoding: 'utf-8' });
+    const raw = fs.readFileSync(source, { encoding: 'utf-8' });
     userdata = JSON.parse(raw);
     // debug('forg group json data is: ' + JSON.stringify(userdata));
     return userdata;

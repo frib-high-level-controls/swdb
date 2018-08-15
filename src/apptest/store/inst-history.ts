@@ -1,14 +1,14 @@
-import server = require('../../app/server');
 import Chai = require('chai');
-let expect = Chai.expect;
-import Supertest = require('supertest');
-import Be = require('../../app/lib/Db');
+const expect = Chai.expect;
 import mongoose = require('mongoose');
+import Supertest = require('supertest');
 import TestTools = require('./TestTools');
-let testTools = new TestTools.TestTools();
-import CommonTools = require('../../app/lib/CommonTools');
-let ctools = new CommonTools.CommonTools();
 import dbg = require('debug');
+import CommonTools = require('../../app/lib/CommonTools');
+import Be = require('../../app/lib/Db');
+import server = require('../../app/server');
+const testTools = new TestTools.TestTools();
+const ctools = new CommonTools.CommonTools();
 const debug = dbg('swdb:inst-history-tests');
 let props: any = {};
 props = ctools.getConfiguration();
@@ -16,9 +16,9 @@ props = ctools.getConfiguration();
 let app;
 let Cookies: any;
 
-describe('Installations history tests suite', function () {
+describe('Installations history tests suite',  () => {
   let supertest: any = null;
-  before('Prep DB', async function () {
+  before('Prep DB', async () => {
     app = await server.start();
     supertest = Supertest(app);
     debug('Prep DB');
@@ -26,23 +26,23 @@ describe('Installations history tests suite', function () {
     await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
   });
 
-  after('clear db', async function () {
+  after('clear db', async () => {
     debug('Clear DB');
     // clear the test collection
     await testTools.clearTestCollections(debug);
     await server.stop();
   });
 
-  let wrapper = { origId: null };
+  const wrapper = { origId: null };
 
-  before('login as test user', function(done){
+  before('login as test user', function(done) {
     this.timeout(8000);
     supertest
     .get('/login')
     .auth(props.test.username, props.test.password)
     .timeout(8000)
     .expect(302)
-    .end(function(err: Error, res: Express.Session){
+    .end((err: Error, res: Express.Session) => {
       if (err) {
         done(err);
       } else {
@@ -53,8 +53,8 @@ describe('Installations history tests suite', function () {
     });
   });
 
-  it('Has the blank history', async function () {
-    let cursor = Be.Db.swDoc.db.collections.history.find();
+  it('Has the blank history', async () => {
+    const cursor = Be.Db.swDoc.db.collections.history.find();
     let count: number;
     if (cursor) {
       count = await cursor.count();
@@ -66,7 +66,7 @@ describe('Installations history tests suite', function () {
     }
   });
 
-  it('Post a new record with correct history', function (done) {
+  it('Post a new record with correct history', (done) => {
     supertest
       .post('/api/v1/inst')
       .set('Accept', 'application/json')
@@ -80,10 +80,10 @@ describe('Installations history tests suite', function () {
        software: '5947589458a6aa0face9a512'})
       .end(async (err: Error, result: Express.Session) => {
         // get record id from the returned location and find records that match
-        let id = result.headers.location.split(/\//).pop();
+        const id = result.headers.location.split(/\//).pop();
         wrapper.origId = id;
         debug('Got id ' + id);
-        let canonObj: any = {
+        const canonObj: any = {
            host: 'Test host',
            name: 'Test name',
            area: [ 'Global' ],
@@ -99,7 +99,7 @@ describe('Installations history tests suite', function () {
       });
   });
 
-  it('Update an installation record with correct history', function (done) {
+  it('Update an installation record with correct history', (done) => {
     supertest
       .put('/api/v1/inst/' + wrapper.origId)
       .set('Accept', 'application/json')
@@ -107,10 +107,10 @@ describe('Installations history tests suite', function () {
       .send( { name: 'New test name' } )
       .end(async (err: Error, result: Express.Session) => {
         // get record id from the returned location and find records that match
-        let id = result.headers.location.split(/\//).pop();
+        const id = result.headers.location.split(/\//).pop();
         wrapper.origId = id;
         debug('Got id ' + id);
-        let canonObj: any  = {
+        const canonObj: any  = {
           name: 'New test name',
         };
         try {

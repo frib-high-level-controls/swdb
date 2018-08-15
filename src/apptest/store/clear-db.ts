@@ -1,5 +1,5 @@
-import myTestTools = require('./TestTools.js');
 import dbg = require('debug');
+import myTestTools = require('./TestTools.js');
 
 /**
  * clear-db.ts
@@ -7,5 +7,5 @@ import dbg = require('debug');
  */
 
 const debug = dbg('swdb:clear-db');
-let a = new myTestTools.TestTools();
+const a = new myTestTools.TestTools();
 a.clearTestCollections(debug);

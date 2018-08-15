@@ -2,23 +2,23 @@ export = {};
 import server = require('../../app/server');
 let app;
 import chai = require('chai');
-let expect = chai.expect;
-import Supertest = require('supertest');
 import chaiaspromised = require('chai-as-promised');
+const expect = chai.expect;
+import dbg = require('debug');
+import Supertest = require('supertest');
 chai.use(chaiaspromised);
 
 import TestTools = require('./TestTools');
-let testTools = new TestTools.TestTools();
+const testTools = new TestTools.TestTools();
 
 import webdriver = require('selenium-webdriver');
-let By = webdriver.By;
-let until = webdriver.until;
+const By = webdriver.By;
+const until = webdriver.until;
 import test = require('selenium-webdriver/testing');
-import dbg = require('debug');
 const debug = dbg('swdb:inst-details-tests');
 
 import CommonTools = require('../../app/lib/CommonTools');
-let ctools = new CommonTools.CommonTools();
+const ctools = new CommonTools.CommonTools();
 let props: any = {};
 let supertest: any;
 props = ctools.getConfiguration();
@@ -55,7 +55,7 @@ test.describe('Installations detail screen tests', () => {
       'Log in'), 5000);
   });
 
-  test.it('login as test user', function(this: any, done: MochaDone){
+  test.it('login as test user', function(this: any, done: MochaDone) {
     this.timeout(8000);
     supertest
     .get('/login')
@@ -66,9 +66,9 @@ test.describe('Installations detail screen tests', () => {
       if (err) {
         done(err);
       } else {
-        let Cookies = res.headers['set-cookie'].pop().split(';')[0];
+        const Cookies = res.headers['set-cookie'].pop().split(';')[0];
         debug('test login cookies: ' + Cookies);
-        let parts = Cookies.split('=');
+        const parts = Cookies.split('=');
         debug('setting driver cookie ' + parts[0] + ' ' + parts[1]);
         chromeDriver.manage().addCookie({name: parts[0], value: parts[1]});
         done();
@@ -106,63 +106,63 @@ test.describe('Installations detail screen tests', () => {
 
   test.it('should show the requested installation record host field', () => {
     chromeDriver.wait(until.elementLocated(By.id('host')), 5000);
-    chromeDriver.findElement(By.id('host')).getAttribute('value').then((result: String) => {
+    chromeDriver.findElement(By.id('host')).getAttribute('value').then((result: string) => {
       expect(result).to.match(/host2/);
     });
   });
 
   test.it('should show the requested installation record name field', () => {
     chromeDriver.wait(until.elementLocated(By.id('name')), 5000);
-    chromeDriver.findElement(By.id('name')).getAttribute('value').then((result: String) => {
+    chromeDriver.findElement(By.id('name')).getAttribute('value').then((result: string) => {
       expect(result).to.equal('Installation name2');
     });
   });
 
   test.it('should show the requested installation record software field', () => {
     chromeDriver.wait(until.elementLocated(By.id('software')), 5000);
-    chromeDriver.findElement(By.id('software')).getAttribute('value').then((result: String) => {
+    chromeDriver.findElement(By.id('software')).getAttribute('value').then((result: string) => {
       expect(result).to.equal('BEAST / b4 / 0.2');
     });
   });
 
   test.it('should show the requested installation record area field', () => {
     chromeDriver.wait(until.elementLocated(By.id('area')), 5000);
-    chromeDriver.findElement(By.id('area')).getAttribute('value').then((result: String) => {
+    chromeDriver.findElement(By.id('area')).getAttribute('value').then((result: string) => {
       expect(result).to.match(/LS1/);
     });
   });
 
   test.it('should show the requested installation record status field', () => {
     chromeDriver.wait(until.elementLocated(By.id('status')), 5000);
-    chromeDriver.findElement(By.id('status')).getAttribute('value').then((result: String) => {
+    chromeDriver.findElement(By.id('status')).getAttribute('value').then((result: string) => {
       expect(result).to.match(/Ready for install/);
     });
   });
 
   test.it('should show the requested installation record status date field', () => {
     chromeDriver.wait(until.elementLocated(By.id('statusDate')), 5000);
-    chromeDriver.findElement(By.id('statusDate')).getAttribute('value').then((result: String) => {
+    chromeDriver.findElement(By.id('statusDate')).getAttribute('value').then((result: string) => {
       expect(result).to.match(/9\/21\/2016/);
     });
   });
 
   test.it('should show the requested installation record vvResults field', () => {
     chromeDriver.wait(until.elementLocated(By.id('vvResultsLoc')), 5000);
-    chromeDriver.findElement(By.id('vvResultsLoc')).getAttribute('value').then((result: String) => {
+    chromeDriver.findElement(By.id('vvResultsLoc')).getAttribute('value').then((result: string) => {
       expect(result).to.match(/vvResultsLoc2/);
     });
   });
 
   test.it('should show the requested installation record VV approval date field', () => {
     chromeDriver.wait(until.elementLocated(By.id('vvApprovalDate')), 5000);
-    chromeDriver.findElement(By.id('vvApprovalDate')).getAttribute('value').then((result: String) => {
+    chromeDriver.findElement(By.id('vvApprovalDate')).getAttribute('value').then((result: string) => {
       expect(result).to.match(/9\/22\/2016/);
     });
   });
 
   test.it('should show the requested installation record drrs field', () => {
     chromeDriver.wait(until.elementLocated(By.id('drrs')), 5000);
-    chromeDriver.findElement(By.id('drrs')).getAttribute('value').then((result: String) => {
+    chromeDriver.findElement(By.id('drrs')).getAttribute('value').then((result: string) => {
       expect(result).to.match(/^$/);
     });
   });

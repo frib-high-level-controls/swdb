@@ -1,36 +1,37 @@
 /**
  * Start and configure the web application.
  */
+import bodyparser = require('body-parser');
+import cookieParser = require('cookie-parser');
+import dbg = require('debug');
+import express = require('express');
+import session = require('express-session');
+import expressValidator = require('express-validator');
 import fs = require('fs');
+import mongoose = require('mongoose');
+import morgan = require('morgan');
 import path = require('path');
 import util = require('util');
 
 import rc = require('rc');
-import dbg = require('debug');
-import bodyparser = require('body-parser');
-import cookieParser = require('cookie-parser');
-import express = require('express');
 import favicon = require('serve-favicon');
-import mongoose = require('mongoose');
-import morgan = require('morgan');
-import session = require('express-session');
-import expressValidator = require('express-validator');
 
-import handlers = require('./shared/handlers');
-import logging = require('./shared/logging');
-import status = require('./shared/status');
-import tasks = require('./shared/tasks');
-import auth = require('./shared/auth');
-import cfauth = require('./shared/forg-auth');
-import forgapi = require('./shared/forgapi');
-
-import * as mockforgapi from './shared/mock-forgapi';
 import CommonTools = require('./lib/CommonTools');
 import Be = require('./lib/Db');
 import InstBe = require('./lib/instDb');
 import instTools = require('./lib/instLib');
 import tools = require('./lib/swdblib');
 import customValidators = require('./lib/validators');
+
+import auth = require('./shared/auth');
+import cfauth = require('./shared/forg-auth');
+import forgapi = require('./shared/forgapi');
+import handlers = require('./shared/handlers');
+import logging = require('./shared/logging');
+import status = require('./shared/status');
+import tasks = require('./shared/tasks');
+
+import * as mockforgapi from './shared/mock-forgapi';
 
 // package metadata
 interface Package {
@@ -72,8 +73,8 @@ const debug = dbg('swdb:index');
 const be = new Be.Db(true);
 const instBe = new InstBe.InstDb(true);
 
-let ctools = new CommonTools.CommonTools();
-let props = ctools.getConfiguration();
+const ctools = new CommonTools.CommonTools();
+const props = ctools.getConfiguration();
 debug('props at startup: ' + JSON.stringify(props, null, 2));
 //////////////////////////////////////////////////
 
@@ -278,10 +279,10 @@ async function doStart(): Promise<express.Application> {
     debug('TEST mode is active!');
     const forgClient = mockforgapi.MockClient.getInstance();
     forgClient.clear();
-    let gdata: forgapi.Group[] = ctools.getForgGroupsTestFile();
+    const gdata: forgapi.Group[] = ctools.getForgGroupsTestFile();
     // debug('loading mock forg groups for with: ' + JSON.stringify(gdata, null, 2));
     forgClient.addGroup(gdata);
-    let udata: forgapi.User[] = ctools.getForgUsersTestFile();
+    const udata: forgapi.User[] = ctools.getForgUsersTestFile();
     // debug('loading mock forg users for with: ' + JSON.stringify(udata, null, 2));
     forgClient.addUser(udata);
     cfAuthProvider = new cfauth.DevForgBasicProvider(forgClient, {});
@@ -474,15 +475,15 @@ async function doStart(): Promise<express.Application> {
       } else {
         // setup an array of validations to perfrom
         // save the results in wfResultsArr, and errors in errors.
-        let wfValArr = [
+        const wfValArr = [
           customValidators.CustomValidators.swNoVerBranchChgIfStatusRdyInstall,
           customValidators.CustomValidators.noSwStateChgIfReferringInst,
         ];
 
-        let errors: customValidators.IValResult[] = [];
-        let wfResultArr = await Promise.all(
+        const errors: customValidators.IValResult[] = [];
+        const wfResultArr = await Promise.all(
           wfValArr.map(async (item, idx, arr) => {
-            let r = await item(req);
+            const r = await item(req);
             if (r.error) {
               errors.push(r);
             }
@@ -524,15 +525,15 @@ async function doStart(): Promise<express.Application> {
       } else {
         // setup an array of validations to perfrom
         // save the results in wfResultsArr, and errors in errors.
-        let wfValArr = [
+        const wfValArr = [
           customValidators.CustomValidators.swNoVerBranchChgIfStatusRdyInstall,
           customValidators.CustomValidators.noSwStateChgIfReferringInst,
         ];
 
-        let errors: customValidators.IValResult[] = [];
-        let wfResultArr = await Promise.all(
+        const errors: customValidators.IValResult[] = [];
+        const wfResultArr = await Promise.all(
           wfValArr.map(async (item, idx, arr) => {
-            let r = await item(req);
+            const r = await item(req);
             if (r.error) {
               errors.push(r);
             }
@@ -591,7 +592,7 @@ async function doStart(): Promise<express.Application> {
         res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
         return;
       } else {
-        let wfResults: customValidators.IValResult =
+        const wfResults: customValidators.IValResult =
           await customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall(req);
         if (wfResults.error) {
           debug('Workflow validation errors ' + JSON.stringify(wfResults));
@@ -624,14 +625,14 @@ async function doStart(): Promise<express.Application> {
       } else {
         // setup an array of validations to perfrom
         // save the results in wfResultsArr, and errors in errors.
-        let wfValArr = [
+        const wfValArr = [
           customValidators.CustomValidators.noInstSwChangeUnlessReadyForInstall,
           customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall,
         ];
 
-        let errors: customValidators.IValResult[] = [];
-        let wfResultArr = await Promise.all(wfValArr.map(async (item, idx, arr) => {
-          let r = await item(req);
+        const errors: customValidators.IValResult[] = [];
+        const wfResultArr = await Promise.all(wfValArr.map(async (item, idx, arr) => {
+          const r = await item(req);
           if (r.error) {
             errors.push(r);
           }
@@ -672,15 +673,15 @@ async function doStart(): Promise<express.Application> {
       } else {
         // setup an array of validations to perfrom
         // save the results in wfResultsArr, and errors in errors.
-        let wfValArr = [
+        const wfValArr = [
           customValidators.CustomValidators.noInstSwChangeUnlessReadyForInstall,
           customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall,
         ];
 
-        let errors: customValidators.IValResult[] = [];
-        let wfResultArr = await Promise.all(
+        const errors: customValidators.IValResult[] = [];
+        const wfResultArr = await Promise.all(
           wfValArr.map(async (item, idx, arr) => {
-            let r = await item(req);
+            const r = await item(req);
             if (r.error) {
               errors.push(r);
             }

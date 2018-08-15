@@ -15,7 +15,7 @@ let server: http.Server | undefined;
 export function start(): Promise<express.Application> {
   return app.start().then((handler) => {
     return new Promise<express.Application>((resolve) => {
-      let port = handler.get('port') || '3000';
+      const port = handler.get('port') || '3000';
       server = http.createServer(handler);
       server.listen(port, () => {
         app.info('HTTP Server listening on port: %s', port);
@@ -24,7 +24,7 @@ export function start(): Promise<express.Application> {
       // Note that errors are ignored, see /bin/app for a more complete implementation. //
     });
   });
-};
+}
 
 
 export function stop(): Promise<void> {
@@ -47,4 +47,4 @@ export function stop(): Promise<void> {
       });
     });
   });
-};
+}

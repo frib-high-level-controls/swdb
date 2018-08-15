@@ -1,23 +1,23 @@
-import server = require('../../app/server');
-import express = require('express');
 import chai = require('chai');
-import supertest = require('supertest');
 import chaiAsPromised = require('chai-as-promised');
+import dbg = require('debug');
+import express = require('express');
 import  webdriver = require('selenium-webdriver');
 import test = require('selenium-webdriver/testing');
+import supertest = require('supertest');
 import TestTools = require('./TestTools');
-import dbg = require('debug');
 const debug = dbg('swdb:inst-list-tests');
 
 import CommonTools = require('../../app/lib/CommonTools');
-let ctools = new CommonTools.CommonTools();
+import server = require('../../app/server');
+const ctools = new CommonTools.CommonTools();
 let props: any = {};
 props = ctools.getConfiguration();
 chai.use(chaiAsPromised);
-let expect = chai.expect;
-let By = webdriver.By;
-let until = webdriver.until;
-let testTools = new TestTools.TestTools();
+const expect = chai.expect;
+const By = webdriver.By;
+const until = webdriver.until;
+const testTools = new TestTools.TestTools();
 let Cookies: string;
 
 let app: express.Application;
@@ -29,15 +29,15 @@ let app: express.Application;
 
 let chromeDriver: any;
 
-test.describe('Installations record tests', function() {
-  before('Prep DB', async function () {
+test.describe('Installations record tests', () => {
+  before('Prep DB', async () => {
     app = await server.start();
     debug('Prep DB');
     await testTools.clearTestCollections(debug);
     await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
   });
 
-  after('clear db', async function () {
+  after('clear db', async () => {
     debug('Clear DB');
     // clear the test collection.
     chromeDriver.quit();
@@ -60,20 +60,20 @@ test.describe('Installations record tests', function() {
       'Log in'), 8000);
   });
 
-  test.it('login as test user', function(this: any, done: MochaDone){
+  test.it('login as test user', function(this: any, done: MochaDone) {
     this.timeout(8000);
     supertest(app)
     .get('/login')
     .auth(props.test.username, props.test.password)
     .timeout(8000)
     .expect(302)
-    .end(function(err, res){
+    .end((err, res) => {
       if (err) {
         done(err);
       } else {
         Cookies = res.header['set-cookie'].pop().split(';')[0];
         debug('test login cookies: ' + Cookies);
-        let parts = Cookies.split('=');
+        const parts = Cookies.split('=');
         debug('setting driver cookie ' + parts[0] + ' ' + parts[1]);
         chromeDriver.manage().addCookie({name: parts[0], value: parts[1]});
         done();
@@ -88,52 +88,52 @@ test.describe('Installations record tests', function() {
     chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
       props.test.username.toUpperCase()), 5000);
   });
-  test.it('should show Host column names in proper order', function() {
-    let xpath = '//*[@id="instList"]/thead/tr[1]/th[1]';
+  test.it('should show Host column names in proper order', () => {
+    const xpath = '//*[@id="instList"]/thead/tr[1]/th[1]';
     chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    let field = chromeDriver.findElement(By.xpath(xpath));
+    const field = chromeDriver.findElement(By.xpath(xpath));
     return expect(Promise.resolve(field.getText())).to.eventually.equal('Host');
   });
 
-  test.it('should show name column names in proper order', function() {
-    let xpath = '//*[@id="instList"]/thead/tr[1]/th[2]';
+  test.it('should show name column names in proper order', () => {
+    const xpath = '//*[@id="instList"]/thead/tr[1]/th[2]';
     chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    let field = chromeDriver.findElement(By.xpath(xpath));
+    const field = chromeDriver.findElement(By.xpath(xpath));
     return expect(Promise.resolve(field.getText())).to.eventually.equal('Name');
   });
 
-  test.it('should show Software column names in proper order', function() {
-    let xpath = '//*[@id="instList"]/thead/tr[1]/th[3]';
+  test.it('should show Software column names in proper order', () => {
+    const xpath = '//*[@id="instList"]/thead/tr[1]/th[3]';
     chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    let field = chromeDriver.findElement(By.xpath(xpath));
+    const field = chromeDriver.findElement(By.xpath(xpath));
     return expect(Promise.resolve(field.getText())).to.eventually.equal('Software');
   });
 
-  test.it('should show Area column names in proper order', function() {
-    let xpath = '//*[@id="instList"]/thead/tr[1]/th[4]';
+  test.it('should show Area column names in proper order', () => {
+    const xpath = '//*[@id="instList"]/thead/tr[1]/th[4]';
     chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    let field = chromeDriver.findElement(By.xpath(xpath));
+    const field = chromeDriver.findElement(By.xpath(xpath));
     return expect(Promise.resolve(field.getText())).to.eventually.equal('Area');
   });
 
-  test.it('should show DRR column names in proper order', function() {
-    let xpath = '//*[@id="instList"]/thead/tr[1]/th[5]';
+  test.it('should show DRR column names in proper order', () => {
+    const xpath = '//*[@id="instList"]/thead/tr[1]/th[5]';
     chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    let field = chromeDriver.findElement(By.xpath(xpath));
+    const field = chromeDriver.findElement(By.xpath(xpath));
     return expect(Promise.resolve(field.getText())).to.eventually.equal('DRR');
   });
 
-  test.it('should show Status column names in proper order', function() {
-    let xpath = '//*[@id="instList"]/thead/tr[1]/th[6]';
+  test.it('should show Status column names in proper order', () => {
+    const xpath = '//*[@id="instList"]/thead/tr[1]/th[6]';
     chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    let field = chromeDriver.findElement(By.xpath(xpath));
+    const field = chromeDriver.findElement(By.xpath(xpath));
     return expect(Promise.resolve(field.getText())).to.eventually.equal('Status');
   });
 
-  test.it('should show Status date column names in proper order', function() {
-    let xpath = '//*[@id="instList"]/thead/tr[1]/th[7]';
+  test.it('should show Status date column names in proper order', () => {
+    const xpath = '//*[@id="instList"]/thead/tr[1]/th[7]';
     chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    let field = chromeDriver.findElement(By.xpath(xpath));
+    const field = chromeDriver.findElement(By.xpath(xpath));
     return expect(Promise.resolve(field.getText())).to.eventually.equal('Status date (m/d/y)');
   });
 
