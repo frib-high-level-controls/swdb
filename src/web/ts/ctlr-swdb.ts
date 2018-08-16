@@ -2,35 +2,6 @@
  * This is the top-level controller for swdb
  */
 
-interface IAppRootScopeService extends ng.IRootScopeService {
-  title?: string;
-}
-
-interface IAppRoute extends ng.route.IRoute {
-  title: string;
-}
-
-interface IConfigProps {
-  webUrl: string;
-  StatusEnum: { [key: string]: string | undefined };
-  InstStatusEnum: { [key: string]: string | undefined };
-  LevelOfCareEnum: { [key: string]: string | undefined };
-  RcsEnum: { [key: string]: string | undefined };
-  VersionControlEnum: { [key: string]: string | undefined };
-  instStatusLabels: string[];
-  statusLabels: string[];
-}
-
-interface IConfigService {
-  promise: Promise<void>;
-  getConfig(): IConfigProps;
-}
-
-interface IUserService {
-  promise: Promise<void>;
-  getUser(): {};
-}
-
 let appController = angular.module('appController', [
   'datatables',
   'datatables.bootstrap',

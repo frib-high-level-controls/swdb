@@ -1,48 +1,6 @@
 /*
  * update controller for swdb
  */
-interface ISwdbUpdateControllerScope extends ng.IScope {
-  session: {
-    user?: {};
-  };
-  props: IConfigProps;
-  swMeta: SWMeta;
-  usrBtnTxt?: string;
-  formData: webapi.ISwdb;
-  inputForm: any;
-  datePicker: any;
-  ownerSelected: { item: IForgGroup | undefined };
-  engineerSelected: { item: IForgUser | undefined };
-  selectedItem: { name: string | undefined };
-  forgUsersList: IForgUser[];
-  forgGroupsList: IForgGroup[];
-  statusDisplay: string | undefined;
-  statusDateDisplay: Date;
-  levelOfCareDisplay: string | undefined;
-  versionControlDisplay: string | undefined;
-  rawHistory: IHistory[];
-  isHistCollapsed: boolean;
-  statusDisabled: boolean;
-  branchDisabled: boolean;
-  versionDisabled: boolean;
-  branchMouseover: string;
-  versionMouseover: string;
-  history: string;
-  swdbParams: {
-    formStatus: string,
-    formErr: string,
-    formShowErr: boolean,
-    formShowStatus: boolean,
-  };
-  newItem(event: {currentTarget: HTMLInputElement}): void;
-  removeItem(event: {currentTarget: HTMLInputElement}): void;
-  onStatusChange(): void;
-  usrBtnClk(): void;
-  bckBtnClk(): void;
-  processForm(): void;
-  updateBtnClk(): void;
-  bumpVerBtnClk(): void;
-}
 
 appController.controller('UpdateController', UpdatePromiseCtrl);
 function UpdatePromiseCtrl(

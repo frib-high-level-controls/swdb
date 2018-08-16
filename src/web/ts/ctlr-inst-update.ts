@@ -2,48 +2,6 @@
  * update controller for installations
  */
 
-interface IInstUpdateControllerScope extends ng.IScope {
-  session: {
-    user?: {};
-  };
-  props: IConfigProps;
-  swMeta: SWMeta;
-  usrBtnTxt?: string;
-  formData: webapi.Inst;
-  slotsSelected: string[];
-  statusDisplay: string | undefined;
-  areasSelected: IForgArea[];
-  swSelected: {item: webapi.ISwdb};
-  statusDateDisplay: Date;
-  vvApprovalDateDisplay: Date;
-  rawHistory: {};
-  datePicker: any;
-  inputForm: any;
-  swList: webapi.ISwdb[];
-  forgAreasList: IForgArea[];
-  softwareDisabled: boolean;
-  softwareMouseover: string;
-  swdbParams: {
-    error: {
-      message: string,
-      status: string,
-    }
-    formStatus: string,
-    formErr: string,
-    formShowErr: boolean,
-    formShowStatus: boolean,
-  };
-  usrBtnClk(): void;
-  updateBtnClk(): void;
-  bckBtnClk(): void;
-  swSelect(item: webapi.Inst): void;
-  // formErrors(form: any): void;
-  newItem(event: { currentTarget: HTMLInputElement }): void;
-  removeItem(event: { currentTarget: HTMLInputElement }): void;
-  processForm(): void;
-  refreshSw(): void;
-}
-
 appController.controller('InstUpdateController', InstUpdatePromiseCtrl);
 function InstUpdatePromiseCtrl(
   $scope: IInstUpdateControllerScope,

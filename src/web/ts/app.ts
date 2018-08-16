@@ -1,3 +1,7 @@
+/**
+ * SWDB app loader
+ */
+
 let app = angular.module('app', [
     'ngRoute',
     'appController',

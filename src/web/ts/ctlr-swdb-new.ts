@@ -2,66 +2,6 @@
  * angular new controller for swdb
  */
 
-interface ISwdbNewControllerScope extends ng.IScope {
-  session: {
-    user?: {};
-  };
-  props: IConfigProps;
-  swMeta: SWMeta;
-  usrBtnTxt?: string;
-  formData: webapi.ISwdb;
-  inputForm: any;
-  datePicker: any;
-  ownerSelected: { item: IForgGroup | undefined };
-  engineerSelected: { item: IForgUser | undefined };
-  forgUsersList: IForgUser[];
-  forgGroupsList: IForgGroup[];
-  statusDisplay: string | undefined;
-  statusDateDisplay: Date;
-  levelOfCareDisplay: string | undefined;
-  versionControlDisplay: string | undefined;
-  rawHistory: IHistory[];
-  isHistCollapsed: boolean;
-  history: string;
-  swdbParams: {
-    formStatus: string,
-    formErr: string,
-    formShowErr: boolean,
-    formShowStatus: boolean,
-  };
-  newItem(event: {currentTarget: HTMLInputElement}): void;
-  removeItem(event: {currentTarget: HTMLInputElement}): void;
-  usrBtnClk(): void;
-  bckBtnClk(): void;
-  processForm(): void;
-  updateBtnClk(): void;
-  bumpVerBtnClk(): void;
-}
-
-interface IForgUserService {
-  promise: ng.IPromise<void>;
-  getUsers(): any;
-  userUidsToObjects(arr: string[]): IForgUser[];
-}
-
-interface IForgUser {
-    uid: string;
-}
-
-interface IForgSlot {
-    uid: string;
-}
-
-interface IForgGroupService {
-  promise: ng.IPromise<void>;
-  getGroups(): any;
-  groupUidsToObjects(arr: string[]): IForgGroup[];
-}
-
-interface IForgGroup {
-    uid: string;
-}
-
 appController.controller('NewController', NewPromiseCtrl);
 function NewPromiseCtrl(
   $scope: ISwdbNewControllerScope,

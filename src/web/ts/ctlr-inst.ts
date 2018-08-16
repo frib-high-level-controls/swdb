@@ -2,30 +2,6 @@
  * This is the Angular list controller for installations
  */
 
-interface SWInst {
-  software: string;
-}
-
-interface Software {
-  swName: string;
-  branch?: string;
-  version?: string;
-}
-
-interface SWMeta {
-  [key: string]: Software | undefined;
-}
-
-interface IInstListControllerScope extends ng.IScope {
-  session: {
-    user?: {};
-  };
-  props: IConfigProps;
-  swMeta: SWMeta;
-  usrBtnTxt?: string;
-  usrBtnClk(): void;
-}
-
 appController.controller('InstListController', function(
   this: { dtOptions: {}, dtColumns: {} },
   DTOptionsBuilder: ng.datatables.DTOptionsBuilderService,
