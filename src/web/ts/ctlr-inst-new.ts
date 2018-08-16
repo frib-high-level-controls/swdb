@@ -2,51 +2,6 @@
  * new controller for installations
  */
 
-interface IInstNewControllerScope extends ng.IScope {
-  session: {
-    user?: {};
-  };
-  props: IConfigProps;
-  swMeta: SWMeta;
-  usrBtnTxt?: string;
-  formData: webapi.Inst;
-  slotsSelected: string[];
-  statusDisplay: string | undefined;
-  areasSelected: IForgArea[];
-  statusDateDisplay: Date;
-  vvApprovalDateDisplay: Date;
-  rawHistory: {};
-  datePicker: any;
-  inputForm: any;
-  swList: webapi.ISwdb[];
-  forgAreasList: IForgArea[];
-  swdbParams: {
-    formStatus: string,
-    formErr: string,
-    formShowErr: boolean,
-    formShowStatus: boolean,
-  };
-  usrBtnClk(): void;
-  updateBtnClk(): void;
-  bckBtnClk(): void;
-  swSelect(item: webapi.Inst): void;
-  // formErrors(form: any): void;
-  newItem(event: {currentTarget: HTMLInputElement}): void;
-  removeItem(event: {currentTarget: HTMLInputElement}): void;
-  processForm(): void;
-  refreshSw(): void;
-}
-
-interface IForgAreaService {
-  promise: ng.IPromise<void>;
-  getAreas(): any;
-  areaUidsToObjects(id: string[]): IForgArea[];
-}
-
-interface IForgArea {
-  uid: string;
-}
-
 appController.controller('InstNewController', InstNewPromiseCtrl);
 function InstNewPromiseCtrl(
   $scope: IInstNewControllerScope,

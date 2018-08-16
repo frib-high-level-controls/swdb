@@ -2,42 +2,6 @@
  * This is the Angular details controller for installations
  */
 
-interface IInstDetailsControllerScope extends ng.IScope {
-  session: {
-    user?: {};
-  };
-  props: IConfigProps;
-  swMeta: SWMeta;
-  usrBtnTxt?: string;
-  formData: webapi.Inst;
-  swSelected: webapi.ISwdb;
-  statusDisplay: string | undefined;
-  statusDateDisplay: string;
-  vvApprovalDateDisplay: string;
-  rawHistory: {};
-  usrBtnClk(): void;
-  updateBtnClk(): void;
-}
-
-interface IRouteParams extends ng.route.IRouteParamsService {
-  itemId: string;
-}
-
-interface IInstService {
-  promise: ng.IPromise<void>;
-  refreshInstList(): ng.IPromise<void>;
-  getInstById(id: string): webapi.Inst[];
-  getInstsBySw(id: string): webapi.Inst[];
-}
-
-interface ISwService {
-  promise: ng.IPromise<void>;
-  refreshSwList(): ng.IPromise<void>;
-  swIdsToObjects(id: string[]): webapi.ISwdb[];
-  getSwList(): webapi.ISwdb[];
-  getSwById(item: string): webapi.ISwdb[];
-}
-
 appController.controller('InstDetailsController', InstDetailsPromiseCtrl);
 function InstDetailsPromiseCtrl(
   $scope: IInstDetailsControllerScope,

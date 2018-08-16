@@ -2,47 +2,6 @@
  * angular detail controller for swdb
  */
 
-interface ISwdbDetailsControllerScope extends ng.IScope {
-  session: {
-    user?: {};
-  };
-  props: IConfigProps;
-  swMeta: SWMeta;
-  usrBtnTxt?: string;
-  formData: webapi.ISwdb;
-  statusDisplay: string | undefined;
-  statusDateDisplay: string | undefined;
-  levelOfCareDisplay: string | undefined;
-  versionControlDisplay: string | undefined;
-  rawHistory: IHistory[];
-  isHistCollapsed: boolean;
-  history: string;
-  usrBtnClk(): void;
-  updateBtnClk(): void;
-  bumpVerBtnClk(): void;
-}
-
-interface IRecData {
-  updateRecID: string;
-  formData: webapi.ISwdb;
-}
-
-interface IRecService {
-  getRec(): IRecData;
-  setRec(obj: IRecData | null ): void;
-}
-
-interface IHistory {
-  at: string;
-  by: string;
-  isCollapsed: boolean;
-  paths: Array<
-  {
-    name: string;
-    value: string;
-  }>;
-}
-
 appController.controller('DetailsController', DetailsPromiseCtrl);
 function DetailsPromiseCtrl(
   $scope: ISwdbDetailsControllerScope,
@@ -107,7 +66,7 @@ function DetailsPromiseCtrl(
     const data = swService.getSwById($routeParams.itemId)[0];
     $scope.formData = data;
     // convert level of care key to value
-    if (data.levelOfCare){
+    if (data.levelOfCare) {
       $scope.levelOfCareDisplay = $scope.props.LevelOfCareEnum[data.levelOfCare];
     }
     if (data.status) {
