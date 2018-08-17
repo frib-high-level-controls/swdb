@@ -104,6 +104,15 @@ module.exports = function(grunt) {
     'ts:app',
   ]);
 
+  grunt.registerTask('build-tests', [
+    'ts:apptest',
+  ]);
+
+  grunt.registerTask('build-all', [
+    'build',
+    'build-tests',
+  ]);
+
   grunt.registerTask('deploy', [
     'clean',
     'ensure_version_tag',
