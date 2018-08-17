@@ -305,7 +305,8 @@ export class SwdbLib {
         notEmpty: {
           errorMessage: 'Status date is required.',
         },
-        isDate: {
+        isFribDate: {
+          options: [req],
           errorMessage: 'Status date must be a date.',
         },
       },

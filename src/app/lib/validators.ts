@@ -13,6 +13,23 @@ const debug = dbg('swdb:validators');
 export class CustomValidators {
   public static vals = {
     customValidators: {
+      isFribDate: (dateStr: string, req: express.Request) => {
+        debug('req is ' + cJSON.stringify(req));
+        const re = new RegExp(/\d{4}-\d{2}-\d{2}/);
+        if (re.test(dateStr)) {
+          // try making a date object
+          const dateObj = new Date(dateStr);
+          if (Number.isFinite(dateObj.getTime())) {
+            req.body.statusDate = dateObj;
+            return true;
+          } else {
+            return false;
+          }
+
+        } else {
+          return false;
+        }
+      },
       isOneOf: (str: string, arr: any[]) => {
         return (arr.indexOf(str) > -1);
       },
