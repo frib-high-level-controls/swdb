@@ -3,13 +3,10 @@
  */
 import * as path from 'path';
 
-// Unable to assign hrclient when imported using new ES6 syntax.
-// See: https://github.com/Microsoft/TypeScript/issues/6751
-import mongoose = require('mongoose');
-
 import * as bodyparser from 'body-parser';
 import * as express from 'express';
 import * as session from 'express-session';
+import * as mongoose from 'mongoose';
 
 import { State } from '../app';
 
@@ -66,8 +63,6 @@ async function doStart(): Promise<express.Application> {
   await status.monitor.start();
 
   // configure Mongoose (MongoDB)
-  mongoose.Promise = global.Promise;
-
   const mongoUrl = 'mongodb://localhost:27017/webapp-test';
 
   const mongoOptions: mongoose.ConnectionOptions = {
