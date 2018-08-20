@@ -70,21 +70,25 @@ describe('History tests suite', () => {
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
       .send({ swName: 'Test Record', owner: 'Owner 1000', engineer: 'Engineer 1000',
-       levelOfCare: 'LOW', status: 'DEVEL', statusDate: 'date 1000' })
+       levelOfCare: 'LOW', status: 'DEVEL', statusDate: '2017-04-21' })
       .end(async (err: Error, result: Supertest.Response) => {
-        // get record id from the returned location and find records that match
-        const id = result.header.location.split(/\//).pop();
-        wrapper.origId = id;
-        debug('Got id ' + id);
-        const canonObj = {
-          swName: 'Test Record', owner: 'Owner 1000', engineer: 'Engineer 1000',
-          levelOfCare: 'LOW', status: 'DEVEL', statusDate: new Date('date 1000'),
-        };
-        try {
-          expect(await testTools.checkHistory(debug, canonObj, id)).to.equal('History record matches');
-          done();
-        } catch (err) {
+        if (err) {
           done(err);
+        } else {
+          // get record id from the returned location and find records that match
+          const id = result.header.location.split(/\//).pop();
+          wrapper.origId = id;
+          debug('Got id ' + id);
+          const canonObj = {
+            swName: 'Test Record', owner: 'Owner 1000', engineer: 'Engineer 1000',
+            levelOfCare: 'LOW', status: 'DEVEL', statusDate: new Date('2017-04-21'),
+          };
+          try {
+            expect(await testTools.checkHistory(debug, canonObj, id)).to.equal('History record matches');
+            done();
+          } catch (err) {
+            done(err);
+          }
         }
       });
   });
