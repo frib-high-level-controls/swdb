@@ -436,7 +436,6 @@ async function doStart(): Promise<express.Application> {
     debug('POST /api/v1/swdb request');
     // Do validation for  new records
 
-
     tools.SwdbLib.newValidation(req);
 
     req.getValidationResult().then((result) => {

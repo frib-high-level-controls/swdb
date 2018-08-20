@@ -482,7 +482,8 @@ export class SwdbLib {
       },
       statusDate: {
         optional: true,
-        isDate: {
+        isFribDate: {
+          options: [req],
           errorMessage: 'Status date must be a date.',
         },
       },
