@@ -106,8 +106,8 @@ describe('Installation api tests', () => {
        name: 'Test name',
        area: ['Global'],
        status: 'RDY_INST',
-       statusDate: 'date 1000',
-       vvApprovalDate: 'date 1000',
+       statusDate: '2017-04-21',
+       vvApprovalDate: '2017-04-21',
        software: '5947589458a6aa0face9a512'})
       .expect(201)
       .end(done);
@@ -122,7 +122,7 @@ describe('Installation api tests', () => {
        name: 'Header Test name',
        area: ['Global'],
        status: 'RDY_INST',
-       statusDate: 'date 1000',
+       statusDate: '2017-04-21',
        software: '5947589458a6aa0face9a512' })
       .expect(201)
       .end(done);
@@ -221,7 +221,7 @@ describe('Installation api tests', () => {
           name: 'Hist1 Test name',
           area: ['Global'],
           status: 'RDY_INST',
-          statusDate: 'date 1000', software: '5947589458a6aa0face9a512',
+          statusDate: '2017-04-21', software: '5947589458a6aa0face9a512',
         })
         .expect(201)
         .end((err: Error, result: supertest.Response & {headers: any}) => {
@@ -377,7 +377,7 @@ describe('Installation api tests', () => {
        name: 'Test name',
        area: ['Global'],
        status: 'BADENUM',
-       statusDate: 'date 1000',
+       statusDate: '2017-04-21',
        software: 'badbeefbadbeefbadbeefbad'})
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
@@ -404,7 +404,7 @@ describe('Installation api tests', () => {
        name: 'Test name',
        area: ['Global'],
        status: 'RDY_INST',
-       statusDate: 'date 1000',
+       statusDate: '2017-04-21',
        software: '5947589458a6aa0face9a512',
       })
       .set('Accept', 'application/json')
@@ -428,7 +428,7 @@ describe('Installation api tests', () => {
         name: 'Test name',
         area: ['Global'],
         status: 'RDY_INST',
-        statusDate: 'date 1000',
+        statusDate: '2017-04-21',
         software: '5947589458a6aa0face9a512'})
       .set('Accept', 'application/json')
       .set('Cookie', Cookies)
@@ -530,9 +530,9 @@ describe('Installation api tests', () => {
       {type: 'PUT', req: {msg: {status: 'RDY_BEAM'}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'GET', res: {msg: {status: 'RDY_BEAM'}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'PUT', req: {msg: {statusDate: '1997-01-01T08:00:00.000Z'}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {statusDate: '1997-01-01T08:00:00.000Z'}, url: '/api/v1/inst/',  err: {status: 200}}},
+      {type: 'GET', res: {msg: {statusDate: '1/1/1997'}, url: '/api/v1/inst/',  err: {status: 200}}},
       {type: 'PUT', req: {msg: {vvApprovalDate: '1997-01-01T08:00:00.000Z'}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {vvApprovalDate: '1997-01-01T08:00:00.000Z'},
+      {type: 'GET', res: {msg: {vvApprovalDate: '1/1/1997'},
        url: '/api/v1/inst/',  err: {status: 200}}},
       {type: 'PUT', req: {msg: {vvResultsLoc: ['http://www.google.com']}, url: '/api/v1/inst/', err: {status: 200}}},
       {type: 'GET', res: {msg: {vvResultsLoc: ['http://www.google.com']}, url: '/api/v1/inst/',  err: {status: 200}}},
@@ -669,7 +669,7 @@ describe('Installation api tests', () => {
           name: 'Test name',
           area: ['Global'],
           status: 'RDY_INST',
-          statusDate: 'date 1000',
+          statusDate: '2017-04-21',
           software: '5947589458a6aa0face9a512',
         })
         .set('Accept', 'application/json')
@@ -701,7 +701,7 @@ describe('Installation api tests', () => {
           engineer: 'Test Engineer',
           levelOfCare: 'LOW',
           status: 'RDY_INST',
-          statusDate: '0',
+          statusDate: '2017-04-21',
         })
         .expect(201)
         .end((err, res) => {
@@ -779,7 +779,7 @@ describe('Installation api tests', () => {
           name: 'Test name',
           area: ['Global'],
           status: 'RDY_INST',
-          statusDate: 'date 1000',
+          statusDate: '2017-04-21',
           software: '5947589458a6aa0face9a512',
         })
         .set('Accept', 'application/json')
@@ -811,7 +811,7 @@ describe('Installation api tests', () => {
           engineer: 'Test Engineer',
           levelOfCare: 'LOW',
           status: 'DEVEL',
-          statusDate: '0',
+          statusDate: '2017-04-21',
         })
         .expect(201)
         .end((err, res) => {

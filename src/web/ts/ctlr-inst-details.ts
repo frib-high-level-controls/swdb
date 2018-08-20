@@ -50,16 +50,16 @@ function InstDetailsPromiseCtrl(
     // format dates for display
     if (data.statusDate) {
       const thisDate: Date = new Date(data.statusDate);
-      const month = thisDate.getMonth() + 1;
-      const day = thisDate.getDate();
-      const year = thisDate.getFullYear();
+      const month = thisDate.getUTCMonth() + 1;
+      const day = thisDate.getUTCDate();
+      const year = thisDate.getUTCFullYear();
       $scope.statusDateDisplay =  month + '/' + day + '/' + year;
     }
     if (data.vvApprovalDate) {
       const thisDate = new Date(data.vvApprovalDate);
-      const month = thisDate.getMonth() + 1;
-      const day = thisDate.getDate();
-      const year = thisDate.getFullYear();
+      const month = thisDate.getUTCMonth() + 1;
+      const day = thisDate.getUTCDate();
+      const year = thisDate.getUTCFullYear();
       $scope.vvApprovalDateDisplay =  month + '/' + day + '/' + year;
     }
 

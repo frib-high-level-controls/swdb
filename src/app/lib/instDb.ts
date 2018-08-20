@@ -55,9 +55,6 @@ export class InstDb {
         });
       }
     }
-    // debug('InstDb.instSchema now:' + JSON.stringify(InstDb.instSchema));
-    // debug('InstDb.instDoc now:' + JSON.stringify(InstDb.instDoc));
-    // debug('InstDb.dbConnect now:' + JSON.stringify(InstDb.dbConnect));
   }
 
   // Create a new record in the backend storage
@@ -65,7 +62,7 @@ export class InstDb {
     const doc = new InstDb.instDoc(req.body);
     try {
       await doc.saveWithHistory(auth.formatRole('USR', user));
-      debug('Created installation ' + doc._id + ' as ' + req.session!.username);
+      debug('Created installation ' + JSON.stringify(doc, null, 2) + ' as ' + req.session!.username);
       res.location(InstDb.props.instApiUrl + doc._id);
       res.status(201);
       res.send();
@@ -101,10 +98,12 @@ export class InstDb {
         area: doc.area,
         slots: doc.slots,
         status: doc.status,
-        statusDate: doc.statusDate.toISOString(),
+        statusDate: (doc.statusDate.getUTCMonth() + 1).toString() + '/' +
+         doc.statusDate.getUTCDate() + '/' + doc.statusDate.getUTCFullYear(),
         software: doc.software,
         vvResultsLoc: doc.vvResultsLoc,
-        vvApprovalDate: doc.vvApprovalDate ? doc.vvApprovalDate.toISOString() : undefined,
+        vvApprovalDate: doc.vvApprovalDate ? (doc.vvApprovalDate.getUTCMonth() +1).toString() + '/' +
+          doc.vvApprovalDate.getUTCDate() + '/' + doc.vvApprovalDate.getUTCFullYear() : undefined,
         drrs: doc.drrs,
       };
     }
@@ -184,7 +183,7 @@ export class InstDb {
           }
           try {
             await founddoc.saveWithHistory(auth.formatRole('USR', user));
-            debug('Updated installation ' + founddoc._id + ' as ' + req.session!.username);
+            debug('Updated installation ' + JSON.stringify(founddoc, null, 2) + ' as ' + req.session!.username);
             res.location(InstDb.props.instApiUrl + founddoc._id);
             res.end();
           } catch (err) {

@@ -124,6 +124,13 @@ export class InstLib {
           errorMessage: 'Status must be one of ' + JSON.stringify(InstStatusEnum),
         },
       },
+      statusDate: {
+        optional: true,
+        isFribDate: {
+          options: [req],
+          errorMessage: 'Status date must be a date.',
+        },
+      },
       software: {
         notEmpty: {
           errorMessage: 'Software reference is required.',
@@ -144,6 +151,13 @@ export class InstLib {
         isVvResultsLoc: {
           options: [req],
           errorMessage: 'V&V results location must be an array of URLs.',
+        },
+      },
+      vvApprovalDate: {
+        optional: true,
+        isFribVvApprovalDate: {
+          options: [req],
+          errorMessage: 'V&V approval date must be a date.',
         },
       },
       DRRs: {
@@ -199,6 +213,13 @@ export class InstLib {
           errorMessage: 'Status must be one of ' + InstStatusEnum,
         },
       },
+      statusDate: {
+        optional: true,
+        isFribDate: {
+          options: [req],
+          errorMessage: 'Status date must be a date.',
+        },
+      },
       software: {
         optional: true,
         isString: {
@@ -217,6 +238,13 @@ export class InstLib {
         isVvResultsLoc: {
           options: [req],
           errorMessage: 'V&V results location must be an array of URLs.',
+        },
+      },
+      vvApprovalDate: {
+        optional: true,
+        isFribVvApprovalDate: {
+          options: [req],
+          errorMessage: 'V&V approval date must be a date.',
         },
       },
       DRRs: {

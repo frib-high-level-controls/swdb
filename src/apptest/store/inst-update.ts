@@ -282,6 +282,17 @@ test.describe('Installations update screen tests', () => {
           expect(text).to.equal('testHost1');
         });
     });
+
+    test.it('should show the status date in update', () => {
+      chromeDriver.wait(until.elementLocated(By.id('statusDate')), 3000);
+      chromeDriver.findElement(By.id('statusDate')).getAttribute('value').then(
+        (text: string) => {
+          expect(text).to.equal(
+            ((tmpStatusDate.getUTCMonth() + 1)) + '/' +
+            (tmpStatusDate.getUTCDate()) + '/' +
+            tmpStatusDate.getUTCFullYear());
+        });
+    });
   });
 
   test.describe('3. should update installation', () => {
@@ -345,9 +356,9 @@ test.describe('Installations update screen tests', () => {
       chromeDriver.findElement(By.id('statusDate')).getAttribute('value').then(
         (text: string) => {
           expect(text).to.equal(
-            ('0' + (tmpStatusDate.getMonth() + 1)).slice(-2) + '/' +
-            ('0' + tmpStatusDate.getDate()).slice(-2) + '/' +
-            tmpStatusDate.getFullYear());
+            ('0' + (tmpStatusDate.getUTCMonth() + 1)).slice(-2) + '/' +
+            ('0' + tmpStatusDate.getUTCDate()).slice(-2) + '/' +
+            tmpStatusDate.getUTCFullYear());
         });
     });
 
@@ -356,9 +367,9 @@ test.describe('Installations update screen tests', () => {
       chromeDriver.findElement(By.id('vvApprovalDate')).getAttribute('value').then(
         (text: string) => {
           expect(text).to.equal(
-            ('0' + (tmpVvApprovalDate.getMonth() + 1)).slice(-2) + '/' +
-            ('0' + tmpVvApprovalDate.getDate()).slice(-2) + '/' +
-            tmpVvApprovalDate.getFullYear());
+            ('0' + (tmpVvApprovalDate.getUTCMonth() + 1)).slice(-2) + '/' +
+            ('0' + tmpVvApprovalDate.getUTCDate()).slice(-2) + '/' +
+            tmpVvApprovalDate.getUTCFullYear());
         });
     });
 

@@ -41,6 +41,7 @@ function InstUpdatePromiseCtrl(
     method.options = {
       'show-weeks': false,
       'startingDay': 0,
+      'timezone': 'utc',
     };
 
     method.format = 'M!/d!/yyyy';
@@ -78,12 +79,10 @@ function InstUpdatePromiseCtrl(
 
     // prep form dates
     if ($scope.statusDateDisplay) {
-      $scope.formData.statusDate = $scope.statusDateDisplay.toISOString();
-    } else {
-      $scope.formData.statusDate = '';
+      $scope.formData.statusDate = $scope.statusDateDisplay.toISOString().split('T')[0];
     }
     if ($scope.vvApprovalDateDisplay) {
-      $scope.formData.vvApprovalDate = $scope.vvApprovalDateDisplay.toISOString();
+      $scope.formData.vvApprovalDate = $scope.vvApprovalDateDisplay.toISOString().split('T')[0];
     } else {
       $scope.formData.vvApprovalDate = '';
     }

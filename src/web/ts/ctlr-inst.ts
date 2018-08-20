@@ -109,9 +109,9 @@ appController.controller('InstListController', function(
       .withTitle('Status date (m/d/y)')
       .renderWith((data, type, full, meta) => {
         const thisDate = new Date(full.statusDate);
-        const month = thisDate.getMonth() + 1;
-        const day = thisDate.getDate();
-        const year = thisDate.getFullYear();
+        const month = thisDate.getUTCMonth() + 1;
+        const day = thisDate.getUTCDate();
+        const year = thisDate.getUTCFullYear();
         return month + '/' + day + '/' + year;
       }),
   ];
