@@ -76,7 +76,7 @@ describe('Installations history tests suite',  () => {
        name: 'Test name',
        area: [ 'Global' ],
        status: 'RDY_INST',
-       statusDate: 'date 1000',
+       statusDate: '2017-04-21',
        software: '5947589458a6aa0face9a512'})
       .end(async (err: Error, result: Express.Session) => {
         // get record id from the returned location and find records that match
@@ -88,7 +88,7 @@ describe('Installations history tests suite',  () => {
            name: 'Test name',
            area: [ 'Global' ],
            status: 'RDY_INST',
-           statusDate: new Date('date 1000'),
+           statusDate: new Date('2017-04-21'),
            software: new mongoose.mongo.ObjectId('5947589458a6aa0face9a512')};
         try {
           expect(await testTools.checkHistory(debug, canonObj, id)).to.equal('History record matches');

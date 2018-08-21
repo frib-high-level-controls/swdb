@@ -78,9 +78,9 @@ function DetailsPromiseCtrl(
     // format dates for display
     if (data.statusDate) {
       const thisDate = new Date(data.statusDate);
-      const month = thisDate.getMonth() + 1;
-      const day = thisDate.getDate();
-      const year = thisDate.getFullYear();
+      const month = thisDate.getUTCMonth() + 1;
+      const day = thisDate.getUTCDate();
+      const year = thisDate.getUTCFullYear();
       $scope.formData.statusDate =  month + '/' + day + '/' + year;
     }
   });

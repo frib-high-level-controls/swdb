@@ -52,6 +52,7 @@ function NewPromiseCtrl(
     method.options = {
       'show-weeks': false,
       'startingDay': 0,
+      'timezone': 'utc',
     };
 
     method.format = 'M!/d!/yyyy';
@@ -94,7 +95,7 @@ function NewPromiseCtrl(
       $scope.formData.engineer = $scope.engineerSelected.item.uid;
     }
 
-    $scope.formData.statusDate = $scope.statusDateDisplay.toISOString();
+    $scope.formData.statusDate = $scope.statusDateDisplay.toISOString().split('T')[0];
 
     // convert enum values to keys
     $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).filter(

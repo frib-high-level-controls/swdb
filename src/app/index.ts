@@ -434,7 +434,6 @@ async function doStart(): Promise<express.Application> {
   app.post('/api/v1/swdb', auth.ensureAuthenticated,
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
     debug('POST /api/v1/swdb request');
-    // debug('POST /api/v1/swdb request: ' + JSON.stringify(req.body));
     // Do validation for  new records
 
     tools.SwdbLib.newValidation(req);
@@ -450,6 +449,8 @@ async function doStart(): Promise<express.Application> {
           res.status(500).send('Ensure authenticated failed');
           return;
         }
+        const dateObj = new Date(req.body.statusDate);
+        req.body.statusDate = dateObj;
         be.createDoc(username, req, res, next);
       }
     });
