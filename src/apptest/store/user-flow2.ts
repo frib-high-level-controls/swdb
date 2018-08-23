@@ -1041,4 +1041,115 @@ test.describe('User flow2 tests', () => {
     });
   });
 
+  test.describe('Cancel from new sw goes back to list', () => {
+    // test cancel from new sw record foes back to the mail search screen
+    test.it('should show new page with username on logout button', function(this: Mocha.ITestCallbackContext) {
+      this.timeout(8000);
+      chromeDriver.get(props.webUrl + '#/new');
+      chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
+      chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
+        props.test.username.toUpperCase()), 5000);
+    });
+
+    test.it('should show the new sw record title and click cancel', () => {
+      chromeDriver.wait(until.titleIs('SWDB - New'), 5000);
+      chromeDriver.wait(until.elementLocated(By.id('cancelBtn')), 5000);
+      chromeDriver.findElement(By.id('cancelBtn')).click();
+    });
+
+    test.it('should show list page', () => {
+      chromeDriver.wait(until.titleIs('SWDB - List'), 5000);
+    });
+  });
+
+  let id: string | undefined;
+  test.describe('Cancel from sw update goes back to details', () => {
+    // Test cancel from sw update goes back to the appropriate detauils screen
+    // find the created record
+    test.it('should find a record', function(this: Mocha.ITestCallbackContext) {
+      this.timeout(8000);
+      chromeDriver.get(props.webUrl + '#/list');
+      chromeDriver.wait(until.elementLocated(By.id('swNameSrch')), 8000)
+        .sendKeys('EXTA IOC');
+      chromeDriver.wait(until.elementLocated(By.id('versionSrch')), 8000)
+        .sendKeys('2.3.5');
+      chromeDriver.wait(until.elementLocated(By.linkText('EXTA IOC')),
+        8000);
+    });
+
+    // find the created record and click update-cancel and back to details
+    test.it('should show record details after cancel update', function(this: Mocha.ITestCallbackContext) {
+      this.timeout(10000);
+      chromeDriver.wait(until.elementLocated(By.linkText('EXTA IOC')),
+        8000).click();
+      chromeDriver.wait(until.titleIs('SWDB - Details'), 5000);
+      chromeDriver.getCurrentUrl().then((currUrl) => {
+        id = currUrl.split('/').pop();
+      });
+      chromeDriver.wait(until.elementLocated(By.id('updateBtn')),
+        8000).click();
+      chromeDriver.wait(until.titleIs('SWDB - Update'), 5000);
+      chromeDriver.wait(until.elementLocated(By.id('cancelBtn')),
+        8000).click();
+      chromeDriver.wait(until.titleIs('SWDB - Details'), 5000);
+      chromeDriver.getCurrentUrl().then((currUrl) => {
+        const newid = currUrl.split('/').pop();
+        expect(newid).to.equal(id);
+      });
+    });
+  });
+
+  test.describe('Cancel from new installation goes back to list', () => {
+    // test cancel from new sw record foes back to the mail search screen
+    test.it('should show new installation page with username on logout button',
+      function(this: Mocha.ITestCallbackContext) {
+      this.timeout(8000);
+      chromeDriver.get(props.webUrl + '#/inst/new');
+      chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
+      chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
+        props.test.username.toUpperCase()), 5000);
+    });
+
+    test.it('should show the new sw record title and click cancel', () => {
+      chromeDriver.wait(until.titleIs('SWDB - New Installation'), 5000);
+      chromeDriver.wait(until.elementLocated(By.id('cancelBtn')), 5000);
+      chromeDriver.findElement(By.id('cancelBtn')).click();
+    });
+
+    test.it('should show list page', () => {
+      chromeDriver.wait(until.titleIs('SWDB - Installations List'), 5000);
+    });
+  });
+
+  test.describe('Cancel from installation update goes back to details', () => {
+    // Test cancel from sw update goes back to the appropriate detauils screen
+    // find the created record
+    test.it('should find installation record', function(this: Mocha.ITestCallbackContext) {
+      this.timeout(8000);
+      chromeDriver.get(props.webUrl + '#/inst/list');
+      chromeDriver.wait(until.elementLocated(By.id('hostSrch')), 8000)
+        .sendKeys('vmachine01');
+    });
+
+    // find the created record and click update-cancel and back to details
+    test.it('should show record details after cancel update', function(this: Mocha.ITestCallbackContext) {
+      this.timeout(10000);
+      chromeDriver.wait(until.elementLocated(By.linkText('vmachine01')),
+        8000).click();
+      chromeDriver.wait(until.titleIs('SWDB - Installation Details'), 5000);
+      chromeDriver.getCurrentUrl().then((currUrl) => {
+        id = currUrl.split('/').pop();
+      });
+      chromeDriver.wait(until.elementLocated(By.id('updateBtn')),
+        8000).click();
+      chromeDriver.wait(until.titleIs('SWDB - Update Installation'), 5000);
+      chromeDriver.wait(until.elementLocated(By.id('cancelBtn')),
+        8000).click();
+      chromeDriver.wait(until.titleIs('SWDB - Installation Details'), 5000);
+      chromeDriver.getCurrentUrl().then((currUrl) => {
+        const newid = currUrl.split('/').pop();
+        expect(newid).to.equal(id);
+      });
+    });
+  });
 });
