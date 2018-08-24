@@ -30,7 +30,7 @@
       // authMechanism: "MDEFAULT",
 
       // ReplicaSet configuration
-      // replicaSet: "cluster-foo";
+      // replicaSet: "cluster-foo",
 
       // Connection configuration
       // connectTimeoutMS: 30000,
