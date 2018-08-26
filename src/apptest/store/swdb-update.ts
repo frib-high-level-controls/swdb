@@ -720,14 +720,6 @@ test.describe('Software update screen tests', () => {
         });
     });
 
-    // test.it("should show the correct statusDate in details", function () {
-    //   chromeDriver.wait(until.elementLocated(By.id("statusDate")), 3000);
-    //   chromeDriver.findElement(By.id("statusDate")).getAttribute("value").then(
-    //     function (text) {
-    //       expect(text).to.equal("2017-09-30T07:00:00.000Z");
-    //     });
-    // });
-
     test.it('should show the correct platforms in bump version new', () => {
       chromeDriver.wait(until.elementLocated(By.id('platforms')), 3000);
       chromeDriver.findElement(By.id('platforms')).getAttribute('value').then(
@@ -735,22 +727,6 @@ test.describe('Software update screen tests', () => {
           expect(text).to.equal('Test platform');
         });
     });
-
-    // test.it("should show the correct vvProcLoc in bump version new", function () {
-    //   chromeDriver.wait(until.elementLocated(By.id("vvProcLoc")), 3000);
-    //   chromeDriver.findElement(By.id("vvProcLoc")).getAttribute("value").then(
-    //     function (text) {
-    //       expect(text).to.equal("http://procservtest.com/procdoc1,http://procservtest.com/procdoc2");
-    //     });
-    // });
-
-    // test.it("should show the correct vvResultsLoc in details", function () {
-    //   chromeDriver.wait(until.elementLocated(By.id("vvResultsLoc")), 3000);
-    //   chromeDriver.findElement(By.id("vvResultsLoc")).getAttribute("value").then(
-    //     function (text) {
-    //       expect(text).to.equal("");
-    //     });
-    // });
 
     test.it('should show the correct versionControl in bump version new', () => {
       chromeDriver.wait(until.elementLocated(By.id('versionControl')), 3000);
@@ -876,13 +852,16 @@ test.describe('Software update screen tests', () => {
         });
     });
 
-    // test.it("should show the correct statusDate in details", function () {
-    //   chromeDriver.wait(until.elementLocated(By.id("statusDate")), 3000);
-    //   chromeDriver.findElement(By.id("statusDate")).getAttribute("value").then(
-    //     function (text) {
-    //       expect(text).to.equal("2017-09-30T07:00:00.000Z");
-    //     });
-    // });
+    test.it('should show the status date in details', () => {
+      chromeDriver.wait(until.elementLocated(By.id('statusDate')), 3000);
+      chromeDriver.findElement(By.id('statusDate')).getAttribute('value').then(
+        (text: string) => {
+          expect(text).to.equal(
+            (tmpStatusDate.getMonth() + 1) + '/' +
+            tmpStatusDate.getDate() + '/' +
+            tmpStatusDate.getFullYear());
+        });
+    });
 
     test.it('should show the correct platforms in details', () => {
       chromeDriver.wait(until.elementLocated(By.id('platforms')), 3000);

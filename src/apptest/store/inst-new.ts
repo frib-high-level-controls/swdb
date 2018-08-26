@@ -27,6 +27,8 @@ let app: express.Application;
 
 
 test.describe('Installations add screen tests', () => {
+  let tmpStatusDate: Date;
+  let tmpStatusDate2: Date;
   let chromeDriver: webdriver.WebDriver;
   before('Prep DB', async () => {
     app = await server.start();
@@ -339,6 +341,7 @@ test.describe('Installations add screen tests', () => {
         By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
       input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
       input.click();
+      tmpStatusDate = new Date();
     });
 
     test.it('Add new record - set V&V Approval date', () => {
@@ -349,6 +352,7 @@ test.describe('Installations add screen tests', () => {
         By.xpath('//*[@id="vvApprovalDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
       input = chromeDriver.findElement(By.xpath('//*[@id="vvApprovalDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
       input.click();
+      tmpStatusDate2 = new Date();
     });
 
     test.it('Add new record - set vvResultsLoc', function(this: any) {
@@ -437,21 +441,34 @@ test.describe('Installations add screen tests', () => {
           expect(text).to.equal('Ready for beam');
         });
     });
-    // need date test
-    // test.it("should show the correct installtion status date in details", function () {
-    //   this.timeout(8000);
-    //   chromeDriver.wait(until.elementLocated(By.id("statusDate")), 3000);
-    //   chromeDriver.findElement(By.id("statusDate")).getAttribute("value").then(
-    //     function (text) {
-    //       expect(text).to.equal("2017-09-30T07:00:00.000Z");
-    //     });
-    // });
+
+    test.it('should show the status date in details', () => {
+      chromeDriver.wait(until.elementLocated(By.id('statusDate')), 3000);
+      chromeDriver.findElement(By.id('statusDate')).getAttribute('value').then(
+        (text: string) => {
+          expect(text).to.equal(
+            (tmpStatusDate.getMonth() + 1) + '/' +
+            tmpStatusDate.getDate() + '/' +
+            tmpStatusDate.getFullYear());
+        });
+    });
 
     test.it('should show the correct vvResultsLoc in details', () => {
       chromeDriver.wait(until.elementLocated(By.id('vvResultsLoc')), 3000);
       chromeDriver.findElement(By.id('vvResultsLoc')).getAttribute('value').then(
         (text: string) => {
           expect(text).to.equal('http://resultservtest.com/resultsdoc1,http://resultservtest.com/resultdoc2');
+        });
+    });
+
+    test.it('should show the V&V approval date in details', () => {
+      chromeDriver.wait(until.elementLocated(By.id('vvApprovalDate')), 3000);
+      chromeDriver.findElement(By.id('vvApprovalDate')).getAttribute('value').then(
+        (text: string) => {
+          expect(text).to.equal(
+            (tmpStatusDate2.getMonth() + 1) + '/' +
+            tmpStatusDate2.getDate() + '/' +
+            tmpStatusDate2.getFullYear());
         });
     });
   });
