@@ -6,11 +6,10 @@ To start with, make sure you have Node.js, MongoDB, Git, sudo, and curl.
 Have your working mongodb location and credentials handy.
 ```sh
 sudo apt-get install curl sudo git mongodb
-sudo npm install -g bower
 ```
 ``` sh
 #Get Node
-curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_8.x | bash - apt-get install -y nodejs
 sudo apt-get install -y nodejs
 ```
 
@@ -27,14 +26,9 @@ npm run make
 SWDB has two outer FRIB system it depends on. 1) CAS - the suthentication system and 2) FORG
 the FRIB organizational service.
 
-At this time the CAS service can be tuned off for development and testing. To do this
+At this time the CAS and FORG service can be tuned off for development and testing. To do this
 add "--test.testing: true" to mocha calls or configure the same in swdbrc. 
-FORG cannot be detached at this time, and remote testing can be accomplshed using 
-an ssh tunnel.
-``` sh
-ssh -L 8081:forg-dev.nscl.msu.edu:443 username@nsclgw1.nscl.msu.edu
-```
-And matching the local host:port in swdbrc configuration item auth.forgapi.url.
+
 ``` sh
 # setup for tests
 sudo npm install -g mocha
@@ -67,9 +61,8 @@ npm install selenium-webdriver
 # NOTE: swdb/tests/swdb-firefox.js instructs geckodriver as to which firefox it should use. Update the firefox path here if necessary.
 # to run all tests
 cd ~/swdb
-# WARNING! This testing will clear ALL collection in the db listed in the swdbrc file.
-# Make sure the db listed is safe for this operation!!
 npm run test-all
+mocha test/apptest/tests.js --config ./config/swdbrc --test.testing true
 ```
 # Managing Configuration
 The file config/properties.json is expected to have the data necessary to running in a given environment.
