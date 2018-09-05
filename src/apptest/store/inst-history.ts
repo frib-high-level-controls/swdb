@@ -1,76 +1,66 @@
-import Chai = require('chai');
-const expect = Chai.expect;
-import mongoose = require('mongoose');
-import Supertest = require('supertest');
-import TestTools = require('./TestTools');
-import dbg = require('debug');
-import CommonTools = require('../../app/lib/CommonTools');
-import Be = require('../../app/lib/Db');
-import server = require('../../app/server');
-const testTools = new TestTools.TestTools();
-const ctools = new CommonTools.CommonTools();
-const debug = dbg('swdb:inst-history-tests');
-let props: any = {};
-props = ctools.getConfiguration();
+/**
+ * Test for Software Installation history.
+ */
+import {expect} from 'chai';
+import * as Debug from 'debug';
+import { Application } from 'express';
+import * as mongoose from 'mongoose';
 
-let app;
-let Cookies: any;
+import * as SuperTest from 'supertest';
+
+import { Update } from '../../app/shared/history';
+
+import * as server from '../../app/server';
+
+import * as data from '../data';
+import * as cookies from '../lib/cookies';
+import * as TestTools from './TestTools';
+
+const debug = Debug('swdb:inst-history-tests');
+
+const props = data.PROPS;
+
+const testTools = new TestTools.TestTools();
+
 
 describe('Installations history tests suite',  () => {
-  let supertest: any = null;
-  before('Prep DB', async () => {
+  let app: Application;
+  let cookie: string;
+  let supertest: SuperTest.SuperTest<SuperTest.Test>;
+
+  before('Start Application', async () => {
     app = await server.start();
-    supertest = Supertest(app);
-    debug('Prep DB');
-    await testTools.clearTestCollections(debug);
-    await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
+    supertest = SuperTest(app);
   });
 
-  after('clear db', async () => {
-    debug('Clear DB');
-    // clear the test collection
-    await testTools.clearTestCollections(debug);
+  before('Init Database', async () => {
+    await data.initialize();
+  });
+
+  before('Get User Session Cookie', async () => {
+    const res = await supertest.get('/login')
+      .auth(props.test.username, props.test.password).expect(302);
+    cookie = cookies.parseCookie(res, 'connect.sid', true).cookieString();
+  });
+
+  after('Stop Application', async () => {
     await server.stop();
   });
 
+
   const wrapper = { origId: null };
 
-  before('login as test user', function(done) {
-    this.timeout(8000);
-    supertest
-    .get('/login')
-    .auth(props.test.username, props.test.password)
-    .timeout(8000)
-    .expect(302)
-    .end((err: Error, res: Express.Session) => {
-      if (err) {
-        done(err);
-      } else {
-        Cookies = res.headers['set-cookie'].pop().split(';')[0];
-        debug('test login cookies: ' + JSON.stringify(Cookies));
-        done();
-      }
-    });
-  });
 
-  it('Has the blank history', async () => {
-    const cursor = Be.Db.swDoc.db.collections.history.find();
-    let count: number;
-    if (cursor) {
-      count = await cursor.count();
-      debug('Found ' + count + ' items');
-      expect(count).to.equal(0);
-    } else {
-      debug('Installation history collection is empty');
-      expect(count = 0).to.equal(0);
-    }
+  it('Check initial number of history updates', async () => {
+    const count = await Update.count({}).exec();
+    expect(count).to.equal(18);
   });
 
   it('Post a new record with correct history', (done) => {
     supertest
       .post('/api/v1/inst')
       .set('Accept', 'application/json')
-      .set('Cookie', [Cookies])
+      .set('Cookie', cookie)
       .send({
        host: 'Test host',
        name: 'Test name',
@@ -78,9 +68,9 @@ describe('Installations history tests suite',  () => {
        status: 'RDY_INST',
        statusDate: '2017-04-21',
        software: '5947589458a6aa0face9a512'})
-      .end(async (err: Error, result: Express.Session) => {
+      .end(async (err, result) => {
         // get record id from the returned location and find records that match
-        const id = result.headers.location.split(/\//).pop();
+        const id = result.header.location.split(/\//).pop();
         wrapper.origId = id;
         debug('Got id ' + id);
         const canonObj: any = {
@@ -103,11 +93,11 @@ describe('Installations history tests suite',  () => {
     supertest
       .put('/api/v1/inst/' + wrapper.origId)
       .set('Accept', 'application/json')
-      .set('Cookie', [Cookies])
+      .set('Cookie', cookie)
       .send( { name: 'New test name' } )
-      .end(async (err: Error, result: Express.Session) => {
+      .end(async (err, result) => {
         // get record id from the returned location and find records that match
-        const id = result.headers.location.split(/\//).pop();
+        const id = result.header.location.split(/\//).pop();
         wrapper.origId = id;
         debug('Got id ' + id);
         const canonObj: any  = {

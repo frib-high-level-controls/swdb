@@ -1,150 +1,130 @@
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
-import dbg = require('debug');
-import express = require('express');
-import  webdriver = require('selenium-webdriver');
-import test = require('selenium-webdriver/testing');
-import supertest = require('supertest');
-import TestTools = require('./TestTools');
-const debug = dbg('swdb:inst-list-tests');
-
-import CommonTools = require('../../app/lib/CommonTools');
-import server = require('../../app/server');
-const ctools = new CommonTools.CommonTools();
-let props: any = {};
-props = ctools.getConfiguration();
-chai.use(chaiAsPromised);
-const expect = chai.expect;
-const By = webdriver.By;
-const until = webdriver.until;
-const testTools = new TestTools.TestTools();
-let Cookies: string;
-
-let app: express.Application;
-
 /**
- * inst-list.ts
- * Test suite for software installations list page
+ * Test for Software Installation list.
  */
+import * as util from 'util';
 
-let chromeDriver: any;
+import {expect} from 'chai';
+import * as Debug from 'debug';
+import { Application } from 'express';
+import { Builder, By, until, WebDriver } from 'selenium-webdriver';
+import * as test from 'selenium-webdriver/testing';
+import * as SuperTest from 'supertest';
+
+import * as server from '../../app/server';
+
+import * as data from '../data';
+import * as cookies from '../lib/cookies';
+
+const debug = Debug('swdb:inst-list-tests');
+
+const props = data.PROPS;
+
+const browser = process.env.SELENIUM_BROWSER || 'chrome';
+
 
 test.describe('Installations record tests', () => {
-  before('Prep DB', async () => {
+  let app: Application;
+  let driver: WebDriver;
+  let supertest: SuperTest.SuperTest<SuperTest.Test>;
+
+
+  before('Start Application', async () => {
     app = await server.start();
-    debug('Prep DB');
-    await testTools.clearTestCollections(debug);
-    await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
+    supertest = SuperTest(app);
   });
 
-  after('clear db', async () => {
-    debug('Clear DB');
-    // clear the test collection.
-    chromeDriver.quit();
-    await testTools.clearTestCollections(debug);
+  before('Init Database', async () => {
+    await data.initialize();
+  });
+
+  before('Init WebDriver',  async () => {
+    driver = await new Builder().forBrowser(browser).build();
+  });
+
+  after('Quit WebDriver', async () => {
+    await driver.quit();
+  });
+
+  after('Stop Application', async () => {
     await server.stop();
   });
 
-
-  test.it('should show search page with login button', function(this: any) {
-    this.timeout(8000);
-
-    chromeDriver = new webdriver.Builder()
-      .forBrowser('chrome')
-      .build();
-    chromeDriver.manage().window().setPosition(200, 0);
-
-    chromeDriver.get(props.webUrl + '#/inst/list');
-    chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 8000);
-    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
-      'Log in'), 8000);
+  test.it('should show search page with login button', () => {
+    driver.manage().window().setPosition(200, 0);
+    driver.get(props.webUrl + '#/inst/list');
+    driver.wait(until.elementLocated(By.id('usrBtn')));
+    driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')), 'Log in'));
   });
 
-  test.it('login as test user', function(this: any, done: MochaDone) {
-    this.timeout(8000);
-    supertest(app)
-    .get('/login')
-    .auth(props.test.username, props.test.password)
-    .timeout(8000)
-    .expect(302)
-    .end((err, res) => {
-      if (err) {
-        done(err);
-      } else {
-        Cookies = res.header['set-cookie'].pop().split(';')[0];
-        debug('test login cookies: ' + Cookies);
-        const parts = Cookies.split('=');
-        debug('setting driver cookie ' + parts[0] + ' ' + parts[1]);
-        chromeDriver.manage().addCookie({name: parts[0], value: parts[1]});
-        done();
-      }
-    });
+  test.it('login as test user by setting session cookie and refreshing', async () => {
+    const res = await supertest.get('/login')
+      .auth(props.test.username, props.test.password).expect(302);
+    const sid = cookies.parseCookie(res, 'connect.sid');
+    debug('Set WebDriver cookie: %s', util.inspect(sid));
+    await driver.manage().addCookie(sid);
+    await driver.navigate().refresh();
   });
 
-  test.it('should show search page with username on logout button', function(this: any) {
-    this.timeout(8000);
-    chromeDriver.get(props.webUrl + '#/inst/list');
-    chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
-    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
+  test.it('should show search page with username on logout button', () => {
+    driver.get(props.webUrl + '#/inst/list');
+    driver.wait(until.elementLocated(By.id('usrBtn')), 5000);
+    driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
       props.test.username.toUpperCase()), 5000);
   });
-  test.it('should show Host column names in proper order', () => {
+
+  test.it('should show Host column names in proper order', async () => {
     const xpath = '//*[@id="instList"]/thead/tr[1]/th[1]';
-    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    const field = chromeDriver.findElement(By.xpath(xpath));
-    return expect(Promise.resolve(field.getText())).to.eventually.equal('Host');
+    driver.wait(until.elementLocated(By.xpath(xpath)));
+    const field = await driver.findElement(By.xpath(xpath)).getText();
+    expect(field).to.equal('Host');
   });
 
-  test.it('should show name column names in proper order', () => {
+  test.it('should show name column names in proper order', async () => {
     const xpath = '//*[@id="instList"]/thead/tr[1]/th[2]';
-    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    const field = chromeDriver.findElement(By.xpath(xpath));
-    return expect(Promise.resolve(field.getText())).to.eventually.equal('Name');
+    driver.wait(until.elementLocated(By.xpath(xpath)));
+    const field = await driver.findElement(By.xpath(xpath)).getText();
+    expect(field).to.equal('Name');
   });
 
-  test.it('should show Software column names in proper order', () => {
+  test.it('should show Software column names in proper order', async () => {
     const xpath = '//*[@id="instList"]/thead/tr[1]/th[3]';
-    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    const field = chromeDriver.findElement(By.xpath(xpath));
-    return expect(Promise.resolve(field.getText())).to.eventually.equal('Software');
+    driver.wait(until.elementLocated(By.xpath(xpath)));
+    const field = await driver.findElement(By.xpath(xpath)).getText();
+    expect(field).to.equal('Software');
   });
 
-  test.it('should show Area column names in proper order', () => {
+  test.it('should show Area column names in proper order', async () => {
     const xpath = '//*[@id="instList"]/thead/tr[1]/th[4]';
-    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    const field = chromeDriver.findElement(By.xpath(xpath));
-    return expect(Promise.resolve(field.getText())).to.eventually.equal('Area');
+    driver.wait(until.elementLocated(By.xpath(xpath)));
+    const field = await driver.findElement(By.xpath(xpath)).getText();
+    expect(field).to.equal('Area');
   });
 
-  test.it('should show DRR column names in proper order', () => {
+  test.it('should show DRR column names in proper order', async () => {
     const xpath = '//*[@id="instList"]/thead/tr[1]/th[5]';
-    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    const field = chromeDriver.findElement(By.xpath(xpath));
-    return expect(Promise.resolve(field.getText())).to.eventually.equal('DRR');
+    driver.wait(until.elementLocated(By.xpath(xpath)));
+    const field = await driver.findElement(By.xpath(xpath)).getText();
+    expect(field).to.equal('DRR');
   });
 
-  test.it('should show Status column names in proper order', () => {
+  test.it('should show Status column names in proper order', async () => {
     const xpath = '//*[@id="instList"]/thead/tr[1]/th[6]';
-    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    const field = chromeDriver.findElement(By.xpath(xpath));
-    return expect(Promise.resolve(field.getText())).to.eventually.equal('Status');
+    driver.wait(until.elementLocated(By.xpath(xpath)));
+    const field = await driver.findElement(By.xpath(xpath)).getText();
+    expect(field).to.equal('Status');
   });
 
-  test.it('should show Status date column names in proper order', () => {
+  test.it('should show Status date column names in proper order', async () => {
     const xpath = '//*[@id="instList"]/thead/tr[1]/th[7]';
-    chromeDriver.wait(until.elementLocated(By.xpath(xpath)), 8000);
-    const field = chromeDriver.findElement(By.xpath(xpath));
-    return expect(Promise.resolve(field.getText())).to.eventually.equal('Status date (m/d/y)');
+    driver.wait(until.elementLocated(By.xpath(xpath)));
+    const field = await driver.findElement(By.xpath(xpath)).getText();
+    expect(field).to.equal('Status date (m/d/y)');
   });
 
   // find an installation record
-  test.it('should find a record', function(this: any) {
-    this.timeout(8000);
-    chromeDriver.get(props.webUrl + '#/inst/list');
-    chromeDriver.wait(until.elementLocated(By.id('hostSrch')), 8000)
-      .sendKeys('host2');
-    chromeDriver.wait(until.elementLocated(By.linkText('host2')),
-      8000);
-
+  test.it('should find a record', () => {
+    driver.get(props.webUrl + '#/inst/list');
+    driver.wait(until.elementLocated(By.id('hostSrch'))).sendKeys('host2');
+    driver.wait(until.elementLocated(By.linkText('host2')));
   });
 });

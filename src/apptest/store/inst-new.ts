@@ -1,144 +1,121 @@
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
-import dbg = require('debug');
-import express = require('express');
-import webdriver = require('selenium-webdriver');
-import chrome = require('selenium-webdriver/chrome');
-import test = require('selenium-webdriver/testing');
-import Supertest = require('supertest');
-import CommonTools = require('../../app/lib/CommonTools');
-import server = require('../../app/server');
-import TestTools = require('./TestTools');
+/**
+ * Tests for Software Installation 'new' page.
+ */
+import * as util from 'util';
 
-chai.use(chaiAsPromised);
-const testTools = new TestTools.TestTools();
-let supertest: any;
-const expect = chai.expect;
-const By = webdriver.By;
-const until = webdriver.until;
-const debug = dbg('swdb:inst-new-tests');
-const prefs = new webdriver.logging.Preferences();
-const options = new chrome.Options();
-const ctools = new CommonTools.CommonTools();
-let props: any  = {};
-// let Cookies: string;
-props = ctools.getConfiguration();
-let app: express.Application;
+import {expect} from 'chai';
+import * as Debug from 'debug';
+import { Application } from 'express';
+import { Builder, By, until, WebDriver } from 'selenium-webdriver';
+import * as test from 'selenium-webdriver/testing';
+import * as SuperTest from 'supertest';
+
+import * as server from '../../app/server';
+
+import * as data from '../data';
+import * as cookies from '../lib/cookies';
+
+
+const debug = Debug('swdb:inst-new-tests');
+
+const props = data.PROPS;
+
+const browser = process.env.SELENIUM_BROWSER || 'chrome';
 
 
 test.describe('Installations add screen tests', () => {
+  let app: Application;
+  let driver: WebDriver;
+  let supertest: SuperTest.SuperTest<SuperTest.Test>;
+
   let tmpStatusDate: Date;
   let tmpStatusDate2: Date;
-  let chromeDriver: webdriver.WebDriver;
-  before('Prep DB', async () => {
+
+  before('Start Application', async () => {
     app = await server.start();
-    supertest = Supertest(app);
-    debug('Prep DB');
-    await testTools.clearTestCollections(debug);
-    await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
+    supertest = SuperTest(app);
   });
 
-  after('clear db', async () => {
-    debug('Clear DB');
-    // clear the test collection.
-    chromeDriver.quit();
-    await testTools.clearTestCollections(debug);
+  before('Init Database', async () => {
+    await data.initialize();
+  });
+
+  before('Init WebDriver',  async () => {
+    driver = await new Builder().forBrowser(browser).build();
+  });
+
+  after('Quit WebDriver', async () => {
+    await driver.quit();
+  });
+
+  after('Stop Application', async () => {
     await server.stop();
   });
 
   test.describe('1. Test basic error handling', () => {
-    test.it('should show search page with login button', function(this: Mocha.ITestCallbackContext) {
-      this.timeout(8000);
-      prefs.setLevel(webdriver.logging.Type.BROWSER, webdriver.logging.Level.ALL);
-      options.setLoggingPrefs(prefs);
-      chromeDriver = new webdriver.Builder()
-        .withCapabilities(webdriver.Capabilities.chrome())
-        .setChromeOptions(options)
-        .build();
-      chromeDriver.manage().window().setPosition(200, 0);
-
-      chromeDriver.get(props.webUrl + '#/list');
-      chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
-      chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
-        'Log in'), 5000);
+    test.it('should show search page with login button', () => {
+      driver.manage().window().setPosition(200, 0);
+      driver.get(props.webUrl + '#/list');
+      driver.wait(until.elementLocated(By.id('usrBtn')));
+      driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')), 'Log in'));
     });
 
-    test.it('login as test user', function(this: Mocha.ITestCallbackContext, done: MochaDone) {
-      this.timeout(8000);
-      supertest
-        .get('/login')
-        .auth(props.test.username, props.test.password)
-        .timeout(8000)
-        .expect(302)
-        .end((err: Error, res: Supertest.Response) => {
-          if (err) {
-            done(err);
-          } else {
-            const Cookies = res.header['set-cookie'].pop().split(';')[0];
-            debug('test login cookies: ' + Cookies);
-            const parts = Cookies.split('=');
-            debug('setting driver cookie ' + parts[0] + ' ' + parts[1]);
-            chromeDriver.manage().addCookie({ name: parts[0], value: parts[1] });
-            done();
-          }
-        });
+    test.it('login as test user by setting session cookie and refreshing', async () => {
+      const res = await supertest.get('/login')
+        .auth(props.test.username, props.test.password).expect(302);
+      const sid = cookies.parseCookie(res, 'connect.sid');
+      debug('Set WebDriver cookie: %s', util.inspect(sid));
+      await driver.manage().addCookie(sid);
+      await driver.navigate().refresh();
     });
 
-    test.it('should show search page with username on logout button', function(this: Mocha.ITestCallbackContext) {
-      this.timeout(8000);
-      chromeDriver.get(props.webUrl + '#/list');
-      chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
-      chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
-        props.test.username.toUpperCase()), 5000);
+    test.it('should show search page with username on logout button', () => {
+      driver.get(props.webUrl + '#/list');
+      driver.wait(until.elementLocated(By.id('usrBtn')));
+      driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
+        props.test.username.toUpperCase()));
     });
 
-    test.it('should show search page with username on logout button', function(this: Mocha.ITestCallbackContext) {
-      this.timeout(8000);
-      chromeDriver.get(props.webUrl + '#/inst/new');
-      chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
-      chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
-        props.test.username.toUpperCase()), 5000);
+    test.it('should show search page with username on logout button', () => {
+      driver.get(props.webUrl + '#/inst/new');
+      driver.wait(until.elementLocated(By.id('usrBtn')));
+      driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
+        props.test.username.toUpperCase()));
     });
 
-    test.it('Submit should fail', function(this: Mocha.ITestCallbackContext) {
-      this.timeout(5000);
-      chromeDriver.findElement(By.id('submitBtn')).click();
+    test.it('Submit should fail', () => {
+      driver.findElement(By.id('submitBtn')).click();
     });
 
-    test.it('Date field should be (Angular) invalid', function(this: Mocha.ITestCallbackContext) {
-      this.timeout(5000);
-      chromeDriver.wait(until.elementLocated(By.id('host')), 3000);
-      chromeDriver.findElement(By.id('host')).getAttribute('class').then(
+    test.it('Date field should be (Angular) invalid', () => {
+      driver.wait(until.elementLocated(By.id('host')));
+      driver.findElement(By.id('host')).getAttribute('class').then(
         (text: string) => {
           expect(text).to.match(/ng-invalid-required/);
         });
     });
 
-    test.it('should stay on the new form', function(this: Mocha.ITestCallbackContext) {
-      this.timeout(5000);
-      chromeDriver.wait(until.titleIs('SWDB - New Installation'), 5000);
+    test.it('should stay on the new form', () => {
+      driver.wait(until.titleIs('SWDB - New Installation'));
     });
 
-    test.it('Set installation host', function(this: any) {
-      this.timeout(15000);
-      chromeDriver.wait(until.elementLocated(By.id('host')), 3000);
-      const input = chromeDriver.findElement(By.id('host'));
+    test.it('Set installation host', () => {
+      driver.wait(until.elementLocated(By.id('host')));
+      const input = driver.findElement(By.id('host'));
       input.sendKeys('testHost0');
     });
 
-    test.it('Host field should be (Angular) valid', function(this: Mocha.ITestCallbackContext) {
-      this.timeout(5000);
-      chromeDriver.wait(until.elementLocated(By.id('host')), 3000);
-      chromeDriver.findElement(By.id('host')).getAttribute('class').then(
+    test.it('Host field should be (Angular) valid', () => {
+      driver.wait(until.elementLocated(By.id('host')));
+      driver.findElement(By.id('host')).getAttribute('class').then(
         (text: string) => {
           expect(text).to.match(/ng-valid-required/);
         });
     });
 
-    test.it('Status Date field should be (Angular) invalid', function(this: Mocha.ITestCallbackContext) {
-      this.timeout(5000);
-      chromeDriver.wait(until.elementLocated(By.id('statusDate')), 3000);
-      chromeDriver.findElement(By.id('statusDate')).getAttribute('class').then(
+    test.it('Status Date field should be (Angular) invalid', () => {
+      driver.wait(until.elementLocated(By.id('statusDate')));
+      driver.findElement(By.id('statusDate')).getAttribute('class').then(
         (text: string) => {
           expect(text).to.match(/ng-invalid-required/);
         });
@@ -146,51 +123,48 @@ test.describe('Installations add screen tests', () => {
 
     test.it('Add new record - set status date', () => {
       // set status date
-      chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')), 3000);
-      let input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
+      driver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')));
+      let input = driver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
       input.click();
-      chromeDriver.wait(until.elementLocated(
-        By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
-      input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
+      driver.wait(until.elementLocated(
+        By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')));
+      input = driver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
       input.click();
     });
 
-    test.it('Submit should fail with software name required error', function(this: Mocha.ITestCallbackContext) {
-      this.timeout(5000);
-      chromeDriver.findElement(By.id('submitBtn')).click();
-      chromeDriver.wait(until.titleIs('SWDB - New Installation'), 5000);
-      chromeDriver.wait(until.elementLocated(By.id('formError')), 3000);
-      chromeDriver.findElement(By.id('formError')).getText().then(
+    test.it('Submit should fail with software name required error', () => {
+      driver.findElement(By.id('submitBtn')).click();
+      driver.wait(until.titleIs('SWDB - New Installation'));
+      driver.wait(until.elementLocated(By.id('formError')));
+      driver.findElement(By.id('formError')).getText().then(
         (text) => {
           expect(text).to.match(/Software reference is required/);
         });
     });
 
-    test.it('set software', async function(this: any) {
-      this.timeout(15000);
-      chromeDriver.wait(until.elementLocated(By.id('software')), 3000);
-      let searchInput = chromeDriver.findElement(By.id('software'));
+    test.it('set software', async () => {
+      driver.wait(until.elementLocated(By.id('software')));
+      let searchInput = driver.findElement(By.id('software'));
       searchInput.click();
-      chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="software"]/input[1]')));
-      searchInput = chromeDriver.findElement(By.xpath('//*[@id="software"]/input[1]'));
+      driver.wait(until.elementLocated(By.xpath('//*[@id="software"]/input[1]')));
+      searchInput = driver.findElement(By.xpath('//*[@id="software"]/input[1]'));
       searchInput.sendKeys('BEAST');
-      chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-0-0"]/span')));
-      const input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-0"]/span'));
+      driver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-0-0"]/span')));
+      const input = driver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-0"]/span'));
       input.click();
-      chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
+      driver.wait(until.elementTextContains(driver.findElement(
         By.id('software')),
-        'BEAST/b12/0.2'), 3000);
-      chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
+        'BEAST/b12/0.2'));
+      driver.wait(until.elementTextContains(driver.findElement(
         By.id('software')),
-        'BEAST/b12/0.2'), 3000);
+        'BEAST/b12/0.2'));
     });
 
-    test.it('Submit should fail with area required error', function(this: Mocha.ITestCallbackContext) {
-      this.timeout(5000);
-      chromeDriver.findElement(By.id('submitBtn')).click();
-      chromeDriver.wait(until.titleIs('SWDB - New Installation'), 5000);
-      chromeDriver.wait(until.elementLocated(By.id('formError')), 3000);
-      chromeDriver.findElement(By.id('formError')).getText().then(
+    test.it('Submit should fail with area required error', () => {
+      driver.findElement(By.id('submitBtn')).click();
+      driver.wait(until.titleIs('SWDB - New Installation'));
+      driver.wait(until.elementLocated(By.id('formError')));
+      driver.findElement(By.id('formError')).getText().then(
         (text) => {
           expect(text).to.match(/Path `status` is required\./);
         });
@@ -199,252 +173,237 @@ test.describe('Installations add screen tests', () => {
 
 
   test.describe('2. Add new installation', () => {
-    test.it('should show search page with username on logout button', function(this: any) {
-      this.timeout(8000);
-      chromeDriver.get(props.webUrl + '#/inst/list');
-      chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
-      chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
-        props.test.username.toUpperCase()), 5000);
+    test.it('should show search page with username on logout button', () => {
+      driver.get(props.webUrl + '#/inst/list');
+      driver.wait(until.elementLocated(By.id('usrBtn')));
+      driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
+        props.test.username.toUpperCase()));
     });
 
-    test.it('should show new page with username on logout button', function(this: any) {
-      this.timeout(8000);
-      chromeDriver.get(props.webUrl + '#/inst/new');
-      chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
-      chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
-        props.test.username.toUpperCase()), 5000);
+    test.it('should show new page with username on logout button', () => {
+      driver.get(props.webUrl + '#/inst/new');
+      driver.wait(until.elementLocated(By.id('usrBtn')));
+      driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
+        props.test.username.toUpperCase()));
     });
 
 
     test.it('should show the requested installation record title', () => {
-      chromeDriver.wait(until.titleIs('SWDB - New Installation'), 5000);
+      driver.wait(until.titleIs('SWDB - New Installation'));
     });
 
-    test.it('Add new record - set host', function(this: any) {
-      this.timeout(15000);
-      chromeDriver.wait(until.elementLocated(By.id('host')), 3000);
-      const input = chromeDriver.findElement(By.id('host'));
+    test.it('Add new record - set host', () => {
+      driver.wait(until.elementLocated(By.id('host')));
+      const input = driver.findElement(By.id('host'));
       input.sendKeys('testHost1');
     });
 
-    test.it('Add new record - set software', async function(this: any) {
-      this.timeout(15000);
-      chromeDriver.wait(until.elementLocated(By.id('software')), 3000);
-      let searchInput = chromeDriver.findElement(By.id('software'));
+    test.it('Add new record - set software', async () => {
+      driver.wait(until.elementLocated(By.id('software')));
+      let searchInput = driver.findElement(By.id('software'));
       searchInput.click();
-      chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="software"]/input[1]')));
-      searchInput = chromeDriver.findElement(By.xpath('//*[@id="software"]/input[1]'));
+      driver.wait(until.elementLocated(By.xpath('//*[@id="software"]/input[1]')));
+      searchInput = driver.findElement(By.xpath('//*[@id="software"]/input[1]'));
       searchInput.sendKeys('BEAST');
-      chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-1-0"]/span')));
-      const input = chromeDriver.findElement(By.xpath('//*[@id="ui-select-choices-row-1-0"]/span'));
+      driver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-1-0"]/span')));
+      const input = driver.findElement(By.xpath('//*[@id="ui-select-choices-row-1-0"]/span'));
       input.click();
-      chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
+      driver.wait(until.elementTextContains(driver.findElement(
         By.id('software')),
-        'BEAST/b12/0.2'), 3000);
-      chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(
+        'BEAST/b12/0.2'));
+      driver.wait(until.elementTextContains(driver.findElement(
         By.id('software')),
-        'BEAST/b12/0.2'), 3000);
+        'BEAST/b12/0.2'));
     });
 
     test.it('Add new record - set name', () => {
       // set name
-      chromeDriver.wait(until.elementLocated(By.id('name')), 3000);
-      const input = chromeDriver.findElement(By.id('name'));
+      driver.wait(until.elementLocated(By.id('name')));
+      const input = driver.findElement(By.id('name'));
       input.click();
       input.sendKeys('Test name');
     });
 
-    test.it('Add new record - set area 0', function(this: any) {
-      this.timeout(6000);
+    test.it('Add new record - set area 0', () => {
       // set area
       // add controls room, operator area, nscl control room
       // then delete the controls room
-      chromeDriver.wait(until.elementLocated(By.id('add.area')), 3000);
-      const input = chromeDriver.findElement(By.id('add.area'));
+      driver.wait(until.elementLocated(By.id('add.area')));
+      const input = driver.findElement(By.id('add.area'));
       input.click();
-      chromeDriver.wait(until.elementLocated(By.id('area.0')), 3000);
-      const input0 = chromeDriver.findElement(By.id('area.0'));
+      driver.wait(until.elementLocated(By.id('area.0')));
+      const input0 = driver.findElement(By.id('area.0'));
       input0.click();
 
-      chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.0"]/input[1]')), 3000);
-      const input0b = chromeDriver.findElement(By.xpath('//*[@id="area.0"]/input[1]'));
+      driver.wait(until.elementLocated(By.xpath('//*[@id="area.0"]/input[1]')));
+      const input0b = driver.findElement(By.xpath('//*[@id="area.0"]/input[1]'));
       input0b.sendKeys('controls\n');
 
-      chromeDriver.wait(until.elementTextContains(input0,
-        'IFS:LAB.FRIB.ASD.CONTROLS.HLCO'), 5000);
+      driver.wait(until.elementTextContains(input0,
+        'IFS:LAB.FRIB.ASD.CONTROLS.HLCO'));
     });
 
-    test.it('Add new record - set area 1', function(this: any) {
-      this.timeout(6000);
-      chromeDriver.wait(until.elementLocated(By.id('add.area')), 3000);
-      const input = chromeDriver.findElement(By.id('add.area'));
+    test.it('Add new record - set area 1', () => {
+      driver.wait(until.elementLocated(By.id('add.area')));
+      const input = driver.findElement(By.id('add.area'));
       input.click();
-      chromeDriver.wait(until.elementLocated(By.id('area.1')), 3000);
-      const input1 = chromeDriver.findElement(By.id('area.1'));
+      driver.wait(until.elementLocated(By.id('area.1')));
+      const input1 = driver.findElement(By.id('area.1'));
       input1.click();
 
-      chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.1"]/input[1]')), 3000);
-      const input1b = chromeDriver.findElement(By.xpath('//*[@id="area.1"]/input[1]'));
+      driver.wait(until.elementLocated(By.xpath('//*[@id="area.1"]/input[1]')));
+      const input1b = driver.findElement(By.xpath('//*[@id="area.1"]/input[1]'));
       input1b.sendKeys('operator\n');
 
-      chromeDriver.wait(until.elementTextContains(input1,
-        'IFS:LAB.FRIB.ASD.ACCELERATOROPS.MACHINEOPERATORS'), 5000);
+      driver.wait(until.elementTextContains(input1,
+        'IFS:LAB.FRIB.ASD.ACCELERATOROPS.MACHINEOPERATORS'));
     });
 
-    test.it('Add new record - set area 2', function(this: any) {
-      this.timeout(6000);
-      chromeDriver.wait(until.elementLocated(By.id('add.area')), 3000);
-      const input = chromeDriver.findElement(By.id('add.area'));
+    test.it('Add new record - set area 2', () => {
+      driver.wait(until.elementLocated(By.id('add.area')));
+      const input = driver.findElement(By.id('add.area'));
       input.click();
-      chromeDriver.wait(until.elementLocated(By.id('area.2')), 3000);
-      const input2 = chromeDriver.findElement(By.id('area.2'));
+      driver.wait(until.elementLocated(By.id('area.2')));
+      const input2 = driver.findElement(By.id('area.2'));
       input2.click();
 
-      chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="area.2"]/input[1]')), 3000);
-      const input2b = chromeDriver.findElement(By.xpath('//*[@id="area.2"]/input[1]'));
+      driver.wait(until.elementLocated(By.xpath('//*[@id="area.2"]/input[1]')));
+      const input2b = driver.findElement(By.xpath('//*[@id="area.2"]/input[1]'));
       input2b.sendKeys('control room\n');
 
-      chromeDriver.wait(until.elementTextContains(input2,
-        'ADB:AREA.NSCL.CONTROLRM'), 5000);
+      driver.wait(until.elementTextContains(input2,
+        'ADB:AREA.NSCL.CONTROLRM'));
     });
 
     test.it('Add new record - remove area 0', () => {
-      chromeDriver.wait(until.elementLocated(By.id('rm.area.0')), 3000);
-      const input = chromeDriver.findElement(By.id('rm.area.0'));
+      driver.wait(until.elementLocated(By.id('rm.area.0')));
+      const input = driver.findElement(By.id('rm.area.0'));
       input.click();
     });
 
     test.it('Add new record - set drr', () => {
       // set drrs
-      chromeDriver.wait(until.elementLocated(By.id('drrs')), 3000);
-      const input = chromeDriver.findElement(By.id('drrs'));
+      driver.wait(until.elementLocated(By.id('drrs')));
+      const input = driver.findElement(By.id('drrs'));
       input.click();
       input.sendKeys('TestDRR');
     });
 
     test.it('Add new record - set status', () => {
       // set the status
-      chromeDriver.wait(until.elementLocated(By.id('status')), 3000);
-      const input = chromeDriver.findElement(By.id('status'));
+      driver.wait(until.elementLocated(By.id('status')));
+      const input = driver.findElement(By.id('status'));
       input.click();
       input.sendKeys('Ready for beam');
 
-      chromeDriver.wait(until.elementLocated(By.id('status')), 3000);
+      driver.wait(until.elementLocated(By.id('status')));
     });
 
     test.it('Add new record - set status date', () => {
       // set status date
-      chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')), 3000);
-      let input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
+      driver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')));
+      let input = driver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
       input.click();
-      chromeDriver.wait(until.elementLocated(
-        By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
-      input = chromeDriver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
+      driver.wait(until.elementLocated(
+        By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')));
+      input = driver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
       input.click();
       tmpStatusDate = new Date();
     });
 
     test.it('Add new record - set V&V Approval date', () => {
-      chromeDriver.wait(until.elementLocated(By.xpath('//*[@id="vvApprovalDate-group"]/div/p/span/button/i')), 3000);
-      let input = chromeDriver.findElement(By.xpath('//*[@id="vvApprovalDate-group"]/div/p/span/button/i'));
+      driver.wait(until.elementLocated(By.xpath('//*[@id="vvApprovalDate-group"]/div/p/span/button/i')));
+      let input = driver.findElement(By.xpath('//*[@id="vvApprovalDate-group"]/div/p/span/button/i'));
       input.click();
-      chromeDriver.wait(until.elementLocated(
-        By.xpath('//*[@id="vvApprovalDate-group"]/div/p/div/ul/li[2]/span/button[1]')), 3000);
-      input = chromeDriver.findElement(By.xpath('//*[@id="vvApprovalDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
+      driver.wait(until.elementLocated(
+        By.xpath('//*[@id="vvApprovalDate-group"]/div/p/div/ul/li[2]/span/button[1]')));
+      input = driver.findElement(By.xpath('//*[@id="vvApprovalDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
       input.click();
       tmpStatusDate2 = new Date();
     });
 
-    test.it('Add new record - set vvResultsLoc', function(this: any) {
-      this.timeout(10000);
+    test.it('Add new record - set vvResultsLoc', () => {
       // set vvResultsLoc
-      chromeDriver.wait(until.elementLocated(By.id('add.vvResultsLoc')), 3000);
-      let input = chromeDriver.findElement(By.id('add.vvResultsLoc'));
+      driver.wait(until.elementLocated(By.id('add.vvResultsLoc')));
+      let input = driver.findElement(By.id('add.vvResultsLoc'));
       input.click();
-      chromeDriver.wait(until.elementLocated(By.id('vvResultsLoc.0')), 3000);
-      const input0 = chromeDriver.findElement(By.id('vvResultsLoc.0'));
+      driver.wait(until.elementLocated(By.id('vvResultsLoc.0')));
+      const input0 = driver.findElement(By.id('vvResultsLoc.0'));
       input0.sendKeys('http://resultservtest.com/resultsdoc0');
       input.click();
-      chromeDriver.wait(until.elementLocated(By.id('vvResultsLoc.1')), 3000);
-      const input1 = chromeDriver.findElement(By.id('vvResultsLoc.1'));
+      driver.wait(until.elementLocated(By.id('vvResultsLoc.1')));
+      const input1 = driver.findElement(By.id('vvResultsLoc.1'));
       input1.sendKeys('http://resultservtest.com/resultsdoc1');
       input.click();
-      chromeDriver.wait(until.elementLocated(By.id('vvResultsLoc.2')), 3000);
-      const input2 = chromeDriver.findElement(By.id('vvResultsLoc.2'));
+      driver.wait(until.elementLocated(By.id('vvResultsLoc.2')));
+      const input2 = driver.findElement(By.id('vvResultsLoc.2'));
       input2.sendKeys('http://resultservtest.com/resultdoc2');
       // remove the first entry
-      chromeDriver.wait(until.elementLocated(By.id('rm.vvResultsLoc.0')), 3000);
-      input = chromeDriver.findElement(By.id('rm.vvResultsLoc.0'));
+      driver.wait(until.elementLocated(By.id('rm.vvResultsLoc.0')));
+      input = driver.findElement(By.id('rm.vvResultsLoc.0'));
       input.click();
 
-      chromeDriver.findElement(By.id('submitBtn')).click();
+      driver.findElement(By.id('submitBtn')).click();
     });
 
 
-    test.it('should show the details record', function(this: any) {
-      this.timeout(8000);
-      chromeDriver.wait(until.titleIs('SWDB - Installation Details'), 5000);
+    test.it('should show the details record', () => {
+      driver.wait(until.titleIs('SWDB - Installation Details'));
     });
   });
 
   test.describe('3. Show new installation details', () => {
-    test.it('should show the correct installtion host in details', function(this: any) {
-      this.timeout(8000);
-      chromeDriver.wait(until.elementLocated(By.id('host')), 3000);
-      chromeDriver.findElement(By.id('host')).getAttribute('value').then(
+    test.it('should show the correct installtion host in details', () => {
+      driver.wait(until.elementLocated(By.id('host')));
+      driver.findElement(By.id('host')).getAttribute('value').then(
         (text: string) => {
           expect(text).to.equal('testHost1');
         });
     });
 
-    test.it('should show the correct installtion name in details', function(this: any) {
-      this.timeout(8000);
-      chromeDriver.wait(until.elementLocated(By.id('name')), 3000);
-      chromeDriver.findElement(By.id('name')).getAttribute('value').then(
+    test.it('should show the correct installation name in details', () => {
+      driver.wait(until.elementLocated(By.id('name')));
+      driver.findElement(By.id('name')).getAttribute('value').then(
         (text: string) => {
           expect(text).to.equal('Test name');
         });
     });
 
-    test.it('should show the correct installation software in details', function(this: any) {
-      this.timeout(8000);
-      chromeDriver.wait(until.elementLocated(By.id('software')), 3000);
-      chromeDriver.findElement(By.id('software')).getAttribute('value').then(
+    test.it('should show the correct installation software in details', () => {
+      driver.wait(until.elementLocated(By.id('software')));
+      driver.findElement(By.id('software')).getAttribute('value').then(
         (text: string) => {
           expect(text).to.equal('BEAST / b12 / 0.2');
         });
     });
 
-    test.it('should show the correct installtion area in details', function(this: any) {
-      this.timeout(8000);
-      chromeDriver.wait(until.elementLocated(By.id('area')), 3000);
-      chromeDriver.findElement(By.id('area')).getAttribute('value').then(
+    test.it('should show the correct installtion area in details', () => {
+      driver.wait(until.elementLocated(By.id('area')));
+      driver.findElement(By.id('area')).getAttribute('value').then(
         (text: string) => {
           expect(text).to.equal('IFS:LAB.FRIB.ASD.ACCELERATOROPS.MACHINEOPERATORS,ADB:AREA.NSCL.CONTROLRM');
         });
     });
 
-    test.it('should show the correct installtion DRR in details', function(this: any) {
-      this.timeout(8000);
-      chromeDriver.wait(until.elementLocated(By.id('drrs')), 3000);
-      chromeDriver.findElement(By.id('drrs')).getAttribute('value').then(
+    test.it('should show the correct installtion DRR in details', () => {
+      driver.wait(until.elementLocated(By.id('drrs')));
+      driver.findElement(By.id('drrs')).getAttribute('value').then(
         (text: string) => {
           expect(text).to.equal('TestDRR');
         });
     });
 
-    test.it('should show the correct installtion status in details', function(this: any) {
-      this.timeout(8000);
-      chromeDriver.wait(until.elementLocated(By.id('status')), 3000);
-      chromeDriver.findElement(By.id('status')).getAttribute('value').then(
+    test.it('should show the correct installtion status in details', () => {
+      driver.wait(until.elementLocated(By.id('status')));
+      driver.findElement(By.id('status')).getAttribute('value').then(
         (text: string) => {
           expect(text).to.equal('Ready for beam');
         });
     });
 
     test.it('should show the status date in details', () => {
-      chromeDriver.wait(until.elementLocated(By.id('statusDate')), 3000);
-      chromeDriver.findElement(By.id('statusDate')).getAttribute('value').then(
+      driver.wait(until.elementLocated(By.id('statusDate')));
+      driver.findElement(By.id('statusDate')).getAttribute('value').then(
         (text: string) => {
           expect(text).to.equal(
             (tmpStatusDate.getMonth() + 1) + '/' +
@@ -454,16 +413,16 @@ test.describe('Installations add screen tests', () => {
     });
 
     test.it('should show the correct vvResultsLoc in details', () => {
-      chromeDriver.wait(until.elementLocated(By.id('vvResultsLoc')), 3000);
-      chromeDriver.findElement(By.id('vvResultsLoc')).getAttribute('value').then(
+      driver.wait(until.elementLocated(By.id('vvResultsLoc')));
+      driver.findElement(By.id('vvResultsLoc')).getAttribute('value').then(
         (text: string) => {
           expect(text).to.equal('http://resultservtest.com/resultsdoc1,http://resultservtest.com/resultdoc2');
         });
     });
 
     test.it('should show the V&V approval date in details', () => {
-      chromeDriver.wait(until.elementLocated(By.id('vvApprovalDate')), 3000);
-      chromeDriver.findElement(By.id('vvApprovalDate')).getAttribute('value').then(
+      driver.wait(until.elementLocated(By.id('vvApprovalDate')));
+      driver.findElement(By.id('vvApprovalDate')).getAttribute('value').then(
         (text: string) => {
           expect(text).to.equal(
             (tmpStatusDate2.getMonth() + 1) + '/' +

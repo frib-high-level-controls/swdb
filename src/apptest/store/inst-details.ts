@@ -1,169 +1,144 @@
-export = {};
-import server = require('../../app/server');
-let app;
-import chai = require('chai');
-import chaiaspromised = require('chai-as-promised');
-const expect = chai.expect;
-import dbg = require('debug');
-import Supertest = require('supertest');
-chai.use(chaiaspromised);
+/**
+ * Tests for Software Installation 'details' page.
+ */
+import * as util from 'util';
 
-import TestTools = require('./TestTools');
-const testTools = new TestTools.TestTools();
+import {expect} from 'chai';
+import * as Debug from 'debug';
+import { Application } from 'express';
+import { Builder, By, until, WebDriver } from 'selenium-webdriver';
+import * as test from 'selenium-webdriver/testing';
+import * as SuperTest from 'supertest';
 
-import webdriver = require('selenium-webdriver');
-const By = webdriver.By;
-const until = webdriver.until;
-import test = require('selenium-webdriver/testing');
-const debug = dbg('swdb:inst-details-tests');
+import * as server from '../../app/server';
 
-import CommonTools = require('../../app/lib/CommonTools');
-const ctools = new CommonTools.CommonTools();
-let props: any = {};
-let supertest: any;
-props = ctools.getConfiguration();
+import * as data from '../data';
+import * as cookies from '../lib/cookies';
 
+
+const debug = Debug('swdb:inst-details-tests');
+
+const props = data.PROPS;
+
+const browser = process.env.SELENIUM_BROWSER || 'chrome';
 
 test.describe('Installations detail screen tests', () => {
-  let chromeDriver: any = null;
-  before('Prep DB', async () => {
+  let app: Application;
+  let driver: WebDriver;
+  let supertest: SuperTest.SuperTest<SuperTest.Test>;
+
+  before('Start Application', async () => {
     app = await server.start();
-    supertest = Supertest(app);
-    debug('Prep DB');
-    await testTools.clearTestCollections(debug);
-    await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
+    supertest = SuperTest(app);
   });
 
-  after('clear db', async () => {
-    debug('Clear DB');
-    // clear the test collection.
-    chromeDriver.quit();
-    await testTools.clearTestCollections(debug);
+  before('Init Database', async () => {
+    await data.initialize();
+  });
+
+  before('Init WebDriver',  async () => {
+    driver = await new Builder().forBrowser(browser).build();
+  });
+
+  after('Quit WebDriver', async () => {
+    await driver.quit();
+  });
+
+  after('Stop Application', async () => {
     await server.stop();
   });
 
-  test.it('should show search page with login button', function(this: any) {
-    chromeDriver = new webdriver.Builder()
-      .forBrowser('chrome')
-      .build();
-    chromeDriver.manage().window().setPosition(200, 0);
-
-    this.timeout(8000);
-    chromeDriver.get(props.webUrl + '#/inst/list');
-    chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
-    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
-      'Log in'), 5000);
+  test.it('should show search page with login button', async () =>  {
+    await driver.manage().window().setPosition(200, 0);
+    await driver.get(props.webUrl + '#/inst/list');
+    await driver.wait(until.elementLocated(By.id('usrBtn')));
+    await driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')), 'Log in'));
   });
 
-  test.it('login as test user', function(this: any, done: MochaDone) {
-    this.timeout(8000);
-    supertest
-    .get('/login')
-    .auth(props.test.username, props.test.password)
-    .timeout(8000)
-    .expect(302)
-    .end((err: Error, res: Express.Session) => {
-      if (err) {
-        done(err);
-      } else {
-        const Cookies = res.headers['set-cookie'].pop().split(';')[0];
-        debug('test login cookies: ' + Cookies);
-        const parts = Cookies.split('=');
-        debug('setting driver cookie ' + parts[0] + ' ' + parts[1]);
-        chromeDriver.manage().addCookie({name: parts[0], value: parts[1]});
-        done();
-      }
-    });
+  test.it('login as test user by setting session cookie and refreshing', async () => {
+    const res = await supertest.get('/login')
+      .auth(props.test.username, props.test.password).expect(302);
+    const sid = cookies.parseCookie(res, 'connect.sid');
+    debug('Set WebDriver cookie: %s', util.inspect(sid));
+    await driver.manage().addCookie(sid);
+    await driver.navigate().refresh();
   });
 
-  test.it('should show search page with username on logout button', function(this: any) {
-    this.timeout(8000);
-    chromeDriver.get(props.webUrl + '#/inst/list');
-    chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
-    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
-      props.test.username.toUpperCase()), 5000);
+  test.it('should show search page with username on logout button', async () => {
+    await driver.get(props.webUrl + '#/inst/list');
+    await driver.wait(until.elementLocated(By.id('usrBtn')));
+    await driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
+      props.test.username.toUpperCase()));
   });
 
-  test.it('should find a record', function(this: any) {
-    this.timeout(8000);
-    chromeDriver.get(props.webUrl + '#/inst/list');
-    chromeDriver.wait(until.elementLocated(By.id('hostSrch')), 8000)
-      .sendKeys('host2');
-    chromeDriver.wait(until.elementLocated(By.linkText('host2')),
-      8000);
+  test.it('should find a record', async () => {
+    await driver.get(props.webUrl + '#/inst/list');
+    await driver.wait(until.elementLocated(By.id('hostSrch'))).sendKeys('host2');
+    await driver.wait(until.elementLocated(By.linkText('host2')));
   });
 
-  test.it('should show the requested installation record title', () => {
-    chromeDriver.findElement(By.linkText('host2')).click();
-    chromeDriver.wait(until.titleIs('SWDB - Installation Details'), 5000);
+  test.it('should show the requested installation record title', async () => {
+    await driver.findElement(By.linkText('host2')).click();
+    await driver.wait(until.titleIs('SWDB - Installation Details'));
   });
 
-  test.it('should show the requested installation record user button', () => {
-    chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
-    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
-      props.test.username.toUpperCase()), 5000);
+  test.it('should show the requested installation record user button', async () => {
+    await driver.wait(until.elementLocated(By.id('usrBtn')));
+    await driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
+      props.test.username.toUpperCase()));
   });
 
-  test.it('should show the requested installation record host field', () => {
-    chromeDriver.wait(until.elementLocated(By.id('host')), 5000);
-    chromeDriver.findElement(By.id('host')).getAttribute('value').then((result: string) => {
-      expect(result).to.match(/host2/);
-    });
+  test.it('should show the requested installation record host field', async () => {
+    await driver.wait(until.elementLocated(By.id('host')));
+    const result = await driver.findElement(By.id('host')).getAttribute('value');
+    expect(result).to.match(/host2/);
   });
 
-  test.it('should show the requested installation record name field', () => {
-    chromeDriver.wait(until.elementLocated(By.id('name')), 5000);
-    chromeDriver.findElement(By.id('name')).getAttribute('value').then((result: string) => {
-      expect(result).to.equal('Installation name2');
-    });
+  test.it('should show the requested installation record name field', async () => {
+    await driver.wait(until.elementLocated(By.id('name')));
+    const result = await driver.findElement(By.id('name')).getAttribute('value');
+    expect(result).to.equal('Installation name2');
   });
 
-  test.it('should show the requested installation record software field', () => {
-    chromeDriver.wait(until.elementLocated(By.id('software')), 5000);
-    chromeDriver.findElement(By.id('software')).getAttribute('value').then((result: string) => {
-      expect(result).to.equal('BEAST / b4 / 0.2');
-    });
+  test.it('should show the requested installation record software field', async () => {
+    await driver.wait(until.elementLocated(By.id('software')));
+    const result = await driver.findElement(By.id('software')).getAttribute('value');
+    expect(result).to.equal('BEAST / b4 / 0.2');
   });
 
-  test.it('should show the requested installation record area field', () => {
-    chromeDriver.wait(until.elementLocated(By.id('area')), 5000);
-    chromeDriver.findElement(By.id('area')).getAttribute('value').then((result: string) => {
-      expect(result).to.match(/LS1/);
-    });
+  test.it('should show the requested installation record area field', async () => {
+    await driver.wait(until.elementLocated(By.id('area')));
+    const result = await driver.findElement(By.id('area')).getAttribute('value');
+    expect(result).to.match(/LS1/);
   });
 
-  test.it('should show the requested installation record status field', () => {
-    chromeDriver.wait(until.elementLocated(By.id('status')), 5000);
-    chromeDriver.findElement(By.id('status')).getAttribute('value').then((result: string) => {
-      expect(result).to.match(/Ready for install/);
-    });
+  test.it('should show the requested installation record status field', async () => {
+    await driver.wait(until.elementLocated(By.id('status')));
+    const result = await driver.findElement(By.id('status')).getAttribute('value');
+    expect(result).to.match(/Ready for install/);
   });
 
-  test.it('should show the requested installation record status date field', () => {
-    chromeDriver.wait(until.elementLocated(By.id('statusDate')), 5000);
-    chromeDriver.findElement(By.id('statusDate')).getAttribute('value').then((result: string) => {
-      expect(result).to.match(/9\/21\/2016/);
-    });
+  test.it('should show the requested installation record status date field', async () => {
+    await driver.wait(until.elementLocated(By.id('statusDate')));
+    const result = await driver.findElement(By.id('statusDate')).getAttribute('value');
+    expect(result).to.match(/9\/21\/2016/);
   });
 
-  test.it('should show the requested installation record vvResults field', () => {
-    chromeDriver.wait(until.elementLocated(By.id('vvResultsLoc')), 5000);
-    chromeDriver.findElement(By.id('vvResultsLoc')).getAttribute('value').then((result: string) => {
-      expect(result).to.match(/vvResultsLoc2/);
-    });
+  test.it('should show the requested installation record vvResults field', async () => {
+    await driver.wait(until.elementLocated(By.id('vvResultsLoc')));
+    const result = await driver.findElement(By.id('vvResultsLoc')).getAttribute('value');
+    expect(result).to.match(/vvResultsLoc2/);
   });
 
-  test.it('should show the requested installation record VV approval date field', () => {
-    chromeDriver.wait(until.elementLocated(By.id('vvApprovalDate')), 5000);
-    chromeDriver.findElement(By.id('vvApprovalDate')).getAttribute('value').then((result: string) => {
-      expect(result).to.match(/9\/22\/2016/);
-    });
+  test.it('should show the requested installation record VV approval date field', async () => {
+    await driver.wait(until.elementLocated(By.id('vvApprovalDate')));
+    const result = await driver.findElement(By.id('vvApprovalDate')).getAttribute('value');
+    expect(result).to.match(/9\/22\/2016/);
   });
 
-  test.it('should show the requested installation record drrs field', () => {
-    chromeDriver.wait(until.elementLocated(By.id('drrs')), 5000);
-    chromeDriver.findElement(By.id('drrs')).getAttribute('value').then((result: string) => {
-      expect(result).to.match(/^$/);
-    });
+  test.it('should show the requested installation record drrs field', async () => {
+    await driver.wait(until.elementLocated(By.id('drrs')));
+    const result = await driver.findElement(By.id('drrs')).getAttribute('value');
+    expect(result).to.match(/^$/);
   });
 });
