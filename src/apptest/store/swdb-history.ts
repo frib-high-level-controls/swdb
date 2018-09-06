@@ -1,77 +1,68 @@
-import Chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
-import Supertest = require('supertest');
-import Be = require('../../app/lib/Db');
-import TestTools = require('./TestTools');
-// const circJSON = require('circular-json');
+/**
+ * Test for Software history.
+ */
+import {expect} from 'chai';
+import * as Debug from 'debug';
+import { Application } from 'express';
 
-import CommonTools = require('../../app/lib/CommonTools');
-import server = require('../../app/server');
-const ctools = new CommonTools.CommonTools();
-let props: CommonTools.IProps;
-props = ctools.getConfiguration();
-import dbg = require('debug');
-const debug = dbg('swdb:swdb-history-tests');
-let app;
-let supertest: Supertest.SuperTest<Supertest.Test>;
+import * as SuperTest from 'supertest';
+
+import { Update } from '../../app/shared/history';
+
+import * as server from '../../app/server';
+
+import * as data from '../data';
+import * as cookies from '../lib/cookies';
+import * as TestTools from './TestTools';
+
+const debug = Debug('swdb:swdb-history-tests');
+
+const props = data.PROPS;
+
 const testTools = new TestTools.TestTools();
-Chai.use(chaiAsPromised);
-const expect = Chai.expect;
 
-let Cookies: string;
-//
+
 describe('History tests suite', () => {
-  before('Prep DB', async () => {
+  let app: Application;
+  let cookie: string;
+  let supertest: SuperTest.SuperTest<SuperTest.Test>;
+
+  before('Start Application', async () => {
     app = await server.start();
-    supertest = Supertest(app);
-    debug('Prep DB');
-    await testTools.clearTestCollections(debug);
-    await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
+    supertest = SuperTest(app);
   });
 
-  after('clear db', async () => {
-    debug('Clear DB');
-    // clear the test collection
-    await testTools.clearTestCollections(debug);
+  before('Init Database', async () => {
+    await data.initialize();
+  });
+
+  before('Get User Session Cookie', async () => {
+    const res = await supertest.get('/login')
+      .auth(props.test.username, props.test.password).expect(302);
+    cookie = cookies.parseCookie(res, 'connect.sid', true).cookieString();
+  });
+
+  after('Stop Application', async () => {
     await server.stop();
   });
 
-  // describe("Login and perform history tests", function () {
+
   const wrapper = { origId: null };
 
-  before('login as test user', function(this, done) {
-    this.timeout(8000);
-    supertest
-    .get('/login')
-    .auth(props.test.username, props.test.password)
-    .timeout(8000)
-    .expect(302)
-    .end((err, res) => {
-      if (err) {
-        done(err);
-      } else {
-        Cookies = res.header['set-cookie'].pop().split(';')[0];
-        debug('test login cookies: ' + JSON.stringify(Cookies));
-        done();
-      }
-    });
-  });
 
-  it('Has the blank history', async () => {
-    const cursor = Be.Db.swDoc.db.collections.history.find();
-    const count: number = await cursor.count();
-    debug('Found ' + count + ' history items');
-    expect(count).to.equal(0);
+  it('Check initial number of history updates', async () => {
+    const count = await Update.count({}).exec();
+    expect(count).to.equal(18);
   });
 
   it('Post a new record with correct history', (done) => {
     supertest
       .post('/api/v1/swdb')
       .set('Accept', 'application/json')
-      .set('Cookie', Cookies)
+      .set('Cookie', cookie)
       .send({ swName: 'Test Record', owner: 'Owner 1000', engineer: 'Engineer 1000',
        levelOfCare: 'LOW', status: 'DEVEL', statusDate: '2017-04-21' })
-      .end(async (err: Error, result: Supertest.Response) => {
+      .end(async (err, result) => {
         if (err) {
           done(err);
         } else {
@@ -97,9 +88,9 @@ describe('History tests suite', () => {
     supertest
       .put('/api/v1/swdb/' + wrapper.origId)
       .set('Accept', 'application/json')
-      .set('Cookie', Cookies)
+      .set('Cookie', cookie)
       .send( { owner: 'New test owner' } )
-      .end(async (err: Error, result: Supertest.Response) => {
+      .end(async (err, result) => {
         // get record id from the returned location and find records that match
         const id = result.header.location.split(/\//).pop();
         wrapper.origId = id;

@@ -1,252 +1,242 @@
-import chai = require('chai');
-import chaiAsPromised = require('chai-as-promised');
-import dbg = require('debug');
-import webdriver = require('selenium-webdriver');
-import test = require('selenium-webdriver/testing');
-import Supertest = require('supertest');
-chai.use(chaiAsPromised);
-import TestTools = require('./TestTools');
-const debug = dbg('swdb:swdb-details-tests');
+/**
+ * Tests for Software 'details' page.
+ */
+import * as util from 'util';
 
-import CommonTools = require('../../app/lib/CommonTools');
-import server = require('../../app/server');
-const ctools = new CommonTools.CommonTools();
-let props: any = {};
-props = ctools.getConfiguration();
-const testTools = new TestTools.TestTools();
-const By = webdriver.By;
-const  until = webdriver.until;
-const expect = chai.expect;
-let app;
-let supertest: any;
+import {expect} from 'chai';
+import * as Debug from 'debug';
+import { Application } from 'express';
+import { Builder, By, until, WebDriver } from 'selenium-webdriver';
+import * as test from 'selenium-webdriver/testing';
+import * as SuperTest from 'supertest';
+
+import * as server from '../../app/server';
+
+import * as data from '../data';
+import * as cookies from '../lib/cookies';
+
+
+const debug = Debug('swdb:swdb-details-tests');
+
+const props = data.PROPS;
+
+const browser = process.env.SELENIUM_BROWSER || 'chrome';
+
+
 
 test.describe('Preload db record tests', () => {
-  let chromeDriver: any;
+  let app: Application;
+  let driver: WebDriver;
+  let supertest: SuperTest.SuperTest<SuperTest.Test>;
 
-  before('Prep DB', async () => {
+  before('Start Application', async () => {
     app = await server.start();
-    supertest = Supertest(app);
-    debug('Prep DB');
-    await testTools.clearTestCollections(debug);
-    await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile, props.test.instTestDataFile);
+    supertest = SuperTest(app);
   });
 
-  after('clear db', async () => {
-    debug('Clear DB');
-    // clear the test collection.
-    chromeDriver.quit();
-    await testTools.clearTestCollections(debug);
+  before('Init Database', async () => {
+    await data.initialize();
+  });
+
+  before('Init WebDriver',  async () => {
+    driver = await new Builder().forBrowser(browser).build();
+  });
+
+  after('Quit WebDriver', async () => {
+    await driver.quit();
+  });
+
+  after('Stop Application', async () => {
     await server.stop();
   });
 
-  test.it('should show search page with login button', function(this: any) {
-    this.timeout(8000);
-
-    chromeDriver = new webdriver.Builder()
-      .forBrowser('chrome')
-      .build();
-    chromeDriver.manage().window().setPosition(200, 0);
-
-    chromeDriver.get(props.webUrl + '#/list');
-    chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
-    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
-      'Log in'), 5000);
+  test.it('should show search page with login button', () => {
+    driver.manage().window().setPosition(200, 0);
+    driver.get(props.webUrl + '#/list');
+    driver.wait(until.elementLocated(By.id('usrBtn')));
+    driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')), 'Log in'));
   });
 
-  test.it('login as test user', function(this: any, done: MochaDone) {
-    this.timeout(8000);
-    supertest
-    .get('/login')
-    .auth(props.test.username, props.test.password)
-    .timeout(8000)
-    .expect(302)
-    .end((err: Error, res: Express.Session) => {
-      if (err) {
-        done(err);
-      } else {
-        const Cookies = res.headers['set-cookie'].pop().split(';')[0];
-        debug('test login cookies: ' + Cookies);
-        const parts = Cookies.split('=');
-        debug('setting driver cookie ' + parts[0] + ' ' + parts[1]);
-        chromeDriver.manage().addCookie({name: parts[0], value: parts[1]});
-        done();
-      }
-    });
+  test.it('login as test user by setting session cookie and refreshing', async () => {
+    const res = await supertest.get('/login')
+      .auth(props.test.username, props.test.password).expect(302);
+    const sid = cookies.parseCookie(res, 'connect.sid');
+    debug('Set WebDriver cookie: %s', util.inspect(sid));
+    await driver.manage().addCookie(sid);
+    await driver.navigate().refresh();
   });
 
-  test.it('should show search page with username on logout button', function(this: any) {
-    this.timeout(8000);
-    chromeDriver.get(props.webUrl + '#/list');
-    chromeDriver.wait(until.elementLocated(By.id('usrBtn')), 5000);
-    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('usrBtn')),
-      props.test.username.toUpperCase()), 5000);
+  test.it('should show search page with username on logout button', () => {
+    driver.get(props.webUrl + '#/list');
+    driver.wait(until.elementLocated(By.id('usrBtn')));
+    driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
+      props.test.username.toUpperCase()));
   });
 
   test.it("should show 'Add software' button", () => {
-    chromeDriver.wait(until.elementLocated(By.id('addBtn')), 5000);
-    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('addBtn')),
-      'Add software'), 5000);
+    driver.wait(until.elementLocated(By.id('addBtn')));
+    driver.wait(until.elementTextContains(driver.findElement(By.id('addBtn')), 'Add software'));
   });
 
-  test.it('should show a known record', function(this: any) {
-    this.timeout(8000);
-    chromeDriver.wait(until.elementLocated(By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]')), 8000);
-    const link = chromeDriver.findElement(By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]'));
-    expect(Promise.resolve(link.getText())).to.eventually.equal('BEAST');
+  test.it('should show a known record', async () => {
+    driver.wait(until.elementLocated(By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]')));
+    const link = await driver.findElement(By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]'));
+    const linkText = await link.getText();
+    expect(linkText).to.equal('BEAST');
     link.click();
   });
 
   test.it('should show details record title', () => {
-    chromeDriver.wait(until.titleIs('SWDB - Details'), 5000);
+    driver.wait(until.titleIs('SWDB - Details'));
   });
 
   test.it("should show 'Back' button", () => {
-    chromeDriver.wait(until.elementLocated(By.id('cancelBtn')), 5000);
-    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('cancelBtn')),
-      'Back to search'), 5000);
+    driver.wait(until.elementLocated(By.id('cancelBtn')));
+    driver.wait(until.elementTextContains(driver.findElement(By.id('cancelBtn')),
+      'Back to search'));
   });
 
   test.it("should show 'Update' button", () => {
-    chromeDriver.wait(until.elementLocated(By.id('updateBtn')), 5000);
-    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('updateBtn')),
-      'Update this document'), 5000);
+    driver.wait(until.elementLocated(By.id('updateBtn')));
+    driver.wait(until.elementTextContains(driver.findElement(By.id('updateBtn')),
+      'Update this document'));
   });
 
   test.it("should show 'Software' tab", () => {
-    chromeDriver.wait(until.elementLocated(By.id('swTab')), 5000);
-    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('swTab')),
-      'Software'), 5000);
+    driver.wait(until.elementLocated(By.id('swTab')));
+    driver.wait(until.elementTextContains(driver.findElement(By.id('swTab')),
+      'Software'));
   });
 
   test.it("should show 'Installations' tab", () => {
-    chromeDriver.wait(until.elementLocated(By.id('instTab')), 5000);
-    chromeDriver.wait(until.elementTextContains(chromeDriver.findElement(By.id('instTab')),
-      'Installations'), 5000);
+    driver.wait(until.elementLocated(By.id('instTab')));
+    driver.wait(until.elementTextContains(driver.findElement(By.id('instTab')),
+      'Installations'));
   });
 
   test.it('should show the correct software name in details', () => {
-    chromeDriver.wait(until.elementLocated(By.id('swName')), 3000);
-    chromeDriver.findElement(By.id('swName')).getAttribute('value').then(
+    driver.wait(until.elementLocated(By.id('swName')));
+    driver.findElement(By.id('swName')).getAttribute('value').then(
       (text: string) => {
         expect(text).to.equal('BEAST');
       });
   });
 
   test.it('should show the correct software branch in details',  () => {
-    chromeDriver.wait(until.elementLocated(By.id('branch')), 3000);
-    chromeDriver.findElement(By.id('branch')).getAttribute('value').then(
+    driver.wait(until.elementLocated(By.id('branch')));
+    driver.findElement(By.id('branch')).getAttribute('value').then(
       (text: string) => {
         expect(text).to.equal('b4');
       });
   });
 
   test.it('should show the correct software version in details',  () => {
-    chromeDriver.wait(until.elementLocated(By.id('version')), 3000);
-    chromeDriver.findElement(By.id('version')).getAttribute('value').then(
+    driver.wait(until.elementLocated(By.id('version')));
+    driver.findElement(By.id('version')).getAttribute('value').then(
       (text: string) => {
         expect(text).to.equal('0.2');
       });
   });
 
   test.it('should show the correct description in details', () => {
-    chromeDriver.wait(until.elementLocated(By.id('desc')), 3000);
-    chromeDriver.findElement(By.id('desc')).getAttribute('value').then(
+    driver.wait(until.elementLocated(By.id('desc')));
+    driver.findElement(By.id('desc')).getAttribute('value').then(
       (text: string) => {
         expect(text).to.equal('');
       });
   });
 
   test.it('should show the correct description doc in details', () => {
-    chromeDriver.wait(until.elementLocated(By.id('descDocLoc')), 3000);
-    chromeDriver.findElement(By.id('descDocLoc')).getAttribute('value').then(
+    driver.wait(until.elementLocated(By.id('descDocLoc')));
+    driver.findElement(By.id('descDocLoc')).getAttribute('value').then(
       (text: string) => {
         expect(text).to.equal('');
       });
   });
 
   test.it('should show the correct design description doc in details', () => {
-    chromeDriver.wait(until.elementLocated(By.id('designDescDocLoc')), 3000);
-    chromeDriver.findElement(By.id('designDescDocLoc')).getAttribute('value').then(
+    driver.wait(until.elementLocated(By.id('designDescDocLoc')));
+    driver.findElement(By.id('designDescDocLoc')).getAttribute('value').then(
       (text: string) => {
         expect(text).to.equal('');
       });
   });
 
   test.it('should show the correct owner in details', () => {
-    chromeDriver.wait(until.elementLocated(By.id('owner')), 3000);
-    chromeDriver.findElement(By.id('owner')).getAttribute('value').then(
+    driver.wait(until.elementLocated(By.id('owner')));
+    driver.findElement(By.id('owner')).getAttribute('value').then(
       (text: string) => {
         expect(text).to.equal('Berryman');
       });
   });
 
   test.it('should show the correct engineer in details', () => {
-    chromeDriver.wait(until.elementLocated(By.id('engineer')), 3000);
-    chromeDriver.findElement(By.id('engineer')).getAttribute('value').then(
+    driver.wait(until.elementLocated(By.id('engineer')));
+    driver.findElement(By.id('engineer')).getAttribute('value').then(
       (text: string) => {
         expect(text).to.equal('');
       });
   });
 
   test.it('should show the correct levelOfCare in details', () => {
-    chromeDriver.wait(until.elementLocated(By.id('levelOfCare')), 3000);
-    chromeDriver.findElement(By.id('levelOfCare')).getAttribute('value').then(
+    driver.wait(until.elementLocated(By.id('levelOfCare')));
+    driver.findElement(By.id('levelOfCare')).getAttribute('value').then(
       (text: string) => {
         expect(text).to.equal('Medium');
       });
   });
 
   test.it('should show the correct status in details', () => {
-    chromeDriver.wait(until.elementLocated(By.id('status')), 3000);
-    chromeDriver.findElement(By.id('status')).getAttribute('value').then(
+    driver.wait(until.elementLocated(By.id('status')));
+    driver.findElement(By.id('status')).getAttribute('value').then(
       (text: string) => {
         expect(text).to.equal('Development');
       });
   });
 
   test.it('should show the correct statusDate in details', () => {
-    chromeDriver.wait(until.elementLocated(By.id('statusDate')), 3000);
-    chromeDriver.findElement(By.id('statusDate')).getAttribute('value').then(
+    driver.wait(until.elementLocated(By.id('statusDate')));
+    driver.findElement(By.id('statusDate')).getAttribute('value').then(
       (text: string) => {
         expect(text).to.equal('7/7/1970');
       });
   });
 
   test.it('should show the correct platforms in details', () => {
-    chromeDriver.wait(until.elementLocated(By.id('platforms')), 3000);
-    chromeDriver.findElement(By.id('platforms')).getAttribute('value').then(
+    driver.wait(until.elementLocated(By.id('platforms')));
+    driver.findElement(By.id('platforms')).getAttribute('value').then(
       (text: string) => {
         expect(text).to.equal('');
       });
   });
 
   test.it('should show the correct vvProcLoc in details', () => {
-    chromeDriver.wait(until.elementLocated(By.id('vvProcLoc')), 3000);
-    chromeDriver.findElement(By.id('vvProcLoc')).getAttribute('value').then(
+    driver.wait(until.elementLocated(By.id('vvProcLoc')));
+    driver.findElement(By.id('vvProcLoc')).getAttribute('value').then(
       (text: string) => {
         expect(text).to.equal('');
       });
   });
 
   test.it('should show the correct vvResultsLoc in details', () => {
-    chromeDriver.wait(until.elementLocated(By.id('vvResultsLoc')), 3000);
-    chromeDriver.findElement(By.id('vvResultsLoc')).getAttribute('value').then(
+    driver.wait(until.elementLocated(By.id('vvResultsLoc')));
+    driver.findElement(By.id('vvResultsLoc')).getAttribute('value').then(
       (text: string) => {
         expect(text).to.equal('');
       });
   });
 
   test.it('should show the correct versionControl in details', () => {
-    chromeDriver.wait(until.elementLocated(By.id('versionControl')), 3000);
-    chromeDriver.findElement(By.id('versionControl')).getAttribute('value').then(
+    driver.wait(until.elementLocated(By.id('versionControl')));
+    driver.findElement(By.id('versionControl')).getAttribute('value').then(
       (text: string) => {
         expect(text).to.equal('');
       });
   });
 
   test.it('should show the correct versionControlLoc in details', () => {
-    chromeDriver.wait(until.elementLocated(By.id('versionControlLoc')), 3000);
-    chromeDriver.findElement(By.id('versionControlLoc')).getAttribute('value').then(
+    driver.wait(until.elementLocated(By.id('versionControlLoc')));
+    driver.findElement(By.id('versionControlLoc')).getAttribute('value').then(
       (text: string) => {
         expect(text).to.equal('');
       });

@@ -1,76 +1,66 @@
-import chai = require('chai');
-import dbg = require('debug');
-import expect2 = require('expect');
-import Supertest = require('supertest');
-import TestTools = require('./TestTools');
+/**
+ * Test for Software API specification.
+ */
+import { assert, expect } from 'chai';
+import * as Debug from 'debug';
+import { Application } from 'express';
 
-import CommonTools = require('../../app/lib/CommonTools');
-import Be = require('../../app/lib/Db');
-import server = require('../../app/server');
-const debug = dbg('swdb:swdb-spec-tests');
+import * as SuperTest from 'supertest';
 
-const expect = chai.expect;
-const ctools = new CommonTools.CommonTools();
-let props: any = {};
-props = ctools.getConfiguration();
-const testTools = new TestTools.TestTools();
-let supertest: any;
-let app;
-let Cookies: any;
-//
+import { Update } from '../../app/shared/history';
+
+import * as server from '../../app/server';
+
+import * as data from '../data';
+import * as cookies from '../lib/cookies';
+
+const debug = Debug('swdb:swdb-spec-tests');
+
+const props = data.PROPS;
+
+const historyCount = data.SOFTWARES.length + data.SWINSTALLS.length;
+
+
 describe('app', () => {
-  before('Prep DB', async function() {
-    this.timeout(8000);
+  let app: Application;
+  let cookie: string;
+  let supertest: SuperTest.SuperTest<SuperTest.Test>;
+
+  before('Start Application', async () => {
     app = await server.start();
-    supertest = Supertest(app);
-    debug('Prep DB');
-    await testTools.clearTestCollections(debug);
-    await testTools.loadTestCollectionsStandard(debug, props.test.swTestDataFile,
-      props.test.instTestDataFile);
+    supertest = SuperTest(app);
   });
 
-  after('clear db', async () => {
-    debug('Clear DB');
-    // clear the test collection
-    await testTools.clearTestCollections(debug);
+  before('Init Database', async () => {
+    await data.initialize();
+  });
+
+  before('Get User Session Cookie', async () => {
+    const res = await supertest.get('/login')
+      .auth(props.test.username, props.test.password).expect(302);
+    cookie = cookies.parseCookie(res, 'connect.sid', true).cookieString();
+  });
+
+  after('Stop Application', async () => {
     await server.stop();
   });
 
-  before('login as test user', function(done) {
-    this.timeout(8000);
-    supertest
-    .get('/login')
-    .auth(props.test.username, props.test.password)
-    .timeout(8000)
-    .expect(302)
-    .end((err: Error, res: Express.Session) => {
-      if (err) {
-         done(err);
-      } else {
-        Cookies = res.headers['set-cookie'].pop().split(';')[0];
-        debug('test login cookies: ' + JSON.stringify(Cookies));
-        done();
-      }
-    });
-  });
 
   // web facing tests
-  //
   it('Respond with welcome', (done) => {
     supertest
     .get('/')
     .expect(200)
-    .end((err: Error, res: Express.Session) => {
-      expect(res.res.text).to.match(/SWDB \(Prototype Interface\)/);
+    .end((err, res) => {
+      expect(res.text).to.match(/SWDB \(Prototype Interface\)/);
       done(err);
     });
   });
-  it('Returns all sw records', function(done) {
-    this.timeout(5000);
+  it('Returns all sw records', (done) => {
     supertest
     .get('/api/v1/swdb')
     .expect(200)
-    .end((err: Error, res: Express.Session) => {
+    .end((err, res) => {
       if (err) {
         done(err);
       } else {
@@ -80,12 +70,11 @@ describe('app', () => {
     });
   });
 
-  it('Returns FORG user records', function(done) {
-    this.timeout(5000);
+  it('Returns FORG user records', (done) => {
     supertest
     .get('/api/v1/swdb/forgUsers')
     .expect(200)
-    .end((err: Error, res: Express.Session) => {
+    .end((err, res) => {
       if (err) {
         done(err);
       } else {
@@ -106,12 +95,11 @@ describe('app', () => {
     });
   });
 
-  it('Returns FORG group records', function(done) {
-    this.timeout(5000);
+  it('Returns FORG group records', (done) => {
     supertest
     .get('/api/v1/swdb/forgGroups')
     .expect(200)
-    .end((err: Error, res: Express.Session) => {
+    .end((err, res) => {
       if (err) {
         done(err);
       } else {
@@ -132,12 +120,11 @@ describe('app', () => {
     });
   });
 
-  it('Returns FORG area records', function(done) {
-    this.timeout(5000);
+  it('Returns FORG area records', (done) => {
     supertest
     .get('/api/v1/swdb/forgAreas')
     .expect(200)
-    .end((err: Error, res: Express.Session) => {
+    .end((err, res) => {
       if (err) {
         done(err);
       } else {
@@ -159,17 +146,16 @@ describe('app', () => {
   });
 
   it('Has the blank history', async () => {
-      const cursor = Be.Db.swDoc.db.collections.history.find();
-      const count = await cursor.count();
-      debug('Found ' + count + ' items');
-      expect(count).to.equal(0);
+    const count = await Update.count({}).exec();
+    debug('Found ' + count + ' items');
+    expect(count).to.equal(historyCount);
   });
 
   it('Returns location header posting new record', (done) => {
     supertest
     .post('/api/v1/swdb')
     .set('Accept', 'application/json')
-    .set('Cookie', [Cookies])
+    .set('Cookie', cookie)
       .send({swName: 'Header Test Record',
        owner: 'Owner 1000',
        engineer: 'Engineer 1000',
@@ -177,42 +163,38 @@ describe('app', () => {
        status: 'DEVEL',
        statusDate: '2017-04-21T00:00:00.000Z'})
     .expect(201)
-    .end((err: Error, result: Express.Session) => {
+    .end((err, result) => {
       if (err) {
         debug('result: ' + JSON.stringify(result));
         done(err);
       } else {
         debug('result: ' + JSON.stringify(result));
-        if (result.headers.location.match(/^.*\/api\/v1\/swdb\/[0-9a-fA-F]{24}$/g)) {
+        if (result.header.location.match(/^.*\/api\/v1\/swdb\/[0-9a-fA-F]{24}$/g)) {
           done();
         } else {
-          done(new Error('Location header is not set' + JSON.stringify(result.headers.location)));
+          done(new Error('Location header is not set' + JSON.stringify(result.header.location)));
         }
       }
     });
   });
 
   it('Has the correct number of history entries', async () => {
-    const cursor = Be.Db.swDoc.db.collections.history.find();
-    const count: number = await cursor.count();
+    const count = await Update.count({}).exec();
     debug('Found ' + count + ' items');
-    expect(count).to.equal(1);
+    expect(count).to.equal(historyCount + 1);
   });
 
   it('Has the swName history entry', async () => {
-    const cursor = Be.Db.swDoc.db.collections.history.find();
-    // try {
-    for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
-      debug('Document history: ' + JSON.stringify(doc));
-      expect(doc.paths[0].name = 'swName');
-    }
+    const updates = await Update.find().exec();
+    const doc = updates[updates.length - 1];
+    debug('Document history: ' + JSON.stringify(doc));
+    expect(doc.paths[0].name).to.equal('swName');
   });
 
   it('Has the correct swName history entry', async () => {
-    const cursor = Be.Db.swDoc.db.collections.history.find();
-    for (let doc = await cursor.next(); doc != null; doc = await cursor.next()) {
-      expect(doc.paths[0].value = 'Header Test Record');
-    }
+    const updates = await Update.find().exec();
+    const doc = updates[updates.length - 1];
+    expect(doc.paths[0].value).to.equal('Header Test Record');
   });
 
 
@@ -222,14 +204,14 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
-          res = JSON.parse(res.text);
-          for (let i = 0, iLen = res.length; i < iLen; i++) {
-            if (res[i].swName === 'Header Test Record') {
-              wrapper.origId = res[i]._id;
+          const result = JSON.parse(res.text);
+          for (let i = 0, iLen = result.length; i < iLen; i++) {
+            if (result[i].swName === 'Header Test Record') {
+              wrapper.origId = result[i]._id;
             }
           }
           done();
@@ -241,7 +223,7 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
@@ -258,19 +240,19 @@ describe('app', () => {
       supertest
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
-        .set('Cookie', [Cookies])
+        .set('Cookie', cookie)
         .send({ owner: 'Header owner' })
         .expect(200)
-        .end((err: Error, result: Express.Session) => {
+        .end((err, result) => {
           if (err) {
             done(err);
           } else {
             const re = new RegExp('^.*/api/v1/swdb/' + wrapper.origId + '$');
-            if (result.headers.location.match(re)) {
-              debug('Location: ' + result.headers.location);
+            if (result.header.location.match(re)) {
+              debug('Location: ' + result.header.location);
               done();
             } else {
-              done(new Error('Location header is not set' + JSON.stringify(result.headers.location)));
+              done(new Error('Location header is not set' + JSON.stringify(result.header.location)));
             }
           }
         });
@@ -280,19 +262,19 @@ describe('app', () => {
       supertest
         .patch('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
-        .set('Cookie', [Cookies])
+        .set('Cookie', cookie)
         .send({ owner: 'Header owner2' })
         .expect(200)
-        .end((err: Error, result: Express.Session) => {
+        .end((err, result) => {
           if (err) {
             done(err);
           } else {
             const re = new RegExp('^.*/api/v1/swdb/' + wrapper.origId + '$');
-            if (result.headers.location.match(re)) {
-              debug('Location: ' + result.headers.location);
+            if (result.header.location.match(re)) {
+              debug('Location: ' + result.header.location);
               done();
             } else {
-              done(new Error('Location header is not set' + JSON.stringify(result.headers.location)));
+              done(new Error('Location header is not set' + JSON.stringify(result.header.location)));
             }
           }
         });
@@ -312,14 +294,14 @@ describe('app', () => {
          status: 'DEVEL',
          statusDate: '2017-04-21T00:00:00.000Z' })
         .set('Accept', 'application/json')
-        .set('Cookie', [Cookies])
+        .set('Cookie', cookie)
         .expect(201)
-        .end((err: Error, result: Express.Session) => {
+        .end((err, result) => {
           if (err) {
             done(err);
           } else {
-            debug('Location: ' + result.headers.location);
-            const urlParts = result.headers.location.split('/');
+            debug('Location: ' + result.header.location);
+            const urlParts = result.header.location.split('/');
             wrapper.origId = urlParts[urlParts.length - 1];
             done();
           }
@@ -329,10 +311,10 @@ describe('app', () => {
       supertest
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
-        .set('Cookie', [Cookies])
+        .set('Cookie', cookie)
         .send({ owner: 'Hist2 owner' })
         .expect(200)
-        .end((err: Error, result: Express.Session) => {
+        .end((err, result) => {
           if (err) {
             done(err);
           } else {
@@ -344,10 +326,10 @@ describe('app', () => {
       supertest
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
-        .set('Cookie', [Cookies])
+        .set('Cookie', cookie)
         .send({ owner: 'Hist3 owner' })
         .expect(200)
-        .end((err: Error, result: Express.Session) => {
+        .end((err, result) => {
           if (err) {
             done(err);
           } else {
@@ -359,10 +341,10 @@ describe('app', () => {
       supertest
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
-        .set('Cookie', [Cookies])
+        .set('Cookie', cookie)
         .send({ owner: 'Hist4 owner' })
         .expect(200)
-        .end((err: Error, result: Express.Session) => {
+        .end((err, result) => {
           if (err) {
             done(err);
           } else {
@@ -374,10 +356,10 @@ describe('app', () => {
       supertest
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
-        .set('Cookie', [Cookies])
+        .set('Cookie', cookie)
         .send({ owner: 'Hist5 owner' })
         .expect(200)
-        .end((err: Error, result: Express.Session) => {
+        .end((err, result) => {
           if (err) {
             done(err);
           } else {
@@ -389,10 +371,10 @@ describe('app', () => {
       supertest
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
-        .set('Cookie', [Cookies])
+        .set('Cookie', cookie)
         .send({ owner: 'Hist6 owner' })
         .expect(200)
-        .end((err: Error, result: Express.Session) => {
+        .end((err, result) => {
           if (err) {
             done(err);
           } else {
@@ -404,10 +386,10 @@ describe('app', () => {
       supertest
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
-        .set('Cookie', [Cookies])
+        .set('Cookie', cookie)
         .send({ owner: 'Hist7 owner' })
         .expect(200)
-        .end((err: Error, result: Express.Session) => {
+        .end((err, result) => {
           if (err) {
             done(err);
           } else {
@@ -420,7 +402,7 @@ describe('app', () => {
       supertest
         .get('/api/v1/swdb/hist/' + wrapper.origId)
         .expect(200)
-        .end( (err: Error, res: Express.Session) => {
+        .end((err, res) => {
           if (err) {
             debug('Err history (api test): ' + JSON.stringify(err, null, 2));
             done(err);
@@ -441,7 +423,7 @@ describe('app', () => {
       supertest
         .get('/api/v1/swdb/hist/' + wrapper.origId + '?limit=1&skip=1')
         .expect(200)
-        .end((err: Error, res: Express.Session) => {
+        .end((err, res) => {
           if (err) {
             debug('Err history (api test): ' + JSON.stringify(err, null, 2));
             done(err);
@@ -464,7 +446,7 @@ describe('app', () => {
     supertest
     .post('/api/v1/swdb')
     .set('Accept', 'application/json')
-    .set('Cookie', [Cookies])
+    .set('Cookie', cookie)
       .send({swName: 'Test Record',
        owner: 'Owner 1000',
        engineer: 'Engineer 1000',
@@ -472,8 +454,8 @@ describe('app', () => {
        status: 'DEVEL',
        statusDate: '2017-04-21T00:00:00.000Z'})
     .expect(201)
-    .end((err: Error, result: Express.Session) => {
-      debug('Location: ' + result.headers.location);
+    .end((err, result) => {
+      debug('Location: ' + result.header.location);
       done();
     });
   });
@@ -488,8 +470,8 @@ describe('app', () => {
      status: 'DEVEL',
      statusDate: '2017-04-21T00:00:00.000Z'})
     .set('Accept', 'application/json')
-    .set('Cookie', [Cookies])
-    .end((err: Error, result: Express.Session) => {
+    .set('Cookie', cookie)
+    .end((err, result) => {
       if (err) {
         done(err);
       } else {
@@ -513,13 +495,13 @@ describe('app', () => {
      status: 'DEVEL',
      statusDate: '1970-01-01T00:00:00.000Z'})
     .set('Accept', 'application/json')
-    .set('Cookie', [Cookies])
+    .set('Cookie', cookie)
     .expect(201)
-    .end((err: Error, result: Express.Session) => {
+    .end((err, result) => {
       if (err) {
         done(err);
       } else {
-        debug('Location: ' + result.headers.location);
+        debug('Location: ' + result.header.location);
         done();
       }
     });
@@ -531,14 +513,14 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
-          res = JSON.parse(res.text);
-          for (let i = 0, iLen = res.length; i < iLen; i++) {
-            if (res[i].swName === 'Test Record') {
-              wrapper.origId = res[i]._id;
+          const result = JSON.parse(res.text);
+          for (let i = 0, iLen = result.length; i < iLen; i++) {
+            if (result[i].swName === 'Test Record') {
+              wrapper.origId = result[i]._id;
             }
           }
           done();
@@ -550,7 +532,7 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
@@ -574,13 +556,13 @@ describe('app', () => {
      status: 'DEVEL',
      statusDate: '2017-04-21T00:00:00.000Z'})
     .set('Accept', 'application/json')
-    .set('Cookie', [Cookies])
+    .set('Cookie', cookie)
     .expect(201)
-    .end((err: Error, result: Express.Session) => {
+    .end((err, result) => {
       if (err) {
         done(err);
       } else {
-        debug('Location: ' + result.headers.location);
+        debug('Location: ' + result.header.location);
         done();
       }
     });
@@ -592,14 +574,14 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
-          res = JSON.parse(res.text);
-          for (let i = 0, iLen = res.length; i < iLen; i++) {
-            if (res[i].swName === 'Desc Test Record') {
-              wrapper.origId = res[i]._id;
+          const result = JSON.parse(res.text);
+          for (let i = 0, iLen = result.length; i < iLen; i++) {
+            if (result[i].swName === 'Desc Test Record') {
+              wrapper.origId = result[i]._id;
             }
           }
           done();
@@ -611,7 +593,7 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
@@ -635,13 +617,13 @@ describe('app', () => {
      status: 'DEVEL',
      statusDate: '2017-04-21T00:00:00.000Z'})
     .set('Accept', 'application/json')
-    .set('Cookie', [Cookies])
+    .set('Cookie', cookie)
     .expect(201)
-    .end((err: Error, result: Express.Session) => {
+    .end((err, result) => {
       if (err) {
         done(err);
       } else {
-        debug('Location: ' + result.headers.location);
+        debug('Location: ' + result.header.location);
         done();
       }
     });
@@ -653,14 +635,14 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
-          res = JSON.parse(res.text);
-          for (let i = 0, iLen = res.length; i < iLen; i++) {
-            if (res[i].swName === 'Engineer Test Record') {
-              wrapper.origId = res[i]._id;
+          const result = JSON.parse(res.text);
+          for (let i = 0, iLen = result.length; i < iLen; i++) {
+            if (result[i].swName === 'Engineer Test Record') {
+              wrapper.origId = result[i]._id;
             }
           }
           done();
@@ -672,7 +654,7 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
@@ -698,13 +680,13 @@ describe('app', () => {
      status: 'DEVEL',
      statusDate: '2017-04-21T00:00:00.000Z'})
     .set('Accept', 'application/json')
-    .set('Cookie', [Cookies])
+    .set('Cookie', cookie)
     .expect(201)
-    .end((err: Error, result: Express.Session) => {
+    .end((err, result) => {
       if (err) {
         done(err);
       } else {
-        debug('Location: ' + result.headers.location);
+        debug('Location: ' + result.header.location);
         done();
       }
     });
@@ -716,14 +698,14 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
-          res = JSON.parse(res.text);
-          for (let i = 0, iLen = res.length; i < iLen; i++) {
-            if (res[i].swName === 'versionControlLoc Test Record') {
-              wrapper.origId = res[i]._id;
+          const result = JSON.parse(res.text);
+          for (let i = 0, iLen = result.length; i < iLen; i++) {
+            if (result[i].swName === 'versionControlLoc Test Record') {
+              wrapper.origId = result[i]._id;
             }
           }
           done();
@@ -735,7 +717,7 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
@@ -759,13 +741,13 @@ describe('app', () => {
      status: 'DEVEL',
      statusDate: '2017-04-21T00:00:00.000Z'})
     .set('Accept', 'application/json')
-    .set('Cookie', [Cookies])
+    .set('Cookie', cookie)
     .expect(201)
-    .end((err: Error, result: Express.Session) => {
+    .end((err, result) => {
       if (err) {
         done(err);
       } else {
-        debug('Location: ' + result.headers.location);
+        debug('Location: ' + result.header.location);
         done();
       }
     });
@@ -777,14 +759,14 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
-          res = JSON.parse(res.text);
-          for (let i = 0, iLen = res.length; i < iLen; i++) {
-            if (res[i].swName === 'designDescDocLoc Test Record') {
-              wrapper.origId = res[i]._id;
+          const result = JSON.parse(res.text);
+          for (let i = 0, iLen = result.length; i < iLen; i++) {
+            if (result[i].swName === 'designDescDocLoc Test Record') {
+              wrapper.origId = result[i]._id;
             }
           }
           done();
@@ -796,7 +778,7 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
@@ -820,13 +802,13 @@ describe('app', () => {
      status: 'DEVEL',
      statusDate: '2017-04-21T00:00:00.000Z'})
     .set('Accept', 'application/json')
-    .set('Cookie', [Cookies])
+    .set('Cookie', cookie)
     .expect(201)
-    .end((err: Error, result: Express.Session) => {
+    .end((err, result) => {
       if (err) {
         done(err);
       } else {
-        debug('Location: ' + result.headers.location);
+        debug('Location: ' + result.header.location);
         done();
       }
     });
@@ -838,14 +820,14 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
-          res = JSON.parse(res.text);
-          for (let i = 0, iLen = res.length; i < iLen; i++) {
-            if (res[i].swName === 'descDocLoc Test Record') {
-              wrapper.origId = res[i]._id;
+          const result = JSON.parse(res.text);
+          for (let i = 0, iLen = result.length; i < iLen; i++) {
+            if (result[i].swName === 'descDocLoc Test Record') {
+              wrapper.origId = result[i]._id;
             }
           }
           done();
@@ -857,7 +839,7 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
@@ -883,13 +865,13 @@ describe('app', () => {
       statusDate: '1970-01-01T00:00:00.000Z',
     })
     .set('Accept', 'application/json')
-    .set('Cookie', [Cookies])
+    .set('Cookie', cookie)
     .expect(201)
-    .end((err: Error, result: Express.Session) => {
+    .end((err, result) => {
       if (err) {
         done(err);
       } else {
-        debug('Location: ' + result.headers.location);
+        debug('Location: ' + result.header.location);
         done();
       }
     });
@@ -901,14 +883,14 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
-          res = JSON.parse(res.text);
-          for (let i = 0, iLen = res.length; i < iLen; i++) {
-            if (res[i].swName === 'vvProcLoc Test Record') {
-              wrapper.origId = res[i]._id;
+          const result = JSON.parse(res.text);
+          for (let i = 0, iLen = result.length; i < iLen; i++) {
+            if (result[i].swName === 'vvProcLoc Test Record') {
+              wrapper.origId = result[i]._id;
             }
           }
           done();
@@ -920,7 +902,7 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
@@ -947,13 +929,13 @@ describe('app', () => {
       status: 'DEVEL',
       statusDate: '1970-01-01T00:00:00.000Z'})
     .set('Accept', 'application/json')
-    .set('Cookie', [Cookies])
+    .set('Cookie', cookie)
     .expect(201)
-    .end((err: Error, result: Express.Session) => {
+    .end((err, result) => {
       if (err) {
         done(err);
       } else {
-        debug('Location: ' + result.headers.location);
+        debug('Location: ' + result.header.location);
         done();
       }
     });
@@ -965,14 +947,14 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
-          res = JSON.parse(res.text);
-          for (let i = 0, iLen = res.length; i < iLen; i++) {
-            if (res[i].swName === 'vvResultsLoc Test Record') {
-              wrapper.origId = res[i]._id;
+          const result = JSON.parse(res.text);
+          for (let i = 0, iLen = result.length; i < iLen; i++) {
+            if (result[i].swName === 'vvResultsLoc Test Record') {
+              wrapper.origId = result[i]._id;
             }
           }
           done();
@@ -984,7 +966,7 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
@@ -1009,13 +991,13 @@ describe('app', () => {
      status: 'DEVEL',
      statusDate: '1970-01-01T00:00:00.000Z'})
     .set('Accept', 'application/json')
-    .set('Cookie', [Cookies])
+    .set('Cookie', cookie)
     .expect(201)
-    .end((err: Error, result: Express.Session) => {
+    .end((err, result) => {
       if (err) {
         done(err);
       } else {
-        debug('Location: ' + result.headers.location);
+        debug('Location: ' + result.header.location);
         done();
       }
     });
@@ -1027,14 +1009,14 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
-          res = JSON.parse(res.text);
-          for (let i = 0, iLen = res.length; i < iLen; i++) {
-            if (res[i].swName === 'branch Test Record') {
-              wrapper.origId = res[i]._id;
+          const result = JSON.parse(res.text);
+          for (let i = 0, iLen = result.length; i < iLen; i++) {
+            if (result[i].swName === 'branch Test Record') {
+              wrapper.origId = result[i]._id;
             }
           }
           done();
@@ -1046,7 +1028,7 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
@@ -1070,13 +1052,13 @@ describe('app', () => {
      status: 'DEVEL',
      statusDate: '1970-01-01T00:00:00.000Z'})
     .set('Accept', 'application/json')
-    .set('Cookie', [Cookies])
+    .set('Cookie', cookie)
     .expect(201)
-    .end((err: Error, result: Express.Session) => {
+    .end((err, result) => {
       if (err) {
         done(err);
       } else {
-        debug('Location: ' + result.headers.location);
+        debug('Location: ' + result.header.location);
         done();
       }
     });
@@ -1088,14 +1070,14 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
-          res = JSON.parse(res.text);
-          for (let i = 0, iLen = res.length; i < iLen; i++) {
-            if (res[i].swName === 'versionControl Test Record') {
-              wrapper.origId = res[i]._id;
+          const result = JSON.parse(res.text);
+          for (let i = 0, iLen = result.length; i < iLen; i++) {
+            if (result[i].swName === 'versionControl Test Record') {
+              wrapper.origId = result[i]._id;
             }
           }
           done();
@@ -1107,7 +1089,7 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
@@ -1131,13 +1113,13 @@ describe('app', () => {
      status: 'DEVEL',
      statusDate: '1970-01-01T00:00:00.000Z'})
     .set('Accept', 'application/json')
-    .set('Cookie', [Cookies])
+    .set('Cookie', cookie)
     .expect(201)
-    .end((err: Error, result: Express.Session) => {
+    .end((err, result) => {
       if (err) {
         done(err);
       } else {
-        debug('Location: ' + result.headers.location);
+        debug('Location: ' + result.header.location);
         done();
       }
     });
@@ -1149,14 +1131,14 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
-          res = JSON.parse(res.text);
-          for (let i = 0, iLen = res.length; i < iLen; i++) {
-            if (res[i].swName === 'previous Test Record') {
-              wrapper.origId = res[i]._id;
+          const result = JSON.parse(res.text);
+          for (let i = 0, iLen = result.length; i < iLen; i++) {
+            if (result[i].swName === 'previous Test Record') {
+              wrapper.origId = result[i]._id;
             }
           }
           done();
@@ -1168,7 +1150,7 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
@@ -1188,14 +1170,14 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
-          res = JSON.parse(res.text);
-          for (let i = 0, iLen = res.length; i < iLen; i++) {
-            if (res[i].swName === 'Test Record2') {
-              wrapper.origId = res[i]._id;
+          const result = JSON.parse(res.text);
+          for (let i = 0, iLen = result.length; i < iLen; i++) {
+            if (result[i].swName === 'Test Record2') {
+              wrapper.origId = result[i]._id;
             }
           }
           done();
@@ -1207,13 +1189,13 @@ describe('app', () => {
       supertest
         .put('/api/v1/swdb/' + wrapper.origId)
         .send({ swName: 'Test Record3' })
-        .set('Cookie', [Cookies])
+        .set('Cookie', cookie)
         .expect(200)
-        .end((err: Error, result: Express.Session) => {
+        .end((err, result) => {
           if (err) {
             done(err);
           } else {
-            debug('Location: ' + result.headers.location);
+            debug('Location: ' + result.header.location);
             done();
           }
         });
@@ -1223,7 +1205,7 @@ describe('app', () => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
@@ -1247,13 +1229,13 @@ describe('app', () => {
           statusDate: '1970-01-01T00:00:00.000Z',
         })
         .set('Accept', 'application/json')
-        .set('Cookie', [Cookies])
+        .set('Cookie', cookie)
         .expect(201)
-        .end((err: Error, result: Express.Session) => {
+        .end((err, result) => {
           if (err) {
             done(err);
           } else {
-            debug('Location: ' + result.headers.location);
+            debug('Location: ' + result.header.location);
             done();
           }
         });
@@ -1265,14 +1247,14 @@ describe('app', () => {
         supertest
           .get('/api/v1/swdb')
           .expect(200)
-          .end((err: Error, res: Express.Session) => {
+          .end((err, res) => {
             if (err) {
               done(err);
             } else {
-              res = JSON.parse(res.text);
-              for (let i = 0, iLen = res.length; i < iLen; i++) {
-                if (res[i].swName === 'Rule 1 Test Record') {
-                  wrapper.origId = res[i]._id;
+              const result = JSON.parse(res.text);
+              for (let i = 0, iLen = result.length; i < iLen; i++) {
+                if (result[i].swName === 'Rule 1 Test Record') {
+                  wrapper.origId = result[i]._id;
                 }
               }
               done();
@@ -1284,7 +1266,7 @@ describe('app', () => {
         supertest
           .get('/api/v1/swdb/' + wrapper.origId)
           .expect(200)
-          .end((err: Error, res: Express.Session) => {
+          .end((err, res) => {
             if (err) {
               done(err);
             } else {
@@ -1302,9 +1284,9 @@ describe('app', () => {
             version: 'Test version',
             branch: 'Test branch',
           })
-          .set('Cookie', [Cookies])
+          .set('Cookie', cookie)
           .expect(200)
-          .end((err: Error, res: Express.Session) => {
+          .end((err, res) => {
             if (err) {
               done(err);
             } else {
@@ -1319,9 +1301,9 @@ describe('app', () => {
           .send({
             status: 'RDY_INST',
           })
-          .set('Cookie', [Cookies])
+          .set('Cookie', cookie)
           .expect(200)
-          .end((err: Error, res: Express.Session) => {
+          .end((err, res) => {
             if (err) {
               done(err);
             } else {
@@ -1334,7 +1316,7 @@ describe('app', () => {
         supertest
           .get('/api/v1/swdb/' + wrapper.origId)
           .expect(200)
-          .end((err: Error, res: Express.Session) => {
+          .end((err, res) => {
             if (err) {
               done(err);
             } else {
@@ -1352,10 +1334,10 @@ describe('app', () => {
             version: 'Test version2',
             branch: 'Test branch2',
           })
-          .set('Cookie', [Cookies])
+          .set('Cookie', cookie)
           .expect(400)
           .expect('Worklow validation errors: "Version and branch cannot change in state Ready for install"')
-          .end((err: Error, res: Express.Session) => {
+          .end((err, res) => {
             if (err) {
               done(err);
             } else {
@@ -1380,13 +1362,13 @@ describe('app', () => {
           statusDate: '1970-01-01T00:00:00.000Z',
         })
         .set('Accept', 'application/json')
-        .set('Cookie', [Cookies])
+        .set('Cookie', cookie)
         .expect(201)
-        .end((err: Error, result: Express.Session) => {
+        .end((err, result) => {
           if (err) {
             done(err);
           } else {
-            debug('Location: ' + result.headers.location);
+            debug('Location: ' + result.header.location);
             done();
           }
         });
@@ -1398,14 +1380,14 @@ describe('app', () => {
         supertest
           .get('/api/v1/swdb')
           .expect(200)
-          .end((err: Error, res: Express.Session) => {
+          .end((err, res) => {
             if (err) {
               done(err);
             } else {
-              res = JSON.parse(res.text);
-              for (let i = 0, iLen = res.length; i < iLen; i++) {
-                if (res[i].swName === 'Rule 4 Test Record') {
-                  wrapper.origId = res[i]._id;
+              const result = JSON.parse(res.text);
+              for (let i = 0, iLen = result.length; i < iLen; i++) {
+                if (result[i].swName === 'Rule 4 Test Record') {
+                  wrapper.origId = result[i]._id;
                 }
               }
               done();
@@ -1417,7 +1399,7 @@ describe('app', () => {
         supertest
           .get('/api/v1/swdb/' + wrapper.origId)
           .expect(200)
-          .end((err: Error, res: Express.Session) => {
+          .end((err, res) => {
             if (err) {
               done(err);
             } else {
@@ -1434,9 +1416,9 @@ describe('app', () => {
           .send({
             status: 'RDY_INST',
           })
-          .set('Cookie', [Cookies])
+          .set('Cookie', cookie)
           .expect(200)
-          .end((err: Error, res: Express.Session) => {
+          .end((err, res) => {
             if (err) {
               done(err);
             } else {
@@ -1449,7 +1431,7 @@ describe('app', () => {
         supertest
           .post('/api/v1/inst')
           .set('Accept', 'application/json')
-          .set('Cookie', Cookies)
+          .set('Cookie', cookie)
           .send({
             host: 'Test host',
             name: 'Test name',
@@ -1460,7 +1442,7 @@ describe('app', () => {
           })
           .expect(201)
           // .end(done);
-          .end((err: Error, res: Express.Session) => {
+          .end((err, res) => {
             if (err) {
               debug('res: ' + JSON.stringify(res, null, 2));
               done(err);
@@ -1481,11 +1463,11 @@ describe('app', () => {
           .send({
             status: 'DEVEL',
           })
-          .set('Cookie', [Cookies])
+          .set('Cookie', cookie)
           .expect(400)
           .expect('Worklow validation errors: "Software state cannot change while ' +
             'there are active installations: ' + wrapper.instId + '"')
-          .end((err: Error, res: Express.Session) => {
+          .end((err, res) => {
             if (err) {
               done(err);
             } else {
@@ -1654,8 +1636,8 @@ describe('app', () => {
           supertest
           .put(value!.req!.url + wrapper.origId)
           .send(value!.req!.msg)
-          .set('Cookie', [Cookies])
-          .end((err: Error, res: Express.Session) => {
+          .set('Cookie', cookie)
+          .end((err, res) => {
             if (err) {
               done(err);
             } else {
@@ -1663,10 +1645,10 @@ describe('app', () => {
                 expect(res.status).to.equal(value.req.err.status);
               }
               if (value!.req!.err.msgHas) {
-                expect2(res.text).toMatch(value.req.err.msgHas || {});
+                assert.deepInclude(res.text, value.req.err.msgHas || {});
               }
 
-              debug('Location: ' + res.headers.location);
+              debug('Location: ' + res.header.location);
               done();
             }
           });
@@ -1679,8 +1661,8 @@ describe('app', () => {
           supertest
           .post(value!.req!.url)
           .send(value!.req!.msg)
-          .set('Cookie', [Cookies])
-          .end((err: Error, res: Express.Session) => {
+          .set('Cookie', cookie)
+          .end((err, res) => {
             if (err) {
               done(err);
             } else {
@@ -1688,9 +1670,9 @@ describe('app', () => {
                 expect(res.status).to.equal(value!.req!.err.status);
               }
               if (value!.req!.err.msgHas) {
-                expect2(res.text).toMatch(value!.req!.err.msgHas || {});
+                assert.deepInclude(res.text, value!.req!.err.msgHas || {});
               }
-              debug('Location: ' + res.headers.location);
+              debug('Location: ' + res.header.location);
               done();
             }
           });
@@ -1702,7 +1684,7 @@ describe('app', () => {
         it(value!.res!.err.status + ' ' + JSON.stringify(value!.res!.msg), (done) => {
           supertest
           .get(value!.res!.url + wrapper.origId)
-          .end((err: Error, res: Express.Session) => {
+          .end((err, res) => {
             if (err) {
               done(err);
             } else {
@@ -1711,9 +1693,7 @@ describe('app', () => {
               }
               for (const prop of Object.keys(value.res.msg)) {
                 expect(res.body).to.have.property(prop);
-                // This is to allow sloppy matching on whole objects.
-                // See the npm "expect" module for more
-                expect2(res.body[prop]).toMatch(value.res.msg[prop]);
+                assert.deepEqual(res.body[prop], value.res.msg[prop]);
               }
               done();
             }
@@ -1724,16 +1704,16 @@ describe('app', () => {
     it('Errors on update a nonexistent record via POST swName id:badbeef', (done) => {
       supertest
       .post('/api/v1/swdb/badbeef')
-      .set('Cookie', [Cookies])
+      .set('Cookie', cookie)
       .set('Accept', 'application/json')
       .send({swName: 'Test Record4'})
       .expect(404)
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
           expect(res.text).to.match(/Not Found/);
-          debug('Location: ' + res.headers.location);
+          debug('Location: ' + res.header.location);
           done();
         }
       });
@@ -1741,15 +1721,15 @@ describe('app', () => {
     it('Errors on update a nonexistent record via PUT swName id:badbeef', (done) => {
       supertest
       .put('/api/v1/swdb/badbeef')
-      .set('Cookie', [Cookies])
+      .set('Cookie', cookie)
       .send({swName: 'Test Record4'})
       .expect(400)
       .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
-          debug('Location: ' + res.headers.location);
+          debug('Location: ' + res.header.location);
           done();
         }
       });
@@ -1757,15 +1737,15 @@ describe('app', () => {
     it('Errors on update a nonexistent record via PATCH swName id:badbeef', (done) => {
       supertest
       .patch('/api/v1/swdb/badbeef')
-      .set('Cookie', [Cookies])
+      .set('Cookie', cookie)
       .send({swName: 'Test Record4'})
       .expect(400)
       .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
-      .end((err: Error, res: Express.Session) => {
+      .end((err, res) => {
         if (err) {
           done(err);
         } else {
-          debug('Location: ' + res.headers.location);
+          debug('Location: ' + res.header.location);
           done();
         }
       });

@@ -20,6 +20,8 @@ const debug = Debug('swdb:inst-history-tests');
 
 const props = data.PROPS;
 
+const historyCount = data.SOFTWARES.length + data.SWINSTALLS.length;
+
 const testTools = new TestTools.TestTools();
 
 
@@ -53,7 +55,7 @@ describe('Installations history tests suite',  () => {
 
   it('Check initial number of history updates', async () => {
     const count = await Update.count({}).exec();
-    expect(count).to.equal(18);
+    expect(count).to.equal(historyCount);
   });
 
   it('Post a new record with correct history', (done) => {

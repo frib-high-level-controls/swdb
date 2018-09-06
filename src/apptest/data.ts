@@ -48,7 +48,7 @@ export const USERS: forgapi.User[] = [
 ];
 
 
-const SOFTWARES: any = [
+export const SOFTWARES: any = [
   {'status':'DEVEL','levelOfCare':'MEDIUM','statusDate':'1970-07-07T07:00:00.000Z','owner':'Berryman','swName':'Test Record','version':'0.1','branch':'b1','comment':'EPICS Dictionary server'},
   {'status':'DEVEL','levelOfCare':'MEDIUM','statusDate':'1970-07-07T07:00:00.000Z','owner':'Berryman','swName':'Test Record2','version':'0.2','branch':'b1','comment':'EPICS Dictionary server'},
   {'status':'DEVEL','levelOfCare':'MEDIUM','statusDate':'1970-07-07T07:00:00.000Z','owner':'Berryman','swName':'Test Record3','version':'0.3','branch':'b1','comment':'EPICS Dictionary server'},
@@ -66,7 +66,7 @@ const SOFTWARES: any = [
   {'status':'RDY_INST','levelOfCare':'MEDIUM','statusDate':'1970-07-07T07:00:00.000Z','owner':'Berryman','swName':'BEAST','version':'0.2','branch':'b12','_id':'5947589458a6aa0face9a512','_v':'0','comment':'alarm configuration binary'},
 ];
 
-const SWINSTALLS: any =  [
+export const SWINSTALLS: any =  [
   {
     'host':'host1',
     'name': 'Installation name1',
