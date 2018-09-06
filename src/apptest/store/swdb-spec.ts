@@ -21,7 +21,7 @@ const props = data.PROPS;
 const historyCount = data.SOFTWARES.length + data.SWINSTALLS.length;
 
 
-describe('app', () => {
+describe('Software API Specification', () => {
   let app: Application;
   let cookie: string;
   let supertest: SuperTest.SuperTest<SuperTest.Test>;

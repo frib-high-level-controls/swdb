@@ -4,7 +4,8 @@
  */
 import * as mongoose from 'mongoose';
 
-import * as forgapi from './shared/mock-forgapi';
+// Get mock-forgapi module from application (not apptest!)
+import * as forgapi from '../app/shared/mock-forgapi';
 
 import * as Db from '../app/lib/Db';
 import * as InstDb from '../app/lib/instDb';
@@ -15,7 +16,7 @@ new InstDb.InstDb(false);
 export const PROPS = {
   webUrl: 'http://localhost:3000/', // Maybe this should come from the application?
   test: {
-    username: 'maxwelld',
+    username: 'FEDM',
     password: 'pas5w0rd',
   },
 };

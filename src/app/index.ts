@@ -24,7 +24,7 @@ import tools = require('./lib/swdblib');
 import customValidators = require('./lib/validators');
 
 import auth = require('./shared/auth');
-import cfauth = require('./shared/forg-auth');
+import forgauth = require('./shared/forg-auth');
 import forgapi = require('./shared/forgapi');
 import handlers = require('./shared/handlers');
 import logging = require('./shared/logging');
@@ -272,35 +272,56 @@ async function doStart(): Promise<express.Application> {
     next();
   });
 
-  // Authentication handlers
-  let cfAuthProvider: auth.IProvider;
-  // check whether we are testing and set the auth
-  if (env !== 'production' && (props.test.testing === 'true' || process.env.WEBAPP_AUTHC_DISABLED === 'true')) {
-    debug('TEST mode is active!');
-    const forgClient = mockforgapi.MockClient.getInstance();
-    forgClient.clear();
-    const gdata: forgapi.Group[] = ctools.getForgGroupsTestFile();
-    // debug('loading mock forg groups for with: ' + JSON.stringify(gdata, null, 2));
-    forgClient.addGroup(gdata);
-    const udata: forgapi.User[] = ctools.getForgUsersTestFile();
-    // debug('loading mock forg users for with: ' + JSON.stringify(udata, null, 2));
-    forgClient.addUser(udata);
-    cfAuthProvider = new cfauth.DevForgBasicProvider(forgClient, {});
-  } else {
-    debug('Normal authentication mode is active!');
-    const forgClient = new forgapi.Client({
+  // Authentication configuration
+  let forgClient: forgapi.IClient;
+  if (env === 'production' || process.env.WEBAPP_AUTHC_DISABLED !== 'mock') {
+    // if (!cfg.forgapi.url) {
+    //   throw new Error('FORG base URL not configured');
+    // }
+    // info('FORG API base URL: %s', cfg.forgapi.url);
+
+    forgClient = new forgapi.Client({
       url: String(props.auth.forgapi.url),
       agentOptions: props.auth.forgapi.agentOptions || {},
+      // url: String(cfg.forgapi.url),
+      // agentOptions: cfg.forgapi.agentOptions || {},
     });
-    cfAuthProvider = new cfauth.ForgCasProvider(forgClient, {
+    // Need the FORG base URL available to views
+    // app.locals.forgurl = String(cfg.forgapi.url);
+  } else {
+    warn('FORG API mock client initialized');
+    forgClient = mockforgapi.MockClient.getInstance();
+  }
+
+  if (env === 'production'
+      || (process.env.WEBAPP_AUTHC_DISABLED !== 'true'
+          && process.env.WEBAPP_AUTHC_DISABLED !== 'mock')) {
+    // if (!cfg.cas.cas_url) {
+    //   throw new Error('CAS base URL not configured');
+    // }
+    // info('CAS base URL: %s', cfg.cas.cas_url);
+
+    // if (!cfg.cas.service_base_url) {
+    //   throw new Error('CAS service base URL not configured');
+    // }
+    // info('CAS service base URL: %s (service URL: %s)', cfg.cas.service_base_url, cfg.cas.service_url);
+
+    auth.setProvider(new forgauth.ForgCasProvider(forgClient, {
       casUrl: String(props.auth.cas.cas_url),
       casServiceUrl: String(props.auth.cas.service_url),
       casAppendPath: props.auth.cas.append_path === true ? true : false,
       casVersion: props.auth.cas.version ? String(props.auth.cas.version) : undefined,
-    });
+      // casUrl: String(cfg.cas.cas_url),
+      // casServiceUrl: String(cfg.cas.service_url),
+      // casServiceBaseUrl: String(cfg.cas.service_base_url),
+      // casVersion: cfg.cas.version ? String(cfg.cas.version) : undefined,
+    }));
+    info('CAS authentication provider enabled');
+  } else {
+    // Use this provider for local development that DISABLES authentication!
+    auth.setProvider(new forgauth.DevForgBasicProvider(forgClient, {}));
+    warn('Development authentication provider: Password verification DISABLED!');
   }
-
-  auth.setProvider(cfAuthProvider);
 
   // Set custom validators in expressValidator
   app.use(expressValidator(customValidators.CustomValidators.vals));
@@ -357,7 +378,7 @@ async function doStart(): Promise<express.Application> {
     res.render('index');
   });
 
-  app.get('/login', cfAuthProvider.authenticate(), (req: express.Request, res: express.Response) => {
+  app.get('/login', auth.getProvider().authenticate(), (req: express.Request, res: express.Response) => {
     debug('GET /login request');
     if (req.query.bounce) {
       res.redirect(req.query.bounce);
@@ -370,7 +391,7 @@ async function doStart(): Promise<express.Application> {
   app.get('/logout', (req: express.Request, res: express.Response, next: express.NextFunction) => {
     debug('GET /logout request');
     delete req.query.ticket;
-    cfAuthProvider.logout(req);
+    auth.getProvider().logout(req);
     res.redirect(props.auth.cas.cas_url + '/logout');
   });
 
