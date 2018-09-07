@@ -8,8 +8,9 @@ import mongoose = require('mongoose');
 import rc = require('rc');
 import XLSX = require('xlsx');
 
-import { Db } from '../app/lib/Db';
-import { InstDb } from '../app/lib/instDb';
+import { Software } from '../app/models/software';
+import { SWInstall } from '../app/models/swinstall';
+
 import * as auth from '../app/shared/auth';
 import * as history from '../app/shared/history';
 
@@ -154,10 +155,9 @@ async function main() {
 
   let valid = true;
   const swDataDoc: HistoryDocument[] = [];
-  new Db(true); // tslint:disable-line
   for (const d of combinedData.swData) {
     info('Create swDoc and validate: %s (Version: %s)', d.swName, d.version);
-    const doc: HistoryDocument = new Db.swDoc(d);
+    const doc: HistoryDocument = new Software(d);
     try {
       await doc.validate();
     } catch (err) {
@@ -169,10 +169,9 @@ async function main() {
   }
 
   const instDataDoc: HistoryDocument[] = [];
-  new InstDb(true); // tslint:disable-line
   for (const d of combinedData.instData) {
     info('Create instDoc and validate: %s (Host: %s)', d.name, d.host);
-    const doc: HistoryDocument = new InstDb.instDoc(d);
+    const doc: HistoryDocument = new SWInstall(d);
     try {
       await doc.validate();
     } catch (err) {
@@ -205,8 +204,8 @@ async function main() {
 
   // Connect and wait for autoIndex to complete
   await mongoose.connect(mongoUrl, cfg.mongo.options);
-  await Db.swDoc.init();
-  await InstDb.instDoc.init();
+  await (Software as any).init(); // @types/mongoose@4.7.39 does not include this method!
+  await (SWInstall as any).init(); // @types/mongoose@4.7.39 does not include this method!
   info('Connected to database: mongodb://%s:%s/%s', cfg.mongo.addr, cfg.mongo.port, cfg.mongo.db);
 
   // Clean DB before saving data

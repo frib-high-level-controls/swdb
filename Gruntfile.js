@@ -2,17 +2,6 @@ module.exports = function(grunt) {
   'use strict';
 
   grunt.initConfig({
-    // setup jshint
-    jshint: {
-      files: ['src/app/*.js', 'src/app/lib/*.js', 'src/apptest/*.js', 'src/apptest/store/*.js', 'src/web/ts/*.js'],
-      options: {
-        esversion: 6,
-        node: true,
-        globals: {
-          jQuery: true
-        },
-      },
-    },
     ts: {
       app: {
         tsconfig: {
@@ -80,7 +69,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-ts');
   grunt.loadNpmTasks('grunt-tslint');
   grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
 
   grunt.registerTask('save_version_file', 'Save version information to app/verison.json', function () {
     var pkg = grunt.file.readJSON('package.json');
@@ -149,7 +137,6 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('lint', [
-    //'jshint',
    'tslint',
   ]);
 };
