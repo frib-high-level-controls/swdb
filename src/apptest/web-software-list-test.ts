@@ -10,12 +10,12 @@ import { Builder, By, until, WebDriver } from 'selenium-webdriver';
 import * as test from 'selenium-webdriver/testing';
 import * as SuperTest from 'supertest';
 
-import * as server from '../../app/server';
+import * as server from '../app/server';
 
-import * as data from '../data';
-import * as cookies from '../lib/cookies';
+import * as data from './data';
+import * as cookies from './lib/cookies';
 
-const debug = Debug('swdb:swdb-list-tests');
+const debug = Debug('swdb:web:software-list-tests');
 
 const props = data.PROPS;
 
@@ -144,7 +144,7 @@ test.describe('Installations record tests', () => {
   });
 
   test.it('should show a known record', async () => {
-    const elementPath = By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]')
+    const elementPath = By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]');
     driver.wait(until.elementLocated(elementPath));
     const link = await driver.findElement(elementPath).getText();
     expect(link).to.equal('BEAST');

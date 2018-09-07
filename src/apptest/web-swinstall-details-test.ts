@@ -10,13 +10,13 @@ import { Builder, By, until, WebDriver } from 'selenium-webdriver';
 import * as test from 'selenium-webdriver/testing';
 import * as SuperTest from 'supertest';
 
-import * as server from '../../app/server';
+import * as server from '../app/server';
 
-import * as data from '../data';
-import * as cookies from '../lib/cookies';
+import * as data from './data';
+import * as cookies from './lib/cookies';
 
 
-const debug = Debug('swdb:inst-details-tests');
+const debug = Debug('swdb:web:swinstall-details-test');
 
 const props = data.PROPS;
 

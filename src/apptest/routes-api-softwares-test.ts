@@ -7,14 +7,14 @@ import { Application } from 'express';
 
 import * as SuperTest from 'supertest';
 
-import { Update } from '../../app/shared/history';
+import { Update } from '../app/shared/history';
 
-import * as server from '../../app/server';
+import * as server from '../app/server';
 
-import * as data from '../data';
-import * as cookies from '../lib/cookies';
+import * as data from './data';
+import * as cookies from './lib/cookies';
 
-const debug = Debug('swdb:swdb-spec-tests');
+const debug = Debug('swdb:routes:api-softwares-test');
 
 const props = data.PROPS;
 

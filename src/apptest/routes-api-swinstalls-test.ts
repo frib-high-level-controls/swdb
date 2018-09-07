@@ -7,17 +7,17 @@ import { Application } from 'express';
 
 import * as SuperTest from 'supertest';
 
-import * as server from '../../app/server';
+import * as server from '../app/server';
 
-import * as data from '../data';
-import * as cookies from '../lib/cookies';
+import * as data from './data';
+import * as cookies from './lib/cookies';
 
-const debug = Debug('swdb:inst-spec-tests');
+const debug = Debug('swdb:routes:api-swinstalls-test');
 
 const props = data.PROPS;
 
 
-describe('Installation api tests', () => {
+describe('Software Installation API Specification', () => {
   let app: Application;
   let cookie: string;
   let supertest: SuperTest.SuperTest<SuperTest.Test>;
