@@ -3,12 +3,16 @@ import dbg = require('debug');
 import express = require('express');
 import  mongoose = require('mongoose');
 import validate = require('validate.js');
-import commonTools = require('./CommonTools');
-import Be = require('./Db');
-import InstBe = require('./instDb');
-const tools = new commonTools.CommonTools();
-const props = tools.getConfiguration();
+
 const debug = dbg('swdb:validators');
+
+import {
+  Software,
+} from '../models/software';
+
+import {
+  SWInstall,
+} from '../models/swinstall';
 
 export class CustomValidators {
   public static vals = {
@@ -198,7 +202,7 @@ export class CustomValidators {
       };
     }
     try {
-      const queryPromise = await Be.Db.swDoc.findOne({ _id: id }).exec();
+      const queryPromise = await Software.findOne({ _id: id }).exec();
       // if old status was Ready for install
       // first, see if there was eve a  record to update
       if (!queryPromise) {
@@ -216,18 +220,18 @@ export class CustomValidators {
           const status = 'RDY_INST';
           return {
             error: true,
-            data: 'Version and branch cannot change in state ' + props.StatusEnum[status],
+            data: 'Version and branch cannot change in state ' + status,
           };
         }
         return {
           error: false,
-          data: queryPromise,
+          data: 'queryPromise',
         };
       } else {
         // this record update is okay for workflow
         return {
           error: false,
-          data: queryPromise,
+          data: 'queryPromise',
         };
       }
     } catch (err) {
@@ -264,7 +268,7 @@ export class CustomValidators {
       };
     }
     try {
-      const queryPromise = await InstBe.InstDb.instDoc.findOne({ _id: id }).exec();
+      const queryPromise = await SWInstall.findOne({ _id: id }).exec();
       // if old status was Ready for install
       // first, see if there was eve a  record to update
       if (!queryPromise) {
@@ -280,7 +284,7 @@ export class CustomValidators {
           // req is changing software, and in in Ready for installation
           return {
             error: false,
-            data: queryPromise,
+            data: 'queryPromise',
           };
         } else {
           // req is changing sw, and not in Ready for installation
@@ -292,7 +296,7 @@ export class CustomValidators {
       } else {
         return {
           error: false,
-          data: queryPromise,
+          data: 'queryPromise',
         };
       }
     } catch (err) {
@@ -330,9 +334,9 @@ export class CustomValidators {
         };
       }
       try {
-        await Be.Db.swDoc.find().exec();
+        await Software.find().exec();
         // debug('Rule3 sees swDocs: ' + JSON.stringify(queryPromise1));
-        const queryPromise  = await Be.Db.swDoc.findOne({ _id: id }).exec();
+        const queryPromise  = await Software.findOne({ _id: id }).exec();
         // if old status was Ready for install
         // first, see if there was eve a  record to update
         if (!queryPromise) {
@@ -395,7 +399,7 @@ export class CustomValidators {
       };
     }
     try {
-      let queryPromise = await Be.Db.swDoc.findOne({ _id: id }).exec();
+      const queryPromise = await Software.findOne({ _id: id }).exec();
       // if old status was Ready for install
       // first, see if there was eve a  record to update
       if (!queryPromise) {
@@ -411,13 +415,13 @@ export class CustomValidators {
         };
       } else {
         // go find installations that refer to this sw
-        queryPromise = await InstBe.InstDb.instDoc.find({ software: id }).exec();
-        if (queryPromise.length > 0) {
+        const queryPromise2 = await SWInstall.find({ software: id }).exec();
+        if (queryPromise2.length > 0) {
           // there are referring installations
           return {
             error: true,
             data: 'Software state cannot change while there are active installations: ' +
-              queryPromise.map((item: any) => {
+              queryPromise2.map((item: any) => {
                 return item._id;
               }),
           };

@@ -7,11 +7,13 @@ import * as mongoose from 'mongoose';
 // Get mock-forgapi module from application (not apptest!)
 import * as forgapi from '../app/shared/mock-forgapi';
 
-import * as Db from '../app/lib/Db';
-import * as InstDb from '../app/lib/instDb';
+import {
+  Software,
+} from '../app/models/software';
 
-new Db.Db(false);
-new InstDb.InstDb(false);
+import {
+  SWInstall,
+} from '../app/models/swinstall';
 
 export const PROPS = {
   webUrl: 'http://localhost:3000/', // Maybe this should come from the application?
@@ -103,6 +105,7 @@ export const SWINSTALLS: any =  [
 
 
 export async function clear(): Promise<void> {
+  forgapi.MockClient.getInstance().clear();
   await mongoose.connection.db.dropDatabase();
 }
 
@@ -113,11 +116,11 @@ export async function initialize(): Promise<void> {
   forgapi.MockClient.getInstance().addUser(USERS);
   // forgapi.MockClient.getInstance().addGroup();
 
-  for (const softare of SOFTWARES) {
-    await new Db.Db.swDoc(softare).saveWithHistory('SYS:TEST');
+  for (const software of SOFTWARES) {
+    await new Software(software).saveWithHistory('SYS:TEST');
   }
 
   for (const swinstall of SWINSTALLS) {
-    await InstDb.InstDb.instDoc(swinstall).saveWithHistory('SYS:TEST');
+    await new SWInstall(swinstall).saveWithHistory('SYS:TEST');
   }
 }

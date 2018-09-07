@@ -16,11 +16,12 @@ import util = require('util');
 import rc = require('rc');
 import favicon = require('serve-favicon');
 
-import CommonTools = require('./lib/CommonTools');
-import Be = require('./lib/Db');
-import InstBe = require('./lib/instDb');
 import instTools = require('./lib/instLib');
 import tools = require('./lib/swdblib');
+
+import software = require('./models/software');
+import swinstall = require('./models/swinstall');
+
 import customValidators = require('./lib/validators');
 
 import auth = require('./shared/auth');
@@ -61,6 +62,16 @@ interface Config {
     db: {};
     options: {};
   };
+  cas: {
+    cas_url?: {};
+    service_url?: {};
+    append_path?: {};
+    version?: {};
+  };
+  forgapi: {
+    url?: {};
+    agentOptions?: {};
+  };
 }
 
 // application states (same as tasks.State, but avoids the dependency)
@@ -70,12 +81,6 @@ export type State = 'STARTING' | 'STARTED' | 'STOPPING' | 'STOPPED';
 // Maintained for compatibility (non-template) //
 //////////////////////////////////////////////////
 const debug = dbg('swdb:index');
-const be = new Be.Db(true);
-const instBe = new InstBe.InstDb(true);
-
-const ctools = new CommonTools.CommonTools();
-const props = ctools.getConfiguration();
-debug('props at startup: ' + JSON.stringify(props, null, 2));
 //////////////////////////////////////////////////
 
 // application singleton
@@ -204,6 +209,12 @@ async function doStart(): Promise<express.Application> {
         useMongoClient: true,
       },
     },
+    cas: {
+      // no defaults
+    },
+    forgapi: {
+      // no defaults
+    },
   };
 
   if (name && (typeof name === 'string')) {
@@ -264,30 +275,20 @@ async function doStart(): Promise<express.Application> {
   app.set('view engine', 'pug');
   app.set('view cache', (env === 'production') ? true : false);
 
-  // Get the CORS params from rc and add to stack
-  app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-    res.header('Access-Control-Allow-Origin', props.CORS.origin);
-    res.header('Access-Control-Allow-Methods', props.CORS.methods);
-    res.header('Access-Control-Allow-Headers', props.CORS.headers);
-    next();
-  });
-
   // Authentication configuration
   let forgClient: forgapi.IClient;
   if (env === 'production' || process.env.WEBAPP_AUTHC_DISABLED !== 'mock') {
-    // if (!cfg.forgapi.url) {
-    //   throw new Error('FORG base URL not configured');
-    // }
-    // info('FORG API base URL: %s', cfg.forgapi.url);
+    if (!cfg.forgapi.url) {
+      throw new Error('FORG base URL not configured');
+    }
+    info('FORG API base URL: %s', cfg.forgapi.url);
 
     forgClient = new forgapi.Client({
-      url: String(props.auth.forgapi.url),
-      agentOptions: props.auth.forgapi.agentOptions || {},
-      // url: String(cfg.forgapi.url),
-      // agentOptions: cfg.forgapi.agentOptions || {},
+      url: String(cfg.forgapi.url),
+      agentOptions: cfg.forgapi.agentOptions || {},
     });
     // Need the FORG base URL available to views
-    // app.locals.forgurl = String(cfg.forgapi.url);
+    app.locals.forgurl = String(cfg.forgapi.url);
   } else {
     warn('FORG API mock client initialized');
     forgClient = mockforgapi.MockClient.getInstance();
@@ -296,10 +297,10 @@ async function doStart(): Promise<express.Application> {
   if (env === 'production'
       || (process.env.WEBAPP_AUTHC_DISABLED !== 'true'
           && process.env.WEBAPP_AUTHC_DISABLED !== 'mock')) {
-    // if (!cfg.cas.cas_url) {
-    //   throw new Error('CAS base URL not configured');
-    // }
-    // info('CAS base URL: %s', cfg.cas.cas_url);
+    if (!cfg.cas.cas_url) {
+      throw new Error('CAS base URL not configured');
+    }
+    info('CAS base URL: %s', cfg.cas.cas_url);
 
     // if (!cfg.cas.service_base_url) {
     //   throw new Error('CAS service base URL not configured');
@@ -307,14 +308,11 @@ async function doStart(): Promise<express.Application> {
     // info('CAS service base URL: %s (service URL: %s)', cfg.cas.service_base_url, cfg.cas.service_url);
 
     auth.setProvider(new forgauth.ForgCasProvider(forgClient, {
-      casUrl: String(props.auth.cas.cas_url),
-      casServiceUrl: String(props.auth.cas.service_url),
-      casAppendPath: props.auth.cas.append_path === true ? true : false,
-      casVersion: props.auth.cas.version ? String(props.auth.cas.version) : undefined,
-      // casUrl: String(cfg.cas.cas_url),
-      // casServiceUrl: String(cfg.cas.service_url),
-      // casServiceBaseUrl: String(cfg.cas.service_base_url),
-      // casVersion: cfg.cas.version ? String(cfg.cas.version) : undefined,
+      casUrl: String(cfg.cas.cas_url),
+      casServiceUrl: String(cfg.cas.service_url),
+      // casServiceBaseUrl: String(cfg.cas.service_base_url), 
+      casAppendPath: cfg.cas.append_path === true ? true : false,
+      casVersion: cfg.cas.version ? String(cfg.cas.version) : undefined,
     }));
     info('CAS authentication provider enabled');
   } else {
@@ -351,7 +349,7 @@ async function doStart(): Promise<express.Application> {
 
   if (env === 'production') {
     app.use(morgan('short'));
-  } else if (props.test.testing !== 'true') {
+  } else {
     app.use(morgan('dev'));
   }
 
@@ -392,7 +390,17 @@ async function doStart(): Promise<express.Application> {
     debug('GET /logout request');
     delete req.query.ticket;
     auth.getProvider().logout(req);
-    res.redirect(props.auth.cas.cas_url + '/logout');
+
+    // if (provider instanceof forgauth.ForgCasProvider) {
+    //   const redirectUrl = provider.getCasLogoutUrl(true);
+    //   info('Redirect to CAS logout: %s', redirectUrl);
+    //   res.redirect(redirectUrl);
+    //   return;
+    // }
+    // res.redirect(res.locals.basePath || '/');
+
+    //res.redirect(props.auth.cas.cas_url + '/logout');
+    res.redirect('/');
   });
 
   app.use('/status', status.router);
@@ -408,7 +416,39 @@ async function doStart(): Promise<express.Application> {
   app.get('/api/v1/swdb/config', (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // update props and send config
     debug('GET /api/v1/swdb/config request');
-    res.send(JSON.stringify(props));
+    const config: any = {};
+    config.webUrl = 'http://localhost:3000/';
+
+    config.LevelOfCareEnum = {};
+    config.LevelOfCareEnum[software.CareLevel.LOW] = 'Low';
+    config.LevelOfCareEnum[software.CareLevel.MEDIUM] = 'Medium';
+    config.LevelOfCareEnum[software.CareLevel.HIGH] = 'High';
+
+    config.StatusEnum = {};
+    config.StatusEnum[software.Status.DEVEL] = 'Development';
+    config.StatusEnum[software.Status.RDY_TEST] = 'Ready for test';
+    config.StatusEnum[software.Status.RDY_INST] =  'Ready for install';
+    config.StatusEnum[software.Status.DEP] = 'DEPRECATED';
+
+    config.InstStatusEnum = {};
+    config.InstStatusEnum[swinstall.Status.RDY_INST] = 'Ready for install';
+    config.InstStatusEnum[swinstall.Status.RDY_VER] = 'Ready for verification';
+    config.InstStatusEnum[swinstall.Status.RDY_BEAM] = 'Ready for beam';
+    config.InstStatusEnum[swinstall.Status.RET] = 'Retired';
+
+    config.RcsEnum = {};
+    config.RcsEnum[software.VCS.GIT] = 'Git';
+    config.RcsEnum[software.VCS.AC] = 'AssetCentre';
+    config.RcsEnum[software.VCS.FS] =  'Filesystem';
+    config.RcsEnum[software.VCS.DEB] =  'Debian';
+    config.RcsEnum[software.VCS.OTHER] = 'Other';
+
+    config.levelOfCareLabels = Object.keys(config.LevelOfCareEnum).map((k) => config.LevelOfCareEnum[k]);
+    config.statusLabels = Object.keys(config.StatusEnum).map((k) => config.StatusEnum[k]);
+    config.instStatusLabels = Object.keys(config.InstStatusEnum).map((k) => config.InstStatusEnum[k]);
+    config.rcsLabels = Object.keys(config.RcsEnum).map((k) => config.RcsEnum[k]);
+
+    res.send(JSON.stringify(config));
   });
 
   // for get slot requests
@@ -438,17 +478,17 @@ async function doStart(): Promise<express.Application> {
   // for get history requests
   app.get('/api/v1/swdb/hist/:id', (req: express.Request, res: express.Response, next: express.NextFunction) => {
     debug('GET /api/v1/swdb/hist/* request');
-    be.getHist(req, res, next);
+    software.getHist(req, res, next);
   });
   // for get requests that are specific
   app.get('/api/v1/swdb/:id', (req: express.Request, res: express.Response, next: express.NextFunction) => {
     debug('GET /api/v1/swdb/* request');
-    be.getDocs(req, res, next);
+    software.getDocs(req, res, next);
   });
   // for get requests that are not specific return all
   app.get('/api/v1/swdb', (req: express.Request, res: express.Response, next: express.NextFunction) => {
     debug('GET /api/v1/swdb/* request');
-    be.getDocs(req, res, next);
+    software.getDocs(req, res, next);
   });
 
   // handle incoming post requests
@@ -472,7 +512,7 @@ async function doStart(): Promise<express.Application> {
         }
         const dateObj = new Date(req.body.statusDate);
         req.body.statusDate = dateObj;
-        be.createDoc(username, req, res, next);
+        software.createDoc(username, req, res, next);
       }
     });
   });
@@ -480,7 +520,7 @@ async function doStart(): Promise<express.Application> {
   // for get list of records requests
   app.post('/api/v1/swdb/list', (req: express.Request, res: express.Response, next: express.NextFunction) => {
     debug('POST /api/v1/swdb/list request');
-    be.getList(req, res, next);
+    software.getList(req, res, next);
   });
 
   // handle incoming put requests for update
@@ -526,7 +566,7 @@ async function doStart(): Promise<express.Application> {
             res.status(500).send('Ensure authenticated failed');
             return;
           }
-          be.updateDoc(username, req, res, next);
+          software.updateDoc(username, req, res, next);
         }
       }
     });
@@ -576,7 +616,7 @@ async function doStart(): Promise<express.Application> {
             res.status(500).send('Ensure authenticated failed');
             return;
           }
-          be.updateDoc(username, req, res, next);
+          software.updateDoc(username, req, res, next);
         }
       }
     });
@@ -588,17 +628,17 @@ async function doStart(): Promise<express.Application> {
   // for get requests that are not specific return all
   app.get('/api/v1/inst/hist/:id', (req: express.Request, res: express.Response, next: express.NextFunction) => {
     debug('GET /api/v1/inst/hist/:id request');
-    instBe.getHist(req, res, next);
+    swinstall.getHist(req, res, next);
   });
   // for get requests that are specific
   app.get('/api/v1/inst/:id', (req: express.Request, res: express.Response, next: express.NextFunction) => {
     debug('GET /api/v1/inst/:id request');
-    instBe.getDocs(req, res, next);
+    swinstall.getDocs(req, res, next);
   });
   // for get requests that are not specific return all
   app.get('/api/v1/inst', (req: express.Request, res: express.Response, next: express.NextFunction) => {
     debug('GET /api/v1/inst/:id request');
-    instBe.getDocs(req, res, next);
+    swinstall.getDocs(req, res, next);
   });
 
   // handle incoming installation post requests
@@ -627,7 +667,7 @@ async function doStart(): Promise<express.Application> {
             res.status(500).send('Ensure authenticated failed');
             return;
           }
-          instBe.createDoc(username, req, res, next);
+          swinstall.createDoc(username, req, res, next);
         }
       }
     });
@@ -675,7 +715,7 @@ async function doStart(): Promise<express.Application> {
             res.status(500).send('Ensure authenticated failed');
             return;
           }
-          instBe.updateDoc(username, req, res, next);
+          swinstall.updateDoc(username, req, res, next);
         }
       }
     });
@@ -724,7 +764,7 @@ async function doStart(): Promise<express.Application> {
             res.status(500).send('Ensure authenticated failed');
             return;
           }
-          instBe.updateDoc(username, req, res, next);
+          swinstall.updateDoc(username, req, res, next);
         }
       }
     });
