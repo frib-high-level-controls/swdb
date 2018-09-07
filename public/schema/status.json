@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "/status",
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [ "OK", "ERROR" ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "uptime": {
+      "type": "number",
+      "minimum": 0
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [ "OK", "ERROR" ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [ "status", "name", "date" ]
+      }
+    }
+  },
+  "required": [ "status", "name", "version", "uptime", "components" ]
+}
