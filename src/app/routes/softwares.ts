@@ -8,7 +8,7 @@ import * as auth from '../shared/auth';
 import * as history from '../shared/history';
 import * as models from '../shared/models';
 
-import * as swdblib from '../lib/swdblib';
+import * as validation from '../lib/validation';
 import * as customValidators from '../lib/validators';
 
 import {
@@ -221,7 +221,7 @@ router.post('/api/v1/swdb', auth.ensureAuthenticated,
   debug('POST /api/v1/swdb request');
   // Do validation for  new records
 
-  swdblib.newValidation(req);
+  validation.checkNewSoftware(req);
 
   req.getValidationResult().then((result) => {
     if (!result.isEmpty()) {
@@ -252,8 +252,7 @@ router.put('/api/v1/swdb/:id', auth.ensureAuthenticated,
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
   debug('PUT /api/v1/swdb/:id request');
 
-  swdblib.updateValidation(req);
-  swdblib.updateSanitization(req);
+  validation.checkUpdateSoftware(req);
   req.getValidationResult().then(async (result) => {
     if (!result.isEmpty()) {
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
@@ -302,8 +301,7 @@ router.patch('/api/v1/swdb/:id', auth.ensureAuthenticated,
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
   debug('PATCH /api/v1/swdb/:id request');
 
-  swdblib.updateValidation(req);
-  swdblib.updateSanitization(req);
+  validation.checkUpdateSoftware(req);
   req.getValidationResult().then(async (result) => {
     if (!result.isEmpty()) {
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));

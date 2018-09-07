@@ -8,7 +8,7 @@ import * as auth from '../shared/auth';
 import * as history from '../shared/history';
 import * as models from '../shared/models';
 
-import * as instlib from '../lib/instLib';
+import * as validation from '../lib/validation';
 import * as customValidators from '../lib/validators';
 
 import {
@@ -213,7 +213,7 @@ router.post('/api/v1/inst', auth.ensureAuthenticated, (req, res, next) => {
 
   debug('POST /api/v1/inst request');
   // Do validation for  new records
-  instlib.newValidation(req);
+  validation.checkNewSWInstall(req);
 
   req.getValidationResult().then(async (result) => {
     if (!result.isEmpty()) {
@@ -245,8 +245,7 @@ router.put('/api/v1/inst/:id', auth.ensureAuthenticated,
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
   debug('PUT /api/v1/inst/:id request');
   // Do validation for installation updates
-  instlib.updateValidation(req);
-  instlib.updateSanitization(req);
+  validation.checkUpdateSWInstall(req);
   req.getValidationResult().then(async (result) => {
     if (!result.isEmpty()) {
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
@@ -292,8 +291,7 @@ router.put('/api/v1/inst/:id', auth.ensureAuthenticated,
 router.patch('/api/v1/inst/:id', auth.ensureAuthenticated, (req, res, next) => {
   debug('PATCH /api/v1/inst/:id request');
   // Do validation for installation updates
-  instlib.updateValidation(req);
-  instlib.updateSanitization(req);
+  validation.checkUpdateSWInstall(req);
   req.getValidationResult().then(async (result) => {
     if (!result.isEmpty()) {
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
