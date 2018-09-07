@@ -16,9 +16,6 @@ import util = require('util');
 import rc = require('rc');
 import favicon = require('serve-favicon');
 
-import instTools = require('./lib/instLib');
-import tools = require('./lib/swdblib');
-
 import software = require('./models/software');
 import swinstall = require('./models/swinstall');
 
@@ -31,6 +28,10 @@ import handlers = require('./shared/handlers');
 import logging = require('./shared/logging');
 import status = require('./shared/status');
 import tasks = require('./shared/tasks');
+
+import * as dataproxy from './routes/dataproxy';
+import * as softwares from './routes/softwares';
+import * as swinstalls from './routes/swinstalls';
 
 import * as mockforgapi from './shared/mock-forgapi';
 
@@ -405,6 +406,7 @@ async function doStart(): Promise<express.Application> {
 
   app.use('/status', status.router);
 
+
   // for get requests that are not specific return all
   app.get('/api/v1/swdb/user', (req: express.Request, res: express.Response, next: express.NextFunction) => {
     debug('GET /api/v1/swdb/user request');
@@ -451,332 +453,14 @@ async function doStart(): Promise<express.Application> {
     res.send(JSON.stringify(config));
   });
 
-  // for get slot requests
-  app.get('/api/v1/swdb/slot', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    debug('GET /api/v1/swdb/slot request');
-    instTools.InstLib.getSlot(req, res, next);
-  });
+  dataproxy.setForgClient(forgClient);
+  app.use(dataproxy.getRouter());
 
-  // for get forg groups requests
-  app.get('/api/v1/swdb/forgGroups', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    debug('GET /api/v1/swdb/forgGroups request');
-    tools.SwdbLib.getForgGroups(req, res, next);
-  });
-
-  // for get forg areas requests
-  app.get('/api/v1/swdb/forgAreas', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    debug('GET /api/v1/swdb/forgAreas request');
-    tools.SwdbLib.getForgAreas(req, res, next);
-  });
-
-  // for get forg users requests
-  app.get('/api/v1/swdb/forgUsers', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    debug('GET /api/v1/swdb/forgUsers request');
-    tools.SwdbLib.getForgUsers(req, res, next);
-  });
-
-  // for get history requests
-  app.get('/api/v1/swdb/hist/:id', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    debug('GET /api/v1/swdb/hist/* request');
-    software.getHist(req, res, next);
-  });
-  // for get requests that are specific
-  app.get('/api/v1/swdb/:id', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    debug('GET /api/v1/swdb/* request');
-    software.getDocs(req, res, next);
-  });
-  // for get requests that are not specific return all
-  app.get('/api/v1/swdb', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    debug('GET /api/v1/swdb/* request');
-    software.getDocs(req, res, next);
-  });
-
-  // handle incoming post requests
-  app.post('/api/v1/swdb', auth.ensureAuthenticated,
-    (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    debug('POST /api/v1/swdb request');
-    // Do validation for  new records
-
-    tools.SwdbLib.newValidation(req);
-
-    req.getValidationResult().then((result) => {
-      if (!result.isEmpty()) {
-        debug('validation result: ' + JSON.stringify(result.array()));
-        res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-        return;
-      } else {
-        const username = auth.getUsername(req);
-        if (!username) {
-          res.status(500).send('Ensure authenticated failed');
-          return;
-        }
-        const dateObj = new Date(req.body.statusDate);
-        req.body.statusDate = dateObj;
-        software.createDoc(username, req, res, next);
-      }
-    });
-  });
-
-  // for get list of records requests
-  app.post('/api/v1/swdb/list', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    debug('POST /api/v1/swdb/list request');
-    software.getList(req, res, next);
-  });
-
-  // handle incoming put requests for update
-  app.put('/api/v1/swdb/:id', auth.ensureAuthenticated,
-    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    debug('PUT /api/v1/swdb/:id request');
-
-    tools.SwdbLib.updateValidation(req);
-    tools.SwdbLib.updateSanitization(req);
-    req.getValidationResult().then(async (result) => {
-      if (!result.isEmpty()) {
-        res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-        return;
-      } else {
-        // setup an array of validations to perfrom
-        // save the results in wfResultsArr, and errors in errors.
-        const wfValArr = [
-          customValidators.CustomValidators.swNoVerBranchChgIfStatusRdyInstall,
-          customValidators.CustomValidators.noSwStateChgIfReferringInst,
-        ];
-
-        const errors: customValidators.IValResult[] = [];
-        const wfResultArr = await Promise.all(
-          wfValArr.map(async (item, idx, arr) => {
-            const r = await item(req);
-            if (r.error) {
-              errors.push(r);
-            }
-            debug('wfValArr[' + idx + ']: ' + JSON.stringify(r));
-            return r;
-          }),
-        );
-
-        debug('Workflow validation results :' + JSON.stringify(wfResultArr));
-
-        if (errors.length > 0) {
-          debug('Workflow validation errors ' + JSON.stringify(errors));
-          res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
-          return;
-        } else {
-          const username = auth.getUsername(req);
-          if (!username) {
-            res.status(500).send('Ensure authenticated failed');
-            return;
-          }
-          software.updateDoc(username, req, res, next);
-        }
-      }
-    });
-  });
-
-
-  // handle incoming patch requests for update
-  app.patch('/api/v1/swdb/:id', auth.ensureAuthenticated,
-    (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    debug('PATCH /api/v1/swdb/:id request');
-
-    tools.SwdbLib.updateValidation(req);
-    tools.SwdbLib.updateSanitization(req);
-    req.getValidationResult().then(async (result) => {
-      if (!result.isEmpty()) {
-        res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-        return;
-      } else {
-        // setup an array of validations to perfrom
-        // save the results in wfResultsArr, and errors in errors.
-        const wfValArr = [
-          customValidators.CustomValidators.swNoVerBranchChgIfStatusRdyInstall,
-          customValidators.CustomValidators.noSwStateChgIfReferringInst,
-        ];
-
-        const errors: customValidators.IValResult[] = [];
-        const wfResultArr = await Promise.all(
-          wfValArr.map(async (item, idx, arr) => {
-            const r = await item(req);
-            if (r.error) {
-              errors.push(r);
-            }
-            debug('wfValArr[' + idx + ']: ' + JSON.stringify(r));
-            return r;
-          }),
-        );
-
-        debug('Workflow validation results :' + JSON.stringify(wfResultArr));
-
-        if (errors.length > 0) {
-          debug('Workflow validation errors ' + JSON.stringify(errors));
-          res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
-          return;
-        } else {
-          const username = auth.getUsername(req);
-          if (!username) {
-            res.status(500).send('Ensure authenticated failed');
-            return;
-          }
-          software.updateDoc(username, req, res, next);
-        }
-      }
-    });
-
-  });
-
-
-  // Handle installation requests
-  // for get requests that are not specific return all
-  app.get('/api/v1/inst/hist/:id', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    debug('GET /api/v1/inst/hist/:id request');
-    swinstall.getHist(req, res, next);
-  });
-  // for get requests that are specific
-  app.get('/api/v1/inst/:id', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    debug('GET /api/v1/inst/:id request');
-    swinstall.getDocs(req, res, next);
-  });
-  // for get requests that are not specific return all
-  app.get('/api/v1/inst', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    debug('GET /api/v1/inst/:id request');
-    swinstall.getDocs(req, res, next);
-  });
-
-  // handle incoming installation post requests
-  app.post('/api/v1/inst', auth.ensureAuthenticated,
-    (req: express.Request, res: express.Response, next: express.NextFunction) => {
-
-    debug('POST /api/v1/inst request');
-    // Do validation for  new records
-    instTools.InstLib.newValidation(req);
-
-    req.getValidationResult().then(async (result) => {
-      if (!result.isEmpty()) {
-        res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-        return;
-      } else {
-        const wfResults: customValidators.IValResult =
-          await customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall(req);
-        if (wfResults.error) {
-          debug('Workflow validation errors ' + JSON.stringify(wfResults));
-          res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults.data));
-          return;
-        } else {
-          debug('POST /api/v1/inst calling create...');
-          const username = auth.getUsername(req);
-          if (!username) {
-            res.status(500).send('Ensure authenticated failed');
-            return;
-          }
-          swinstall.createDoc(username, req, res, next);
-        }
-      }
-    });
-  });
-
-  // handle incoming put requests for installation update
-  app.put('/api/v1/inst/:id', auth.ensureAuthenticated,
-    (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    debug('PUT /api/v1/inst/:id request');
-    // Do validation for installation updates
-    instTools.InstLib.updateValidation(req);
-    instTools.InstLib.updateSanitization(req);
-    req.getValidationResult().then(async (result) => {
-      if (!result.isEmpty()) {
-        res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-        return;
-      } else {
-        // setup an array of validations to perfrom
-        // save the results in wfResultsArr, and errors in errors.
-        const wfValArr = [
-          customValidators.CustomValidators.noInstSwChangeUnlessReadyForInstall,
-          customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall,
-        ];
-
-        const errors: customValidators.IValResult[] = [];
-        const wfResultArr = await Promise.all(wfValArr.map(async (item, idx, arr) => {
-          const r = await item(req);
-          if (r.error) {
-            errors.push(r);
-          }
-          debug('wfValArr[' + idx + ']: ' + JSON.stringify(r));
-          return r;
-        }),
-      );
-
-        debug('Workflow validation results :' + JSON.stringify(wfResultArr));
-
-        if (errors.length > 0) {
-          debug('Workflow validation errors ' + JSON.stringify(errors));
-          res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
-          return;
-        } else {
-          const username = auth.getUsername(req);
-          if (!username) {
-            res.status(500).send('Ensure authenticated failed');
-            return;
-          }
-          swinstall.updateDoc(username, req, res, next);
-        }
-      }
-    });
-  });
-
-  // handle incoming put requests for installation update
-  app.patch('/api/v1/inst/:id', auth.ensureAuthenticated,
-    (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    debug('PATCH /api/v1/inst/:id request');
-    // Do validation for installation updates
-    instTools.InstLib.updateValidation(req);
-    instTools.InstLib.updateSanitization(req);
-    req.getValidationResult().then(async (result) => {
-      if (!result.isEmpty()) {
-        res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-        return;
-      } else {
-        // setup an array of validations to perfrom
-        // save the results in wfResultsArr, and errors in errors.
-        const wfValArr = [
-          customValidators.CustomValidators.noInstSwChangeUnlessReadyForInstall,
-          customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall,
-        ];
-
-        const errors: customValidators.IValResult[] = [];
-        const wfResultArr = await Promise.all(
-          wfValArr.map(async (item, idx, arr) => {
-            const r = await item(req);
-            if (r.error) {
-              errors.push(r);
-            }
-            debug('wfValArr[' + idx + ']: ' + JSON.stringify(r));
-            return r;
-          }),
-        );
-
-        debug('Workflow validation results :' + JSON.stringify(wfResultArr));
-
-        if (errors.length > 0) {
-          debug('Workflow validation errors ' + JSON.stringify(errors));
-          res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
-          return;
-        } else {
-          const username = auth.getUsername(req);
-          if (!username) {
-            res.status(500).send('Ensure authenticated failed');
-            return;
-          }
-          swinstall.updateDoc(username, req, res, next);
-        }
-      }
-    });
-  });
-
-  // handle incoming delete requests
-  // app.delete('/swdbserv/v1*', function(req, res, next) {
-  //   be.deleteDoc(req, res, next);
-  // });
+  app.use(softwares.getRouter());
+  app.use(swinstalls.getRouter());
 
   // handle errors
-  app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (res.headersSent) {
       return next(err);
     }

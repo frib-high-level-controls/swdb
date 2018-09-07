@@ -80,13 +80,13 @@ describe('Software API Specification', () => {
       } else {
         try {
           const sub = JSON.parse(res.text).filter((element: any, idx: number, array: object[]) => {
-            return element.uid === 'ELLISR';
+            return element.uid === 'FEDM';
           });
           if (sub.length === 1) {
             done();
           } else {
             debug('Got filtered array ' + JSON.stringify(sub));
-            done(new Error('Cannot find expected user "ELLISR"'));
+            done(new Error('Cannot find expected user "FEDM"'));
           }
         } catch (err) {
           done(err);
@@ -105,13 +105,13 @@ describe('Software API Specification', () => {
       } else {
         try {
           const sub = JSON.parse(res.text).filter((element: any, idx: number, array: object[]) => {
-            return element.uid === 'IFS:LAB.FRIB.ASD.CONTROLS';
+            return element.uid === 'ISF:LAB.DIV.FE';
           });
           if (sub.length === 1) {
             done();
           } else {
             debug('Got filtered array ' + JSON.stringify(sub));
-            done(new Error('Cannot find expected user "IFS:LAB.FRIB.ASD.CONTROLS"'));
+            done(new Error('Cannot find expected user "ISF:LAB.DIV.FE"'));
           }
         } catch (err) {
           done(err);
@@ -130,13 +130,13 @@ describe('Software API Specification', () => {
       } else {
         try {
           const sub = JSON.parse(res.text).filter((element: any, idx: number, array: object[]) => {
-            return element.uid === 'ADB:AREA.FRIB.CTRLITIDF';
+            return element.uid === 'ADB:FRONT_END';
           });
           if (sub.length === 1) {
             done();
           } else {
             debug('Got filtered array ' + JSON.stringify(sub));
-            done(new Error('Cannot find expected user "ADB:AREA.FRIB.CTRLITIDF"'));
+            done(new Error('Cannot find expected user "ADB:FRONT_END"'));
           }
         } catch (err) {
           done(err);

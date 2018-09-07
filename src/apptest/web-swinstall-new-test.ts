@@ -237,10 +237,9 @@ test.describe('Installations add screen tests', () => {
 
       driver.wait(until.elementLocated(By.xpath('//*[@id="area.0"]/input[1]')));
       const input0b = driver.findElement(By.xpath('//*[@id="area.0"]/input[1]'));
-      input0b.sendKeys('controls\n');
+      input0b.sendKeys('front\n');
 
-      driver.wait(until.elementTextContains(input0,
-        'IFS:LAB.FRIB.ASD.CONTROLS.HLCO'));
+      driver.wait(until.elementTextContains(input0, 'ADB:FRONT_END'));
     });
 
     test.it('Add new record - set area 1', () => {
@@ -253,10 +252,9 @@ test.describe('Installations add screen tests', () => {
 
       driver.wait(until.elementLocated(By.xpath('//*[@id="area.1"]/input[1]')));
       const input1b = driver.findElement(By.xpath('//*[@id="area.1"]/input[1]'));
-      input1b.sendKeys('operator\n');
+      input1b.sendKeys('cryo\n');
 
-      driver.wait(until.elementTextContains(input1,
-        'IFS:LAB.FRIB.ASD.ACCELERATOROPS.MACHINEOPERATORS'));
+      driver.wait(until.elementTextContains(input1, 'ADB:CRYO'));
     });
 
     test.it('Add new record - set area 2', () => {
@@ -269,10 +267,9 @@ test.describe('Installations add screen tests', () => {
 
       driver.wait(until.elementLocated(By.xpath('//*[@id="area.2"]/input[1]')));
       const input2b = driver.findElement(By.xpath('//*[@id="area.2"]/input[1]'));
-      input2b.sendKeys('control room\n');
+      input2b.sendKeys('target\n');
 
-      driver.wait(until.elementTextContains(input2,
-        'ADB:AREA.NSCL.CONTROLRM'));
+      driver.wait(until.elementTextContains(input2, 'ADB:TARGET'));
     });
 
     test.it('Add new record - remove area 0', () => {
@@ -381,7 +378,7 @@ test.describe('Installations add screen tests', () => {
       driver.wait(until.elementLocated(By.id('area')));
       driver.findElement(By.id('area')).getAttribute('value').then(
         (text: string) => {
-          expect(text).to.equal('IFS:LAB.FRIB.ASD.ACCELERATOROPS.MACHINEOPERATORS,ADB:AREA.NSCL.CONTROLRM');
+          expect(text).to.equal('ADB:CRYO,ADB:TARGET');
         });
     });
 

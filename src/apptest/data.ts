@@ -24,7 +24,12 @@ export const PROPS = {
 };
 
 export const USERS: forgapi.User[] = [
-  { uid: 'FEAM',
+  {
+    uid: 'DVM',
+    fullname: 'Division Manager',
+    roles: [ 'USR:DVM', 'GRP:ISF:LAB.DIV', 'GRP:ISF:LAB.DIV#LEADER' ],
+  }, {
+    uid: 'FEAM',
     fullname: 'FE Area Manager',
     roles: [ 'USR:FEAM', 'GRP:ADB:FRONT_END', 'GRP:ADB:FRONT_END#LEADER' ],
   }, {
@@ -32,17 +37,25 @@ export const USERS: forgapi.User[] = [
     fullname: 'FE Dept Manager',
     roles: [ 'USR:FEDM', 'GRP:ISF:LAB.DIV.FE', 'GRP:ISF:LAB.DIV.FE#LEADER' ],
   }, {
-    uid: 'EESME',
-    fullname: 'EE Subject Matter Expert',
+    uid: 'EEDM',
+    fullname: 'EE Dept Manager',
     roles: [ 'USR:EESME', 'GRP:ISF:LAB.DIV.EE', 'GRP:ISF:LAB.DIV.EE#LEADER' ],
   }, {
-    uid: 'MESME',
-    fullname: 'ME Subject Matter Expert',
+    uid: 'MEDM',
+    fullname: 'ME Dept Manager',
     roles: [ 'USR:MESME', 'GRP:ISF:LAB.DIV.ME', 'GRP:ISF:LAB.DIV.ME#LEADER' ],
   }, {
-    uid: 'ALTSME',
-    fullname: 'Alternative Subject Matter Expert',
-    roles: [ 'USR:ALTSME', 'GRP:ISF:LAB.DIV.GRP' ],
+    uid: 'CTRLDM',
+    fullname: 'Controls Dept Manager',
+    roles: [ 'USR:CTRLDM', 'GRP:ISF:LAB.DIV.CONTROLS', 'GRP:ISF:LAB.DIV.CONTROLS#LEADER' ],
+  }, {
+    uid: 'CTRLENG',
+    fullname: 'Controls Engineer #1',
+    roles: [ 'USR:CTRLENG', 'GRP:ISF:LAB.DIV.CONTROLS' ],
+  }, {
+    uid: 'CTRLENG2',
+    fullname: 'Controls Engineer #2',
+    roles: [ 'USR:CTRLENG2', 'GRP:ISF:LAB.DIV.CONTROLS' ],
   }, {
     uid: 'LSM',
     fullname: 'Laboratory Safety Manager',
@@ -50,6 +63,72 @@ export const USERS: forgapi.User[] = [
   },
 ];
 
+export const GROUPS: forgapi.Group[] = [
+  {
+    uid: 'ISF:LAB.DIV',
+    fullname: 'Arbitrary Lab Division',
+    leader: 'DVM',
+    source: 'ISF',
+    srcname: 'LAB.DIV',
+    type: 'DIV',
+  }, {
+    uid: 'ISF:LAB.DIV.FE',
+    fullname: 'Front End Department',
+    leader: 'FEDM',
+    source: 'ISF',
+    srcname: 'LAB.DIV.FE',
+    type: 'DEPT',
+  }, {
+    uid: 'ISF:LAB.DIV.EE',
+    fullname: 'Electrical Engineering Department',
+    leader: 'EEDM',
+    source: 'ISF',
+    srcname: 'LAB.DIV.EE',
+    type: 'DEPT',
+  }, {
+    uid: 'ISF:LAB.DIV.ME',
+    fullname: 'Mechanical Engineering Department',
+    leader: 'MEDM',
+    source: 'ISF',
+    srcname: 'LAB.DIV.ME',
+    type: 'DEPT',
+  }, {
+    uid: 'ISF:LAB.DIV.CONTROLS',
+    fullname: 'Controls Department',
+    leader: 'CTRLDM',
+    source: 'ISF',
+    srcname: 'LAB.DIV.CONTROLS',
+    type: 'DEPT',
+  }, {
+    uid: 'ISF:LAB.DIV.CONTROLS.HLC',
+    fullname: 'HL Controls Group',
+    leader: 'CTRLDM',
+    source: 'ISF',
+    srcname: 'LAB.DIV.CONTROLS.HLC',
+    type: 'GROUP',
+  }, {
+    uid: 'ADB:FRONT_END',
+    fullname: 'Front End Area',
+    leader: 'FEAM',
+    source: 'ADB',
+    srcname: 'FRONT_END',
+    type: 'AREA',
+  }, {
+    uid: 'ADB:CRYO',
+    fullname: 'Cryogenics Area',
+    leader: 'CRYOAM',
+    source: 'ADB',
+    srcname: 'CRYO',
+    type: 'AREA',
+  }, {
+    uid: 'ADB:TARGET',
+    fullname: 'Target Area',
+    leader: 'TARGAM',
+    source: 'ADB',
+    srcname: 'TARGET',
+    type: 'AREA',
+  },
+];
 
 export const SOFTWARES: any = [
   {'status':'DEVEL','levelOfCare':'MEDIUM','statusDate':'1970-07-07T07:00:00.000Z','owner':'Berryman','swName':'Test Record','version':'0.1','branch':'b1','comment':'EPICS Dictionary server'},
@@ -114,7 +193,7 @@ export async function initialize(): Promise<void> {
   await clear();
 
   forgapi.MockClient.getInstance().addUser(USERS);
-  // forgapi.MockClient.getInstance().addGroup();
+  forgapi.MockClient.getInstance().addGroup(GROUPS);
 
   for (const software of SOFTWARES) {
     await new Software(software).saveWithHistory('SYS:TEST');

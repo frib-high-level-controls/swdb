@@ -141,8 +141,8 @@ test.describe('Software update screen tests', () => {
       driver.wait(until.elementLocated(By.xpath('//*[@id="owner"]/input[1]')));
       input = driver.findElement(By.xpath('//*[@id="owner"]/input[1]'));
       input.sendKeys('controls');
-      driver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-0-2"]')));
-      input = driver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-2"]'));
+      driver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-0-1"]')));
+      input = driver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-1"]'));
       input.click();
     });
 
@@ -251,7 +251,7 @@ test.describe('Software update screen tests', () => {
       input.click();
       driver.wait(until.elementLocated(By.xpath('//*[@id="engineer"]/input[1]')));
       input = driver.findElement(By.xpath('//*[@id="engineer"]/input[1]'));
-      input.sendKeys('ellisr');
+      input.sendKeys('ctrleng2');
       driver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-1-0"]')));
       input = driver.findElement(By.xpath('//*[@id="ui-select-choices-row-1-0"]'));
       input.click();
@@ -279,7 +279,7 @@ test.describe('Software update screen tests', () => {
       driver.wait(until.elementLocated(By.id('owner')));
       driver.findElement(By.id('owner')).getAttribute('value').then(
         (text) => {
-          expect(text).to.equal('IFS:LAB.FRIB.ASD.CONTROLS.EBC');
+          expect(text).to.equal('ISF:LAB.DIV.CONTROLS.HLC');
         });
     });
 
@@ -287,7 +287,7 @@ test.describe('Software update screen tests', () => {
       driver.wait(until.elementLocated(By.id('engineer')));
       driver.findElement(By.id('engineer')).getAttribute('value').then(
         (text) => {
-          expect(text).to.equal('ELLISR');
+          expect(text).to.equal('CTRLENG2');
         });
     });
   });
@@ -296,21 +296,16 @@ test.describe('Software update screen tests', () => {
     // find the created record
     test.it('should find a record', function(this: Mocha.ITestCallbackContext) {
       driver.get(props.webUrl + '#/list');
-      driver.wait(until.elementLocated(By.id('swNameSrch')))
-        .sendKeys('swdb-update-test');
-      driver.wait(until.elementLocated(By.id('versionSrch')))
-        .sendKeys('Test version');
-      driver.wait(until.elementLocated(By.linkText('swdb-update-test')),
-        8000);
+      driver.wait(until.elementLocated(By.id('swNameSrch'))).sendKeys('swdb-update-test');
+      driver.wait(until.elementLocated(By.id('versionSrch'))).sendKeys('Test version');
+      driver.wait(until.elementLocated(By.linkText('swdb-update-test')));
     });
 
     // find the created record and click update
     test.it('should show record details', function(this: Mocha.ITestCallbackContext) {
-      driver.wait(until.elementLocated(By.linkText('swdb-update-test')),
-        8000).click();
+      driver.wait(until.elementLocated(By.linkText('swdb-update-test'))).click();
       driver.wait(until.titleIs('SWDB - Details'));
-      driver.wait(until.elementLocated(By.id('updateBtn')),
-        8000).click();
+      driver.wait(until.elementLocated(By.id('updateBtn'))).click();
     });
   });
 
@@ -367,17 +362,16 @@ test.describe('Software update screen tests', () => {
         });
     });
 
-    test.it('should show the correct owner in update', function(this: Mocha.ITestCallbackContext) {
+    test.it('should show the correct owner in update', () => {
       driver.wait(until.elementLocated(By.id('owner')));
       driver.wait(until.elementTextContains(driver.findElement(
-        By.xpath('//*[@id="owner"]/div[1]/span/span[2]/span')),
-        'IFS:LAB.FRIB.ASD.CONTROLS.EBC'));
+        By.xpath('//*[@id="owner"]/div[1]/span/span[2]/span')), 'ISF:LAB.DIV.CONTROLS'));
     });
 
-    test.it('should show the correct engineer in update', function(this: Mocha.ITestCallbackContext) {
+    test.it('should show the correct engineer in update', () => {
       driver.wait(until.elementLocated(By.id('engineer')));
       driver.wait(until.elementTextContains(driver.findElement(
-        By.xpath('//*[@id="engineer"]/div[1]/span/span[2]/span')), 'ELLISR'));
+        By.xpath('//*[@id="engineer"]/div[1]/span/span[2]/span')), 'CTRLENG2'));
     });
 
     test.it('should show the correct levelOfCare in update', () => {
@@ -497,7 +491,7 @@ test.describe('Software update screen tests', () => {
       driver.wait(until.elementLocated(By.id('owner')));
       driver.findElement(By.id('owner')).getAttribute('value').then(
         (text) => {
-          expect(text).to.equal('IFS:LAB.FRIB.ASD.CONTROLS.EBC');
+          expect(text).to.equal('ISF:LAB.DIV.CONTROLS.HLC');
         });
     });
 
@@ -505,7 +499,7 @@ test.describe('Software update screen tests', () => {
       driver.wait(until.elementLocated(By.id('engineer')));
       driver.findElement(By.id('engineer')).getAttribute('value').then(
         (text) => {
-          expect(text).to.equal('ELLISR');
+          expect(text).to.equal('CTRLENG2');
         });
     });
 
@@ -639,14 +633,13 @@ test.describe('Software update screen tests', () => {
     test.it('should show the correct owner in bump version new', function(this: Mocha.ITestCallbackContext) {
       driver.wait(until.elementLocated(By.id('owner')));
       driver.wait(until.elementTextContains(driver.findElement(
-        By.xpath('//*[@id="owner"]/div[1]/span/span[2]/span')),
-        'IFS:LAB.FRIB.ASD.CONTROLS.EBC'));
+        By.xpath('//*[@id="owner"]/div[1]/span/span[2]/span')), 'ISF:LAB.DIV.CONTROLS'));
     });
 
     test.it('should show the correct engineer in bump version new', function(this: Mocha.ITestCallbackContext) {
       driver.wait(until.elementLocated(By.id('engineer')));
       driver.wait(until.elementTextContains(driver.findElement(
-        By.xpath('//*[@id="engineer"]/div[1]/span/span[2]/span')), 'ELLISR'));
+        By.xpath('//*[@id="engineer"]/div[1]/span/span[2]/span')), 'CTRLENG2'));
     });
 
     test.it('should show the correct levelOfCare in bump version new', () => {
@@ -768,7 +761,7 @@ test.describe('Software update screen tests', () => {
       driver.wait(until.elementLocated(By.id('owner')));
       driver.findElement(By.id('owner')).getAttribute('value').then(
         (text) => {
-          expect(text).to.equal('IFS:LAB.FRIB.ASD.CONTROLS.EBC');
+          expect(text).to.equal('ISF:LAB.DIV.CONTROLS.HLC');
         });
     });
 
@@ -776,7 +769,7 @@ test.describe('Software update screen tests', () => {
       driver.wait(until.elementLocated(By.id('engineer')));
       driver.findElement(By.id('engineer')).getAttribute('value').then(
         (text) => {
-          expect(text).to.equal('ELLISR');
+          expect(text).to.equal('CTRLENG2');
         });
     });
 
@@ -890,29 +883,24 @@ test.describe('Software update screen tests', () => {
   test.describe('11. should clear all optional fields', () => {
     test.it('should find new record', function(this: Mocha.ITestCallbackContext) {
       driver.get(props.webUrl + '#/list');
-      driver.wait(until.elementLocated(By.id('swNameSrch')))
-        .sendKeys('swdb-update-test');
-      driver.wait(until.elementLocated(By.id('versionSrch')))
-        .sendKeys('Test version');
-      driver.wait(until.elementLocated(By.linkText('swdb-update-test')),
-        8000);
+      driver.wait(until.elementLocated(By.id('swNameSrch'))).sendKeys('swdb-update-test');
+      driver.wait(until.elementLocated(By.id('versionSrch'))).sendKeys('Test version');
+      driver.wait(until.elementLocated(By.linkText('swdb-update-test')));
     });
     // find the created record and click update
     test.it('should show record details', function(this: Mocha.ITestCallbackContext) {
-      driver.wait(until.elementLocated(By.linkText('swdb-update-test')),
-        8000).click();
+      driver.wait(until.elementLocated(By.linkText('swdb-update-test'))).click();
       driver.wait(until.titleIs('SWDB - Details'));
-      driver.wait(until.elementLocated(By.id('updateBtn')),
-        8000).click();
+      driver.wait(until.elementLocated(By.id('updateBtn'))).click();
     });
     test.it('should show the update title', () => {
       driver.wait(until.titleIs('SWDB - Update'));
     });
 
     test.it('should clear the description field', function(this: Mocha.ITestCallbackContext) {
-      driver.wait(until.elementLocated(By.id('desc')))
-        .clear();
+      driver.wait(until.elementLocated(By.id('desc'))).clear();
     });
+
     test.it('should clear the branch field', function(this: Mocha.ITestCallbackContext) {
       driver.wait(until.elementLocated(By.id('branch'))).clear();
     });

@@ -56,37 +56,35 @@ describe('Installations history tests suite',  () => {
     expect(count).to.equal(historyCount);
   });
 
-  it('Post a new record with correct history', (done) => {
-    supertest
+  it('Post a new record with correct history', async () => {
+    const result = await supertest
       .post('/api/v1/inst')
       .set('Accept', 'application/json')
+      .set('Content-Type', 'application/json')
       .set('Cookie', cookie)
       .send({
-       host: 'Test host',
-       name: 'Test name',
-       area: [ 'Global' ],
-       status: 'RDY_INST',
-       statusDate: '2017-04-21',
-       software: '5947589458a6aa0face9a512'})
-      .end(async (err, result) => {
-        // get record id from the returned location and find records that match
-        const id = result.header.location.split(/\//).pop();
-        wrapper.origId = id;
-        debug('Got id ' + id);
-        const canonObj: any = {
-           host: 'Test host',
-           name: 'Test name',
-           area: [ 'Global' ],
-           status: 'RDY_INST',
-           statusDate: new Date('2017-04-21'),
-           software: new mongoose.mongo.ObjectId('5947589458a6aa0face9a512')};
-        try {
-          expect(await checkHistory(debug, canonObj, id)).to.equal('History record matches');
-          done();
-        } catch (err) {
-          done(err);
-        }
-      });
+        host: 'Test host',
+        name: 'Test name',
+        area: [ 'Global' ],
+        status: 'RDY_INST',
+        statusDate: '2017-04-21',
+        software: '5947589458a6aa0face9a512',
+      })
+      .expect(201);
+
+    const id = result.header.location.split(/\//).pop();
+    wrapper.origId = id;
+    debug('Got id ' + id);
+    const canonObj: any = {
+      host: 'Test host',
+      name: 'Test name',
+      area: [ 'Global' ],
+      status: 'RDY_INST',
+      statusDate: new Date('2017-04-21'),
+      software: new mongoose.mongo.ObjectId('5947589458a6aa0face9a512'),
+    };
+
+    expect(await checkHistory(debug, canonObj, id)).to.equal('History record matches');
   });
 
   it('Update an installation record with correct history', (done) => {

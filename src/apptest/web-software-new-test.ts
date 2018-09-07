@@ -155,8 +155,8 @@ test.describe('Software update screen tests', () => {
       driver.wait(until.elementLocated(By.xpath('//*[@id="owner"]/input[1]')));
       input = driver.findElement(By.xpath('//*[@id="owner"]/input[1]'));
       input.sendKeys('controls');
-      driver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-0-2"]')));
-      input = driver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-2"]'));
+      driver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-0-0"]')));
+      input = driver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-0"]'));
       driver.wait(until.elementIsVisible(input));
       input.click();
     });
@@ -235,8 +235,8 @@ test.describe('Software update screen tests', () => {
       driver.wait(until.elementLocated(By.xpath('//*[@id="owner"]/input[1]')));
       input = driver.findElement(By.xpath('//*[@id="owner"]/input[1]'));
       input.sendKeys('controls');
-      driver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-2-2"]')));
-      input = driver.findElement(By.xpath('//*[@id="ui-select-choices-row-2-2"]'));
+      driver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-2-0"]')));
+      input = driver.findElement(By.xpath('//*[@id="ui-select-choices-row-2-0"]'));
       input.click();
     });
 
@@ -342,7 +342,7 @@ test.describe('Software update screen tests', () => {
       input.click();
       driver.wait(until.elementLocated(By.xpath('//*[@id="engineer"]/input[1]')));
       input = driver.findElement(By.xpath('//*[@id="engineer"]/input[1]'));
-      input.sendKeys('ellisr');
+      input.sendKeys('ctrleng');
       driver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-3-0"]')));
       input = driver.findElement(By.xpath('//*[@id="ui-select-choices-row-3-0"]'));
       input.click();
@@ -411,7 +411,7 @@ test.describe('Software update screen tests', () => {
       driver.wait(until.elementLocated(By.id('owner')));
       driver.findElement(By.id('owner')).getAttribute('value').then(
         (text: string) => {
-          expect(text).to.equal('IFS:LAB.FRIB.ASD.CONTROLS.EBC');
+          expect(text).to.equal('ISF:LAB.DIV.CONTROLS');
         });
     });
 
@@ -419,7 +419,7 @@ test.describe('Software update screen tests', () => {
       driver.wait(until.elementLocated(By.id('engineer')));
       driver.findElement(By.id('engineer')).getAttribute('value').then(
         (text: string) => {
-          expect(text).to.equal('ELLISR');
+          expect(text).to.equal('CTRLENG');
         });
     });
 

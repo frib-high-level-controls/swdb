@@ -98,7 +98,7 @@ test.describe('User flow2 tests', () => {
       input.click();
       driver.wait(until.elementLocated(By.xpath('//*[@id="owner"]/input[1]')));
       input = driver.findElement(By.xpath('//*[@id="owner"]/input[1]'));
-      input.sendKeys('IFS:LAB.FRIB.ASD.CONTROLS.HLCO');
+      input.sendKeys('ISF:LAB.DIV.CONTROLS.HLC');
       driver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-0-0"]')));
       input = driver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-0"]'));
       input.click();
@@ -147,7 +147,7 @@ test.describe('User flow2 tests', () => {
       driver.wait(until.elementLocated(By.id('owner')));
       driver.findElement(By.id('owner')).getAttribute('value').then(
         (text) => {
-          expect(text).to.equal('IFS:LAB.FRIB.ASD.CONTROLS.HLCO');
+          expect(text).to.equal('ISF:LAB.DIV.CONTROLS.HLC');
         });
     });
 
@@ -283,7 +283,7 @@ test.describe('User flow2 tests', () => {
       input.click();
       driver.wait(until.elementLocated(By.xpath('//*[@id="engineer"]/input[1]')));
       input = driver.findElement(By.xpath('//*[@id="engineer"]/input[1]'));
-      input.sendKeys('MAXWELLD');
+      input.sendKeys('CTRLENG');
       driver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-3-0"]')));
       input = driver.findElement(By.xpath('//*[@id="ui-select-choices-row-3-0"]'));
       input.click();
@@ -363,7 +363,7 @@ test.describe('User flow2 tests', () => {
       input0.click();
       driver.wait(until.elementLocated(By.xpath('//*[@id="area.0"]/input[1]')));
       const input0b = driver.findElement(By.xpath('//*[@id="area.0"]/input[1]'));
-      input0b.sendKeys('FRIB.FRONTEND');
+      input0b.sendKeys('front');
       driver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-5-0"]/span')));
       const inputZero = driver.findElement(By.xpath('//*[@id="ui-select-choices-row-5-0"]/span'));
       inputZero.click();
@@ -379,7 +379,7 @@ test.describe('User flow2 tests', () => {
 
       driver.wait(until.elementLocated(By.xpath('//*[@id="area.1"]/input[1]')));
       const input1b = driver.findElement(By.xpath('//*[@id="area.1"]/input[1]'));
-      input1b.sendKeys('FRIB.LINACSEG');
+      input1b.sendKeys('cryo');
       driver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-6-0"]/span')));
       const inputOne = driver.findElement(By.xpath('//*[@id="ui-select-choices-row-6-0"]/span'));
       inputOne.click();
