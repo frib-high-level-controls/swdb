@@ -14,15 +14,13 @@ import * as server from '../app/server';
 
 import * as data from './data';
 import * as cookies from './lib/cookies';
-import * as TestTools from './lib/TestTools';
+import { checkHistory } from './lib/testing';
 
 const debug = Debug('swdb:routes:history-swinstalls-test');
 
 const props = data.PROPS;
 
 const historyCount = data.SOFTWARES.length + data.SWINSTALLS.length;
-
-const testTools = new TestTools.TestTools();
 
 
 describe('Installations history tests suite',  () => {
@@ -83,7 +81,7 @@ describe('Installations history tests suite',  () => {
            statusDate: new Date('2017-04-21'),
            software: new mongoose.mongo.ObjectId('5947589458a6aa0face9a512')};
         try {
-          expect(await testTools.checkHistory(debug, canonObj, id)).to.equal('History record matches');
+          expect(await checkHistory(debug, canonObj, id)).to.equal('History record matches');
           done();
         } catch (err) {
           done(err);
@@ -106,7 +104,7 @@ describe('Installations history tests suite',  () => {
           name: 'New test name',
         };
         try {
-          expect(await testTools.checkHistory(debug, canonObj, id)).to.equal('History record matches');
+          expect(await checkHistory(debug, canonObj, id)).to.equal('History record matches');
           done();
         } catch (err) {
           done(err);

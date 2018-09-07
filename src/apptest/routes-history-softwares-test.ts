@@ -13,13 +13,11 @@ import * as server from '../app/server';
 
 import * as data from './data';
 import * as cookies from './lib/cookies';
-import * as TestTools from './lib/TestTools';
+import { checkHistory } from './lib/testing';
 
 const debug = Debug('swdb:routes:history-softwares-test');
 
 const props = data.PROPS;
-
-const testTools = new TestTools.TestTools();
 
 
 describe('History tests suite', () => {
@@ -75,7 +73,7 @@ describe('History tests suite', () => {
             levelOfCare: 'LOW', status: 'DEVEL', statusDate: new Date('2017-04-21'),
           };
           try {
-            expect(await testTools.checkHistory(debug, canonObj, id)).to.equal('History record matches');
+            expect(await checkHistory(debug, canonObj, id)).to.equal('History record matches');
             done();
           } catch (err) {
             done(err);
@@ -99,7 +97,7 @@ describe('History tests suite', () => {
             owner: 'New test owner',
           };
         try {
-          expect(await testTools.checkHistory(debug, canonObj, id)).to.equal('History record matches');
+          expect(await checkHistory(debug, canonObj, id)).to.equal('History record matches');
           done();
         } catch (err) {
           done(err);
