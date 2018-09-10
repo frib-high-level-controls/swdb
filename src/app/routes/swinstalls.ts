@@ -12,9 +12,18 @@ import * as validation from '../lib/validation';
 import * as customValidators from '../lib/validators';
 
 import {
+  catchAll,
+  HttpStatus,
+  RequestError,
+} from '../shared/handlers';
+
+import {
   ISWInstall,
   SWInstall,
 } from '../models/swinstall';
+
+
+const NOT_FOUND = HttpStatus.NOT_FOUND;
 
 const debug = Debug('swdb:routes:api-software');
 
@@ -57,45 +66,42 @@ async function createDoc(user: string, req: express.Request, res: express.Respon
 //   }
 // }
 
-function getDocs(req: express.Request, res: express.Response, next: express.NextFunction) {
-  // Convert DB Model to Web API
-  function toAPI(doc: ISWInstall): webapi.Inst {
-    return {
-      _id: String(doc._id),
-      host: doc.host,
-      name: doc.name,
-      area: doc.area,
-      slots: doc.slots,
-      status: doc.status,
-      statusDate: (doc.statusDate.getUTCMonth() + 1).toString() + '/' +
-        doc.statusDate.getUTCDate() + '/' + doc.statusDate.getUTCFullYear(),
-      software: doc.software,
-      vvResultsLoc: doc.vvResultsLoc,
-      vvApprovalDate: doc.vvApprovalDate ? (doc.vvApprovalDate.getUTCMonth() + 1).toString() + '/' +
-        doc.vvApprovalDate.getUTCDate() + '/' + doc.vvApprovalDate.getUTCFullYear() : undefined,
-      drrs: doc.drrs,
-    };
-  }
+
+
+// Convert DB Model to Web API
+function toWebAPI(doc: ISWInstall): webapi.Inst {
+  return {
+    _id: String(doc._id),
+    host: doc.host,
+    name: doc.name,
+    area: doc.area,
+    slots: doc.slots,
+    status: doc.status,
+    statusDate: (doc.statusDate.getUTCMonth() + 1).toString() + '/' +
+      doc.statusDate.getUTCDate() + '/' + doc.statusDate.getUTCFullYear(),
+    software: doc.software,
+    vvResultsLoc: doc.vvResultsLoc,
+    vvApprovalDate: doc.vvApprovalDate ? (doc.vvApprovalDate.getUTCMonth() + 1).toString() + '/' +
+      doc.vvApprovalDate.getUTCDate() + '/' + doc.vvApprovalDate.getUTCFullYear() : undefined,
+    drrs: doc.drrs,
+  };
+}
+
+
+async function getDocs(req: express.Request, res: express.Response): Promise<void> {
   const id = req.params.id;
   if (!id) {
-    // return all
-    SWInstall.find({}, (err: Error, docs: ISWInstall[]) => {
-      if (!err) {
-        res.json(docs.map(toAPI));
-      } else {
-        next(err);
-      }
-    });
-  } else {
-    // return specified item
-    SWInstall.findOne({ _id: id }, (err: Error, docs: ISWInstall) => {
-      if (!err) {
-        res.send(toAPI(docs));
-      } else {
-        next(err);
-      }
-    });
+    // return all items
+    const docs = await SWInstall.find().exec();
+    res.json(docs.map(toWebAPI));
+    return;
   }
+  // return specified item
+  const doc = await SWInstall.findById(id).exec();
+  if (!doc) {
+    throw new RequestError('Software Install not found', NOT_FOUND);
+  }
+  res.json(toWebAPI(doc));
 }
 
 /**
@@ -107,33 +113,24 @@ function getDocs(req: express.Request, res: express.Response, next: express.Next
  * @params req The express Request object
  * @params res The express Response object
  */
-async function getHist(req: express.Request, res: express.Response, next: express.NextFunction) {
-
-  const id = req.params.id;
-  debug('looking for installation history on ' + id );
+async function getHist(req: express.Request, res: express.Response): Promise<void> {
+  const id = req.params.id ? String(req.params.id) : null;
   if (!id) {
-    next(new Error('Search ID must be provided'));
-  } else {
-    // get query terms and set defaults , if needed
-    let limit = req.query.limit;
-    if (!limit) {
-      limit = 5;
-    }
-    let skip = req.query.skip;
-    if (!skip) {
-      skip = 0;
-    }
-    debug('looking for history on ' + id + ' limit is ' + limit + ' skip is ' + skip);
-    const cursor = history.Update.find({ rid: models.ObjectId(id) })
-      .sort({at: -1}).limit(Number(limit)).skip(Number(skip));
-    try {
-      const arr = await cursor.exec();
-      debug('found history ' + JSON.stringify(arr, null, 2));
-      res.send(arr);
-    } catch (err) {
-      next(err);
-    }
+    throw new Error('Search ID must be provided');
   }
+  // get query terms and set defaults, if needed
+  let limit = Number(req.query.limit);
+  if (Number.isNaN(limit) || limit < 1) {
+    limit = 5;
+  }
+  let skip = Number(req.query.skip);
+  if (Number.isNaN(skip) || skip < 0) {
+    skip = 0;
+  }
+  debug(`Find SWInstall history for ${id} with limit: ${limit}, 'skip: ${skip}`);
+  const updates = await history.Update.find({ rid: models.ObjectId(id) }).sort({at: -1}).limit(limit).skip(skip).exec();
+  debug(`Found SWInstall history with length: ${updates.length}`);
+  res.json(updates);
 }
 
 async function updateDoc(user: string, req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -191,22 +188,22 @@ async function updateDoc(user: string, req: express.Request, res: express.Respon
 
 // Handle installation requests
 // for get requests that are not specific return all
-router.get('/api/v1/inst/hist/:id', (req: express.Request, res: express.Response, next: express.NextFunction) => {
+router.get('/api/v1/inst/hist/:id', catchAll(async (req, res, next) => {
   debug('GET /api/v1/inst/hist/:id request');
-  getHist(req, res, next);
-});
+  await getHist(req, res);
+}));
 
 // for get requests that are specific
-router.get('/api/v1/inst/:id', (req: express.Request, res: express.Response, next: express.NextFunction) => {
+router.get('/api/v1/inst/:id', catchAll(async (req, res) => {
   debug('GET /api/v1/inst/:id request');
-  getDocs(req, res, next);
-});
+  await getDocs(req, res);
+}));
 
 // for get requests that are not specific return all
-router.get('/api/v1/inst', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  debug('GET /api/v1/inst/:id request');
-  getDocs(req, res, next);
-});
+router.get('/api/v1/inst', catchAll( async (req, res) => {
+  debug('GET /api/v1/inst request');
+  await getDocs(req, res);
+}));
 
 // handle incoming installation post requests
 router.post('/api/v1/inst', auth.ensureAuthenticated, (req, res, next) => {
@@ -241,8 +238,7 @@ router.post('/api/v1/inst', auth.ensureAuthenticated, (req, res, next) => {
 });
 
 // handle incoming put requests for installation update
-router.put('/api/v1/inst/:id', auth.ensureAuthenticated,
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+router.put('/api/v1/inst/:id', auth.ensureAuthenticated, (req, res, next) => {
   debug('PUT /api/v1/inst/:id request');
   // Do validation for installation updates
   validation.checkUpdateSWInstall(req);

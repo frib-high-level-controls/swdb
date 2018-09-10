@@ -33,8 +33,7 @@ declare namespace webapi {
   }
 
   // Application specific types defined below.
-
-  export interface Inst {
+  export interface SWInstall {
     _id?: string;
     host?: string;
     name?: string;
@@ -48,7 +47,9 @@ declare namespace webapi {
     drrs?: string;
   }
 
-  export interface ISwdb {
+  export type Inst = SWInstall
+
+  export interface Software {
     _id?: string;
     swName?: string;
     version?: string;
@@ -69,4 +70,6 @@ declare namespace webapi {
     previous?: string;
     comment?: string;
   }
+
+  export type ISwdb = Software;
 }

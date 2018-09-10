@@ -230,7 +230,6 @@ describe('Software API Specification', () => {
           expect(res.body).to.have.property('_id');
           expect(res.body.swName).to.equal('Header Test Record');
           expect(res.body._id).to.match(/.{24}/);
-          expect(res.body.__v).to.match(/\d+/);
           done();
         }
       });
@@ -539,7 +538,6 @@ describe('Software API Specification', () => {
           expect(res.body).to.have.property('_id');
           expect(res.body.swName).to.equal('Test Record');
           expect(res.body._id).to.match(/.{24}/);
-          expect(res.body.__v).to.match(/\d+/);
           done();
         }
       });
@@ -600,7 +598,6 @@ describe('Software API Specification', () => {
           expect(res.body).to.have.property('_id');
           expect(res.body.swName).to.equal('Desc Test Record');
           expect(res.body._id).to.match(/.{24}/);
-          expect(res.body.__v).to.match(/\d+/);
           done();
         }
       });
@@ -662,7 +659,6 @@ describe('Software API Specification', () => {
           expect(res.body.swName).to.equal('Engineer Test Record');
           expect(res.body.engineer).to.equal('Any Engineer');
           expect(res.body._id).to.match(/.{24}/);
-          expect(res.body.__v).to.match(/\d+/);
           done();
         }
       });

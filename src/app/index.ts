@@ -459,7 +459,10 @@ async function doStart(): Promise<express.Application> {
   app.use(softwares.getRouter());
   app.use(swinstalls.getRouter());
 
-  // handle errors
+  // no handler found for request (404)
+  app.use(handlers.notFoundHandler());
+
+  // handle errors (temporary)
   app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (res.headersSent) {
       return next(err);
@@ -468,14 +471,17 @@ async function doStart(): Promise<express.Application> {
       // catch mongo validation errors
       res.status(400);
       res.send(err);
+    } else if (err instanceof handlers.RequestError) {
+      res.status(err.status);
+      res.send(err.message);
     } else {
       res.status(500);
-      res.send(err.message || 'An error ocurred');
+      res.send(err.message || 'An unknown error ocurred');
+    }
+    if (res.statusCode >= 500) {
+      error(err);
     }
   });
-
-  // no handler found for request (404)
-  app.use(handlers.notFoundHandler());
 
   // error handlers
   app.use(handlers.requestErrorHandler());

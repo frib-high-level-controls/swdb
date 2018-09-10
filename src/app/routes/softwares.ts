@@ -12,8 +12,19 @@ import * as validation from '../lib/validation';
 import * as customValidators from '../lib/validators';
 
 import {
+  catchAll,
+  HttpStatus,
+  RequestError,
+} from '../shared/handlers';
+
+import {
+  ISoftware,
   Software,
 } from '../models/software';
+
+
+const NOT_FOUND = HttpStatus.NOT_FOUND;
+
 
 const debug = Debug('swdb:routes:api-software');
 
@@ -58,27 +69,46 @@ async function createDoc(user: string, req: express.Request, res: express.Respon
 //   }
 // }
 
-function getDocs(req: express.Request, res: express.Response, next: express.NextFunction) {
+
+// Convert DB Model to Web API
+function toWebAPI(doc: ISoftware): webapi.ISwdb {
+  return {
+    _id: String(doc._id),
+    swName: doc.swName,
+    version: doc.version,
+    branch: doc.branch,
+    desc: doc.desc,
+    owner: doc.owner,
+    engineer: doc.engineer,
+    levelOfCare: doc.levelOfCare,
+    status: doc.status,
+    statusDate: doc.statusDate.toISOString(),
+    platforms: doc.platforms,
+    designDescDocLoc: doc.designDescDocLoc,
+    descDocLoc: doc.descDocLoc,
+    vvProcLoc: doc.vvProcLoc,
+    vvResultsLoc: doc.vvResultsLoc,
+    versionControl: doc.versionControl,
+    versionControlLoc: doc.versionControlLoc,
+    previous: doc.previous,
+    comment: doc.comment,
+  };
+}
+
+async function getDocs(req: express.Request, res: express.Response): Promise<void> {
   const id = req.params.id;
   if (!id) {
-    // return all
-    Software.find({}, (err: Error, docs: any) => {
-      if (!err) {
-        res.send(docs);
-      } else {
-        next(err);
-      }
-    });
-  } else {
-    // return specified item`
-    Software.findOne({ _id: id }, (err: Error, docs: any) => {
-      if (!err) {
-        res.send(docs);
-      } else {
-        next(err);
-      }
-    });
+    // return all items
+    const docs = await Software.find().exec();
+    res.json(docs.map(toWebAPI));
+    return;
   }
+  // return specified item
+  const doc = await Software.findById(id).exec();
+  if (!doc) {
+    throw new RequestError('Software not found', NOT_FOUND);
+  }
+  res.json(toWebAPI(doc));
 }
 
 /**
@@ -90,32 +120,24 @@ function getDocs(req: express.Request, res: express.Response, next: express.Next
  * @params req The express Request object
  * @params res The express Response object
  */
-async function getHist(req: express.Request, res: express.Response, next: express.NextFunction) {
-
-  const id = req.params.id;
+async function getHist(req: express.Request, res: express.Response): Promise<void> {
+  const id = req.params.id ? String(req.params.id) : null;
   if (!id) {
-    next(new Error('Search ID must be provided'));
-  } else {
-    // get query terms and set defaults , if needed
-    let limit = req.query.limit;
-    if (!limit) {
-      limit = 5;
-    }
-    let skip = req.query.skip;
-    if (!skip) {
-      skip = 0;
-    }
-    debug('looking for history on ' + id + ' limit is ' + limit + ' skip is ' + skip);
-    const cursor = history.Update.find({ rid: models.ObjectId(id) })
-      .sort({at: -1}).limit(Number(limit)).skip(Number(skip));
-    try {
-      const arr = await cursor.exec();
-      debug('found history ' + JSON.stringify(arr, null, 2));
-      res.send(arr);
-    } catch (err) {
-      next(err);
-    }
+    throw new Error('Search ID must be provided');
   }
+  // get query terms and set defaults, if needed
+  let limit = Number(req.query.limit);
+  if (Number.isNaN(limit) || limit < 1) {
+    limit = 5;
+  }
+  let skip = Number(req.query.skip);
+  if (Number.isNaN(skip) || skip < 0) {
+    skip = 0;
+  }
+  debug(`Find Software history for ${id} with limit: ${limit}, skip: ${skip}`);
+  const updates = await history.Update.find({ rid: models.ObjectId(id) }).sort({at: -1}).limit(limit).skip(skip).exec();
+  debug(`Found Software history with length: ${updates.length}`);
+  res.json(updates);
 }
 
 function updateDoc(user: string, req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -198,26 +220,25 @@ function getList(req: express.Request, res: express.Response, next: express.Next
 // }
 
 // for get history requests
-router.get('/api/v1/swdb/hist/:id', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  debug('GET /api/v1/swdb/hist/* request');
-  getHist(req, res, next);
-});
+router.get('/api/v1/swdb/hist/:id', catchAll(async (req, res) => {
+  debug('GET /api/v1/swdb/hist/:id request');
+  await getHist(req, res);
+}));
 
 // for get requests that are specific
-router.get('/api/v1/swdb/:id', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  debug('GET /api/v1/swdb/* request');
-  getDocs(req, res, next);
-});
+router.get('/api/v1/swdb/:id', catchAll(async (req, res) => {
+  debug('GET /api/v1/swdb/:id request');
+  await getDocs(req, res);
+}));
 
 // for get requests that are not specific return all
-router.get('/api/v1/swdb', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  debug('GET /api/v1/swdb/* request');
-  getDocs(req, res, next);
-});
+router.get('/api/v1/swdb', catchAll(async (req, res) => {
+  debug('GET /api/v1/swdb request');
+  await getDocs(req, res);
+}));
 
 // handle incoming post requests
-router.post('/api/v1/swdb', auth.ensureAuthenticated,
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+router.post('/api/v1/swdb', auth.ensureAuthenticated, (req, res, next) => {
   debug('POST /api/v1/swdb request');
   // Do validation for  new records
 
@@ -242,14 +263,13 @@ router.post('/api/v1/swdb', auth.ensureAuthenticated,
 });
 
 // for get list of records requests
-router.post('/api/v1/swdb/list', (req: express.Request, res: express.Response, next: express.NextFunction) => {
+router.post('/api/v1/swdb/list', (req, res, next) => {
   debug('POST /api/v1/swdb/list request');
   getList(req, res, next);
 });
 
 // handle incoming put requests for update
-router.put('/api/v1/swdb/:id', auth.ensureAuthenticated,
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+router.put('/api/v1/swdb/:id', auth.ensureAuthenticated, async (req, res, next) => {
   debug('PUT /api/v1/swdb/:id request');
 
   validation.checkUpdateSoftware(req);
@@ -297,8 +317,7 @@ router.put('/api/v1/swdb/:id', auth.ensureAuthenticated,
 
 
 // handle incoming patch requests for update
-router.patch('/api/v1/swdb/:id', auth.ensureAuthenticated,
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+router.patch('/api/v1/swdb/:id', auth.ensureAuthenticated, (req, res, next) => {
   debug('PATCH /api/v1/swdb/:id request');
 
   validation.checkUpdateSoftware(req);
