@@ -186,6 +186,9 @@ export const SWINSTALLS: any =  [
 export async function clear(): Promise<void> {
   forgapi.MockClient.getInstance().clear();
   await mongoose.connection.db.dropDatabase();
+  // Must manually ensure indexes exist!
+  await Software.ensureIndexes();
+  await SWInstall.ensureIndexes();
 }
 
 export async function initialize(): Promise<void> {
