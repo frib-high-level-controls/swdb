@@ -1,10 +1,10 @@
-import cJSON = require('circular-json');
-import dbg = require('debug');
-import express = require('express');
-import  mongoose = require('mongoose');
-import validate = require('validate.js');
-
-const debug = dbg('swdb:validators');
+/**
+ * Custom validators
+ */
+import * as Debug from 'debug';
+import * as express from 'express';
+import * as mongoose from 'mongoose';
+import * as validate from 'validate.js';
 
 import {
   Software,
@@ -14,170 +14,158 @@ import {
   SWInstall,
 } from '../models/swinstall';
 
+const debug = Debug('swdb:validators');
+
+
+
+export function isFribDate(dateStr: string, opts: { req: express.Request }) {
+  //debug('req is ' + cJSON.stringify(opts.req));
+  const re = new RegExp(/\d{4}-\d{2}-\d{2}/);
+  if (re.test(dateStr)) {
+    // try making a date object
+    const dateObj = new Date(dateStr);
+    if (Number.isFinite(dateObj.getTime())) {
+      opts.req.body.statusDate = dateObj;
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+
+export function isFribVvApprovalDate(dateStr: string, opts: { req: express.Request}) {
+  //debug('req is ' + cJSON.stringify(opts.req));
+  // vvApproval date can be cleared as ''. Check this first.
+  if (dateStr === '') {
+    return true;
+  } else {
+    const re = new RegExp(/\d{4}-\d{2}-\d{2}/);
+    if (re.test(dateStr)) {
+      // try making a date object
+      const dateObj = new Date(dateStr);
+      if (Number.isFinite(dateObj.getTime())) {
+        opts.req.body.statusDate = dateObj; // this looks like a bug!?
+        return true;
+      } else {
+        return false;
+      }
+
+    } else {
+      return false;
+    }
+  }
+}
+
+export function isArea(val: string, opts: { req: express.Request }) {
+  // Must be an array of strings
+  const result: string[] = [];
+  if (Array.isArray(val)) {
+    //debug('body is ' + cJSON.stringify(opts.req.body, null, 2));
+    //debug('val is ' + cJSON.stringify(val, null, 2));
+    val.forEach((element, idx, arr) => {
+      const thisResult = validate.isString(element);
+      // debug('validation for element: ' + thisResult);
+      if (!thisResult) {
+        // record all failed fields
+        result.push(String(element) + ' must be a string');
+      }
+    });
+    return true;
+  } else {
+    return false;
+  }
+}
+
+export function isVvProcLoc(val: string, opts: { req: express.Request }) {
+  /* Case 1: The string is not a json array
+    * Case 2: The String is an array, but the listed items are not valid strings.
+    * Case 3: The string is an array and all listed items are valid strings
+    */
+  const result: string[] = [];
+  if (Array.isArray(val)) {
+    //debug('body is ' + cJSON.stringify(opts.req.body, null, 2));
+    val.forEach((element: string, idx: number, arr: any[]) => {
+      //debug('checking element ' + element);
+      //debug('checking element(by index) ' + opts.req.body.vvProcLoc[idx]);
+      const thisResult = validate.isString(element);
+      if (!thisResult) {
+        // record all failed fields
+        result.push(String(element) + ' must be a string');
+      }
+    });
+    //debug('vals: ' + JSON.stringify(result, null, 2));
+    //debug('#vals: ' + result.length);
+    if (result.length !== 0) {
+      return false; // Case 2
+    } else {
+      return true; // Case 3
+    }
+  } else {
+    return false; // Case 1
+  }
+}
+
+export function isVvResultsLoc(val: string, opts: { req: express.Request }) {
+  /* Case 1: The string is not a json array
+    * Case 2: The String is an array, but the listed items are not valid urls.
+    * Case 3: The string is an array and all listed items are valif urls
+    */
+  const result: string[] = [];
+  if (Array.isArray(val)) {
+    //debug('body is ' + cJSON.stringify(opts.req.body, null, 2));
+    val.forEach((element: string, idx: number, arr: any[]) => {
+      //debug('checking element ' + element);
+      //debug('checking element(by index) ' + opts.req.body.vvResultsLoc[idx]);
+      const thisResult = validate.isString(element);
+      if (!thisResult) {
+        // record all failed fields
+        result.push(String(element) + ' must be a string');
+      }
+    });
+    //debug('vals: ' + JSON.stringify(result, null, 2));
+    //debug('#vals: ' + result.length);
+    if (result.length !== 0) {
+      return false; // Case 2
+    } else {
+      return true; // Case 3
+    }
+  } else {
+    return false; // Case 1
+  }
+}
+
+export function isSlots(slots: any, opts: { req: express.Request }) {
+  // Must be an array of strings
+  if (Array.isArray(slots)) {
+    for (const slot of slots) {
+      if (typeof slot !== 'string') {
+        return false;
+      }
+    }
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// export function isDRRs(val: any[], opts: { req: express.Request }) {
+//   // Must be a string
+//   if (Array.isArray(val)) {
+//     val.forEach((element: any, idx: number, arr: any[]) => {
+//       opts.req.checkBody('slots[' + idx + ']',
+//         'DRR ' + idx + ' must be a string')
+//         .optional().isAscii();
+//     });
+//     return true;
+//   } else {
+//     return false;
+//   }
+// }
+
+
 export class CustomValidators {
-  public static vals = {
-    customValidators: {
-      isFribDate: (dateStr: string, req: express.Request) => {
-        debug('req is ' + cJSON.stringify(req));
-        const re = new RegExp(/\d{4}-\d{2}-\d{2}/);
-        if (re.test(dateStr)) {
-          // try making a date object
-          const dateObj = new Date(dateStr);
-          if (Number.isFinite(dateObj.getTime())) {
-            req.body.statusDate = dateObj;
-            return true;
-          } else {
-            return false;
-          }
-
-        } else {
-          return false;
-        }
-      },
-      isFribVvApprovalDate: (dateStr: string, req: express.Request) => {
-        debug('req is ' + cJSON.stringify(req));
-        // vvApproval date can be cleared as ''. Check this first.
-        if (dateStr === '') {
-          return true;
-        } else {
-          const re = new RegExp(/\d{4}-\d{2}-\d{2}/);
-          if (re.test(dateStr)) {
-            // try making a date object
-            const dateObj = new Date(dateStr);
-            if (Number.isFinite(dateObj.getTime())) {
-              req.body.statusDate = dateObj;
-              return true;
-            } else {
-              return false;
-            }
-
-          } else {
-            return false;
-          }
-        }
-      },
-      isOneOf: (str: string, arr: any[]) => {
-        return (arr.indexOf(str) > -1);
-      },
-      isInEnum: (str: string, e: any) => {
-        if (str in e) {
-          return true;
-        } else {
-          return false;
-        }
-      },
-      isArea: (val: string, req: express.Request) => {
-        // Must be an array of strings
-        const result: string[] = [];
-        if (Array.isArray(val)) {
-          debug('body is ' + cJSON.stringify(req.body, null, 2));
-          debug('val is ' + cJSON.stringify(val, null, 2));
-          val.forEach((element, idx, arr) => {
-            const thisResult = validate.isString(element);
-            // debug('validation for element: ' + thisResult);
-            if (!thisResult) {
-              // record all failed fields
-              result.push(String(element) + ' must be a string');
-            }
-          });
-          return true;
-        } else {
-          return false;
-        }
-      },
-      isVvProcLoc: (val: string, req: express.Request) => {
-        /* Case 1: The string is not a json array
-         * Case 2: The String is an array, but the listed items are not valid strings.
-         * Case 3: The string is an array and all listed items are valid strings
-         */
-        const result: string[] = [];
-        if (Array.isArray(val)) {
-          debug('body is ' + cJSON.stringify(req.body, null, 2));
-          val.forEach((element: string, idx: number, arr: any[]) => {
-            debug('checking element ' + element);
-            debug('checking element(by index) ' + req.body.vvProcLoc[idx]);
-            const thisResult = validate.isString(element);
-            if (!thisResult) {
-              // record all failed fields
-              result.push(String(element) + ' must be a string');
-            }
-          });
-          debug('vals: ' + JSON.stringify(result, null, 2));
-          // debug('#vals: ' + result.length);
-          if (result.length !== 0) {
-            return false; // Case 2
-          } else {
-            return true; // Case 3
-          }
-        } else {
-          return false; // Case 1
-        }
-      },
-      isVvResultsLoc: (val: string, req: express.Request) => {
-        /* Case 1: The string is not a json array
-         * Case 2: The String is an array, but the listed items are not valid urls.
-         * Case 3: The string is an array and all listed items are valif urls
-         */
-        const result: string[] = [];
-        if (Array.isArray(val)) {
-          debug('body is ' + cJSON.stringify(req.body, null, 2));
-          val.forEach((element: string, idx: number, arr: any[]) => {
-            debug('checking element ' + element);
-            debug('checking element(by index) ' + req.body.vvResultsLoc[idx]);
-            const thisResult = validate.isString(element);
-            if (!thisResult) {
-              // record all failed fields
-              result.push(String(element) + ' must be a string');
-            }
-          });
-          debug('vals: ' + JSON.stringify(result, null, 2));
-          // debug('#vals: ' + result.length);
-          if (result.length !== 0) {
-            return false; // Case 2
-          } else {
-            return true; // Case 3
-          }
-        } else {
-          return false; // Case 1
-        }
-      },
-      isSlots: (val: any[], req: express.Request) => {
-        // Must be an array of strings
-        if (Array.isArray(val)) {
-          val.forEach((element: any, idx: number, arr: any[]) => {
-            req.checkBody('slots[' + idx + ']',
-              'Slot ' + idx + ' must be a string')
-              .optional().isAscii();
-          });
-          return true;
-        } else {
-          return false;
-        }
-      },
-      isDRRs: (val: any[], req: express.Request) => {
-        // Must be a string
-        if (Array.isArray(val)) {
-          val.forEach((element: any, idx: number, arr: any[]) => {
-            req.checkBody('slots[' + idx + ']',
-              'DRR ' + idx + ' must be a string')
-              .optional().isAscii();
-          });
-          return true;
-        } else {
-          return false;
-        }
-      },
-      isString: (val: any) => {
-        if (typeof val === 'string') {
-          return true;
-        } else {
-          return false;
-        }
-      },
-
-    },
-  };
-
   /**
    * swNoVerBranchChgIfStatusRdyInstall - method to detect version/branch change when sw status
    *  is Ready for install

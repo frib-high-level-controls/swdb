@@ -8,13 +8,19 @@ import * as auth from '../shared/auth';
 import * as history from '../shared/history';
 import * as models from '../shared/models';
 
-import * as validation from '../lib/validation';
 import * as customValidators from '../lib/validators';
+
+import {
+  checkNewSoftware,
+  checkUpdateSoftware,
+  legacyErrorFormatter,
+} from '../lib/validation';
 
 import {
   catchAll,
   HttpStatus,
   RequestError,
+  validationResult,
 } from '../shared/handlers';
 
 import {
@@ -242,9 +248,8 @@ router.post('/api/v1/swdb', auth.ensureAuthenticated, (req, res, next) => {
   debug('POST /api/v1/swdb request');
   // Do validation for  new records
 
-  validation.checkNewSoftware(req);
-
-  req.getValidationResult().then((result) => {
+  checkNewSoftware(req).then(() => {
+    const result = validationResult(req, legacyErrorFormatter);
     if (!result.isEmpty()) {
       debug('validation result: ' + JSON.stringify(result.array()));
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
@@ -272,8 +277,8 @@ router.post('/api/v1/swdb/list', (req, res, next) => {
 router.put('/api/v1/swdb/:id', auth.ensureAuthenticated, async (req, res, next) => {
   debug('PUT /api/v1/swdb/:id request');
 
-  validation.checkUpdateSoftware(req);
-  req.getValidationResult().then(async (result) => {
+  checkUpdateSoftware(req).then(async () => {
+    const result = validationResult(req, legacyErrorFormatter);
     if (!result.isEmpty()) {
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
@@ -320,8 +325,8 @@ router.put('/api/v1/swdb/:id', auth.ensureAuthenticated, async (req, res, next) 
 router.patch('/api/v1/swdb/:id', auth.ensureAuthenticated, (req, res, next) => {
   debug('PATCH /api/v1/swdb/:id request');
 
-  validation.checkUpdateSoftware(req);
-  req.getValidationResult().then(async (result) => {
+  checkUpdateSoftware(req).then(async () => {
+    const result = validationResult(req, legacyErrorFormatter);
     if (!result.isEmpty()) {
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;

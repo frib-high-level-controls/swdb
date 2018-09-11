@@ -8,13 +8,19 @@ import * as auth from '../shared/auth';
 import * as history from '../shared/history';
 import * as models from '../shared/models';
 
-import * as validation from '../lib/validation';
 import * as customValidators from '../lib/validators';
+
+import {
+  checkNewSWInstall,
+  checkUpdateSWInstall,
+  legacyErrorFormatter,
+} from '../lib/validation';
 
 import {
   catchAll,
   HttpStatus,
   RequestError,
+  validationResult,
 } from '../shared/handlers';
 
 import {
@@ -210,9 +216,8 @@ router.post('/api/v1/inst', auth.ensureAuthenticated, (req, res, next) => {
 
   debug('POST /api/v1/inst request');
   // Do validation for  new records
-  validation.checkNewSWInstall(req);
-
-  req.getValidationResult().then(async (result) => {
+  checkNewSWInstall(req).then(async () => {
+    const result = validationResult(req, legacyErrorFormatter);
     if (!result.isEmpty()) {
       debug('Validation errors: ' + JSON.stringify(result.array()));
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
@@ -241,8 +246,8 @@ router.post('/api/v1/inst', auth.ensureAuthenticated, (req, res, next) => {
 router.put('/api/v1/inst/:id', auth.ensureAuthenticated, (req, res, next) => {
   debug('PUT /api/v1/inst/:id request');
   // Do validation for installation updates
-  validation.checkUpdateSWInstall(req);
-  req.getValidationResult().then(async (result) => {
+  checkUpdateSWInstall(req).then(async () => {
+    const result = validationResult(req, legacyErrorFormatter);
     if (!result.isEmpty()) {
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;
@@ -287,8 +292,8 @@ router.put('/api/v1/inst/:id', auth.ensureAuthenticated, (req, res, next) => {
 router.patch('/api/v1/inst/:id', auth.ensureAuthenticated, (req, res, next) => {
   debug('PATCH /api/v1/inst/:id request');
   // Do validation for installation updates
-  validation.checkUpdateSWInstall(req);
-  req.getValidationResult().then(async (result) => {
+  checkUpdateSWInstall(req).then(async () => {
+    const result = validationResult(req, legacyErrorFormatter);
     if (!result.isEmpty()) {
       res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
       return;

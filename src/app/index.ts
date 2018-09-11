@@ -11,7 +11,6 @@ import bodyparser = require('body-parser');
 import dbg = require('debug');
 import express = require('express');
 import session = require('express-session');
-import expressValidator = require('express-validator');
 import mongoose = require('mongoose');
 import morgan = require('morgan');
 import rc = require('rc');
@@ -28,8 +27,6 @@ import tasks = require('./shared/tasks');
 
 import software = require('./models/software');
 import swinstall = require('./models/swinstall');
-
-import customValidators = require('./lib/validators');
 
 import * as dataproxy from './routes/dataproxy';
 import * as softwares from './routes/softwares';
@@ -378,9 +375,6 @@ async function doStart(): Promise<express.Application> {
     auth.setProvider(new forgauth.DevForgBasicProvider(forgClient, {}));
     warn('Development authentication provider: Password verification DISABLED!');
   }
-
-  // Set custom validators in expressValidator
-  app.use(expressValidator(customValidators.CustomValidators.vals));
 
   // Session configuration
   app.use(session({

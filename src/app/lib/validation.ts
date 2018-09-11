@@ -4,16 +4,53 @@
 import * as express from 'express';
 
 import {
+  checkSchema,
+} from 'express-validator/check';
+
+import {
+  // check,
+  validate,
+} from '../shared/handlers';
+
+import {
   CARE_LEVELS,
   STATUSES as SOFTWARE_STATUSES,
   VERSION_CONTROL_SYSTEMS,
 } from '../models/software';
 
-
 import {
   STATUSES as SWINSTALL_STATUSES,
 } from '../models/swinstall';
 
+import {
+  isArea,
+  isFribDate,
+  isFribVvApprovalDate,
+  isSlots,
+  isVvProcLoc,
+  isVvResultsLoc,
+} from './validators';
+
+
+// See the definition of ErrorFormatter provided by express-validator
+interface VError {
+  location: 'body' | 'params' | 'query' | 'headers' | 'cookies'; // copied from location.d.ts
+  param: string;
+  msg: any;
+  value: any;
+}
+
+
+/**
+ * Convert validation error to legacy format
+ */
+export function legacyErrorFormatter(err: VError) {
+  return {
+    param: err.param,
+    msg: err.msg,
+    value: err.value,
+  };
+}
 
 /**
  * newValidation checks validation on new swdb records
@@ -21,10 +58,11 @@ import {
  *
  * @params req Express.Request
  */
-export const checkNewSoftware = (req: express.Request) => {
-  req.checkBody({
+export async function checkNewSoftware(req: express.Request) {
+  return validate(req, checkSchema({
     swName: {
-      notEmpty: {
+      in: 'body',
+      exists: {
         errorMessage: 'Software name is required.',
       },
       isString: {
@@ -39,6 +77,7 @@ export const checkNewSoftware = (req: express.Request) => {
       },
     },
     version: {
+      in: 'body',
       optional: true,
       isString: {
         errorMessage: 'Version must be a string.',
@@ -52,6 +91,7 @@ export const checkNewSoftware = (req: express.Request) => {
       },
     },
     branch: {
+      in: 'body',
       optional: true,
       isString: {
         errorMessage: 'Branch must be a string.',
@@ -65,6 +105,7 @@ export const checkNewSoftware = (req: express.Request) => {
       },
     },
     desc: {
+      in: 'body',
       optional: true,
       isString: {
         errorMessage: 'Description must be a string.',
@@ -78,7 +119,8 @@ export const checkNewSoftware = (req: express.Request) => {
       },
     },
     owner: {
-      notEmpty: {
+      in: 'body',
+      exists: {
         errorMessage: 'Owner is required.',
       },
       isString: {
@@ -93,6 +135,7 @@ export const checkNewSoftware = (req: express.Request) => {
       },
     },
     engineer: {
+      in: 'body',
       optional: true,
       isString: {
         errorMessage: 'Engineer must be a string.',
@@ -106,33 +149,37 @@ export const checkNewSoftware = (req: express.Request) => {
       },
     },
     levelOfCare: {
-      notEmpty: {
+      in: 'body',
+      exists: {
         errorMessage: 'Level of care is required.',
       },
-      isOneOf: {
+      isIn: {
         options: [CARE_LEVELS],
         errorMessage: 'Level of care must be one of ' + CARE_LEVELS,
       },
     },
     status: {
-      notEmpty: {
+      in: 'body',
+      exists: {
         errorMessage: 'Status is required.',
       },
-      isOneOf: {
+      isIn: {
         options: [SOFTWARE_STATUSES],
         errorMessage: 'Status must be one of ' + SOFTWARE_STATUSES,
       },
     },
     statusDate: {
-      notEmpty: {
+      in: 'body',
+      exists: {
         errorMessage: 'Status date is required.',
       },
-      isFribDate: {
-        options: [req],
+      custom: {
+        options: isFribDate,
         errorMessage: 'Status date must be a date.',
       },
     },
     platforms: {
+      in: 'body',
       optional: true,
       isString: {
         errorMessage: 'Platforms must be a string.',
@@ -146,45 +193,52 @@ export const checkNewSoftware = (req: express.Request) => {
       },
     },
     designDescDocLoc: {
+      in: 'body',
       optional: true,
       isString: {
         errorMessage: 'Design description document location must be a string.',
       },
     },
     descDocLoc: {
+      in: 'body',
       optional: true,
       isString: {
         errorMessage: 'Description document location must be a string.',
       },
     },
     vvProcLoc: {
+      in: 'body',
       optional: true,
-      isVvProcLoc: {
-        options: [req],
+      custom: {
+        options: isVvProcLoc,
         errorMessage: 'V&V procedure location must be an array of strings.',
       },
     },
     vvResultsLoc: {
+      in: 'body',
       optional: true,
-      isVvResultsLoc: {
-        options: [req],
+      custom: {
+        options: isVvResultsLoc,
         errorMessage: 'V&V results location must be an array of strings.',
       },
     },
     versionControl: {
+      in: 'body',
       optional: true,
-      isOneOf: {
+      isIn: {
         options: [VERSION_CONTROL_SYSTEMS],
         errorMessage: 'Revision control must be one of ' + VERSION_CONTROL_SYSTEMS,
       },
     },
     versionControlLoc: {
+      in: 'body',
       optional: true,
       isString: {
         errorMessage: 'Version control location must be a string.',
       },
     },
     previous: {
+      in: 'body',
       optional: true,
       isAscii: {
         errorMessage: 'Previous must be ASCII characters.',
@@ -198,6 +252,7 @@ export const checkNewSoftware = (req: express.Request) => {
       },
     },
     comment: {
+      in: 'body',
       optional: true,
       isString: {
         errorMessage: 'Comment must be a string.',
@@ -210,9 +265,8 @@ export const checkNewSoftware = (req: express.Request) => {
         errorMessage: 'Comment must be 0-2048 characters.',
       },
     },
-  });
-
-};
+  }));
+}
 
 /**
  * updateValidation checks validation on swdb record updates
@@ -220,9 +274,10 @@ export const checkNewSoftware = (req: express.Request) => {
  *
  * @params req Express.Request
  */
-export function checkUpdateSoftware(req: express.Request) {
-  req.checkBody({
+export async function checkUpdateSoftware(req: express.Request) {
+  return validate(req, checkSchema({
     swName: {
+      in: ['body'],
       optional: true,
       isString: {
         errorMessage: 'swName must be a string.',
@@ -236,6 +291,7 @@ export function checkUpdateSoftware(req: express.Request) {
       },
     },
     version: {
+      in: ['body'],
       optional: true,
       isString: {
         errorMessage: 'Version must be a string.',
@@ -246,6 +302,7 @@ export function checkUpdateSoftware(req: express.Request) {
       },
     },
     branch: {
+      in: ['body'],
       optional: true,
       isString: {
         errorMessage: 'Branch must be a string.',
@@ -256,6 +313,7 @@ export function checkUpdateSoftware(req: express.Request) {
       },
     },
     desc: {
+      in: ['body'],
       optional: true,
       isString: {
         errorMessage: 'Description must be a string',
@@ -266,7 +324,8 @@ export function checkUpdateSoftware(req: express.Request) {
       },
     },
     owner: {
-      optional: false,
+      in: ['body'],
+      optional: true,
       isString: {
         errorMessage: 'Owner must be a string.',
       },
@@ -279,6 +338,7 @@ export function checkUpdateSoftware(req: express.Request) {
       },
     },
     engineer: {
+      in: ['body'],
       optional: true,
       isString: {
         errorMessage: 'Engineer must be a string.',
@@ -289,27 +349,31 @@ export function checkUpdateSoftware(req: express.Request) {
       },
     },
     levelOfCare: {
+      in: ['body'],
       optional: true,
-      isOneOf: {
+      isIn: {
         options: [CARE_LEVELS],
         errorMessage: 'Level of care must be one of ' + CARE_LEVELS,
       },
     },
     status: {
+      in: ['body'],
       optional: true,
-      isOneOf: {
+      isIn: {
         options: [SOFTWARE_STATUSES],
         errorMessage: 'Status must be one of ' + SOFTWARE_STATUSES,
       },
     },
     statusDate: {
+      in: ['body'],
       optional: true,
-      isFribDate: {
-        options: [req],
+      custom: {
+        options: isFribDate,
         errorMessage: 'Status date must be a date.',
       },
     },
     platforms: {
+      in: ['body'],
       optional: true,
       isString: {
         errorMessage: 'Platforms must be a string.',
@@ -320,45 +384,52 @@ export function checkUpdateSoftware(req: express.Request) {
       },
     },
     designDescDocLoc: {
+      in: ['body'],
       optional: true,
       isString: {
         errorMessage: 'Design description document location must be a string.',
       },
     },
     descDocLoc: {
+      in: ['body'],
       optional: true,
       isString: {
         errorMessage: 'Description document location must be a string.',
       },
     },
     vvProcLoc: {
+      in: ['body'],
       optional: true,
-      isVvProcLoc: {
-        options: [req],
+      custom: {
+        options: isVvProcLoc,
         errorMessage: 'V&V procedure location must be an array of strings.',
       },
     },
     vvResultsLoc: {
+      in: ['body'],
       optional: true,
-      isVvResultsLoc: {
-        options: [req],
+      custom: {
+        options: isVvResultsLoc,
         errorMessage: 'V&V results location must be an array of strings.',
       },
     },
     versionControl: {
+      in: ['body'],
       optional: true,
-      isOneOf: {
+      isIn: {
         options: [VERSION_CONTROL_SYSTEMS],
         errorMessage: 'Revision control must be one of ' + VERSION_CONTROL_SYSTEMS,
       },
     },
     versionControlLoc: {
+      in: ['body'],
       optional: true,
       isString: {
         errorMessage: 'Version control location must be a string.',
       },
     },
     previous: {
+      in: ['body'],
       optional: true,
       isAscii: {
         errorMessage: 'Previous must be ASCII characters.',
@@ -372,6 +443,7 @@ export function checkUpdateSoftware(req: express.Request) {
       },
     },
     comment: {
+      in: ['body'],
       optional: true,
       isString: {
         errorMessage: 'Comment must be a string',
@@ -381,14 +453,15 @@ export function checkUpdateSoftware(req: express.Request) {
         errorMessage: 'Comment must be 0-2048 characters',
       },
     },
-  });
+  }));
 }
 
 
-export function checkNewSWInstall(req: express.Request) {
-  req.checkBody({
+export async function checkNewSWInstall(req: express.Request) {
+  return validate(req, checkSchema({
     host: {
-      notEmpty: {
+      in: ['body'],
+      exists: {
         errorMessage: 'Host is required.',
       },
       isString: {
@@ -403,36 +476,40 @@ export function checkNewSWInstall(req: express.Request) {
       },
     },
     area: {
+      in: ['body'],
       optional: true,
-      isArea: {
-        options: [req],
-        // options: [AreaEnum],
+      custom: {
+        options: isArea,
         errorMessage: 'Area must be a list of area strings.',
       },
     },
     slots: {
+      in: ['body'],
       optional: true,
-      isSlots: {
-        options: [req],
+      custom: {
+        options: isSlots,
         errorMessage: 'Slots must be a list of slots',
       },
     },
     status: {
+      in: ['body'],
       optional: true,
-      isOneOf: {
+      isIn: {
         options: [SWINSTALL_STATUSES],
         errorMessage: 'Status must be one of ' + SWINSTALL_STATUSES,
       },
     },
     statusDate: {
+      in: ['body'],
       optional: true,
-      isFribDate: {
-        options: [req],
+      custom: {
+        options: isFribDate,
         errorMessage: 'Status date must be a date.',
       },
     },
     software: {
-      notEmpty: {
+      in: ['body'],
+      exists: {
         errorMessage: 'Software reference is required.',
       },
       isString: {
@@ -447,20 +524,23 @@ export function checkNewSWInstall(req: express.Request) {
       },
     },
     vvResultsLoc: {
+      in: ['body'],
       optional: true,
-      isVvResultsLoc: {
-        options: [req],
+      custom: {
+        options: isVvResultsLoc,
         errorMessage: 'V&V results location must be an array of URLs.',
       },
     },
     vvApprovalDate: {
+      in: ['body'],
       optional: true,
-      isFribVvApprovalDate: {
-        options: [req],
+      custom: {
+        options: isFribVvApprovalDate,
         errorMessage: 'V&V approval date must be a date.',
       },
     },
     DRRs: {
+      in: ['body'],
       optional: true,
       isString: {
         errorMessage: 'DRRs must be a string.',
@@ -473,13 +553,13 @@ export function checkNewSWInstall(req: express.Request) {
         errorMessage: 'DRRs must be 1-30 characters.',
       },
     },
-
-  });
+  }));
 }
 
-export function checkUpdateSWInstall(req: express.Request) {
-  req.checkBody({
+export async function checkUpdateSWInstall(req: express.Request) {
+  return validate(req, checkSchema({
     host: {
+      in: ['body'],
       optional: true,
       isString: {
         errorMessage: 'Host must be a string.',
@@ -493,34 +573,39 @@ export function checkUpdateSWInstall(req: express.Request) {
       },
     },
     area: {
+      in: ['body'],
       optional: true,
-      isArea: {
-        options: [req],
+      custom: {
+        options: isArea,
         errorMessage: 'Area must be a list of area strings.',
       },
     },
     slots: {
+      in: ['body'],
       optional: true,
-      isSlots: {
-        options: [req],
+      custom: {
+        options: isSlots,
         errorMessage: 'Slots must be a list of slots',
       },
     },
     status: {
+      in: ['body'],
       optional: true,
-      isOneOf: {
+      isIn: {
         options: [SWINSTALL_STATUSES],
         errorMessage: 'Status must be one of ' + SWINSTALL_STATUSES,
       },
     },
     statusDate: {
+      in: ['body'],
       optional: true,
-      isFribDate: {
-        options: [req],
+      custom: {
+        options: isFribDate,
         errorMessage: 'Status date must be a date.',
       },
     },
     software: {
+      in: ['body'],
       optional: true,
       isString: {
         errorMessage: 'Software reference must be a string.',
@@ -534,20 +619,23 @@ export function checkUpdateSWInstall(req: express.Request) {
       },
     },
     vvResultsLoc: {
+      in: ['body'],
       optional: true,
-      isVvResultsLoc: {
-        options: [req],
+      custom: {
+        options: isVvResultsLoc,
         errorMessage: 'V&V results location must be an array of URLs.',
       },
     },
     vvApprovalDate: {
+      in: ['body'],
       optional: true,
-      isFribVvApprovalDate: {
-        options: [req],
+      custom: {
+        options: isFribVvApprovalDate,
         errorMessage: 'V&V approval date must be a date.',
       },
     },
     DRRs: {
+      in: ['body'],
       optional: true,
       isString: {
         errorMessage: 'DRRs must be a string.',
@@ -560,5 +648,5 @@ export function checkUpdateSWInstall(req: express.Request) {
         errorMessage: 'DRRs must be 1-30 characters.',
       },
     },
-  });
+  }));
 }
