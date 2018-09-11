@@ -3,6 +3,17 @@
  */
 import * as express from 'express';
 
+import {
+  ErrorFormatter as VErrorFormatter,
+  Result as VResult,
+  ValidationChain,
+  validationResult as vresult,
+} from 'express-validator/check';
+
+import {
+  SanitizationChain,
+} from 'express-validator/filter';
+
 import * as HttpStatusCodes from 'http-status-codes';
 
 import * as log from './logging';
@@ -14,6 +25,24 @@ type NextFunction = express.NextFunction;
 type RequestHandler = express.RequestHandler;
 type ErrorRequestHandler = express.ErrorRequestHandler;
 
+type C = ValidationChain | SanitizationChain;
+type VLocation = 'body' | 'params' | 'query' | 'headers' | 'cookies'; // copied from location.d.ts
+
+interface VError {
+  location: VLocation;
+  param: string;
+  msg: any;
+  value: any;
+}
+
+export {
+  body as check,
+} from 'express-validator/check';
+
+export {
+  sanitizeBody as sanitize,
+} from 'express-validator/filter';
+
 export const HttpStatus = HttpStatusCodes;
 
 
@@ -21,7 +50,7 @@ export interface HttpStatusError extends Error {
   status: number;
 }
 
-export type RequestPromiseHandler = (req: Request, res: Response, next?: NextFunction) => PromiseLike<void>;
+export type RequestPromiseHandler = (req: Request, res: Response, next: NextFunction) => PromiseLike<void>;
 
 export function catchAll(handler: RequestPromiseHandler): RequestHandler {
   return (req, res, next) => {
@@ -263,4 +292,87 @@ export function basePathHandler(): RequestHandler {
     res.locals.basePath = basePath;
     next();
   };
+}
+
+
+/**
+ * Process the given validation or sanitation chains for a request.
+ */
+export function validate(req: Request, chains: C[]): Promise<void> {
+  let p = Promise.resolve();
+  for (const chain of chains) {
+    p = p.then(() => {
+      return new Promise<void>((resolve, reject) => {
+        // Response is not required to process chain,
+        // but need cast to work around type checks.
+        chain(req, null as any, resolve);
+      });
+    });
+  }
+  return p;
+}
+
+/**
+ * Fomat a validation error as Package Error Detail.
+ */
+export const pkgErrorDetailFormatter: VErrorFormatter = (verror): webapi.PkgErrorDetail => {
+  return {
+    reason: 'ValidationError',
+    location: verror.param,
+    message: verror.msg,
+  };
+};
+
+/**
+ * Get the validation results from the request. If 'format' is true then convert the result
+ * to a PkgErrorDetail object. A custom validation error formatter may also be provided.
+ */
+export function validationResult(req: Request, formatWith?: false): VResult<VError>;
+export function validationResult(req: Request, formatWith: true): VResult<webapi.PkgErrorDetail>;
+export function validationResult<T = VError>(req: Request, formatWith: VErrorFormatter<T> ): VResult<T>;
+export function validationResult<T = VError>(req: Request, formatWith?: boolean | VErrorFormatter<T> ): VResult<T> {
+  const result = vresult<T>(req);
+  if (!formatWith) {
+    return result;
+  }
+  if (formatWith === true) {
+    return result.formatWith(pkgErrorDetailFormatter);
+  }
+  return result.formatWith(formatWith);
+}
+
+/**
+ * Process the given validation or sanitation chains, and if the result
+ * contains a validation error then prepare and throw a RequestError.
+ */
+export function validateAndThrow(req: Request, chains: C[]): Promise<void>;
+export function validateAndThrow(req: Request, msg: string, chains: C[]): Promise<void>;
+export function validateAndThrow(req: Request, msg: string, code: number, chains: C[]): Promise<void>;
+export function validateAndThrow(req: Request, msg?: string | C[], code?: number | C[], chains?: C[]): Promise<void> {
+  let vmsg = 'Request data validation error';
+  let vcode = HttpStatus.BAD_REQUEST;
+  if (Array.isArray(msg)) {
+    chains = msg;
+  } else if (msg) {
+    vmsg = msg;
+  }
+  if (Array.isArray(code)) {
+    chains = code;
+  } else if (code) {
+    vcode = code;
+  }
+  if (!Array.isArray(chains)) {
+     return Promise.resolve();
+  }
+  return validate(req, chains).then(() => {
+    const result = validationResult(req, true);
+    if (!result.isEmpty()) {
+      const perror: webapi.PkgError = {
+        code: vcode,
+        message: vmsg,
+        errors: result.array(),
+      };
+      throw new RequestError(perror.message, perror.code, perror);
+    }
+  });
 }

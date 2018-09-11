@@ -41,7 +41,7 @@ async function createDoc(user: string, req: express.Request, res: express.Respon
   const doc = new Software(req.body);
 
   try {
-    await doc.saveWithHistory(auth.formatRole('USR', user));
+    await doc.saveWithHistory(auth.formatRole(auth.RoleScheme.USR, user));
     debug('Created sw ' + doc._id + ' as ' + user);
     res.location(`${res.locals.basePath || ''}/api/v1/swdb/${doc.id}`);
     res.status(201);
@@ -163,7 +163,7 @@ function updateDoc(user: string, req: express.Request, res: express.Response, ne
           }
         }
         try {
-          await doc.saveWithHistory(auth.formatRole('USR', user));
+          await doc.saveWithHistory(auth.formatRole(auth.RoleScheme.USR, user));
           debug('Updated sw ' + doc._id + ' as ' + user);
           res.location(`${res.locals.basePath || ''}/api/v1/swdb/${doc.id}`);
           res.end();

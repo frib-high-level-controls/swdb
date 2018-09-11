@@ -6,61 +6,68 @@
     "port": "3000",
     "addr": "localhost", /* use "0.0.0.0" to bind to all interfaces */
     "trust_proxy": false, /* see details: https://expressjs.com/en/guide/behind-proxies.html */
-    "session_life": 28800000,
+    //"session_life": 3600000,
     // For production generate a random string using python:
     // >>> import os, base64
     // >>> print base64.b64encode(os.urandom(50)).decode('ascii')
     // Or using JavaScript (NodeJS)
     // > var crypto = require('crypto');
     // > console.log(crypto.randomBytes(50).toString('base64'));
-    "session_secret": "secret"
+    //"session_secret": "secret"
   },
   // MongoDB connection configuration using JavaScript client library
-  // (see http://mongodb.github.io/node-mongodb-native/2.0/reference/connecting/connection-settings/)
+  // (For available options see: http://mongodb.github.io/node-mongodb-native/3.1/api/MongoClient.html)
   "mongo": {
     // "user": "username",
     // "pass": "password",
-    "addr": "localhost",
-    "port": "27017",
+    "host": "localhost:27017", // Supports a comma separated list
+    // "addr": "localhost",    // Deprecated: use 'host' instead
+    // "port": "27017",        // Deprecated: use 'host' instead
     "db": "webapp-dev",
     "options": {
-      // Authentication database 
-      // "authSource": "admin",
+      // Authentication configuration 
+      // authSource: "admin",
+      // authMechanism: "MDEFAULT",
 
       // ReplicaSet configuration
-      // "replicaSet": "foo";
+      // replicaSet: "cluster-foo";
 
-      // SSL Configuration
-      // "ssl": true,
-      // "sslValidate": true,
-      // "sslCA": "",
-      // "sslCert": "",
-      // "sslKey": "",
-      // "sslPass": "",
-      // "sslCRL": "",
+      // Connection configuration
+      // connectTimeoutMS: 30000,
+      // socketTimeoutMS 360000,
+      // reconnectTries: 30,
+      // reconnectInterval: 1000,
+      // autoReconnect: true,
+      // keepAlive: true,
 
-      // Server configuration
-      // "poolSize": 5,
-      // "socketTimeoutMS": 10000,
-      // "connectTimeoutMS": 30000,
-      // "keepAlive": 1,
-      // "autoReconnect": true,
-      // "reconnectTries": 10,
-      // "reconnectInterval": 1000,
+      // SSL configuration
+      // ssl: false,
+      // sslValidate: true,
+      // sslCA: "",
+      // sslCert: "",
+      // sslKey: "",
+      // sslPass: "",
+      // sslCRL: ""
 
+      // Use the "new" style connection options (Required for Mongoose 4.x only!)
       // See http://mongoosejs.com/docs/connections.html
       "useMongoClient": true
+
+      // Use the "new" URL parser (Remove deprecation warning in Mongoose 5.x!)
+      // "useNewUrlParser": true
     }
   },
   "cas": {
-    // Append the request path to the service URL
-    //"append_path": false,
     // The CAS protocol version (CAS1.0 | CAS2.0 | CAS3.0)
     //"version": "CAS1.0",
-    // The base URL for CAS service
+    // The base URL for the CAS service
     "cas_url": "https://example.com/cas",
     // The application service URL used in the CAS protocol
-    "service_url": "http://webapp.service.com"
+    //"service_url": "/cas"
+    // The application service base URL. The service_url will be
+    // resolved against this base URL. If the service_url is not
+    // provided then the original request URL will be used instead.
+    "service_base_url": "http://webapp.service.com"
   },
   "forgapi": {
     // The base URL for the FORG API

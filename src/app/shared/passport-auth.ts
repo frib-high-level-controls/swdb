@@ -8,7 +8,6 @@ import * as ppcas from 'passport-cas';
 import * as pphttp from 'passport-http';
 
 import * as auth from './auth';
-import * as log from './logging';
 
 type Request = express.Request;
 type RequestHandler = express.RequestHandler;
@@ -25,8 +24,8 @@ export interface BasicProviderOptions {
 
 export interface CasProviderOptions {
   casUrl: string;
-  casServiceUrl: string;
-  casAppendPath?: boolean;
+  casServiceUrl?: string;
+  casServiceBaseUrl: string;
   casVersion?: string;
 }
 
@@ -40,7 +39,7 @@ export abstract class PassportAbstractProvider<S extends Strategy, AO extends Au
     extends auth.AbstractProvider<AO> {
 
   public initialize(): RequestHandler {
-    log.info('Initialize %s', this.constructor.name);
+    debug('Initialize %s', this.constructor.name);
     passport.use(this.getStrategy());
 
     // Warning: Ensure the value of `this` is properly captured.
@@ -133,8 +132,8 @@ export abstract class CasPassportAbstractProvider<AO extends CasAuthenticateOpti
       throw new Error('CAS base URL is required');
     }
 
-    if (!options.casServiceUrl) {
-      throw new Error('CAS service URL is required');
+    if (!options.casServiceBaseUrl) {
+      throw new Error('CAS application service base URL is required');
     }
 
     // The passport-cas library does not directly support version 'CAS2.0',
@@ -150,8 +149,8 @@ export abstract class CasPassportAbstractProvider<AO extends CasAuthenticateOpti
 
     const strategyOptions: ppcas.StrategyOptions = {
       ssoBaseURL: options.casUrl,
-      serviceURL: options.casAppendPath ? undefined : options.casServiceUrl,
-      serverBaseURL: options.casServiceUrl,
+      serviceURL: options.casServiceUrl,
+      serverBaseURL: options.casServiceBaseUrl,
       validateURL: options.casVersion === 'CAS2.0' ? '/serviceValidate' : undefined,
       version: version,
     };
@@ -212,20 +211,28 @@ export abstract class CasPassportAbstractProvider<AO extends CasAuthenticateOpti
     };
   }
 
-  public getCasLogoutUrl(service?: boolean): string {
+  public getCasLogoutUrl(service?: boolean | string): string {
     // Redirect to CAS logout. CAS v3 uses 'service' parameter and
     // CAS v2 uses 'url' parameter to allow redirect back to service
     // after logout is complete. The specification does not require
     // the 'gateway' parameter for logout, but RubyCAS needs it to redirect.
-    let url = this.options.casUrl + '/logout';
+    let serviceURL: string | undefined;
     if (service) {
-      if (this.options.casVersion === 'CAS3.0') {
-        url += '?service=' + encodeURIComponent(this.options.casServiceUrl);
-      } else if (this.options.casVersion === 'CAS2.0') {
-        url += '?url=' + encodeURIComponent(this.options.casServiceUrl);
+      if (typeof service === 'string') {
+        serviceURL = service;
+      } else {
+        serviceURL = this.options.casServiceBaseUrl;
       }
     }
-    return url;
+    let logoutUrl = this.options.casUrl + '/logout';
+    if (serviceURL) {
+      if (this.options.casVersion === 'CAS3.0') {
+        logoutUrl += '?service=' + encodeURIComponent(serviceURL);
+      } else if (this.options.casVersion === 'CAS2.0') {
+        logoutUrl += '?url=' + encodeURIComponent(serviceURL);
+      }
+    }
+    return logoutUrl;
   }
 
   protected getStrategy(): ppcas.Strategy {

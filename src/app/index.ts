@@ -1,33 +1,35 @@
 /**
  * Start and configure the web application.
  */
+import crypto = require('crypto');
+import fs = require('fs');
+import net = require('net');
+import path = require('path');
+import util = require('util');
+
 import bodyparser = require('body-parser');
-import cookieParser = require('cookie-parser');
 import dbg = require('debug');
 import express = require('express');
 import session = require('express-session');
 import expressValidator = require('express-validator');
-import fs = require('fs');
 import mongoose = require('mongoose');
 import morgan = require('morgan');
-import path = require('path');
-import util = require('util');
-
 import rc = require('rc');
 import favicon = require('serve-favicon');
-
-import software = require('./models/software');
-import swinstall = require('./models/swinstall');
-
-import customValidators = require('./lib/validators');
 
 import auth = require('./shared/auth');
 import forgauth = require('./shared/forg-auth');
 import forgapi = require('./shared/forgapi');
 import handlers = require('./shared/handlers');
 import logging = require('./shared/logging');
+import promises = require('./shared/promises');
 import status = require('./shared/status');
 import tasks = require('./shared/tasks');
+
+import software = require('./models/software');
+import swinstall = require('./models/swinstall');
+
+import customValidators = require('./lib/validators');
 
 import * as dataproxy from './routes/dataproxy';
 import * as softwares from './routes/softwares';
@@ -58,6 +60,7 @@ interface Config {
   mongo: {
     user?: {};
     pass?: {};
+    host?: {};
     port: {};
     addr: {};
     db: {};
@@ -66,7 +69,7 @@ interface Config {
   cas: {
     cas_url?: {};
     service_url?: {};
-    append_path?: {};
+    service_base_url?: {};
     version?: {};
   };
   forgapi: {
@@ -93,26 +96,19 @@ export let warn = logging.warn;
 export let error = logging.error;
 
 if (process.env.NODE_ENV === 'test') {
-  info = () => { return; };
-  warn = () => { return; };
-  error = () => { return; };
+  logging.setInfo(null);
+  logging.setWarn(null);
+  // logging.setError(null);
 }
 
 // application lifecycle
 const task = new tasks.StandardTask<express.Application>(doStart, doStop);
 
 // application activity
-let activeCount = 0;
 const activeLimit = 100;
-let activeStopped = Promise.resolve();
-
-function updateActivityStatus(): void {
-  if (activeCount <= activeLimit) {
-    status.setComponentOk('Activity', activeCount + ' <= ' + activeLimit);
-  } else {
-    status.setComponentError('Activity', activeCount + ' > ' + activeLimit);
-  }
-}
+const activeResponses = new Set<express.Response>();
+const activeSockets = new Set<net.Socket>();
+let activeFinished = Promise.resolve();
 
 const readFile = util.promisify(fs.readFile);
 
@@ -157,16 +153,7 @@ export function start(): Promise<express.Application> {
 // asynchronously configure the application
 async function doStart(): Promise<express.Application> {
 
-  let activeFinished: () => void;
-
   info('Application starting');
-
-  activeCount = 0;
-  activeStopped = new Promise<void>((resolve) => {
-    activeFinished = resolve;
-  });
-
-  updateActivityStatus();
 
   app = express();
 
@@ -174,32 +161,64 @@ async function doStart(): Promise<express.Application> {
   app.set('name', name);
   app.set('version', version);
 
-  app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (task.getState() !== 'STARTED') {
-      res.status(503).end('Application ' + task.getState());
-      return;
+  activeSockets.clear();
+  activeResponses.clear();
+
+  function updateActivityStatus(): void {
+    if (activeResponses.size <= activeLimit) {
+      status.setComponentOk('Activity', activeResponses.size + ' <= ' + activeLimit);
+    } else {
+      status.setComponentError('Activity', activeResponses.size + ' > ' + activeLimit);
     }
-    res.on('finish', () => {
-      activeCount -= 1;
-      updateActivityStatus();
-      if (task.getState() === 'STOPPING' && activeCount <= 0) {
-        activeFinished();
+  }
+
+  activeFinished = new Promise((resolve) => {
+    app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+      if (task.getState() !== 'STARTED') {
+        res.status(503).end('Application ' + task.getState());
+        return;
       }
+
+      if (!activeResponses.has(res)) {
+        activeResponses.add(res);
+        updateActivityStatus();
+        res.on('finish', () => {
+          if (!activeResponses.delete(res)) {
+            warn('Response is NOT active!');
+          }
+          updateActivityStatus();
+          if (task.getState() === 'STOPPING' && activeResponses.size <= 0) {
+            resolve();
+          }
+        });
+      } else {
+        warn('Response is ALREADY active!');
+      }
+
+      const socket = res.connection;
+      if (!activeSockets.has(socket)) {
+        activeSockets.add(socket);
+        socket.on('close', () => {
+          if (!activeSockets.delete(socket)) {
+            warn('Socket is NOT active!');
+          }
+        });
+      }
+
+      next();
     });
-    activeCount += 1;
-    updateActivityStatus();
-    next();
   });
 
   const env: {} | undefined = app.get('env');
+  info('Deployment environment: \'%s\'', env);
 
   const cfg: Config = {
     app: {
       port: '3000',
       addr: 'localhost',
       trust_proxy: false,
-      session_life: 28800000,
-      session_secret: 'secret',
+      session_life: 3600000,
+      session_secret: crypto.randomBytes(50).toString('base64'),
     },
     mongo: {
       port: '27017',
@@ -207,7 +226,7 @@ async function doStart(): Promise<express.Application> {
       db: 'webapp-dev',
       options: {
         // see http://mongoosejs.com/docs/connections.html
-        useMongoClient: true,
+        useNewUrlParser: true,
       },
     },
     cas: {
@@ -246,30 +265,69 @@ async function doStart(): Promise<express.Application> {
     }
     mongoUrl += '@';
   }
-  mongoUrl += cfg.mongo.addr + ':' + cfg.mongo.port + '/' + cfg.mongo.db;
+  if (!cfg.mongo.host) {
+    cfg.mongo.host = `${cfg.mongo.addr}:${cfg.mongo.port}`;
+  }
+  mongoUrl +=  `${cfg.mongo.host}/${cfg.mongo.db}`;
 
-  mongoose.Promise = global.Promise;
+  // Remove password from the MongoDB URL to avoid logging the password!
+  info('Mongoose connection URL: %s', mongoUrl.replace(/\/\/(.*):(.*)@/, '//$1:<password>@'));
+
+  if (mongoose.Promise !== global.Promise) {
+    // Mongoose 5.x should use ES6 Promises by default!
+    throw new Error('Mongoose is not using native ES6 Promises!');
+  }
+
+  status.setComponentError('MongoDB', 'Never Connected');
+  info('Mongoose connection: Never Connected');
+
+  // NOTE: Registering a listener for the 'error' event
+  // suppresses error reporting from the connect() method.
+  // Therefore call connect() BEFORE registering listeners!
+  await mongoose.connect(mongoUrl, cfg.mongo.options);
+
+  status.setComponentOk('MongoDB', 'Connected');
+  info('Mongoose connection: Connected');
 
   mongoose.connection.on('connected', () => {
     status.setComponentOk('MongoDB', 'Connected');
-    info('Mongoose default connection opened.');
+    info('Mongoose connection: Connected');
   });
 
   mongoose.connection.on('disconnected', () => {
     status.setComponentError('MongoDB', 'Disconnected');
-    warn('Mongoose default connection closed');
+    warn('Mongoose connection: Disconnected');
+  });
+
+  mongoose.connection.on('timeout', () => {
+    status.setComponentError('MongoDB', 'Timeout');
+    info('Mongoose connection: Timeout');
+  });
+
+  mongoose.connection.on('reconnect', () => {
+    status.setComponentError('MongoDB', 'Reconnected');
+    info('Mongoose connection: Reconnected');
+  });
+
+  mongoose.connection.on('close', () => {
+    status.setComponentError('MongoDB', 'Closed');
+    warn('Mongoose connection: Closed');
+  });
+
+  mongoose.connection.on('reconnectFailed', () => {
+    status.setComponentError('MongoDB', 'Reconnect Failed (Restart Required)');
+    error('Mongoose connection: Reconnect Failed');
+    // Mongoose has stopped attempting to reconnect,
+    // so initiate appliction shutdown with the
+    // expectation that systemd will auto restart.
+    error('Sending Shutdown signal: SIGINT');
+    process.kill(process.pid, 'SIGINT');
   });
 
   mongoose.connection.on('error', (err) => {
-    status.setComponentError('MongoDB', err.message || 'Unknown Error');
-    error('Mongoose default connection error: %s', err);
+    status.setComponentError('MongoDB', '%s', err);
+    error('Mongoose connection error: %s', err);
   });
-
-  status.setComponentError('MongoDB', 'Never Connected');
-  // Remove password from the mongoUrl to avoid logging the password!
-  const safeMongoUrl = mongoUrl.replace(/\/\/(.*):(.*)@/, '//$1:******@');
-  info('Mongoose default connection: %s', safeMongoUrl);
-  await mongoose.connect(mongoUrl, cfg.mongo.options);
 
   // view engine configuration
   app.set('views', path.resolve(__dirname, '..', 'views'));
@@ -303,16 +361,15 @@ async function doStart(): Promise<express.Application> {
     }
     info('CAS base URL: %s', cfg.cas.cas_url);
 
-    // if (!cfg.cas.service_base_url) {
-    //   throw new Error('CAS service base URL not configured');
-    // }
-    // info('CAS service base URL: %s (service URL: %s)', cfg.cas.service_base_url, cfg.cas.service_url);
+    if (!cfg.cas.service_base_url) {
+       throw new Error('CAS service base URL not configured');
+    }
+    info('CAS service base URL: %s (service URL: %s)', cfg.cas.service_base_url, cfg.cas.service_url);
 
     auth.setProvider(new forgauth.ForgCasProvider(forgClient, {
       casUrl: String(cfg.cas.cas_url),
       casServiceUrl: String(cfg.cas.service_url),
-      // casServiceBaseUrl: String(cfg.cas.service_base_url), 
-      casAppendPath: cfg.cas.append_path === true ? true : false,
+      casServiceBaseUrl: String(cfg.cas.service_base_url),
       casVersion: cfg.cas.version ? String(cfg.cas.version) : undefined,
     }));
     info('CAS authentication provider enabled');
@@ -369,15 +426,13 @@ async function doStart(): Promise<express.Application> {
     extended: false,
   }));
 
-  app.use(cookieParser());
-
   // handle incoming get requests
   app.get('/', (req: express.Request, res: express.Response) => {
     debug('GET / request');
     res.render('index');
   });
 
-  app.get('/login', auth.getProvider().authenticate(), (req: express.Request, res: express.Response) => {
+  app.get('/login', auth.getProvider().authenticate({ rememberParams: [ 'bounce' ]}), (req, res) => {
     debug('GET /login request');
     if (req.query.bounce) {
       res.redirect(req.query.bounce);
@@ -387,25 +442,19 @@ async function doStart(): Promise<express.Application> {
   });
 
   // logoff
-  app.get('/logout', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    debug('GET /logout request');
-    delete req.query.ticket;
+  app.get('/logout', (req, res) => {
     auth.getProvider().logout(req);
-
-    // if (provider instanceof forgauth.ForgCasProvider) {
-    //   const redirectUrl = provider.getCasLogoutUrl(true);
-    //   info('Redirect to CAS logout: %s', redirectUrl);
-    //   res.redirect(redirectUrl);
-    //   return;
-    // }
-    // res.redirect(res.locals.basePath || '/');
-
-    //res.redirect(props.auth.cas.cas_url + '/logout');
-    res.redirect('/');
+    const provider = auth.getProvider();
+    if (provider instanceof forgauth.ForgCasProvider) {
+      const redirectUrl = provider.getCasLogoutUrl(true);
+      info('Redirect to CAS logout: %s', redirectUrl);
+      res.redirect(redirectUrl);
+      return;
+    }
+    res.redirect(res.locals.basePath || '/');
   });
 
   app.use('/status', status.router);
-
 
   // for get requests that are not specific return all
   app.get('/api/v1/swdb/user', (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -499,16 +548,23 @@ export function stop(): Promise<void> {
 async function doStop(): Promise<void> {
   info('Application stopping');
 
-  if (activeCount > 0) {
-    info('Waiting for active requests to stop');
-    await activeStopped;
+  if (activeResponses.size > 0) {
+    info('Wait for %s active response(s)', activeResponses.size);
+    try {
+      await Promise.race([activeFinished, promises.rejectTimeout(15000)]);
+    } catch (err) {
+      warn('Timeout: End %s active response(s)', activeResponses.size);
+      for (const res of activeResponses) {
+        res.end();
+      }
+    }
   }
 
-  try {
-    await status.monitor.stop();
-    info('Status monitor stopped');
-  } catch (err) {
-    warn('Status monitor stop failure: %s', err);
+  if (activeSockets.size > 0) {
+    warn('Destroy %s active socket(s)', activeSockets.size);
+    for (const soc of activeSockets) {
+      soc.destroy();
+    }
   }
 
   // disconnect Mongoose (MongoDB)
@@ -517,6 +573,13 @@ async function doStop(): Promise<void> {
     info('Mongoose disconnected');
   } catch (err) {
     warn('Mongoose disconnect failure: %s', err);
+  }
+
+  try {
+    await status.monitor.stop();
+    info('Status monitor stopped');
+  } catch (err) {
+    warn('Status monitor stop failure: %s', err);
   }
 
   info('Application stopped');

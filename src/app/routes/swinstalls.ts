@@ -38,7 +38,7 @@ export function getRouter(opts?: {}): express.Router {
 async function createDoc(user: string, req: express.Request, res: express.Response, next: express.NextFunction) {
   const doc = new SWInstall(req.body);
   try {
-    await doc.saveWithHistory(auth.formatRole('USR', user));
+    await doc.saveWithHistory(auth.formatRole(auth.RoleScheme.USR, user));
     debug('Created installation ' + JSON.stringify(doc, null, 2) + ' as ' + req.session!.username);
     res.location(`${res.locals.basePath || ''}/api/v1/inst/${doc.id}`);
     res.status(201);
@@ -148,7 +148,7 @@ async function updateDoc(user: string, req: express.Request, res: express.Respon
           }
         }
         try {
-          await founddoc.saveWithHistory(auth.formatRole('USR', user));
+          await founddoc.saveWithHistory(auth.formatRole(auth.RoleScheme.USR, user));
           debug('Updated installation ' + JSON.stringify(founddoc, null, 2) + ' as ' + req.session!.username);
           res.location(`${res.locals.basePath || ''}/api/v1/inst/${founddoc.id}`);
           res.end();

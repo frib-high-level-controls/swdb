@@ -211,7 +211,7 @@ async function main() {
   // Clean DB before saving data
   await mongoose.connection.db.dropDatabase();
 
-  const updatedBy = auth.formatRole('SYS', 'IMPORTXLSX');
+  const updatedBy = auth.formatRole(auth.RoleScheme.SYS, 'IMPORTXLSX');
 
   for (const doc of swDataDoc) {
     try {
