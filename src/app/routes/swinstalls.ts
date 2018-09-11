@@ -8,7 +8,10 @@ import * as auth from '../shared/auth';
 import * as history from '../shared/history';
 import * as models from '../shared/models';
 
-import * as customValidators from '../lib/validators';
+import {
+  CustomValidators,
+  IValResult,
+} from '../lib/validators';
 
 import {
   checkNewSWInstall,
@@ -40,40 +43,6 @@ export function getRouter(opts?: {}): express.Router {
 }
 
 
-// Create a new record in the backend storage
-async function createDoc(user: string, req: express.Request, res: express.Response, next: express.NextFunction) {
-  const doc = new SWInstall(req.body);
-  try {
-    await doc.saveWithHistory(auth.formatRole(auth.RoleScheme.USR, user));
-    debug('Created installation ' + JSON.stringify(doc, null, 2) + ' as ' + req.session!.username);
-    res.location(`${res.locals.basePath || ''}/api/v1/inst/${doc.id}`);
-    res.status(201);
-    res.send();
-  } catch (err) {
-      debug('Error creating installation ' + doc._id + err);
-      next(err);
-  }
-}
-
-/**
- * createDocByRecord - crates a new record given a single sw record
- *
- * @param user The user making the request (String)
- * @param req The requested sw record to save
- */
-// async function createDocByRecord(user: string, req: express.Request) {
-//   const doc = new SWInstall(req);
-
-//   try {
-//     await doc.saveWithHistory(auth.formatRole('USR', user));
-//     debug('Created installation ' + doc._id + ' as ' + user);
-//   } catch (err) {
-//       debug('Error creating installation ' + doc._id + ': ' + err);
-//   }
-// }
-
-
-
 // Convert DB Model to Web API
 function toWebAPI(doc: ISWInstall): webapi.Inst {
   return {
@@ -93,6 +62,30 @@ function toWebAPI(doc: ISWInstall): webapi.Inst {
   };
 }
 
+// Create a new record in the backend storage
+async function createDoc(user: string, req: express.Request, res: express.Response): Promise<void> {
+  const doc = await new SWInstall(req.body).saveWithHistory(auth.formatRole(auth.RoleScheme.USR, user));
+  debug('Created SWInstall: ' + doc._id + ' as ' + user);
+  res.location(`${res.locals.basePath || ''}/api/v1/inst/${doc.id}`);
+  res.status(201).json(toWebAPI(doc));
+}
+
+/**
+ * createDocByRecord - crates a new record given a single sw record
+ *
+ * @param user The user making the request (String)
+ * @param req The requested sw record to save
+ */
+// async function createDocByRecord(user: string, req: express.Request) {
+//   const doc = new SWInstall(req);
+
+//   try {
+//     await doc.saveWithHistory(auth.formatRole('USR', user));
+//     debug('Created installation ' + doc._id + ' as ' + user);
+//   } catch (err) {
+//       debug('Error creating installation ' + doc._id + ': ' + err);
+//   }
+// }
 
 async function getDocs(req: express.Request, res: express.Response): Promise<void> {
   const id = req.params.id;
@@ -139,35 +132,30 @@ async function getHist(req: express.Request, res: express.Response): Promise<voi
   res.json(updates);
 }
 
-async function updateDoc(user: string, req: express.Request, res: express.Response, next: express.NextFunction) {
-  const id = req.params.id;
-  if (id) {
-    SWInstall.findOne({ _id: id }, async (err: Error, founddoc: any) => {
-      if (founddoc) {
-        for (const prop in req.body) {
-          if (req.body.hasOwnProperty(prop)) {
-            // overwrite the record property with this, but not id
-            if (prop === '_id') {
-              continue;
-            }
-            founddoc[prop] = req.body[prop];
-          }
-        }
-        try {
-          await founddoc.saveWithHistory(auth.formatRole(auth.RoleScheme.USR, user));
-          debug('Updated installation ' + JSON.stringify(founddoc, null, 2) + ' as ' + req.session!.username);
-          res.location(`${res.locals.basePath || ''}/api/v1/inst/${founddoc.id}`);
-          res.end();
-        } catch (err) {
-          next(err);
-        }
-      } else {
-        return next(new Error('Record not found'));
-      }
-    });
-  } else {
-    next(new Error('Record not found'));
+async function updateDoc(user: string, req: express.Request, res: express.Response): Promise<void> {
+  const id = req.params.id ? String(req.params.id) : null;
+  if (!id) {
+    throw new Error('Record not found');
   }
+  const doc = await SWInstall.findById(id).exec();
+  if (!doc) {
+    throw new Error('Record not found');
+  }
+
+  doc.schema.eachPath((path) => {
+    if ([ '_id', 'history' ].includes(path)) {
+      return;
+    }
+    if (req.body[path] !== undefined) {
+      debug(`Updated SWInstall path: ${path}, value: '${req.body[path]}'`);
+      doc.set(path, req.body[path]);
+    }
+  });
+
+  await doc.saveWithHistory(auth.formatRole(auth.RoleScheme.USR, user));
+  debug(`Updated Software: ${doc._id} as ${user}`);
+  res.location(`${res.locals.basePath || ''}/api/v1/inst/${doc.id}`);
+  res.json(toWebAPI(doc));
 }
 
 
@@ -194,7 +182,7 @@ async function updateDoc(user: string, req: express.Request, res: express.Respon
 
 // Handle installation requests
 // for get requests that are not specific return all
-router.get('/api/v1/inst/hist/:id', catchAll(async (req, res, next) => {
+router.get('/api/v1/inst/hist/:id', catchAll(async (req, res) => {
   debug('GET /api/v1/inst/hist/:id request');
   await getHist(req, res);
 }));
@@ -212,128 +200,123 @@ router.get('/api/v1/inst', catchAll( async (req, res) => {
 }));
 
 // handle incoming installation post requests
-router.post('/api/v1/inst', auth.ensureAuthenticated, (req, res, next) => {
-
+router.post('/api/v1/inst', auth.ensureAuthenticated, catchAll(async (req, res) => {
   debug('POST /api/v1/inst request');
+
   // Do validation for  new records
-  checkNewSWInstall(req).then(async () => {
-    const result = validationResult(req, legacyErrorFormatter);
-    if (!result.isEmpty()) {
-      debug('Validation errors: ' + JSON.stringify(result.array()));
-      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-      return;
-    } else {
-      const wfResults: customValidators.IValResult =
-        await customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall(req);
-      if (wfResults.error) {
-        debug('Workflow validation errors ' + JSON.stringify(wfResults));
-        res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults.data));
-        return;
-      } else {
-        debug('POST /api/v1/inst calling create...');
-        const username = auth.getUsername(req);
-        if (!username) {
-          res.status(500).send('Ensure authenticated failed');
-          return;
-        }
-        createDoc(username, req, res, next);
-      }
-    }
-  });
-});
+  await checkNewSWInstall(req);
+
+  const result = validationResult(req, legacyErrorFormatter);
+  if (!result.isEmpty()) {
+    debug('Validation errors: ' + JSON.stringify(result.array()));
+    res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+    return;
+  }
+
+  const wfResults = await CustomValidators.noInstSwUnlessSwIsReadyForInstall(req);
+  if (wfResults.error) {
+    debug('Workflow validation errors ' + JSON.stringify(wfResults));
+    res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults.data));
+    return;
+  }
+
+  const username = auth.getUsername(req);
+  if (!username) {
+    res.status(500).send('Ensure authenticated failed');
+    return;
+  }
+
+  await createDoc(username, req, res);
+}));
 
 // handle incoming put requests for installation update
-router.put('/api/v1/inst/:id', auth.ensureAuthenticated, (req, res, next) => {
+router.put('/api/v1/inst/:id', auth.ensureAuthenticated, catchAll(async (req, res) => {
   debug('PUT /api/v1/inst/:id request');
+
   // Do validation for installation updates
-  checkUpdateSWInstall(req).then(async () => {
-    const result = validationResult(req, legacyErrorFormatter);
-    if (!result.isEmpty()) {
-      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-      return;
-    } else {
-      // setup an array of validations to perfrom
-      // save the results in wfResultsArr, and errors in errors.
-      const wfValArr = [
-        customValidators.CustomValidators.noInstSwChangeUnlessReadyForInstall,
-        customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall,
-      ];
+  await checkUpdateSWInstall(req);
 
-      const errors: customValidators.IValResult[] = [];
-      const wfResultArr = await Promise.all(wfValArr.map(async (item, idx, arr) => {
-        const r = await item(req);
-        if (r.error) {
-          errors.push(r);
-        }
-        debug('wfValArr[' + idx + ']: ' + JSON.stringify(r));
-        return r;
-      }),
-    );
+  const result = validationResult(req, legacyErrorFormatter);
+  if (!result.isEmpty()) {
+    res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+    return;
+  }
 
-      debug('Workflow validation results :' + JSON.stringify(wfResultArr));
+  // setup an array of validations to perfrom
+  // save the results in wfResultsArr, and errors in errors.
+  const wfResultArr = await Promise.all([
+    CustomValidators.noInstSwChangeUnlessReadyForInstall(req),
+    CustomValidators.noInstSwUnlessSwIsReadyForInstall(req),
+  ]);
 
-      if (errors.length > 0) {
-        debug('Workflow validation errors ' + JSON.stringify(errors));
-        res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
-        return;
-      } else {
-        const username = auth.getUsername(req);
-        if (!username) {
-          res.status(500).send('Ensure authenticated failed');
-          return;
-        }
-        updateDoc(username, req, res, next);
-      }
+  const errors = wfResultArr.reduce<IValResult[]>((p, r, idx) => {
+    if (r.error) {
+      p.push(r);
     }
-  });
-});
+    debug('wfValArr[' + idx + ']: ' + JSON.stringify(r));
+    return p;
+  }, []);
+
+  debug('Workflow validation results :' + JSON.stringify(wfResultArr));
+
+  if (errors.length > 0) {
+    debug('Workflow validation errors: ' + JSON.stringify(errors));
+    res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
+    return;
+  }
+
+  const username = auth.getUsername(req);
+  if (!username) {
+    res.status(500).send('Ensure authenticated failed');
+    return;
+  }
+
+  await updateDoc(username, req, res);
+}));
 
 // handle incoming put requests for installation update
-router.patch('/api/v1/inst/:id', auth.ensureAuthenticated, (req, res, next) => {
+router.patch('/api/v1/inst/:id', auth.ensureAuthenticated, catchAll(async (req, res) => {
   debug('PATCH /api/v1/inst/:id request');
+
   // Do validation for installation updates
-  checkUpdateSWInstall(req).then(async () => {
-    const result = validationResult(req, legacyErrorFormatter);
-    if (!result.isEmpty()) {
-      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-      return;
-    } else {
-      // setup an array of validations to perfrom
-      // save the results in wfResultsArr, and errors in errors.
-      const wfValArr = [
-        customValidators.CustomValidators.noInstSwChangeUnlessReadyForInstall,
-        customValidators.CustomValidators.noInstSwUnlessSwIsReadyForInstall,
-      ];
+  await checkUpdateSWInstall(req);
 
-      const errors: customValidators.IValResult[] = [];
-      const wfResultArr = await Promise.all(
-        wfValArr.map(async (item, idx, arr) => {
-          const r = await item(req);
-          if (r.error) {
-            errors.push(r);
-          }
-          debug('wfValArr[' + idx + ']: ' + JSON.stringify(r));
-          return r;
-        }),
-      );
+  const result = validationResult(req, legacyErrorFormatter);
+  if (!result.isEmpty()) {
+    res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+    return;
+  }
 
-      debug('Workflow validation results :' + JSON.stringify(wfResultArr));
+  // setup an array of validations to perfrom
+  const wfResultArr = await Promise.all([
+    CustomValidators.noInstSwChangeUnlessReadyForInstall(req),
+    CustomValidators.noInstSwUnlessSwIsReadyForInstall(req),
+  ]);
 
-      if (errors.length > 0) {
-        debug('Workflow validation errors ' + JSON.stringify(errors));
-        res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
-        return;
-      } else {
-        const username = auth.getUsername(req);
-        if (!username) {
-          res.status(500).send('Ensure authenticated failed');
-          return;
-        }
-        updateDoc(username, req, res, next);
-      }
+  const errors = wfResultArr.reduce<IValResult[]>((p, r, idx) => {
+    if (r.error) {
+      p.push(r);
     }
-  });
-});
+    debug('wfValArr[' + idx + ']: ' + JSON.stringify(r));
+    return p;
+  }, []);
+
+  debug('Workflow validation results :' + JSON.stringify(wfResultArr));
+
+  if (errors.length > 0) {
+    debug('Workflow validation errors ' + JSON.stringify(errors));
+    res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
+    return;
+  }
+
+  const username = auth.getUsername(req);
+  if (!username) {
+    res.status(500).send('Ensure authenticated failed');
+    return;
+  }
+
+  await updateDoc(username, req, res);
+}));
 
 // handle incoming delete requests
 // router.delete('/swdbserv/v1*', function(req, res, next) {
