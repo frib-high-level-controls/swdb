@@ -25,10 +25,8 @@ import promises = require('./shared/promises');
 import status = require('./shared/status');
 import tasks = require('./shared/tasks');
 
-import software = require('./models/software');
-import swinstall = require('./models/swinstall');
-
 import * as dataproxy from './routes/dataproxy';
+import * as metadata from './routes/metadata';
 import * as softwares from './routes/softwares';
 import * as swinstalls from './routes/swinstalls';
 
@@ -450,51 +448,7 @@ async function doStart(): Promise<express.Application> {
 
   app.use('/status', status.router);
 
-  // for get requests that are not specific return all
-  app.get('/api/v1/swdb/user', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    debug('GET /api/v1/swdb/user request');
-    res.json({ user: auth.getProvider().getUser(req) });
-    debug('sending user data ' + JSON.stringify({ user: auth.getProvider().getUser(req) }, null, 2));
-  });
-
-  // for get requests that are not specific return all
-  app.get('/api/v1/swdb/config', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    // update props and send config
-    debug('GET /api/v1/swdb/config request');
-    const config: any = {};
-    config.webUrl = 'http://localhost:3000/';
-
-    config.LevelOfCareEnum = {};
-    config.LevelOfCareEnum[software.CareLevel.LOW] = 'Low';
-    config.LevelOfCareEnum[software.CareLevel.MEDIUM] = 'Medium';
-    config.LevelOfCareEnum[software.CareLevel.HIGH] = 'High';
-
-    config.StatusEnum = {};
-    config.StatusEnum[software.Status.DEVEL] = 'Development';
-    config.StatusEnum[software.Status.RDY_TEST] = 'Ready for test';
-    config.StatusEnum[software.Status.RDY_INST] =  'Ready for install';
-    config.StatusEnum[software.Status.DEP] = 'DEPRECATED';
-
-    config.InstStatusEnum = {};
-    config.InstStatusEnum[swinstall.Status.RDY_INST] = 'Ready for install';
-    config.InstStatusEnum[swinstall.Status.RDY_VER] = 'Ready for verification';
-    config.InstStatusEnum[swinstall.Status.RDY_BEAM] = 'Ready for beam';
-    config.InstStatusEnum[swinstall.Status.RET] = 'Retired';
-
-    config.RcsEnum = {};
-    config.RcsEnum[software.VCS.GIT] = 'Git';
-    config.RcsEnum[software.VCS.AC] = 'AssetCentre';
-    config.RcsEnum[software.VCS.FS] =  'Filesystem';
-    config.RcsEnum[software.VCS.DEB] =  'Debian';
-    config.RcsEnum[software.VCS.OTHER] = 'Other';
-
-    config.levelOfCareLabels = Object.keys(config.LevelOfCareEnum).map((k) => config.LevelOfCareEnum[k]);
-    config.statusLabels = Object.keys(config.StatusEnum).map((k) => config.StatusEnum[k]);
-    config.instStatusLabels = Object.keys(config.InstStatusEnum).map((k) => config.InstStatusEnum[k]);
-    config.rcsLabels = Object.keys(config.RcsEnum).map((k) => config.RcsEnum[k]);
-
-    res.send(JSON.stringify(config));
-  });
+  app.use(metadata.getRouter());
 
   dataproxy.setForgClient(forgClient);
   app.use(dataproxy.getRouter());
