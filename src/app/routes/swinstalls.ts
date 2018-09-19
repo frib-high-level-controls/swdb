@@ -8,6 +8,8 @@ import * as auth from '../shared/auth';
 import * as history from '../shared/history';
 import * as models from '../shared/models';
 
+import * as legacy from '../lib/legacy';
+
 import {
   CustomValidators,
   IValResult,
@@ -16,7 +18,6 @@ import {
 import {
   checkNewSWInstall,
   checkUpdateSWInstall,
-  legacyErrorFormatter,
 } from '../lib/validation';
 
 import {
@@ -206,7 +207,7 @@ router.post('/api/v1/inst', auth.ensureAuthenticated, catchAll(async (req, res) 
   // Do validation for  new records
   await checkNewSWInstall(req);
 
-  const result = validationResult(req, legacyErrorFormatter);
+  const result = validationResult(req, legacy.validationErrorFormatter);
   if (!result.isEmpty()) {
     debug('Validation errors: ' + JSON.stringify(result.array()));
     res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
@@ -236,7 +237,7 @@ router.put('/api/v1/inst/:id', auth.ensureAuthenticated, catchAll(async (req, re
   // Do validation for installation updates
   await checkUpdateSWInstall(req);
 
-  const result = validationResult(req, legacyErrorFormatter);
+  const result = validationResult(req, legacy.validationErrorFormatter);
   if (!result.isEmpty()) {
     res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
     return;
@@ -281,7 +282,7 @@ router.patch('/api/v1/inst/:id', auth.ensureAuthenticated, catchAll(async (req, 
   // Do validation for installation updates
   await checkUpdateSWInstall(req);
 
-  const result = validationResult(req, legacyErrorFormatter);
+  const result = validationResult(req, legacy.validationErrorFormatter);
   if (!result.isEmpty()) {
     res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
     return;

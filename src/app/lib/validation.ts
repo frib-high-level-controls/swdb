@@ -32,26 +32,6 @@ import {
 } from './validators';
 
 
-// See the definition of ErrorFormatter provided by express-validator
-interface VError {
-  location: 'body' | 'params' | 'query' | 'headers' | 'cookies'; // copied from location.d.ts
-  param: string;
-  msg: any;
-  value: any;
-}
-
-
-/**
- * Convert validation error to legacy format
- */
-export function legacyErrorFormatter(err: VError) {
-  return {
-    param: err.param,
-    msg: err.msg,
-    value: err.value,
-  };
-}
-
 /**
  * newValidation checks validation on new swdb records
  * Uses express-validator.

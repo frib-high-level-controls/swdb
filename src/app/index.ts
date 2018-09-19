@@ -25,6 +25,8 @@ import promises = require('./shared/promises');
 import status = require('./shared/status');
 import tasks = require('./shared/tasks');
 
+import * as legacy from './lib/legacy';
+
 import * as dataproxy from './routes/dataproxy';
 import * as metadata from './routes/metadata';
 import * as softwares from './routes/softwares';
@@ -419,7 +421,7 @@ async function doStart(): Promise<express.Application> {
   }));
 
   // handle incoming get requests
-  app.get('/', (req: express.Request, res: express.Response) => {
+  app.get('/', (req, res) => {
     debug('GET / request');
     res.render('index');
   });
@@ -459,26 +461,8 @@ async function doStart(): Promise<express.Application> {
   // no handler found for request (404)
   app.use(handlers.notFoundHandler());
 
-  // handle errors (temporary)
-  app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (res.headersSent) {
-      return next(err);
-    }
-    if (err.name === 'ValidationError') {
-      // catch mongo validation errors
-      res.status(400);
-      res.send(err);
-    } else if (err instanceof handlers.RequestError) {
-      res.status(err.status);
-      res.send(err.message);
-    } else {
-      res.status(500);
-      res.send(err.message || 'An unknown error ocurred');
-    }
-    if (res.statusCode >= 500) {
-      error(err);
-    }
-  });
+  // legacy error handler (non-template)
+  app.use(legacy.requestErrorHandler);
 
   // error handlers
   app.use(handlers.requestErrorHandler());
