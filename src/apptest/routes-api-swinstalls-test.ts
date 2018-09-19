@@ -7,7 +7,7 @@ import { Application } from 'express';
 
 import * as SuperTest from 'supertest';
 
-import * as server from '../app/server';
+import * as server from './app';
 
 import * as data from './data';
 import * as cookies from './lib/cookies';

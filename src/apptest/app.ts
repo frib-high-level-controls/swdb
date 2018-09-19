@@ -19,6 +19,13 @@ import * as tasks from '../app/shared/tasks';
 
 import * as forgapi from './shared/mock-forgapi';
 
+import * as legacy from '../app/lib/legacy';
+
+import * as dataproxy from '../app/routes/dataproxy';
+import * as metadata from '../app/routes/metadata';
+import * as softwares from '../app/routes/softwares';
+import * as swinstalls from '../app/routes/swinstalls';
+
 // application states
 export type State = State;
 
@@ -73,6 +80,11 @@ async function doStart(): Promise<express.Application> {
   // Clear the DB on application startup?
   // await mongoose.connection.db.dropDatabase();
 
+  // view engine configuration
+  app.set('views', path.resolve(__dirname, '..', '..', 'views'));
+  app.set('view engine', 'pug');
+  app.set('view cache', true);
+
   app.use(bodyparser.json());
   app.use(bodyparser.urlencoded({
     extended: false,
@@ -89,12 +101,46 @@ async function doStart(): Promise<express.Application> {
     },
   }));
 
+  app.use(authProvider.initialize());
+
   app.use(express.static(path.resolve(__dirname, '..', '..', 'public')));
+
+  // set the response locals 'basePath'
+  app.use(handlers.basePathHandler());
+
+  // handle incoming get requests
+  app.get('/', (req, res) => {
+    res.render('index');
+  });
+
+  app.get('/login', authProvider.authenticate(), (req, res) => {
+    if (req.query.bounce) {
+      res.redirect(req.query.bounce);
+      return;
+    }
+    res.redirect('/');
+  });
+
+  app.get('/logout', (req, res) => {
+    authProvider.logout(req);
+    res.redirect('/');
+  });
 
   app.use('/status', status.router);
 
+  app.use(metadata.getRouter());
+
+  dataproxy.setForgClient(forgClient);
+  app.use(dataproxy.getRouter());
+
+  app.use(softwares.getRouter());
+  app.use(swinstalls.getRouter());
+
   // no handler found for request
   app.use(handlers.notFoundHandler());
+
+  // handle errors (temporary)
+  app.use(legacy.requestErrorHandler);
 
   // error handlers
   app.use(handlers.requestErrorHandler());

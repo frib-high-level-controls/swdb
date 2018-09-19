@@ -8,7 +8,7 @@ import http = require('http');
 
 import express = require('express');
 
-import app = require('./index');
+import app = require('./app');
 
 let server: http.Server | undefined;
 

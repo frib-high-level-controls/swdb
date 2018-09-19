@@ -11,7 +11,7 @@ import { Builder, By, Key, until, WebDriver } from 'selenium-webdriver';
 import * as test from 'selenium-webdriver/testing';
 import * as SuperTest from 'supertest';
 
-import * as server from '../app/server';
+import * as server from './server';
 
 import * as data from './data';
 import * as cookies from './lib/cookies';

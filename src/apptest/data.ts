@@ -5,7 +5,7 @@
 import * as mongoose from 'mongoose';
 
 // Get mock-forgapi module from application (not apptest!)
-import * as forgapi from '../app/shared/mock-forgapi';
+import * as forgapi from './shared/mock-forgapi';
 
 import {
   Software,

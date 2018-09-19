@@ -10,7 +10,7 @@ import * as SuperTest from 'supertest';
 
 import { Update } from '../app/shared/history';
 
-import * as server from '../app/server';
+import * as server from './app';
 
 import * as data from './data';
 import * as cookies from './lib/cookies';
