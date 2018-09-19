@@ -32,8 +32,6 @@ import * as metadata from './routes/metadata';
 import * as softwares from './routes/softwares';
 import * as swinstalls from './routes/swinstalls';
 
-import * as mockforgapi from './shared/mock-forgapi';
-
 // package metadata
 interface Package {
   name?: {};
@@ -332,27 +330,19 @@ async function doStart(): Promise<express.Application> {
   app.set('view cache', (env === 'production') ? true : false);
 
   // Authentication configuration
-  let forgClient: forgapi.IClient;
-  if (env === 'production' || process.env.WEBAPP_AUTHC_DISABLED !== 'mock') {
-    if (!cfg.forgapi.url) {
-      throw new Error('FORG base URL not configured');
-    }
-    info('FORG API base URL: %s', cfg.forgapi.url);
-
-    forgClient = new forgapi.Client({
-      url: String(cfg.forgapi.url),
-      agentOptions: cfg.forgapi.agentOptions || {},
-    });
-    // Need the FORG base URL available to views
-    app.locals.forgurl = String(cfg.forgapi.url);
-  } else {
-    warn('FORG API mock client initialized');
-    forgClient = mockforgapi.MockClient.getInstance();
+  if (!cfg.forgapi.url) {
+    throw new Error('FORG base URL not configured');
   }
+  info('FORG API base URL: %s', cfg.forgapi.url);
 
-  if (env === 'production'
-      || (process.env.WEBAPP_AUTHC_DISABLED !== 'true'
-          && process.env.WEBAPP_AUTHC_DISABLED !== 'mock')) {
+  const forgClient = new forgapi.Client({
+    url: String(cfg.forgapi.url),
+    agentOptions: cfg.forgapi.agentOptions || {},
+  });
+  // Need the FORG base URL available to views
+  app.locals.forgurl = String(cfg.forgapi.url);
+
+  if (env === 'production' || process.env.WEBAPP_AUTHC_DISABLED !== 'true') {
     if (!cfg.cas.cas_url) {
       throw new Error('CAS base URL not configured');
     }
