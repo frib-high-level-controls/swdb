@@ -60,7 +60,7 @@ module.exports = function(grunt) {
     },
     clean: {
       app: [ './app' ],
-      test: [ './test/app', './test/apptest' ],
+      test: [ './test' ],
       tools: [ './tools' ],
       public: [ './public/js' ],
     },
