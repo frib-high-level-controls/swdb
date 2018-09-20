@@ -104,8 +104,8 @@ async function main() {
       addr: 'localhost',
       db: 'swdb-dev',
       options: {
-        // see http://mongoosejs.com/docs/connections.html
-        useMongoClient: true,
+        // Use the "new" URL parser (Remove deprecation warning in Mongoose 5.x!)
+        useNewUrlParser: true,
       },
     },
     engineer: {},
