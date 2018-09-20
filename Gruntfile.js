@@ -34,6 +34,15 @@ module.exports = function(grunt) {
           additionalFlags: '--outDir ./public/js --listEmittedFiles'
         },
       },
+      webtest: {
+        tsconfig: {
+          tsconfig: './src/webtest',
+          passThrough: true,
+        },
+        options: {
+          additionalFlags: '--outDir ./test --listEmittedFiles'
+        },
+      },
       tools: {
         tsconfig: {
           tsconfig: './src/tools',
@@ -128,6 +137,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build-tests', [
     'build',
     'ts:apptest',
+    'ts:webtest',
   ]);
 
   grunt.registerTask('build-tools', [

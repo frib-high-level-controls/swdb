@@ -12,8 +12,8 @@ import * as SuperTest from 'supertest';
 
 import * as server from './server';
 
-import * as data from './data';
-import * as cookies from './lib/cookies';
+import * as data from '../apptest/data';
+import * as cookies from '../apptest/lib/cookies';
 
 const debug = Debug('swdb:web:software-update-test');
 
