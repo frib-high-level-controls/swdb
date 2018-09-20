@@ -29,9 +29,9 @@ function NewPromiseCtrl(
 
   $scope.usrBtnClk =  () => {
     if ($scope.session.user) {
-      $location.path($scope.props.webUrl + 'logout');
+      $location.path(`${basePath}/logout`);
     } else {
-      $location.path($scope.props.webUrl + 'login');
+      $location.path(`${basePath}/login`);
     }
   };
 
@@ -171,7 +171,7 @@ function NewPromiseCtrl(
   // check our user session and redirect if needed
   if (!$scope.session.user) {
     // go to cas
-    $location.path($scope.props.webUrl + 'login');
+    $location.path(`${basePath}/login`);
   }
 
   // initialize selected owner and engineer

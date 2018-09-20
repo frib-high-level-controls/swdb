@@ -35,8 +35,6 @@ router.get('/api/v1/swdb/config', ensureAccepts('json'), (req, res) => {
   debug('GET /api/v1/swdb/config request');
   const config: any = {};  // TODO: use a type defined in webapi.d.ts
 
-  config.webUrl = 'http://localhost:3000/';
-
   config.LevelOfCareEnum = {};
   config.LevelOfCareEnum[software.CareLevel.LOW] = 'Low';
   config.LevelOfCareEnum[software.CareLevel.MEDIUM] = 'Medium';

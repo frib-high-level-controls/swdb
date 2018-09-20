@@ -26,9 +26,9 @@ function InstNewPromiseCtrl(
 
   $scope.usrBtnClk =  () => {
     if ($scope.session.user) {
-      $window.location.href = $scope.props.webUrl + 'logout';
+      $window.location.href = `${basePath}/logout`;
     } else {
-      $window.location.href = $scope.props.webUrl + 'login';
+      $window.location.href = `${basePath}/login`;
     }
   };
 
@@ -176,7 +176,7 @@ function InstNewPromiseCtrl(
   // check our user session and redirect if needed
   if (!$scope.session.user) {
     // go to cas
-    $window.location.href = $scope.props.webUrl + 'login';
+    $window.location.href = `${basePath}/login`;
   }
 
   // initialize this record

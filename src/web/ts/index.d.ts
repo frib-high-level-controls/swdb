@@ -77,7 +77,6 @@ interface IAppRoute extends ng.route.IRoute {
 }
 
 interface IConfigProps {
-  webUrl: string;
   StatusEnum: { [key: string]: string | undefined };
   InstStatusEnum: { [key: string]: string | undefined };
   LevelOfCareEnum: { [key: string]: string | undefined };

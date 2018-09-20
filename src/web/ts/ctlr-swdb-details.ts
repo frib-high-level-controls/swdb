@@ -28,9 +28,9 @@ function DetailsPromiseCtrl(
 
   $scope.usrBtnClk = () => {
     if ($scope.session.user) {
-      $window.location.href = $scope.props.webUrl + 'logout';
+      $window.location.href = `${basePath}/logout`;
     } else {
-      $window.location.href = $scope.props.webUrl + 'login';
+      $window.location.href = `${basePath}/login`;
     }
   };
 
