@@ -693,8 +693,7 @@ test.describe('User flow2 tests', () => {
 
     test.it('should find the installation record', function(this: Mocha.ITestCallbackContext) {
       driver.get(props.webUrl + '#/inst/list');
-      driver.wait(until.elementLocated(By.id('hostSrch')))
-        .sendKeys('vmachine01');
+      driver.wait(until.elementLocated(By.id('hostSrch'))).sendKeys('vmachine01');
       driver.wait(until.elementLocated(By.linkText('vmachine01'))).click();
     });
 

@@ -549,3 +549,48 @@ app.config(['$routeProvider', ($routeProvider: ng.route.IRouteParamsService) => 
             redirectTo: '/list',
         });
 }]);
+
+
+class DateUtil {
+
+  /**
+   * Convert Date object to ISO date string in UTC time.
+   */
+  public static toUTCDateISOString(d: Date): string {
+    return d.toISOString().split('T')[0];
+  }
+
+  /**
+   * Convert ISO date string to Date object in UTC time.
+   */
+  public static fromUTCDateISOString(s: string): Date {
+    if (!s.match(/\d{4}-\d{2}-\d{2}/)) {
+      return new Date(Number.NaN);
+    }
+    return new Date(s);
+  }
+
+  /**
+   * Convert Date object to ISO date string in local time.
+   */
+  public static toLocalDateISOString(d: Date) {
+    const year = String(d.getFullYear());
+    const month = ('0' + (d.getMonth() + 1)).slice(-2);
+    const day = ('0' + d.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
+
+  /**
+   * Convert ISO date string to Date object in local time.
+   */
+  public static fromLocalDateISOString(s: string): Date {
+    if (!s.match(/\d{4}-\d{2}-\d{2}/)) {
+      return new Date(Number.NaN);
+    }
+    const ss = s.split('-');
+    const year = Number(ss[0]);
+    const month = Number(ss[1]) - 1;
+    const day = Number(ss[2]);
+    return new Date(year, month, day);
+  }
+}

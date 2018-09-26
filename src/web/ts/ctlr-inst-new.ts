@@ -79,10 +79,10 @@ function InstNewPromiseCtrl(
 
     // prep form dates
     if ($scope.statusDateDisplay) {
-      $scope.formData.statusDate = $scope.statusDateDisplay.toISOString().split('T')[0];
+      $scope.formData.statusDate = DateUtil.toLocalDateISOString($scope.statusDateDisplay);
     }
     if ($scope.vvApprovalDateDisplay) {
-      $scope.formData.vvApprovalDate = $scope.vvApprovalDateDisplay.toISOString().split('T')[0];
+      $scope.formData.vvApprovalDate = DateUtil.toLocalDateISOString($scope.vvApprovalDateDisplay);
     }
 
     if ($scope.inputForm.$valid) {

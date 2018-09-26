@@ -16,9 +16,9 @@ function NewPromiseCtrl(
   recService: IRecService,
 ) {
 
-  $scope.$watch( () => {
+  $scope.$watch(() => {
     return $scope.session;
-  },  () => {
+  }, () => {
     // prep for login button
     if ($scope.session && $scope.session.user) {
       $scope.usrBtnTxt = '';
@@ -27,7 +27,7 @@ function NewPromiseCtrl(
     }
   }, true);
 
-  $scope.usrBtnClk =  () => {
+  $scope.usrBtnClk = () => {
     if ($scope.session.user) {
       $location.path(`${basePath}/logout`);
     } else {
@@ -35,31 +35,31 @@ function NewPromiseCtrl(
     }
   };
 
-  $scope.bckBtnClk =  () => {
+  $scope.bckBtnClk = () => {
     $location.path('/list');
   };
 
-  $scope.datePicker = ( () => {
-    const method: any = {};
-    method.instances = [];
+  $scope.datePicker = (() => {
+    const instances: { [key: string]: boolean | undefined } = {};
 
-    method.open =  ($event: any, instance: any) => {
+    const open =  ($event: ng.IAngularEvent, instance: string) => {
       $event.preventDefault();
-      $event.stopPropagation();
-      method.instances[instance] = true;
+      // $event.stopPropagation(); // Is this needed?
+      instances[instance] = true;
     };
 
-    method.options = {
+    const options = {
       'show-weeks': false,
       'startingDay': 0,
       'timezone': 'utc',
     };
 
-    method.format = 'M!/d!/yyyy';
-    return method;
+    const format = 'M!/d!/yyyy';
+
+    return { open, instances, options, format };
   })();
 
-  $scope.newItem =  (event: {currentTarget: HTMLInputElement}) => {
+  $scope.newItem = (event) => {
     const parts = event.currentTarget.id.split('.');
     if (parts[1] === 'vvProcLoc') {
       if ($scope.formData.vvProcLoc) {
@@ -72,7 +72,7 @@ function NewPromiseCtrl(
     }
   };
 
-  $scope.removeItem =  (event) => {
+  $scope.removeItem = (event) => {
     const parts = event.currentTarget.id.split('.');
     if (parts[1] === 'vvProcLoc') {
       if ($scope.formData.vvProcLoc) {
@@ -85,7 +85,7 @@ function NewPromiseCtrl(
     }
   };
 
-  $scope.processForm =  () => {
+  $scope.processForm = () => {
     // Prep any selected owner
     if ($scope.ownerSelected.item) {
       $scope.formData.owner = $scope.ownerSelected.item.uid;
@@ -95,21 +95,18 @@ function NewPromiseCtrl(
       $scope.formData.engineer = $scope.engineerSelected.item.uid;
     }
 
-    $scope.formData.statusDate = $scope.statusDateDisplay.toISOString().split('T')[0];
+    $scope.formData.statusDate = DateUtil.toLocalDateISOString($scope.statusDateDisplay);
 
     // convert enum values to keys
-    $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).filter(
-       (item) => {
-        return $scope.levelOfCareDisplay === $scope.props.LevelOfCareEnum[item];
-      })[0];
-    $scope.formData.status = Object.keys($scope.props.StatusEnum).filter(
-       (item) => {
-        return $scope.statusDisplay === $scope.props.StatusEnum[item];
-      })[0];
-    $scope.formData.versionControl = Object.keys($scope.props.RcsEnum).filter(
-       (item) => {
-        return $scope.versionControlDisplay === $scope.props.RcsEnum[item];
-      })[0];
+    $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).filter((item) => {
+      return $scope.levelOfCareDisplay === $scope.props.LevelOfCareEnum[item];
+    })[0];
+    $scope.formData.status = Object.keys($scope.props.StatusEnum).filter((item) => {
+      return $scope.statusDisplay === $scope.props.StatusEnum[item];
+    })[0];
+    $scope.formData.versionControl = Object.keys($scope.props.RcsEnum).filter((item) => {
+      return $scope.versionControlDisplay === $scope.props.RcsEnum[item];
+    })[0];
 
     if ($scope.inputForm.$valid) {
       const url = basePath + '/api/v1/swdb';

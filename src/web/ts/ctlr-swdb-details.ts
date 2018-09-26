@@ -81,7 +81,7 @@ function DetailsPromiseCtrl(
       const month = thisDate.getUTCMonth() + 1;
       const day = thisDate.getUTCDate();
       const year = thisDate.getUTCFullYear();
-      $scope.formData.statusDate =  month + '/' + day + '/' + year;
+      $scope.statusDateDisplay =  month + '/' + day + '/' + year;
     }
   });
 

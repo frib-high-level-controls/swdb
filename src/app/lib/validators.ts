@@ -17,45 +17,39 @@ import {
 const debug = Debug('swdb:validators');
 
 
-
-export function isFribDate(dateStr: string, opts: { req: express.Request }) {
-  //debug('req is ' + cJSON.stringify(opts.req));
-  const re = new RegExp(/\d{4}-\d{2}-\d{2}/);
-  if (re.test(dateStr)) {
-    // try making a date object
-    const dateObj = new Date(dateStr);
-    if (Number.isFinite(dateObj.getTime())) {
-      opts.req.body.statusDate = dateObj;
-      return true;
-    } else {
-      return false;
+/**
+ * Custom sanitizer similar to the provided 'toDate', however,
+ * this sanitizer ensures the value in an ISO date-only string.
+ * Use null to indicate error like the provided 'toDate' function.
+ *
+ * For comparison see the validator library source code:
+ *   https://github.com/chriso/validator.js/blob/master/src/lib/toDate.js
+ */
+export function isoDateStringToUTCDate(allowEmpty: true): (value: {}) => (Date | string | null);
+export function isoDateStringToUTCDate(allowEmpty?: false): (value: {}) => (Date | null);
+export function isoDateStringToUTCDate(allowEmpty?: boolean): (value: {}) => (Date | string | null) {
+  return (value: {}) => {
+    // Empty string used as flag to clear vvApprovalDate!
+    if (allowEmpty && value === '') {
+      return '';
     }
-  } else {
-    return false;
-  }
-}
 
-export function isFribVvApprovalDate(dateStr: string, opts: { req: express.Request}) {
-  //debug('req is ' + cJSON.stringify(opts.req));
-  // vvApproval date can be cleared as ''. Check this first.
-  if (dateStr === '') {
-    return true;
-  } else {
-    const re = new RegExp(/\d{4}-\d{2}-\d{2}/);
-    if (re.test(dateStr)) {
-      // try making a date object
-      const dateObj = new Date(dateStr);
-      if (Number.isFinite(dateObj.getTime())) {
-        opts.req.body.statusDate = dateObj; // this looks like a bug!?
-        return true;
-      } else {
-        return false;
-      }
-
-    } else {
-      return false;
+    if (!value) {
+      return null;
     }
-  }
+
+    const isoDateString = String(value);
+    if (!isoDateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
+      return null;
+    }
+
+    const timestamp = Date.parse(isoDateString);
+    if (Number.isNaN(timestamp)) {
+      return null;
+    }
+
+    return new Date(timestamp);
+  };
 }
 
 export function isArea(val: string, opts: { req: express.Request }) {

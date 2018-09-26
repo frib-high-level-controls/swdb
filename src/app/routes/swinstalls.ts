@@ -53,12 +53,10 @@ function toWebAPI(doc: ISWInstall): webapi.Inst {
     area: doc.area,
     slots: doc.slots,
     status: doc.status,
-    statusDate: (doc.statusDate.getUTCMonth() + 1).toString() + '/' +
-      doc.statusDate.getUTCDate() + '/' + doc.statusDate.getUTCFullYear(),
+    statusDate: doc.statusDate.toISOString().split('T')[0],
     software: doc.software,
     vvResultsLoc: doc.vvResultsLoc,
-    vvApprovalDate: doc.vvApprovalDate ? (doc.vvApprovalDate.getUTCMonth() + 1).toString() + '/' +
-      doc.vvApprovalDate.getUTCDate() + '/' + doc.vvApprovalDate.getUTCFullYear() : undefined,
+    vvApprovalDate: doc.vvApprovalDate ? doc.vvApprovalDate.toISOString().split('T')[0] : undefined,
     drrs: doc.drrs,
   };
 }

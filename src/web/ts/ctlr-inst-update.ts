@@ -3,6 +3,7 @@
  */
 
 appController.controller('InstUpdateController', InstUpdatePromiseCtrl);
+
 function InstUpdatePromiseCtrl(
   $scope: IInstUpdateControllerScope,
   $http: ng.IHttpService,
@@ -27,26 +28,24 @@ function InstUpdatePromiseCtrl(
     }
   }, true);
 
-  $scope.datePicker = ( () => {
-    const method: any = {};
-    method.instances = [];
+  $scope.datePicker = (() => {
+    const instances: { [key: string]: boolean | undefined } = {};
 
-    method.open =  ($event: any, instance: any) => {
+    const open = ($event: ng.IAngularEvent, instance: string) => {
       $event.preventDefault();
-      $event.stopPropagation();
-
-      method.instances[instance] = true;
+      // $event.stopPropagation(); // Is this needed?
+      instances[instance] = true;
     };
 
-    method.options = {
+    const options = {
       'show-weeks': false,
       'startingDay': 0,
       'timezone': 'utc',
     };
 
-    method.format = 'M!/d!/yyyy';
+    const format = 'M!/d!/yyyy';
 
-    return method;
+    return { open, instances, options, format };
   })();
 
   $scope.bckBtnClk =  () => {
@@ -62,7 +61,7 @@ function InstUpdatePromiseCtrl(
     }
   };
 
-  $scope.processForm =  () => {
+  $scope.processForm = () => {
     // convert enum value to enum key
     $scope.formData.status = Object.keys($scope.props.InstStatusEnum).filter(
        (item: string) => {
@@ -79,10 +78,10 @@ function InstUpdatePromiseCtrl(
 
     // prep form dates
     if ($scope.statusDateDisplay) {
-      $scope.formData.statusDate = $scope.statusDateDisplay.toISOString().split('T')[0];
+      $scope.formData.statusDate = DateUtil.toLocalDateISOString($scope.statusDateDisplay);
     }
     if ($scope.vvApprovalDateDisplay) {
-      $scope.formData.vvApprovalDate = $scope.vvApprovalDateDisplay.toISOString().split('T')[0];
+      $scope.formData.vvApprovalDate = DateUtil.toLocalDateISOString($scope.vvApprovalDateDisplay);
     } else {
       $scope.formData.vvApprovalDate = '';
     }
@@ -215,10 +214,10 @@ function InstUpdatePromiseCtrl(
 
     // make a Date object from this string
     if ($scope.formData.statusDate) {
-      $scope.statusDateDisplay = new Date($scope.formData.statusDate);
+      $scope.statusDateDisplay = DateUtil.fromLocalDateISOString($scope.formData.statusDate);
     }
     if (($scope.formData.vvApprovalDate) && ($scope.formData.vvApprovalDate !== '')) {
-      $scope.vvApprovalDateDisplay = new Date($scope.formData.vvApprovalDate);
+      $scope.vvApprovalDateDisplay = DateUtil.fromLocalDateISOString($scope.formData.vvApprovalDate);
     }
 
     // convert the retreived record software

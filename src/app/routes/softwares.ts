@@ -56,7 +56,7 @@ function toWebAPI(doc: ISoftware): webapi.ISwdb {
     engineer: doc.engineer,
     levelOfCare: doc.levelOfCare,
     status: doc.status,
-    statusDate: doc.statusDate.toISOString(),
+    statusDate: doc.statusDate.toISOString().split('T')[0],
     platforms: doc.platforms,
     designDescDocLoc: doc.designDescDocLoc,
     descDocLoc: doc.descDocLoc,

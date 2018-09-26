@@ -24,8 +24,7 @@ import {
 
 import {
   isArea,
-  isFribDate,
-  isFribVvApprovalDate,
+  isoDateStringToUTCDate,
   isSlots,
   isVvProcLoc,
   isVvResultsLoc,
@@ -150,12 +149,17 @@ export async function checkNewSoftware(req: express.Request) {
     },
     statusDate: {
       in: 'body',
-      exists: {
-        errorMessage: 'Status date is required.',
+      customSanitizer: {
+        options: isoDateStringToUTCDate(),
       },
-      custom: {
-        options: isFribDate,
-        errorMessage: 'Status date must be a date.',
+      exists: {
+        options: { checkFalsy: true },
+        errorMessage: (value: {}) => {
+          if (value === undefined) {
+            return 'Status date is required.';
+          }
+          return 'Status date must be a date.';
+        },
       },
     },
     platforms: {
@@ -347,8 +351,11 @@ export async function checkUpdateSoftware(req: express.Request) {
     statusDate: {
       in: ['body'],
       optional: true,
-      custom: {
-        options: isFribDate,
+      customSanitizer: {
+        options: isoDateStringToUTCDate(),
+      },
+      exists: {
+        options: { checkNull: true },
         errorMessage: 'Status date must be a date.',
       },
     },
@@ -482,8 +489,11 @@ export async function checkNewSWInstall(req: express.Request) {
     statusDate: {
       in: ['body'],
       optional: true,
-      custom: {
-        options: isFribDate,
+      customSanitizer: {
+        options: isoDateStringToUTCDate(),
+      },
+      exists: {
+        options: { checkNull: true },
         errorMessage: 'Status date must be a date.',
       },
     },
@@ -514,8 +524,11 @@ export async function checkNewSWInstall(req: express.Request) {
     vvApprovalDate: {
       in: ['body'],
       optional: true,
-      custom: {
-        options: isFribVvApprovalDate,
+      customSanitizer: {
+        options: isoDateStringToUTCDate(true),
+      },
+      exists: {
+        options: { checkNull: true },
         errorMessage: 'V&V approval date must be a date.',
       },
     },
@@ -579,8 +592,11 @@ export async function checkUpdateSWInstall(req: express.Request) {
     statusDate: {
       in: ['body'],
       optional: true,
-      custom: {
-        options: isFribDate,
+      customSanitizer: {
+        options: isoDateStringToUTCDate(),
+      },
+      exists: {
+        options: { checkNull: true },
         errorMessage: 'Status date must be a date.',
       },
     },
@@ -609,8 +625,11 @@ export async function checkUpdateSWInstall(req: express.Request) {
     vvApprovalDate: {
       in: ['body'],
       optional: true,
-      custom: {
-        options: isFribVvApprovalDate,
+      customSanitizer: {
+        options: isoDateStringToUTCDate(true),
+      },
+      exists: {
+        options: { checkNull: true },
         errorMessage: 'V&V approval date must be a date.',
       },
     },

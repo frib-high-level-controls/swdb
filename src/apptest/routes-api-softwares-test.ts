@@ -161,7 +161,7 @@ describe('Software API Specification', () => {
        engineer: 'Engineer 1000',
        levelOfCare: 'LOW',
        status: 'DEVEL',
-       statusDate: '2017-04-21T00:00:00.000Z'})
+       statusDate: '2017-04-21'})
     .expect(201)
     .end((err, result) => {
       if (err) {
@@ -291,7 +291,7 @@ describe('Software API Specification', () => {
          previous: 'badbeefbadbeefbadbeefbad',
          levelOfCare: 'LOW',
          status: 'DEVEL',
-         statusDate: '2017-04-21T00:00:00.000Z' })
+         statusDate: '2017-04-21' })
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
         .expect(201)
@@ -451,7 +451,7 @@ describe('Software API Specification', () => {
        engineer: 'Engineer 1000',
        levelOfCare: 'LOW',
        status: 'DEVEL',
-       statusDate: '2017-04-21T00:00:00.000Z'})
+       statusDate: '2017-04-21'})
     .expect(201)
     .end((err, result) => {
       debug('Location: ' + result.header.location);
@@ -467,7 +467,7 @@ describe('Software API Specification', () => {
      engineer: 'Engineer 1000',
      levelOfCare: 'LOW',
      status: 'DEVEL',
-     statusDate: '2017-04-21T00:00:00.000Z'})
+     statusDate: '2017-04-21'})
     .set('Accept', 'application/json')
     .set('Cookie', cookie)
     .end((err, result) => {
@@ -492,7 +492,7 @@ describe('Software API Specification', () => {
      engineer: 'Engineer 1002',
      levelOfCare: 'LOW',
      status: 'DEVEL',
-     statusDate: '1970-01-01T00:00:00.000Z'})
+     statusDate: '1970-01-01'})
     .set('Accept', 'application/json')
     .set('Cookie', cookie)
     .expect(201)
@@ -552,7 +552,7 @@ describe('Software API Specification', () => {
      engineer: 'Engineer 1002',
      levelOfCare: 'LOW',
      status: 'DEVEL',
-     statusDate: '2017-04-21T00:00:00.000Z'})
+     statusDate: '2017-04-21'})
     .set('Accept', 'application/json')
     .set('Cookie', cookie)
     .expect(201)
@@ -612,7 +612,7 @@ describe('Software API Specification', () => {
      engineer: 'Any Engineer',
      levelOfCare: 'LOW',
      status: 'DEVEL',
-     statusDate: '2017-04-21T00:00:00.000Z'})
+     statusDate: '2017-04-21'})
     .set('Accept', 'application/json')
     .set('Cookie', cookie)
     .expect(201)
@@ -674,7 +674,7 @@ describe('Software API Specification', () => {
      versionControlLoc: 'http://www.somehost/some-path/some-file',
      levelOfCare: 'LOW',
      status: 'DEVEL',
-     statusDate: '2017-04-21T00:00:00.000Z'})
+     statusDate: '2017-04-21'})
     .set('Accept', 'application/json')
     .set('Cookie', cookie)
     .expect(201)
@@ -735,7 +735,7 @@ describe('Software API Specification', () => {
      designDescDocLoc: 'http://www.somehost/some-path/some-file',
      levelOfCare: 'LOW',
      status: 'DEVEL',
-     statusDate: '2017-04-21T00:00:00.000Z'})
+     statusDate: '2017-04-21'})
     .set('Accept', 'application/json')
     .set('Cookie', cookie)
     .expect(201)
@@ -796,7 +796,7 @@ describe('Software API Specification', () => {
      descDocLoc: 'http://www.somehost/some-path/some-file',
      levelOfCare: 'LOW',
      status: 'DEVEL',
-     statusDate: '2017-04-21T00:00:00.000Z'})
+     statusDate: '2017-04-21'})
     .set('Accept', 'application/json')
     .set('Cookie', cookie)
     .expect(201)
@@ -858,7 +858,7 @@ describe('Software API Specification', () => {
       vvProcLoc: ['http://www.somehost/some-path/some-file', 'http://www.somehost/some-path/some-file2'],
       levelOfCare: 'LOW',
       status: 'DEVEL',
-      statusDate: '1970-01-01T00:00:00.000Z',
+      statusDate: '1970-01-01',
     })
     .set('Accept', 'application/json')
     .set('Cookie', cookie)
@@ -923,7 +923,7 @@ describe('Software API Specification', () => {
       vvResultsLoc: [ 'http://www.somehost/some-path/some-file3', 'http://www.somehost/some-path/some-file4' ],
       levelOfCare: 'LOW',
       status: 'DEVEL',
-      statusDate: '1970-01-01T00:00:00.000Z'})
+      statusDate: '1970-01-01'})
     .set('Accept', 'application/json')
     .set('Cookie', cookie)
     .expect(201)
@@ -985,7 +985,7 @@ describe('Software API Specification', () => {
      branch: 'New branch',
      levelOfCare: 'LOW',
      status: 'DEVEL',
-     statusDate: '1970-01-01T00:00:00.000Z'})
+     statusDate: '1970-01-01'})
     .set('Accept', 'application/json')
     .set('Cookie', cookie)
     .expect(201)
@@ -1046,7 +1046,7 @@ describe('Software API Specification', () => {
      versionControl: 'GIT',
      levelOfCare: 'LOW',
      status: 'DEVEL',
-     statusDate: '1970-01-01T00:00:00.000Z'})
+     statusDate: '1970-01-01'})
     .set('Accept', 'application/json')
     .set('Cookie', cookie)
     .expect(201)
@@ -1107,7 +1107,7 @@ describe('Software API Specification', () => {
      previous: 'badbeefbadbeefbadbeefbad',
      levelOfCare: 'LOW',
      status: 'DEVEL',
-     statusDate: '1970-01-01T00:00:00.000Z'})
+     statusDate: '1970-01-01'})
     .set('Accept', 'application/json')
     .set('Cookie', cookie)
     .expect(201)
@@ -1222,7 +1222,7 @@ describe('Software API Specification', () => {
           engineer: 'Test Engineer',
           levelOfCare: 'LOW',
           status: 'DEVEL',
-          statusDate: '1970-01-01T00:00:00.000Z',
+          statusDate: '1970-01-01',
         })
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
@@ -1355,7 +1355,7 @@ describe('Software API Specification', () => {
           engineer: 'Test Engineer',
           levelOfCare: 'LOW',
           status: 'DEVEL',
-          statusDate: '1970-01-01T00:00:00.000Z',
+          statusDate: '1970-01-01',
         })
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
@@ -1433,7 +1433,7 @@ describe('Software API Specification', () => {
             name: 'Test name',
             area: ['Global'],
             status: 'RDY_INST',
-            statusDate: '1970-01-01T00:00:00.000Z',
+            statusDate: '1970-01-01',
             software: wrapper.origId,
           })
           .expect(201)
@@ -1495,8 +1495,8 @@ describe('Software API Specification', () => {
       {type: 'GET', res: {msg: {status: 'DEVEL'}, url: '/api/v1/swdb/',  err: {status: 200}}},
       {type: 'PUT', req: {msg: {status: 'ERRONEOUS_VALUE'}, url: '/api/v1/swdb/', err: {status: 400}}},
       {type: 'GET', res: {msg: {status: 'DEVEL'}, url: '/api/v1/swdb/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {statusDate: '1970-01-01T00:00:00.000Z'}, url: '/api/v1/swdb/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {statusDate: '1970-01-01T00:00:00.000Z'}, url: '/api/v1/swdb/',  err: {status: 200}}},
+      {type: 'PUT', req: {msg: {statusDate: '1970-01-01'}, url: '/api/v1/swdb/', err: {status: 200}}},
+      {type: 'GET', res: {msg: {statusDate: '1970-01-01'}, url: '/api/v1/swdb/',  err: {status: 200}}},
       {type: 'PUT', req: {msg: {version: 'NEW test version'}, url: '/api/v1/swdb/', err: {status: 200}}},
       {type: 'GET', res: {msg: {version: 'NEW test version'}, url: '/api/v1/swdb/',  err: {status: 200}}},
       {type: 'PUT', req: {msg: {branch: 'NEW Branch'}, url: '/api/v1/swdb/', err: {status: 200}}},
@@ -1537,7 +1537,7 @@ describe('Software API Specification', () => {
       {type: 'PUT', req: {msg: {comment: 'NEW test comment'}, url: '/api/v1/swdb/', err: {status: 200}}},
       {type: 'GET', res: {msg: {comment: 'NEW test comment'}, url: '/api/v1/swdb/',  err: {status: 200}}},
       // test new record basic only required items
-      {type: 'POST',  req: {msg: {swName: 'NEW-test-name-1', status: 'RDY_TEST', statusDate: '1970-01-01T00:00:00.000Z',
+      {type: 'POST',  req: {msg: {swName: 'NEW-test-name-1', status: 'RDY_TEST', statusDate: '1970-01-01',
        owner: 'test owner', levelOfCare: 'MEDIUM'}, url: '/api/v1/swdb/',
       err: {status: 201, msgHas: ''}}},
       // test new swName is required, min, max

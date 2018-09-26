@@ -41,23 +41,23 @@ function UpdatePromiseCtrl(
   };
 
   $scope.datePicker = ( () => {
-    const method: any = {};
-    method.instances = [];
+    const instances: { [key: string]: boolean | undefined } = {};
 
-    method.open =  ($event: any, instance: any) => {
+    const open =  ($event: ng.IAngularEvent, instance: string) => {
       $event.preventDefault();
-      $event.stopPropagation();
-      method.instances[instance] = true;
+      // $event.stopPropagation(); // Is this needed?
+      instances[instance] = true;
     };
 
-    method.options = {
+    const options = {
       'show-weeks': false,
       'startingDay': 0,
       'timezone': 'utc',
     };
 
-    method.format = 'M!/d!/yyyy';
-    return method;
+    const format = 'M!/d!/yyyy';
+
+    return { instances, open, options, format };
   })();
 
   $scope.newItem =  (event: {currentTarget: HTMLInputElement}) => {
@@ -93,7 +93,7 @@ function UpdatePromiseCtrl(
         $scope.formData.owner = $scope.ownerSelected.item.uid;
       }
 
-      $scope.formData.statusDate = $scope.statusDateDisplay.toISOString().split('T')[0];
+      $scope.formData.statusDate = DateUtil.toLocalDateISOString($scope.statusDateDisplay);
 
       // Prep any selected engineer
       if ($scope.engineerSelected && $scope.engineerSelected.item && $scope.engineerSelected.item.uid) {
@@ -102,18 +102,16 @@ function UpdatePromiseCtrl(
       const url = basePath + '/api/v1/swdb/' + $scope.formData._id;
 
       // update formData lovel of care with enum key
-      $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).filter(
-         (item) => {
+      $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).filter((item) => {
           return $scope.levelOfCareDisplay === $scope.props.LevelOfCareEnum[item];
-        })[0];
-      $scope.formData.status = Object.keys($scope.props.StatusEnum).filter(
-         (item) => {
+      })[0];
+      $scope.formData.status = Object.keys($scope.props.StatusEnum).filter((item) => {
           return $scope.statusDisplay === $scope.props.StatusEnum[item];
-        })[0];
-      $scope.formData.versionControl = Object.keys($scope.props.RcsEnum).filter(
-         (item) => {
-          return $scope.versionControlDisplay === $scope.props.RcsEnum[item];
-        })[0];
+      })[0];
+      $scope.formData.versionControl = Object.keys($scope.props.RcsEnum).filter((item) => {
+        return $scope.versionControlDisplay === $scope.props.RcsEnum[item];
+      })[0];
+
       $http({
         method: 'PUT',
         url: url,
@@ -214,7 +212,7 @@ function UpdatePromiseCtrl(
 
     // make a Date object from this string
     if ($scope.formData.statusDate) {
-      $scope.statusDateDisplay = new Date($scope.formData.statusDate);
+      $scope.statusDateDisplay = DateUtil.fromLocalDateISOString($scope.formData.statusDate);
     }
     // set selctor to current swName value
     $scope.selectedItem = { name: $scope.formData.swName };

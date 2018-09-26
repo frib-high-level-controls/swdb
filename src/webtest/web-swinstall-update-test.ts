@@ -200,9 +200,7 @@ test.describe('Installations update screen tests', () => {
       driver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-0-0"]/span')));
       const input = driver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-0"]/span'));
       input.click();
-      driver.wait(until.elementTextContains(driver.findElement(
-        By.id('software')),
-        'BEAST/b12/0.2'));
+      driver.wait(until.elementTextContains(driver.findElement(By.id('software')), 'BEAST/b12/0.2'));
     });
 
     test.it('set V&V results loc0 for new installation record', () => {
@@ -231,6 +229,7 @@ test.describe('Installations update screen tests', () => {
       const input2 = driver.findElement(By.id('vvResultsLoc.2'));
       input2.sendKeys('http://resultservtest.com/resultdoc2');
     });
+
     test.it('remove V&V results loc0 for new installation record', () => {
       // remove the first entry
       driver.wait(until.elementLocated(By.id('rm.vvResultsLoc.0')));
