@@ -28,9 +28,9 @@ app.service('configService', ($http: ng.IHttpService) => {
     let configData: IConfigProps | null = null;
 
     const promise = $http({url: basePath + '/api/v1/swdb/config', method: 'GET'})
-    .then((data: {data: IConfigProps} & angular.IHttpResponse<any>) => {
-        configData = data.data;
-    });
+      .then((res: angular.IHttpResponse<IConfigProps>) => {
+        configData = res.data;
+      });
 
     return {
         promise: promise,
@@ -43,25 +43,57 @@ app.service('configService', ($http: ng.IHttpService) => {
     };
 });
 
-// Service to get user data to controllers
-app.service('userService', ($http: ng.IHttpService) => {
-    let userData: IForgUser | null = null;
 
-    const promise = $http({url: basePath + '/api/v1/swdb/user', method: 'GET'})
-      .then( (data: {data: IForgUser} & angular.IHttpResponse<any>) => {
-        userData = data.data;
+abstract class AbstractRESTService {
+  protected $http: ng.IHttpService;
+
+  constructor($http: ng.IHttpService) {
+    this.$http = $http;
+  }
+
+  protected $get<T>(url: string, options?: ng.IRequestShortcutConfig) {
+    return this.$http.get<T>(url, options);
+  }
+}
+
+class SessionService extends AbstractRESTService {
+
+  public promise: ng.IPromise<void>;
+
+  private userData: ISession | null = null;
+
+  constructor($http: ng.IHttpService) {
+    super($http);
+    this.initLegacy();
+  }
+
+  public async getSession(): Promise<ISession> {
+    const res = await this.$get<ISession>(basePath + '/api/v1/swdb/user');
+    // TODO: check response status
+    return res.data;
+  }
+
+  // Legacy methods below!
+
+  public setData(data: ISession) {
+    this.userData = data;
+  }
+
+  public getUser() {
+    return this.userData || {};
+  }
+
+  private initLegacy() {
+    this.promise = this.$http({url: basePath + '/api/v1/swdb/user', method: 'GET'})
+      .then((res: angular.IHttpResponse<ISession>) => {
+        this.userData = res.data;
     });
+  }
+}
+app.service('session', ['$http', SessionService]);
 
-    return {
-        promise: promise,
-        setData: (data: IForgUser) => {
-            userData = data;
-        },
-        getUser: () => {
-            return userData;
-        },
-    };
-});
+type IUserService = SessionService;
+app.factory('userService', [ 'session', (session: SessionService) => (session)]);
 
 // Service to get ccdb slots to controllers
 // app.service('slotService', ($http: ng.IHttpService) => {
@@ -240,44 +272,69 @@ app.service('instService', ($http: ng.IHttpService) => {
     };
 });
 
-// Service to get FORG user data to controllers
-app.service('forgUserService', ($http: ng.IHttpService) => {
-  let userData: {data: IForgUser[]} | null = null;
 
-  const promise = $http({ url: basePath + '/api/v1/swdb/forgUsers', method: 'GET' })
-    .then( (data: IForgUser[] & angular.IHttpResponse<any>) => {
-      userData = data;
-    });
+class UsersService extends AbstractRESTService {
 
-  return {
-    promise: promise,
-    getUsers: () => {
-      return userData;
-    },
-    refreshUsersList: () => {
-      $http({ url: basePath + '/api/v1/swdb/forgUsers', method: 'GET' })
-        .then( (data: IForgUser[] & angular.IHttpResponse<any>) => {
-          userData = data;
-          return userData;
-        });
-    },
-    /**
-     * userUidsToObjects
-     * @param userUids array id user UID strings
-     * @return array of user objects from forg
-     */
-    userUidsToObjects: (userUids: string[]) => {
-      const forgObj = userUids.map((item, idx, array) => {
-        if (userData) {
-          return userData.data.filter( (elem: IForgUser) => {
-            return elem.uid === item;
-          });
-        }
+  // Legacy
+  public promise: ng.IPromise<void>;
+
+  // Legacy
+  private userData: IForgUser[] = [];
+
+  constructor($http: ng.IHttpService) {
+    super($http);
+    this.initLegacy();
+  }
+
+  public async getList() {
+    const res = await this.$get<IForgUser[]>(`${basePath}/api/v1/swdb/forgUsers`);
+    //  TODO: check response status
+    return res.data;
+  }
+
+  // Legacy methods below!
+
+  public getUsers() {
+    return this.userData;
+  }
+
+  public refreshUsersList() {
+    this.$http({ url: basePath + '/api/v1/swdb/forgUsers', method: 'GET' })
+      .then((res: ng.IHttpResponse<IForgUser[]>) => {
+        this.userData = res.data;
+        return this.userData;
       });
-      return forgObj[0];
-    },
-  };
-});
+  }
+
+  /**
+   * userUidsToObjects
+   * @param userUids array id user UID strings
+   * @return array of user objects from forg
+   */
+  public userUidsToObjects(userUids: string[]) {
+    const forgObj = userUids.map((item, idx, array) => {
+      if (this.userData) {
+        return this.userData.filter((elem: IForgUser) => {
+          return elem.uid === item;
+        });
+      }
+    });
+    return forgObj[0] || [];
+  }
+
+  private initLegacy() {
+    this.promise = this.$http({ url: basePath + '/api/v1/swdb/forgUsers', method: 'GET' })
+      .then((res: ng.IHttpResponse<IForgUser[]>) => {
+        this.userData = res.data;
+      });
+  }
+}
+// Service to get FORG user data to controllers
+app.service('users', ['$http', UsersService]);
+
+// Legacy Support!
+type IForgUserService = UsersService;
+app.factory('forgUserService', ['users', (users: UsersService) => (users)]);
 
 // Service to get FORG group data to controllers
 app.service('forgGroupService', ($http: ng.IHttpService) => {

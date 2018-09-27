@@ -40,12 +40,6 @@ interface SWMeta {
   [key: string]: Software | undefined;
 }
 
-interface IForgUserService {
-  promise: ng.IPromise<void>;
-  getUsers(): any;
-  userUidsToObjects(arr: string[]): IForgUser[];
-}
-
 interface IForgUser {
     uid: string;
 }
@@ -83,11 +77,9 @@ interface IConfigService {
   getConfig(): IConfigProps;
 }
 
-interface IUserService {
-  promise: Promise<void>;
-  getUser(): {};
+interface ISession {
+  user?: {};
 }
-
 
 interface IRecData {
   updateRecID: string;

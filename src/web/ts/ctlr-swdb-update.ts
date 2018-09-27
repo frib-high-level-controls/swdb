@@ -168,7 +168,7 @@ function UpdatePromiseCtrl(
   $scope.props = configService.getConfig();
   $scope.session = userService.getUser();
   forgUserService.promise.then(() => {
-    $scope.forgUsersList = forgUserService.getUsers().data;
+    $scope.forgUsersList = forgUserService.getUsers();
   });
   forgGroupService.promise.then(() => {
     $scope.forgGroupsList = forgGroupService.getGroups().data;
