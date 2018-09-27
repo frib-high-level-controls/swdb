@@ -13,7 +13,7 @@ module.exports = function(grunt) {
         // Typescript compiler fails for find the source files (grunt-ts v5.5.1).
         //outDir: './app',
         options: {
-          additionalFlags: '--outDir ./app --listEmittedFiles'
+          additionalFlags: '--outDir ./app'
         },
       },
       apptest: {
@@ -22,7 +22,7 @@ module.exports = function(grunt) {
           passThrough: true,
         },
         options: {
-          additionalFlags: '--outDir ./test --listEmittedFiles'
+          additionalFlags: '--outDir ./test'
         },
       },
       web: {
@@ -31,7 +31,7 @@ module.exports = function(grunt) {
           passThrough: true,
         },
         options: {
-          additionalFlags: '--outDir ./public/js --listEmittedFiles'
+          additionalFlags: '--outDir ./public/js'
         },
       },
       webtest: {
@@ -40,7 +40,7 @@ module.exports = function(grunt) {
           passThrough: true,
         },
         options: {
-          additionalFlags: '--outDir ./test --listEmittedFiles'
+          additionalFlags: '--outDir ./test'
         },
       },
       tools: {
@@ -49,7 +49,7 @@ module.exports = function(grunt) {
           passThrough: true,
         },
         options: {
-          additionalFlags: '--outDir ./tools --listEmittedFiles'
+          additionalFlags: '--outDir ./tools'
         },
       },
     },
