@@ -171,7 +171,7 @@ function UpdatePromiseCtrl(
     $scope.forgUsersList = forgUserService.getUsers();
   });
   forgGroupService.promise.then(() => {
-    $scope.forgGroupsList = forgGroupService.getGroups().data;
+    $scope.forgGroupsList = forgGroupService.getGroups();
   });
 
   // check our user session and redirect if needed

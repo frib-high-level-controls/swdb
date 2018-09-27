@@ -168,7 +168,7 @@ function InstUpdatePromiseCtrl(
   });
 
   forgAreaService.promise.then( () => {
-    $scope.forgAreasList = forgAreaService.getAreas().data;
+    $scope.forgAreasList = forgAreaService.getAreas();
   });
 
   // check our user session and redirect if needed

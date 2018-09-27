@@ -337,93 +337,138 @@ type IForgUserService = UsersService;
 app.factory('forgUserService', ['users', (users: UsersService) => (users)]);
 
 // Service to get FORG group data to controllers
-app.service('forgGroupService', ($http: ng.IHttpService) => {
-  let groupData: {data: IForgGroup[]} | null = null;
+class GroupsService extends AbstractRESTService {
 
-  const promise = $http({ url: basePath + '/api/v1/swdb/forgGroups', method: 'GET' })
-    .then( (data: IForgGroup[] & angular.IHttpResponse<any>) => {
-      groupData = data;
+  // Legacy
+  public promise: ng.IPromise<void>;
+
+  // Legacy
+  private groupData: IForgGroup[] = [];
+
+  constructor($http: ng.IHttpService) {
+    super($http);
+    this.initLegacy();
+  }
+
+  public async getList(): Promise<IForgGroup[]> {
+    const res = await this.$get<IForgGroup[]>(`${basePath}/api/v1/swdb/forgGroups`);
+    // TODO: check response status
+    return res.data;
+  }
+
+  // Legacy methods below!
+  public getGroups() {
+    return this.groupData;
+  }
+
+  public refreshGroupsList() {
+    this.$http({ url: basePath + '/api/v1/swdb/forgGroups', method: 'GET' })
+      .then((res: angular.IHttpResponse<IForgGroup[]>) => {
+        this.groupData = res.data;
+        return this.groupData;
+      });
+  }
+
+  /**
+   * groupUidsToObjects
+   * @param groupUids array id group UID strings
+   * @return array of group objects from forg
+   */
+  public groupUidsToObjects(groupUids: string[]) {
+    const forgObj = groupUids.map( (item, idx, array) => {
+      if (this.groupData) {
+        return this.groupData.filter((elem) => {
+          return elem.uid === item;
+        });
+      }
     });
+    return forgObj[0] || [];
+  }
 
-  return {
-    promise: promise,
-    getGroups: () => {
-      return groupData;
-    },
-    refreshGroupsList: () => {
-      $http({ url: basePath + '/api/v1/swdb/forgGroups', method: 'GET' })
-        .then( (data: IForgGroup[] & angular.IHttpResponse<any>) => {
-        groupData = data;
-        return groupData;
+  private initLegacy() {
+    this.promise = this.$http({ url: basePath + '/api/v1/swdb/forgGroups', method: 'GET' })
+      .then((res: angular.IHttpResponse<IForgGroup[]>) => {
+        this.groupData = res.data;
       });
-    },
-    /**
-     * groupUidsToObjects
-     * @param groupUids array id group UID strings
-     * @return array of group objects from forg
-     */
-    groupUidsToObjects:  (groupUids: string[]) => {
-      const forgObj = groupUids.map( (item, idx, array) => {
-        if (groupData) {
-          return groupData.data.filter( (elem) => {
-            return elem.uid === item;
-          });
-        }
-      });
-      return forgObj[0];
-    },
-  };
-});
+  }
+}
+app.service('groups', ['$http', GroupsService]);
+
+// Legacy Support!
+type IForgGroupService = GroupsService;
+app.factory('forgGroupService', ['groups', (groups: GroupsService) => (groups)]);
 
 // Service to get FORG area data to controllers
-app.service('forgAreaService', ($http: ng.IHttpService) => {
-  let areaData: {data: IForgArea[]} | null = null;
+class AreasService extends AbstractRESTService {
 
-  const promise = $http({ url: basePath + '/api/v1/swdb/forgAreas', method: 'GET' })
-    .then( (data: IForgArea[] & angular.IHttpResponse<any>) => {
-      areaData = data;
-    });
+  // Legacy
+  public promise: ng.IPromise<void>;
 
-  return {
-    promise: promise,
-    getAreas: () => {
-      return areaData;
-    },
-    refreshAreasList: () => {
-      $http({ url: basePath + '/api/v1/swdb/forgAreas', method: 'GET' })
-        .then( (data: IForgArea[] & angular.IHttpResponse<any>) => {
-          if (areaData) {
-            areaData = data;
-            return areaData;
-          }
+  // Legacy
+  private areaData: IForgArea[] = [];
+
+  constructor($http: ng.IHttpService) {
+    super($http);
+    this.initLegacy();
+  }
+
+  public async getList(): Promise<IForgArea[]> {
+    const res = await this.$get<IForgArea[]>(`${basePath}/api/v1/swdb/forgAreas`);
+    // TODO: check response status
+    return res.data;
+  }
+
+  // Legacy methods below!
+  public getAreas() {
+    return this.areaData;
+  }
+
+  public refreshAreasList() {
+    this.$http({ url: basePath + '/api/v1/swdb/forgAreas', method: 'GET' })
+      .then((res: ng.IHttpResponse<IForgArea[]>) => {
+        if (this.areaData) {
+          this.areaData = res.data;
+          return this.areaData;
+        }
+      });
+  }
+
+  /**
+   * areaUIidsToObjects
+   * @param areaUids array id area UID strings
+   * @return array of area objects from forg
+   */
+  public areaUidsToObjects(areaUids: string[]) {
+    let forgObj;
+    if (areaUids) {
+      if (this.areaData) {
+        forgObj = areaUids.map((item, idx, array) => {
+          return this.areaData.filter((elem) => {
+            return elem.uid === item;
+          })[0];
         });
-    },
-    /**
-     * areaUIidsToObjects
-     * @param areaUids array id area UID strings
-     * @return array of area objects from forg
-     */
-    areaUidsToObjects: (areaUids: string[]) => {
-      let forgObj;
-      if (areaUids) {
-        forgObj = areaUids.map( (item, idx, array) => {
-          if (areaData) {
-            return areaData.data.filter( (elem) => {
-              return elem.uid === item;
-            })[0];
-          }
-        });
-      } else {
-        forgObj = null;
       }
-      if (forgObj) {
-        return forgObj;
-      } else {
-        return [];
-      }
-    },
-  };
-});
+    } else {
+      forgObj = null;
+    }
+    if (forgObj) {
+      return forgObj;
+    } else {
+      return [];
+    }
+  }
+
+  private initLegacy() {
+    this.promise = this.$http({ url: basePath + '/api/v1/swdb/forgAreas', method: 'GET' })
+      .then((res: ng.IHttpResponse<IForgArea[]>) => {
+        this.areaData = res.data;
+      });
+  }
+}
+app.service('areas', ['$http', AreasService]);
+
+type IForgAreaService = AreasService;
+app.factory('forgAreaService', ['areas', (areas: AreasService) => (areas)]);
 
 app.filter('swFilt', () => {
   // custom filter for sw records

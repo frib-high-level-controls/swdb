@@ -17,12 +17,6 @@ interface IInstService {
   getInstsBySw(id: string): webapi.Inst[];
 }
 
-interface IForgAreaService {
-  promise: ng.IPromise<void>;
-  getAreas(): any;
-  areaUidsToObjects(id: string[]): IForgArea[];
-}
-
 interface IForgArea {
   uid: string;
 }
@@ -46,12 +40,6 @@ interface IForgUser {
 
 interface IForgSlot {
     uid: string;
-}
-
-interface IForgGroupService {
-  promise: ng.IPromise<void>;
-  getGroups(): any;
-  groupUidsToObjects(arr: string[]): IForgGroup[];
 }
 
 interface IForgGroup {
