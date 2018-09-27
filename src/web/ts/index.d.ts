@@ -17,14 +17,6 @@ interface IInstService {
   getInstsBySw(id: string): webapi.Inst[];
 }
 
-interface ISwService {
-  promise: ng.IPromise<void>;
-  refreshSwList(): ng.IPromise<void>;
-  swIdsToObjects(id: string[]): webapi.ISwdb[];
-  getSwList(): webapi.ISwdb[];
-  getSwById(item: string): webapi.ISwdb[];
-}
-
 interface IForgAreaService {
   promise: ng.IPromise<void>;
   getAreas(): any;

@@ -20,7 +20,7 @@ appController.run(['$rootScope', '$route', '$http', '$routeParams', '$location',
     $routeParams: ng.route.IRouteParamsService,
     $location: ng.ILocationService,
     configService: {},
-    slotService: {},
+    // slotService: {},
   ) => {
     $rootScope.$on('$routeChangeSuccess', (event, currentRoute: IAppRoute) => {
       // Change page title, based on Route information
@@ -39,6 +39,9 @@ appController.factory('StatusService', () => {
 interface IListControllerScope extends ng.IScope {
   session: {
     user?: {};
+  };
+  $resolve: {
+    softwareList: webapi.Software[];
   };
   props: IConfigProps;
   usrBtnTxt?: string;
@@ -83,12 +86,7 @@ appController.controller('ListController', function(
   const vm = this;
   vm.dtOptions = DTOptionsBuilder
     .fromFnPromise(() => {
-      const defer = $q.defer();
-      const url = basePath + '/api/v1/swdb';
-      $http.get<{data: {}}>(url).then((result) => {
-        defer.resolve(result.data);
-      });
-      return defer.promise;
+      return Promise.resolve($scope.$resolve.softwareList);
     })
     .withBootstrap()
     .withPaginationType('full_numbers')

@@ -64,90 +64,126 @@ app.service('userService', ($http: ng.IHttpService) => {
 });
 
 // Service to get ccdb slots to controllers
-app.service('slotService', ($http: ng.IHttpService) => {
-    let slotData: IForgSlot | null = null;
+// app.service('slotService', ($http: ng.IHttpService) => {
+//     let slotData: IForgSlot | null = null;
 
-    const promise = 	$http({
-      url: basePath + '/api/v1/swdb/slot',
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then((data: IForgSlot & angular.IHttpResponse<any>) => {
-        slotData = data;
-    });
+//     const promise = 	$http({
+//       url: basePath + '/api/v1/swdb/slot',
+//       method: 'GET',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//     }).then((data: IForgSlot & angular.IHttpResponse<IForgSlot>) => {
+//         slotData = data;
+//     });
 
-    return {
-        promise: promise,
-        setData: (data: IForgSlot) => {
-            slotData = data;
-        },
-        getSlot: () => {
-            return slotData;
-        },
-    };
-});
+//     return {
+//         promise: promise,
+//         setData: (data: IForgSlot) => {
+//             slotData = data;
+//         },
+//         getSlot: () => {
+//             return slotData;
+//         },
+//     };
+// });
 
-// Service to get sw data to controllers
-app.service('swService', ($http: ng.IHttpService) => {
-    let swData: webapi.ISwdb[] | null = null;
-    let promise = $http({url: basePath + '/api/v1/swdb', method: 'GET'})
-    .then((data: {data: webapi.ISwdb[]} & angular.IHttpResponse<any>) => {
-        swData = data.data;
-    });
+/**
+ * SoftwareService provides access to software data using the REST API.
+ */
+class SoftwareService {
 
-    return {
-      promise: promise,
-      getSwList: () => {
-          return swData;
-        },
-      refreshSwList: () => {
-        promise = $http({ url: basePath + '/api/v1/swdb', method: 'GET' })
-        .then( (data: {data: webapi.ISwdb[]} & angular.IHttpResponse<any>) => {
-          swData = data.data;
+  // Legacy
+  public promise: ng.IPromise<void>;
+
+  // Legacy
+  private swData: webapi.ISwdb[] | null = null;
+
+  private $http: ng.IHttpService;
+
+  constructor($http: ng.IHttpService) {
+    this.$http = $http;
+    this.initLegacy();
+  }
+
+  public async getList(): Promise<webapi.Software[]> {
+    const res = await this.$http.get<webapi.Software[]>(`${basePath}/api/v1/swdb`);
+    // TODO: check status code for error
+    return res.data;
+  }
+
+  public async getById(id: string): Promise<webapi.Software[]> {
+    const res = await this.$http.get<webapi.Software[]>(`${basePath}/api/v1/swdb/${id}`);
+    // TODO: check status code for error
+    return res.data;
+  }
+
+  public getSwList() {
+    return this.swData || [];
+  }
+
+  // Legacy methods below!
+
+  public refreshSwList() {
+    this.promise = this.$http({ url: basePath + '/api/v1/swdb', method: 'GET' })
+      .then((res: ng.IHttpResponse<webapi.Software[]>) => {
+        this.swData = res.data;
+      });
+    return this.promise;
+  }
+
+  /**
+   * getSwById
+   * @param swId id user ID string
+   * @return matching sw objects
+   */
+  public getSwById(swId: string) {
+    if (this.swData) {
+      return this.swData.filter((item: webapi.ISwdb) => {
+        return item._id === swId;
+      });
+    }
+    return [];
+  }
+
+  /**
+   * userUidsToObjects
+   * @param swIds array id user ID strings
+   * @return array of sw objects from forg
+   */
+  public swIdsToObjects(swIds: string[]) {
+    const swObj = swIds.map((item, idx, array) => {
+      if (this.swData) {
+        const node = this.swData.filter((elem) => {
+          return elem._id === item;
         });
-        return promise;
-      },
-      /**
-       * getSwById
-       * @param swId id user ID string
-       * @return matching sw objects
-       */
-      getSwById: (swId: string) => {
-        if (swData) {
-          return swData.filter( (item: webapi.ISwdb) => {
-            return item._id === swId;
-          });
-        }
-      },
-      /**
-       * userUidsToObjects
-       * @param swIds array id user ID strings
-       * @return array of sw objects from forg
-       */
-      swIdsToObjects: (swIds: string[]) => {
-        const swObj = swIds.map((item, idx, array) => {
-          if (swData) {
-            const node = swData.filter( (elem) => {
-              return elem._id === item;
-            });
-            return node;
-          } else {
-            return [];
-          }
-        });
-        return swObj[0];
-      },
-    };
-});
+        return node;
+      } else {
+        return [];
+      }
+    });
+    return swObj[0];
+  }
+
+  private initLegacy() {
+    this.promise = this.$http({url: basePath + '/api/v1/swdb', method: 'GET'})
+      .then((res: angular.IHttpResponse<webapi.ISwdb[]>) => {
+        this.swData = res.data;
+      });
+  }
+}
+app.service('software', ['$http', SoftwareService]);
+
+type ISwService = SoftwareService;
+app.factory('swService', ['software', (software: SoftwareService) => (software)]);
 
 // Service to get inst data to controllers
 app.service('instService', ($http: ng.IHttpService) => {
     let instData: webapi.Inst[] | null = null;
 
     let promise = 	$http({url: basePath + '/api/v1/inst', method: 'GET'})
-      .then( (data: {data: webapi.Inst[]} & angular.IHttpResponse<any>) => {
-        instData = data.data;
+      .then((res: ng.IHttpResponse<webapi.Inst[]>) => {
+        instData = res.data;
       });
 
     return {
@@ -157,8 +193,8 @@ app.service('instService', ($http: ng.IHttpService) => {
         },
       refreshInstList:  () => {
         promise = $http({ url: basePath + '/api/v1/inst', method: 'GET' })
-          .then( (data: {data: webapi.Inst[]} & angular.IHttpResponse<any>) => {
-            instData = data.data;
+          .then((res: ng.IHttpResponse<webapi.Inst[]>) => {
+            instData = res.data;
           });
         return promise;
       },
@@ -426,6 +462,9 @@ app.config(['$routeProvider', ($routeProvider: ng.route.IRouteParamsService) => 
                 userServiceData: (userService: IUserService) => {
                     return userService.promise;
                 },
+                softwareList: ['software', (software: SoftwareService) => {
+                  return software.getList();
+                }],
             },
         })
         .when('/inst/list', {
