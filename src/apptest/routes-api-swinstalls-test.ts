@@ -173,27 +173,6 @@ describe('Software Installation API Specification', () => {
           }
         });
     });
-
-    it('Returns the correct location header PATCH existing record', (done) => {
-      supertest
-        .patch('/api/v1/inst/' + wrapper.origId)
-        .set('Accept', 'application/json')
-        .set('Cookie', cookie)
-        .send({ owner: 'Header owner2' })
-        .expect(200)
-        .end((err, result) => {
-          if (err) {
-            done(err);
-          } else {
-            const re = new RegExp('^.*/api/v1/inst/' + wrapper.origId + '$');
-            if (result.header.location.match(re)) {
-              done();
-            } else {
-              done(new Error('Location header is not set' + JSON.stringify(result.header.location)));
-            }
-          }
-        });
-    });
   });
 
   describe('Check history calls', () => {
@@ -618,16 +597,6 @@ describe('Software Installation API Specification', () => {
     it('Errors on update a nonexistent record via PUT id:badbeef', (done) => {
       supertest
         .put('/api/v1/inst/badbeef')
-        .set('Cookie', cookie)
-        .send({swName: 'Test Record5'})
-        .expect(400)
-        .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
-        .end(done);
-    });
-
-    it('Errors on update a nonexistent record via PATCH id:badbeef', (done) => {
-      supertest
-        .patch('/api/v1/inst/badbeef')
         .set('Cookie', cookie)
         .send({swName: 'Test Record5'})
         .expect(400)

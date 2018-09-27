@@ -178,7 +178,6 @@ async function updateDoc(user: string, req: express.Request, res: express.Respon
 // }
 
 
-
 // Handle installation requests
 // for get requests that are not specific return all
 router.get('/api/v1/inst/hist/:id', catchAll(async (req, res) => {
@@ -202,6 +201,12 @@ router.get('/api/v1/inst', catchAll( async (req, res) => {
 router.post('/api/v1/inst', auth.ensureAuthenticated, catchAll(async (req, res) => {
   debug('POST /api/v1/inst request');
 
+  const username = auth.getUsername(req);
+  if (!username) {
+    res.status(500).send('Ensure authenticated failed');
+    return;
+  }
+
   // Do validation for  new records
   await checkNewSWInstall(req);
 
@@ -219,18 +224,18 @@ router.post('/api/v1/inst', auth.ensureAuthenticated, catchAll(async (req, res) 
     return;
   }
 
-  const username = auth.getUsername(req);
-  if (!username) {
-    res.status(500).send('Ensure authenticated failed');
-    return;
-  }
-
   await createDoc(username, req, res);
 }));
 
 // handle incoming put requests for installation update
 router.put('/api/v1/inst/:id', auth.ensureAuthenticated, catchAll(async (req, res) => {
   debug('PUT /api/v1/inst/:id request');
+
+  const username = auth.getUsername(req);
+  if (!username) {
+    res.status(500).send('Ensure authenticated failed');
+    return;
+  }
 
   // Do validation for installation updates
   await checkUpdateSWInstall(req);
@@ -261,56 +266,6 @@ router.put('/api/v1/inst/:id', auth.ensureAuthenticated, catchAll(async (req, re
   if (errors.length > 0) {
     debug('Workflow validation errors: ' + JSON.stringify(errors));
     res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
-    return;
-  }
-
-  const username = auth.getUsername(req);
-  if (!username) {
-    res.status(500).send('Ensure authenticated failed');
-    return;
-  }
-
-  await updateDoc(username, req, res);
-}));
-
-// handle incoming put requests for installation update
-router.patch('/api/v1/inst/:id', auth.ensureAuthenticated, catchAll(async (req, res) => {
-  debug('PATCH /api/v1/inst/:id request');
-
-  // Do validation for installation updates
-  await checkUpdateSWInstall(req);
-
-  const result = validationResult(req, legacy.validationErrorFormatter);
-  if (!result.isEmpty()) {
-    res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-    return;
-  }
-
-  // setup an array of validations to perfrom
-  const wfResultArr = await Promise.all([
-    CustomValidators.noInstSwChangeUnlessReadyForInstall(req),
-    CustomValidators.noInstSwUnlessSwIsReadyForInstall(req),
-  ]);
-
-  const errors = wfResultArr.reduce<IValResult[]>((p, r, idx) => {
-    if (r.error) {
-      p.push(r);
-    }
-    debug('wfValArr[' + idx + ']: ' + JSON.stringify(r));
-    return p;
-  }, []);
-
-  debug('Workflow validation results :' + JSON.stringify(wfResultArr));
-
-  if (errors.length > 0) {
-    debug('Workflow validation errors ' + JSON.stringify(errors));
-    res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
-    return;
-  }
-
-  const username = auth.getUsername(req);
-  if (!username) {
-    res.status(500).send('Ensure authenticated failed');
     return;
   }
 

@@ -144,7 +144,7 @@ async function updateDoc(user: string, req: express.Request, res: express.Respon
   const id = req.params.id ? String(req.params.id) : null;
   if (!id) {
     throw new Error('Record not found');
-            }
+  }
   const doc = await Software.findById(id);
   if (!doc) {
     throw new Error('Record not found');
@@ -233,6 +233,12 @@ router.get('/api/v1/swdb', catchAll(async (req, res) => {
 router.post('/api/v1/swdb', auth.ensureAuthenticated, catchAll(async (req, res) => {
   debug('POST /api/v1/swdb request');
 
+  const username = auth.getUsername(req);
+  if (!username) {
+    res.status(500).send('Ensure authenticated failed');
+    return;
+  }
+
   // Do validation for  new records
   await checkNewSoftware(req);
 
@@ -240,12 +246,6 @@ router.post('/api/v1/swdb', auth.ensureAuthenticated, catchAll(async (req, res) 
   if (!result.isEmpty()) {
     debug('validation result: ' + JSON.stringify(result.array()));
     res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-    return;
-  }
-
-  const username = auth.getUsername(req);
-  if (!username) {
-    res.status(500).send('Ensure authenticated failed');
     return;
   }
 
@@ -265,50 +265,11 @@ router.post('/api/v1/swdb/list', catchAll(async (req, res) => {
 router.put('/api/v1/swdb/:id', auth.ensureAuthenticated, catchAll(async (req, res) => {
   debug('PUT /api/v1/swdb/:id request');
 
-  await checkUpdateSoftware(req);
-
-  const result = validationResult(req, legacy.validationErrorFormatter);
-  if (!result.isEmpty()) {
-    res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-    return;
-  }
-
-  // setup an array of validations to perfrom
-  // save the results in wfResultsArr, and errors in errors.
-  const wfResultArr = await Promise.all([
-    CustomValidators.swNoVerBranchChgIfStatusRdyInstall(req),
-    CustomValidators.noSwStateChgIfReferringInst(req),
-  ]);
-
-  const errors = wfResultArr.reduce<IValResult[]>((p, r, idx) => {
-    if (r.error) {
-      p.push(r);
-    }
-    debug('wfValArr[' + idx + ']: ' + JSON.stringify(r));
-    return p;
-  }, []);
-
-  debug('Workflow validation results :' + JSON.stringify(wfResultArr));
-
-  if (errors.length > 0) {
-    debug('Workflow validation errors ' + JSON.stringify(errors));
-    res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
-    return;
-  }
-
   const username = auth.getUsername(req);
   if (!username) {
     res.status(500).send('Ensure authenticated failed');
     return;
   }
-
-  await updateDoc(username, req, res);
-}));
-
-
-// handle incoming patch requests for update
-router.patch('/api/v1/swdb/:id', auth.ensureAuthenticated, catchAll(async (req, res) => {
-  debug('PATCH /api/v1/swdb/:id request');
 
   await checkUpdateSoftware(req);
 
@@ -338,12 +299,6 @@ router.patch('/api/v1/swdb/:id', auth.ensureAuthenticated, catchAll(async (req, 
   if (errors.length > 0) {
     debug('Workflow validation errors ' + JSON.stringify(errors));
     res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
-    return;
-  }
-
-  const username = auth.getUsername(req);
-  if (!username) {
-    res.status(500).send('Ensure authenticated failed');
     return;
   }
 

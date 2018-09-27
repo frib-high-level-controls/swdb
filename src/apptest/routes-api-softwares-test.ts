@@ -256,28 +256,6 @@ describe('Software API Specification', () => {
           }
         });
     });
-
-    it('Returns the correct location header PATCH existing record', (done) => {
-      supertest
-        .patch('/api/v1/swdb/' + wrapper.origId)
-        .set('Accept', 'application/json')
-        .set('Cookie', cookie)
-        .send({ owner: 'Header owner2' })
-        .expect(200)
-        .end((err, result) => {
-          if (err) {
-            done(err);
-          } else {
-            const re = new RegExp('^.*/api/v1/swdb/' + wrapper.origId + '$');
-            if (result.header.location.match(re)) {
-              debug('Location: ' + result.header.location);
-              done();
-            } else {
-              done(new Error('Location header is not set' + JSON.stringify(result.header.location)));
-            }
-          }
-        });
-    });
   });
 
   describe('Check history calls', () => {
@@ -1717,22 +1695,6 @@ describe('Software API Specification', () => {
     it('Errors on update a nonexistent record via PUT swName id:badbeef', (done) => {
       supertest
       .put('/api/v1/swdb/badbeef')
-      .set('Cookie', cookie)
-      .send({swName: 'Test Record4'})
-      .expect(400)
-      .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
-      .end((err, res) => {
-        if (err) {
-          done(err);
-        } else {
-          debug('Location: ' + res.header.location);
-          done();
-        }
-      });
-    });
-    it('Errors on update a nonexistent record via PATCH swName id:badbeef', (done) => {
-      supertest
-      .patch('/api/v1/swdb/badbeef')
       .set('Cookie', cookie)
       .send({swName: 'Test Record4'})
       .expect(400)
