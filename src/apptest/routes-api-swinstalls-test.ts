@@ -353,9 +353,7 @@ describe('Software Installation API Specification', () => {
           done(err);
         } else {
           const regex =
-            'Status must be one of {\\\\"RDY_INST\\\\":\\\\"Ready for install\\\\",' +
-            '\\\\"RDY_VER\\\\":\\\\"Ready for verification\\\\",\\\\"RDY_BEAM\\\\":\\\\"Ready for beam\\\\",' +
-            '\\\\"RET\\\\":\\\\"Retired\\\\"}';
+            'Status must be one of RDY_INST,RDY_VER,RDY_BEAM,RET';
           expect(res.text).to.match(new RegExp(regex));
           done();
         }
@@ -650,6 +648,7 @@ describe('Software Installation API Specification', () => {
         .set('Cookie', cookie)
         .send({
           swName: 'Rule 2 Test Record',
+          desc: '',
           version: 'test version',
           branch: 'test branch',
           owner: 'previous Test Owner',
@@ -657,6 +656,14 @@ describe('Software Installation API Specification', () => {
           levelOfCare: 'LOW',
           status: 'RDY_INST',
           statusDate: '2017-04-21',
+          platforms: '',
+          descDocLoc: '',
+          designDescDocLoc: '',
+          vvProcLoc: [],
+          vvResultsLoc: [],
+          versionControl: '',
+          versionControlLoc: '',
+          comment: '',
         })
         .expect(201)
         .end((err, res) => {
@@ -760,6 +767,7 @@ describe('Software Installation API Specification', () => {
         .set('Cookie', cookie)
         .send({
           swName: 'Rule 3 Test Record',
+          desc: '',
           version: 'test version',
           branch: 'test branch',
           owner: 'previous Test Owner',
@@ -767,6 +775,14 @@ describe('Software Installation API Specification', () => {
           levelOfCare: 'LOW',
           status: 'DEVEL',
           statusDate: '2017-04-21',
+          platforms: '',
+          descDocLoc: '',
+          designDescDocLoc: '',
+          vvProcLoc: [],
+          vvResultsLoc: [],
+          versionControl: '',
+          versionControlLoc: '',
+          comment: '',
         })
         .expect(201)
         .end((err, res) => {

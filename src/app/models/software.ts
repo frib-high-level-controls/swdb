@@ -1,9 +1,12 @@
 /**
  * Model to represent Software or Firmware.
  */
+import { isString } from 'lodash';
 import * as mongoose from 'mongoose';
 
 import * as history from '../shared/history';
+
+type ObjectId = mongoose.Types.ObjectId;
 
 export enum CareLevel {
   LOW = 'LOW',
@@ -32,23 +35,23 @@ export const VCS = VersionControlSystem;
 export interface ISoftware extends history.IHistory {
   _id: any;
   swName: string;
-  version?: string;
-  branch?: string;
-  desc?: string;
+  desc: string;
+  branch: string;
+  version: string;
   owner: string;
-  engineer?: string;
+  engineer: string;
   levelOfCare: string;
   status: string;
   statusDate: Date;
-  platforms?: string;
-  designDescDocLoc?: string;
-  descDocLoc?: string;
-  vvProcLoc?: string[];
-  vvResultsLoc?: string[];
-  versionControl?: string;
-  versionControlLoc?: string;
-  previous?: string;
-  comment?: string;
+  platforms: string;
+  descDocLoc: string;
+  designDescDocLoc: string;
+  vvProcLoc: string[];
+  vvResultsLoc: string[];
+  versionControl: string;
+  versionControlLoc: string;
+  previous?: ObjectId;
+  comment: string;
 }
 
 export interface Software extends ISoftware, history.Document<Software> {
@@ -76,6 +79,8 @@ export const VERSION_CONTROL_SYSTEMS: VCS[] = [
   VCS.OTHER,
 ];
 
+const MODEL_NAME = 'swdb';
+
 const Schema = mongoose.Schema;
 
 const ObjectId = Schema.Types.ObjectId;
@@ -85,14 +90,23 @@ const softwareSchema = new Schema({
     type: String,
     required: true,
   },
-  version: {
+  desc: {
     type: String,
+    default: '',
+    // Using 'require: true' on fields of String type
+    // causes empty strings ('') to raise a validation
+    // error. Use the following custom validator instead.
+    validate: isString,
   },
   branch: {
     type: String,
+    default: '',
+    validate: isString,
   },
-  desc: {
+  version: {
     type: String,
+    default: '',
+    validate: isString,
   },
   owner: {
     type: String,
@@ -100,7 +114,8 @@ const softwareSchema = new Schema({
   },
   engineer: {
     type: String,
-    required: false,
+    default: '',
+    validate: isString,
   },
   levelOfCare: {
     type: String,
@@ -118,31 +133,48 @@ const softwareSchema = new Schema({
   },
   platforms: {
     type: String,
+    default: '',
+    validate: isString,
   },
   designDescDocLoc: {
     type: String,
+    default: '',
+    validate: isString,
   },
   descDocLoc: {
     type: String,
+    default: '',
+    validate: isString,
   },
   vvProcLoc: {
     type: [String],
+    default: [],
+    required: true,
   },
   vvResultsLoc: {
     type: [String],
+    default: [],
+    required: true,
   },
   versionControl: {
     type: String,
-    enum: VERSION_CONTROL_SYSTEMS,
+    enum: [''].concat(VERSION_CONTROL_SYSTEMS),
+    validate: isString,
   },
   versionControlLoc: {
     type: String,
+    default: '',
+    validate: isString,
   },
   previous: {
     type: ObjectId,
+    ref: MODEL_NAME,
+    default: null,
   },
   comment: {
     type: String,
+    default: '',
+    validate: isString,
   },
 }, {
   emitIndexErrors: true,
@@ -154,4 +186,4 @@ history.addHistory(softwareSchema, {
   watchAll: true,
 });
 
-export const Software = history.model<Software>('swdb', softwareSchema, 'swdbCollection');
+export const Software = history.model<Software>(MODEL_NAME, softwareSchema, 'swdbCollection');

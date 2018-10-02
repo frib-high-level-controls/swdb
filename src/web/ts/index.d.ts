@@ -133,7 +133,7 @@ interface ISwdbNewControllerScope extends ng.IScope {
   forgUsersList: IForgUser[];
   forgGroupsList: IForgGroup[];
   statusDisplay: string | undefined;
-  statusDateDisplay: Date;
+  statusDateDisplay: Date | null;
   levelOfCareDisplay: string | undefined;
   versionControlDisplay: string | undefined;
   rawHistory: IHistory[];

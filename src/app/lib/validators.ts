@@ -72,11 +72,11 @@ export function isArea(val: string, opts: { req: express.Request }) {
   }
 }
 
-export function isVvProcLoc(val: string, opts: { req: express.Request }) {
-  /* Case 1: The string is not a json array
-    * Case 2: The String is an array, but the listed items are not valid strings.
-    * Case 3: The string is an array and all listed items are valid strings
-    */
+export function isVvProcLoc(val: {}) {
+  /* Case 1: The value is not an array
+   * Case 2: The String is an array, but the listed items are not valid strings.
+   * Case 3: The string is an array and all listed items are valid strings
+   */
   const result: string[] = [];
   if (Array.isArray(val)) {
     //debug('body is ' + cJSON.stringify(opts.req.body, null, 2));

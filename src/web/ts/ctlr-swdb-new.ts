@@ -63,12 +63,12 @@ function NewPromiseCtrl(
     const parts = event.currentTarget.id.split('.');
     if (parts[1] === 'vvProcLoc') {
       if ($scope.formData.vvProcLoc) {
-      $scope.formData.vvProcLoc.push('');
+        $scope.formData.vvProcLoc.push('');
       }
     } else if (parts[1] === 'vvResultsLoc') {
       if ($scope.formData.vvResultsLoc) {
-      $scope.formData.vvResultsLoc.push('');
-    }
+        $scope.formData.vvResultsLoc.push('');
+      }
     }
   };
 
@@ -95,7 +95,11 @@ function NewPromiseCtrl(
       $scope.formData.engineer = $scope.engineerSelected.item.uid;
     }
 
-    $scope.formData.statusDate = DateUtil.toLocalDateISOString($scope.statusDateDisplay);
+    if ($scope.statusDateDisplay) {
+      $scope.formData.statusDate = DateUtil.toLocalDateISOString($scope.statusDateDisplay);
+    } else {
+      $scope.formData.statusDate = '';
+    }
 
     // convert enum values to keys
     $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).filter((item) => {
@@ -104,9 +108,9 @@ function NewPromiseCtrl(
     $scope.formData.status = Object.keys($scope.props.StatusEnum).filter((item) => {
       return $scope.statusDisplay === $scope.props.StatusEnum[item];
     })[0];
-    $scope.formData.versionControl = Object.keys($scope.props.RcsEnum).filter((item) => {
-      return $scope.versionControlDisplay === $scope.props.RcsEnum[item];
-    })[0];
+    $scope.formData.versionControl = Object.keys($scope.props.RcsEnum).reduce((p, v) => {
+      return $scope.versionControlDisplay === $scope.props.RcsEnum[v] ? v : p;
+    }, '');
 
     if ($scope.inputForm.$valid) {
       const url = basePath + '/api/v1/swdb';
@@ -177,8 +181,23 @@ function NewPromiseCtrl(
 
   // initialize this record
   $scope.formData = {
+    swName: '',
+    desc: '',
+    branch: '',
+    version: '',
+    owner: '',
+    engineer: '',
+    levelOfCare: '',
+    status: '',
+    statusDate: '',
+    platforms: '',
+    descDocLoc: '',
+    designDescDocLoc: '',
     vvProcLoc: [],
     vvResultsLoc: [],
+    versionControl: '',
+    versionControlLoc: '',
+    comment: '',
   };
 
   $scope.swdbParams = {
@@ -188,6 +207,8 @@ function NewPromiseCtrl(
     formErr: '',
   };
   getEnums();
+
+  $scope.statusDateDisplay = new Date();
 
   // expect recService to provide ID and formdata
   const updateRec = recService.getRec();

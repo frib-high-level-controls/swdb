@@ -1,9 +1,13 @@
 /**
  * Test for Software API specification.
  */
+
+/* tslint:disable:max-line-length */
+
 import { assert, expect } from 'chai';
 import * as Debug from 'debug';
 import { Application } from 'express';
+import { assign } from 'lodash';
 
 import * as SuperTest from 'supertest';
 
@@ -153,29 +157,42 @@ describe('Software API Specification', () => {
 
   it('Returns location header posting new record', (done) => {
     supertest
-    .post('/api/v1/swdb')
-    .set('Accept', 'application/json')
-    .set('Cookie', cookie)
-      .send({swName: 'Header Test Record',
-       owner: 'Owner 1000',
-       engineer: 'Engineer 1000',
-       levelOfCare: 'LOW',
-       status: 'DEVEL',
-       statusDate: '2017-04-21'})
-    .expect(201)
-    .end((err, result) => {
-      if (err) {
-        debug('result: ' + JSON.stringify(result));
-        done(err);
-      } else {
-        debug('result: ' + JSON.stringify(result));
-        if (result.header.location.match(/^.*\/api\/v1\/swdb\/[0-9a-fA-F]{24}$/g)) {
-          done();
+      .post('/api/v1/swdb')
+      .set('Accept', 'application/json')
+      .set('Cookie', cookie)
+      .send({
+        swName: 'Header Test Record',
+        desc: '',
+        branch: '',
+        version: '',
+        owner: 'Owner 1000',
+        engineer: 'Engineer 1000',
+        levelOfCare: 'LOW',
+        status: 'DEVEL',
+        statusDate: '2017-04-21',
+        designDescDocLoc: '',
+        descDocLoc: '',
+        vvProcLoc: [],
+        vvResultsLoc: [],
+        versionControl: '',
+        versionControlLoc: '',
+        platforms: '',
+        comment: '',
+      })
+      .expect(201)
+      .end((err, result) => {
+        if (err) {
+          debug('result: ' + JSON.stringify(result.text));
+          done(err);
         } else {
-          done(new Error('Location header is not set' + JSON.stringify(result.header.location)));
+          debug('result: ' + JSON.stringify(result));
+          if (result.header.location.match(/^.*\/api\/v1\/swdb\/[0-9a-fA-F]{24}$/g)) {
+            done();
+          } else {
+            done(new Error('Location header is not set' + JSON.stringify(result.header.location)));
+          }
         }
-      }
-    });
+      });
   });
 
   it('Has the correct number of history entries', async () => {
@@ -240,7 +257,25 @@ describe('Software API Specification', () => {
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
-        .send({ owner: 'Header owner' })
+        .send({
+          owner: 'Header owner',
+          swName: 'Header Test Record',
+          desc: '',
+          branch: '',
+          version: '',
+          engineer: 'Engineer 1000',
+          levelOfCare: 'LOW',
+          status: 'DEVEL',
+          statusDate: '2017-04-21',
+          designDescDocLoc: '',
+          descDocLoc: '',
+          vvProcLoc: [],
+          vvResultsLoc: [],
+          versionControl: '',
+          versionControlLoc: '',
+          platforms: '',
+          comment: '',
+        })
         .expect(200)
         .end((err, result) => {
           if (err) {
@@ -263,13 +298,26 @@ describe('Software API Specification', () => {
     before('Before test post and get id', (done) => {
       supertest
         .post('/api/v1/swdb')
-        .send({ swName: 'Hist1 Test Record',
-         owner: 'Test Owner',
-         engineer: 'Test Engineer',
-         previous: 'badbeefbadbeefbadbeefbad',
-         levelOfCare: 'LOW',
-         status: 'DEVEL',
-         statusDate: '2017-04-21' })
+        .send({
+          swName: 'Hist1 Test Record',
+          owner: 'Test Owner',
+          engineer: 'Test Engineer',
+          previous: 'badbeefbadbeefbadbeefbad',
+          levelOfCare: 'LOW',
+          status: 'DEVEL',
+          statusDate: '2017-04-21',
+          desc: '',
+          branch: '',
+          version: '',
+          designDescDocLoc: '',
+          descDocLoc: '',
+          vvProcLoc: [],
+          vvResultsLoc: [],
+          versionControl: '',
+          versionControlLoc: '',
+          platforms: '',
+          comment: '',
+        })
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
         .expect(201)
@@ -289,7 +337,26 @@ describe('Software API Specification', () => {
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
-        .send({ owner: 'Hist2 owner' })
+        .send({
+          owner: 'Hist2 owner',
+          swName: 'Hist1 Test Record',
+          engineer: 'Test Engineer',
+          previous: 'badbeefbadbeefbadbeefbad',
+          levelOfCare: 'LOW',
+          status: 'DEVEL',
+          statusDate: '2017-04-21',
+          desc: '',
+          branch: '',
+          version: '',
+          designDescDocLoc: '',
+          descDocLoc: '',
+          vvProcLoc: [],
+          vvResultsLoc: [],
+          versionControl: '',
+          versionControlLoc: '',
+          platforms: '',
+          comment: '',
+        })
         .expect(200)
         .end((err, result) => {
           if (err) {
@@ -304,7 +371,26 @@ describe('Software API Specification', () => {
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
-        .send({ owner: 'Hist3 owner' })
+        .send({
+          owner: 'Hist3 owner',
+          swName: 'Hist1 Test Record',
+          engineer: 'Test Engineer',
+          previous: 'badbeefbadbeefbadbeefbad',
+          levelOfCare: 'LOW',
+          status: 'DEVEL',
+          statusDate: '2017-04-21',
+          desc: '',
+          branch: '',
+          version: '',
+          designDescDocLoc: '',
+          descDocLoc: '',
+          vvProcLoc: [],
+          vvResultsLoc: [],
+          versionControl: '',
+          versionControlLoc: '',
+          platforms: '',
+          comment: '',
+        })
         .expect(200)
         .end((err, result) => {
           if (err) {
@@ -319,7 +405,26 @@ describe('Software API Specification', () => {
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
-        .send({ owner: 'Hist4 owner' })
+        .send({
+          owner: 'Hist4 owner',
+          swName: 'Hist1 Test Record',
+          engineer: 'Test Engineer',
+          previous: 'badbeefbadbeefbadbeefbad',
+          levelOfCare: 'LOW',
+          status: 'DEVEL',
+          statusDate: '2017-04-21',
+          desc: '',
+          branch: '',
+          version: '',
+          designDescDocLoc: '',
+          descDocLoc: '',
+          vvProcLoc: [],
+          vvResultsLoc: [],
+          versionControl: '',
+          versionControlLoc: '',
+          platforms: '',
+          comment: '',
+        })
         .expect(200)
         .end((err, result) => {
           if (err) {
@@ -334,7 +439,26 @@ describe('Software API Specification', () => {
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
-        .send({ owner: 'Hist5 owner' })
+        .send({
+          owner: 'Hist5 owner',
+          swName: 'Hist1 Test Record',
+          engineer: 'Test Engineer',
+          previous: 'badbeefbadbeefbadbeefbad',
+          levelOfCare: 'LOW',
+          status: 'DEVEL',
+          statusDate: '2017-04-21',
+          desc: '',
+          branch: '',
+          version: '',
+          designDescDocLoc: '',
+          descDocLoc: '',
+          vvProcLoc: [],
+          vvResultsLoc: [],
+          versionControl: '',
+          versionControlLoc: '',
+          platforms: '',
+          comment: '',
+        })
         .expect(200)
         .end((err, result) => {
           if (err) {
@@ -349,7 +473,26 @@ describe('Software API Specification', () => {
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
-        .send({ owner: 'Hist6 owner' })
+        .send({
+          owner: 'Hist6 owner',
+          swName: 'Hist1 Test Record',
+          engineer: 'Test Engineer',
+          previous: 'badbeefbadbeefbadbeefbad',
+          levelOfCare: 'LOW',
+          status: 'DEVEL',
+          statusDate: '2017-04-21',
+          desc: '',
+          branch: '',
+          version: '',
+          designDescDocLoc: '',
+          descDocLoc: '',
+          vvProcLoc: [],
+          vvResultsLoc: [],
+          versionControl: '',
+          versionControlLoc: '',
+          platforms: '',
+          comment: '',
+        })
         .expect(200)
         .end((err, result) => {
           if (err) {
@@ -364,7 +507,26 @@ describe('Software API Specification', () => {
         .put('/api/v1/swdb/' + wrapper.origId)
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
-        .send({ owner: 'Hist7 owner' })
+        .send({
+          owner: 'Hist7 owner',
+          swName: 'Hist1 Test Record',
+          engineer: 'Test Engineer',
+          previous: 'badbeefbadbeefbadbeefbad',
+          levelOfCare: 'LOW',
+          status: 'DEVEL',
+          statusDate: '2017-04-21',
+          desc: '',
+          branch: '',
+          version: '',
+          designDescDocLoc: '',
+          descDocLoc: '',
+          vvProcLoc: [],
+          vvResultsLoc: [],
+          versionControl: '',
+          versionControlLoc: '',
+          platforms: '',
+          comment: '',
+        })
         .expect(200)
         .end((err, result) => {
           if (err) {
@@ -419,69 +581,93 @@ describe('Software API Specification', () => {
     });
   });
 
-  it('Post a new record', (done) => {
-    supertest
-    .post('/api/v1/swdb')
-    .set('Accept', 'application/json')
-    .set('Cookie', cookie)
-      .send({swName: 'Test Record',
-       owner: 'Owner 1000',
-       engineer: 'Engineer 1000',
-       levelOfCare: 'LOW',
-       status: 'DEVEL',
-       statusDate: '2017-04-21'})
-    .expect(201)
-    .end((err, result) => {
-      debug('Location: ' + result.header.location);
-      done();
-    });
+  it('Post a new record', async () => {
+    const result = await supertest
+      .post('/api/v1/swdb')
+      .set('Accept', 'application/json')
+      .set('Cookie', cookie)
+      .send({
+        swName: 'Test Record',
+        desc: '',
+        branch: '',
+        version: '',
+        owner: 'Owner 1000',
+        engineer: 'Engineer 1000',
+        levelOfCare: 'LOW',
+        platforms: '',
+        status: 'DEVEL',
+        statusDate: '2017-04-21',
+        descDocLoc: '',
+        designDescDocLoc: '',
+        vvProcLoc: [],
+        vvResultsLoc: [],
+        versionControl: '',
+        versionControlLoc: '',
+        comment: '',
+      })
+      .expect(201);
+    debug('Location: ' + result.header.location);
   });
 
-  it('Errors posting a duplicate new record', (done) => {
-    supertest
-    .post('/api/v1/swdb')
-    .send({swName: 'Test Record',
-     owner: 'Owner 1000',
-     engineer: 'Engineer 1000',
-     levelOfCare: 'LOW',
-     status: 'DEVEL',
-     statusDate: '2017-04-21'})
-    .set('Accept', 'application/json')
-    .set('Cookie', cookie)
-    .end((err, result) => {
-      if (err) {
-        done(err);
-      } else {
-        if ((result.text.match(/^E11000 duplicate key error*/g)) && (result.status === 500)) {
-          debug('Got ""E11000 duplicate key error"');
-          done();
-        } else {
-          done(new Error('no error found'));
-        }
-      }
-    });
+  it('Errors posting a duplicate new record', async () => {
+    const result = await supertest
+      .post('/api/v1/swdb')
+      .send({
+        swName: 'Test Record',
+        desc: '',
+        branch: '',
+        version: '',
+        owner: 'Owner 1000',
+        engineer: 'Engineer 1000',
+        levelOfCare: 'LOW',
+        status: 'DEVEL',
+        statusDate: '2017-04-21',
+        descDocLoc: '',
+        designDescDocLoc: '',
+        vvProcLoc: [],
+        vvResultsLoc: [],
+        platforms: '',
+        versionControl: '',
+        versionControlLoc: '',
+        comment: '',
+      })
+      .set('Accept', 'application/json')
+      .set('Cookie', cookie)
+      .expect(500);
+
+    if ((result.text.match(/^E11000 duplicate key error*/g)) && (result.status === 500)) {
+      debug('Got ""E11000 duplicate key error"');
+    } else {
+      throw new Error('no error found');
+    }
   });
 
-  it('Post a new record Test Record2', (done) => {
-    supertest
-    .post('/api/v1/swdb')
-    .send({swName: 'Test Record2',
-     owner: 'Owner 1002',
-     engineer: 'Engineer 1002',
-     levelOfCare: 'LOW',
-     status: 'DEVEL',
-     statusDate: '1970-01-01'})
-    .set('Accept', 'application/json')
-    .set('Cookie', cookie)
-    .expect(201)
-    .end((err, result) => {
-      if (err) {
-        done(err);
-      } else {
-        debug('Location: ' + result.header.location);
-        done();
-      }
-    });
+  it('Post a new record Test Record2', async () => {
+    const result = await supertest
+      .post('/api/v1/swdb')
+      .send({
+        swName: 'Test Record2',
+        desc: '',
+        branch: '',
+        version: '',
+        owner: 'Owner 1002',
+        engineer: 'Engineer 1002',
+        levelOfCare: 'LOW',
+        status: 'DEVEL',
+        statusDate: '1970-01-01',
+        descDocLoc: '',
+        designDescDocLoc: '',
+        vvProcLoc: [],
+        vvResultsLoc: [],
+        platforms: '',
+        versionControl: '',
+        versionControlLoc: '',
+        comment: '',
+      })
+      .set('Accept', 'application/json')
+      .set('Cookie', cookie)
+      .expect(201);
+    debug('Location: ' + result.header.location);
   });
 
   describe('get id for Test Record', () => {
@@ -522,26 +708,32 @@ describe('Software API Specification', () => {
     });
   });
 
-  it('Post a new record Desc Test Record', (done) => {
-    supertest
-    .post('/api/v1/swdb')
-    .send({swName: 'Desc Test Record',
-     owner: 'Owner 1002',
-     engineer: 'Engineer 1002',
-     levelOfCare: 'LOW',
-     status: 'DEVEL',
-     statusDate: '2017-04-21'})
-    .set('Accept', 'application/json')
-    .set('Cookie', cookie)
-    .expect(201)
-    .end((err, result) => {
-      if (err) {
-        done(err);
-      } else {
-        debug('Location: ' + result.header.location);
-        done();
-      }
-    });
+  it('Post a new record Desc Test Record', async () => {
+    const result = await supertest
+      .post('/api/v1/swdb')
+      .send({
+        swName: 'Desc Test Record',
+        owner: 'Owner 1002',
+        engineer: 'Engineer 1002',
+        levelOfCare: 'LOW',
+        status: 'DEVEL',
+        statusDate: '2017-04-21',
+        desc: '',
+        branch: '',
+        version: '',
+        descDocLoc: '',
+        designDescDocLoc: '',
+        vvProcLoc: [],
+        vvResultsLoc: [],
+        platforms: '',
+        versionControl: '',
+        versionControlLoc: '',
+        comment: '',
+      })
+      .set('Accept', 'application/json')
+      .set('Cookie', cookie)
+      .expect(201);
+    debug('Location: ' + result.header.location);
   });
 
   describe('get id for Desc Test Record', () => {
@@ -584,13 +776,26 @@ describe('Software API Specification', () => {
 
   it('Post a new record Engineer Test Record', (done) => {
     supertest
-    .post('/api/v1/swdb')
-    .send({swName: 'Engineer Test Record',
-     owner: 'Owner 1002',
-     engineer: 'Any Engineer',
-     levelOfCare: 'LOW',
-     status: 'DEVEL',
-     statusDate: '2017-04-21'})
+      .post('/api/v1/swdb')
+      .send({
+        swName: 'Engineer Test Record',
+        owner: 'Owner 1002',
+        engineer: 'Any Engineer',
+        levelOfCare: 'LOW',
+        status: 'DEVEL',
+        statusDate: '2017-04-21',
+        desc: '',
+        branch: '',
+        version: '',
+        descDocLoc: '',
+        designDescDocLoc: '',
+        vvProcLoc: [],
+        vvResultsLoc: [],
+        platforms: '',
+        versionControl: '',
+        versionControlLoc: '',
+        comment: '',
+    })
     .set('Accept', 'application/json')
     .set('Cookie', cookie)
     .expect(201)
@@ -645,14 +850,26 @@ describe('Software API Specification', () => {
 
   it('Post a new record versionControlLoc Test Record', (done) => {
     supertest
-    .post('/api/v1/swdb')
-    .send({swName: 'versionControlLoc Test Record',
-     owner: 'versioControlLoc Test Owner',
-     engineer: 'Test Engineer',
-     versionControlLoc: 'http://www.somehost/some-path/some-file',
-     levelOfCare: 'LOW',
-     status: 'DEVEL',
-     statusDate: '2017-04-21'})
+      .post('/api/v1/swdb')
+      .send({
+        swName: 'versionControlLoc Test Record',
+        owner: 'versioControlLoc Test Owner',
+        engineer: 'Test Engineer',
+        versionControlLoc: 'http://www.somehost/some-path/some-file',
+        levelOfCare: 'LOW',
+        status: 'DEVEL',
+        statusDate: '2017-04-21',
+        desc: '',
+        branch: '',
+        version: '',
+        descDocLoc: '',
+        designDescDocLoc: '',
+        vvProcLoc: [],
+        vvResultsLoc: [],
+        platforms: '',
+        versionControl: '',
+        comment: '',
+    })
     .set('Accept', 'application/json')
     .set('Cookie', cookie)
     .expect(201)
@@ -706,25 +923,37 @@ describe('Software API Specification', () => {
 
   it('Post a new record designDescDocLoc Test Record', (done) => {
     supertest
-    .post('/api/v1/swdb')
-    .send({swName: 'designDescDocLoc Test Record',
-     owner: 'designDescDocLoc Test Owner',
-     engineer: 'Test Engineer',
-     designDescDocLoc: 'http://www.somehost/some-path/some-file',
-     levelOfCare: 'LOW',
-     status: 'DEVEL',
-     statusDate: '2017-04-21'})
-    .set('Accept', 'application/json')
-    .set('Cookie', cookie)
-    .expect(201)
-    .end((err, result) => {
-      if (err) {
-        done(err);
-      } else {
-        debug('Location: ' + result.header.location);
-        done();
-      }
-    });
+      .post('/api/v1/swdb')
+      .send({
+        swName: 'designDescDocLoc Test Record',
+        owner: 'designDescDocLoc Test Owner',
+        engineer: 'Test Engineer',
+        designDescDocLoc: 'http://www.somehost/some-path/some-file',
+        levelOfCare: 'LOW',
+        status: 'DEVEL',
+        statusDate: '2017-04-21',
+        desc: '',
+        branch: '',
+        version: '',
+        descDocLoc: '',
+        vvProcLoc: [],
+        vvResultsLoc: [],
+        platforms: '',
+        versionControl: '',
+        versionControlLoc: '',
+        comment: '',
+      })
+      .set('Accept', 'application/json')
+      .set('Cookie', cookie)
+      .expect(201)
+      .end((err, result) => {
+        if (err) {
+          done(err);
+        } else {
+          debug('Location: ' + result.header.location);
+          done();
+        }
+      });
   });
 
   describe('get id for designDescDocLoc Test Record', () => {
@@ -767,25 +996,37 @@ describe('Software API Specification', () => {
 
   it('Post a new record descDocLoc Test Record', (done) => {
     supertest
-    .post('/api/v1/swdb')
-    .send({swName: 'descDocLoc Test Record',
-     owner: 'descDocLoc Test Owner',
-     engineer: 'Test Engineer',
-     descDocLoc: 'http://www.somehost/some-path/some-file',
-     levelOfCare: 'LOW',
-     status: 'DEVEL',
-     statusDate: '2017-04-21'})
-    .set('Accept', 'application/json')
-    .set('Cookie', cookie)
-    .expect(201)
-    .end((err, result) => {
-      if (err) {
-        done(err);
-      } else {
-        debug('Location: ' + result.header.location);
-        done();
-      }
-    });
+      .post('/api/v1/swdb')
+      .send({
+        swName: 'descDocLoc Test Record',
+        owner: 'descDocLoc Test Owner',
+        engineer: 'Test Engineer',
+        descDocLoc: 'http://www.somehost/some-path/some-file',
+        levelOfCare: 'LOW',
+        status: 'DEVEL',
+        statusDate: '2017-04-21',
+        desc: '',
+        branch: '',
+        version: '',
+        designDescDocLoc: '',
+        vvProcLoc: [],
+        vvResultsLoc: [],
+        platforms: '',
+        versionControl: '',
+        versionControlLoc: '',
+        comment: '',
+      })
+      .set('Accept', 'application/json')
+      .set('Cookie', cookie)
+      .expect(201)
+      .end((err, result) => {
+        if (err) {
+          done(err);
+        } else {
+          debug('Location: ' + result.header.location);
+          done();
+        }
+      });
   });
 
   describe('get id for descDocLoc Test Record', () => {
@@ -837,6 +1078,16 @@ describe('Software API Specification', () => {
       levelOfCare: 'LOW',
       status: 'DEVEL',
       statusDate: '1970-01-01',
+      desc: '',
+      branch: '',
+      version: '',
+      descDocLoc: '',
+      designDescDocLoc: '',
+      vvResultsLoc: [],
+      platforms: '',
+      versionControl: '',
+      versionControlLoc: '',
+      comment: '',
     })
     .set('Accept', 'application/json')
     .set('Cookie', cookie)
@@ -901,7 +1152,18 @@ describe('Software API Specification', () => {
       vvResultsLoc: [ 'http://www.somehost/some-path/some-file3', 'http://www.somehost/some-path/some-file4' ],
       levelOfCare: 'LOW',
       status: 'DEVEL',
-      statusDate: '1970-01-01'})
+      statusDate: '1970-01-01',
+      desc: '',
+      branch: '',
+      version: '',
+      descDocLoc: '',
+      designDescDocLoc: '',
+      vvProcLoc: [],
+      platforms: '',
+      versionControl: '',
+      versionControlLoc: '',
+      comment: '',
+    })
     .set('Accept', 'application/json')
     .set('Cookie', cookie)
     .expect(201)
@@ -956,25 +1218,37 @@ describe('Software API Specification', () => {
 
   it('Post a new record branch Test Record', (done) => {
     supertest
-    .post('/api/v1/swdb')
-    .send({swName: 'branch Test Record',
-     owner: 'branch Test Owner',
-     engineer: 'Test Engineer',
-     branch: 'New branch',
-     levelOfCare: 'LOW',
-     status: 'DEVEL',
-     statusDate: '1970-01-01'})
-    .set('Accept', 'application/json')
-    .set('Cookie', cookie)
-    .expect(201)
-    .end((err, result) => {
-      if (err) {
-        done(err);
-      } else {
-        debug('Location: ' + result.header.location);
-        done();
-      }
-    });
+      .post('/api/v1/swdb')
+      .send({
+        swName: 'branch Test Record',
+        owner: 'branch Test Owner',
+        engineer: 'Test Engineer',
+        branch: 'New branch',
+        levelOfCare: 'LOW',
+        status: 'DEVEL',
+        statusDate: '1970-01-01',
+        desc: '',
+        version: '',
+        descDocLoc: '',
+        designDescDocLoc: '',
+        vvProcLoc: [],
+        vvResultsLoc: [],
+        platforms: '',
+        versionControl: '',
+        versionControlLoc: '',
+        comment: '',
+      })
+      .set('Accept', 'application/json')
+      .set('Cookie', cookie)
+      .expect(201)
+      .end((err, result) => {
+        if (err) {
+          done(err);
+        } else {
+          debug('Location: ' + result.header.location);
+          done();
+        }
+      });
   });
 
   describe('get id for branch Test Record', () => {
@@ -1018,24 +1292,36 @@ describe('Software API Specification', () => {
   it('Post a new record versionControl Test Record', (done) => {
     supertest
       .post('/api/v1/swdb')
-    .send({swName: 'versionControl Test Record',
-     owner: 'versionControl Test Owner',
-     engineer: 'Test Engineer',
-     versionControl: 'GIT',
-     levelOfCare: 'LOW',
-     status: 'DEVEL',
-     statusDate: '1970-01-01'})
-    .set('Accept', 'application/json')
-    .set('Cookie', cookie)
-    .expect(201)
-    .end((err, result) => {
-      if (err) {
-        done(err);
-      } else {
-        debug('Location: ' + result.header.location);
-        done();
-      }
-    });
+      .send({
+        swName: 'versionControl Test Record',
+        owner: 'versionControl Test Owner',
+        engineer: 'Test Engineer',
+        versionControl: 'GIT',
+        levelOfCare: 'LOW',
+        status: 'DEVEL',
+        statusDate: '1970-01-01',
+        desc: '',
+        branch: '',
+        version: '',
+        descDocLoc: '',
+        designDescDocLoc: '',
+        vvProcLoc: [],
+        vvResultsLoc: [],
+        platforms: '',
+        versionControlLoc: '',
+        comment: '',
+      })
+      .set('Accept', 'application/json')
+      .set('Cookie', cookie)
+      .expect(201)
+      .end((err, result) => {
+        if (err) {
+          done(err);
+        } else {
+          debug('Location: ' + result.header.location);
+          done();
+        }
+      });
   });
 
   describe('get id for versionControl Test Record', () => {
@@ -1078,25 +1364,38 @@ describe('Software API Specification', () => {
 
   it('Post a new record previous Test Record', (done) => {
     supertest
-    .post('/api/v1/swdb')
-    .send({swName: 'previous Test Record',
-     owner: 'previous Test Owner',
-     engineer: 'Test Engineer',
-     previous: 'badbeefbadbeefbadbeefbad',
-     levelOfCare: 'LOW',
-     status: 'DEVEL',
-     statusDate: '1970-01-01'})
-    .set('Accept', 'application/json')
-    .set('Cookie', cookie)
-    .expect(201)
-    .end((err, result) => {
-      if (err) {
-        done(err);
-      } else {
-        debug('Location: ' + result.header.location);
-        done();
-      }
-    });
+      .post('/api/v1/swdb')
+      .send({
+        swName: 'previous Test Record',
+        owner: 'previous Test Owner',
+        engineer: 'Test Engineer',
+        previous: 'badbeefbadbeefbadbeefbad',
+        levelOfCare: 'LOW',
+        status: 'DEVEL',
+        statusDate: '1970-01-01',
+        desc: '',
+        branch: '',
+        version: '',
+        descDocLoc: '',
+        designDescDocLoc: '',
+        vvProcLoc: [],
+        vvResultsLoc: [],
+        platforms: '',
+        versionControl: '',
+        versionControlLoc: '',
+        comment: '',
+      })
+      .set('Accept', 'application/json')
+      .set('Cookie', cookie)
+      .expect(201)
+      .end((err, result) => {
+        if (err) {
+          done(err);
+        } else {
+          debug('Location: ' + result.header.location);
+          done();
+        }
+      });
   });
 
   describe('get id for previous Test Record', () => {
@@ -1162,7 +1461,25 @@ describe('Software API Specification', () => {
     it('Can update a record via PUT swName id:Test Record3', (done) => {
       supertest
         .put('/api/v1/swdb/' + wrapper.origId)
-        .send({ swName: 'Test Record3' })
+        .send({
+          swName: 'Test Record3',
+          desc: '',
+          branch: '',
+          version: '',
+          owner: 'Owner 1002',
+          engineer: 'Engineer 1002',
+          levelOfCare: 'LOW',
+          status: 'DEVEL',
+          statusDate: '1970-01-01',
+          descDocLoc: '',
+          designDescDocLoc: '',
+          vvProcLoc: [],
+          vvResultsLoc: [],
+          platforms: '',
+          versionControl: '',
+          versionControlLoc: '',
+          comment: '',
+        })
         .set('Cookie', cookie)
         .expect(200)
         .end((err, result) => {
@@ -1201,6 +1518,17 @@ describe('Software API Specification', () => {
           levelOfCare: 'LOW',
           status: 'DEVEL',
           statusDate: '1970-01-01',
+          desc: '',
+          branch: '',
+          version: '',
+          descDocLoc: '',
+          designDescDocLoc: '',
+          vvProcLoc: [],
+          vvResultsLoc: [],
+          platforms: '',
+          versionControl: '',
+          versionControlLoc: '',
+          comment: '',
         })
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
@@ -1257,6 +1585,21 @@ describe('Software API Specification', () => {
           .send({
             version: 'Test version',
             branch: 'Test branch',
+            swName: 'Rule 1 Test Record',
+            owner: 'previous Test Owner',
+            engineer: 'Test Engineer',
+            levelOfCare: 'LOW',
+            status: 'DEVEL',
+            statusDate: '1970-01-01',
+            desc: '',
+            descDocLoc: '',
+            designDescDocLoc: '',
+            vvProcLoc: [],
+            vvResultsLoc: [],
+            platforms: '',
+            versionControl: '',
+            versionControlLoc: '',
+            comment: '',
           })
           .set('Cookie', cookie)
           .expect(200)
@@ -1274,10 +1617,29 @@ describe('Software API Specification', () => {
           .put('/api/v1/swdb/' + wrapper.origId)
           .send({
             status: 'RDY_INST',
+            version: 'Test version',
+            branch: 'Test branch',
+            swName: 'Rule 1 Test Record',
+            owner: 'previous Test Owner',
+            engineer: 'Test Engineer',
+            levelOfCare: 'LOW',
+            statusDate: '1970-01-01',
+            desc: '',
+            descDocLoc: '',
+            designDescDocLoc: '',
+            vvProcLoc: [],
+            vvResultsLoc: [],
+            platforms: '',
+            versionControl: '',
+            versionControlLoc: '',
+            comment: '',
           })
           .set('Cookie', cookie)
           .expect(200)
           .end((err, res) => {
+            if (res.status >= 400) {
+              debug('Response: %s', res.text);
+            }
             if (err) {
               done(err);
             } else {
@@ -1307,10 +1669,25 @@ describe('Software API Specification', () => {
           .send({
             version: 'Test version2',
             branch: 'Test branch2',
+            status: 'RDY_INST',
+            swName: 'Rule 1 Test Record',
+            owner: 'previous Test Owner',
+            engineer: 'Test Engineer',
+            levelOfCare: 'LOW',
+            statusDate: '1970-01-01',
+            desc: '',
+            descDocLoc: '',
+            designDescDocLoc: '',
+            vvProcLoc: [],
+            vvResultsLoc: [],
+            platforms: '',
+            versionControl: '',
+            versionControlLoc: '',
+            comment: '',
           })
           .set('Cookie', cookie)
           .expect(400)
-          .expect('Worklow validation errors: "Version and branch cannot change in state Ready for install"')
+          .expect('Worklow validation errors: "Version and branch cannot change in state RDY_INST"')
           .end((err, res) => {
             if (err) {
               done(err);
@@ -1334,6 +1711,15 @@ describe('Software API Specification', () => {
           levelOfCare: 'LOW',
           status: 'DEVEL',
           statusDate: '1970-01-01',
+          desc: '',
+          descDocLoc: '',
+          designDescDocLoc: '',
+          vvProcLoc: [],
+          vvResultsLoc: [],
+          platforms: '',
+          versionControl: '',
+          versionControlLoc: '',
+          comment: '',
         })
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
@@ -1389,6 +1775,22 @@ describe('Software API Specification', () => {
           .put('/api/v1/swdb/' + wrapper.origId)
           .send({
             status: 'RDY_INST',
+            swName: 'Rule 4 Test Record',
+            version: 'test version',
+            branch: 'test branch',
+            owner: 'previous Test Owner',
+            engineer: 'Test Engineer',
+            levelOfCare: 'LOW',
+            statusDate: '1970-01-01',
+            desc: '',
+            descDocLoc: '',
+            designDescDocLoc: '',
+            vvProcLoc: [],
+            vvResultsLoc: [],
+            platforms: '',
+            versionControl: '',
+            versionControlLoc: '',
+            comment: '',
           })
           .set('Cookie', cookie)
           .expect(200)
@@ -1436,6 +1838,22 @@ describe('Software API Specification', () => {
           .put('/api/v1/swdb/' + wrapper.origId)
           .send({
             status: 'DEVEL',
+            swName: 'Rule 4 Test Record',
+            version: 'test version',
+            branch: 'test branch',
+            owner: 'previous Test Owner',
+            engineer: 'Test Engineer',
+            levelOfCare: 'LOW',
+            statusDate: '1970-01-01',
+            desc: '',
+            descDocLoc: '',
+            designDescDocLoc: '',
+            vvProcLoc: [],
+            vvResultsLoc: [],
+            platforms: '',
+            versionControl: '',
+            versionControlLoc: '',
+            comment: '',
           })
           .set('Cookie', cookie)
           .expect(400)
@@ -1451,175 +1869,232 @@ describe('Software API Specification', () => {
       });
     });
 
+    const template = {
+      swName: 'Rule 4 Test Record',
+      version: 'test version',
+      branch: 'test branch',
+      owner: 'previous Test Owner',
+      engineer: 'Test Engineer',
+      levelOfCare: 'LOW',
+      status: 'DEVEL',
+      statusDate: '1970-01-01',
+      desc: '',
+      descDocLoc: '',
+      designDescDocLoc: '',
+      vvProcLoc: [],
+      vvResultsLoc: [],
+      platforms: '',
+      versionControl: '',
+      versionControlLoc: '',
+      comment: '',
+    };
+
     // This table lists test requests to make and the expected
-    // responses.
-    // {req:{msg:,url:,type:,err{status:}}
-    //  res:{msg:,url:,type:,err{status:}}
-    //  }
-    const testUpdateParams = [
-      {type: 'PUT', req: {msg: {swName: 'Test Record4'}, url: '/api/v1/swdb/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {swName: 'Test Record4'}, url: '/api/v1/swdb/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {owner: 'New test owner 1002'}, url: '/api/v1/swdb/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {owner: 'New test owner 1002'}, url: '/api/v1/swdb/', err: {status: 200}}},
-      {type: 'PUT', req: {msg: {engineer: 'New Engineer'}, url: '/api/v1/swdb/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {engineer: 'New Engineer'}, url: '/api/v1/swdb/', err: {status: 200}}},
-      {type: 'PUT', req: {msg: {levelOfCare: 'MEDIUM'}, url: '/api/v1/swdb/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {levelOfCare: 'MEDIUM'}, url: '/api/v1/swdb/', err: {status: 200}}},
-      {type: 'PUT', req: {msg: {levelOfCare: 'ERRONEOUS_VALUE'}, url: '/api/v1/swdb/', err: {status: 400}}},
-      {type: 'GET', res: {msg: {levelOfCare: 'MEDIUM'}, url: '/api/v1/swdb/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {levelOfCare: 'LOW'},  url: '/api/v1/swdb/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {levelOfCare: 'LOW'}, url: '/api/v1/swdb/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {status: 'DEVEL'}, url: '/api/v1/swdb/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {status: 'DEVEL'}, url: '/api/v1/swdb/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {status: 'ERRONEOUS_VALUE'}, url: '/api/v1/swdb/', err: {status: 400}}},
-      {type: 'GET', res: {msg: {status: 'DEVEL'}, url: '/api/v1/swdb/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {statusDate: '1970-01-01'}, url: '/api/v1/swdb/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {statusDate: '1970-01-01'}, url: '/api/v1/swdb/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {version: 'NEW test version'}, url: '/api/v1/swdb/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {version: 'NEW test version'}, url: '/api/v1/swdb/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {branch: 'NEW Branch'}, url: '/api/v1/swdb/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {branch: 'NEW Branch'}, url: '/api/v1/swdb/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {branch: 'NEW Branch name that is much too long'}, url: '/api/v1/swdb/',
-       err: {status: 400}}},
-      {type: 'PUT', req: {msg: {platforms: 'NEW test platform'}, url: '/api/v1/swdb/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {platforms: 'NEW test platform'}, url: '/api/v1/swdb/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {designDescDocLoc: 'http://www.somehost/some-path/some-file'},
-      url: '/api/v1/swdb/', err: {status: 200}}},
-       {type: 'GET', res: {msg: {designDescDocLoc: 'http://www.somehost/some-path/some-file'},
-      url: '/api/v1/swdb/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {descDocLoc: 'http://www.somehost/some-path/some-file'}, url: '/api/v1/swdb/',
-       err: {status: 200}}},
-      {type: 'GET', res: {msg: {descDocLoc: 'http://www.somehost/some-path/some-file'}, url: '/api/v1/swdb/',
-        err: {status: 200}}},
-      {type: 'PUT', req: {msg: {vvProcLoc: ['http://www.somehost/some-path/some-file']}, url: '/api/v1/swdb/',
-       err: {status: 200}}},
-      {type: 'GET', res: {msg: {vvProcLoc: ['http://www.somehost/some-path/some-file']}, url: '/api/v1/swdb/',
-        err: {status: 200}}},
-      {type: 'PUT', req: {msg: {vvProcLoc: 'http:some-malformed-url'}, url: '/api/v1/swdb/', err: {status: 400}}},
-      {type: 'PUT', req: {msg: {vvResultsLoc: ['http://www.somehost/some-path/some-file3']}, url: '/api/v1/swdb/',
-       err: {status: 200}}},
-      {type: 'GET', res: {msg: {vvResultsLoc: ['http://www.somehost/some-path/some-file3']}, url: '/api/v1/swdb/',
-        err: {status: 200}}},
-      {type: 'PUT', req: {msg: {vvResultsLoc: 'http:some-malformed-url'}, url: '/api/v1/swdb/', err: {status: 400}}},
-      {type: 'PUT', req: {msg: {versionControl: 'GIT'}, url: '/api/v1/swdb/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {versionControl: 'GIT'}, url: '/api/v1/swdb/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {versionControl: 'Erroneous RCS'}, url: '/api/v1/swdb/', err: {status: 400}}},
-      {type: 'PUT', req: {msg: {versionControlLoc: 'http://www.somehost/some-path/some-file'}, url: '/api/v1/swdb/',
-       err: {status: 200}}},
-      {type: 'GET', res: {msg: {versionControlLoc: 'http://www.somehost/some-path/some-file'}, url: '/api/v1/swdb/',
-        err: {status: 200}}},
-      {type: 'PUT', req: {msg: {previous: 'badbeefbadbeefbadbeefbad'}, url: '/api/v1/swdb/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {previous: 'badbeefbadbeefbadbeefbad'}, url: '/api/v1/swdb/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {previous: 'bad reference is way to long for this'}, url: '/api/v1/swdb/',
-       err: {status: 400}}},
-      {type: 'PUT', req: {msg: {comment: 'NEW test comment'}, url: '/api/v1/swdb/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {comment: 'NEW test comment'}, url: '/api/v1/swdb/',  err: {status: 200}}},
+    const table: Array<{type: string; url: string; status: number, data: any, msg?: string}> = [
+      {type: 'PUT', url: '/api/v1/swdb/', status: 200, data: {swName: 'Test Record4'}},
+      {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {swName: 'Test Record4'}},
+
+      {type: 'PUT', url: '/api/v1/swdb/', status: 200, data: {owner: 'New test owner 1002'}},
+      {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {owner: 'New test owner 1002'}},
+
+      {type: 'PUT', url: '/api/v1/swdb/', status: 200, data: {engineer: 'New Engineer'}},
+      {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {engineer: 'New Engineer'}},
+
+      {type: 'PUT', url: '/api/v1/swdb/', status: 200, data: {levelOfCare: 'MEDIUM'}},
+      {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {levelOfCare: 'MEDIUM'}},
+      {type: 'PUT', url: '/api/v1/swdb/', status: 400, data: {levelOfCare: 'ERRONEOUS_VALUE'}},
+      {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {levelOfCare: 'MEDIUM'}},
+      {type: 'PUT', url: '/api/v1/swdb/', status: 200, data: {levelOfCare: 'LOW'}},
+      {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {levelOfCare: 'LOW'}},
+
+      {type: 'PUT', data: {status: 'DEVEL'}, url: '/api/v1/swdb/', status: 200},
+      {type: 'GET', data: {status: 'DEVEL'}, url: '/api/v1/swdb/',  status: 200},
+      {type: 'PUT', data: {status: 'ERRONEOUS_VALUE'}, url: '/api/v1/swdb/', status: 400},
+      {type: 'GET', data: {status: 'DEVEL'}, url: '/api/v1/swdb/',  status: 200},
+
+      {type: 'PUT', data: {statusDate: '1970-01-01'}, url: '/api/v1/swdb/', status: 200},
+      {type: 'GET', data: {statusDate: '1970-01-01'}, url: '/api/v1/swdb/',  status: 200},
+
+      {type: 'PUT', data: {version: 'NEW test version'}, url: '/api/v1/swdb/', status: 200},
+      {type: 'GET', data: {version: 'NEW test version'}, url: '/api/v1/swdb/',  status: 200},
+
+      {type: 'PUT', data: {branch: 'NEW Branch'}, url: '/api/v1/swdb/', status: 200},
+      {type: 'GET', data: {branch: 'NEW Branch'}, url: '/api/v1/swdb/',  status: 200},
+      {type: 'PUT', url: '/api/v1/swdb/', status: 400, data: {branch: 'NEW Branch name that is much too long  much too long  much too long  much too long much too long much too long'}},
+      {type: 'GET', data: {branch: 'NEW Branch'}, url: '/api/v1/swdb/',  status: 200},
+
+      {type: 'PUT', url: '/api/v1/swdb/', status: 200, data: {platforms: 'NEW test platform'}},
+      {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {platforms: 'NEW test platform'}},
+
+      {type: 'PUT', url: '/api/v1/swdb/', status: 200, data: {designDescDocLoc: 'http://www.somehost/some-path/some-file'}},
+      {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {designDescDocLoc: 'http://www.somehost/some-path/some-file'}},
+
+      {type: 'PUT', url: '/api/v1/swdb/', status: 200, data: {descDocLoc: 'http://www.somehost/some-path/some-file'}},
+      {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {descDocLoc: 'http://www.somehost/some-path/some-file'}},
+
+      {type: 'PUT', data: {vvProcLoc: ['http://www.somehost/some-path/some-file']}, url: '/api/v1/swdb/', status: 200},
+      {type: 'GET', data: {vvProcLoc: ['http://www.somehost/some-path/some-file']}, url: '/api/v1/swdb/', status: 200},
+      {type: 'PUT', data: {vvProcLoc: 'http:some-malformed-url'}, url: '/api/v1/swdb/', status: 400},
+      {type: 'GET', data: {vvProcLoc: ['http://www.somehost/some-path/some-file']}, url: '/api/v1/swdb/', status: 200},
+
+      {type: 'PUT', data: {vvResultsLoc: ['http://www.somehost/some-path/some-file3']}, url: '/api/v1/swdb/', status: 200},
+      {type: 'GET', data: {vvResultsLoc: ['http://www.somehost/some-path/some-file3']}, url: '/api/v1/swdb/', status: 200},
+      {type: 'PUT', data: {vvResultsLoc: 'http:some-malformed-url'}, url: '/api/v1/swdb/', status: 400},
+      {type: 'GET', data: {vvResultsLoc: ['http://www.somehost/some-path/some-file3']}, url: '/api/v1/swdb/', status: 200},
+
+      {type: 'PUT', data: {versionControl: 'GIT'}, url: '/api/v1/swdb/', status: 200},
+      {type: 'GET', data: {versionControl: 'GIT'}, url: '/api/v1/swdb/',  status: 200},
+      {type: 'PUT', data: {versionControl: 'Erroneous RCS'}, url: '/api/v1/swdb/', status: 400},
+      {type: 'GET', data: {versionControl: 'GIT'}, url: '/api/v1/swdb/',  status: 200},
+
+      {type: 'PUT', url: '/api/v1/swdb/', status: 200, data: {versionControlLoc: 'http://www.somehost/some-path/some-file'}},
+      {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {versionControlLoc: 'http://www.somehost/some-path/some-file'}},
+
+      {type: 'PUT', data: {previous: 'badbeefbadbeefbadbeefbad'}, url: '/api/v1/swdb/', status: 200},
+      {type: 'GET', data: {previous: 'badbeefbadbeefbadbeefbad'}, url: '/api/v1/swdb/',  status: 200},
+      {type: 'PUT', data: {previous: 'bad reference is way to long for this'}, url: '/api/v1/swdb/', status: 400},
+      {type: 'GET', data: {previous: 'badbeefbadbeefbadbeefbad'}, url: '/api/v1/swdb/',  status: 200},
+
+      {type: 'PUT', url: '/api/v1/swdb/', status: 200, data: {comment: 'NEW test comment'}},
+      {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {comment: 'NEW test comment'}},
+
       // test new record basic only required items
-      {type: 'POST',  req: {msg: {swName: 'NEW-test-name-1', status: 'RDY_TEST', statusDate: '1970-01-01',
-       owner: 'test owner', levelOfCare: 'MEDIUM'}, url: '/api/v1/swdb/',
-      err: {status: 201, msgHas: ''}}},
+      {type: 'POST', url: '/api/v1/swdb/', status: 201,
+        data: {swName: 'NEW-test-name-1', desc: '', branch: '', version: '', owner: 'test owner', engineer: '',
+                status: 'RDY_TEST', statusDate: '1970-01-01', levelOfCare: 'MEDIUM', descDocLoc: '', designDescDocLoc: '',
+                vvProcLoc: [], vvResultsLoc: [], platforms: '', versionControl: '', versionControlLoc: '', comment: ''},
+        msg: ''},
+
       // test new swName is required, min, max
-      {type: 'POST', req: {msg: {owner: 'test owner'}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas: '{"param":"swName","msg":"Software name is required."}'}}},
+      {type: 'POST', url: '/api/v1/swdb/', status: 400,
+        data: {owner: 'test owner'},
+        msg: '{"param":"swName","msg":"Software name is required."}'},
+
       // test nwe owner required, min, max
-      {type: 'POST', req: {msg: {swName: 'NEW Test name'}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas: '{"param":"owner","msg":"Owner is required."}'}}},
+      {type: 'POST', url: '/api/v1/swdb/', status: 400,
+        data: {swName: 'NEW Test name'},
+        msg: '{"param":"owner","msg":"Owner is required."}'},
+
       // test levelOfCare required, enumerated
-      {type: 'POST', req: {msg: {swName: 'NEW Test name', owner: 'NEW OWNER'}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas: '{"param":"levelOfCare","msg":"Level of care is required."}'}}},
-      {type: 'POST', req: {msg: {swName: 'NEW Test name', owner: 'NEW OWNER', levelOfCare: 'LOW'}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas: '{"param":"status","msg":"Status is required."}'}}},
-      {type: 'POST', req: {msg: {swName: 'NEW Test name', owner: 'NEW OWNER', levelOfCare: 'LOW', status: 'DEVEL'},
-       url: '/api/v1/swdb/',
-      err: {status: 400, msgHas: '{"param":"statusDate","msg":"Status date is required."}'}}},
+      {type: 'POST', url: '/api/v1/swdb/', status: 400,
+        data: {swName: 'NEW Test name', owner: 'NEW OWNER'},
+        msg: '{"param":"levelOfCare","msg":"Level of care is required."}'},
+      {type: 'POST', url: '/api/v1/swdb/', status: 400,
+        data: {swName: 'NEW Test name', owner: 'NEW OWNER', levelOfCare: 'LOW'},
+        msg: '{"param":"status","msg":"Status is required."}'},
+      {type: 'POST', url: '/api/v1/swdb/', status: 400,
+        data: {swName: 'NEW Test name', owner: 'NEW OWNER', levelOfCare: 'LOW', status: 'DEVEL'},
+        msg: '{"param":"statusDate","msg":"Status date is required."}'},
+
       // test new status enumerated
-      {type: 'POST', req: {msg: {status: 'not-enumerated'}, url: '/api/v1/swdb/',
-      err: {status: 400,
-         // tslint:disable-next-line:max-line-length
-         msgHas: '{"param":"status","msg":"Status must be one of DEVEL,RDY_TEST,RDY_INST,DEP","value":"not-enumerated"}'}}},
-      {type: 'POST',
-       req:
-        {msg:
-          {swName: 'testing', owner: 'test owner', levelOfCare: 'LOW', status: 'DEVEL', statusDate: 'non-date'},
-       url: '/api/v1/swdb/',
-      err: {status: 400, msgHas: '{"param":"statusDate","msg":"Status date must be a date.","value":"non-date"}'}}},
+      {type: 'POST', url: '/api/v1/swdb/', status: 400,
+        data: {status: 'not-enumerated'},
+        msg: '{"param":"status","msg":"Status must be one of DEVEL, RDY_TEST, RDY_INST, DEP","value":"not-enumerated"}'},
+      {type: 'POST', url: '/api/v1/swdb/', status: 400,
+        data: {swName: 'testing', owner: 'test owner', levelOfCare: 'LOW', status: 'DEVEL', statusDate: 'non-date'},
+        msg: '{"param":"statusDate","msg":"Status date must be a date.","value":"non-date"}'},
+
       // test new version min, max
-      {type: 'POST', req: {msg: {version: ''}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas: '"param":"version","msg":"Version must be 1-30 characters."'}}},
-      {type: 'POST', req: {msg: {version: '0123456789012345678901234567890'}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas: '"param":"version","msg":"Version must be 1-30 characters."'}}},
+      {type: 'POST', url: '/api/v1/swdb/', status: 400,
+        data: {version: '0123456789012345678901234567890012345678901234567890123456789001234567890123456789012345678901234567890'},
+        msg: '"param":"version","msg":"Version must less than 100 characters."'},
+
       // test new platforms min, max
-      {type: 'POST', req: {msg: {platforms: 'NEW'}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas: '"param":"platforms","msg":"Platforms must be 4-30 characters."'}}},
-      {type: 'POST', req: {msg: {platforms: '0123456789012345678901234567890'}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas: '"param":"platforms","msg":"Platforms must be 4-30 characters."'}}},
+      {type: 'POST', url: '/api/v1/swdb/', status: 400,
+        data: {platforms: '0123456789012345678901234567890012345678901234567890123456789001234567890123456789012345678901234567890'},
+        msg: '"param":"platforms","msg":"Platforms must less than 100 characters."'},
+
       // test new versionControl min, max
-      {type: 'POST', req: {msg: {versionControl: 'Erroneous RCS'}, url: '/api/v1/swdb/',
-      err: {status: 400,
-         msgHas: '"param":"versionControl","msg":"Revision control must be one of GIT,AC,FS,DEB,OTHER"'}}},
+      {type: 'POST',  url: '/api/v1/swdb/', status: 400,
+        data: {versionControl: 'Erroneous RCS'},
+        msg: '"param":"versionControl","msg":"Version control must be one of GIT, AC, FS, DEB, OTHER"'},
 
       // test update owner min, max
-      {type: 'PUT', req: {msg: {swName: 'NEW Test name', owner: 'N'}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas: '"param":"owner","msg":"Owner must be 2-80 characters."'}}},
-      {type: 'PUT', req: {msg: {swName: 'NEW Test name', owner:
-         '01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890'},
-          url: '/api/v1/swdb/', err: {status: 400, msgHas: '"param":"owner","msg":"Owner must be 2-80 characters."'}}},
+      {type: 'PUT', url: '/api/v1/swdb/', status: 400,
+        data: {swName: 'NEW Test name', owner: 'N'},
+        msg: '"param":"owner","msg":"Owner must be 2-80 characters."'},
+      {type: 'PUT', url: '/api/v1/swdb/', status: 400,
+       data: {swName: 'NEW Test name', owner: '01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890'},
+       msg: '"param":"owner","msg":"Owner must be 2-80 characters."'},
+      {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {owner: 'New test owner 1002'}},
+
       // test update levelOfCare enumerated
-      {type: 'PUT', req: {msg: {levelOfCare: 'not-enumerated'}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas:
-        '{"param":"levelOfCare","msg":"Level of care must be one of LOW,MEDIUM,HIGH","value":"not-enumerated"}'}}},
+      {type: 'PUT', url: '/api/v1/swdb/', status: 400,
+        data: {levelOfCare: 'not-enumerated'},
+        msg: '{"param":"levelOfCare","msg":"Level of care must be one of LOW, MEDIUM, HIGH","value":"not-enumerated"}'},
+      {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {levelOfCare: 'LOW'}},
+
       // test update status enumerated
-      {type: 'PUT', req: {msg: {status: 'not-enumerated'}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas:
-        '{"param":"status","msg":"Status must be one of DEVEL,RDY_TEST,RDY_INST,DEP","value":"not-enumerated"}'}}},
-      {type: 'PUT', req: {msg: {statusDate: 'non-date'}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas: '{"param":"statusDate","msg":"Status date must be a date.","value":"non-date"}'}}},
+      {type: 'PUT', url: '/api/v1/swdb/', status: 400,
+        data: {status: 'not-enumerated'},
+        msg: '{"param":"status","msg":"Status must be one of DEVEL, RDY_TEST, RDY_INST, DEP","value":"not-enumerated"}'},
+      {type: 'GET', data: {status: 'DEVEL'}, url: '/api/v1/swdb/',  status: 200},
+
+      {type: 'PUT', url: '/api/v1/swdb/', status: 400,
+        data: {statusDate: 'non-date'},
+        msg: '{"param":"statusDate","msg":"Status date must be a date.","value":"non-date"}'},
+      {type: 'GET', data: {statusDate: '1970-01-01'}, url: '/api/v1/swdb/',  status: 200},
+
       // test update version min, max
-      {type: 'PUT', req: {msg: {version: '0123456789012345678901234567890'}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas: '"param":"version","msg":"Version must be 1-30 characters."'}}},
+      {type: 'PUT', url: '/api/v1/swdb/', status: 400,
+        data: {version: '0123456789012345678901234567890012345678901234567890123456789001234567890123456789012345678901234567890'},
+        msg: '"param":"version","msg":"Version must less than 100 characters."'},
+      {type: 'GET', data: {version: 'NEW test version'}, url: '/api/v1/swdb/',  status: 200},
+
       // test update platforms min, max
-      {type: 'PUT', req: {msg: {platforms: '0123456789012345678901234567890'}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas: '"param":"platforms","msg":"Platforms must be 4-30 characters."'}}},
+      {type: 'PUT', url: '/api/v1/swdb/', status: 400,
+        data: {platforms: '0123456789012345678901234567890012345678901234567890123456789001234567890123456789012345678901234567890'},
+        msg: '"param":"platforms","msg":"Platforms must less than 100 characters."'},
+      {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {platforms: 'NEW test platform'}},
+
       // test update versionControl min, max
-      {type: 'PUT', req: {msg: {versionControl: 'Erroneous RCS'}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas:
-        '"param":"versionControl","msg":"Revision control must be one of GIT,AC,FS,DEB,OTHER"'}}},
+      {type: 'PUT', url: '/api/v1/swdb/', status: 400,
+        data: {versionControl: 'Erroneous RCS'},
+        msg: '"param":"versionControl","msg":"Version control must be one of GIT, AC, FS, DEB, OTHER"'},
+      {type: 'GET', data: {versionControl: 'GIT'}, url: '/api/v1/swdb/',  status: 200},
+
       // test update comment
-      {type: 'PUT', req: {msg: {comment: ['NE']}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas: '"param":"comment","msg":"Comment must be a string"'}}},
-      {type: 'PUT', req: {msg: {comment: 'NE'}, url: '/api/v1/swdb/',
-      err: {status: 200}}},
-      {type: 'PUT', req: {msg: {comment: '0123456789012345678901234567890'}, url: '/api/v1/swdb/',
-      err: {status: 200}}},
+      {type: 'PUT', url: '/api/v1/swdb/', status: 400,
+        data: {comment: ['NE']},
+        msg: '"param":"comment","msg":"Comment must be a string."'},
+      {type: 'PUT', url: '/api/v1/swdb/', status: 200,
+        data: {comment: 'NE'}},
+      {type: 'PUT', url: '/api/v1/swdb/', status: 200,
+        data: {comment: '0123456789012345678901234567890'}},
 
       // test update desc
-      {type: 'PUT', req: {msg: {desc: ['NE']}, url: '/api/v1/swdb/',
-      err: {status: 400, msgHas: '"param":"desc","msg":"Description must be a string"'}}},
-      {type: 'PUT', req: {msg: {desc: 'NE'}, url: '/api/v1/swdb/',
-      err: {status: 200}}},
-      {type: 'PUT', req: {msg: {desc: '0123456789012345678901234567890'}, url: '/api/v1/swdb/',
-      err: {status: 200}}},
+      {type: 'PUT', url: '/api/v1/swdb/', status: 400,
+        data: {desc: ['NE']},
+        msg: '"param":"desc","msg":"Description must be a string."'},
+      {type: 'PUT', url: '/api/v1/swdb/', status: 200,
+        data: {desc: 'NE'}},
+      {type: 'PUT', url: '/api/v1/swdb/', status: 200,
+        data: {desc: '0123456789012345678901234567890'}},
+      {type: 'GET', url: '/api/v1/swdb/', status: 200,
+        data: {desc: '0123456789012345678901234567890'}},
     ];
 
     // go through the table and check the given parameters
-    testUpdateParams.forEach((value: any, i) => {
+    for (const value of table) {
       // handle PUT
       if (value.type === 'PUT') {
-        it(value!.req!.err.status + ' ' + value.type + ' msg: ' +
-        JSON.stringify(JSON.stringify(value!.req!.msg)), (done) => {
+        it(`${value.type} ${value.url}:id (${value.status}): ${JSON.stringify(value.data)}`, (done) => {
           supertest
-          .put(value!.req!.url + wrapper.origId)
-          .send(value!.req!.msg)
+          .put(value.url + wrapper.origId)
+          .send(assign(template, value.data))
           .set('Cookie', cookie)
           .end((err, res) => {
             if (err) {
               done(err);
             } else {
-              if (value.req.err.status) {
-                expect(res.status).to.equal(value.req.err.status);
+              if (res.status >= 400) {
+                debug('Response: %s', res.text);
               }
-              if (value!.req!.err.msgHas) {
-                assert.deepInclude(res.text, value.req.err.msgHas || {});
+              if (value.status) {
+                expect(res.status).to.equal(value.status);
+              }
+              if (value.msg) {
+                assert.deepInclude(res.text, value.msg || {});
               }
 
               debug('Location: ' + res.header.location);
@@ -1628,23 +2103,25 @@ describe('Software API Specification', () => {
           });
         });
       }
+      // handle POST
       if (value.type === 'POST') {
-        // tslint:disable-next-line:max-line-length
-        it(value!.req!.err.status + ' ' + value.type + ' ' +
-          JSON.stringify(JSON.stringify(value!.req!.msg)), (done) => {
+        it(`${value.type} ${value.url} (${value.status}): ${JSON.stringify(value.data)}`, (done) => {
           supertest
-          .post(value!.req!.url)
-          .send(value!.req!.msg)
+          .post(value.url)
+          .send(value.data)
           .set('Cookie', cookie)
           .end((err, res) => {
             if (err) {
               done(err);
             } else {
-              if (value!.req!.err.status) {
-                expect(res.status).to.equal(value!.req!.err.status);
+              if (res.status >= 400) {
+                debug('Response: %s', res.text);
               }
-              if (value!.req!.err.msgHas) {
-                assert.deepInclude(res.text, value!.req!.err.msgHas || {});
+              if (value.status) {
+                expect(res.status).to.equal(value.status);
+              }
+              if (value.msg) {
+                assert.deepInclude(res.text, value.msg || {});
               }
               debug('Location: ' + res.header.location);
               done();
@@ -1652,61 +2129,67 @@ describe('Software API Specification', () => {
           });
         });
       }
-
       // handle GET
       if (value.type === 'GET') {
-        it(value!.res!.err.status + ' ' + JSON.stringify(value!.res!.msg), (done) => {
+        it(`${value.type} ${value.url}:id (${value.status}): ${JSON.stringify(value.data)}`, (done) => {
           supertest
-          .get(value!.res!.url + wrapper.origId)
+          .get(value.url + wrapper.origId)
           .end((err, res) => {
             if (err) {
               done(err);
             } else {
-              if (value!.res.err.status) {
-                expect(res.status).to.equal(value.res.err.status);
+              if (res.status >= 400) {
+                debug('Response: %s', res.text);
               }
-              for (const prop of Object.keys(value.res.msg)) {
+              if (value.status) {
+                expect(res.status).to.equal(value.status);
+              }
+              for (const prop of Object.keys(value.data)) {
                 expect(res.body).to.have.property(prop);
-                assert.deepEqual(res.body[prop], value.res.msg[prop]);
+                assert.deepEqual(res.body[prop], value.data[prop]);
               }
+              assign(template, value.data);
               done();
             }
           });
         });
       }
-    });
+    }
     it('Errors on update a nonexistent record via POST swName id:badbeef', (done) => {
       supertest
-      .post('/api/v1/swdb/badbeef')
-      .set('Cookie', cookie)
-      .set('Accept', 'application/json')
-      .send({swName: 'Test Record4'})
-      .expect(404)
-      .end((err, res) => {
-        if (err) {
-          done(err);
-        } else {
-          expect(res.text).to.match(/Not Found/);
-          debug('Location: ' + res.header.location);
-          done();
-        }
+        .post('/api/v1/swdb/badbeef')
+        .set('Cookie', cookie)
+        .set('Accept', 'application/json')
+        .send({swName: 'Test Record4'})
+        .expect(404)
+        .end((err, res) => {
+          if (err) {
+            done(err);
+          } else {
+            expect(res.text).to.match(/Not Found/);
+            debug('Location: ' + res.header.location);
+            done();
+          }
       });
     });
     it('Errors on update a nonexistent record via PUT swName id:badbeef', (done) => {
       supertest
-      .put('/api/v1/swdb/badbeef')
-      .set('Cookie', cookie)
-      .send({swName: 'Test Record4'})
-      .expect(400)
-      .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
-      .end((err, res) => {
-        if (err) {
-          done(err);
-        } else {
-          debug('Location: ' + res.header.location);
-          done();
-        }
-      });
+        .put('/api/v1/swdb/badbeef')
+        .set('Cookie', cookie)
+        .send({swName: 'Test Record4'})
+        .expect(404)
+        .expect('Not Found')
+        .end((err, res) => {
+          if (res.status >= 400) {
+            debug('Response: %s', res.text);
+          }
+          if (err) {
+            done(err);
+          } else {
+            debug('Location: ' + res.header.location);
+            done();
+          }
+        });
     });
   });
 });

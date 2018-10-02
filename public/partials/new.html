@@ -200,7 +200,7 @@
             <p class="input-group">
               <input id="statusDate" name="statusDateInput" type="text" class="form-control" placeholder="Status Date (mm/dd/yyy)" uib-datepicker-popup="{{datePicker.format}}"
                 ng-model="statusDateDisplay" is-open="datePicker.instances['statusDate']" datepicker-options="datePicker.options"
-                ng-disabled="statusDisabled" ng-required="true" close-text="Close" 
+                ng-disabled="statusDisabled" ng-required="false" close-text="Close" 
               />
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'statusDate')">

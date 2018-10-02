@@ -83,44 +83,20 @@ test.describe('Software update screen tests', () => {
         props.test.username.toUpperCase()));
     });
 
-    test.it('Submit should fail', () => {
-      driver.findElement(By.id('submitBtn')).click();
-    });
-
-    test.it('Date field should be (Angular) invalid', () => {
+    test.it('Default status date is today', async () => {
       driver.wait(until.elementLocated(By.id('statusDate')));
-      driver.findElement(By.id('statusDate')).getAttribute('class').then(
-        (text: string) => {
-          expect(text).to.match(/ng-invalid-required/);
-        });
+      const element = await driver.findElement(By.id('statusDate'));
+      const value = await element.getAttribute('value');
+      const now = new Date();
+      const month = ('0' + (now.getMonth() + 1)).slice(-2);
+      const day = ('0' + now.getDate()).slice(-2);
+      const year = now.getFullYear();
+      expect(value).to.equal(`${month}/${day}/${year}`);
     });
 
-    test.it('should stay on the new form', () => {
-      driver.wait(until.titleIs('SWDB - New'));
-    });
-
-    test.it('Set software status date', () => {
-      driver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')));
-      let input = driver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
-      input.click();
-      driver.wait(until.elementLocated(
-        By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')));
-      input = driver.findElement(
-        By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
-      input.click();
+    test.it('Clear the status date', async () => {
+      await driver.findElement(By.id('statusDate')).clear();
       driver.wait(until.elementLocated(By.id('statusDate')));
-      input = driver.findElement(By.id('statusDate'));
-      input.clear();
-
-      input.sendKeys('10/1/2017');
-    });
-
-    test.it('Date field should be (Angular) valid', () => {
-      driver.wait(until.elementLocated(By.id('statusDate')));
-      driver.findElement(By.id('statusDate')).getAttribute('class').then(
-        (text: string) => {
-          expect(text).to.match(/ng-valid-required/);
-        });
     });
 
     test.it('Submit should fail with software name required error', () => {
@@ -159,6 +135,30 @@ test.describe('Software update screen tests', () => {
       input = driver.findElement(By.xpath('//*[@id="ui-select-choices-row-0-0"]'));
       driver.wait(until.elementIsVisible(input));
       input.click();
+    });
+
+    test.it('Submit should fail with status date required error', async () => {
+      driver.findElement(By.id('submitBtn')).click();
+      driver.wait(until.titleIs('SWDB - New'));
+      driver.wait(until.elementLocated(By.id('formError')));
+      const text = await driver.findElement(By.id('formError')).getText();
+      expect(text).to.match(/Status date must be a date./);
+    });
+
+    test.it('Set software status date', () => {
+      driver.wait(until.elementLocated(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i')));
+      let input = driver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/span/button/i'));
+      input.click();
+      driver.wait(until.elementLocated(
+        By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')));
+      input = driver.findElement(
+        By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
+      input.click();
+      driver.wait(until.elementLocated(By.id('statusDate')));
+      input = driver.findElement(By.id('statusDate'));
+      input.clear();
+
+      input.sendKeys('10/1/2017');
     });
 
     test.it('Submit should succeed showing the details screen', () => {

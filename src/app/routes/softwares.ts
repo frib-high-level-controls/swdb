@@ -3,6 +3,7 @@
  */
 import * as Debug from 'debug';
 import * as express from 'express';
+import { isEqual } from 'lodash';
 
 import * as auth from '../shared/auth';
 import * as history from '../shared/history';
@@ -17,7 +18,6 @@ import {
 
 import {
   checkNewSoftware,
-  checkUpdateSoftware,
 } from '../lib/validation';
 
 import {
@@ -45,7 +45,7 @@ export function getRouter(opts?: {}): express.Router {
 }
 
 // Convert DB Model to Web API
-function toWebAPI(doc: ISoftware): webapi.ISwdb {
+function toWebAPI(doc: ISoftware): webapi.Software {
   return {
     _id: String(doc._id),
     swName: doc.swName,
@@ -64,15 +64,81 @@ function toWebAPI(doc: ISoftware): webapi.ISwdb {
     vvResultsLoc: doc.vvResultsLoc,
     versionControl: doc.versionControl,
     versionControlLoc: doc.versionControlLoc,
-    previous: doc.previous,
+    previous: doc.previous ? doc.previous.toHexString() : undefined,
     comment: doc.comment,
   };
 }
 
+// Convert Web API data to DB Model
+function toModel(data: webapi.Software, doc?: Software): Software {
+  if (!doc) {
+    doc = new Software();
+  }
+  if (!isEqual(doc.swName, data.swName)) {
+    doc.swName = data.swName;
+  }
+  if (!isEqual(doc.desc, data.desc)) {
+    doc.desc = data.desc;
+  }
+  if (!isEqual(doc.branch, data.branch)) {
+    doc.branch = data.branch;
+  }
+  if (!isEqual(doc.version, data.version)) {
+    doc.version = data.version;
+  }
+  if (!isEqual(doc.owner, data.owner)) {
+    doc.owner = data.owner;
+  }
+  if (!isEqual(doc.engineer, data.engineer)) {
+    doc.engineer = data.engineer;
+  }
+  if (!isEqual(doc.levelOfCare, data.levelOfCare)) {
+    doc.levelOfCare = data.levelOfCare;
+  }
+  if (!isEqual(doc.status, data.status)) {
+    doc.status = data.status;
+  }
+  if (!doc.statusDate || doc.statusDate.getTime() !== Date.parse(data.statusDate)) {
+    doc.statusDate = new Date(data.statusDate);
+  }
+  if (!isEqual(doc.platforms, data.platforms)) {
+    doc.platforms = data.platforms;
+  }
+  if (!isEqual(doc.descDocLoc, data.descDocLoc)) {
+    doc.descDocLoc = data.descDocLoc;
+  }
+  if (!isEqual(doc.designDescDocLoc, data.designDescDocLoc)) {
+    doc.designDescDocLoc = data.designDescDocLoc;
+  }
+  if (!isEqual(doc.vvProcLoc, data.vvProcLoc)) {
+    doc.vvProcLoc = data.vvProcLoc;
+  }
+  if (!isEqual(doc.vvResultsLoc, data.vvResultsLoc)) {
+    doc.vvResultsLoc = data.vvResultsLoc;
+  }
+  if (!isEqual(doc.versionControl, data.versionControl)) {
+    doc.versionControl = data.versionControl;
+  }
+  if (!isEqual(doc.versionControlLoc, data.versionControlLoc)) {
+    doc.versionControlLoc = data.versionControlLoc;
+  }
+  if (data.previous) {
+    if (!doc.previous || !doc.previous.equals(data.previous)) {
+      doc.previous = models.ObjectId(data.previous);
+    }
+  } else if (doc.previous) {
+    doc.previous = undefined;
+  }
+  if (!isEqual(doc.comment, data.comment)) {
+    doc.comment = data.comment;
+  }
+  return doc;
+}
 
 // Create a new record in the backend storage
 async function createDoc(user: string, req: express.Request, res: express.Response) {
-  const doc = await new Software(req.body).saveWithHistory(auth.formatRole(auth.RoleScheme.USR, user));
+  const role = auth.formatRole(auth.RoleScheme.USR, user);
+  const doc = await toModel(req.body).saveWithHistory(role);
   debug('Created Software: ' + doc._id + ' as ' + user);
   res.location(`${res.locals.basePath || ''}/api/v1/swdb/${doc.id}`);
   res.status(201).json(toWebAPI(doc));
@@ -140,35 +206,9 @@ async function getHist(req: express.Request, res: express.Response): Promise<voi
   res.json(updates);
 }
 
-async function updateDoc(user: string, req: express.Request, res: express.Response) {
-  const id = req.params.id ? String(req.params.id) : null;
-  if (!id) {
-    throw new Error('Record not found');
-  }
-  const doc = await Software.findById(id);
-  if (!doc) {
-    throw new Error('Record not found');
-  }
-
-  doc.schema.eachPath((path) => {
-    if ([ '_id', 'history' ].includes(path)) {
-      return;
-    }
-    if (req.body[path] !== undefined) {
-      // watch for incoming deletes (??)
-      if (req.body[path] === '') {
-        if (doc.get(path)) {
-          debug(`Remove Software path: ${path}`);
-          doc.set(path, undefined);
-        }
-        return;
-      }
-      debug(`Updated Software path: ${path}, value: '${req.body[path]}'`);
-      doc.set(path, req.body[path]);
-    }
-  });
-
-  await doc.saveWithHistory(auth.formatRole(auth.RoleScheme.USR, user));
+async function updateDoc(user: string, doc: Software, req: express.Request, res: express.Response) {
+  const role = auth.formatRole(auth.RoleScheme.USR, user);
+  doc = await toModel(req.body, doc).saveWithHistory(role);
   debug(`Updated Software: ${doc._id} as ${user}`);
   res.location(`${res.locals.basePath || ''}/api/v1/swdb/${doc.id}`);
   res.json(toWebAPI(doc));
@@ -212,13 +252,13 @@ async function getList(req: express.Request, res: express.Response) {
 // }
 
 // for get history requests
-router.get('/api/v1/swdb/hist/:id', catchAll(async (req, res) => {
+router.get('/api/v1/swdb/hist/:id([a-fA-F\\d]{24})', catchAll(async (req, res) => {
   debug('GET /api/v1/swdb/hist/:id request');
   await getHist(req, res);
 }));
 
 // for get requests that are specific
-router.get('/api/v1/swdb/:id', catchAll(async (req, res) => {
+router.get('/api/v1/swdb/:id([a-fA-F\\d]{24})', catchAll(async (req, res) => {
   debug('GET /api/v1/swdb/:id request');
   await getDocs(req, res);
 }));
@@ -262,8 +302,17 @@ router.post('/api/v1/swdb/list', catchAll(async (req, res) => {
 }));
 
 // handle incoming put requests for update
-router.put('/api/v1/swdb/:id', auth.ensureAuthenticated, catchAll(async (req, res) => {
-  debug('PUT /api/v1/swdb/:id request');
+router.put('/api/v1/swdb/:id([a-fA-F\\d]{24})', auth.ensureAuthenticated, catchAll(async (req, res) => {
+  const id = req.params.id ? String(req.params.id) : null;
+  debug('PUT /api/v1/swdb/%s request', id);
+
+  if (!id) {
+    throw new RequestError('Record not found', NOT_FOUND);
+  }
+  const doc = await Software.findById(id);
+  if (!doc) {
+    throw new RequestError('Record not found', NOT_FOUND);
+  }
 
   const username = auth.getUsername(req);
   if (!username) {
@@ -271,7 +320,7 @@ router.put('/api/v1/swdb/:id', auth.ensureAuthenticated, catchAll(async (req, re
     return;
   }
 
-  await checkUpdateSoftware(req);
+  await checkNewSoftware(req);
 
   const result = validationResult(req, legacy.validationErrorFormatter);
   if (!result.isEmpty()) {
@@ -302,5 +351,5 @@ router.put('/api/v1/swdb/:id', auth.ensureAuthenticated, catchAll(async (req, re
     return;
   }
 
-  await updateDoc(username, req, res);
+  await updateDoc(username, doc, req, res);
 }));

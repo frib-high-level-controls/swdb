@@ -50,25 +50,25 @@ declare namespace webapi {
   export type Inst = SWInstall
 
   export interface Software {
-    _id?: string;
-    swName?: string;
-    version?: string;
-    branch?: string;
-    desc?: string;
-    owner?: string;
-    engineer?: string;
-    levelOfCare?: string;
-    status?: string;
-    statusDate?: string;
-    platforms?: string;
-    designDescDocLoc?: string;
-    descDocLoc?: string;
-    vvProcLoc?: string[];
-    vvResultsLoc?: string[];
-    versionControl?: string;
-    versionControlLoc?: string;
+    _id?: string; // TODO: rename to 'id'?
+    swName: string; // TODO: rename to 'name'?
+    desc: string;
+    branch: string;
+    version: string;
+    owner: string;
+    engineer: string;
+    levelOfCare: string;
+    status: string;
+    statusDate: string;
+    platforms: string;
+    descDocLoc: string;
+    designDescDocLoc: string; // TODO: rename to 'desginDocLoc'?
+    vvProcLoc: string[];
+    vvResultsLoc: string[];
+    versionControl: string;
+    versionControlLoc: string;
     previous?: string;
-    comment?: string;
+    comment: string;
   }
 
   export type ISwdb = Software;

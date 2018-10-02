@@ -58,8 +58,25 @@ describe('History tests suite', () => {
       .post('/api/v1/swdb')
       .set('Accept', 'application/json')
       .set('Cookie', cookie)
-      .send({ swName: 'Test Record', owner: 'Owner 1000', engineer: 'Engineer 1000',
-       levelOfCare: 'LOW', status: 'DEVEL', statusDate: '2017-04-21' })
+      .send({
+        swName: 'Test Record',
+        desc: '',
+        branch: '',
+        version: '',
+        owner: 'Owner 1000',
+        engineer: 'Engineer 1000',
+        levelOfCare: 'LOW',
+        status: 'DEVEL',
+        statusDate: '2017-04-21',
+        platforms: '',
+        descDocLoc: '',
+        designDescDocLoc: '',
+        vvProcLoc: [],
+        vvResultsLoc: [],
+        versionControl: '',
+        versionControlLoc: '',
+        comment: '',
+      })
       .end(async (err, result) => {
         if (err) {
           done(err);
@@ -87,7 +104,25 @@ describe('History tests suite', () => {
       .put('/api/v1/swdb/' + wrapper.origId)
       .set('Accept', 'application/json')
       .set('Cookie', cookie)
-      .send( { owner: 'New test owner' } )
+      .send({
+        owner: 'New test owner',
+        swName: 'Test Record',
+        desc: '',
+        branch: '',
+        version: '',
+        engineer: 'Engineer 1000',
+        levelOfCare: 'LOW',
+        status: 'DEVEL',
+        statusDate: '2017-04-21',
+        platforms: '',
+        descDocLoc: '',
+        designDescDocLoc: '',
+        vvProcLoc: [],
+        vvResultsLoc: [],
+        versionControl: '',
+        versionControlLoc: '',
+        comment: '',
+      })
       .end(async (err, result) => {
         // get record id from the returned location and find records that match
         const id = result.header.location.split(/\//).pop();
