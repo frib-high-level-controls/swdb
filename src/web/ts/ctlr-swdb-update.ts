@@ -214,8 +214,8 @@ function UpdatePromiseCtrl(
     if ($scope.formData.statusDate) {
       $scope.statusDateDisplay = DateUtil.fromLocalDateISOString($scope.formData.statusDate);
     }
-    // set selctor to current swName value
-    $scope.selectedItem = { name: $scope.formData.swName };
+    // set selctor to current software name value
+    $scope.selectedItem = { name: $scope.formData.name };
     // convert the retreived record owner
     forgGroupService.promise.then(() => {
       if ($scope.formData.owner) {

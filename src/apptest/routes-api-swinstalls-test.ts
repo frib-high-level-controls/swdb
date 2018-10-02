@@ -647,7 +647,7 @@ describe('Software Installation API Specification', () => {
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
         .send({
-          swName: 'Rule 2 Test Record',
+          name: 'Rule 2 Test Record',
           desc: '',
           version: 'test version',
           branch: 'test branch',
@@ -766,7 +766,7 @@ describe('Software Installation API Specification', () => {
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
         .send({
-          swName: 'Rule 3 Test Record',
+          name: 'Rule 3 Test Record',
           desc: '',
           version: 'test version',
           branch: 'test branch',

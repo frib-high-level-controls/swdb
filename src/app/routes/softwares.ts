@@ -48,7 +48,7 @@ export function getRouter(opts?: {}): express.Router {
 function toWebAPI(doc: ISoftware): webapi.Software {
   return {
     _id: String(doc._id),
-    swName: doc.swName,
+    name: doc.name,
     version: doc.version,
     branch: doc.branch,
     desc: doc.desc,
@@ -74,8 +74,8 @@ function toModel(data: webapi.Software, doc?: Software): Software {
   if (!doc) {
     doc = new Software();
   }
-  if (!isEqual(doc.swName, data.swName)) {
-    doc.swName = data.swName;
+  if (!isEqual(doc.name, data.name)) {
+    doc.name = data.name;
   }
   if (!isEqual(doc.desc, data.desc)) {
     doc.desc = data.desc;
@@ -222,10 +222,10 @@ async function getList(req: express.Request, res: express.Response) {
   }
 
   const docs = await Software.find({ _id: { $in: objIds } }).exec();
-  const results: {[key: string]: {swName: string, version: string, branch: string}} = {};
+  const results: {[key: string]: {name: string, version: string, branch: string}} = {};
   for (const doc of docs) {
     results[doc.id] = {
-      swName: doc.swName,
+      name: doc.name,
       version: doc.version || '',
       branch: doc.branch || '',
     };

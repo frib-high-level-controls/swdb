@@ -51,7 +51,7 @@ declare namespace webapi {
 
   export interface Software {
     _id?: string; // TODO: rename to 'id'?
-    swName: string; // TODO: rename to 'name'?
+    name: string;
     desc: string;
     branch: string;
     version: string;

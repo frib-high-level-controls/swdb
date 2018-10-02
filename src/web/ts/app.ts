@@ -482,15 +482,15 @@ app.filter('swFilt', () => {
           // set branch to empty string if it does not exist
           element.branch = '';
         }
-        if (!element.swName) {
+        if (!element.name) {
           // set branch to empty string if it does not exist
-          element.swName = '';
+          element.name = '';
         }
         if (!element.version) {
           // set branch to empty string if it does not exist
           element.version = '';
         }
-        if (element.swName.match(re) || element.branch.match(re) || element.version.match(re)) {
+        if (element.name.match(re) || element.branch.match(re) || element.version.match(re)) {
           swOut.push(element);
         } else {
           return false;

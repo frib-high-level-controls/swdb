@@ -34,7 +34,7 @@ export const VCS = VersionControlSystem;
 
 export interface ISoftware extends history.IHistory {
   _id: any;
-  swName: string;
+  name: string;
   desc: string;
   branch: string;
   version: string;
@@ -86,7 +86,7 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
 const softwareSchema = new Schema({
-  swName: {
+  name: {
     type: String,
     required: true,
   },
@@ -180,7 +180,7 @@ const softwareSchema = new Schema({
   emitIndexErrors: true,
 });
 
-softwareSchema.index({ swName: 1, version: 1, branch: 1 }, { unique: true });
+softwareSchema.index({ name: 1, version: 1, branch: 1 }, { unique: true });
 
 history.addHistory(softwareSchema, {
   watchAll: true,

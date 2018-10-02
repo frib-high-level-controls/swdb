@@ -25,7 +25,7 @@ interface SWInst {
 }
 
 interface Software {
-  swName: string;
+  name: string;
   branch?: string;
   version?: string;
 }

@@ -161,7 +161,7 @@ describe('Software API Specification', () => {
       .set('Accept', 'application/json')
       .set('Cookie', cookie)
       .send({
-        swName: 'Header Test Record',
+        name: 'Header Test Record',
         desc: '',
         branch: '',
         version: '',
@@ -201,14 +201,14 @@ describe('Software API Specification', () => {
     expect(count).to.equal(historyCount + 1);
   });
 
-  it('Has the swName history entry', async () => {
+  it('Has the name history entry', async () => {
     const updates = await Update.find().exec();
     const doc = updates[updates.length - 1];
     debug('Document history: ' + JSON.stringify(doc));
-    expect(doc.paths[0].name).to.equal('swName');
+    expect(doc.paths[0].name).to.equal('name');
   });
 
-  it('Has the correct swName history entry', async () => {
+  it('Has the correct name history entry', async () => {
     const updates = await Update.find().exec();
     const doc = updates[updates.length - 1];
     expect(doc.paths[0].value).to.equal('Header Test Record');
@@ -227,7 +227,7 @@ describe('Software API Specification', () => {
         } else {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
-            if (result[i].swName === 'Header Test Record') {
+            if (result[i].name === 'Header Test Record') {
               wrapper.origId = result[i]._id;
             }
           }
@@ -245,7 +245,7 @@ describe('Software API Specification', () => {
           done(err);
         } else {
           expect(res.body).to.have.property('_id');
-          expect(res.body.swName).to.equal('Header Test Record');
+          expect(res.body.name).to.equal('Header Test Record');
           expect(res.body._id).to.match(/.{24}/);
           done();
         }
@@ -259,7 +259,7 @@ describe('Software API Specification', () => {
         .set('Cookie', cookie)
         .send({
           owner: 'Header owner',
-          swName: 'Header Test Record',
+          name: 'Header Test Record',
           desc: '',
           branch: '',
           version: '',
@@ -299,7 +299,7 @@ describe('Software API Specification', () => {
       supertest
         .post('/api/v1/swdb')
         .send({
-          swName: 'Hist1 Test Record',
+          name: 'Hist1 Test Record',
           owner: 'Test Owner',
           engineer: 'Test Engineer',
           previous: 'badbeefbadbeefbadbeefbad',
@@ -339,7 +339,7 @@ describe('Software API Specification', () => {
         .set('Cookie', cookie)
         .send({
           owner: 'Hist2 owner',
-          swName: 'Hist1 Test Record',
+          name: 'Hist1 Test Record',
           engineer: 'Test Engineer',
           previous: 'badbeefbadbeefbadbeefbad',
           levelOfCare: 'LOW',
@@ -373,7 +373,7 @@ describe('Software API Specification', () => {
         .set('Cookie', cookie)
         .send({
           owner: 'Hist3 owner',
-          swName: 'Hist1 Test Record',
+          name: 'Hist1 Test Record',
           engineer: 'Test Engineer',
           previous: 'badbeefbadbeefbadbeefbad',
           levelOfCare: 'LOW',
@@ -407,7 +407,7 @@ describe('Software API Specification', () => {
         .set('Cookie', cookie)
         .send({
           owner: 'Hist4 owner',
-          swName: 'Hist1 Test Record',
+          name: 'Hist1 Test Record',
           engineer: 'Test Engineer',
           previous: 'badbeefbadbeefbadbeefbad',
           levelOfCare: 'LOW',
@@ -441,7 +441,7 @@ describe('Software API Specification', () => {
         .set('Cookie', cookie)
         .send({
           owner: 'Hist5 owner',
-          swName: 'Hist1 Test Record',
+          name: 'Hist1 Test Record',
           engineer: 'Test Engineer',
           previous: 'badbeefbadbeefbadbeefbad',
           levelOfCare: 'LOW',
@@ -475,7 +475,7 @@ describe('Software API Specification', () => {
         .set('Cookie', cookie)
         .send({
           owner: 'Hist6 owner',
-          swName: 'Hist1 Test Record',
+          name: 'Hist1 Test Record',
           engineer: 'Test Engineer',
           previous: 'badbeefbadbeefbadbeefbad',
           levelOfCare: 'LOW',
@@ -509,7 +509,7 @@ describe('Software API Specification', () => {
         .set('Cookie', cookie)
         .send({
           owner: 'Hist7 owner',
-          swName: 'Hist1 Test Record',
+          name: 'Hist1 Test Record',
           engineer: 'Test Engineer',
           previous: 'badbeefbadbeefbadbeefbad',
           levelOfCare: 'LOW',
@@ -587,7 +587,7 @@ describe('Software API Specification', () => {
       .set('Accept', 'application/json')
       .set('Cookie', cookie)
       .send({
-        swName: 'Test Record',
+        name: 'Test Record',
         desc: '',
         branch: '',
         version: '',
@@ -613,7 +613,7 @@ describe('Software API Specification', () => {
     const result = await supertest
       .post('/api/v1/swdb')
       .send({
-        swName: 'Test Record',
+        name: 'Test Record',
         desc: '',
         branch: '',
         version: '',
@@ -646,7 +646,7 @@ describe('Software API Specification', () => {
     const result = await supertest
       .post('/api/v1/swdb')
       .send({
-        swName: 'Test Record2',
+        name: 'Test Record2',
         desc: '',
         branch: '',
         version: '',
@@ -682,7 +682,7 @@ describe('Software API Specification', () => {
         } else {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
-            if (result[i].swName === 'Test Record') {
+            if (result[i].name === 'Test Record') {
               wrapper.origId = result[i]._id;
             }
           }
@@ -700,7 +700,7 @@ describe('Software API Specification', () => {
           done(err);
         } else {
           expect(res.body).to.have.property('_id');
-          expect(res.body.swName).to.equal('Test Record');
+          expect(res.body.name).to.equal('Test Record');
           expect(res.body._id).to.match(/.{24}/);
           done();
         }
@@ -712,7 +712,7 @@ describe('Software API Specification', () => {
     const result = await supertest
       .post('/api/v1/swdb')
       .send({
-        swName: 'Desc Test Record',
+        name: 'Desc Test Record',
         owner: 'Owner 1002',
         engineer: 'Engineer 1002',
         levelOfCare: 'LOW',
@@ -748,7 +748,7 @@ describe('Software API Specification', () => {
         } else {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
-            if (result[i].swName === 'Desc Test Record') {
+            if (result[i].name === 'Desc Test Record') {
               wrapper.origId = result[i]._id;
             }
           }
@@ -766,7 +766,7 @@ describe('Software API Specification', () => {
           done(err);
         } else {
           expect(res.body).to.have.property('_id');
-          expect(res.body.swName).to.equal('Desc Test Record');
+          expect(res.body.name).to.equal('Desc Test Record');
           expect(res.body._id).to.match(/.{24}/);
           done();
         }
@@ -778,7 +778,7 @@ describe('Software API Specification', () => {
     supertest
       .post('/api/v1/swdb')
       .send({
-        swName: 'Engineer Test Record',
+        name: 'Engineer Test Record',
         owner: 'Owner 1002',
         engineer: 'Any Engineer',
         levelOfCare: 'LOW',
@@ -821,7 +821,7 @@ describe('Software API Specification', () => {
         } else {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
-            if (result[i].swName === 'Engineer Test Record') {
+            if (result[i].name === 'Engineer Test Record') {
               wrapper.origId = result[i]._id;
             }
           }
@@ -839,7 +839,7 @@ describe('Software API Specification', () => {
           done(err);
         } else {
           expect(res.body).to.have.property('_id');
-          expect(res.body.swName).to.equal('Engineer Test Record');
+          expect(res.body.name).to.equal('Engineer Test Record');
           expect(res.body.engineer).to.equal('Any Engineer');
           expect(res.body._id).to.match(/.{24}/);
           done();
@@ -852,7 +852,7 @@ describe('Software API Specification', () => {
     supertest
       .post('/api/v1/swdb')
       .send({
-        swName: 'versionControlLoc Test Record',
+        name: 'versionControlLoc Test Record',
         owner: 'versioControlLoc Test Owner',
         engineer: 'Test Engineer',
         versionControlLoc: 'http://www.somehost/some-path/some-file',
@@ -895,7 +895,7 @@ describe('Software API Specification', () => {
         } else {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
-            if (result[i].swName === 'versionControlLoc Test Record') {
+            if (result[i].name === 'versionControlLoc Test Record') {
               wrapper.origId = result[i]._id;
             }
           }
@@ -913,7 +913,7 @@ describe('Software API Specification', () => {
           done(err);
         } else {
           expect(res.body).to.have.property('_id');
-          expect(res.body.swName).to.equal('versionControlLoc Test Record');
+          expect(res.body.name).to.equal('versionControlLoc Test Record');
           expect(res.body.versionControlLoc).to.equal('http://www.somehost/some-path/some-file');
           done();
         }
@@ -925,7 +925,7 @@ describe('Software API Specification', () => {
     supertest
       .post('/api/v1/swdb')
       .send({
-        swName: 'designDescDocLoc Test Record',
+        name: 'designDescDocLoc Test Record',
         owner: 'designDescDocLoc Test Owner',
         engineer: 'Test Engineer',
         designDescDocLoc: 'http://www.somehost/some-path/some-file',
@@ -968,7 +968,7 @@ describe('Software API Specification', () => {
         } else {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
-            if (result[i].swName === 'designDescDocLoc Test Record') {
+            if (result[i].name === 'designDescDocLoc Test Record') {
               wrapper.origId = result[i]._id;
             }
           }
@@ -986,7 +986,7 @@ describe('Software API Specification', () => {
           done(err);
         } else {
           expect(res.body).to.have.property('_id');
-          expect(res.body.swName).to.equal('designDescDocLoc Test Record');
+          expect(res.body.name).to.equal('designDescDocLoc Test Record');
           expect(res.body.designDescDocLoc).to.equal('http://www.somehost/some-path/some-file');
           done();
         }
@@ -998,7 +998,7 @@ describe('Software API Specification', () => {
     supertest
       .post('/api/v1/swdb')
       .send({
-        swName: 'descDocLoc Test Record',
+        name: 'descDocLoc Test Record',
         owner: 'descDocLoc Test Owner',
         engineer: 'Test Engineer',
         descDocLoc: 'http://www.somehost/some-path/some-file',
@@ -1041,7 +1041,7 @@ describe('Software API Specification', () => {
         } else {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
-            if (result[i].swName === 'descDocLoc Test Record') {
+            if (result[i].name === 'descDocLoc Test Record') {
               wrapper.origId = result[i]._id;
             }
           }
@@ -1059,7 +1059,7 @@ describe('Software API Specification', () => {
           done(err);
         } else {
           expect(res.body).to.have.property('_id');
-          expect(res.body.swName).to.equal('descDocLoc Test Record');
+          expect(res.body.name).to.equal('descDocLoc Test Record');
           expect(res.body.descDocLoc).to.equal('http://www.somehost/some-path/some-file');
           done();
         }
@@ -1071,7 +1071,7 @@ describe('Software API Specification', () => {
     supertest
     .post('/api/v1/swdb')
     .send({
-      swName: 'vvProcLoc Test Record',
+      name: 'vvProcLoc Test Record',
       owner: 'vvProcLoc Test Owner',
       engineer: 'Test Engineer',
       vvProcLoc: ['http://www.somehost/some-path/some-file', 'http://www.somehost/some-path/some-file2'],
@@ -1114,7 +1114,7 @@ describe('Software API Specification', () => {
         } else {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
-            if (result[i].swName === 'vvProcLoc Test Record') {
+            if (result[i].name === 'vvProcLoc Test Record') {
               wrapper.origId = result[i]._id;
             }
           }
@@ -1133,7 +1133,7 @@ describe('Software API Specification', () => {
         } else {
           debug('res: ' + JSON.stringify(res.body));
           expect(res.body).to.have.property('_id');
-          expect(res.body.swName).to.equal('vvProcLoc Test Record');
+          expect(res.body.name).to.equal('vvProcLoc Test Record');
           expect(JSON.stringify(res.body.vvProcLoc))
             .to.equal('["http://www.somehost/some-path/some-file","http://www.somehost/some-path/some-file2"]');
           done();
@@ -1146,7 +1146,7 @@ describe('Software API Specification', () => {
     supertest
     .post('/api/v1/swdb')
     .send({
-      swName: 'vvResultsLoc Test Record',
+      name: 'vvResultsLoc Test Record',
       owner: 'vvResultsLoc Test Owner',
       engineer: 'Test Engineer',
       vvResultsLoc: [ 'http://www.somehost/some-path/some-file3', 'http://www.somehost/some-path/some-file4' ],
@@ -1189,7 +1189,7 @@ describe('Software API Specification', () => {
         } else {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
-            if (result[i].swName === 'vvResultsLoc Test Record') {
+            if (result[i].name === 'vvResultsLoc Test Record') {
               wrapper.origId = result[i]._id;
             }
           }
@@ -1207,7 +1207,7 @@ describe('Software API Specification', () => {
           done(err);
         } else {
           expect(res.body).to.have.property('_id');
-          expect(res.body.swName).to.equal('vvResultsLoc Test Record');
+          expect(res.body.name).to.equal('vvResultsLoc Test Record');
           expect(JSON.stringify(res.body.vvResultsLoc))
             .to.equal('["http://www.somehost/some-path/some-file3","http://www.somehost/some-path/some-file4"]');
           done();
@@ -1220,7 +1220,7 @@ describe('Software API Specification', () => {
     supertest
       .post('/api/v1/swdb')
       .send({
-        swName: 'branch Test Record',
+        name: 'branch Test Record',
         owner: 'branch Test Owner',
         engineer: 'Test Engineer',
         branch: 'New branch',
@@ -1263,7 +1263,7 @@ describe('Software API Specification', () => {
         } else {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
-            if (result[i].swName === 'branch Test Record') {
+            if (result[i].name === 'branch Test Record') {
               wrapper.origId = result[i]._id;
             }
           }
@@ -1281,7 +1281,7 @@ describe('Software API Specification', () => {
           done(err);
         } else {
           expect(res.body).to.have.property('_id');
-          expect(res.body.swName).to.equal('branch Test Record');
+          expect(res.body.name).to.equal('branch Test Record');
           expect(res.body.branch).to.equal('New branch');
           done();
         }
@@ -1293,7 +1293,7 @@ describe('Software API Specification', () => {
     supertest
       .post('/api/v1/swdb')
       .send({
-        swName: 'versionControl Test Record',
+        name: 'versionControl Test Record',
         owner: 'versionControl Test Owner',
         engineer: 'Test Engineer',
         versionControl: 'GIT',
@@ -1336,7 +1336,7 @@ describe('Software API Specification', () => {
         } else {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
-            if (result[i].swName === 'versionControl Test Record') {
+            if (result[i].name === 'versionControl Test Record') {
               wrapper.origId = result[i]._id;
             }
           }
@@ -1354,7 +1354,7 @@ describe('Software API Specification', () => {
           done(err);
         } else {
           expect(res.body).to.have.property('_id');
-          expect(res.body.swName).to.equal('versionControl Test Record');
+          expect(res.body.name).to.equal('versionControl Test Record');
           expect(res.body.versionControl).to.equal('GIT');
           done();
         }
@@ -1366,7 +1366,7 @@ describe('Software API Specification', () => {
     supertest
       .post('/api/v1/swdb')
       .send({
-        swName: 'previous Test Record',
+        name: 'previous Test Record',
         owner: 'previous Test Owner',
         engineer: 'Test Engineer',
         previous: 'badbeefbadbeefbadbeefbad',
@@ -1410,7 +1410,7 @@ describe('Software API Specification', () => {
         } else {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
-            if (result[i].swName === 'previous Test Record') {
+            if (result[i].name === 'previous Test Record') {
               wrapper.origId = result[i]._id;
             }
           }
@@ -1428,7 +1428,7 @@ describe('Software API Specification', () => {
           done(err);
         } else {
           expect(res.body).to.have.property('_id');
-          expect(res.body.swName).to.equal('previous Test Record');
+          expect(res.body.name).to.equal('previous Test Record');
           expect(res.body.previous).to.equal('badbeefbadbeefbadbeefbad');
           done();
         }
@@ -1449,7 +1449,7 @@ describe('Software API Specification', () => {
         } else {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
-            if (result[i].swName === 'Test Record2') {
+            if (result[i].name === 'Test Record2') {
               wrapper.origId = result[i]._id;
             }
           }
@@ -1458,11 +1458,11 @@ describe('Software API Specification', () => {
       });
     });
 
-    it('Can update a record via PUT swName id:Test Record3', (done) => {
+    it('Can update a record via PUT name id:Test Record3', (done) => {
       supertest
         .put('/api/v1/swdb/' + wrapper.origId)
         .send({
-          swName: 'Test Record3',
+          name: 'Test Record3',
           desc: '',
           branch: '',
           version: '',
@@ -1501,7 +1501,7 @@ describe('Software API Specification', () => {
           done(err);
         } else {
           expect(res.body).to.have.property('_id');
-          expect(res.body.swName).to.equal('Test Record3');
+          expect(res.body.name).to.equal('Test Record3');
           done();
         }
       });
@@ -1512,7 +1512,7 @@ describe('Software API Specification', () => {
       supertest
         .post('/api/v1/swdb')
         .send({
-          swName: 'Rule 1 Test Record',
+          name: 'Rule 1 Test Record',
           owner: 'previous Test Owner',
           engineer: 'Test Engineer',
           levelOfCare: 'LOW',
@@ -1555,7 +1555,7 @@ describe('Software API Specification', () => {
             } else {
               const result = JSON.parse(res.text);
               for (let i = 0, iLen = result.length; i < iLen; i++) {
-                if (result[i].swName === 'Rule 1 Test Record') {
+                if (result[i].name === 'Rule 1 Test Record') {
                   wrapper.origId = result[i]._id;
                 }
               }
@@ -1573,7 +1573,7 @@ describe('Software API Specification', () => {
               done(err);
             } else {
               expect(res.body).to.have.property('_id');
-              expect(res.body.swName).to.equal('Rule 1 Test Record');
+              expect(res.body.name).to.equal('Rule 1 Test Record');
               done();
             }
           });
@@ -1585,7 +1585,7 @@ describe('Software API Specification', () => {
           .send({
             version: 'Test version',
             branch: 'Test branch',
-            swName: 'Rule 1 Test Record',
+            name: 'Rule 1 Test Record',
             owner: 'previous Test Owner',
             engineer: 'Test Engineer',
             levelOfCare: 'LOW',
@@ -1619,7 +1619,7 @@ describe('Software API Specification', () => {
             status: 'RDY_INST',
             version: 'Test version',
             branch: 'Test branch',
-            swName: 'Rule 1 Test Record',
+            name: 'Rule 1 Test Record',
             owner: 'previous Test Owner',
             engineer: 'Test Engineer',
             levelOfCare: 'LOW',
@@ -1670,7 +1670,7 @@ describe('Software API Specification', () => {
             version: 'Test version2',
             branch: 'Test branch2',
             status: 'RDY_INST',
-            swName: 'Rule 1 Test Record',
+            name: 'Rule 1 Test Record',
             owner: 'previous Test Owner',
             engineer: 'Test Engineer',
             levelOfCare: 'LOW',
@@ -1703,7 +1703,7 @@ describe('Software API Specification', () => {
       supertest
         .post('/api/v1/swdb')
         .send({
-          swName: 'Rule 4 Test Record',
+          name: 'Rule 4 Test Record',
           version: 'test version',
           branch: 'test branch',
           owner: 'previous Test Owner',
@@ -1746,7 +1746,7 @@ describe('Software API Specification', () => {
             } else {
               const result = JSON.parse(res.text);
               for (let i = 0, iLen = result.length; i < iLen; i++) {
-                if (result[i].swName === 'Rule 4 Test Record') {
+                if (result[i].name === 'Rule 4 Test Record') {
                   wrapper.origId = result[i]._id;
                 }
               }
@@ -1764,7 +1764,7 @@ describe('Software API Specification', () => {
               done(err);
             } else {
               expect(res.body).to.have.property('_id');
-              expect(res.body.swName).to.equal('Rule 4 Test Record');
+              expect(res.body.name).to.equal('Rule 4 Test Record');
               done();
             }
           });
@@ -1775,7 +1775,7 @@ describe('Software API Specification', () => {
           .put('/api/v1/swdb/' + wrapper.origId)
           .send({
             status: 'RDY_INST',
-            swName: 'Rule 4 Test Record',
+            name: 'Rule 4 Test Record',
             version: 'test version',
             branch: 'test branch',
             owner: 'previous Test Owner',
@@ -1838,7 +1838,7 @@ describe('Software API Specification', () => {
           .put('/api/v1/swdb/' + wrapper.origId)
           .send({
             status: 'DEVEL',
-            swName: 'Rule 4 Test Record',
+            name: 'Rule 4 Test Record',
             version: 'test version',
             branch: 'test branch',
             owner: 'previous Test Owner',
@@ -1870,7 +1870,7 @@ describe('Software API Specification', () => {
     });
 
     const template = {
-      swName: 'Rule 4 Test Record',
+      name: 'Rule 4 Test Record',
       version: 'test version',
       branch: 'test branch',
       owner: 'previous Test Owner',
@@ -1891,8 +1891,8 @@ describe('Software API Specification', () => {
 
     // This table lists test requests to make and the expected
     const table: Array<{type: string; url: string; status: number, data: any, msg?: string}> = [
-      {type: 'PUT', url: '/api/v1/swdb/', status: 200, data: {swName: 'Test Record4'}},
-      {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {swName: 'Test Record4'}},
+      {type: 'PUT', url: '/api/v1/swdb/', status: 200, data: {name: 'Test Record4'}},
+      {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {name: 'Test Record4'}},
 
       {type: 'PUT', url: '/api/v1/swdb/', status: 200, data: {owner: 'New test owner 1002'}},
       {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {owner: 'New test owner 1002'}},
@@ -1960,30 +1960,30 @@ describe('Software API Specification', () => {
 
       // test new record basic only required items
       {type: 'POST', url: '/api/v1/swdb/', status: 201,
-        data: {swName: 'NEW-test-name-1', desc: '', branch: '', version: '', owner: 'test owner', engineer: '',
+        data: {name: 'NEW-test-name-1', desc: '', branch: '', version: '', owner: 'test owner', engineer: '',
                 status: 'RDY_TEST', statusDate: '1970-01-01', levelOfCare: 'MEDIUM', descDocLoc: '', designDescDocLoc: '',
                 vvProcLoc: [], vvResultsLoc: [], platforms: '', versionControl: '', versionControlLoc: '', comment: ''},
         msg: ''},
 
-      // test new swName is required, min, max
+      // test new name is required, min, max
       {type: 'POST', url: '/api/v1/swdb/', status: 400,
         data: {owner: 'test owner'},
-        msg: '{"param":"swName","msg":"Software name is required."}'},
+        msg: '{"param":"name","msg":"Software name is required."}'},
 
       // test nwe owner required, min, max
       {type: 'POST', url: '/api/v1/swdb/', status: 400,
-        data: {swName: 'NEW Test name'},
+        data: {name: 'NEW Test name'},
         msg: '{"param":"owner","msg":"Owner is required."}'},
 
       // test levelOfCare required, enumerated
       {type: 'POST', url: '/api/v1/swdb/', status: 400,
-        data: {swName: 'NEW Test name', owner: 'NEW OWNER'},
+        data: {name: 'NEW Test name', owner: 'NEW OWNER'},
         msg: '{"param":"levelOfCare","msg":"Level of care is required."}'},
       {type: 'POST', url: '/api/v1/swdb/', status: 400,
-        data: {swName: 'NEW Test name', owner: 'NEW OWNER', levelOfCare: 'LOW'},
+        data: {name: 'NEW Test name', owner: 'NEW OWNER', levelOfCare: 'LOW'},
         msg: '{"param":"status","msg":"Status is required."}'},
       {type: 'POST', url: '/api/v1/swdb/', status: 400,
-        data: {swName: 'NEW Test name', owner: 'NEW OWNER', levelOfCare: 'LOW', status: 'DEVEL'},
+        data: {name: 'NEW Test name', owner: 'NEW OWNER', levelOfCare: 'LOW', status: 'DEVEL'},
         msg: '{"param":"statusDate","msg":"Status date is required."}'},
 
       // test new status enumerated
@@ -1991,7 +1991,7 @@ describe('Software API Specification', () => {
         data: {status: 'not-enumerated'},
         msg: '{"param":"status","msg":"Status must be one of DEVEL, RDY_TEST, RDY_INST, DEP","value":"not-enumerated"}'},
       {type: 'POST', url: '/api/v1/swdb/', status: 400,
-        data: {swName: 'testing', owner: 'test owner', levelOfCare: 'LOW', status: 'DEVEL', statusDate: 'non-date'},
+        data: {name: 'testing', owner: 'test owner', levelOfCare: 'LOW', status: 'DEVEL', statusDate: 'non-date'},
         msg: '{"param":"statusDate","msg":"Status date must be a date.","value":"non-date"}'},
 
       // test new version min, max
@@ -2011,10 +2011,10 @@ describe('Software API Specification', () => {
 
       // test update owner min, max
       {type: 'PUT', url: '/api/v1/swdb/', status: 400,
-        data: {swName: 'NEW Test name', owner: 'N'},
+        data: {name: 'NEW Test name', owner: 'N'},
         msg: '"param":"owner","msg":"Owner must be 2-80 characters."'},
       {type: 'PUT', url: '/api/v1/swdb/', status: 400,
-       data: {swName: 'NEW Test name', owner: '01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890'},
+       data: {name: 'NEW Test name', owner: '01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890'},
        msg: '"param":"owner","msg":"Owner must be 2-80 characters."'},
       {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {owner: 'New test owner 1002'}},
 
@@ -2155,12 +2155,12 @@ describe('Software API Specification', () => {
         });
       }
     }
-    it('Errors on update a nonexistent record via POST swName id:badbeef', (done) => {
+    it('Errors on update a nonexistent record via POST name id:badbeef', (done) => {
       supertest
         .post('/api/v1/swdb/badbeef')
         .set('Cookie', cookie)
         .set('Accept', 'application/json')
-        .send({swName: 'Test Record4'})
+        .send({name: 'Test Record4'})
         .expect(404)
         .end((err, res) => {
           if (err) {
@@ -2172,11 +2172,11 @@ describe('Software API Specification', () => {
           }
       });
     });
-    it('Errors on update a nonexistent record via PUT swName id:badbeef', (done) => {
+    it('Errors on update a nonexistent record via PUT name id:badbeef', (done) => {
       supertest
         .put('/api/v1/swdb/badbeef')
         .set('Cookie', cookie)
-        .send({swName: 'Test Record4'})
+        .send({name: 'Test Record4'})
         .expect(404)
         .expect('Not Found')
         .end((err, res) => {

@@ -91,7 +91,7 @@ appController.controller('InstListController', function(
           sw.version = '';
         }
         return '<a href="#/details/' + full.software + '" >' +
-          sw.swName +
+          sw.name +
           ' / ' + sw.branch +
           ' / ' + sw.version +
           '</a>';

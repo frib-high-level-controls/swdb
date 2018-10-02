@@ -77,9 +77,9 @@
           <div class="col-sm-8" uib-tooltip="{{softwareMouseover}}">
             <ui-select id="software" ng-model="swSelected.item" on-select="swSelect($item)" 
               ng-disabled="softwareDisabled" theme="bootstrap">
-              <ui-select-match placeholder="Select or search software in the list...">{{$select.selected.swName}}/{{$select.selected.branch}}/{{$select.selected.version}}</ui-select-match>
+              <ui-select-match placeholder="Select or search software in the list...">{{$select.selected.name}}/{{$select.selected.branch}}/{{$select.selected.version}}</ui-select-match>
               <ui-select-choices repeat="item in swList | filter: $select.search">
-                  <div ng-bind-html="item.swName | highlight: $select.search"></div>
+                  <div ng-bind-html="item.name | highlight: $select.search"></div>
                   <small ng-bind-html="'Branch: ' + item.branch +' Version: ' + item.version | highlight: $select.search"></small>
               </ui-select-choices>
             </ui-select>

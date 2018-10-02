@@ -97,7 +97,7 @@ appController.controller('ListController', function(
       .withTitle('Software name')
       .renderWith((data, type, full, meta) => {
         return '<a href="#/details/' + full._id + '">' +
-          full.swName + '</a>';
+          full.name + '</a>';
       }),
     DTColumnBuilder.newColumn('branch')
       .withTitle('Branch').withOption('defaultContent', ''),

@@ -181,7 +181,7 @@ function NewPromiseCtrl(
 
   // initialize this record
   $scope.formData = {
-    swName: '',
+    name: '',
     desc: '',
     branch: '',
     version: '',
@@ -214,7 +214,7 @@ function NewPromiseCtrl(
   const updateRec = recService.getRec();
   if (updateRec) {
     const updateRedID = updateRec.updateRecID;
-    $scope.formData.swName = updateRec.formData.swName;
+    $scope.formData.name = updateRec.formData.name;
     $scope.formData.desc = updateRec.formData.desc;
     $scope.formData.owner = updateRec.formData.owner;
     $scope.formData.engineer = updateRec.formData.engineer;

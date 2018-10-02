@@ -29,7 +29,7 @@ export async function checkHistory(sdebug: debug.IDebugger, canonObj: {[key: str
     for (const doc of cursor) {
       sdebug('Got history ' + doc._id + ' with  rid ' + id + JSON.stringify(doc));
       for (const canonKey of Object.keys(canonObj)) {
-        // we should find an paths array object where name: "swName" and value: value
+        // we should find an paths array object where name: "name" and value: value
         for (const item of doc.paths) {
           // sdebug('searching element ' + JSON.stringify(item) + ' for ' + canonKey);
           const keyName = 'name';

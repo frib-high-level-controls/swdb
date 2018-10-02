@@ -59,7 +59,7 @@ describe('History tests suite', () => {
       .set('Accept', 'application/json')
       .set('Cookie', cookie)
       .send({
-        swName: 'Test Record',
+        name: 'Test Record',
         desc: '',
         branch: '',
         version: '',
@@ -86,7 +86,7 @@ describe('History tests suite', () => {
           wrapper.origId = id;
           debug('Got id ' + id);
           const canonObj = {
-            swName: 'Test Record', owner: 'Owner 1000', engineer: 'Engineer 1000',
+            name: 'Test Record', owner: 'Owner 1000', engineer: 'Engineer 1000',
             levelOfCare: 'LOW', status: 'DEVEL', statusDate: new Date('2017-04-21'),
           };
           try {
@@ -106,7 +106,7 @@ describe('History tests suite', () => {
       .set('Cookie', cookie)
       .send({
         owner: 'New test owner',
-        swName: 'Test Record',
+        name: 'Test Record',
         desc: '',
         branch: '',
         version: '',

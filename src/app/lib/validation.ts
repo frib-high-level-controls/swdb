@@ -38,7 +38,7 @@ import {
  */
 export async function checkNewSoftware(req: express.Request) {
   return validate(req, checkSchema({
-    'swName': {
+    'name': {
       in: ['body'],
       trim: true,
       exists: {

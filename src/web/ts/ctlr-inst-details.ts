@@ -76,7 +76,7 @@ function InstDetailsPromiseCtrl(
         $scope.swSelected.version = '';
       }
 
-      let software = $scope.swSelected.swName;
+      let software = $scope.swSelected.name;
       if ($scope.swSelected.branch) {
         software += ' / ' + $scope.swSelected.branch + ' / ' + $scope.swSelected.version;
       } else {
