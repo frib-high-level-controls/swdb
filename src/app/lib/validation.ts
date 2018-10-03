@@ -160,7 +160,7 @@ export async function checkNewSoftware(req: express.Request) {
         errorMessage: 'Description document location must be a string.',
       },
     },
-    'designDescDocLoc': {
+    'designDocLoc': {
       in: ['body'],
       isString: {
         errorMessage: 'Design description document location must be a string.',

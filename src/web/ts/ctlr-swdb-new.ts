@@ -192,7 +192,7 @@ function NewPromiseCtrl(
     statusDate: '',
     platforms: '',
     descDocLoc: '',
-    designDescDocLoc: '',
+    designDocLoc: '',
     vvProcLoc: [],
     vvResultsLoc: [],
     versionControl: '',
@@ -228,7 +228,7 @@ function NewPromiseCtrl(
 
     $scope.statusDateDisplay = new Date();
     $scope.formData.platforms = updateRec.formData.platforms;
-    $scope.formData.designDescDocLoc = updateRec.formData.designDescDocLoc;
+    $scope.formData.designDocLoc = updateRec.formData.designDocLoc;
     $scope.formData.descDocLoc = updateRec.formData.descDocLoc;
     $scope.formData.vvProcLoc = updateRec.formData.vvProcLoc;
 

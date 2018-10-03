@@ -45,7 +45,7 @@ export interface ISoftware extends history.IHistory {
   statusDate: Date;
   platforms: string;
   descDocLoc: string;
-  designDescDocLoc: string;
+  designDocLoc: string;
   vvProcLoc: string[];
   vvResultsLoc: string[];
   versionControl: string;
@@ -136,7 +136,7 @@ const softwareSchema = new Schema({
     default: '',
     validate: isString,
   },
-  designDescDocLoc: {
+  designDocLoc: {
     type: String,
     default: '',
     validate: isString,

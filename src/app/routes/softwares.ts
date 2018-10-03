@@ -58,7 +58,7 @@ function toWebAPI(doc: ISoftware): webapi.Software {
     status: doc.status,
     statusDate: doc.statusDate.toISOString().split('T')[0],
     platforms: doc.platforms,
-    designDescDocLoc: doc.designDescDocLoc,
+    designDocLoc: doc.designDocLoc,
     descDocLoc: doc.descDocLoc,
     vvProcLoc: doc.vvProcLoc,
     vvResultsLoc: doc.vvResultsLoc,
@@ -107,8 +107,8 @@ function toModel(data: webapi.Software, doc?: Software): Software {
   if (!isEqual(doc.descDocLoc, data.descDocLoc)) {
     doc.descDocLoc = data.descDocLoc;
   }
-  if (!isEqual(doc.designDescDocLoc, data.designDescDocLoc)) {
-    doc.designDescDocLoc = data.designDescDocLoc;
+  if (!isEqual(doc.designDocLoc, data.designDocLoc)) {
+    doc.designDocLoc = data.designDocLoc;
   }
   if (!isEqual(doc.vvProcLoc, data.vvProcLoc)) {
     doc.vvProcLoc = data.vvProcLoc;

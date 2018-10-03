@@ -62,7 +62,7 @@ declare namespace webapi {
     statusDate: string;
     platforms: string;
     descDocLoc: string;
-    designDescDocLoc: string; // TODO: rename to 'desginDocLoc'?
+    designDocLoc: string;
     vvProcLoc: string[];
     vvResultsLoc: string[];
     versionControl: string;

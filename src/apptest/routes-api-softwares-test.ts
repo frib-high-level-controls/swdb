@@ -170,7 +170,7 @@ describe('Software API Specification', () => {
         levelOfCare: 'LOW',
         status: 'DEVEL',
         statusDate: '2017-04-21',
-        designDescDocLoc: '',
+        designDocLoc: '',
         descDocLoc: '',
         vvProcLoc: [],
         vvResultsLoc: [],
@@ -267,7 +267,7 @@ describe('Software API Specification', () => {
           levelOfCare: 'LOW',
           status: 'DEVEL',
           statusDate: '2017-04-21',
-          designDescDocLoc: '',
+          designDocLoc: '',
           descDocLoc: '',
           vvProcLoc: [],
           vvResultsLoc: [],
@@ -309,7 +309,7 @@ describe('Software API Specification', () => {
           desc: '',
           branch: '',
           version: '',
-          designDescDocLoc: '',
+          designDocLoc: '',
           descDocLoc: '',
           vvProcLoc: [],
           vvResultsLoc: [],
@@ -348,7 +348,7 @@ describe('Software API Specification', () => {
           desc: '',
           branch: '',
           version: '',
-          designDescDocLoc: '',
+          designDocLoc: '',
           descDocLoc: '',
           vvProcLoc: [],
           vvResultsLoc: [],
@@ -382,7 +382,7 @@ describe('Software API Specification', () => {
           desc: '',
           branch: '',
           version: '',
-          designDescDocLoc: '',
+          designDocLoc: '',
           descDocLoc: '',
           vvProcLoc: [],
           vvResultsLoc: [],
@@ -416,7 +416,7 @@ describe('Software API Specification', () => {
           desc: '',
           branch: '',
           version: '',
-          designDescDocLoc: '',
+          designDocLoc: '',
           descDocLoc: '',
           vvProcLoc: [],
           vvResultsLoc: [],
@@ -450,7 +450,7 @@ describe('Software API Specification', () => {
           desc: '',
           branch: '',
           version: '',
-          designDescDocLoc: '',
+          designDocLoc: '',
           descDocLoc: '',
           vvProcLoc: [],
           vvResultsLoc: [],
@@ -484,7 +484,7 @@ describe('Software API Specification', () => {
           desc: '',
           branch: '',
           version: '',
-          designDescDocLoc: '',
+          designDocLoc: '',
           descDocLoc: '',
           vvProcLoc: [],
           vvResultsLoc: [],
@@ -518,7 +518,7 @@ describe('Software API Specification', () => {
           desc: '',
           branch: '',
           version: '',
-          designDescDocLoc: '',
+          designDocLoc: '',
           descDocLoc: '',
           vvProcLoc: [],
           vvResultsLoc: [],
@@ -598,7 +598,7 @@ describe('Software API Specification', () => {
         status: 'DEVEL',
         statusDate: '2017-04-21',
         descDocLoc: '',
-        designDescDocLoc: '',
+        designDocLoc: '',
         vvProcLoc: [],
         vvResultsLoc: [],
         versionControl: '',
@@ -623,7 +623,7 @@ describe('Software API Specification', () => {
         status: 'DEVEL',
         statusDate: '2017-04-21',
         descDocLoc: '',
-        designDescDocLoc: '',
+        designDocLoc: '',
         vvProcLoc: [],
         vvResultsLoc: [],
         platforms: '',
@@ -656,7 +656,7 @@ describe('Software API Specification', () => {
         status: 'DEVEL',
         statusDate: '1970-01-01',
         descDocLoc: '',
-        designDescDocLoc: '',
+        designDocLoc: '',
         vvProcLoc: [],
         vvResultsLoc: [],
         platforms: '',
@@ -722,7 +722,7 @@ describe('Software API Specification', () => {
         branch: '',
         version: '',
         descDocLoc: '',
-        designDescDocLoc: '',
+        designDocLoc: '',
         vvProcLoc: [],
         vvResultsLoc: [],
         platforms: '',
@@ -788,7 +788,7 @@ describe('Software API Specification', () => {
         branch: '',
         version: '',
         descDocLoc: '',
-        designDescDocLoc: '',
+        designDocLoc: '',
         vvProcLoc: [],
         vvResultsLoc: [],
         platforms: '',
@@ -863,7 +863,7 @@ describe('Software API Specification', () => {
         branch: '',
         version: '',
         descDocLoc: '',
-        designDescDocLoc: '',
+        designDocLoc: '',
         vvProcLoc: [],
         vvResultsLoc: [],
         platforms: '',
@@ -921,14 +921,14 @@ describe('Software API Specification', () => {
     });
   });
 
-  it('Post a new record designDescDocLoc Test Record', (done) => {
+  it('Post a new record designDocLoc Test Record', (done) => {
     supertest
       .post('/api/v1/swdb')
       .send({
-        name: 'designDescDocLoc Test Record',
-        owner: 'designDescDocLoc Test Owner',
+        name: 'designDocLoc Test Record',
+        owner: 'designDocLoc Test Owner',
         engineer: 'Test Engineer',
-        designDescDocLoc: 'http://www.somehost/some-path/some-file',
+        designDocLoc: 'http://www.somehost/some-path/some-file',
         levelOfCare: 'LOW',
         status: 'DEVEL',
         statusDate: '2017-04-21',
@@ -956,9 +956,9 @@ describe('Software API Specification', () => {
       });
   });
 
-  describe('get id for designDescDocLoc Test Record', () => {
+  describe('get id for designDocLoc Test Record', () => {
     const wrapper = {origId: null};
-    before('Get ID record id: designDescDocLoc Test Record', (done) => {
+    before('Get ID record id: designDocLoc Test Record', (done) => {
       supertest
       .get('/api/v1/swdb')
       .expect(200)
@@ -968,7 +968,7 @@ describe('Software API Specification', () => {
         } else {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
-            if (result[i].name === 'designDescDocLoc Test Record') {
+            if (result[i].name === 'designDocLoc Test Record') {
               wrapper.origId = result[i]._id;
             }
           }
@@ -977,7 +977,7 @@ describe('Software API Specification', () => {
       });
     });
 
-    it('Returns test record id: designDescDocLoc Test Record', (done) => {
+    it('Returns test record id: designDocLoc Test Record', (done) => {
       supertest
       .get('/api/v1/swdb/' + wrapper.origId)
       .expect(200)
@@ -986,8 +986,8 @@ describe('Software API Specification', () => {
           done(err);
         } else {
           expect(res.body).to.have.property('_id');
-          expect(res.body.name).to.equal('designDescDocLoc Test Record');
-          expect(res.body.designDescDocLoc).to.equal('http://www.somehost/some-path/some-file');
+          expect(res.body.name).to.equal('designDocLoc Test Record');
+          expect(res.body.designDocLoc).to.equal('http://www.somehost/some-path/some-file');
           done();
         }
       });
@@ -1008,7 +1008,7 @@ describe('Software API Specification', () => {
         desc: '',
         branch: '',
         version: '',
-        designDescDocLoc: '',
+        designDocLoc: '',
         vvProcLoc: [],
         vvResultsLoc: [],
         platforms: '',
@@ -1082,7 +1082,7 @@ describe('Software API Specification', () => {
       branch: '',
       version: '',
       descDocLoc: '',
-      designDescDocLoc: '',
+      designDocLoc: '',
       vvResultsLoc: [],
       platforms: '',
       versionControl: '',
@@ -1157,7 +1157,7 @@ describe('Software API Specification', () => {
       branch: '',
       version: '',
       descDocLoc: '',
-      designDescDocLoc: '',
+      designDocLoc: '',
       vvProcLoc: [],
       platforms: '',
       versionControl: '',
@@ -1230,7 +1230,7 @@ describe('Software API Specification', () => {
         desc: '',
         version: '',
         descDocLoc: '',
-        designDescDocLoc: '',
+        designDocLoc: '',
         vvProcLoc: [],
         vvResultsLoc: [],
         platforms: '',
@@ -1304,7 +1304,7 @@ describe('Software API Specification', () => {
         branch: '',
         version: '',
         descDocLoc: '',
-        designDescDocLoc: '',
+        designDocLoc: '',
         vvProcLoc: [],
         vvResultsLoc: [],
         platforms: '',
@@ -1377,7 +1377,7 @@ describe('Software API Specification', () => {
         branch: '',
         version: '',
         descDocLoc: '',
-        designDescDocLoc: '',
+        designDocLoc: '',
         vvProcLoc: [],
         vvResultsLoc: [],
         platforms: '',
@@ -1472,7 +1472,7 @@ describe('Software API Specification', () => {
           status: 'DEVEL',
           statusDate: '1970-01-01',
           descDocLoc: '',
-          designDescDocLoc: '',
+          designDocLoc: '',
           vvProcLoc: [],
           vvResultsLoc: [],
           platforms: '',
@@ -1522,7 +1522,7 @@ describe('Software API Specification', () => {
           branch: '',
           version: '',
           descDocLoc: '',
-          designDescDocLoc: '',
+          designDocLoc: '',
           vvProcLoc: [],
           vvResultsLoc: [],
           platforms: '',
@@ -1593,7 +1593,7 @@ describe('Software API Specification', () => {
             statusDate: '1970-01-01',
             desc: '',
             descDocLoc: '',
-            designDescDocLoc: '',
+            designDocLoc: '',
             vvProcLoc: [],
             vvResultsLoc: [],
             platforms: '',
@@ -1626,7 +1626,7 @@ describe('Software API Specification', () => {
             statusDate: '1970-01-01',
             desc: '',
             descDocLoc: '',
-            designDescDocLoc: '',
+            designDocLoc: '',
             vvProcLoc: [],
             vvResultsLoc: [],
             platforms: '',
@@ -1677,7 +1677,7 @@ describe('Software API Specification', () => {
             statusDate: '1970-01-01',
             desc: '',
             descDocLoc: '',
-            designDescDocLoc: '',
+            designDocLoc: '',
             vvProcLoc: [],
             vvResultsLoc: [],
             platforms: '',
@@ -1713,7 +1713,7 @@ describe('Software API Specification', () => {
           statusDate: '1970-01-01',
           desc: '',
           descDocLoc: '',
-          designDescDocLoc: '',
+          designDocLoc: '',
           vvProcLoc: [],
           vvResultsLoc: [],
           platforms: '',
@@ -1784,7 +1784,7 @@ describe('Software API Specification', () => {
             statusDate: '1970-01-01',
             desc: '',
             descDocLoc: '',
-            designDescDocLoc: '',
+            designDocLoc: '',
             vvProcLoc: [],
             vvResultsLoc: [],
             platforms: '',
@@ -1847,7 +1847,7 @@ describe('Software API Specification', () => {
             statusDate: '1970-01-01',
             desc: '',
             descDocLoc: '',
-            designDescDocLoc: '',
+            designDocLoc: '',
             vvProcLoc: [],
             vvResultsLoc: [],
             platforms: '',
@@ -1880,7 +1880,7 @@ describe('Software API Specification', () => {
       statusDate: '1970-01-01',
       desc: '',
       descDocLoc: '',
-      designDescDocLoc: '',
+      designDocLoc: '',
       vvProcLoc: [],
       vvResultsLoc: [],
       platforms: '',
@@ -1926,8 +1926,8 @@ describe('Software API Specification', () => {
       {type: 'PUT', url: '/api/v1/swdb/', status: 200, data: {platforms: 'NEW test platform'}},
       {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {platforms: 'NEW test platform'}},
 
-      {type: 'PUT', url: '/api/v1/swdb/', status: 200, data: {designDescDocLoc: 'http://www.somehost/some-path/some-file'}},
-      {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {designDescDocLoc: 'http://www.somehost/some-path/some-file'}},
+      {type: 'PUT', url: '/api/v1/swdb/', status: 200, data: {designDocLoc: 'http://www.somehost/some-path/some-file'}},
+      {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {designDocLoc: 'http://www.somehost/some-path/some-file'}},
 
       {type: 'PUT', url: '/api/v1/swdb/', status: 200, data: {descDocLoc: 'http://www.somehost/some-path/some-file'}},
       {type: 'GET', url: '/api/v1/swdb/', status: 200, data: {descDocLoc: 'http://www.somehost/some-path/some-file'}},
@@ -1961,7 +1961,7 @@ describe('Software API Specification', () => {
       // test new record basic only required items
       {type: 'POST', url: '/api/v1/swdb/', status: 201,
         data: {name: 'NEW-test-name-1', desc: '', branch: '', version: '', owner: 'test owner', engineer: '',
-                status: 'RDY_TEST', statusDate: '1970-01-01', levelOfCare: 'MEDIUM', descDocLoc: '', designDescDocLoc: '',
+                status: 'RDY_TEST', statusDate: '1970-01-01', levelOfCare: 'MEDIUM', descDocLoc: '', designDocLoc: '',
                 vvProcLoc: [], vvResultsLoc: [], platforms: '', versionControl: '', versionControlLoc: '', comment: ''},
         msg: ''},
 
