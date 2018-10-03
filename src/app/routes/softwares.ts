@@ -22,7 +22,10 @@ import {
 
 import {
   catchAll,
+  ensureAccepts,
+  ensurePackage,
   HttpStatus,
+  pkgErrorDetailFormatter,
   RequestError,
   validationResult,
 } from '../shared/handlers';
@@ -32,8 +35,13 @@ import {
   Software,
 } from '../models/software';
 
+type Request = express.Request;
+type Response = express.Response;
 
+const CREATED = HttpStatus.CREATED;
 const NOT_FOUND = HttpStatus.NOT_FOUND;
+const BAD_REQUEST = HttpStatus.BAD_REQUEST;
+const INTERNAL_SERVER_ERROR = HttpStatus.INTERNAL_SERVER_ERROR;
 
 
 const debug = Debug('swdb:routes:api-software');
@@ -136,12 +144,17 @@ function toModel(data: webapi.Software, doc?: Software): Software {
 }
 
 // Create a new record in the backend storage
-async function createDoc(user: string, req: express.Request, res: express.Response) {
+async function createDoc(user: string, v2: boolean, req: Request, res: Response) {
   const role = auth.formatRole(auth.RoleScheme.USR, user);
-  const doc = await toModel(req.body).saveWithHistory(role);
+  const doc = await toModel(v2 ? req.body.data : req.body).saveWithHistory(role);
   debug('Created Software: ' + doc._id + ' as ' + user);
   res.location(`${res.locals.basePath || ''}/api/v1/swdb/${doc.id}`);
-  res.status(201).json(toWebAPI(doc));
+  if (v2) {
+    const pkg: webapi.Pkg<webapi.Software> = { data: toWebAPI(doc) };
+    res.status(CREATED).json(pkg);
+  } else {
+    res.status(201).json(toWebAPI(doc));
+  }
 }
 
 /**
@@ -161,12 +174,17 @@ async function createDoc(user: string, req: express.Request, res: express.Respon
 //   }
 // }
 
-async function getDocs(req: express.Request, res: express.Response): Promise<void> {
+async function getDocs(v2: boolean, req: Request, res: Response): Promise<void> {
   const id = req.params.id;
   if (!id) {
     // return all items
     const docs = await Software.find().exec();
-    res.json(docs.map(toWebAPI));
+    if (v2) {
+      const pkg: webapi.Pkg<webapi.Software[]> = { data: docs.map(toWebAPI) };
+      res.json(pkg);
+    } else {
+      res.json(docs.map(toWebAPI));
+    }
     return;
   }
   // return specified item
@@ -174,7 +192,12 @@ async function getDocs(req: express.Request, res: express.Response): Promise<voi
   if (!doc) {
     throw new RequestError('Software not found', NOT_FOUND);
   }
-  res.json(toWebAPI(doc));
+  if (v2) {
+    const pkg: webapi.Pkg<webapi.Software> = { data: toWebAPI(doc) };
+    res.json(pkg);
+  } else {
+    res.json(toWebAPI(doc));
+  }
 }
 
 /**
@@ -186,7 +209,7 @@ async function getDocs(req: express.Request, res: express.Response): Promise<voi
  * @params req The express Request object
  * @params res The express Response object
  */
-async function getHist(req: express.Request, res: express.Response): Promise<void> {
+async function getHist(v2: boolean, req: Request, res: Response): Promise<void> {
   const id = req.params.id ? String(req.params.id) : null;
   if (!id) {
     throw new Error('Search ID must be provided');
@@ -203,19 +226,38 @@ async function getHist(req: express.Request, res: express.Response): Promise<voi
   debug(`Find Software history for ${id} with limit: ${limit}, skip: ${skip}`);
   const updates = await history.Update.find({ rid: models.ObjectId(id) }).sort({at: -1}).limit(limit).skip(skip).exec();
   debug(`Found Software history with length: ${updates.length}`);
-  res.json(updates);
+  if (v2) {
+    const pkg: webapi.Pkg<webapi.Update[]> = {
+      data: updates.map((update) => ({
+        by: update.by,
+        at: update.at.toISOString(),
+        paths: update.paths.map((path) => ({
+          name: path.name,
+          value: path.value,
+        })),
+      })),
+    };
+    res.json(pkg);
+  } else {
+    res.json(updates);
+  }
 }
 
-async function updateDoc(user: string, doc: Software, req: express.Request, res: express.Response) {
+async function updateDoc(user: string, doc: Software, v2: boolean, req: Request, res: Response) {
   const role = auth.formatRole(auth.RoleScheme.USR, user);
-  doc = await toModel(req.body, doc).saveWithHistory(role);
+  doc = await toModel(v2 ? req.body.data : req.body, doc).saveWithHistory(role);
   debug(`Updated Software: ${doc._id} as ${user}`);
   res.location(`${res.locals.basePath || ''}/api/v1/swdb/${doc.id}`);
-  res.json(toWebAPI(doc));
+  if (v2) {
+    const pkg: webapi.Pkg<webapi.Software> = { data: toWebAPI(doc) };
+    res.json(pkg);
+  } else {
+    res.json(toWebAPI(doc));
+  }
 }
 
 // return array of records given an array of ids
-async function getList(req: express.Request, res: express.Response) {
+async function getList(req: Request, res: Response) {
   const objIds: string[] = [];
   if (Array.isArray(req.body)) {
     objIds.push(...req.body.map(String));
@@ -253,49 +295,115 @@ async function getList(req: express.Request, res: express.Response) {
 
 // for get history requests
 router.get('/api/v1/swdb/hist/:id([a-fA-F\\d]{24})', catchAll(async (req, res) => {
-  debug('GET /api/v1/swdb/hist/:id request');
-  await getHist(req, res);
+  debug('GET /api/v1/swdb/hist/%s request', req.params.id);
+  req.params.v = 'v1';
+  return getSoftwareHistHandler(req, res);
 }));
+
+router.get('/api/v2/software/:id([a-fA-F\\d]{24})/history', ensureAccepts('json'), catchAll(async (req, res) => {
+  debug('GET /api/v2/software/%s/history', req.params.id);
+  req.params.v = 'v2';
+  return getSoftwareHistHandler(req, res);
+}));
+
+const getSoftwareHistHandler = async (req: Request, res: Response) => {
+  const v2 = req.params.v === 'v2';
+  await getHist(v2, req, res);
+};
 
 // for get requests that are specific
 router.get('/api/v1/swdb/:id([a-fA-F\\d]{24})', catchAll(async (req, res) => {
   debug('GET /api/v1/swdb/:id request');
-  await getDocs(req, res);
+  req.params.v = 'v1';
+  return getSoftwareHandler(req, res);
 }));
+
+router.get('/api/v2/software/:id([a-fA-F\\d]{24})', ensureAccepts('json'), catchAll(async (req, res) => {
+  debug('GET /api/v2/software/%s', req.params.id);
+  req.params.v = 'v2';
+  return getSoftwareHandler(req, res);
+}));
+
+const getSoftwareHandler = async (req: Request, res: Response) => {
+  const v2 = req.params.v === 'v2';
+  await getDocs(v2, req, res);
+};
 
 // for get requests that are not specific return all
 router.get('/api/v1/swdb', catchAll(async (req, res) => {
   debug('GET /api/v1/swdb request');
-  await getDocs(req, res);
+  req.params.v = 'v1';
+  return getSoftwareListHandler(req, res);
 }));
 
-// handle incoming post requests
+router.get('/api/v2/software', ensureAccepts('json'), catchAll(async (req, res) => {
+  debug('GET /api/v2/software');
+  req.params.v = 'v2';
+  return getSoftwareListHandler(req, res);
+}));
+
+const getSoftwareListHandler = async (req: Request, res: Response) => {
+  const v2 = req.params.v === 'v2';
+  await getDocs(v2, req, res);
+};
+
+// handle incoming post requests for create
 router.post('/api/v1/swdb', auth.ensureAuthenticated, catchAll(async (req, res) => {
   debug('POST /api/v1/swdb request');
+  req.params.v = 'v1';
+  return postSoftwareHandler(req, res);
+}));
+
+// tslint:disable:max-line-length
+router.post('/api/v2/software', ensureAccepts('json'), ensurePackage(), auth.ensureAuthc(), catchAll(async (req, res) => {
+  debug('POST /api/v2/software');
+  req.params.v = 'v2';
+  return postSoftwareHandler(req, res);
+}));
+
+const postSoftwareHandler = async (req: Request, res: Response) => {
+  const v2 = req.params.v === 'v2';
 
   const username = auth.getUsername(req);
   if (!username) {
-    res.status(500).send('Ensure authenticated failed');
-    return;
+    if (v2) {
+      throw new RequestError('No username on authenticated request', INTERNAL_SERVER_ERROR);
+    } else {
+      res.status(500).send('Ensure authenticated failed');
+      return;
+    }
   }
 
   // Do validation for  new records
-  await checkNewSoftware(req);
+  await checkNewSoftware(v2, req);
 
-  const result = validationResult(req, legacy.validationErrorFormatter);
-  if (!result.isEmpty()) {
-    debug('validation result: ' + JSON.stringify(result.array()));
-    res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-    return;
+  if (v2) {
+    // TODO: replace with validateAndThrow()
+    const result = validationResult(req, pkgErrorDetailFormatter);
+    if (!result.isEmpty()) {
+      const perror: webapi.PkgError = {
+        code: BAD_REQUEST,
+        message: 'Software Validation Error',
+        errors: result.array(),
+      };
+      throw new RequestError(perror.message, perror.code, perror);
+    }
+  } else {
+    const result = validationResult(req, legacy.validationErrorFormatter);
+    if (!result.isEmpty()) {
+      debug('validation result: ' + JSON.stringify(result.array()));
+      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+      return;
+    }
   }
 
   const dateObj = new Date(req.body.statusDate);
-  req.body.statusDate = dateObj;
+  req.body.statusDate = dateObj; // TODO: is this required?
 
-  await createDoc(username, req, res);
-}));
+  await createDoc(username, v2, req, res);
+};
 
-// for get list of records requests
+// for get list of records requests (not supported in v2)
 router.post('/api/v1/swdb/list', catchAll(async (req, res) => {
   debug('POST /api/v1/swdb/list request');
   await getList(req, res);
@@ -303,8 +411,21 @@ router.post('/api/v1/swdb/list', catchAll(async (req, res) => {
 
 // handle incoming put requests for update
 router.put('/api/v1/swdb/:id([a-fA-F\\d]{24})', auth.ensureAuthenticated, catchAll(async (req, res) => {
+  debug('PUT /api/v1/swdb/%s', req.params.id);
+  req.params.v = 'v1';
+  return putSoftwareHandler(req, res);
+}));
+
+// tslint:disable:max-line-length
+router.put('/api/v2/software/:id([a-fA-F\\d]{24})', ensureAccepts('json'), ensurePackage(), auth.ensureAuthc(), catchAll(async (req, res) => {
+  debug('PUT /api/v2/software/%s request', req.params.id);
+  req.params.v = 'v2';
+  return putSoftwareHandler(req, res);
+}));
+
+const putSoftwareHandler = async (req: Request, res: Response) => {
+  const v2 = req.params.v === 'v2';
   const id = req.params.id ? String(req.params.id) : null;
-  debug('PUT /api/v1/swdb/%s request', id);
 
   if (!id) {
     throw new RequestError('Record not found', NOT_FOUND);
@@ -316,23 +437,40 @@ router.put('/api/v1/swdb/:id([a-fA-F\\d]{24})', auth.ensureAuthenticated, catchA
 
   const username = auth.getUsername(req);
   if (!username) {
-    res.status(500).send('Ensure authenticated failed');
-    return;
+    if (v2) {
+      throw new RequestError('No username on authenticated request', INTERNAL_SERVER_ERROR);
+    } else {
+      res.status(500).send('Ensure authenticated failed');
+      return;
+    }
   }
 
-  await checkNewSoftware(req);
+  await checkNewSoftware(v2, req);
 
-  const result = validationResult(req, legacy.validationErrorFormatter);
-  if (!result.isEmpty()) {
-    res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-    return;
+  if (v2) {
+    // TODO: replace with validateAndThrow()
+    const result = validationResult(req, pkgErrorDetailFormatter);
+    if (!result.isEmpty()) {
+      const perror: webapi.PkgError = {
+        code: BAD_REQUEST,
+        message: 'Software Validation Error',
+        errors: result.array(),
+      };
+      throw new RequestError(perror.message, perror.code, perror);
+    }
+  } else {
+    const result = validationResult(req, legacy.validationErrorFormatter);
+    if (!result.isEmpty()) {
+      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+      return;
+    }
   }
 
   // setup an array of validations to perfrom
   // save the results in wfResultsArr, and errors in errors.
   const wfResultArr = await Promise.all([
-    CustomValidators.swNoVerBranchChgIfStatusRdyInstall(req),
-    CustomValidators.noSwStateChgIfReferringInst(req),
+    CustomValidators.swNoVerBranchChgIfStatusRdyInstall(v2, req),
+    CustomValidators.noSwStateChgIfReferringInst(v2, req),
   ]);
 
   const errors = wfResultArr.reduce<IValResult[]>((p, r, idx) => {
@@ -347,9 +485,22 @@ router.put('/api/v1/swdb/:id([a-fA-F\\d]{24})', auth.ensureAuthenticated, catchA
 
   if (errors.length > 0) {
     debug('Workflow validation errors ' + JSON.stringify(errors));
-    res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
-    return;
+    if (v2) {
+      const perror: webapi.PkgError = {
+        code: BAD_REQUEST,
+        message: 'Workflow Validation Error',
+        errors: errors.map((v) => ({
+          reason: 'WorkflowValidationError',
+          message: v.data,
+          location: 'data', // TODO: more specific location
+        })),
+      };
+      throw new RequestError(perror.message, perror.code, perror);
+    } else {
+      res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
+      return;
+    }
   }
 
-  await updateDoc(username, doc, req, res);
-}));
+  await updateDoc(username, doc, v2, req, res);
+};

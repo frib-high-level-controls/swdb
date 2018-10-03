@@ -33,6 +33,17 @@ declare namespace webapi {
   }
 
   // Application specific types defined below.
+  export interface Path {
+    name: string;
+    value: {};
+  }
+
+  export interface Update {
+    at: string;
+    by: string;
+    paths: Path[];
+  }
+  
   export interface SWInstall {
     _id?: string;
     host?: string;

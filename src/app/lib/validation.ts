@@ -5,6 +5,7 @@ import * as express from 'express';
 
 import {
   checkSchema,
+  ValidationSchema,
 } from 'express-validator/check';
 
 import {
@@ -36,193 +37,195 @@ import {
  *
  * @params req Express.Request
  */
-export async function checkNewSoftware(req: express.Request) {
-  return validate(req, checkSchema({
-    'name': {
-      in: ['body'],
-      trim: true,
-      exists: {
-        options: { checkFalsy: true },
-        errorMessage: 'Software name is required.',
-      },
-      isString: {
-        errorMessage: 'Software name must be a string.',
-      },
-      isLength: {
-        options: [{ min: 2, max: 40 }],
-        errorMessage: 'Name must be 2-40 characters.',
-      },
-    },
-    'desc': {
-      in: ['body'],
-      isString: {
-        errorMessage: 'Description must be a string.',
-      },
+export async function checkNewSoftware(v2: boolean, req: express.Request) {
+  const prefix = v2 ? 'data.' : '';
+  const schema: ValidationSchema = {};
 
-      isLength: {
-        options: { max: 2000 },
-        errorMessage: 'Description must less than 2000 characters.',
-      },
+  schema[`${prefix}name`] = {
+    in: ['body'],
+    trim: true,
+    exists: {
+      options: { checkFalsy: true },
+      errorMessage: 'Software name is required.',
     },
-    'version': {
-      in: ['body'],
-      isString: {
-        errorMessage: 'Version must be a string.',
-      },
-      isLength: {
-        options: { max: 100 },
-        errorMessage: 'Version must less than 100 characters.',
-      },
+    isString: {
+      errorMessage: 'Software name must be a string.',
     },
-    'branch': {
-      in: ['body'],
-      isString: {
-        errorMessage: 'Branch must be a string.',
-      },
-      isLength: {
-        options: { max: 100 },
-        errorMessage: 'Branch must less than 100 characters.',
-      },
+    isLength: {
+      options: [{ min: 2, max: 40 }],
+      errorMessage: 'Name must be 2-40 characters.',
     },
-    'owner': {
-      in: ['body'],
-      exists: {
-        options: { checkFalsy: true },
-        errorMessage: 'Owner is required.',
-      },
-      isString: {
-        errorMessage: 'Owner must be a string.',
-      },
-      isLength: {
-        options: [{ min: 2, max: 80 }],
-        errorMessage: 'Owner must be 2-80 characters.',
-      },
-      // TODO: Need do validate against FORG!?
+  };
+  schema[`${prefix}desc`] = {
+    in: ['body'],
+    isString: {
+      errorMessage: 'Description must be a string.',
     },
-    'engineer': {
-      in: ['body'],
-      isString: {
-        errorMessage: 'Engineer must be a string.',
-      },
-      isLength: {
-        options: { max: 30 },
-        errorMessage: 'Engineer must less than 30 characters.',
-      },
-      // TODO: Need to validate against FORG!?
+
+    isLength: {
+      options: { max: 2000 },
+      errorMessage: 'Description must less than 2000 characters.',
     },
-    'levelOfCare': {
-      in: ['body'],
-      exists: {
-        errorMessage: 'Level of care is required.',
-      },
-      isIn: {
-        options: [CARE_LEVELS],
-        errorMessage: 'Level of care must be one of ' + CARE_LEVELS.join(', '),
-      },
+  };
+  schema[`${prefix}version`] = {
+    in: ['body'],
+    isString: {
+      errorMessage: 'Version must be a string.',
     },
-    'status': {
-      in: ['body'],
-      exists: {
-        errorMessage: 'Status is required.',
-      },
-      isIn: {
-        options: [SOFTWARE_STATUSES],
-        errorMessage: 'Status must be one of ' + SOFTWARE_STATUSES.join(', '),
-      },
+    isLength: {
+      options: { max: 100 },
+      errorMessage: 'Version must less than 100 characters.',
     },
-    'statusDate': {
-      in: ['body'],
-      exists: {
-        errorMessage: 'Status date is required.',
-      },
-      matches: {
-        options: /\d{4}-\d{2}-\d{2}/,
-        errorMessage: 'Status date must be a date.',
-      },
-      custom: {
-        options: (v: {}) => Number.isFinite(Date.parse(String(v))),
-        errorMessage: 'Status date must be a valid date.',
-      },
+  };
+  schema[`${prefix}branch`] = {
+    in: ['body'],
+    isString: {
+      errorMessage: 'Branch must be a string.',
     },
-    'platforms': {
-      in: ['body'],
-      isString: {
-        errorMessage: 'Platforms must be a string.',
-      },
-      isLength: {
-        options: { max: 100 },
-        errorMessage: 'Platforms must less than 100 characters.',
-      },
+    isLength: {
+      options: { max: 100 },
+      errorMessage: 'Branch must less than 100 characters.',
     },
-    'descDocLoc': {
-      in: ['body'],
-      isString: {
-        errorMessage: 'Description document location must be a string.',
-      },
+  };
+  schema[`${prefix}owner`] = {
+    in: ['body'],
+    exists: {
+      options: { checkFalsy: true },
+      errorMessage: 'Owner is required.',
     },
-    'designDocLoc': {
-      in: ['body'],
-      isString: {
-        errorMessage: 'Design description document location must be a string.',
-      },
+    isString: {
+      errorMessage: 'Owner must be a string.',
     },
-    'vvProcLoc': {
-      in: ['body'],
-      isArray: {
-        errorMessage: 'V&V procedure location must be an array of strings.',
-      },
+    isLength: {
+      options: [{ min: 2, max: 80 }],
+      errorMessage: 'Owner must be 2-80 characters.',
     },
-    'vvProcLoc.*': {
-      in: ['body'],
-      isString: {
-        errorMessage: 'V&V procedure location must be a string.',
-      },
+    // TODO: Need do validate against FORG!?
+  };
+  schema[`${prefix}engineer`] = {
+    in: ['body'],
+    isString: {
+      errorMessage: 'Engineer must be a string.',
     },
-    'vvResultsLoc': {
-      in: ['body'],
-      custom: {
-        options: isVvResultsLoc,
-        errorMessage: 'V&V results location must be an array of strings.',
-      },
+    isLength: {
+      options: { max: 30 },
+      errorMessage: 'Engineer must less than 30 characters.',
     },
-    'versionControl': {
-      in: ['body'],
-      isString: {
-        errorMessage: 'Version controls must be a string',
-      },
-      isIn: {
-        // Empty string is allowed, but is not is the standard list.
-        options: [[''].concat(VERSION_CONTROL_SYSTEMS)],
-        errorMessage: 'Version control must be one of ' + VERSION_CONTROL_SYSTEMS.join(', '),
-      },
+    // TODO: Need to validate against FORG!?
+  };
+  schema[`${prefix}levelOfCare`] = {
+    in: ['body'],
+    exists: {
+      errorMessage: 'Level of care is required.',
     },
-    'versionControlLoc': {
-      in: ['body'],
-      isString: {
-        errorMessage: 'Version control location must be a string.',
-      },
+    isIn: {
+      options: [CARE_LEVELS],
+      errorMessage: 'Level of care must be one of ' + CARE_LEVELS.join(', '),
     },
-    'previous': {
-      in: ['body'],
-      optional: true,
-      isMongoId: {
-        errorMessage: 'Previous must be a UUID.',
-      },
+  };
+  schema[`${prefix}status`] = {
+    in: ['body'],
+    exists: {
+      errorMessage: 'Status is required.',
     },
-    'comment': {
-      in: ['body'],
-      isString: {
-        errorMessage: 'Comment must be a string.',
-      },
-      // isAscii: {
-      //   errorMessage: 'Comment must be ASCII characters.',
-      // },
-      isLength: {
-        options: { max: 2000 },
-        errorMessage: 'Comment must be less than 2000 characters.',
-      },
+    isIn: {
+      options: [SOFTWARE_STATUSES],
+      errorMessage: 'Status must be one of ' + SOFTWARE_STATUSES.join(', '),
     },
-  }));
+  };
+  schema[`${prefix}statusDate`] = {
+    in: ['body'],
+    exists: {
+      errorMessage: 'Status date is required.',
+    },
+    matches: {
+      options: /\d{4}-\d{2}-\d{2}/,
+      errorMessage: 'Status date must be a date.',
+    },
+    custom: {
+      options: (v: {}) => Number.isFinite(Date.parse(String(v))),
+      errorMessage: 'Status date must be a valid date.',
+    },
+  };
+  schema[`${prefix}platforms`] = {
+    in: ['body'],
+    isString: {
+      errorMessage: 'Platforms must be a string.',
+    },
+    isLength: {
+      options: { max: 100 },
+      errorMessage: 'Platforms must less than 100 characters.',
+    },
+  };
+  schema[`${prefix}descDocLoc`] = {
+    in: ['body'],
+    isString: {
+      errorMessage: 'Description document location must be a string.',
+    },
+  },
+  schema[`${prefix}designDocLoc`] = {
+    in: ['body'],
+    isString: {
+      errorMessage: 'Design description document location must be a string.',
+    },
+  };
+  schema[`${prefix}vvProcLoc`] = {
+    in: ['body'],
+    isArray: {
+      errorMessage: 'V&V procedure location must be an array of strings.',
+    },
+  };
+  schema[`${prefix}vvProcLoc.*`] = {
+    in: ['body'],
+    isString: {
+      errorMessage: 'V&V procedure location must be a string.',
+    },
+  };
+  schema[`${prefix}vvResultsLoc`] = {
+    in: ['body'],
+    custom: {
+      options: isVvResultsLoc,
+      errorMessage: 'V&V results location must be an array of strings.',
+    },
+  };
+  schema[`${prefix}versionControl`] = {
+    in: ['body'],
+    isString: {
+      errorMessage: 'Version controls must be a string',
+    },
+    isIn: {
+      // Empty string is allowed, but is not is the standard list.
+      options: [[''].concat(VERSION_CONTROL_SYSTEMS)],
+      errorMessage: 'Version control must be one of ' + VERSION_CONTROL_SYSTEMS.join(', '),
+    },
+  };
+  schema[`${prefix}versionControlLoc`] = {
+    in: ['body'],
+    isString: {
+      errorMessage: 'Version control location must be a string.',
+    },
+  };
+  schema[`${prefix}previous`] = {
+    in: ['body'],
+    optional: true,
+    isMongoId: {
+      errorMessage: 'Previous must be a UUID.',
+    },
+  };
+  schema[`${prefix}comment`] = {
+    in: ['body'],
+    isString: {
+      errorMessage: 'Comment must be a string.',
+    },
+    // isAscii: {
+    //   errorMessage: 'Comment must be ASCII characters.',
+    // },
+    isLength: {
+      options: { max: 2000 },
+      errorMessage: 'Comment must be less than 2000 characters.',
+    },
+  };
+  return validate(req, checkSchema(schema));
 }
 
 export async function checkNewSWInstall(req: express.Request) {

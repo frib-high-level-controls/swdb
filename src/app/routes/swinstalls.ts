@@ -217,7 +217,7 @@ router.post('/api/v1/inst', auth.ensureAuthenticated, catchAll(async (req, res) 
     return;
   }
 
-  const wfResults = await CustomValidators.noInstSwUnlessSwIsReadyForInstall(req);
+  const wfResults = await CustomValidators.noInstSwUnlessSwIsReadyForInstall(false, req);
   if (wfResults.error) {
     debug('Workflow validation errors ' + JSON.stringify(wfResults));
     res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults.data));
@@ -249,8 +249,8 @@ router.put('/api/v1/inst/:id', auth.ensureAuthenticated, catchAll(async (req, re
   // setup an array of validations to perfrom
   // save the results in wfResultsArr, and errors in errors.
   const wfResultArr = await Promise.all([
-    CustomValidators.noInstSwChangeUnlessReadyForInstall(req),
-    CustomValidators.noInstSwUnlessSwIsReadyForInstall(req),
+    CustomValidators.noInstSwChangeUnlessReadyForInstall(false, req),
+    CustomValidators.noInstSwUnlessSwIsReadyForInstall(false, req),
   ]);
 
   const errors = wfResultArr.reduce<IValResult[]>((p, r, idx) => {

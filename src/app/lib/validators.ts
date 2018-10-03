@@ -169,7 +169,7 @@ export class CustomValidators {
    * @returns Promise<IValResult>
    */
   public static swNoVerBranchChgIfStatusRdyInstall =
-    async (req: express.Request): Promise<IValResult> => {
+    async (v2: boolean, req: express.Request): Promise<IValResult> => {
     // get the id of the record which is wanting update
     // go get the existing record
     debug('Checking wfRuler1');
@@ -196,8 +196,9 @@ export class CustomValidators {
       if (queryPromise.status === 'RDY_INST') {
         // if the version or branch have changed
         // debug('swUpdateWorkflowValidation req: ' + JSON.stringify(req.body));
-        if ((('version' in req.body) || ('branch' in req.body)) &&
-         ((req.body.version !== queryPromise.version) || (req.body.branch !== queryPromise.branch))) {
+        const data = v2 ? req.body.data : req.body;
+        if ((('version' in data) || ('branch' in data)) &&
+          ((data.version !== queryPromise.version) || (data.branch !== queryPromise.branch))) {
           // debug('swUpdateWorkflowValidation version and/or branch changed');
           const status = 'RDY_INST';
           return {
@@ -233,7 +234,7 @@ export class CustomValidators {
    * @returns Promise<IValResult>
    */
   public static noInstSwChangeUnlessReadyForInstall =
-    async (req: express.Request): Promise<IValResult> => {
+    async (v2: boolean, req: express.Request): Promise<IValResult> => {
     // The installation sw field cxan only change in the Ready for install state
     // get the id of the record which is wanting update
     // go get the existing record
@@ -259,9 +260,10 @@ export class CustomValidators {
           data: 'Rule2 record id not found ' + id,
         };
       }
-      if ((req.body.software) &&
-        (JSON.stringify(req.body.software) !== JSON.stringify(queryPromise.software))) {
-        debug('software from ' + JSON.stringify(queryPromise.software) + ' to ' + JSON.stringify(req.body.software));
+      const data = v2 ? req.body.data : req.body;
+      if ((data.software) &&
+        (JSON.stringify(data.software) !== JSON.stringify(queryPromise.software))) {
+        debug('software from ' + JSON.stringify(queryPromise.software) + ' to ' + JSON.stringify(data.software));
         if (queryPromise.status === 'RDY_INST') {
           // req is changing software, and in in Ready for installation
           return {
@@ -298,14 +300,15 @@ export class CustomValidators {
    * @returns Promise<IValResult>
    */
   public static noInstSwUnlessSwIsReadyForInstall =
-    async (req: express.Request): Promise<IValResult> => {
+    async (v2: boolean, req: express.Request): Promise<IValResult> => {
     // here the req passed is either a new installation or an update.
     // the software listed in the request must have state Ready for install.
 
     // check that the id is parsable
     debug('Checking wfRule3');
-    if (req.body.software) {
-      const id = req.body.software;
+    const data = v2 ? req.body.data : req.body;
+    if (data.software) {
+      const id = data.software;
       try {
         const idObj = new mongoose.mongo.ObjectId(id);
         debug('id:' + idObj);
@@ -366,7 +369,7 @@ export class CustomValidators {
    *
    * @returns Promise<IValResult>
    */
-  public static noSwStateChgIfReferringInst = async (req: express.Request): Promise<IValResult> => {
+  public static noSwStateChgIfReferringInst = async (v2: boolean, req: express.Request): Promise<IValResult> => {
     // check that the id is parsable
     debug('Checking wfRule4');
     // go get the existing record
@@ -390,7 +393,8 @@ export class CustomValidators {
           data: 'Record id not found' + id,
         };
       }
-      if (queryPromise.status === req.body.status) {
+      const data = v2 ? req.body.data : req.body;
+      if (queryPromise.status === data.status) {
         return {
           error: false,
           data: 'No status changed.',
