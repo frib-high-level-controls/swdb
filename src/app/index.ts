@@ -25,8 +25,6 @@ import promises = require('./shared/promises');
 import status = require('./shared/status');
 import tasks = require('./shared/tasks');
 
-import * as legacy from './lib/legacy';
-
 import * as dataproxy from './routes/dataproxy';
 import * as metadata from './routes/metadata';
 import * as softwares from './routes/softwares';
@@ -450,9 +448,6 @@ async function doStart(): Promise<express.Application> {
 
   // no handler found for request (404)
   app.use(handlers.notFoundHandler());
-
-  // legacy error handler (non-template)
-  app.use(legacy.requestErrorHandler);
 
   // error handlers
   app.use(handlers.requestErrorHandler());
