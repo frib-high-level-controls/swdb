@@ -172,7 +172,7 @@ class SoftwareService {
   public getSwById(swId: string) {
     if (this.swData) {
       return this.swData.filter((item: webapi.ISwdb) => {
-        return item._id === swId;
+        return item.id === swId;
       });
     }
     return [];
@@ -187,7 +187,7 @@ class SoftwareService {
     const swObj = swIds.map((item, idx, array) => {
       if (this.swData) {
         const node = this.swData.filter((elem) => {
-          return elem._id === item;
+          return elem.id === item;
         });
         return node;
       } else {
@@ -238,7 +238,7 @@ app.service('instService', ($http: ng.IHttpService) => {
       getInstById: (instId: string) => {
         if (instData) {
           return instData.filter( (item, idx) => {
-            if (item._id === instId) {
+            if (item.id === instId) {
               return true;
             } else {
               //

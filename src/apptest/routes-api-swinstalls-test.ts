@@ -128,7 +128,7 @@ describe('Software Installation API Specification', () => {
             res = JSON.parse(res.text);
             for (let i = 0, iLen = res.length; i < iLen; i++) {
               if (res[i].host === 'Header Test host') {
-                wrapper.origId = res[i]._id;
+                wrapper.origId = res[i].id;
               }
             }
             done();
@@ -145,9 +145,9 @@ describe('Software Installation API Specification', () => {
             done(err);
           } else {
             debug('res.body' + JSON.stringify(res.body));
-            expect(res.body).to.have.property('_id');
+            expect(res.body).to.have.property('id');
             expect(res.body.host).to.equal('Header Test host');
-            expect(res.body._id).to.match(/.{24}/);
+            expect(res.body.id).to.match(/.{24}/);
             done();
           }
         });
@@ -425,7 +425,7 @@ describe('Software Installation API Specification', () => {
             for (let i = 0, iLen = res.length; i < iLen; i++) {
               if (res[i].host === 'Test host' &&
                 res[i].software === '5947589458a6aa0face9a512') {
-                wrapper.origId = res[i]._id;
+                wrapper.origId = res[i].id;
               }
             }
             done();
@@ -441,9 +441,9 @@ describe('Software Installation API Specification', () => {
           if (err) {
             done(err);
           } else {
-            expect(res.body).to.have.property('_id');
+            expect(res.body).to.have.property('id');
             expect(res.body.host).to.equal('Test host');
-            expect(res.body._id).to.match(/.{24}/);
+            expect(res.body.id).to.match(/.{24}/);
             done();
           }
         });
@@ -466,7 +466,7 @@ describe('Software Installation API Specification', () => {
           if (err) {
             done(err);
           } else {
-            expect(res.body).to.have.property('_id');
+            expect(res.body).to.have.property('id');
             expect(res.body.host).to.equal('Test host3');
             done();
           }

@@ -37,7 +37,7 @@ function UpdatePromiseCtrl(
 
   $scope.bckBtnClk =  () => {
     // Go back to details
-    $location.path('/details/' + $scope.formData._id);
+    $location.path('/details/' + $scope.formData.id);
   };
 
   $scope.datePicker = ( () => {
@@ -99,7 +99,7 @@ function UpdatePromiseCtrl(
       if ($scope.engineerSelected && $scope.engineerSelected.item && $scope.engineerSelected.item.uid) {
         $scope.formData.engineer = $scope.engineerSelected.item.uid;
       }
-      const url = basePath + '/api/v1/swdb/' + $scope.formData._id;
+      const url = basePath + '/api/v1/swdb/' + $scope.formData.id;
 
       // update formData lovel of care with enum key
       $scope.formData.levelOfCare = Object.keys($scope.props.LevelOfCareEnum).filter((item) => {

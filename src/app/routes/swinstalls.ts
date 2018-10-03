@@ -47,7 +47,7 @@ export function getRouter(opts?: {}): express.Router {
 // Convert DB Model to Web API
 function toWebAPI(doc: ISWInstall): webapi.Inst {
   return {
-    _id: String(doc._id),
+    id: String(doc._id),
     host: doc.host,
     name: doc.name,
     area: doc.area,

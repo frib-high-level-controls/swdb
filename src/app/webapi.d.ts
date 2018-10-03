@@ -45,7 +45,7 @@ declare namespace webapi {
   }
   
   export interface SWInstall {
-    _id?: string;
+    id?: string;
     host?: string;
     name?: string;
     area?: string[];
@@ -61,7 +61,7 @@ declare namespace webapi {
   export type Inst = SWInstall
 
   export interface Software {
-    _id?: string; // TODO: rename to 'id'?
+    id?: string;
     name: string;
     desc: string;
     branch: string;

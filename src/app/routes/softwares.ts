@@ -55,7 +55,7 @@ export function getRouter(opts?: {}): express.Router {
 // Convert DB Model to Web API
 function toWebAPI(doc: ISoftware): webapi.Software {
   return {
-    _id: String(doc._id),
+    id: String(doc._id),
     name: doc.name,
     version: doc.version,
     branch: doc.branch,

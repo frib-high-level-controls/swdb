@@ -50,7 +50,7 @@ function InstUpdatePromiseCtrl(
 
   $scope.bckBtnClk =  () => {
     // Go back to details
-    $location.path('/inst/details/' + $scope.formData._id);
+    $location.path('/inst/details/' + $scope.formData.id);
   };
 
   $scope.usrBtnClk =  () => {
@@ -87,7 +87,7 @@ function InstUpdatePromiseCtrl(
     }
 
     if ($scope.inputForm.$valid) {
-      const url = basePath + '/api/v1/inst/' + $scope.formData._id;
+      const url = basePath + '/api/v1/inst/' + $scope.formData.id;
 
       $http({
         method: 'PUT',
@@ -153,7 +153,7 @@ function InstUpdatePromiseCtrl(
 
 
   $scope.swSelect =  ($item) => {
-    $scope.formData.software = $item._id;
+    $scope.formData.software = $item.id;
   };
 
   // refresh the service list

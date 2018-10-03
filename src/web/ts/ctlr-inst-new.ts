@@ -38,7 +38,7 @@ function InstNewPromiseCtrl(
   };
 
   $scope.swSelect =  ($item) => {
-    $scope.formData.software = $item._id;
+    $scope.formData.software = $item.id;
   };
 
   $scope.datePicker = ( () => {

@@ -228,7 +228,7 @@ describe('Software API Specification', () => {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
             if (result[i].name === 'Header Test Record') {
-              wrapper.origId = result[i]._id;
+              wrapper.origId = result[i].id;
             }
           }
           done();
@@ -244,9 +244,9 @@ describe('Software API Specification', () => {
         if (err) {
           done(err);
         } else {
-          expect(res.body).to.have.property('_id');
+          expect(res.body).to.have.property('id');
           expect(res.body.name).to.equal('Header Test Record');
-          expect(res.body._id).to.match(/.{24}/);
+          expect(res.body.id).to.match(/.{24}/);
           done();
         }
       });
@@ -683,7 +683,7 @@ describe('Software API Specification', () => {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
             if (result[i].name === 'Test Record') {
-              wrapper.origId = result[i]._id;
+              wrapper.origId = result[i].id;
             }
           }
           done();
@@ -699,9 +699,9 @@ describe('Software API Specification', () => {
         if (err) {
           done(err);
         } else {
-          expect(res.body).to.have.property('_id');
+          expect(res.body).to.have.property('id');
           expect(res.body.name).to.equal('Test Record');
-          expect(res.body._id).to.match(/.{24}/);
+          expect(res.body.id).to.match(/.{24}/);
           done();
         }
       });
@@ -749,7 +749,7 @@ describe('Software API Specification', () => {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
             if (result[i].name === 'Desc Test Record') {
-              wrapper.origId = result[i]._id;
+              wrapper.origId = result[i].id;
             }
           }
           done();
@@ -765,9 +765,9 @@ describe('Software API Specification', () => {
         if (err) {
           done(err);
         } else {
-          expect(res.body).to.have.property('_id');
+          expect(res.body).to.have.property('id');
           expect(res.body.name).to.equal('Desc Test Record');
-          expect(res.body._id).to.match(/.{24}/);
+          expect(res.body.id).to.match(/.{24}/);
           done();
         }
       });
@@ -822,7 +822,7 @@ describe('Software API Specification', () => {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
             if (result[i].name === 'Engineer Test Record') {
-              wrapper.origId = result[i]._id;
+              wrapper.origId = result[i].id;
             }
           }
           done();
@@ -838,10 +838,10 @@ describe('Software API Specification', () => {
         if (err) {
           done(err);
         } else {
-          expect(res.body).to.have.property('_id');
+          expect(res.body).to.have.property('id');
           expect(res.body.name).to.equal('Engineer Test Record');
           expect(res.body.engineer).to.equal('Any Engineer');
-          expect(res.body._id).to.match(/.{24}/);
+          expect(res.body.id).to.match(/.{24}/);
           done();
         }
       });
@@ -896,7 +896,7 @@ describe('Software API Specification', () => {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
             if (result[i].name === 'versionControlLoc Test Record') {
-              wrapper.origId = result[i]._id;
+              wrapper.origId = result[i].id;
             }
           }
           done();
@@ -912,7 +912,7 @@ describe('Software API Specification', () => {
         if (err) {
           done(err);
         } else {
-          expect(res.body).to.have.property('_id');
+          expect(res.body).to.have.property('id');
           expect(res.body.name).to.equal('versionControlLoc Test Record');
           expect(res.body.versionControlLoc).to.equal('http://www.somehost/some-path/some-file');
           done();
@@ -969,7 +969,7 @@ describe('Software API Specification', () => {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
             if (result[i].name === 'designDocLoc Test Record') {
-              wrapper.origId = result[i]._id;
+              wrapper.origId = result[i].id;
             }
           }
           done();
@@ -985,7 +985,7 @@ describe('Software API Specification', () => {
         if (err) {
           done(err);
         } else {
-          expect(res.body).to.have.property('_id');
+          expect(res.body).to.have.property('id');
           expect(res.body.name).to.equal('designDocLoc Test Record');
           expect(res.body.designDocLoc).to.equal('http://www.somehost/some-path/some-file');
           done();
@@ -1042,7 +1042,7 @@ describe('Software API Specification', () => {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
             if (result[i].name === 'descDocLoc Test Record') {
-              wrapper.origId = result[i]._id;
+              wrapper.origId = result[i].id;
             }
           }
           done();
@@ -1058,7 +1058,7 @@ describe('Software API Specification', () => {
         if (err) {
           done(err);
         } else {
-          expect(res.body).to.have.property('_id');
+          expect(res.body).to.have.property('id');
           expect(res.body.name).to.equal('descDocLoc Test Record');
           expect(res.body.descDocLoc).to.equal('http://www.somehost/some-path/some-file');
           done();
@@ -1115,7 +1115,7 @@ describe('Software API Specification', () => {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
             if (result[i].name === 'vvProcLoc Test Record') {
-              wrapper.origId = result[i]._id;
+              wrapper.origId = result[i].id;
             }
           }
           done();
@@ -1132,7 +1132,7 @@ describe('Software API Specification', () => {
           done(err);
         } else {
           debug('res: ' + JSON.stringify(res.body));
-          expect(res.body).to.have.property('_id');
+          expect(res.body).to.have.property('id');
           expect(res.body.name).to.equal('vvProcLoc Test Record');
           expect(JSON.stringify(res.body.vvProcLoc))
             .to.equal('["http://www.somehost/some-path/some-file","http://www.somehost/some-path/some-file2"]');
@@ -1190,7 +1190,7 @@ describe('Software API Specification', () => {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
             if (result[i].name === 'vvResultsLoc Test Record') {
-              wrapper.origId = result[i]._id;
+              wrapper.origId = result[i].id;
             }
           }
           done();
@@ -1206,7 +1206,7 @@ describe('Software API Specification', () => {
         if (err) {
           done(err);
         } else {
-          expect(res.body).to.have.property('_id');
+          expect(res.body).to.have.property('id');
           expect(res.body.name).to.equal('vvResultsLoc Test Record');
           expect(JSON.stringify(res.body.vvResultsLoc))
             .to.equal('["http://www.somehost/some-path/some-file3","http://www.somehost/some-path/some-file4"]');
@@ -1264,7 +1264,7 @@ describe('Software API Specification', () => {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
             if (result[i].name === 'branch Test Record') {
-              wrapper.origId = result[i]._id;
+              wrapper.origId = result[i].id;
             }
           }
           done();
@@ -1280,7 +1280,7 @@ describe('Software API Specification', () => {
         if (err) {
           done(err);
         } else {
-          expect(res.body).to.have.property('_id');
+          expect(res.body).to.have.property('id');
           expect(res.body.name).to.equal('branch Test Record');
           expect(res.body.branch).to.equal('New branch');
           done();
@@ -1337,7 +1337,7 @@ describe('Software API Specification', () => {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
             if (result[i].name === 'versionControl Test Record') {
-              wrapper.origId = result[i]._id;
+              wrapper.origId = result[i].id;
             }
           }
           done();
@@ -1353,7 +1353,7 @@ describe('Software API Specification', () => {
         if (err) {
           done(err);
         } else {
-          expect(res.body).to.have.property('_id');
+          expect(res.body).to.have.property('id');
           expect(res.body.name).to.equal('versionControl Test Record');
           expect(res.body.versionControl).to.equal('GIT');
           done();
@@ -1411,7 +1411,7 @@ describe('Software API Specification', () => {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
             if (result[i].name === 'previous Test Record') {
-              wrapper.origId = result[i]._id;
+              wrapper.origId = result[i].id;
             }
           }
           done();
@@ -1427,7 +1427,7 @@ describe('Software API Specification', () => {
         if (err) {
           done(err);
         } else {
-          expect(res.body).to.have.property('_id');
+          expect(res.body).to.have.property('id');
           expect(res.body.name).to.equal('previous Test Record');
           expect(res.body.previous).to.equal('badbeefbadbeefbadbeefbad');
           done();
@@ -1450,7 +1450,7 @@ describe('Software API Specification', () => {
           const result = JSON.parse(res.text);
           for (let i = 0, iLen = result.length; i < iLen; i++) {
             if (result[i].name === 'Test Record2') {
-              wrapper.origId = result[i]._id;
+              wrapper.origId = result[i].id;
             }
           }
           done();
@@ -1500,7 +1500,7 @@ describe('Software API Specification', () => {
         if (err) {
           done(err);
         } else {
-          expect(res.body).to.have.property('_id');
+          expect(res.body).to.have.property('id');
           expect(res.body.name).to.equal('Test Record3');
           done();
         }
@@ -1556,7 +1556,7 @@ describe('Software API Specification', () => {
               const result = JSON.parse(res.text);
               for (let i = 0, iLen = result.length; i < iLen; i++) {
                 if (result[i].name === 'Rule 1 Test Record') {
-                  wrapper.origId = result[i]._id;
+                  wrapper.origId = result[i].id;
                 }
               }
               done();
@@ -1572,7 +1572,7 @@ describe('Software API Specification', () => {
             if (err) {
               done(err);
             } else {
-              expect(res.body).to.have.property('_id');
+              expect(res.body).to.have.property('id');
               expect(res.body.name).to.equal('Rule 1 Test Record');
               done();
             }
@@ -1656,7 +1656,7 @@ describe('Software API Specification', () => {
             if (err) {
               done(err);
             } else {
-              expect(res.body).to.have.property('_id');
+              expect(res.body).to.have.property('id');
               expect(res.body.status).to.equal('RDY_INST');
               done();
             }
@@ -1747,7 +1747,7 @@ describe('Software API Specification', () => {
               const result = JSON.parse(res.text);
               for (let i = 0, iLen = result.length; i < iLen; i++) {
                 if (result[i].name === 'Rule 4 Test Record') {
-                  wrapper.origId = result[i]._id;
+                  wrapper.origId = result[i].id;
                 }
               }
               done();
@@ -1763,7 +1763,7 @@ describe('Software API Specification', () => {
             if (err) {
               done(err);
             } else {
-              expect(res.body).to.have.property('_id');
+              expect(res.body).to.have.property('id');
               expect(res.body.name).to.equal('Rule 4 Test Record');
               done();
             }
