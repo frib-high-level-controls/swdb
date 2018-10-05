@@ -62,8 +62,6 @@ function InstNewPromiseCtrl(
   })();
 
   $scope.processForm =  () => {
-    //$scope.formData.slots = $scope.slotsSelected;
-
     // convert enum value to enum key
     $scope.formData.status = Object.keys($scope.props.InstStatusEnum).filter(
        (item: string) => {

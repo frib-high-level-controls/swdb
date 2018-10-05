@@ -1,6 +1,6 @@
 {
     "extends": "tslint:recommended",
-    "defaultSeverity": "warning",
+    "defaultSeverity": "error",
     "rules": {
         "quotemark": [ true, "single", "avoid-escape" ],
         "object-literal-sort-keys": false,

@@ -43,7 +43,7 @@ declare namespace webapi {
     by: string;
     paths: Path[];
   }
-  
+
   export interface SWInstall {
     id?: string;
     host: string;
@@ -57,7 +57,7 @@ declare namespace webapi {
     drr: string;
   }
   // legacy type alias
-  export type Inst = SWInstall
+  export type Inst = SWInstall;
 
   export interface Software {
     id?: string;

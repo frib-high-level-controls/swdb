@@ -56,8 +56,8 @@ export function isArea(val: string, opts: { req: express.Request }) {
   // Must be an array of strings
   const result: string[] = [];
   if (Array.isArray(val)) {
-    //debug('body is ' + cJSON.stringify(opts.req.body, null, 2));
-    //debug('val is ' + cJSON.stringify(val, null, 2));
+    // debug('body is ' + cJSON.stringify(opts.req.body, null, 2));
+    // debug('val is ' + cJSON.stringify(val, null, 2));
     val.forEach((element, idx, arr) => {
       const thisResult = validate.isString(element);
       // debug('validation for element: ' + thisResult);
@@ -79,18 +79,18 @@ export function isVvProcLoc(val: {}) {
    */
   const result: string[] = [];
   if (Array.isArray(val)) {
-    //debug('body is ' + cJSON.stringify(opts.req.body, null, 2));
+    // debug('body is ' + cJSON.stringify(opts.req.body, null, 2));
     val.forEach((element: string, idx: number, arr: any[]) => {
-      //debug('checking element ' + element);
-      //debug('checking element(by index) ' + opts.req.body.vvProcLoc[idx]);
+      // debug('checking element ' + element);
+      // debug('checking element(by index) ' + opts.req.body.vvProcLoc[idx]);
       const thisResult = validate.isString(element);
       if (!thisResult) {
         // record all failed fields
         result.push(String(element) + ' must be a string');
       }
     });
-    //debug('vals: ' + JSON.stringify(result, null, 2));
-    //debug('#vals: ' + result.length);
+    // debug('vals: ' + JSON.stringify(result, null, 2));
+    // debug('#vals: ' + result.length);
     if (result.length !== 0) {
       return false; // Case 2
     } else {
@@ -108,18 +108,18 @@ export function isVvResultsLoc(val: string, opts: { req: express.Request }) {
     */
   const result: string[] = [];
   if (Array.isArray(val)) {
-    //debug('body is ' + cJSON.stringify(opts.req.body, null, 2));
+    // debug('body is ' + cJSON.stringify(opts.req.body, null, 2));
     val.forEach((element: string, idx: number, arr: any[]) => {
-      //debug('checking element ' + element);
-      //debug('checking element(by index) ' + opts.req.body.vvResultsLoc[idx]);
+      // debug('checking element ' + element);
+      // debug('checking element(by index) ' + opts.req.body.vvResultsLoc[idx]);
       const thisResult = validate.isString(element);
       if (!thisResult) {
         // record all failed fields
         result.push(String(element) + ' must be a string');
       }
     });
-    //debug('vals: ' + JSON.stringify(result, null, 2));
-    //debug('#vals: ' + result.length);
+    // debug('vals: ' + JSON.stringify(result, null, 2));
+    // debug('#vals: ' + result.length);
     if (result.length !== 0) {
       return false; // Case 2
     } else {
