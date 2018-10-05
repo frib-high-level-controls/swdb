@@ -102,7 +102,7 @@ describe('Software Installation API Specification', () => {
         vvResultsLoc: [],
         vvApprovalDate: '2017-04-21',
         software: '5947589458a6aa0face9a512',
-        drrs: '',
+        drr: '',
       })
       .expect(201)
       .end(done);
@@ -122,7 +122,7 @@ describe('Software Installation API Specification', () => {
         software: '5947589458a6aa0face9a512',
         vvResultsLoc: [],
         vvApprovalDate: '',
-        drrs: '',
+        drr: '',
       })
       .expect(201)
       .end(done);
@@ -180,7 +180,7 @@ describe('Software Installation API Specification', () => {
           software: '5947589458a6aa0face9a512',
           vvResultsLoc: [],
           vvApprovalDate: '',
-          drrs: '',
+          drr: '',
         })
         .expect(200)
         .end((err, result) => {
@@ -214,7 +214,7 @@ describe('Software Installation API Specification', () => {
           software: '5947589458a6aa0face9a512',
           vvResultsLoc: [],
           vvApprovalDate: '',
-          drrs: '',
+          drr: '',
         })
         .expect(201)
         .end((err: Error, result) => {
@@ -242,7 +242,7 @@ describe('Software Installation API Specification', () => {
           software: '5947589458a6aa0face9a512',
           vvResultsLoc: [],
           vvApprovalDate: '',
-          drrs: '',
+          drr: '',
         })
         .expect(200)
         .end((err: Error, result) => {
@@ -267,7 +267,7 @@ describe('Software Installation API Specification', () => {
           software: '5947589458a6aa0face9a512',
           vvResultsLoc: [],
           vvApprovalDate: '',
-          drrs: '',
+          drr: '',
         })
         .expect(200)
         .end((err: Error, result) => {
@@ -292,7 +292,7 @@ describe('Software Installation API Specification', () => {
           software: '5947589458a6aa0face9a512',
           vvResultsLoc: [],
           vvApprovalDate: '',
-          drrs: '',
+          drr: '',
         })
         .expect(200)
         .end((err: Error, result) => {
@@ -317,7 +317,7 @@ describe('Software Installation API Specification', () => {
           software: '5947589458a6aa0face9a512',
           vvResultsLoc: [],
           vvApprovalDate: '',
-          drrs: '',
+          drr: '',
         })
         .expect(200)
         .end((err: Error, result) => {
@@ -342,7 +342,7 @@ describe('Software Installation API Specification', () => {
           software: '5947589458a6aa0face9a512',
           vvResultsLoc: [],
           vvApprovalDate: '',
-          drrs: '',
+          drr: '',
         })
         .expect(200)
         .end((err: Error, result) => {
@@ -367,7 +367,7 @@ describe('Software Installation API Specification', () => {
           software: '5947589458a6aa0face9a512',
           vvResultsLoc: [],
           vvApprovalDate: '',
-          drrs: '',
+          drr: '',
         })
         .expect(200)
         .end((err: Error, result) => {
@@ -435,7 +435,7 @@ describe('Software Installation API Specification', () => {
         software: 'badbeefbadbeefbadbeefbad',
         vvResultsLoc: [],
         vvApprovalDate: '',
-        drrs: '',
+        drr: '',
       })
       .set('Accept', 'application/json')
       .set('Cookie', cookie)
@@ -463,7 +463,7 @@ describe('Software Installation API Specification', () => {
         software: '5947589458a6aa0face9a512',
         vvResultsLoc: [],
         vvApprovalDate: '',
-        drrs: '',
+        drr: '',
       })
       .set('Accept', 'application/json')
       .set('Cookie', cookie)
@@ -490,7 +490,7 @@ describe('Software Installation API Specification', () => {
         software: '5947589458a6aa0face9a512',
         vvResultsLoc: [],
         vvApprovalDate: '',
-        drrs: '',
+        drr: '',
       })
       .set('Accept', 'application/json')
       .set('Cookie', cookie)
@@ -559,7 +559,7 @@ describe('Software Installation API Specification', () => {
           software: '5947589458a6aa0face9a512',
           vvResultsLoc: [],
           vvApprovalDate: '',
-          drrs: '',
+          drr: '',
         })
         .set('Cookie', cookie)
         .expect(200)
@@ -591,7 +591,7 @@ describe('Software Installation API Specification', () => {
       software: '5947589458a6aa0face9a512',
       vvResultsLoc: [],
       vvApprovalDate: '',
-      drrs: '',
+      drr: '',
     };
 
     // This table lists test requests to make and the expected
@@ -608,8 +608,8 @@ describe('Software Installation API Specification', () => {
       {type: 'GET', data: {software: '5947589458a6aa0face9a512'}, url: '/api/v1/inst/',  status: 200},
       {type: 'PUT', data: {area: ['FE']}, url: '/api/v1/inst/', status: 200},
       {type: 'GET', data: {area: ['FE']}, url: '/api/v1/inst/', status: 200},
-      {type: 'PUT', data: {drrs: 'Test DRR'}, url: '/api/v1/inst/', status: 200},
-      {type: 'GET', data: {drrs: 'Test DRR'}, url: '/api/v1/inst/', status: 200},
+      {type: 'PUT', data: {drr: 'Test DRR'}, url: '/api/v1/inst/', status: 200},
+      {type: 'GET', data: {drr: 'Test DRR'}, url: '/api/v1/inst/', status: 200},
       {type: 'PUT', data: {status: 'RDY_BEAM'}, url: '/api/v1/inst/', status: 200},
       {type: 'GET', data: {status: 'RDY_BEAM'}, url: '/api/v1/inst/', status: 200},
       {type: 'PUT', data: {statusDate: '1997'}, url: '/api/v1/inst/', status: 400},
@@ -745,7 +745,7 @@ describe('Software Installation API Specification', () => {
           software: '5947589458a6aa0face9a512',
           vvResultsLoc: [],
           vvApprovalDate: '',
-          drrs: '',
+          drr: '',
         })
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
@@ -812,7 +812,7 @@ describe('Software Installation API Specification', () => {
           statusDate: '2017-04-21',
           vvResultsLoc: [],
           vvApprovalDate: '',
-          drrs: '',
+          drr: '',
           software: wrapper.swId,
         })
         .set('Cookie', cookie)
@@ -840,7 +840,7 @@ describe('Software Installation API Specification', () => {
           statusDate: '2017-04-21',
           vvResultsLoc: [],
           vvApprovalDate: '',
-          drrs: '',
+          drr: '',
           software: wrapper.swId,
           status: 'RDY_BEAM',
         })
@@ -859,7 +859,7 @@ describe('Software Installation API Specification', () => {
           statusDate: '2017-04-21',
           vvResultsLoc: [],
           vvApprovalDate: '',
-          drrs: '',
+          drr: '',
           status: 'RDY_BEAM',
           software: '5947589458a6aa0face9a512',
         })
@@ -897,7 +897,7 @@ describe('Software Installation API Specification', () => {
           software: '5947589458a6aa0face9a512',
           vvResultsLoc: [],
           vvApprovalDate: '',
-          drrs: '',
+          drr: '',
         })
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
@@ -966,7 +966,7 @@ describe('Software Installation API Specification', () => {
           statusDate: '2017-04-21',
           vvResultsLoc: [],
           vvApprovalDate: '',
-          drrs: '',
+          drr: '',
         })
         .expect(400)
         .expect('Worklow validation errors: "Software field must point to software ' +

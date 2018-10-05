@@ -27,7 +27,7 @@ export interface ISWInstall extends history.IHistory {
   software: ObjectId;
   vvResultsLoc: string[];
   vvApprovalDate?: Date;
-  drrs: string;
+  drr: string;
 }
 
 export interface SWInstall extends ISWInstall, history.Document<SWInstall> {
@@ -86,7 +86,7 @@ const swInstallSchema = new Schema({
     type: Date,
     required: false,
   },
-  drrs: {
+  drr: {
     type: String,
     default: '',
     validate: isString,

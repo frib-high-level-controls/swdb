@@ -187,8 +187,7 @@ function InstNewPromiseCtrl(
     vvResultsLoc: [],
     vvApprovalDate: '',
     software: '',
-    drrs: '',
-    //slots: [],
+    drr: '',
   };
 
   $scope.swdbParams = {
@@ -201,7 +200,6 @@ function InstNewPromiseCtrl(
   $scope.areasSelected = [];
 
   $scope.statusDisplay = 'Ready for install';
-  
 
   $scope.statusDateDisplay = new Date();
 }

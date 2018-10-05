@@ -54,7 +54,7 @@ declare namespace webapi {
     software: string;
     vvResultsLoc: string[];
     vvApprovalDate: string;
-    drrs: string;
+    drr: string;
   }
   // legacy type alias
   export type Inst = SWInstall

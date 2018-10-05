@@ -343,18 +343,19 @@ export async function checkNewSWInstall(v2: boolean, req: express.Request) {
       },
     },
   };
-  schema[`${prefix}drrs`] = {
+  schema[`${prefix}drr`] = {
     in: ['body'],
     isString: {
-      errorMessage: 'DRRs must be a string.',
+      errorMessage: 'DRR must be a string.',
     },
     // isAscii: {
     //   errorMessage: 'DRRs must be ASCII characters.',
     // },
     isLength: {
       options: { max: 30 },
-      errorMessage: 'DRRs must be less than 30 characters.',
+      errorMessage: 'DRR must be less than 30 characters.',
     },
+    // TODO: match to pattern like /DRR\d{2}(-\d)?/
   };
   return validate(req, checkSchema(schema));
 }

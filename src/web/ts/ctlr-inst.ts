@@ -98,7 +98,7 @@ appController.controller('InstListController', function(
       }),
     DTColumnBuilder.newColumn('area')
       .withTitle('Area').withOption('defaultContent', ''),
-    DTColumnBuilder.newColumn('drrs')
+    DTColumnBuilder.newColumn('drr')
       .withTitle('DRR').withOption('defaultContent', ''),
     DTColumnBuilder.newColumn('status')
       .withTitle('Status')

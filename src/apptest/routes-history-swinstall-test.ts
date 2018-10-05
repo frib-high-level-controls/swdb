@@ -71,7 +71,7 @@ describe('Installations history tests suite',  () => {
         software: '5947589458a6aa0face9a512',
         vvResultsLoc: [],
         vvApprovalDate: '',
-        drrs: '',
+        drr: '',
       })
       .expect(201);
 
@@ -104,7 +104,7 @@ describe('Installations history tests suite',  () => {
         software: '5947589458a6aa0face9a512',
         vvResultsLoc: [],
         vvApprovalDate: '',
-        drrs: '',
+        drr: '',
       })
       .end(async (err, result) => {
         // get record id from the returned location and find records that match

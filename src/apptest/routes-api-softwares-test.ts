@@ -1817,7 +1817,7 @@ describe('Software API Specification', () => {
             software: wrapper.origId,
             vvResultsLoc: [],
             vvApprovalDate: '',
-            drrs: '',
+            drr: '',
           })
           .expect(201)
           // .end(done);

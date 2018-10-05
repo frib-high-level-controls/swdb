@@ -56,7 +56,7 @@ function toWebAPI(doc: ISWInstall): webapi.Inst {
     software: doc.software.toHexString(),
     vvResultsLoc: doc.vvResultsLoc,
     vvApprovalDate: doc.vvApprovalDate ? doc.vvApprovalDate.toISOString().split('T')[0] : '',
-    drrs: doc.drrs,
+    drr: doc.drr,
   };
 }
 
@@ -93,8 +93,8 @@ function toModel(data: webapi.SWInstall, doc?: SWInstall): SWInstall {
   } else if (doc.vvApprovalDate) {
     doc.vvApprovalDate = undefined;
   }
-  if (!isEqual(doc.drrs, data.drrs)) {
-    doc.drrs = data.drrs;
+  if (!isEqual(doc.drr, data.drr)) {
+    doc.drr = data.drr;
   }
   return doc;
 }
