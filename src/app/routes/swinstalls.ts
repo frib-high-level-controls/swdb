@@ -22,7 +22,10 @@ import {
 
 import {
   catchAll,
+  ensureAccepts,
+  ensurePackage,
   HttpStatus,
+  pkgErrorDetailFormatter,
   RequestError,
   validationResult,
 } from '../shared/handlers';
@@ -32,8 +35,14 @@ import {
   SWInstall,
 } from '../models/swinstall';
 
+type Request = express.Request;
+type Response = express.Response;
 
+const CREATED = HttpStatus.CREATED;
 const NOT_FOUND = HttpStatus.NOT_FOUND;
+const BAD_REQUEST = HttpStatus.BAD_REQUEST;
+const INTERNAL_SERVER_ERROR = HttpStatus.INTERNAL_SERVER_ERROR;
+
 
 const debug = Debug('swdb:routes:api-software');
 
@@ -100,11 +109,16 @@ function toModel(data: webapi.SWInstall, doc?: SWInstall): SWInstall {
 }
 
 // Create a new record in the backend storage
-async function createDoc(user: string, req: express.Request, res: express.Response): Promise<void> {
-  const doc = await toModel(req.body).saveWithHistory(auth.formatRole(auth.RoleScheme.USR, user));
+async function createDoc(user: string, v2: boolean, req: Request, res: Response): Promise<void> {
+  const doc = await toModel(v2 ? req.body.data : req.body).saveWithHistory(auth.formatRole(auth.RoleScheme.USR, user));
   debug('Created SWInstall: ' + doc._id + ' as ' + user);
   res.location(`${res.locals.basePath || ''}/api/v1/inst/${doc.id}`);
-  res.status(201).json(toWebAPI(doc));
+  if (v2) {
+    const pkg: webapi.Pkg<webapi.SWInstall> = { data: toWebAPI(doc) };
+    res.status(CREATED).json(pkg);
+  } else {
+    res.status(201).json(toWebAPI(doc));
+  }
 }
 
 /**
@@ -124,12 +138,17 @@ async function createDoc(user: string, req: express.Request, res: express.Respon
 //   }
 // }
 
-async function getDocs(req: express.Request, res: express.Response): Promise<void> {
+async function getDocs(v2: boolean, req: Request, res: Response): Promise<void> {
   const id = req.params.id;
   if (!id) {
     // return all items
     const docs = await SWInstall.find().exec();
-    res.json(docs.map(toWebAPI));
+    if (v2) {
+      const pkg: webapi.Pkg<webapi.SWInstall[]> = { data: docs.map(toWebAPI) };
+      res.json(pkg);
+    } else {
+      res.json(docs.map(toWebAPI));
+    }
     return;
   }
   // return specified item
@@ -137,7 +156,12 @@ async function getDocs(req: express.Request, res: express.Response): Promise<voi
   if (!doc) {
     throw new RequestError('Software Install not found', NOT_FOUND);
   }
-  res.json(toWebAPI(doc));
+  if (v2) {
+    const pkg: webapi.Pkg<webapi.SWInstall> = { data: toWebAPI(doc) };
+    res.json(pkg);
+  } else {
+    res.json(toWebAPI(doc));
+  }
 }
 
 /**
@@ -149,7 +173,7 @@ async function getDocs(req: express.Request, res: express.Response): Promise<voi
  * @params req The express Request object
  * @params res The express Response object
  */
-async function getHist(req: express.Request, res: express.Response): Promise<void> {
+async function getHist(v2: boolean, req: Request, res: Response): Promise<void> {
   const id = req.params.id ? String(req.params.id) : null;
   if (!id) {
     throw new Error('Search ID must be provided');
@@ -166,15 +190,34 @@ async function getHist(req: express.Request, res: express.Response): Promise<voi
   debug(`Find SWInstall history for ${id} with limit: ${limit}, 'skip: ${skip}`);
   const updates = await history.Update.find({ rid: models.ObjectId(id) }).sort({at: -1}).limit(limit).skip(skip).exec();
   debug(`Found SWInstall history with length: ${updates.length}`);
-  res.json(updates);
+  if (v2) {
+    const pkg: webapi.Pkg<webapi.Update[]> = {
+      data: updates.map((update) => ({
+        by: update.by,
+        at: update.at.toISOString(),
+        paths: update.paths.map((path) => ({
+          name: path.name,
+          value: path.value,
+        })),
+      })),
+    };
+    res.json(pkg);
+  } else {
+    res.json(updates);
+  }
 }
 
-async function updateDoc(user: string, doc: SWInstall, req: express.Request, res: express.Response): Promise<void> {
+async function updateDoc(user: string, doc: SWInstall, v2: boolean, req: Request, res: Response): Promise<void> {
   const role = auth.formatRole(auth.RoleScheme.USR, user);
-  doc = await toModel(req.body, doc).saveWithHistory(role);
+  doc = await toModel(v2 ? req.body.data : req.body, doc).saveWithHistory(role);
   debug(`Updated SW Install: ${doc._id} as ${user}`);
   res.location(`${res.locals.basePath || ''}/api/v1/inst/${doc.id}`);
-  res.json(toWebAPI(doc));
+  if (v2) {
+    const pkg: webapi.Pkg<webapi.SWInstall> = { data: toWebAPI(doc) };
+    res.json(pkg);
+  } else {
+    res.json(toWebAPI(doc));
+  }
 }
 
 
@@ -201,56 +244,149 @@ async function updateDoc(user: string, doc: SWInstall, req: express.Request, res
 // Handle installation requests
 // for get requests that are not specific return all
 router.get('/api/v1/inst/hist/:id([a-fA-F\\d]{24})', catchAll(async (req, res) => {
-  debug('GET /api/v1/inst/hist/:id request');
-  await getHist(req, res);
+  debug('GET /api/v1/inst/hist/%s request', req.params.id);
+  req.params.v = 'v1';
+  return getSoftwareHistHandler(req, res);
 }));
+
+router.get('/api/v2/swinstall/:id([a-fA-F\\d]{24})/history', ensureAccepts('json'), catchAll(async (req, res) => {
+  debug('GET /api/v2/swinstall/%s/history', req.params.id);
+  req.params.v = 'v2';
+  return getSoftwareHistHandler(req, res);
+}));
+
+const getSoftwareHistHandler = async (req: Request, res: Response) => {
+  const v2 = req.params.v === 'v2';
+  await getHist(v2, req, res);
+};
 
 // for get requests that are specific
 router.get('/api/v1/inst/:id([a-fA-F\\d]{24})', catchAll(async (req, res) => {
-  debug('GET /api/v1/inst/:id request');
-  await getDocs(req, res);
+  debug('GET /api/v1/inst/%s request', req.params.id);
+  req.params.v = 'v1';
+  return getSWInstallHandler(req, res);
 }));
+
+router.get('/api/v2/swinstall/:id([a-fA-F\\d]{24})', ensureAccepts('json'), catchAll(async (req, res) => {
+  debug('GET /api/v2/swinstall/%s', req.params.id);
+  req.params.v = 'v2';
+  return getSWInstallHandler(req, res);
+}));
+
+const getSWInstallHandler = async (req: Request, res: Response) => {
+  const v2 = req.params.v === 'v2';
+  await getDocs(v2, req, res);
+};
 
 // for get requests that are not specific return all
 router.get('/api/v1/inst', catchAll( async (req, res) => {
   debug('GET /api/v1/inst request');
-  await getDocs(req, res);
+  req.params.v = 'v1';
+  return getSWInstallListHandler(req, res);
 }));
+
+router.get('/api/v2/swinstall', ensureAccepts('json'), catchAll( async (req, res) => {
+  debug('GET /api/v2/swinstall');
+  req.params.v = 'v2';
+  return getSWInstallListHandler(req, res);
+}));
+
+const getSWInstallListHandler = async (req: Request, res: Response) => {
+  const v2 = req.params.v === 'v2';
+  await getDocs(v2, req, res);
+};
+
 
 // handle incoming installation post requests
 router.post('/api/v1/inst', auth.ensureAuthenticated, catchAll(async (req, res) => {
   debug('POST /api/v1/inst request');
+  req.params.v = 'v1';
+  return postSWInstallHandler(req, res);
+}));
+
+// tslint:disable:max-line-length
+router.post('/api/v2/swinstall', ensureAccepts('json'), ensurePackage(), auth.ensureAuthc(), catchAll(async (req, res) => {
+  debug('POST /api/v2/swinstall');
+  req.params.v = 'v2';
+  return postSWInstallHandler(req, res);
+}));
+
+const postSWInstallHandler = async (req: Request, res: Response) => {
+  const v2 = req.params.v === 'v2';
 
   const username = auth.getUsername(req);
   if (!username) {
-    res.status(500).send('Ensure authenticated failed');
-    return;
+    if (v2) {
+      throw new RequestError('No username on authenticated request', INTERNAL_SERVER_ERROR);
+    } else {
+      res.status(500).send('Ensure authenticated failed');
+      return;
+    }
   }
 
   // Do validation for  new records
-  await checkNewSWInstall(false, req);
+  await checkNewSWInstall(v2, req);
 
-  const result = validationResult(req, legacy.validationErrorFormatter);
-  if (!result.isEmpty()) {
-    debug('Validation errors: ' + JSON.stringify(result.array()));
-    res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-    return;
+  if (v2) {
+    // TODO: replace with validateAndThrow()
+    const result = validationResult(req, pkgErrorDetailFormatter);
+    if (!result.isEmpty()) {
+      const perror: webapi.PkgError = {
+        code: BAD_REQUEST,
+        message: 'SW Install Validation Error',
+        errors: result.array(),
+      };
+      throw new RequestError(perror.message, perror.code, perror);
+    }
+  } else {
+    const result = validationResult(req, legacy.validationErrorFormatter);
+    if (!result.isEmpty()) {
+      debug('Validation errors: ' + JSON.stringify(result.array()));
+      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+      return;
+    }
   }
 
-  const wfResults = await CustomValidators.noInstSwUnlessSwIsReadyForInstall(false, req);
+  const wfResults = await CustomValidators.noInstSwUnlessSwIsReadyForInstall(v2, req);
   if (wfResults.error) {
-    debug('Workflow validation errors ' + JSON.stringify(wfResults));
-    res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults.data));
-    return;
+    if (v2) {
+      const perror: webapi.PkgError = {
+        code: BAD_REQUEST,
+        message: 'Workflow Validation Error',
+        errors: [{
+          reason: 'WorkflowValidationError',
+          message: wfResults.data,
+          location: 'data', // TODO: more specific location
+        }],
+      };
+      throw new RequestError(perror.message, perror.code, perror);
+    } else {
+      debug('Workflow validation errors ' + JSON.stringify(wfResults));
+      res.status(400).send('Worklow validation errors: ' + JSON.stringify(wfResults.data));
+      return;
+    }
   }
 
-  await createDoc(username, req, res);
-}));
+  await createDoc(username, v2, req, res);
+};
 
 // handle incoming put requests for installation update
 router.put('/api/v1/inst/:id([a-fA-F\\d]{24})', auth.ensureAuthenticated, catchAll(async (req, res) => {
+  debug('PUT /api/v1/inst/%s request', req.params.id);
+  req.params.v = 'v1';
+  return putSWInstallHandler(req, res);
+}));
+
+// tslint:disable:max-line-length
+router.put('/api/v2/swinstall/:id([a-fA-F\\d]{24})', ensureAccepts('json'), ensurePackage(), auth.ensureAuthc(), catchAll(async (req, res) => {
+  debug('PUT /api/v2/swinstall/%s', req.params.id);
+  req.params.v = 'v2';
+  return putSWInstallHandler(req, res);
+}));
+
+const putSWInstallHandler = async (req: Request, res: Response) => {
+  const v2 = req.params.v === 'v2';
   const id = req.params.id ? String(req.params.id) : null;
-  debug('PUT /api/v1/inst/%s request', id);
 
   if (!id) {
     throw new RequestError('Record not found', NOT_FOUND);
@@ -262,24 +398,41 @@ router.put('/api/v1/inst/:id([a-fA-F\\d]{24})', auth.ensureAuthenticated, catchA
 
   const username = auth.getUsername(req);
   if (!username) {
-    res.status(500).send('Ensure authenticated failed');
-    return;
+    if (v2) {
+      throw new RequestError('No username on authenticated request', INTERNAL_SERVER_ERROR);
+    } else {
+      res.status(500).send('Ensure authenticated failed');
+      return;
+    }
   }
 
   // Do validation for installation updates
-  await checkNewSWInstall(false, req);
+  await checkNewSWInstall(v2, req);
 
-  const result = validationResult(req, legacy.validationErrorFormatter);
-  if (!result.isEmpty()) {
-    res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
-    return;
+  if (v2) {
+    // TODO: replace with validateAndThrow()
+    const result = validationResult(req, pkgErrorDetailFormatter);
+    if (!result.isEmpty()) {
+      const perror: webapi.PkgError = {
+        code: BAD_REQUEST,
+        message: 'SW Install Validation Error',
+        errors: result.array(),
+      };
+      throw new RequestError(perror.message, perror.code, perror);
+    }
+  } else {
+    const result = validationResult(req, legacy.validationErrorFormatter);
+    if (!result.isEmpty()) {
+      res.status(400).send('Validation errors: ' + JSON.stringify(result.array()));
+      return;
+    }
   }
 
   // setup an array of validations to perfrom
   // save the results in wfResultsArr, and errors in errors.
   const wfResultArr = await Promise.all([
-    CustomValidators.noInstSwChangeUnlessReadyForInstall(false, req),
-    CustomValidators.noInstSwUnlessSwIsReadyForInstall(false, req),
+    CustomValidators.noInstSwChangeUnlessReadyForInstall(v2, req),
+    CustomValidators.noInstSwUnlessSwIsReadyForInstall(v2, req),
   ]);
 
   const errors = wfResultArr.reduce<IValResult[]>((p, r, idx) => {
@@ -294,12 +447,25 @@ router.put('/api/v1/inst/:id([a-fA-F\\d]{24})', auth.ensureAuthenticated, catchA
 
   if (errors.length > 0) {
     debug('Workflow validation errors: ' + JSON.stringify(errors));
-    res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
-    return;
+    if (v2) {
+      const perror: webapi.PkgError = {
+        code: BAD_REQUEST,
+        message: 'Workflow Validation Error',
+        errors: errors.map((v) => ({
+          reason: 'WorkflowValidationError',
+          message: v.data,
+          location: 'data', // TODO: more specific location
+        })),
+      };
+      throw new RequestError(perror.message, perror.code, perror);
+    } else {
+      res.status(400).send('Worklow validation errors: ' + JSON.stringify(errors[0].data));
+      return;
+    }
   }
 
-  await updateDoc(username, doc, req, res);
-}));
+  await updateDoc(username, doc, v2, req, res);
+};
 
 // handle incoming delete requests
 // router.delete('/swdbserv/v1*', function(req, res, next) {
