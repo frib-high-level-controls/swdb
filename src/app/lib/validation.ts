@@ -23,10 +23,6 @@ import {
   STATUSES as SWINSTALL_STATUSES,
 } from '../models/swinstall';
 
-import {
-  isVvResultsLoc,
-} from './validators';
-
 const ISO8601_DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
 /**
@@ -136,7 +132,7 @@ export async function checkNewSoftware(v2: boolean, req: express.Request) {
       errorMessage: 'Status date is required.',
     },
     matches: {
-      options: /\d{4}-\d{2}-\d{2}/,
+      options: ISO8601_DATE_REGEX,
       errorMessage: 'Status date must be a date.',
     },
     custom: {
@@ -178,11 +174,16 @@ export async function checkNewSoftware(v2: boolean, req: express.Request) {
       errorMessage: 'V&V procedure location must be a string.',
     },
   };
-  schema[`${prefix}vvResultsLoc`] = { // TODO with wildcard!
+  schema[`${prefix}vvResultsLoc`] = {
     in: ['body'],
-    custom: {
-      options: isVvResultsLoc,
+    isArray: {
       errorMessage: 'V&V results location must be an array of strings.',
+    },
+  };
+  schema[`${prefix}vvResultsLoc.*`] = {
+    in: ['body'],
+    isString: {
+      errorMessage: 'V&V results location must be a string.',
     },
   };
   schema[`${prefix}versionControl`] = {
@@ -294,7 +295,7 @@ export async function checkNewSWInstall(v2: boolean, req: express.Request) {
       errorMessage: 'Status date is required.',
     },
     matches: {
-      options: /\d{4}-\d{2}-\d{2}/,
+      options: ISO8601_DATE_REGEX,
       errorMessage: 'Status date must be a date.',
     },
     custom: {
