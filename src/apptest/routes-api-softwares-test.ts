@@ -1815,6 +1815,9 @@ describe('Software API Specification', () => {
             status: 'RDY_INST',
             statusDate: '1970-01-01',
             software: wrapper.origId,
+            vvResultsLoc: [],
+            vvApprovalDate: '',
+            drrs: '',
           })
           .expect(201)
           // .end(done);

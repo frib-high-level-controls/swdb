@@ -87,14 +87,6 @@ test.describe('Installations add screen tests', () => {
       driver.findElement(By.id('submitBtn')).click();
     });
 
-    test.it('Date field should be (Angular) invalid', () => {
-      driver.wait(until.elementLocated(By.id('host')));
-      driver.findElement(By.id('host')).getAttribute('class').then(
-        (text: string) => {
-          expect(text).to.match(/ng-invalid-required/);
-        });
-    });
-
     test.it('should stay on the new form', () => {
       driver.wait(until.titleIs('SWDB - New Installation'));
     });
@@ -103,22 +95,6 @@ test.describe('Installations add screen tests', () => {
       driver.wait(until.elementLocated(By.id('host')));
       const input = driver.findElement(By.id('host'));
       input.sendKeys('testHost0');
-    });
-
-    test.it('Host field should be (Angular) valid', () => {
-      driver.wait(until.elementLocated(By.id('host')));
-      driver.findElement(By.id('host')).getAttribute('class').then(
-        (text: string) => {
-          expect(text).to.match(/ng-valid-required/);
-        });
-    });
-
-    test.it('Status Date field should be (Angular) invalid', () => {
-      driver.wait(until.elementLocated(By.id('statusDate')));
-      driver.findElement(By.id('statusDate')).getAttribute('class').then(
-        (text: string) => {
-          expect(text).to.match(/ng-invalid-required/);
-        });
     });
 
     test.it('Add new record - set status date', () => {
@@ -130,6 +106,34 @@ test.describe('Installations add screen tests', () => {
         By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]')));
       input = driver.findElement(By.xpath('//*[@id="statusDate-group"]/div/p/div/ul/li[2]/span/button[1]'));
       input.click();
+    });
+
+    test.it('Submit should fail with area required error', () => {
+      driver.findElement(By.id('submitBtn')).click();
+      driver.wait(until.titleIs('SWDB - New Installation'));
+      driver.wait(until.elementLocated(By.id('formError')));
+      driver.findElement(By.id('formError')).getText().then(
+        (text) => {
+          expect(text).to.match(/Areas is required\./);
+        });
+    });
+
+    test.it('Add new record - set area 0', () => {
+      // set area
+      // add controls room, operator area, nscl control room
+      // then delete the controls room
+      driver.wait(until.elementLocated(By.id('add.area')));
+      const input = driver.findElement(By.id('add.area'));
+      input.click();
+      driver.wait(until.elementLocated(By.id('area.0')));
+      const input0 = driver.findElement(By.id('area.0'));
+      input0.click();
+
+      driver.wait(until.elementLocated(By.xpath('//*[@id="area.0"]/input[1]')));
+      const input0b = driver.findElement(By.xpath('//*[@id="area.0"]/input[1]'));
+      input0b.sendKeys('front\n');
+
+      driver.wait(until.elementTextContains(input0, 'ADB:FRONT_END'));
     });
 
     test.it('Submit should fail with software name required error', () => {
@@ -160,17 +164,11 @@ test.describe('Installations add screen tests', () => {
         'BEAST/b12/0.2'));
     });
 
-    test.it('Submit should fail with area required error', () => {
+    test.it('Submit should and go to Installation Details', () => {
       driver.findElement(By.id('submitBtn')).click();
-      driver.wait(until.titleIs('SWDB - New Installation'));
-      driver.wait(until.elementLocated(By.id('formError')));
-      driver.findElement(By.id('formError')).getText().then(
-        (text) => {
-          expect(text).to.match(/Path `status` is required\./);
-        });
+      driver.wait(until.titleIs('SWDB - Installation Details'));
     });
   });
-
 
   test.describe('2. Add new installation', () => {
     test.it('should show search page with username on logout button', () => {
@@ -205,15 +203,11 @@ test.describe('Installations add screen tests', () => {
       driver.wait(until.elementLocated(By.xpath('//*[@id="software"]/input[1]')));
       searchInput = driver.findElement(By.xpath('//*[@id="software"]/input[1]'));
       searchInput.sendKeys('BEAST');
-      driver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-1-0"]/span')));
-      const input = driver.findElement(By.xpath('//*[@id="ui-select-choices-row-1-0"]/span'));
+      driver.wait(until.elementLocated(By.xpath('//*[@id="ui-select-choices-row-2-0"]/span')));
+      const input = driver.findElement(By.xpath('//*[@id="ui-select-choices-row-2-0"]/span'));
       input.click();
-      driver.wait(until.elementTextContains(driver.findElement(
-        By.id('software')),
-        'BEAST/b12/0.2'));
-      driver.wait(until.elementTextContains(driver.findElement(
-        By.id('software')),
-        'BEAST/b12/0.2'));
+      driver.wait(until.elementTextContains(driver.findElement(By.id('software')), 'BEAST/b12/0.2'));
+      driver.wait(until.elementTextContains(driver.findElement(By.id('software')), 'BEAST/b12/0.2'));
     });
 
     test.it('Add new record - set name', () => {

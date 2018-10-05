@@ -46,18 +46,17 @@ declare namespace webapi {
   
   export interface SWInstall {
     id?: string;
-    host?: string;
-    name?: string;
-    area?: string[];
-    slots?: string[];
-    status?: string;
-    statusDate?: string;
-    software?: string;
-    vvResultsLoc?: string[];
-    vvApprovalDate?: string;
-    drrs?: string;
+    host: string;
+    name: string;
+    area: string[];
+    status: string;
+    statusDate: string;
+    software: string;
+    vvResultsLoc: string[];
+    vvApprovalDate: string;
+    drrs: string;
   }
-
+  // legacy type alias
   export type Inst = SWInstall
 
   export interface Software {
@@ -81,6 +80,6 @@ declare namespace webapi {
     previous?: string;
     comment: string;
   }
-
+  // legacy type alias
   export type ISwdb = Software;
 }

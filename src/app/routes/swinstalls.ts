@@ -3,6 +3,7 @@
  */
 import * as Debug from 'debug';
 import * as express from 'express';
+import { isEqual } from 'lodash';
 
 import * as auth from '../shared/auth';
 import * as history from '../shared/history';
@@ -17,7 +18,6 @@ import {
 
 import {
   checkNewSWInstall,
-  checkUpdateSWInstall,
 } from '../lib/validation';
 
 import {
@@ -51,19 +51,57 @@ function toWebAPI(doc: ISWInstall): webapi.Inst {
     host: doc.host,
     name: doc.name,
     area: doc.area,
-    slots: doc.slots,
     status: doc.status,
     statusDate: doc.statusDate.toISOString().split('T')[0],
-    software: doc.software,
+    software: doc.software.toHexString(),
     vvResultsLoc: doc.vvResultsLoc,
-    vvApprovalDate: doc.vvApprovalDate ? doc.vvApprovalDate.toISOString().split('T')[0] : undefined,
+    vvApprovalDate: doc.vvApprovalDate ? doc.vvApprovalDate.toISOString().split('T')[0] : '',
     drrs: doc.drrs,
   };
 }
 
+// Convert Web API data to DB Model
+function toModel(data: webapi.SWInstall, doc?: SWInstall): SWInstall {
+  if (!doc) {
+    doc = new SWInstall();
+  }
+  if (!isEqual(doc.host, data.host)) {
+    doc.host = data.host;
+  }
+  if (!isEqual(doc.name, data.name)) {
+    doc.name = data.name;
+  }
+  if (!isEqual(doc.area, data.area)) {
+    doc.area = data.area;
+  }
+  if (!isEqual(doc.status, data.status)) {
+    doc.status = data.status;
+  }
+  if (!doc.statusDate || doc.statusDate.getTime() !== Date.parse(data.statusDate)) {
+    doc.statusDate = new Date(data.statusDate);
+  }
+  if (!doc.software || !doc.software.equals(data.software)) {
+    doc.software = models.ObjectId(data.software);
+  }
+  if (!isEqual(doc.vvResultsLoc, data.vvResultsLoc)) {
+    doc.vvResultsLoc = data.vvResultsLoc;
+  }
+  if (data.vvApprovalDate) {
+    if (!doc.vvApprovalDate || doc.vvApprovalDate.getTime() !== Date.parse(data.vvApprovalDate)) {
+      doc.vvApprovalDate = new Date(data.vvApprovalDate);
+    }
+  } else if (doc.vvApprovalDate) {
+    doc.vvApprovalDate = undefined;
+  }
+  if (!isEqual(doc.drrs, data.drrs)) {
+    doc.drrs = data.drrs;
+  }
+  return doc;
+}
+
 // Create a new record in the backend storage
 async function createDoc(user: string, req: express.Request, res: express.Response): Promise<void> {
-  const doc = await new SWInstall(req.body).saveWithHistory(auth.formatRole(auth.RoleScheme.USR, user));
+  const doc = await toModel(req.body).saveWithHistory(auth.formatRole(auth.RoleScheme.USR, user));
   debug('Created SWInstall: ' + doc._id + ' as ' + user);
   res.location(`${res.locals.basePath || ''}/api/v1/inst/${doc.id}`);
   res.status(201).json(toWebAPI(doc));
@@ -131,28 +169,10 @@ async function getHist(req: express.Request, res: express.Response): Promise<voi
   res.json(updates);
 }
 
-async function updateDoc(user: string, req: express.Request, res: express.Response): Promise<void> {
-  const id = req.params.id ? String(req.params.id) : null;
-  if (!id) {
-    throw new Error('Record not found');
-  }
-  const doc = await SWInstall.findById(id).exec();
-  if (!doc) {
-    throw new Error('Record not found');
-  }
-
-  doc.schema.eachPath((path) => {
-    if ([ '_id', 'history' ].includes(path)) {
-      return;
-    }
-    if (req.body[path] !== undefined) {
-      debug(`Updated SWInstall path: ${path}, value: '${req.body[path]}'`);
-      doc.set(path, req.body[path]);
-    }
-  });
-
-  await doc.saveWithHistory(auth.formatRole(auth.RoleScheme.USR, user));
-  debug(`Updated Software: ${doc._id} as ${user}`);
+async function updateDoc(user: string, doc: SWInstall, req: express.Request, res: express.Response): Promise<void> {
+  const role = auth.formatRole(auth.RoleScheme.USR, user);
+  doc = await toModel(req.body, doc).saveWithHistory(role);
+  debug(`Updated SW Install: ${doc._id} as ${user}`);
   res.location(`${res.locals.basePath || ''}/api/v1/inst/${doc.id}`);
   res.json(toWebAPI(doc));
 }
@@ -180,13 +200,13 @@ async function updateDoc(user: string, req: express.Request, res: express.Respon
 
 // Handle installation requests
 // for get requests that are not specific return all
-router.get('/api/v1/inst/hist/:id', catchAll(async (req, res) => {
+router.get('/api/v1/inst/hist/:id([a-fA-F\\d]{24})', catchAll(async (req, res) => {
   debug('GET /api/v1/inst/hist/:id request');
   await getHist(req, res);
 }));
 
 // for get requests that are specific
-router.get('/api/v1/inst/:id', catchAll(async (req, res) => {
+router.get('/api/v1/inst/:id([a-fA-F\\d]{24})', catchAll(async (req, res) => {
   debug('GET /api/v1/inst/:id request');
   await getDocs(req, res);
 }));
@@ -208,7 +228,7 @@ router.post('/api/v1/inst', auth.ensureAuthenticated, catchAll(async (req, res) 
   }
 
   // Do validation for  new records
-  await checkNewSWInstall(req);
+  await checkNewSWInstall(false, req);
 
   const result = validationResult(req, legacy.validationErrorFormatter);
   if (!result.isEmpty()) {
@@ -228,8 +248,17 @@ router.post('/api/v1/inst', auth.ensureAuthenticated, catchAll(async (req, res) 
 }));
 
 // handle incoming put requests for installation update
-router.put('/api/v1/inst/:id', auth.ensureAuthenticated, catchAll(async (req, res) => {
-  debug('PUT /api/v1/inst/:id request');
+router.put('/api/v1/inst/:id([a-fA-F\\d]{24})', auth.ensureAuthenticated, catchAll(async (req, res) => {
+  const id = req.params.id ? String(req.params.id) : null;
+  debug('PUT /api/v1/inst/%s request', id);
+
+  if (!id) {
+    throw new RequestError('Record not found', NOT_FOUND);
+  }
+  const doc = await SWInstall.findById(id);
+  if (!doc) {
+    throw new RequestError('Record not found', NOT_FOUND);
+  }
 
   const username = auth.getUsername(req);
   if (!username) {
@@ -238,7 +267,7 @@ router.put('/api/v1/inst/:id', auth.ensureAuthenticated, catchAll(async (req, re
   }
 
   // Do validation for installation updates
-  await checkUpdateSWInstall(req);
+  await checkNewSWInstall(false, req);
 
   const result = validationResult(req, legacy.validationErrorFormatter);
   if (!result.isEmpty()) {
@@ -269,7 +298,7 @@ router.put('/api/v1/inst/:id', auth.ensureAuthenticated, catchAll(async (req, re
     return;
   }
 
-  await updateDoc(username, req, res);
+  await updateDoc(username, doc, req, res);
 }));
 
 // handle incoming delete requests

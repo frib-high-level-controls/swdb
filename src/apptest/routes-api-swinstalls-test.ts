@@ -1,9 +1,13 @@
 /**
  * Test for Software Installation API specification.
  */
+
+/* tslint:disable:max-line-length */
+
 import { assert, expect } from 'chai';
 import * as Debug from 'debug';
 import { Application } from 'express';
+import { assign } from 'lodash';
 
 import * as SuperTest from 'supertest';
 
@@ -89,13 +93,17 @@ describe('Software Installation API Specification', () => {
       .post('/api/v1/inst')
       .set('Accept', 'application/json')
       .set('Cookie', cookie)
-      .send({host: 'Test host',
-       name: 'Test name',
-       area: ['Global'],
-       status: 'RDY_INST',
-       statusDate: '2017-04-21',
-       vvApprovalDate: '2017-04-21',
-       software: '5947589458a6aa0face9a512'})
+      .send({
+        host: 'Test host',
+        name: 'Test name',
+        area: ['Global'],
+        status: 'RDY_INST',
+        statusDate: '2017-04-21',
+        vvResultsLoc: [],
+        vvApprovalDate: '2017-04-21',
+        software: '5947589458a6aa0face9a512',
+        drrs: '',
+      })
       .expect(201)
       .end(done);
   });
@@ -105,12 +113,17 @@ describe('Software Installation API Specification', () => {
       .post('/api/v1/inst')
       .set('Accept', 'application/json')
       .set('Cookie', cookie)
-      .send({ host: 'Header Test host',
-       name: 'Header Test name',
-       area: ['Global'],
-       status: 'RDY_INST',
-       statusDate: '2017-04-21',
-       software: '5947589458a6aa0face9a512' })
+      .send({
+        host: 'Header Test host',
+        name: 'Header Test name',
+        area: ['Global'],
+        status: 'RDY_INST',
+        statusDate: '2017-04-21',
+        software: '5947589458a6aa0face9a512',
+        vvResultsLoc: [],
+        vvApprovalDate: '',
+        drrs: '',
+      })
       .expect(201)
       .end(done);
   });
@@ -158,7 +171,17 @@ describe('Software Installation API Specification', () => {
         .put('/api/v1/inst/' + wrapper.origId)
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
-        .send({ owner: 'Header owner' })
+        .send({
+          host: 'Header Test host',
+          name: 'Header Test name',
+          area: ['Global'],
+          status: 'RDY_INST',
+          statusDate: '2017-04-21',
+          software: '5947589458a6aa0face9a512',
+          vvResultsLoc: [],
+          vvApprovalDate: '',
+          drrs: '',
+        })
         .expect(200)
         .end((err, result) => {
           if (err) {
@@ -187,7 +210,11 @@ describe('Software Installation API Specification', () => {
           name: 'Hist1 Test name',
           area: ['Global'],
           status: 'RDY_INST',
-          statusDate: '2017-04-21', software: '5947589458a6aa0face9a512',
+          statusDate: '2017-04-21',
+          software: '5947589458a6aa0face9a512',
+          vvResultsLoc: [],
+          vvApprovalDate: '',
+          drrs: '',
         })
         .expect(201)
         .end((err: Error, result) => {
@@ -206,7 +233,17 @@ describe('Software Installation API Specification', () => {
         .put('/api/v1/inst/' + wrapper.origId)
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
-        .send({ name: 'Hist2 Test name' })
+        .send({
+          name: 'Hist2 Test name',
+          host: 'Hist Test host',
+          area: ['Global'],
+          status: 'RDY_INST',
+          statusDate: '2017-04-21',
+          software: '5947589458a6aa0face9a512',
+          vvResultsLoc: [],
+          vvApprovalDate: '',
+          drrs: '',
+        })
         .expect(200)
         .end((err: Error, result) => {
           if (err) {
@@ -221,7 +258,17 @@ describe('Software Installation API Specification', () => {
         .put('/api/v1/inst/' + wrapper.origId)
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
-        .send({ name: 'Hist3 Test name' })
+        .send({
+          name: 'Hist3 Test name',
+          host: 'Hist Test host',
+          area: ['Global'],
+          status: 'RDY_INST',
+          statusDate: '2017-04-21',
+          software: '5947589458a6aa0face9a512',
+          vvResultsLoc: [],
+          vvApprovalDate: '',
+          drrs: '',
+        })
         .expect(200)
         .end((err: Error, result) => {
           if (err) {
@@ -236,7 +283,17 @@ describe('Software Installation API Specification', () => {
         .put('/api/v1/inst/' + wrapper.origId)
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
-        .send({ name: 'Hist4 Test name' })
+        .send({
+          name: 'Hist4 Test name',
+          host: 'Hist Test host',
+          area: ['Global'],
+          status: 'RDY_INST',
+          statusDate: '2017-04-21',
+          software: '5947589458a6aa0face9a512',
+          vvResultsLoc: [],
+          vvApprovalDate: '',
+          drrs: '',
+        })
         .expect(200)
         .end((err: Error, result) => {
           if (err) {
@@ -251,7 +308,17 @@ describe('Software Installation API Specification', () => {
         .put('/api/v1/inst/' + wrapper.origId)
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
-        .send({ name: 'Hist5 Test name' })
+        .send({
+          name: 'Hist5 Test name',
+          host: 'Hist Test host',
+          area: ['Global'],
+          status: 'RDY_INST',
+          statusDate: '2017-04-21',
+          software: '5947589458a6aa0face9a512',
+          vvResultsLoc: [],
+          vvApprovalDate: '',
+          drrs: '',
+        })
         .expect(200)
         .end((err: Error, result) => {
           if (err) {
@@ -266,7 +333,17 @@ describe('Software Installation API Specification', () => {
         .put('/api/v1/inst/' + wrapper.origId)
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
-        .send({ name: 'Hist6 Test name' })
+        .send({
+          name: 'Hist6 Test name',
+          host: 'Hist Test host',
+          area: ['Global'],
+          status: 'RDY_INST',
+          statusDate: '2017-04-21',
+          software: '5947589458a6aa0face9a512',
+          vvResultsLoc: [],
+          vvApprovalDate: '',
+          drrs: '',
+        })
         .expect(200)
         .end((err: Error, result) => {
           if (err) {
@@ -281,7 +358,17 @@ describe('Software Installation API Specification', () => {
         .put('/api/v1/inst/' + wrapper.origId)
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
-        .send({ name: 'Hist7 Test name' })
+        .send({
+          name: 'Hist7 Test name',
+          host: 'Hist Test host',
+          area: ['Global'],
+          status: 'RDY_INST',
+          statusDate: '2017-04-21',
+          software: '5947589458a6aa0face9a512',
+          vvResultsLoc: [],
+          vvApprovalDate: '',
+          drrs: '',
+        })
         .expect(200)
         .end((err: Error, result) => {
           if (err) {
@@ -339,12 +426,17 @@ describe('Software Installation API Specification', () => {
   it('Errors posting a bad status installation', (done) => {
     supertest
       .post('/api/v1/inst')
-      .send({host: 'test host',
-       name: 'Test name',
-       area: ['Global'],
-       status: 'BADENUM',
-       statusDate: '2017-04-21',
-       software: 'badbeefbadbeefbadbeefbad'})
+      .send({
+        host: 'test host',
+        name: 'Test name',
+        area: ['Global'],
+        status: 'BADENUM',
+        statusDate: '2017-04-21',
+        software: 'badbeefbadbeefbadbeefbad',
+        vvResultsLoc: [],
+        vvApprovalDate: '',
+        drrs: '',
+      })
       .set('Accept', 'application/json')
       .set('Cookie', cookie)
       .expect(400)
@@ -352,8 +444,7 @@ describe('Software Installation API Specification', () => {
         if (err) {
           done(err);
         } else {
-          const regex =
-            'Status must be one of RDY_INST,RDY_VER,RDY_BEAM,RET';
+          const regex = 'Status must be one of RDY_INST, RDY_VER, RDY_BEAM, RET';
           expect(res.text).to.match(new RegExp(regex));
           done();
         }
@@ -364,12 +455,15 @@ describe('Software Installation API Specification', () => {
     supertest
       .post('/api/v1/inst')
       .send({
-       host: 'Test host',
-       name: 'Test name',
-       area: ['Global'],
-       status: 'RDY_INST',
-       statusDate: '2017-04-21',
-       software: '5947589458a6aa0face9a512',
+        host: 'Test host',
+        name: 'Test name',
+        area: ['Global'],
+        status: 'RDY_INST',
+        statusDate: '2017-04-21',
+        software: '5947589458a6aa0face9a512',
+        vvResultsLoc: [],
+        vvApprovalDate: '',
+        drrs: '',
       })
       .set('Accept', 'application/json')
       .set('Cookie', cookie)
@@ -393,7 +487,11 @@ describe('Software Installation API Specification', () => {
         area: ['Global'],
         status: 'RDY_INST',
         statusDate: '2017-04-21',
-        software: '5947589458a6aa0face9a512'})
+        software: '5947589458a6aa0face9a512',
+        vvResultsLoc: [],
+        vvApprovalDate: '',
+        drrs: '',
+      })
       .set('Accept', 'application/json')
       .set('Cookie', cookie)
       .expect(201)
@@ -452,7 +550,17 @@ describe('Software Installation API Specification', () => {
     it('Can update a record via PUT host id:Test host3', (done) => {
       supertest
         .put('/api/v1/inst/' + wrapper.origId)
-        .send({host: 'Test host3'})
+        .send({
+          host: 'Test host3',
+          name: 'Test name',
+          area: ['Global'],
+          status: 'RDY_INST',
+          statusDate: '2017-04-21',
+          software: '5947589458a6aa0face9a512',
+          vvResultsLoc: [],
+          vvApprovalDate: '',
+          drrs: '',
+        })
         .set('Cookie', cookie)
         .expect(200)
         .end(done);
@@ -474,54 +582,64 @@ describe('Software Installation API Specification', () => {
     });
 
 
+    const template = {
+      host: 'Test host3',
+      name: 'Test name',
+      area: ['Global'],
+      status: 'RDY_INST',
+      statusDate: '2017-04-21',
+      software: '5947589458a6aa0face9a512',
+      vvResultsLoc: [],
+      vvApprovalDate: '',
+      drrs: '',
+    };
 
     // This table lists test requests to make and the expected
     // responses.
     // {req:{msg:,url:,type:,err{status:}}
     //  res:{msg:,url:,type:,err{status:}}
     //  }
-    const testUpdateParams = [
-      {type: 'PUT', req: {msg: {host: 'Test host4'}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {host: 'Test host4'}, url: '/api/v1/inst/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {name: 'Test name4'}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {name: 'Test name4'}, url: '/api/v1/inst/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {software: '5947589458a6aa0face9a512'}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {software: '5947589458a6aa0face9a512'}, url: '/api/v1/inst/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {area: ['FE']}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {area: ['FE']}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'PUT', req: {msg: {drrs: 'Test DRR'}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {drrs: 'Test DRR'}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'PUT', req: {msg: {status: 'RDY_BEAM'}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {status: 'RDY_BEAM'}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'PUT', req: {msg: {statusDate: '1997'}, url: '/api/v1/inst/', err: {status: 400}}},
-      {type: 'PUT', req: {msg: {statusDate: '1997-01-01'}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {statusDate: '1997-01-01'}, url: '/api/v1/inst/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {vvApprovalDate: '1997-01-01T08:00:00.000Z'}, url: '/api/v1/inst/', err: {status: 400}}},
-      {type: 'PUT', req: {msg: {vvApprovalDate: '1997-01-01'}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {vvApprovalDate: '1997-01-01'}, url: '/api/v1/inst/',  err: {status: 200}}},
-      {type: 'PUT', req: {msg: {vvResultsLoc: ['http://www.google.com']}, url: '/api/v1/inst/', err: {status: 200}}},
-      {type: 'GET', res: {msg: {vvResultsLoc: ['http://www.google.com']}, url: '/api/v1/inst/',  err: {status: 200}}},
+    const testUpdateParams: Array<{type: string; url: string; status: number, data: any, msg?: string}> = [
+      {type: 'PUT', url: '/api/v1/inst/', status: 200, data: {host: 'Test host4'}},
+      {type: 'GET', url: '/api/v1/inst/', status: 200, data: {host: 'Test host4'}},
+      {type: 'PUT', url: '/api/v1/inst/', status: 200, data: {name: 'Test name4'}},
+      {type: 'GET', url: '/api/v1/inst/', status: 200, data: {name: 'Test name4'}},
+      {type: 'PUT', data: {software: '5947589458a6aa0face9a512'}, url: '/api/v1/inst/', status: 200},
+      {type: 'GET', data: {software: '5947589458a6aa0face9a512'}, url: '/api/v1/inst/',  status: 200},
+      {type: 'PUT', data: {area: ['FE']}, url: '/api/v1/inst/', status: 200},
+      {type: 'GET', data: {area: ['FE']}, url: '/api/v1/inst/', status: 200},
+      {type: 'PUT', data: {drrs: 'Test DRR'}, url: '/api/v1/inst/', status: 200},
+      {type: 'GET', data: {drrs: 'Test DRR'}, url: '/api/v1/inst/', status: 200},
+      {type: 'PUT', data: {status: 'RDY_BEAM'}, url: '/api/v1/inst/', status: 200},
+      {type: 'GET', data: {status: 'RDY_BEAM'}, url: '/api/v1/inst/', status: 200},
+      {type: 'PUT', data: {statusDate: '1997'}, url: '/api/v1/inst/', status: 400},
+      {type: 'PUT', data: {statusDate: '1997-01-01'}, url: '/api/v1/inst/', status: 200},
+      {type: 'GET', data: {statusDate: '1997-01-01'}, url: '/api/v1/inst/',  status: 200},
+      {type: 'PUT', data: {vvApprovalDate: '1997-01-01T08:00:00.000Z'}, url: '/api/v1/inst/', status: 400},
+      {type: 'PUT', data: {vvApprovalDate: '1997-01-01'}, url: '/api/v1/inst/', status: 200},
+      {type: 'GET', data: {vvApprovalDate: '1997-01-01'}, url: '/api/v1/inst/',  status: 200},
+      {type: 'PUT', data: {vvResultsLoc: ['http://www.google.com']}, url: '/api/v1/inst/', status: 200},
+      {type: 'GET', data: {vvResultsLoc: ['http://www.google.com']}, url: '/api/v1/inst/',  status: 200},
     ];
 
     // go through the table and check the given parameters
-    testUpdateParams.forEach((value: any, i) => {
+    for (const value of testUpdateParams) {
       // handle PUT
       if (value.type === 'PUT') {
-        it(value.req.err.status + ' ' + value.type + ' msg: ' +
-          JSON.stringify(JSON.stringify(value.req.msg)), (done) => {
+        it(`${value.type} ${value.url}:id (${value.status}): ${JSON.stringify(value.data)}`, (done) => {
             supertest
-              .put(value.req.url + wrapper.origId)
-              .send(value.req.msg)
+              .put(value.url + wrapper.origId)
+              .send(assign(template, value.data))
               .set('Cookie', cookie)
               .end((err, res) => {
                 if (err) {
                   done(err);
                 } else {
-                  if (value.req.err.status) {
-                    expect(res.status).to.equal(value.req.err.status);
+                  if (value.status) {
+                    expect(res.status).to.equal(value.status);
                   }
-                  if (value.req.err.msgHas) {
-                    expect(res.text).to.equal(value.req.err.msgHas);
+                  if (value.msg) {
+                    expect(res.text).to.equal(value.msg);
                   }
 
                   done();
@@ -529,51 +647,52 @@ describe('Software Installation API Specification', () => {
               });
           });
       }
-      if (value.type === 'POST') {
-        it(value.req.err.status + ' ' + value.type + ' ' + JSON.stringify(JSON.stringify(value.req.msg)),
-         (done) => {
-          supertest
-            .post(value.req.url)
-            .send(value.req.msg)
-            .set('Cookie', cookie)
-            .end((err, res) => {
-              if (err) {
-                done(err);
-              } else {
-                if (value.req.err.status) {
-                  expect(res.status).to.equal(value.req.err.status);
-                }
-                if (value.req.err.msgHas) {
-                  expect(res.text).to.equal(value.req.err.msgHas);
-                }
-                done();
-              }
-            });
-        });
-      }
+      // handle POST (Not currently used!)
+      // if (value.type === 'POST') {
+      //   it(value.req.err.status + ' ' + value.type + ' ' + JSON.stringify(JSON.stringify(value.req.msg)),
+      //    (done) => {
+      //     supertest
+      //       .post(value.req.url)
+      //       .send(value.req.msg)
+      //       .set('Cookie', cookie)
+      //       .end((err, res) => {
+      //         if (err) {
+      //           done(err);
+      //         } else {
+      //           if (value.req.err.status) {
+      //             expect(res.status).to.equal(value.req.err.status);
+      //           }
+      //           if (value.req.err.msgHas) {
+      //             expect(res.text).to.equal(value.req.err.msgHas);
+      //           }
+      //           done();
+      //         }
+      //       });
+      //   });
+      // }
 
       // handle GET
       if (value.type === 'GET') {
-        it(value.res.err.status + ' ' + JSON.stringify(value.res.msg), (done) => {
+        it(`${value.type} ${value.url}:id (${value.status}): ${JSON.stringify(value.data)}`, (done) => {
           supertest
-            .get(value.res.url + wrapper.origId)
+            .get(value.url + wrapper.origId)
             .end((err, res) => {
               if (err) {
                 done(err);
               } else {
-                if (value.res.err.status) {
-                  expect(res.status).to.equal(value.res.err.status);
+                if (value.status) {
+                  expect(res.status).to.equal(value.status);
                 }
-                for (const prop of Object.keys(value.res.msg)) {
+                for (const prop of Object.keys(value.data)) {
                   expect(res.body).to.have.property(prop);
-                  assert.deepEqual(res.body[prop], value.res.msg[prop]);
+                  assert.deepEqual(res.body[prop], value.data[prop]);
                 }
                 done();
               }
             });
         });
       }
-    });
+    }
 
     it('Errors on update a nonexistent record via POST id id:badbeef', (done) => {
       supertest
@@ -597,8 +716,8 @@ describe('Software Installation API Specification', () => {
         .put('/api/v1/inst/badbeef')
         .set('Cookie', cookie)
         .send({swName: 'Test Record5'})
-        .expect(400)
-        .expect('Worklow validation errors: "Record id parse err: badbeef: {}"')
+        .expect(404)
+        .expect('Not Found')
         .end(done);
     });
   });
@@ -624,6 +743,9 @@ describe('Software Installation API Specification', () => {
           status: 'RDY_INST',
           statusDate: '2017-04-21',
           software: '5947589458a6aa0face9a512',
+          vvResultsLoc: [],
+          vvApprovalDate: '',
+          drrs: '',
         })
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
@@ -682,7 +804,17 @@ describe('Software Installation API Specification', () => {
     it('set software field to something in Ready for install', (done) => {
       supertest
         .put('/api/v1/inst/' + wrapper.origId)
-        .send({ software: wrapper.swId })
+        .send({
+          host: 'Rule 2 test host',
+          name: 'Test name',
+          area: ['Global'],
+          status: 'RDY_INST',
+          statusDate: '2017-04-21',
+          vvResultsLoc: [],
+          vvApprovalDate: '',
+          drrs: '',
+          software: wrapper.swId,
+        })
         .set('Cookie', cookie)
         .expect(200)
         .end((err, res) => {
@@ -697,11 +829,21 @@ describe('Software Installation API Specification', () => {
         });
     });
 
-    it('Set status to Read for beam', (done) => {
+    it('Set status to Ready for beam', (done) => {
       supertest
         .put('/api/v1/inst/' + wrapper.origId)
         .set('Cookie', cookie)
-        .send({status: 'RDY_BEAM'})
+        .send({
+          host: 'Rule 2 test host',
+          name: 'Test name',
+          area: ['Global'],
+          statusDate: '2017-04-21',
+          vvResultsLoc: [],
+          vvApprovalDate: '',
+          drrs: '',
+          software: wrapper.swId,
+          status: 'RDY_BEAM',
+        })
         .expect(200)
         .end(done);
     });
@@ -710,7 +852,17 @@ describe('Software Installation API Specification', () => {
       supertest
         .put('/api/v1/inst/' + wrapper.origId)
         .set('Cookie', cookie)
-        .send({ software: '5947589458a6aa0face9a512' })
+        .send({
+          host: 'Rule 2 test host',
+          name: 'Test name',
+          area: ['Global'],
+          statusDate: '2017-04-21',
+          vvResultsLoc: [],
+          vvApprovalDate: '',
+          drrs: '',
+          status: 'RDY_BEAM',
+          software: '5947589458a6aa0face9a512',
+        })
         .expect(400)
         .expect('Worklow validation errors: "Installation software field can only be changed in state RDY_INST"')
         .end((err, res) => {
@@ -743,6 +895,9 @@ describe('Software Installation API Specification', () => {
           status: 'RDY_INST',
           statusDate: '2017-04-21',
           software: '5947589458a6aa0face9a512',
+          vvResultsLoc: [],
+          vvApprovalDate: '',
+          drrs: '',
         })
         .set('Accept', 'application/json')
         .set('Cookie', cookie)
@@ -802,7 +957,17 @@ describe('Software Installation API Specification', () => {
       supertest
         .put('/api/v1/inst/' + wrapper.origId)
         .set('Cookie', cookie)
-        .send({ software: wrapper.swId })
+        .send({
+          software: wrapper.swId,
+          host: 'Rule 3 test host',
+          name: 'Test name',
+          area: ['Global'],
+          status: 'RDY_INST',
+          statusDate: '2017-04-21',
+          vvResultsLoc: [],
+          vvApprovalDate: '',
+          drrs: '',
+        })
         .expect(400)
         .expect('Worklow validation errors: "Software field must point to software ' +
          'with status RDY_INST.The given software, ' +

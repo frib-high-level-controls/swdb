@@ -38,33 +38,31 @@ function InstNewPromiseCtrl(
   };
 
   $scope.swSelect =  ($item) => {
-    $scope.formData.software = $item.id;
+    $scope.formData.software = $item.id || '';
   };
 
   $scope.datePicker = ( () => {
-    const method: any = {};
-    method.instances = [];
+    const instances: { [key: string]: boolean | undefined } = {};
 
-    method.open =  ($event: any, instance: any) => {
+    const open =  ($event: ng.IAngularEvent, instance: string) => {
+      // $event.stopPropagation(); // Is this needed?
       $event.preventDefault();
-      $event.stopPropagation();
-
-      method.instances[instance] = true;
+      instances[instance] = true;
     };
 
-    method.options = {
+    const options = {
       'show-weeks': false,
       'startingDay': 0,
       'timezone': 'utc',
     };
 
-    method.format = 'M!/d!/yyyy';
+    const format = 'M!/d!/yyyy';
 
-    return method;
+    return { open, instances, options, format };
   })();
 
   $scope.processForm =  () => {
-    $scope.formData.slots = $scope.slotsSelected;
+    //$scope.formData.slots = $scope.slotsSelected;
 
     // convert enum value to enum key
     $scope.formData.status = Object.keys($scope.props.InstStatusEnum).filter(
@@ -181,10 +179,16 @@ function InstNewPromiseCtrl(
 
   // initialize this record
   $scope.formData = {
+    host: '',
+    name: '',
     area: [],
-    status: 'DEVEL',
+    status: 'RDY_INST',
+    statusDate: '',
     vvResultsLoc: [],
-    slots: [],
+    vvApprovalDate: '',
+    software: '',
+    drrs: '',
+    //slots: [],
   };
 
   $scope.swdbParams = {
@@ -196,4 +200,8 @@ function InstNewPromiseCtrl(
   $scope.slotsSelected = [];
   $scope.areasSelected = [];
 
+  $scope.statusDisplay = 'Ready for install';
+  
+
+  $scope.statusDateDisplay = new Date();
 }

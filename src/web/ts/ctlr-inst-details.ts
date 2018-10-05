@@ -34,7 +34,7 @@ function InstDetailsPromiseCtrl(
 
   $scope.updateBtnClk =  () => {
     // set the sw back to the id
-    $scope.formData.software = $scope.swSelected.id;
+    $scope.formData.software = $scope.swSelected.id || '';
     $location.path('/inst/update/' + $scope.formData.id);
   };
 

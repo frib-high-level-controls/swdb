@@ -69,6 +69,9 @@ describe('Installations history tests suite',  () => {
         status: 'RDY_INST',
         statusDate: '2017-04-21',
         software: '5947589458a6aa0face9a512',
+        vvResultsLoc: [],
+        vvApprovalDate: '',
+        drrs: '',
       })
       .expect(201);
 
@@ -92,7 +95,17 @@ describe('Installations history tests suite',  () => {
       .put('/api/v1/inst/' + wrapper.origId)
       .set('Accept', 'application/json')
       .set('Cookie', cookie)
-      .send( { name: 'New test name' } )
+      .send({
+        name: 'New test name',
+        host: 'Test host',
+        area: [ 'Global' ],
+        status: 'RDY_INST',
+        statusDate: '2017-04-21',
+        software: '5947589458a6aa0face9a512',
+        vvResultsLoc: [],
+        vvApprovalDate: '',
+        drrs: '',
+      })
       .end(async (err, result) => {
         // get record id from the returned location and find records that match
         const id = result.header.location.split(/\//).pop();

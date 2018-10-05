@@ -79,7 +79,7 @@ export const VERSION_CONTROL_SYSTEMS: VCS[] = [
   VCS.OTHER,
 ];
 
-const MODEL_NAME = 'swdb';
+export const MODEL_NAME = 'swdb';
 
 const Schema = mongoose.Schema;
 
@@ -169,7 +169,6 @@ const softwareSchema = new Schema({
   previous: {
     type: ObjectId,
     ref: MODEL_NAME,
-    default: null,
   },
   comment: {
     type: String,

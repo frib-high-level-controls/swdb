@@ -24,12 +24,10 @@ import {
 } from '../models/swinstall';
 
 import {
-  isArea,
-  isoDateStringToUTCDate,
-  isSlots,
   isVvResultsLoc,
 } from './validators';
 
+const ISO8601_DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
 /**
  * newValidation checks validation on new swdb records
@@ -61,7 +59,6 @@ export async function checkNewSoftware(v2: boolean, req: express.Request) {
     isString: {
       errorMessage: 'Description must be a string.',
     },
-
     isLength: {
       options: { max: 2000 },
       errorMessage: 'Description must less than 2000 characters.',
@@ -181,7 +178,7 @@ export async function checkNewSoftware(v2: boolean, req: express.Request) {
       errorMessage: 'V&V procedure location must be a string.',
     },
   };
-  schema[`${prefix}vvResultsLoc`] = {
+  schema[`${prefix}vvResultsLoc`] = { // TODO with wildcard!
     in: ['body'],
     custom: {
       options: isVvResultsLoc,
@@ -228,208 +225,135 @@ export async function checkNewSoftware(v2: boolean, req: express.Request) {
   return validate(req, checkSchema(schema));
 }
 
-export async function checkNewSWInstall(req: express.Request) {
-  return validate(req, checkSchema({
-    host: {
-      in: ['body'],
-      exists: {
-        errorMessage: 'Host is required.',
-      },
-      isString: {
-        errorMessage: 'Host must be a string.',
-      },
-      isAscii: {
-        errorMessage: 'Host must be ASCII characters.',
-      },
-      isLength: {
-        options: [{ min: 2, max: 30 }],
-        errorMessage: 'Host must be 2-30 characters.',
-      },
-    },
-    area: {
-      in: ['body'],
-      optional: true,
-      custom: {
-        options: isArea,
-        errorMessage: 'Area must be a list of area strings.',
-      },
-    },
-    slots: {
-      in: ['body'],
-      optional: true,
-      custom: {
-        options: isSlots,
-        errorMessage: 'Slots must be a list of slots',
-      },
-    },
-    status: {
-      in: ['body'],
-      optional: true,
-      isIn: {
-        options: [SWINSTALL_STATUSES],
-        errorMessage: 'Status must be one of ' + SWINSTALL_STATUSES,
-      },
-    },
-    statusDate: {
-      in: ['body'],
-      optional: true,
-      customSanitizer: {
-        options: isoDateStringToUTCDate(),
-      },
-      exists: {
-        options: { checkNull: true },
-        errorMessage: 'Status date must be a date.',
-      },
-    },
-    software: {
-      in: ['body'],
-      exists: {
-        errorMessage: 'Software reference is required.',
-      },
-      isString: {
-        errorMessage: 'Software reference must be a string.',
-      },
-      isHexadecimal: {
-        errorMessage: 'Software reference must be hexadecimal characters.',
-      },
-      isLength: {
-        options: [{ min: 24, max: 24 }],
-        errorMessage: 'Software reference must be 24 characters.',
-      },
-    },
-    vvResultsLoc: {
-      in: ['body'],
-      optional: true,
-      custom: {
-        options: isVvResultsLoc,
-        errorMessage: 'V&V results location must be an array of URLs.',
-      },
-    },
-    vvApprovalDate: {
-      in: ['body'],
-      optional: true,
-      customSanitizer: {
-        options: isoDateStringToUTCDate(true),
-      },
-      exists: {
-        options: { checkNull: true },
-        errorMessage: 'V&V approval date must be a date.',
-      },
-    },
-    DRRs: {
-      in: ['body'],
-      optional: true,
-      isString: {
-        errorMessage: 'DRRs must be a string.',
-      },
-      isAscii: {
-        errorMessage: 'DRRs must be ASCII characters.',
-      },
-      isLength: {
-        options: [{ min: 1, max: 30 }],
-        errorMessage: 'DRRs must be 1-30 characters.',
-      },
-    },
-  }));
-}
+export async function checkNewSWInstall(v2: boolean, req: express.Request) {
+  const prefix = v2 ? 'data.' : '';
+  const schema: ValidationSchema = {};
 
-export async function checkUpdateSWInstall(req: express.Request) {
-  return validate(req, checkSchema({
-    host: {
-      in: ['body'],
-      optional: true,
-      isString: {
-        errorMessage: 'Host must be a string.',
-      },
-      isAscii: {
-        errorMessage: 'Host must be ASCII characters.',
-      },
-      isLength: {
-        options: [{ min: 2, max: 30 }],
-        errorMessage: 'Host must be 2-30 characters.',
+  schema[`${prefix}host`] = {
+    in: ['body'],
+    trim: true,
+    exists: {
+      options: { checkFalsy: true },
+      errorMessage: 'Host is required.',
+    },
+    isString: {
+      errorMessage: 'Host must be a string.',
+    },
+    // isAscii: {
+    //   errorMessage: 'Host must be ASCII characters.',
+    // },
+    isLength: {
+      options: [{ min: 2, max: 40 }],
+      errorMessage: 'Host must be 2-40 characters.',
+    },
+  };
+  schema[`${prefix}name`] = {
+    in: ['body'],
+    isString: {
+      errorMessage: 'Name must be a string.',
+    },
+    isLength: {
+      options: { max: 100 },
+      errorMessage: 'Name must less than 100 characters.',
+    },
+  };
+  schema[`${prefix}area`] = {
+    in: ['body'],
+    isLength: {
+      options: { min: 1 },
+      errorMessage: 'Areas is required.',
+    },
+  };
+  schema[`${prefix}area.*`] = {
+    in: ['body'],
+    isString: {
+      errorMessage: 'Area must be a string.',
+    },
+  };
+  // slots: {
+  //   in: ['body'],
+  //   optional: true,
+  //   custom: {
+  //     options: isSlots,
+  //     errorMessage: 'Slots must be a list of slots',
+  //   },
+  // },
+  schema[`${prefix}status`] = {
+    in: ['body'],
+    exists: {
+      errorMessage: 'Status is required.',
+    },
+    isIn: {
+      options: [SWINSTALL_STATUSES],
+      errorMessage: 'Status must be one of ' + SWINSTALL_STATUSES.join(', '),
+    },
+  };
+  schema[`${prefix}statusDate`] = {
+    in: ['body'],
+    exists: {
+      errorMessage: 'Status date is required.',
+    },
+    matches: {
+      options: /\d{4}-\d{2}-\d{2}/,
+      errorMessage: 'Status date must be a date.',
+    },
+    custom: {
+      options: (v: {}) => Number.isFinite(Date.parse(String(v))),
+      errorMessage: 'Status date must be a valid date.',
+    },
+  };
+  schema[`${prefix}software`] = {
+    in: ['body'],
+    exists: {
+      options: { checkFalsy: true },
+      errorMessage: 'Software reference is required.',
+    },
+    isMongoId: {
+      errorMessage: 'Software reference must be an ID.',
+    },
+  },
+  schema[`${prefix}vvResultsLoc`] = {
+    in: ['body'],
+    isArray: {
+      errorMessage: 'V&V results must be an array.',
+    },
+  };
+  schema[`${prefix}vvResultsLoc.*`] = {
+    in: ['body'],
+    isString: {
+      errorMessage: 'V&V results location must be a string.',
+    },
+  };
+  schema[`${prefix}vvApprovalDate`] = {
+    in: ['body'],
+    // Allowed to be '' OR 'YYYY-MM-DD'!
+    custom: {
+      options: (v: {}) => {
+        if (v !== '') {
+          const str = String(v);
+          if (!str.match(ISO8601_DATE_REGEX)) {
+            throw new Error('V&V approval date must be a date.');
+          }
+          if (!Number.isFinite(Date.parse(str))) {
+            throw new Error('V&V approval date must be a valid date.');
+          }
+        }
+        return true;
       },
     },
-    area: {
-      in: ['body'],
-      optional: true,
-      custom: {
-        options: isArea,
-        errorMessage: 'Area must be a list of area strings.',
-      },
+  };
+  schema[`${prefix}drrs`] = {
+    in: ['body'],
+    isString: {
+      errorMessage: 'DRRs must be a string.',
     },
-    slots: {
-      in: ['body'],
-      optional: true,
-      custom: {
-        options: isSlots,
-        errorMessage: 'Slots must be a list of slots',
-      },
+    // isAscii: {
+    //   errorMessage: 'DRRs must be ASCII characters.',
+    // },
+    isLength: {
+      options: { max: 30 },
+      errorMessage: 'DRRs must be less than 30 characters.',
     },
-    status: {
-      in: ['body'],
-      optional: true,
-      isIn: {
-        options: [SWINSTALL_STATUSES],
-        errorMessage: 'Status must be one of ' + SWINSTALL_STATUSES,
-      },
-    },
-    statusDate: {
-      in: ['body'],
-      optional: true,
-      customSanitizer: {
-        options: isoDateStringToUTCDate(),
-      },
-      exists: {
-        options: { checkNull: true },
-        errorMessage: 'Status date must be a date.',
-      },
-    },
-    software: {
-      in: ['body'],
-      optional: true,
-      isString: {
-        errorMessage: 'Software reference must be a string.',
-      },
-      isHexadecimal: {
-        errorMessage: 'Software reference must be hexadecimal characters.',
-      },
-      isLength: {
-        options: [{ min: 24, max: 24 }],
-        errorMessage: 'Software reference must be 24 characters.',
-      },
-    },
-    vvResultsLoc: {
-      in: ['body'],
-      optional: true,
-      custom: {
-        options: isVvResultsLoc,
-        errorMessage: 'V&V results location must be an array of URLs.',
-      },
-    },
-    vvApprovalDate: {
-      in: ['body'],
-      optional: true,
-      customSanitizer: {
-        options: isoDateStringToUTCDate(true),
-      },
-      exists: {
-        options: { checkNull: true },
-        errorMessage: 'V&V approval date must be a date.',
-      },
-    },
-    DRRs: {
-      in: ['body'],
-      optional: true,
-      isString: {
-        errorMessage: 'DRRs must be a string.',
-      },
-      isAscii: {
-        errorMessage: 'DRRs must be ASCII characters.',
-      },
-      isLength: {
-        options: [{ min: 1, max: 30 }],
-        errorMessage: 'DRRs must be 1-30 characters.',
-      },
-    },
-  }));
+  };
+  return validate(req, checkSchema(schema));
 }

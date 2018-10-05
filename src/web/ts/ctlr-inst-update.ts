@@ -153,7 +153,7 @@ function InstUpdatePromiseCtrl(
 
 
   $scope.swSelect =  ($item) => {
-    $scope.formData.software = $item.id;
+    $scope.formData.software = $item.id || '';
   };
 
   // refresh the service list

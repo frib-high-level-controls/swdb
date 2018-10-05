@@ -1,10 +1,14 @@
 /**
  * Model to represent Software or Firmware.
  */
+import { isString } from 'lodash';
 import * as mongoose from 'mongoose';
 
 import * as history from '../shared/history';
 
+import { MODEL_NAME as SOFTWARE_MODEL_NAME } from './software';
+
+type ObjectId = mongoose.Types.ObjectId;
 
 export enum Status {
   RDY_INST = 'RDY_INST',
@@ -16,15 +20,14 @@ export enum Status {
 export interface ISWInstall extends history.IHistory {
   _id: any;
   host: string;
-  name?: string;
+  name: string;
   area: string[];
-  slots?: string[];
   status: string;
   statusDate: Date;
-  software: string;
-  vvResultsLoc?: string[];
+  software: ObjectId;
+  vvResultsLoc: string[];
   vvApprovalDate?: Date;
-  drrs?: string;
+  drrs: string;
 }
 
 export interface SWInstall extends ISWInstall, history.Document<SWInstall> {
@@ -50,13 +53,15 @@ const swInstallSchema = new Schema({
   name: {
     type: String,
     default: '',
+    // Using 'require: true' on fields of String type
+    // causes empty strings ('') to raise a validation
+    // error. Use the following custom validator instead.
+    validate: isString,
   },
   area: {
     type: [String],
+    default: [],
     required: true,
-  },
-  slots: {
-    type: [String],
   },
   status: {
     type: String,
@@ -69,17 +74,22 @@ const swInstallSchema = new Schema({
   },
   software: {
     type: ObjectId,
+    ref: SOFTWARE_MODEL_NAME,
     required: true,
   },
   vvResultsLoc: {
     type: [String],
+    default: [],
+    required: true,
   },
   vvApprovalDate: {
     type: Date,
+    required: false,
   },
   drrs: {
     type: String,
     default: '',
+    validate: isString,
   },
 }, {
   emitIndexErrors: true,

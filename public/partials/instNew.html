@@ -41,8 +41,8 @@
         <div id="host-group" class="form-group">
           <label class="col-sm-2 control-label">Host*</label>
           <div class="col-sm-8">
-            <input id="host" type="text" name="hostInput" class="form-control" placeholder="Host" ng-model="formData.host" ng-required="true"
-              ng-minlength="2" ng-maxlength="30">
+            <input id="host" type="text" name="hostInput" class="form-control" placeholder="Host" ng-model="formData.host">
+               <!-- ng-required="true" ng-minlength="2" ng-maxlength="30" -->
             </input>
           </div>
           <div class="col-sm-2" id="hostInputSts" ng-messages="inputForm.hostInput.$error" ng-if="inputForm.hostInput.$dirty">
@@ -164,7 +164,7 @@
             <p class="input-group">
               <input id="statusDate" name="statusDateInput" type="text" class="form-control" uib-datepicker-popup="{{datePicker.format}}"
                 ng-model="statusDateDisplay" is-open="datePicker.instances['statusDate']" datepicker-options="datePicker.options"
-                ng-required="true" close-text="Close" alt-input-formats="altInputFormats" 
+                ng-required="false" close-text="Close" alt-input-formats="altInputFormats" 
               />
               <span class="input-group-btn">
             <button type="button" class="btn btn-default" ng-click="datePicker.open($event, 'statusDate')"><i class="glyphicon glyphicon-calendar"></i></button>
