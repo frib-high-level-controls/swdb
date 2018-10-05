@@ -112,11 +112,12 @@ function toModel(data: webapi.SWInstall, doc?: SWInstall): SWInstall {
 async function createDoc(user: string, v2: boolean, req: Request, res: Response): Promise<void> {
   const doc = await toModel(v2 ? req.body.data : req.body).saveWithHistory(auth.formatRole(auth.RoleScheme.USR, user));
   debug('Created SWInstall: ' + doc._id + ' as ' + user);
-  res.location(`${res.locals.basePath || ''}/api/v1/inst/${doc.id}`);
   if (v2) {
+    res.location(`${res.locals.basePath || ''}/api/v2/swinstall/${doc.id}`);
     const pkg: webapi.Pkg<webapi.SWInstall> = { data: toWebAPI(doc) };
     res.status(CREATED).json(pkg);
   } else {
+    res.location(`${res.locals.basePath || ''}/api/v1/inst/${doc.id}`);
     res.status(201).json(toWebAPI(doc));
   }
 }
@@ -211,11 +212,12 @@ async function updateDoc(user: string, doc: SWInstall, v2: boolean, req: Request
   const role = auth.formatRole(auth.RoleScheme.USR, user);
   doc = await toModel(v2 ? req.body.data : req.body, doc).saveWithHistory(role);
   debug(`Updated SW Install: ${doc._id} as ${user}`);
-  res.location(`${res.locals.basePath || ''}/api/v1/inst/${doc.id}`);
   if (v2) {
+    res.location(`${res.locals.basePath || ''}/api/v2/swinstall/${doc.id}`);
     const pkg: webapi.Pkg<webapi.SWInstall> = { data: toWebAPI(doc) };
     res.json(pkg);
   } else {
+    res.location(`${res.locals.basePath || ''}/api/v1/inst/${doc.id}`);
     res.json(toWebAPI(doc));
   }
 }

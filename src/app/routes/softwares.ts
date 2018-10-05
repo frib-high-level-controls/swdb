@@ -148,11 +148,12 @@ async function createDoc(user: string, v2: boolean, req: Request, res: Response)
   const role = auth.formatRole(auth.RoleScheme.USR, user);
   const doc = await toModel(v2 ? req.body.data : req.body).saveWithHistory(role);
   debug('Created Software: ' + doc._id + ' as ' + user);
-  res.location(`${res.locals.basePath || ''}/api/v1/swdb/${doc.id}`);
   if (v2) {
+    res.location(`${res.locals.basePath || ''}/api/v2/software/${doc.id}`);
     const pkg: webapi.Pkg<webapi.Software> = { data: toWebAPI(doc) };
     res.status(CREATED).json(pkg);
   } else {
+    res.location(`${res.locals.basePath || ''}/api/v1/swdb/${doc.id}`);
     res.status(201).json(toWebAPI(doc));
   }
 }
@@ -247,11 +248,12 @@ async function updateDoc(user: string, doc: Software, v2: boolean, req: Request,
   const role = auth.formatRole(auth.RoleScheme.USR, user);
   doc = await toModel(v2 ? req.body.data : req.body, doc).saveWithHistory(role);
   debug(`Updated Software: ${doc._id} as ${user}`);
-  res.location(`${res.locals.basePath || ''}/api/v1/swdb/${doc.id}`);
   if (v2) {
+    res.location(`${res.locals.basePath || ''}/api/v2/software/${doc.id}`);
     const pkg: webapi.Pkg<webapi.Software> = { data: toWebAPI(doc) };
     res.json(pkg);
   } else {
+    res.location(`${res.locals.basePath || ''}/api/v1/swdb/${doc.id}`);
     res.json(toWebAPI(doc));
   }
 }
