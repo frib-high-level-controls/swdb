@@ -32,7 +32,7 @@ export enum VersionControlSystem {
 export type  VCS = VersionControlSystem;
 export const VCS = VersionControlSystem;
 
-export interface ISoftware extends history.IHistory {
+export interface ISoftware {
   _id: any;
   name: string;
   desc: string;
@@ -88,6 +88,7 @@ const ObjectId = Schema.Types.ObjectId;
 const softwareSchema = new Schema({
   name: {
     type: String,
+    trim: true,
     required: true,
   },
   desc: {
@@ -100,11 +101,13 @@ const softwareSchema = new Schema({
   },
   branch: {
     type: String,
+    trim: true,
     default: '',
     validate: isString,
   },
   version: {
     type: String,
+    trim: true,
     default: '',
     validate: isString,
   },

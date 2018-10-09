@@ -17,7 +17,7 @@ export enum Status {
   RET = 'RET',
 }
 
-export interface ISWInstall extends history.IHistory {
+export interface ISWInstall {
   _id: any;
   host: string;
   name: string;
@@ -48,10 +48,12 @@ const ObjectId = Schema.Types.ObjectId;
 const swInstallSchema = new Schema({
   host: {
     type: String,
+    trim: true,
     required: true,
   },
   name: {
     type: String,
+    trim: true,
     default: '',
     // Using 'require: true' on fields of String type
     // causes empty strings ('') to raise a validation
