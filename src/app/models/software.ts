@@ -79,7 +79,7 @@ export const VERSION_CONTROL_SYSTEMS: VCS[] = [
   VCS.OTHER,
 ];
 
-export const MODEL_NAME = 'swdb';
+export const MODEL_NAME = 'software';
 
 const Schema = mongoose.Schema;
 
@@ -188,4 +188,4 @@ history.addHistory(softwareSchema, {
   watchAll: true,
 });
 
-export const Software = history.model<Software>(MODEL_NAME, softwareSchema, 'swdbCollection');
+export const Software = history.model<Software>(MODEL_NAME, softwareSchema, `${MODEL_NAME}s`);

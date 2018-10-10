@@ -41,6 +41,8 @@ export const STATUSES: Status[] = [
   Status.RET,
 ];
 
+export const MODEL_NAME = 'swinstall';
+
 const Schema = mongoose.Schema;
 
 const ObjectId = Schema.Types.ObjectId;
@@ -103,4 +105,4 @@ history.addHistory(swInstallSchema, {
   watchAll: true,
 });
 
-export const SWInstall = history.model<SWInstall>('inst', swInstallSchema, 'instCollection');
+export const SWInstall = history.model<SWInstall>(MODEL_NAME, swInstallSchema, `${MODEL_NAME}s`);
