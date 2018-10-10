@@ -53,7 +53,10 @@ function InstUpdatePromiseCtrl(
     $location.path('/inst/details/' + $scope.formData.id);
   };
 
-  $scope.usrBtnClk =  () => {
+  $scope.usrBtnClk = (event: ng.IAngularEvent) => {
+    if (event) {
+      event.preventDefault();
+    }
     if ($scope.session.user) {
       $window.location.href = `${basePath}/logout`;
     } else {

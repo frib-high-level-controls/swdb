@@ -27,7 +27,10 @@ appController.controller('InstListController', function(
     }
   }, true);
 
-  $scope.usrBtnClk = () => {
+  $scope.usrBtnClk = (event: ng.IAngularEvent) => {
+    if (event) {
+      event.preventDefault();
+    }
     if ($scope.session.user) {
       $window.location.href = `${basePath}/logout`;
     } else {

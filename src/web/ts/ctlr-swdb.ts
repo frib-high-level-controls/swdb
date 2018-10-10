@@ -45,7 +45,7 @@ interface IListControllerScope extends ng.IScope {
   };
   props: IConfigProps;
   usrBtnTxt?: string;
-  usrBtnClk(): void;
+  usrBtnClk(event: ng.IAngularEvent): void;
 }
 
 appController.controller('ListController', function(
@@ -55,7 +55,6 @@ appController.controller('ListController', function(
   $http: ng.IHttpService,
   $q: ng.IQService,
   $scope: IListControllerScope,
-  $cookies: {},
   $window: ng.IWindowService,
   configService: IConfigService,
   userService: IUserService,
@@ -72,7 +71,10 @@ appController.controller('ListController', function(
     }
   }, true);
 
-  $scope.usrBtnClk = () => {
+  $scope.usrBtnClk = (event: ng.IAngularEvent) => {
+    if (event) {
+      event.preventDefault();
+    }
     if ($scope.session.user) {
       $window.location.href = `${basePath}/logout`;
     } else {

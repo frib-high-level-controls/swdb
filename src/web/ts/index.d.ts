@@ -113,7 +113,7 @@ interface ISwdbDetailsControllerScope extends ng.IScope {
   rawHistory: IHistory[];
   isHistCollapsed: boolean;
   history: string;
-  usrBtnClk(): void;
+  usrBtnClk(event: ng.IAngularEvent): void;
   updateBtnClk(): void;
   bumpVerBtnClk(): void;
 }
@@ -147,7 +147,7 @@ interface ISwdbNewControllerScope extends ng.IScope {
   };
   newItem(event: {currentTarget: HTMLInputElement}): void;
   removeItem(event: {currentTarget: HTMLInputElement}): void;
-  usrBtnClk(): void;
+  usrBtnClk(event: ng.IAngularEvent): void;
   bckBtnClk(): void;
   processForm(): void;
   updateBtnClk(): void;
@@ -190,7 +190,7 @@ interface ISwdbUpdateControllerScope extends ng.IScope {
   newItem(event: {currentTarget: HTMLInputElement}): void;
   removeItem(event: {currentTarget: HTMLInputElement}): void;
   onStatusChange(): void;
-  usrBtnClk(): void;
+  usrBtnClk(event: ng.IAngularEvent): void;
   bckBtnClk(): void;
   processForm(): void;
   updateBtnClk(): void;
@@ -204,7 +204,7 @@ interface IInstListControllerScope extends ng.IScope {
   props: IConfigProps;
   swMeta: SWMeta;
   usrBtnTxt?: string;
-  usrBtnClk(): void;
+  usrBtnClk(event: ng.IAngularEvent): void;
 }
 
 interface IInstDetailsControllerScope extends ng.IScope {
@@ -220,7 +220,7 @@ interface IInstDetailsControllerScope extends ng.IScope {
   statusDateDisplay: string;
   vvApprovalDateDisplay: string;
   rawHistory: {};
-  usrBtnClk(): void;
+  usrBtnClk(event: ng.IAngularEvent): void;
   updateBtnClk(): void;
 }
 
@@ -248,7 +248,7 @@ interface IInstNewControllerScope extends ng.IScope {
     formShowErr: boolean,
     formShowStatus: boolean,
   };
-  usrBtnClk(): void;
+  usrBtnClk(event: ng.IAngularEvent): void;
   updateBtnClk(): void;
   bckBtnClk(): void;
   swSelect(item: webapi.Inst): void;
@@ -290,7 +290,7 @@ interface IInstUpdateControllerScope extends ng.IScope {
     formShowErr: boolean,
     formShowStatus: boolean,
   };
-  usrBtnClk(): void;
+  usrBtnClk(event: ng.IAngularEvent): void;
   updateBtnClk(): void;
   bckBtnClk(): void;
   swSelect(item: webapi.Inst): void;

@@ -27,7 +27,10 @@ function NewPromiseCtrl(
     }
   }, true);
 
-  $scope.usrBtnClk = () => {
+  $scope.usrBtnClk = (event: ng.IAngularEvent) => {
+    if (event) {
+      event.preventDefault();
+    }
     if ($scope.session.user) {
       $location.path(`${basePath}/logout`);
     } else {
