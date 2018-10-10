@@ -54,7 +54,7 @@ test.describe('Installations update screen tests', () => {
   test.describe('1. should add a new installation record', () => {
     test.it('should show search page with login button', () => {
       driver.manage().window().setPosition(200, 0);
-      driver.get(props.webUrl + '#/inst/list');
+      driver.get(props.webUrl + '#!/inst/list');
       driver.wait(until.elementLocated(By.id('usrBtn')));
       driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')), 'Log in'));
     });
@@ -69,14 +69,14 @@ test.describe('Installations update screen tests', () => {
     });
 
     test.it('should show search page with username on logout button', () => {
-      driver.get(props.webUrl + '#/inst/list');
+      driver.get(props.webUrl + '#!/inst/list');
       driver.wait(until.elementLocated(By.id('usrBtn')));
       driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
         props.test.username.toUpperCase()));
     });
 
     test.it('should show update page with username on logout button', () => {
-      driver.get(props.webUrl + '#/inst/new');
+      driver.get(props.webUrl + '#!/inst/new');
       driver.wait(until.elementLocated(By.id('usrBtn')));
       driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
         props.test.username.toUpperCase()));
@@ -297,16 +297,16 @@ test.describe('Installations update screen tests', () => {
     });
 
     test.it('should show the correct area.0 in update', () => {
-      driver.wait(until.elementLocated(By.xpath('//*[@id="area.0"]/div[1]/span/span[2]/span')));
-      driver.findElement(By.xpath('//*[@id="area.0"]/div[1]/span/span[2]/span')).getText().then(
+      driver.wait(until.elementLocated(By.xpath('//*[@id="area.0"]/div[1]/span/span[2]')));
+      driver.findElement(By.xpath('//*[@id="area.0"]/div[1]/span/span[2]')).getText().then(
         (text: string) => {
           expect(text).to.equal('ADB:CRYO');
         });
     });
 
     test.it('should show the correct area.1 in update', () => {
-      driver.wait(until.elementLocated(By.xpath('//*[@id="area.1"]/div[1]/span/span[2]/span')));
-      driver.findElement(By.xpath('//*[@id="area.1"]/div[1]/span/span[2]/span')).getText().then(
+      driver.wait(until.elementLocated(By.xpath('//*[@id="area.1"]/div[1]/span/span[2]')));
+      driver.findElement(By.xpath('//*[@id="area.1"]/div[1]/span/span[2]')).getText().then(
         (text: string) => {
           expect(text).to.equal('ADB:TARGET');
         });

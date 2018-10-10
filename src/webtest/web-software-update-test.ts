@@ -55,7 +55,7 @@ test.describe('Software update screen tests', () => {
       // prefs.setLevel(webdriver.logging.Type.BROWSER, webdriver.logging.Level.ALL);
       // options.setLoggingPrefs(prefs);
       driver.manage().window().setPosition(200, 0);
-      driver.get(props.webUrl + '#/list');
+      driver.get(props.webUrl + '#!/list');
       driver.wait(until.elementLocated(By.id('usrBtn')));
       driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')), 'Log in'));
     });
@@ -70,14 +70,14 @@ test.describe('Software update screen tests', () => {
     });
 
     test.it('should show search page with username on logout button', function(this: Mocha.ITestCallbackContext) {
-      driver.get(props.webUrl + '#/list');
+      driver.get(props.webUrl + '#!/list');
       driver.wait(until.elementLocated(By.id('usrBtn')));
       driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
         props.test.username.toUpperCase()));
     });
 
     test.it('should show new page with username on logout button', function(this: Mocha.ITestCallbackContext) {
-      driver.get(props.webUrl + '#/new');
+      driver.get(props.webUrl + '#!/new');
       driver.wait(until.elementLocated(By.id('usrBtn')));
       driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
         props.test.username.toUpperCase()));
@@ -295,7 +295,7 @@ test.describe('Software update screen tests', () => {
   test.describe('3. should find the new record', () => {
     // find the created record
     test.it('should find a record', function(this: Mocha.ITestCallbackContext) {
-      driver.get(props.webUrl + '#/list');
+      driver.get(props.webUrl + '#!/list');
       driver.wait(until.elementLocated(By.id('swNameSrch'))).sendKeys('swdb-update-test');
       driver.wait(until.elementLocated(By.id('versionSrch'))).sendKeys('Test version');
       driver.wait(until.elementLocated(By.linkText('swdb-update-test')));
@@ -365,13 +365,13 @@ test.describe('Software update screen tests', () => {
     test.it('should show the correct owner in update', () => {
       driver.wait(until.elementLocated(By.id('owner')));
       driver.wait(until.elementTextContains(driver.findElement(
-        By.xpath('//*[@id="owner"]/div[1]/span/span[2]/span')), 'ISF:LAB.DIV.CONTROLS'));
+        By.xpath('//*[@id="owner"]/div[1]/span/span[2]')), 'ISF:LAB.DIV.CONTROLS'));
     });
 
     test.it('should show the correct engineer in update', () => {
       driver.wait(until.elementLocated(By.id('engineer')));
       driver.wait(until.elementTextContains(driver.findElement(
-        By.xpath('//*[@id="engineer"]/div[1]/span/span[2]/span')), 'CTRLENG2'));
+        By.xpath('//*[@id="engineer"]/div[1]/span/span[2]')), 'CTRLENG2'));
     });
 
     test.it('should show the correct levelOfCare in update', () => {
@@ -633,13 +633,13 @@ test.describe('Software update screen tests', () => {
     test.it('should show the correct owner in bump version new', function(this: Mocha.ITestCallbackContext) {
       driver.wait(until.elementLocated(By.id('owner')));
       driver.wait(until.elementTextContains(driver.findElement(
-        By.xpath('//*[@id="owner"]/div[1]/span/span[2]/span')), 'ISF:LAB.DIV.CONTROLS'));
+        By.xpath('//*[@id="owner"]/div[1]/span/span[2]')), 'ISF:LAB.DIV.CONTROLS'));
     });
 
     test.it('should show the correct engineer in bump version new', function(this: Mocha.ITestCallbackContext) {
       driver.wait(until.elementLocated(By.id('engineer')));
       driver.wait(until.elementTextContains(driver.findElement(
-        By.xpath('//*[@id="engineer"]/div[1]/span/span[2]/span')), 'CTRLENG2'));
+        By.xpath('//*[@id="engineer"]/div[1]/span/span[2]')), 'CTRLENG2'));
     });
 
     test.it('should show the correct levelOfCare in bump version new', () => {
@@ -882,7 +882,7 @@ test.describe('Software update screen tests', () => {
 
   test.describe('11. should clear all optional fields', () => {
     test.it('should find new record', function(this: Mocha.ITestCallbackContext) {
-      driver.get(props.webUrl + '#/list');
+      driver.get(props.webUrl + '#!/list');
       driver.wait(until.elementLocated(By.id('swNameSrch'))).sendKeys('swdb-update-test');
       driver.wait(until.elementLocated(By.id('versionSrch'))).sendKeys('Test version');
       driver.wait(until.elementLocated(By.linkText('swdb-update-test')));

@@ -50,7 +50,7 @@ test.describe('Installations detail screen tests', () => {
 
   test.it('should show search page with login button', async () =>  {
     await driver.manage().window().setPosition(200, 0);
-    await driver.get(props.webUrl + '#/inst/list');
+    await driver.get(props.webUrl + '#!/inst/list');
     await driver.wait(until.elementLocated(By.id('usrBtn')));
     await driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')), 'Log in'));
   });
@@ -65,14 +65,14 @@ test.describe('Installations detail screen tests', () => {
   });
 
   test.it('should show search page with username on logout button', async () => {
-    await driver.get(props.webUrl + '#/inst/list');
+    await driver.get(props.webUrl + '#!/inst/list');
     await driver.wait(until.elementLocated(By.id('usrBtn')));
     await driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
       props.test.username.toUpperCase()));
   });
 
   test.it('should find a record', async () => {
-    await driver.get(props.webUrl + '#/inst/list');
+    await driver.get(props.webUrl + '#!/inst/list');
     await driver.wait(until.elementLocated(By.id('hostSrch'))).sendKeys('host2');
     await driver.wait(until.elementLocated(By.linkText('host2')));
   });

@@ -76,7 +76,7 @@ appController.controller('InstListController', function(
     DTColumnBuilder.newColumn('host')
       .withTitle('Host').withOption('defaultContent', '')
       .renderWith((data, type, full, meta) => {
-        return '<a href="#/inst/details/' + full.id + '">' + full.host + '</a>';
+        return '<a href="#!/inst/details/' + full.id + '">' + full.host + '</a>';
       }),
     DTColumnBuilder.newColumn('name')
       .withTitle('Name').withOption('defaultContent', ''),
@@ -93,7 +93,7 @@ appController.controller('InstListController', function(
         if (!sw.version) {
           sw.version = '';
         }
-        return '<a href="#/details/' + full.software + '" >' +
+        return '<a href="#!/details/' + full.software + '" >' +
           sw.name +
           ' / ' + sw.branch +
           ' / ' + sw.version +
