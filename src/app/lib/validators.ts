@@ -3,8 +3,9 @@
  */
 import * as Debug from 'debug';
 import * as express from 'express';
+import * as lodash from 'lodash';
 import * as mongoose from 'mongoose';
-import * as validate from 'validate.js';
+
 
 import {
   Software,
@@ -59,7 +60,7 @@ export function isArea(val: string, opts: { req: express.Request }) {
     // debug('body is ' + cJSON.stringify(opts.req.body, null, 2));
     // debug('val is ' + cJSON.stringify(val, null, 2));
     val.forEach((element, idx, arr) => {
-      const thisResult = validate.isString(element);
+      const thisResult = lodash.isString(element);
       // debug('validation for element: ' + thisResult);
       if (!thisResult) {
         // record all failed fields
@@ -83,7 +84,7 @@ export function isVvProcLoc(val: {}) {
     val.forEach((element: string, idx: number, arr: any[]) => {
       // debug('checking element ' + element);
       // debug('checking element(by index) ' + opts.req.body.vvProcLoc[idx]);
-      const thisResult = validate.isString(element);
+      const thisResult = lodash.isString(element);
       if (!thisResult) {
         // record all failed fields
         result.push(String(element) + ' must be a string');
@@ -112,7 +113,7 @@ export function isVvResultsLoc(val: string, opts: { req: express.Request }) {
     val.forEach((element: string, idx: number, arr: any[]) => {
       // debug('checking element ' + element);
       // debug('checking element(by index) ' + opts.req.body.vvResultsLoc[idx]);
-      const thisResult = validate.isString(element);
+      const thisResult = lodash.isString(element);
       if (!thisResult) {
         // record all failed fields
         result.push(String(element) + ' must be a string');
