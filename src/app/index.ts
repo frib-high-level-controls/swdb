@@ -262,7 +262,7 @@ async function doStart(): Promise<express.Application> {
   });
 
   mongoose.connection.on('reconnect', () => {
-    status.setComponentError('MongoDB', 'Reconnected');
+    status.setComponentOk('MongoDB', 'Reconnected');
     info('Mongoose connection: Reconnected');
   });
 
