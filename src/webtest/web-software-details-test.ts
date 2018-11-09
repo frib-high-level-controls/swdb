@@ -43,7 +43,9 @@ test.describe('Preload db record tests', () => {
   });
 
   after('Quit WebDriver', async () => {
-    await driver.quit();
+    if (driver) {
+      await driver.quit();
+    }
   });
 
   after('Stop Application', async () => {
