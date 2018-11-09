@@ -1,6 +1,6 @@
 {
   "name": "swdb",
-  "version": "1.1.0-3",
+  "version": "1.1.0-3.BETA",
   "private": true,
   "description": "Software Database application",
   "scripts": {
