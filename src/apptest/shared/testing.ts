@@ -23,14 +23,13 @@ export async function requestFor(app: express.Application, username?: string, pa
   return agent;
 }
 
-type CheckPackageData = {} | ((d: {}) => Promise<void> | void);
 type CheckPackageChecker = (res: supertest.Response) => Promise<void> | void;
-interface CheckPackageOpts { equal?: boolean; ordered?: boolean; }
+interface CheckPackageOptions { equal?: boolean; ordered?: boolean; }
 
 /**
  * Utility to assert the response is a valid webapi data package.
  */
-export function checkPackage(data?: CheckPackageData, options?: CheckPackageOpts): CheckPackageChecker {
+export function checkPackage(data?: {}, options?: CheckPackageOptions): CheckPackageChecker {
   return (res: supertest.Response) => {
     options = options || {};
 

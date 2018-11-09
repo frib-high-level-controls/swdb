@@ -1,29 +1,32 @@
 /**
  * Start and configure the web application.
  */
-import crypto = require('crypto');
-import fs = require('fs');
-import net = require('net');
-import path = require('path');
-import util = require('util');
+import * as crypto from 'crypto';
+import * as fs from 'fs';
+import * as net from 'net';
+import * as path from 'path';
+import * as util from 'util';
 
-import bodyparser = require('body-parser');
-import dbg = require('debug');
-import express = require('express');
-import session = require('express-session');
-import mongoose = require('mongoose');
-import morgan = require('morgan');
+// Required syntax because the type declaration uses 'export = rc;'.
+// (See: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/rc/index.d.ts)
 import rc = require('rc');
-import favicon = require('serve-favicon');
 
-import auth = require('./shared/auth');
-import forgauth = require('./shared/forg-auth');
-import forgapi = require('./shared/forgapi');
-import handlers = require('./shared/handlers');
-import logging = require('./shared/logging');
-import promises = require('./shared/promises');
-import status = require('./shared/status');
-import tasks = require('./shared/tasks');
+import * as bodyparser from 'body-parser';
+import * as dbg from 'debug';
+import * as express from 'express';
+import * as session from 'express-session';
+import * as mongoose from 'mongoose';
+import * as morgan from 'morgan';
+import * as favicon from 'serve-favicon';
+
+import * as auth from './shared/auth';
+import * as forgauth from './shared/forg-auth';
+import * as forgapi from './shared/forgapi';
+import * as handlers from './shared/handlers';
+import * as logging from './shared/logging';
+import * as promises from './shared/promises';
+import * as status from './shared/status';
+import * as tasks from './shared/tasks';
 
 import * as dataproxy from './routes/dataproxy';
 import * as metadata from './routes/metadata';
