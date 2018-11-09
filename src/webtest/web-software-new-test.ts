@@ -101,7 +101,7 @@ test.describe('Software update screen tests', () => {
 
     test.it('Submit should fail with software name required error', () => {
       driver.findElement(By.id('submitBtn')).click();
-      driver.wait(until.titleIs('SWDB - New'));
+      driver.wait(until.titleIs('New - SCDB'));
       driver.wait(until.elementLocated(By.id('formError')));
       driver.findElement(By.id('formError')).getText().then(
         (text) => {
@@ -116,7 +116,7 @@ test.describe('Software update screen tests', () => {
 
     test.it('Submit should fail with software owner required error', () => {
       driver.findElement(By.id('submitBtn')).click();
-      driver.wait(until.titleIs('SWDB - New'));
+      driver.wait(until.titleIs('New - SCDB'));
       driver.wait(until.elementLocated(By.id('formError')));
       driver.findElement(By.id('formError')).getText().then(
         (text) => {
@@ -139,7 +139,7 @@ test.describe('Software update screen tests', () => {
 
     test.it('Submit should fail with status date required error', async () => {
       driver.findElement(By.id('submitBtn')).click();
-      driver.wait(until.titleIs('SWDB - New'));
+      driver.wait(until.titleIs('New - SCDB'));
       driver.wait(until.elementLocated(By.id('formError')));
       const text = await driver.findElement(By.id('formError')).getText();
       expect(text).to.match(/Status date must be a date./);
@@ -164,7 +164,7 @@ test.describe('Software update screen tests', () => {
     test.it('Submit should succeed showing the details screen', () => {
       driver.executeScript('scroll(0, 250);');
       driver.findElement(By.id('submitBtn')).click();
-      driver.wait(until.titleIs('SWDB - Details'));
+      driver.wait(until.titleIs('Details - SCDB'));
     });
   });
 
@@ -185,7 +185,7 @@ test.describe('Software update screen tests', () => {
 
 
     test.it('should show the requested record title', () => {
-      driver.wait(until.titleIs('SWDB - New'));
+      driver.wait(until.titleIs('New - SCDB'));
     });
 
     test.it('Set software name', () => {
@@ -353,7 +353,7 @@ test.describe('Software update screen tests', () => {
     });
 
     test.it('should show the details record', () => {
-      driver.wait(until.titleIs('SWDB - Details'));
+      driver.wait(until.titleIs('Details - SCDB'));
     });
   });
 

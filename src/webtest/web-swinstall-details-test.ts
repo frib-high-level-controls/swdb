@@ -79,7 +79,7 @@ test.describe('Installations detail screen tests', () => {
 
   test.it('should show the requested installation record title', async () => {
     await driver.findElement(By.linkText('host2')).click();
-    await driver.wait(until.titleIs('SWDB - Installation Details'));
+    await driver.wait(until.titleIs('Installation Details - SCDB'));
   });
 
   test.it('should show the requested installation record user button', async () => {

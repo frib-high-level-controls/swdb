@@ -87,7 +87,7 @@ test.describe('Preload db record tests', () => {
   });
 
   test.it('should show details record title', () => {
-    driver.wait(until.titleIs('SWDB - Details'));
+    driver.wait(until.titleIs('Details - SCDB'));
   });
 
   test.it("should show 'Back' button", () => {

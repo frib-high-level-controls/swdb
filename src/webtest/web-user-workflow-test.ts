@@ -83,7 +83,7 @@ test.describe('User flow2 tests', () => {
   });
 
   test.it('should show the requested sw record title', () => {
-    driver.wait(until.titleIs('SWDB - New'));
+    driver.wait(until.titleIs('New - SCDB'));
   });
 
   test.describe('1. Add initial software record', () => {
@@ -132,7 +132,7 @@ test.describe('User flow2 tests', () => {
 
     test.it('should show the sw details record', function(this: Mocha.ITestCallbackContext) {
       // check result
-      driver.wait(until.titleIs('SWDB - Details'));
+      driver.wait(until.titleIs('Details - SCDB'));
     });
 
     test.it('should show the correct software name in details', () => {
@@ -164,7 +164,7 @@ test.describe('User flow2 tests', () => {
     });
 
     test.it('should show the sw update title', () => {
-      driver.wait(until.titleIs('SWDB - Update'));
+      driver.wait(until.titleIs('Update - SCDB'));
     });
 
     test.it('Update sw record - set version', function(this: Mocha.ITestCallbackContext) {
@@ -295,7 +295,7 @@ test.describe('User flow2 tests', () => {
 
     test.it('should show the sw details record', function(this: Mocha.ITestCallbackContext) {
       // check result
-      driver.wait(until.titleIs('SWDB - Details'));
+      driver.wait(until.titleIs('Details - SCDB'));
     });
   });
 
@@ -311,7 +311,7 @@ test.describe('User flow2 tests', () => {
     });
 
     test.it('should show the new installation page title', () => {
-      driver.wait(until.titleIs('SWDB - New Installation'));
+      driver.wait(until.titleIs('New Installation - SCDB'));
     });
     test.it('Add new inst record - set host', function(this: Mocha.ITestCallbackContext) {
       driver.wait(until.elementLocated(By.id('host')));
@@ -409,7 +409,7 @@ test.describe('User flow2 tests', () => {
 
     test.it('should show the inst details record', function(this: Mocha.ITestCallbackContext) {
       // check result
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
     });
   });
 
@@ -460,7 +460,7 @@ test.describe('User flow2 tests', () => {
 
     test.it('should show the inst details record', function(this: Mocha.ITestCallbackContext) {
       // check result
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
     });
   });
 
@@ -515,7 +515,7 @@ test.describe('User flow2 tests', () => {
 
     test.it('should show the inst details record', function(this: Mocha.ITestCallbackContext) {
       // check result
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
     });
   });
 
@@ -533,12 +533,12 @@ test.describe('User flow2 tests', () => {
     // find the created record and click update
     test.it('should show record details', function(this: Mocha.ITestCallbackContext) {
       driver.wait(until.elementLocated(By.linkText('EXTA IOC'))).click();
-      driver.wait(until.titleIs('SWDB - Details'));
+      driver.wait(until.titleIs('Details - SCDB'));
       driver.wait(until.elementLocated(By.id('updateBtn'))).click();
     });
 
     test.it('should show the update title', () => {
-      driver.wait(until.titleIs('SWDB - Update'));
+      driver.wait(until.titleIs('Update - SCDB'));
     });
 
     test.it('Update2 inst record - set status', () => {
@@ -583,12 +583,12 @@ test.describe('User flow2 tests', () => {
     // find the created record and click update
     test.it('should show record details', function(this: Mocha.ITestCallbackContext) {
       driver.wait(until.elementLocated(By.linkText('EXTA IOC'))).click();
-      driver.wait(until.titleIs('SWDB - Details'));
+      driver.wait(until.titleIs('Details - SCDB'));
       driver.wait(until.elementLocated(By.id('bumpVerBtn'))).click();
     });
 
     test.it('Should go to a prepopulated software update page', function(this: Mocha.ITestCallbackContext) {
-      driver.wait(until.titleIs('SWDB - New'));
+      driver.wait(until.titleIs('New - SCDB'));
     });
   });
 
@@ -616,7 +616,7 @@ test.describe('User flow2 tests', () => {
   // });
 
   // test.it('should show the correct error', () => {
-  //   driver.wait(until.titleIs('SWDB - Update'), 2000);
+  //   driver.wait(until.titleIs('Update - SCDB'), 2000);
   //   driver.wait(until.elementLocated(By.id('formError')));
   //   driver.findElement(By.id('formError')).getText().then(
   //     (text) => {
@@ -639,7 +639,7 @@ test.describe('User flow2 tests', () => {
     });
 
     test.it('should show the details title', () => {
-      driver.wait(until.titleIs('SWDB - Details'));
+      driver.wait(until.titleIs('Details - SCDB'));
     });
   });
 
@@ -659,12 +659,12 @@ test.describe('User flow2 tests', () => {
     // find the created record and click update
     test.it('should show record details', function(this: Mocha.ITestCallbackContext) {
       driver.wait(until.elementLocated(By.linkText('EXTA IOC'))).click();
-      driver.wait(until.titleIs('SWDB - Details'));
+      driver.wait(until.titleIs('Details - SCDB'));
       driver.wait(until.elementLocated(By.id('updateBtn'))).click();
     });
 
     test.it('should show the update title', () => {
-      driver.wait(until.titleIs('SWDB - Update'));
+      driver.wait(until.titleIs('Update - SCDB'));
     });
 
     test.it('Set software status date', function(this: Mocha.ITestCallbackContext) {
@@ -698,12 +698,12 @@ test.describe('User flow2 tests', () => {
     });
 
     test.it('should show installation record details', function(this: Mocha.ITestCallbackContext) {
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
       driver.wait(until.elementLocated(By.id('updateBtn'))).click();
     });
 
     test.it('should show the update title', () => {
-      driver.wait(until.titleIs('SWDB - Update Installation'));
+      driver.wait(until.titleIs('Update Installation - SCDB'));
     });
 
     test.it('Update inst record - set status', () => {
@@ -744,7 +744,7 @@ test.describe('User flow2 tests', () => {
     });
 
     test.it('should show the details title', () => {
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
     });
 
     test.it('should show the correct sw field in details', () => {
@@ -762,12 +762,12 @@ test.describe('User flow2 tests', () => {
      */
 
     test.it('should show installation record details', function(this: Mocha.ITestCallbackContext) {
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
       driver.wait(until.elementLocated(By.id('updateBtn'))).click();
     });
 
     test.it('should show the update title', () => {
-      driver.wait(until.titleIs('SWDB - Update Installation'));
+      driver.wait(until.titleIs('Update Installation - SCDB'));
     });
 
     test.it('Add new inst record - set software', async function(this: Mocha.ITestCallbackContext) {
@@ -788,7 +788,7 @@ test.describe('User flow2 tests', () => {
     });
 
     test.it('should show the details title', () => {
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
     });
 
     test.it('should show the correct sw field in details', () => {
@@ -805,7 +805,7 @@ test.describe('User flow2 tests', () => {
      * 14. Update installation status as Ready for verification
      */
     test.it('should show installation record details', function(this: Mocha.ITestCallbackContext) {
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
       driver.wait(until.elementLocated(By.id('updateBtn'))).click();
     });
 
@@ -828,13 +828,13 @@ test.describe('User flow2 tests', () => {
     });
 
     test.it('should show the details title', () => {
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
     });
   });
 
   test.describe('15. Update installation status as Ready for beam', () => {
     test.it('should show installation record details', function(this: Mocha.ITestCallbackContext) {
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
       driver.wait(until.elementLocated(By.id('updateBtn'))).click();
     });
 
@@ -878,7 +878,7 @@ test.describe('User flow2 tests', () => {
     });
 
     test.it('should show the details title', () => {
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
     });
   });
 
@@ -895,12 +895,12 @@ test.describe('User flow2 tests', () => {
     // find the created record and click update
     test.it('should show record details', function(this: Mocha.ITestCallbackContext) {
       driver.wait(until.elementLocated(By.linkText('EXTA IOC'))).click();
-      driver.wait(until.titleIs('SWDB - Details'));
+      driver.wait(until.titleIs('Details - SCDB'));
       driver.wait(until.elementLocated(By.id('updateBtn'))).click();
     });
 
     test.it('should show the update title', () => {
-      driver.wait(until.titleIs('SWDB - Update'));
+      driver.wait(until.titleIs('Update - SCDB'));
     });
 
     test.it('Update sw record - set status', () => {
@@ -922,7 +922,7 @@ test.describe('User flow2 tests', () => {
     });
 
     test.it('should show the details title', function(this: Mocha.ITestCallbackContext) {
-      driver.wait(until.titleIs('SWDB - Details'));
+      driver.wait(until.titleIs('Details - SCDB'));
     });
 
     test.it('should show the correct sw status in details', () => {
@@ -952,13 +952,13 @@ test.describe('User flow2 tests', () => {
     });
 
     test.it('should show the new sw record title and click cancel', () => {
-      driver.wait(until.titleIs('SWDB - New'));
+      driver.wait(until.titleIs('New - SCDB'));
       driver.wait(until.elementLocated(By.id('cancelBtn')));
       driver.findElement(By.id('cancelBtn')).click();
     });
 
     test.it('should show list page', () => {
-      driver.wait(until.titleIs('SWDB - List'));
+      driver.wait(until.titleIs('List - SCDB'));
     });
   });
 
@@ -978,14 +978,14 @@ test.describe('User flow2 tests', () => {
     // find the created record and click update-cancel and back to details
     test.it('should show record details after cancel update', function(this: Mocha.ITestCallbackContext) {
       driver.wait(until.elementLocated(By.linkText('EXTA IOC'))).click();
-      driver.wait(until.titleIs('SWDB - Details'));
+      driver.wait(until.titleIs('Details - SCDB'));
       driver.getCurrentUrl().then((currUrl) => {
         id = currUrl.split('/').pop();
       });
       driver.wait(until.elementLocated(By.id('updateBtn'))).click();
-      driver.wait(until.titleIs('SWDB - Update'));
+      driver.wait(until.titleIs('Update - SCDB'));
       driver.wait(until.elementLocated(By.id('cancelBtn'))).click();
-      driver.wait(until.titleIs('SWDB - Details'));
+      driver.wait(until.titleIs('Details - SCDB'));
       driver.getCurrentUrl().then((currUrl) => {
         const newid = currUrl.split('/').pop();
         expect(newid).to.equal(id);
@@ -1004,13 +1004,13 @@ test.describe('User flow2 tests', () => {
     });
 
     test.it('should show the new sw record title and click cancel', () => {
-      driver.wait(until.titleIs('SWDB - New Installation'));
+      driver.wait(until.titleIs('New Installation - SCDB'));
       driver.wait(until.elementLocated(By.id('cancelBtn')));
       driver.findElement(By.id('cancelBtn')).click();
     });
 
     test.it('should show list page', () => {
-      driver.wait(until.titleIs('SWDB - Installations List'));
+      driver.wait(until.titleIs('Installations List - SCDB'));
     });
   });
 
@@ -1026,14 +1026,14 @@ test.describe('User flow2 tests', () => {
     // find the created record and click update-cancel and back to details
     test.it('should show record details after cancel update', function(this: Mocha.ITestCallbackContext) {
       driver.wait(until.elementLocated(By.linkText('vmachine01'))).click();
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
       driver.getCurrentUrl().then((currUrl) => {
         id = currUrl.split('/').pop();
       });
       driver.wait(until.elementLocated(By.id('updateBtn'))).click();
-      driver.wait(until.titleIs('SWDB - Update Installation'));
+      driver.wait(until.titleIs('Update Installation - SCDB'));
       driver.wait(until.elementLocated(By.id('cancelBtn'))).click();
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
       driver.getCurrentUrl().then((currUrl) => {
         const newid = currUrl.split('/').pop();
         expect(newid).to.equal(id);

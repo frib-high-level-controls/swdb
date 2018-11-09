@@ -73,7 +73,7 @@ test.describe('Installations record tests', () => {
   });
 
   test.it('should show title', () => {
-    driver.wait(until.titleIs('SWDB - List'));
+    driver.wait(until.titleIs('List - SCDB'));
   });
 
   test.it("should show 'Add software' button", () => {

@@ -84,7 +84,7 @@ test.describe('Installations update screen tests', () => {
 
 
     test.it('should show the requested installation record title', () => {
-      driver.wait(until.titleIs('SWDB - New Installation'));
+      driver.wait(until.titleIs('New Installation - SCDB'));
     });
 
     test.it('Set the host', () => {
@@ -239,13 +239,13 @@ test.describe('Installations update screen tests', () => {
 
     test.it('should show the details record', () => {
       driver.findElement(By.id('submitBtn')).click();
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
     });
   });
 
   test.describe('2. should show installation details', () => {
     test.it('should show the correct installtion host in details', () => {
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
       driver.wait(until.elementLocated(By.id('host')));
       driver.findElement(By.id('host')).getAttribute('value').then(
         (text: string) => {
@@ -269,7 +269,7 @@ test.describe('Installations update screen tests', () => {
     test.it('should go to update record', () => {
       driver.wait(until.elementLocated(By.id('updateBtn')));
       driver.findElement(By.id('updateBtn')).click();
-      driver.wait(until.titleIs('SWDB - Update Installation'));
+      driver.wait(until.titleIs('Update Installation - SCDB'));
     });
 
     test.it('should show the correct host in update', () => {
@@ -281,7 +281,7 @@ test.describe('Installations update screen tests', () => {
     });
 
     test.it('should update installation host', () => {
-      driver.wait(until.titleIs('SWDB - Update Installation'));
+      driver.wait(until.titleIs('Update Installation - SCDB'));
       driver.wait(until.elementLocated(By.id('host')));
       const input = driver.findElement(By.id('host'));
       input.clear();
@@ -350,7 +350,7 @@ test.describe('Installations update screen tests', () => {
 
   test.describe('4. should show updated installation details', () => {
     test.it('should show the details record', () => {
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
     });
 
     test.it('should show the correct installtion host in details', () => {
@@ -429,7 +429,7 @@ test.describe('Installations update screen tests', () => {
     test.it('should go to update record', () => {
       driver.wait(until.elementLocated(By.id('updateBtn')));
       driver.findElement(By.id('updateBtn')).click();
-      driver.wait(until.titleIs('SWDB - Update Installation'));
+      driver.wait(until.titleIs('Update Installation - SCDB'));
     });
 
     test.it('clear name field', () => {
@@ -461,7 +461,7 @@ test.describe('Installations update screen tests', () => {
 
   test.describe('6. should show updated installation details', () => {
     test.it('should show the details record', () => {
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
     });
 
     test.it('should show the correct installtion host in details', () => {

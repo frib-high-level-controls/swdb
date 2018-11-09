@@ -85,7 +85,7 @@ test.describe('Software update screen tests', () => {
 
 
     test.it('should show the requested installation record title', () => {
-      driver.wait(until.titleIs('SWDB - New'));
+      driver.wait(until.titleIs('New - SCDB'));
     });
 
     test.it('Add new record', function(this: Mocha.ITestCallbackContext) {
@@ -264,7 +264,7 @@ test.describe('Software update screen tests', () => {
 
   test.describe('2. should show software details', () => {
     test.it('should show the details record', function(this: Mocha.ITestCallbackContext) {
-      driver.wait(until.titleIs('SWDB - Details'));
+      driver.wait(until.titleIs('Details - SCDB'));
     });
 
     test.it('should show the correct software name in details', () => {
@@ -304,14 +304,14 @@ test.describe('Software update screen tests', () => {
     // find the created record and click update
     test.it('should show record details', function(this: Mocha.ITestCallbackContext) {
       driver.wait(until.elementLocated(By.linkText('swdb-update-test'))).click();
-      driver.wait(until.titleIs('SWDB - Details'));
+      driver.wait(until.titleIs('Details - SCDB'));
       driver.wait(until.elementLocated(By.id('updateBtn'))).click();
     });
   });
 
   test.describe('4. should show the correct data in update screen', () => {
     test.it('should show the update title', () => {
-      driver.wait(until.titleIs('SWDB - Update'));
+      driver.wait(until.titleIs('Update - SCDB'));
     });
 
     test.it('should show the correct software name in update', () => {
@@ -436,7 +436,7 @@ test.describe('Software update screen tests', () => {
 
   test.describe('6. should show updated data from the new record details', () => {
     test.it('should show the details record', function(this: Mocha.ITestCallbackContext) {
-      driver.wait(until.titleIs('SWDB - Details'), 20000);
+      driver.wait(until.titleIs('Details - SCDB'), 20000);
     });
 
     test.it('should show the correct description in details', () => {
@@ -579,7 +579,7 @@ test.describe('Software update screen tests', () => {
     test.it('should click new version shows new record page ', () => {
       driver.wait(until.elementLocated(By.id('bumpVerBtn')),
         8000).click();
-      driver.wait(until.titleIs('SWDB - New'));
+      driver.wait(until.titleIs('New - SCDB'));
     });
 
     test.it('should show the correct description in bump version new', () => {
@@ -704,7 +704,7 @@ test.describe('Software update screen tests', () => {
       input.sendKeys('Bumped Branch');
       driver.wait(until.elementLocated(By.id('submitBtn')),
         8000).click();
-      driver.wait(until.titleIs('SWDB - Details'));
+      driver.wait(until.titleIs('Details - SCDB'));
     });
   });
 
@@ -850,7 +850,7 @@ test.describe('Software update screen tests', () => {
 
     test.it('should go to update', () => {
       driver.wait(until.elementLocated(By.id('updateBtn'))).click();
-      driver.wait(until.titleIs('SWDB - Update'));
+      driver.wait(until.titleIs('Update - SCDB'));
     });
 
     test.it('should update the same record', function(this: Mocha.ITestCallbackContext) {
@@ -863,7 +863,7 @@ test.describe('Software update screen tests', () => {
     });
 
     test.it('should show the history table in details', function(this: Mocha.ITestCallbackContext) {
-      driver.wait(until.titleIs('SWDB - Details'));
+      driver.wait(until.titleIs('Details - SCDB'));
     });
 
     test.it('should show both desc changes in the history table of details',
@@ -890,11 +890,11 @@ test.describe('Software update screen tests', () => {
     // find the created record and click update
     test.it('should show record details', function(this: Mocha.ITestCallbackContext) {
       driver.wait(until.elementLocated(By.linkText('swdb-update-test'))).click();
-      driver.wait(until.titleIs('SWDB - Details'));
+      driver.wait(until.titleIs('Details - SCDB'));
       driver.wait(until.elementLocated(By.id('updateBtn'))).click();
     });
     test.it('should show the update title', () => {
-      driver.wait(until.titleIs('SWDB - Update'));
+      driver.wait(until.titleIs('Update - SCDB'));
     });
 
     test.it('should clear the description field', function(this: Mocha.ITestCallbackContext) {
@@ -935,7 +935,7 @@ test.describe('Software update screen tests', () => {
       driver.findElement(By.id('submitBtn')).click();
     });
     test.it('should show the update title', () => {
-      driver.wait(until.titleIs('SWDB - Details'));
+      driver.wait(until.titleIs('Details - SCDB'));
     });
     test.it('should show cleared description field', function(this: Mocha.ITestCallbackContext) {
       driver.wait(until.elementLocated(By.id('desc')));

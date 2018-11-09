@@ -54,7 +54,7 @@ describe('Software Installation API Specification', () => {
         if (err) {
           done(err);
         } else {
-          expect(res.text).to.match(/SWDB \(Prototype Interface\)/);
+          expect(res.text).to.match(/SCDB/);
           done();
         }
       });

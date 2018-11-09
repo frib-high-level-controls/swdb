@@ -88,7 +88,7 @@ test.describe('Installations add screen tests', () => {
     });
 
     test.it('should stay on the new form', () => {
-      driver.wait(until.titleIs('SWDB - New Installation'));
+      driver.wait(until.titleIs('New Installation - SCDB'));
     });
 
     test.it('Set installation host', () => {
@@ -110,7 +110,7 @@ test.describe('Installations add screen tests', () => {
 
     test.it('Submit should fail with area required error', () => {
       driver.findElement(By.id('submitBtn')).click();
-      driver.wait(until.titleIs('SWDB - New Installation'));
+      driver.wait(until.titleIs('New Installation - SCDB'));
       driver.wait(until.elementLocated(By.id('formError')));
       driver.findElement(By.id('formError')).getText().then(
         (text) => {
@@ -138,7 +138,7 @@ test.describe('Installations add screen tests', () => {
 
     test.it('Submit should fail with software name required error', () => {
       driver.findElement(By.id('submitBtn')).click();
-      driver.wait(until.titleIs('SWDB - New Installation'));
+      driver.wait(until.titleIs('New Installation - SCDB'));
       driver.wait(until.elementLocated(By.id('formError')));
       driver.findElement(By.id('formError')).getText().then(
         (text) => {
@@ -166,7 +166,7 @@ test.describe('Installations add screen tests', () => {
 
     test.it('Submit should and go to Installation Details', () => {
       driver.findElement(By.id('submitBtn')).click();
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
     });
   });
 
@@ -187,7 +187,7 @@ test.describe('Installations add screen tests', () => {
 
 
     test.it('should show the requested installation record title', () => {
-      driver.wait(until.titleIs('SWDB - New Installation'));
+      driver.wait(until.titleIs('New Installation - SCDB'));
     });
 
     test.it('Add new record - set host', () => {
@@ -339,7 +339,7 @@ test.describe('Installations add screen tests', () => {
 
 
     test.it('should show the details record', () => {
-      driver.wait(until.titleIs('SWDB - Installation Details'));
+      driver.wait(until.titleIs('Installation Details - SCDB'));
     });
   });
 

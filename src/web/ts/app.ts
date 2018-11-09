@@ -1,5 +1,5 @@
 /**
- * SWDB app loader
+ * SCDB app loader
  */
 
 let app = angular.module('app', [

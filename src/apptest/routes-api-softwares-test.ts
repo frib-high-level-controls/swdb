@@ -56,7 +56,7 @@ describe('Software API Specification', () => {
     .get('/')
     .expect(200)
     .end((err, res) => {
-      expect(res.text).to.match(/SWDB \(Prototype Interface\)/);
+      expect(res.text).to.match(/SCDB/);
       done(err);
     });
   });
