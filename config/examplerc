@@ -26,35 +26,31 @@
     "db": "webapp-dev",
     "options": {
       // Authentication configuration 
-      // authSource: "admin",
-      // authMechanism: "MDEFAULT",
+      // "authSource": "admin",
+      // "authMechanism": "MDEFAULT",
 
       // ReplicaSet configuration
-      // replicaSet: "cluster-foo",
+      // "replicaSet": "cluster-foo",
 
       // Connection configuration
-      // connectTimeoutMS: 30000,
-      // socketTimeoutMS 360000,
-      // reconnectTries: 30,
-      // reconnectInterval: 1000,
-      // autoReconnect: true,
-      // keepAlive: true,
+      // "connectTimeoutMS": 30000,
+      // "socketTimeoutMS": 360000,
+      // "reconnectTries": 30,
+      // "reconnectInterval": 1000,
+      // "autoReconnect": true,
+      // "keepAlive": true,
 
       // SSL configuration
-      // ssl: false,
-      // sslValidate: true,
-      // sslCA: "",
-      // sslCert: "",
-      // sslKey: "",
-      // sslPass: "",
-      // sslCRL: ""
-
-      // Use the "new" style connection options (Required for Mongoose 4.x only!)
-      // See http://mongoosejs.com/docs/connections.html
-      "useMongoClient": true
+      // "ssl": false,
+      // "sslValidate": true,
+      // "sslCA": "",
+      // "sslCert": "",
+      // "sslKey": "",
+      // "sslPass": "",
+      // "sslCRL": "",
 
       // Use the "new" URL parser (Remove deprecation warning in Mongoose 5.x!)
-      // "useNewUrlParser": true
+      "useNewUrlParser": true
     }
   },
   "cas": {
