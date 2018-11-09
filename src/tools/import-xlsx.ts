@@ -195,7 +195,7 @@ async function main() {
 
   // Connect and wait for autoIndex to complete
   await mongoose.connect(mongoUrl, cfg.mongo.options);
-  info('Connected to database: mongodb://%s:%s/%s', cfg.mongo.addr, cfg.mongo.port, cfg.mongo.db);
+  info('Connected to database: mongodb://%s/%s', cfg.mongo.host, cfg.mongo.db);
 
   // Clean DB before saving data
   await mongoose.connection.db.dropDatabase();
