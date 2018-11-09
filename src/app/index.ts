@@ -12,7 +12,6 @@ import * as util from 'util';
 import rc = require('rc');
 
 import * as bodyparser from 'body-parser';
-import * as dbg from 'debug';
 import * as express from 'express';
 import * as session from 'express-session';
 import * as mongoose from 'mongoose';
@@ -76,12 +75,6 @@ interface Config {
 
 // application states (same as tasks.State, but avoids the dependency)
 export type State = 'STARTING' | 'STARTED' | 'STOPPING' | 'STOPPED';
-
-/////////////////////////////////////////////////
-// Maintained for compatibility (non-template) //
-//////////////////////////////////////////////////
-const debug = dbg('swdb:index');
-//////////////////////////////////////////////////
 
 // application singleton
 let app: express.Application;
@@ -413,12 +406,10 @@ async function doStart(): Promise<express.Application> {
 
   // handle incoming get requests
   app.get('/', (req, res) => {
-    debug('GET / request');
     res.render('index');
   });
 
   app.get('/login', auth.getProvider().authenticate({ rememberParams: [ 'bounce' ]}), (req, res) => {
-    debug('GET /login request');
     if (req.query.bounce) {
       res.redirect(req.query.bounce);
       return;
