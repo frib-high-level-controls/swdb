@@ -1,70 +1,46 @@
-# SWDB
-This ia a prototype web application for storing meta-information on software.
-#Installation Overview
-This install has been tested on Debin Jessie.
-To start with, make sure you have Node.js, MongoDB, Git, sudo, and curl. 
-Have your working mongodb location and credentials handy.
-```sh
-sudo apt-get install curl sudo git mongodb
-```
-``` sh
-#Get Node
-curl -sL https://deb.nodesource.com/setup_8.x | bash - apt-get install -y nodejs
-sudo apt-get install -y nodejs
-```
+Software Configuration Database (SCDB)
+======================================
 
-# SWDB Installation
-``` bash
-# install swdb
-git clone https://github.com/frib-high-level-controls/swdb
-cd swdb
+A single-page web application for managing software (and firmware) installations.
+
+This application has been implemented using using [NodeJS](https://nodejs.org) (runtime),
+[Express](https://expressjs.com/) (routing), [Pug](https://pugjs.org) (templating)
+and [TypeScript](https://www.typescriptlang.org/) (language).
+
+Quick Start
+-----------
+This application requires [NodeJS](https://nodejs.org/en/download/) (>= 8.11)
+and [MongoDB](https://www.mongodb.com/download-center/community) (>= 3.2),
+which can be obtained from the respective home pages or a package manager.
+
+Then run the following commands from the root of the source directory:
+```sh
+# Obtain the build and runtime dependencies
 npm install
-npm run make
+# Compile the application using TypeScript
+npm run grunt clean build-all
+# Start the application with an example configuration
+./bin/app --config config/examplerc
 ```
 
-# Unit/API Test Setup
-SWDB has two outer FRIB system it depends on. 1) CAS - the suthentication system and 2) FORG
-the FRIB organizational service.
-
-At this time the CAS and FORG service can be tuned off for development and testing. To do this
-add "--test.testing: true" to mocha calls or configure the same in swdbrc. 
-
-``` sh
-# setup for tests
-sudo npm install -g mocha
-sudo npm install -g chai
-npm install selenium-webdriver
-```
-
-# Web Tests (Selenium)
+Running the Tests
+-----------------
+API tests are run with the following commands (will start dedicated instance of MongoDB):
 ```sh
-# Setting up for Chrome tests
-# install Chrome
-#install the selenium chromewdriver
-# Get it here http://chromedriver.storage.googleapis.com/index.html
-# It can go anywhere on your PATH. (I used /opt/chromedriver)
-# The Node/selenium-webdriver/chromedriver trifecta can be a struggle
-#  This is known to work:
-#  Node 6.9.1
-#  selenium-webdriver 3.0.1
-#  chromedriver 2.25.426924
-
-# Setting up firefox tests
-# install Firefox (I used a newer version than debian's firefox-esr)
-# Install Geckodriver (I used 
- https://github.com/mozilla/geckodriver/releases/download/v0.13.0/geckodriver-v0.13.0-linux64.tar.gz)
-#  Known good config:
-#  Node 6.9.1
-#  selenium-Webdriver 3.0.1
-#  Geckodriver v0.13.0
-#  firefox 50.1.0
-# NOTE: swdb/tests/swdb-firefox.js instructs geckodriver as to which firefox it should use. Update the firefox path here if necessary.
-# to run all tests
-cd ~/swdb
-npm run test-all
-mocha test/apptest/tests.js --config ./config/swdbrc --test.testing true
+WEBAPP_START_MONGOD=true NODE_ENV=test npm run -- nyc-mocha -t 5000 test/apptest
 ```
-# Managing Configuration
-The file config/properties.json is expected to have the data necessary to running in a given environment.
-See the docs directory in the repository for more information on using the properties file to configure the system.
 
+Web tests use the [Selenium](https://www.seleniumhq.org/) framework and requires
+the Chromium (v68) browser and Chromedriver WebDriver (v2.38). These are the
+versions known to work at this time, other versions may work. Firefox is supported
+by Selenium, but currently it is not tested for this application. These are most
+easily obtained from the package manager on Debian (or Ubuntu) systems using the
+following command:
+```sh
+sudo apt-get install chromium chromedriver
+```
+
+Run the web test using the following command:
+```sh
+WEBAPP_START_MONGOD=true NODE_ENV=test npm run -- nyc-mocha -t 5000 test/webtest
+```
