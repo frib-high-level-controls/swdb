@@ -285,7 +285,7 @@ async function loadXLSX(fileName: string, cfg: Config): Promise<void> {
       let swInstallStatusDate = sheetStatusDate;
 
       // SWInstall VV Approval Date is optional.
-      let swInstallVVApprovalDate = row[COL_VV_APRDATE] ? String(row[COL_VV_APRDATE]) : '';
+      let swInstallVVApprovalDate = row[COL_VV_APRDATE] ? String(row[COL_VV_APRDATE]).trim() : '';
       if (swInstallVVApprovalDate) {
         const m = swInstallVVApprovalDate.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/);
         if (!m) {
@@ -303,7 +303,7 @@ async function loadXLSX(fileName: string, cfg: Config): Promise<void> {
       }
 
       // SWInstall Area is required, if there is at lest one installation.
-      let swInstallArea = row[COL_AREA] ? String(row[COL_AREA]) : '';
+      let swInstallArea = row[COL_AREA] ? String(row[COL_AREA]).trim() : '';
       if (swInstallArea && (!cfg.area || !cfg.area[swInstallArea])) {
         throw new Errorf(`Sheet: %s, name: %s: SWInstall unknown Area: %s`, sheet, swInstallName, swInstallArea);
       }
@@ -317,7 +317,7 @@ async function loadXLSX(fileName: string, cfg: Config): Promise<void> {
       }
 
       // SWInstall Status is required, if there is at least one installation.
-      let swInstallStatus = row[COL_STATUS] ? String(row[COL_STATUS]) : '';
+      let swInstallStatus = row[COL_STATUS] ? String(row[COL_STATUS]).trim() : '';
       if (swInstallStatus && (!cfg.status || !cfg.status[swInstallStatus])) {
         throw new Errorf(`Sheet: %s, name %s: SWInstall unknown Status: %s`, sheet, swInstallName, swInstallStatus);
       }
@@ -331,19 +331,19 @@ async function loadXLSX(fileName: string, cfg: Config): Promise<void> {
       }
 
       // SWInstall VV Results Location is optional, but recommended!
-      const swInstallVVResultsLoc = row[COL_VV_RESULTS] ? String(row[COL_VV_RESULTS]) : '';
+      const swInstallVVResultsLoc = row[COL_VV_RESULTS] ? String(row[COL_VV_RESULTS]).trim() : '';
       if (!swInstallVVResultsLoc) {
         warn('Sheet: %s, name: %s: SWInstall VV Results Location is empty', sheet, swInstallName);
       }
 
       // Software Name is required.
-      const softwareName = row[COL_NAME_1] ? String(row[COL_NAME_1]) : '';
+      const softwareName = row[COL_NAME_1] ? String(row[COL_NAME_1]).trim() : '';
       if (!softwareName) {
         throw new Errorf('Sheet: %s, name: %s: Software Name is required', sheet, swInstallName);
       }
 
       // Software Description is required if there is at least one installation.
-      const softwareDesc = row[COL_DESCRIPTION] ? String(row[COL_DESCRIPTION]) : '';
+      const softwareDesc = row[COL_DESCRIPTION] ? String(row[COL_DESCRIPTION]).trim() : '';
       if (!softwareDesc) {
         if (swInstallHosts.length === 0) {
           warn('Sheet: %s, name: %s: Software Description is empty', sheet, swInstallName);
@@ -356,7 +356,7 @@ async function loadXLSX(fileName: string, cfg: Config): Promise<void> {
       const softwareBranch = '';
 
       // Software version is required if there is at least one installation.
-      const softwareVersion = row[COL_VERSION] ? String(row[COL_VERSION]) : '';
+      const softwareVersion = row[COL_VERSION] ? String(row[COL_VERSION]).trim() : '';
       if (!softwareVersion) {
         if (swInstallHosts.length === 0) {
           warn('Sheet: %s, name: %s: Software Version is empty', sheet, swInstallName);
@@ -366,20 +366,20 @@ async function loadXLSX(fileName: string, cfg: Config): Promise<void> {
       }
 
       // Software Level of Care is required.
-      const softwareLevelOfCare = row[COL_LOC] ? String(row[COL_LOC]).toUpperCase() : '';
+      const softwareLevelOfCare = row[COL_LOC] ? String(row[COL_LOC]).trim().toUpperCase() : '';
       if (!['LOW', 'MEDIUM', 'HIGH'].includes(softwareLevelOfCare)) {
         throw new Errorf(`Sheet: ${sheet}, row: ${rowidx + 1}: Software level of care is required`);
       }
 
       // Software Owner is required.
-      let softwareOwner = row[COL_OWNER] ? String(row[COL_OWNER]) : '';
+      let softwareOwner = row[COL_OWNER] ? String(row[COL_OWNER]).trim() : '';
       if (!cfg.owner || !cfg.owner[softwareOwner]) {
         throw new Errorf('Sheet: %s, row: %s: Software unknown Owner: %s', sheet, swInstallName, softwareOwner);
       }
       softwareOwner = String(cfg.owner[softwareOwner]);
 
       // Software Engineer is required if there is a least one installation.
-      let softwareEngineer = row[COL_ENGINEER] ? String(row[COL_ENGINEER]) : '';
+      let softwareEngineer = row[COL_ENGINEER] ? String(row[COL_ENGINEER]).trim() : '';
       if (softwareEngineer && (!cfg.engineer || !cfg.engineer[softwareEngineer])) {
         throw new Errorf(`Sheet: %s, name: %s: Software unknown Engineer: %s`,
                                                          sheet, swInstallName, softwareEngineer);
@@ -394,7 +394,7 @@ async function loadXLSX(fileName: string, cfg: Config): Promise<void> {
       }
 
       // Software Version Control is required if there is at least one installation.
-      let softwareVersionControl = row[COL_VCS_TYPE] ? String(row[COL_VCS_TYPE]) : '';
+      let softwareVersionControl = row[COL_VCS_TYPE] ? String(row[COL_VCS_TYPE]).trim() : '';
       if (softwareVersionControl && (!cfg.vcs || !cfg.vcs[softwareVersionControl])) {
         throw new Errorf('Sheet: %s, name: %s: Software unknown Version Control: %s',
                                                           sheet, swInstallName, softwareVersionControl);
@@ -409,7 +409,7 @@ async function loadXLSX(fileName: string, cfg: Config): Promise<void> {
       }
 
       // Software Version Control Location is required if there is at least one installation.
-      const softwareVersionControlLoc = row[COL_VCS_LOCATION] ? String(row[COL_VCS_LOCATION]) : '';
+      const softwareVersionControlLoc = row[COL_VCS_LOCATION] ? String(row[COL_VCS_LOCATION]).trim() : '';
       if (!softwareVersionControlLoc) {
         if (swInstallHosts.length === 0) {
           warn('Sheet: %s, name: %s: Software Version Control Location is empty', sheet, swInstallName);
@@ -419,7 +419,7 @@ async function loadXLSX(fileName: string, cfg: Config): Promise<void> {
       }
 
       // Software Platforms  is required if there is at least one installation.
-      const softwarePlatforms = row[COL_PLATFORMS] ? String(row[COL_PLATFORMS]) : '';
+      const softwarePlatforms = row[COL_PLATFORMS] ? String(row[COL_PLATFORMS]).trim() : '';
       if (!softwarePlatforms) {
         if (swInstallHosts.length === 0) {
           warn('Sheet: %s, name: %s: Software Platforms is empty', sheet, swInstallName);
