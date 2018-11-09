@@ -48,6 +48,7 @@ interface Config {
   mongo: {
     user?: {};
     pass?: {};
+    host?: {};
     port: {};
     addr: {};
     db: {};
@@ -183,11 +184,14 @@ async function main() {
   if (cfg.mongo.user) {
     mongoUrl += encodeURIComponent(String(cfg.mongo.user));
     if (cfg.mongo.pass) {
-    mongoUrl += ':' + encodeURIComponent(String(cfg.mongo.pass));
+      mongoUrl += ':' + encodeURIComponent(String(cfg.mongo.pass));
     }
     mongoUrl += '@';
   }
-  mongoUrl += cfg.mongo.addr + ':' + cfg.mongo.port + '/' + cfg.mongo.db;
+  if (!cfg.mongo.host) {
+    cfg.mongo.host = `${cfg.mongo.addr}:${cfg.mongo.port}`;
+  }
+  mongoUrl +=  `${cfg.mongo.host}/${cfg.mongo.db}`;
 
   // Connect and wait for autoIndex to complete
   await mongoose.connect(mongoUrl, cfg.mongo.options);
