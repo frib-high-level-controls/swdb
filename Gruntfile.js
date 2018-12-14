@@ -2,6 +2,17 @@ module.exports = function(grunt) {
   'use strict';
 
   grunt.initConfig({
+    shell: {
+      options: {
+        stderr: false
+      },
+      puglint: {
+        command: './node_modules/.bin/pug-lint ./views/*.pug ./views/docs/*.pug',
+      },
+      pugrender: {
+        command: './node_modules/.bin/pug ./views/docs/*.pug -O \'{ "basePath":".." }\' -D -P --name-after-file -o ./public/docs',
+      },
+    },
     ts: {
       app: {
         tsconfig: {
@@ -71,10 +82,11 @@ module.exports = function(grunt) {
       app: [ './app' ],
       test: [ './test' ],
       tools: [ './tools' ],
-      public: [ './public/js' ],
+      public: [ './public/js', './public/docs/*.html' ],
     },
   });
 
+  grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-ts');
   grunt.loadNpmTasks('grunt-tslint');
   grunt.loadNpmTasks('grunt-contrib-clean');
@@ -132,6 +144,7 @@ module.exports = function(grunt) {
     'save_version_file',
     'ts:app',
     'ts:web',
+    'shell:pugrender',
   ]);
 
   grunt.registerTask('build-tests', [
@@ -158,5 +171,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('lint', [
    'tslint',
+   'shell:puglint',
   ]);
 };

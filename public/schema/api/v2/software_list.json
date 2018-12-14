@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://netdb.frib.msu.edu/schema/api/v2/software_list.json",
+  "title": "Software List Package",
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "array",
+      "items": {
+        "$ref": "./software.json#/properties/data"
+      }
+    },
+    "error": {
+      "$ref": "./error.json"
+    }
+  }
+}

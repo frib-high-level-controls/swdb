@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://netdb.frib.msu.edu/schema/api/v2/swinstall.json",
+  "title": "Software Installation Package",
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Unique identifier for the software installation",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of this software installation",
+          "type": "string"
+        },
+        "host": {
+          "description": "Host name of this software installation",
+          "type": "string"
+        },
+        "area": {
+          "description": "List of areas that are use this software installation",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "description": "Status of this software installation",
+          "type": "string"
+        },
+        "statusDate": {
+          "description": "Effective date of this software installation",
+          "type": "string"
+        },
+        "software": {
+          "description": "Identifier of the software for this installation",
+          "type": "string"
+        },
+        "vvResultsLoc": {
+          "description": "Location of the V&V results document for this software installation",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "vvApprovalDate": {
+          "description": "Effective data of the V&V results for this software installation",
+          "type": "string"
+        },
+        "drr": {
+          "description": "Device Readiness Review associated with this software installation ",
+          "type": "string"
+        }
+      },
+      "required": [ "id", "host", "name", "area", "status", "statusDate",
+                    "software", "vvResultsLoc", "vvApprovalDate", "drr" ]
+      },
+      "error": {
+        "$ref": "./error.json"
+      }
+    }
+  }

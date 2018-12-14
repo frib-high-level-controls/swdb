@@ -26,6 +26,7 @@ npm-debug.log
 
 # Ignore public
 /public/js
+/public/docs/*.html
 
 # Ignore test coverage results
 /.nyc_output

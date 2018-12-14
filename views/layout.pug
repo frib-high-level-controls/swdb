@@ -1,0 +1,23 @@
+doctype html
+html
+  head
+    meta(http-equiv='X-UA-Compatible', content='IE=Edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(rel='icon', href=basePath + '/favicon.ico?v=1')
+    link(rel='stylesheet', href=basePath + '/node_modules/bootstrap/dist/css/bootstrap.min.css')
+    link(rel='stylesheet', href=basePath + '/node_modules/font-awesome/css/font-awesome.min.css')
+    link(rel='stylesheet', href=basePath + '/css/styles.css')
+    //- Polyfill for ES6 Promises on ES5 targets
+    script(type='text/javascript', src=basePath + '/node_modules/es6-promise/dist/es6-promise.auto.min.js')
+    script(type='text/javascript', src=basePath + '/node_modules/jquery/dist/jquery.min.js')
+    script(type='text/javascript', src=basePath + '/node_modules/bootstrap/dist/js/bootstrap.min.js')
+    block head
+
+  body
+    include ./header.pug
+    block content
+    //- include ./footer.pug
+    script(type='text/javascript', src=basePath + '/node_modules/moment/min/moment.min.js')
+    script(type='text/javascript') var basePath = '#{basePath}';
+    script(type='text/javascript', src=basePath + '/js/active-nav.js')
+    block js

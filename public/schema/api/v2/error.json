@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://netdb.frib.msu.edu/schema/api/v2/error.json",
+  "title": "Package Error",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "number",
+      "description": "Numeric status code (ie HTTP status code)"
+    },
+    "message": {
+      "type": "string",
+      "description": "Description of the error to display to the user."
+    },
+    "errors": {
+      "type": "array",
+      "description": "Optional error details.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "Identifies the type of error (ie 'ValidationError')."
+          },
+          "message": {
+            "type": "string",
+            "description": "Description of the error to display to the user."
+          },
+          "location": {
+            "type": "string",
+            "description": "The location of the error. Indicates a portion of the request data to which this error applies."
+          }
+        },
+        "required": [ "message", "location" ]
+      }
+    }
+  },
+  "required": [ "code", "message" ]
+}

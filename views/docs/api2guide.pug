@@ -1,0 +1,332 @@
+extends ../layout.pug
+
+block head
+  title API v2 - SCDB
+  //- Special styling to ensure that the in-page links are visible below the navigation bar.
+  //- See details: https://stackoverflow.com/questions/10732690/offsetting-an-html-anchor-to-adjust-for-fixed-header
+  style(type='text/css')
+    | body {
+    |   padding-top: 60px;
+    | }
+    | h2 {
+    |   position:relative;
+    | }
+    | h2 span {
+    |   position: absolute; top:-60px;
+    | }
+    | .screenshot {
+    |   border: 1px solid;
+    | }
+
+block content
+  .container
+    .panel.panel-primary
+      .panel-heading
+        h1
+          center SCDB REST API v2
+      .panel-body
+        :marked
+          **Title:** Software Document List  
+          **Method:** GET  
+          **URL Path:** /api/v2/software  
+          
+          **Responses:**
+          * 200 - Success ([JSON Schema](../schema/api/v2/software_list.json)):  
+          ```json
+          { 
+            "data": [
+              {
+                "id": "5bbe0c12bd7ba50b153bd275",
+                "name": "Control System Studio",
+                "version": "4.5.6-2.debian08.1",
+                "branch": "",
+                "desc": "Primary operator interface for the accelerator. CS Studio is used to create and display operator screens (ie OPIs). CS Studio integrates with other services including Olog, Scan Server, Archive Appliance, Channel Finder and Save/Restore.",
+                "owner": "IFS:LAB.FRIB.ASD.CONTROLS.HLCO",
+                "engineer": "BERRYMAN",
+                "levelOfCare": "MEDIUM",
+                "status": "RDY_INST",
+                "statusDate": "2018-03-07",
+                "platforms": "Linux (x86_64)",
+                "designDocLoc": "",
+                "descDocLoc": "",
+                "vvProcLoc": [],
+                "vvResultsLoc": [],
+                "versionControl": "DEB",
+                "versionControlLoc": "http://ci.frib.msu.edu/debian/pool/fc1/c/cs-studio",
+                "comment": "Imported from file: Software_Configuration_DRR02.xlsx"
+              },
+              ...
+            ]
+          }
+          ```
+          * 406 - Not Acceptable
+          ---
+
+          **Title:** Software Document  
+          **Method:** GET  
+          **URL Path:** /api/v2/software/:id  
+          
+          **Responses:**
+          * 200 - Success ([JSON Schema](../schema/api/v2/software.json)):  
+          ```json
+          { 
+            "data": {
+              "id": "5bbe0c12bd7ba50b153bd275",
+              "name": "Control System Studio",
+              "version": "4.5.6-2.debian08.1",
+              "branch": "",
+              "desc": "Primary operator interface for the accelerator. CS Studio is used to create and display operator screens (ie OPIs). CS Studio integrates with other services including Olog, Scan Server, Archive Appliance, Channel Finder and Save/Restore.",
+              "owner": "IFS:LAB.FRIB.ASD.CONTROLS.HLCO",
+              "engineer": "BERRYMAN",
+              "levelOfCare": "MEDIUM",
+              "status": "RDY_INST",
+              "statusDate": "2018-03-07",
+              "platforms": "Linux (x86_64)",
+              "designDocLoc": "",
+              "descDocLoc": "",
+              "vvProcLoc": [],
+              "vvResultsLoc": [],
+              "versionControl": "DEB",
+              "versionControlLoc": "http://ci.frib.msu.edu/debian/pool/fc1/c/cs-studio",
+              "comment": "Imported from file: Software_Configuration_DRR02.xlsx"
+            }
+          }
+          ```
+          * 406 - Not Acceptable
+          ---
+
+          **Title:** Create Software Document  
+          **Method:** POST  
+          **URL Path:** /api/v2/software  
+          **Body:**
+          ```json
+          {
+            "data": {
+              "name": "Control System Studio",
+              "version": "4.6.3-2.debian08.1",
+              "owner": "IFS:LAB.FRIB.ASD.CONTROLS.HLCO",
+              "levelOfCare": "MEDIUM",
+              "previous": "5bbe0c12bd7ba50b153bd275"
+            }
+          }
+          ```
+          **Responses:**
+          * 201 - Created ([JSON Schema](../schema/api/v2/software.json)):  
+          ```json
+          { 
+            "data": {
+              "id": "5bbe0c12bd7ba50b15332435",
+              "name": "Control System Studio",
+              "version": "4.6.3-2.debian08.1",
+              "branch": "",
+              "desc": "",
+              "owner": "IFS:LAB.FRIB.ASD.CONTROLS.HLCO",
+              "engineer": "",
+              "levelOfCare": "MEDIUM",
+              "status": "DEVEL",
+              "statusDate": "2018-03-07",
+              "platforms": "",
+              "designDocLoc": "",
+              "descDocLoc": "",
+              "vvProcLoc": [],
+              "vvResultsLoc": [],
+              "versionControl": "",
+              "versionControlLoc": "",
+              "comment": "",
+              "previous": "5bbe0c12bd7ba50b153bd275"
+            }
+          }
+          ```
+          * 400 - Bad Request ([JSON Schema](../schema/api/v2/error.json))
+          * 406 - Not Acceptable
+          ---
+
+          **Title:** Update Software Document  
+          **Method:** PUT  
+          **URL Path:** /api/v2/software/:id  
+          **Body:**
+          ```json
+          {
+            "data": {
+              "name": "Control System Studio",
+              "version": "4.6.3-2.debian08.1",
+              "branch": "",
+              "desc": "",
+              "owner": "IFS:LAB.FRIB.ASD.CONTROLS.HLCO",
+              "engineer": "",
+              "levelOfCare": "MEDIUM",
+              "status": "DEVEL",
+              "statusDate": "2018-03-07",
+              "platforms": "",
+              "designDocLoc": "",
+              "descDocLoc": "",
+              "vvProcLoc": [],
+              "vvResultsLoc": [],
+              "versionControl": "DEB",
+              "versionControlLoc": "http://ci.frib.msu.edu/debian/pool/fc1/c/cs-studio",
+              "comment": "New version requiring OpenJDK v11"
+            }
+          }
+          ```
+          **Responses:**
+          * 200 - Success ([JSON Schema](../schema/api/v2/software.json)):  
+          ```json
+          { 
+            "data": {
+              "id": "5bbe0c12bd7ba50b15332435",
+              "name": "Control System Studio",
+              "version": "4.6.3-2.debian08.1",
+              "branch": "",
+              "desc": "",
+              "owner": "IFS:LAB.FRIB.ASD.CONTROLS.HLCO",
+              "engineer": "",
+              "levelOfCare": "MEDIUM",
+              "status": "DEVEL",
+              "statusDate": "2018-03-07",
+              "platforms": "",
+              "designDocLoc": "",
+              "descDocLoc": "",
+              "vvProcLoc": [],
+              "vvResultsLoc": [],
+              "versionControl": "DEB",
+              "versionControlLoc": "http://ci.frib.msu.edu/debian/pool/fc1/c/cs-studio",
+              "comment": "New version requiring OpenJDK v11"
+            }
+          }
+          ```
+          * 400 - Bad Request ([JSON Schema](../schema/api/v2/error.json))
+          * 406 - Not Acceptable
+          ---
+          **Title:** Software Install Document List  
+          **Method:** GET  
+          **URL Path:** /api/v2/swinstall  
+          
+          **Responses:**
+          * 200 - Success ([JSON Schema](../schema/api/v2/swinstall_list.json)):  
+          ```json
+          { 
+            "data": [
+              {
+                "id": "5bbe0c13bd7ba50b153bd58a",
+                "host": "work-ftc-r1632-01.ftc",
+                "name": "Control System Studio",
+                "area": [
+                  "ADB:AREA.FRIB.FRONTEND"
+                ],
+                "status": "RDY_BEAM",
+                "statusDate": "2018-03-07",
+                "software": "5bbe0c12bd7ba50b153bd275",
+                "vvResultsLoc": [
+                  "http://traveler.nscl.msu.edu/travelers/5b070b2de21d7ede07e2a917/"
+                ],
+                "vvApprovalDate": "2018-03-07",
+                "drr": "DRR02"
+              },
+              ...
+            ]
+          }
+          ```
+          * 406 - Not Acceptable
+          ---
+          **Title:** Software Install Document  
+          **Method:** GET  
+          **URL Path:** /api/v2/swinstall/:id  
+          
+          **Responses:**
+          * 200 - Success ([JSON Schema](../schema/api/v2/swinstall.json)):  
+          ```json
+          { 
+            "data": {
+              "id": "5bbe0c13bd7ba50b153bd58a",
+              "host": "work-ftc-r1632-01.ftc",
+              "name": "Control System Studio",
+              "area": [
+                "ADB:AREA.FRIB.FRONTEND"
+              ],
+              "status": "RDY_BEAM",
+              "statusDate": "2018-03-07",
+              "software": "5bbe0c12bd7ba50b153bd275",
+              "vvResultsLoc": [
+                "http://traveler.nscl.msu.edu/travelers/5b070b2de21d7ede07e2a917/"
+              ],
+              "vvApprovalDate": "2018-03-07",
+              "drr": "DRR02"
+            },
+          }
+          ```
+          * 406 - Not Acceptable
+          ---
+          **Title:** Create Software Install Document  
+          **Method:** POST  
+          **URL Path:** /api/v2/swinstall  
+          **Body:**  
+          ```json
+          {
+            "data": {
+              "host": "work-ftc-r1632-99.ftc",
+              "name": "Control System Studio",
+              "software": "5bbe0c12bd7ba50b15332435"
+            }
+          }
+          ```
+          **Responses:**
+          * 201 - Created ([JSON Schema](../schema/api/v2/swinstall.json)):  
+          ```json
+          { 
+            "data": {
+              "id": "5bbe0c13bd7ba50b153af424",
+              "host": "work-ftc-r1632-99.ftc",
+              "name": "Control System Studio",
+              "area": [],
+              "status": "RDY_INST",
+              "statusDate": "2018-03-07",
+              "software": "5bbe0c12bd7ba50b15332435",
+              "vvResultsLoc": [],
+              "vvApprovalDate": "",
+              "drr": ""
+            },
+          }
+          ```
+          * 400 - Bad Request ([JSON Schema](../schema/api/v2/error.json))
+          * 406 - Not Acceptable
+          ---
+          **Title:** Update Software Install Document  
+          **Method:** PUT  
+          **URL Path:** /api/v2/swinstall/:id  
+          **Body:**  
+          ```json
+          {
+            "data": {
+              "host": "work-ftc-r1632-99.ftc",
+              "name": "Control System Studio",
+              "area": [ "ADB:AREA.FRIB.CTRLRM" ],
+              "status": "RDY_INST",
+              "statusDate": "2018-03-07",
+              "software": "5bbe0c12bd7ba50b15332435",
+              "vvResultsLoc": [],
+              "vvApprovalDate": "",
+              "drr": "DRR03"
+            }
+          }
+          ```
+          **Responses:**
+          * 200 - Success ([JSON Schema](../schema/api/v2/swinstall.json)):  
+          ```json
+          { 
+            "data": {
+              "id": "5bbe0c13bd7ba50b153af424",
+              "host": "work-ftc-r1632-99.ftc",
+              "name": "Control System Studio",
+              "area": [ "ADB:AREA.FRIB.CTRLRM" ],
+              "status": "RDY_INST",
+              "statusDate": "2018-03-07",
+              "software": "5bbe0c12bd7ba50b15332435",
+              "vvResultsLoc": [],
+              "vvApprovalDate": "",
+              "drr": "DRR03"
+            },
+          }
+          ```
+          * 400 - Bad Request ([JSON Schema](../schema/api/v2/error.json))
+          * 406 - Not Acceptable
+          ---

@@ -1,0 +1,101 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://netdb.frib.msu.edu/schema/api/v2/software.json",
+  "title": "Software Package",
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Unique identifier for the software",
+          "type": "string"
+        },
+        "name": {
+          "description": "Name of this software",
+          "type": "string"
+        },
+        "desc": {
+          "description": "Description of this software",
+          "type": "string"
+        },
+        "branch": {
+          "description": "Branch identifier for this software",
+          "type": "string"
+        },
+        "version": {
+          "description": "Version identifier for this software",
+          "type": "string"
+        },
+        "owner": {
+          "description": "Owner of this software (usually Department, Group or Team)",
+          "type": "string"
+        },
+        "engineer": {
+          "description": "Primary engineer for this software",
+          "type": "string"
+        },
+        "levelOfCare": {
+          "description": "Level of Care for this software",
+          "type": "string"
+        },
+        "status": {
+          "description": "Status of this software",
+          "type": "string"
+        },
+        "statusDate": {
+          "description": "Effective date for the status of this software",
+          "type": "string"
+        },
+        "platforms": {
+          "description": "Platform(s) for this software",
+          "type": "string"
+        },
+        "descDocLoc": {
+          "description": "Location of the software description document",
+          "type": "string"
+        },
+        "designDocLoc": {
+          "description": "Location of the software design document",
+          "type": "string"
+        },
+        "vvProcLoc": {
+          "description": "Location of the V&V procedure document",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "vvResultsLoc": {
+          "description": "Location of the V&V results document",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "versionControl": {
+          "description": "Version control system used by this software",
+          "type": "string"
+        },
+        "versionControlLoc": {
+          "description": "Location of Version Control repository for this software",
+          "type": "string"
+        },
+        "previous": {
+          "description": "Identifier of previous version of this software",
+          "type": "string"
+        },
+        "comment": {
+          "description": "Comment on this software",
+          "type": "string"
+        }
+      },
+      "required": [ "id", "name", "desc", "branch", "version", "owner", "engineer", "levelOfCare",
+                    "status", "statusDate", "platforms", "descDocLoc", "designDocLoc", "vvProcLoc",
+                    "vvResultsLoc", "versionControl", "versionControlLoc", "comment" ]
+    },
+    "error": {
+      "$ref": "./error.json"
+    }
+  }
+}
