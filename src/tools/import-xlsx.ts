@@ -4,7 +4,7 @@
 import * as path from 'path';
 import { format } from 'util';
 
-import * as dbg from 'debug';
+import * as Debug from 'debug';
 import * as mongoose from 'mongoose';
 import rc = require('rc');
 import XLSX = require('xlsx');
@@ -18,8 +18,6 @@ import {
   ISWInstall,
   SWInstall,
 } from '../app/models/swinstall';
-
-import * as auth from '../app/shared/auth';
 
 interface WorksheetRow {
   [key: string]: ({} | undefined | null);
@@ -55,6 +53,7 @@ interface Config {
     options: {};
   };
   dryrun?: {};
+  updateBy?: {};
   _?: Array<{}>;
   engineer: {[key: string]: {} | undefined};
   area: {[key: string]: {} | undefined};
@@ -65,7 +64,7 @@ interface Config {
 }
 
 
-const debug = dbg('import-file');
+const debug = Debug('import-file');
 
 // Custom Error class that accepts a format string and parameters.
 class Errorf extends Error {
@@ -85,8 +84,11 @@ const error = (message?: any, ...params: any[]) => {
   console.error('ERROR: ' + format(message, ...params));
 };
 
-const softwares = new Map<string, ISoftware>();
-const swInstalls = new Map<string, ISWInstall>();
+const softwareDB = new Map<string, ISoftware>();
+const swInstallDB = new Map<string, ISWInstall>();
+
+const softwares: ISoftware[] = [];
+const swInstalls: ISWInstall[] = [];
 
 async function main() {
   const cfg: Config = {
@@ -125,6 +127,7 @@ async function main() {
         --help               display help information
         --config [rcfile]    load configuration from rcfile
         --dryrun [dryrun]    validate CCDB data (default: true)
+        --updateBy [username]  username to use for saving history
     `);
     return;
   }
@@ -134,48 +137,10 @@ async function main() {
     return;
   }
 
-  for (const filePath of cfg._) {
-    const absFilePath = path.resolve(String(filePath));
-    info('Loading file: %s', absFilePath);
-    await loadXLSX(absFilePath, cfg);
-  }
-
-  let valid = true;
-
-  const softwareDocuments: Software[] = [];
-  for (const d of softwares.values()) {
-    info('Create Software document and validate: "%s" (Version: %s)', d.name, d.version);
-    const doc = new Software(d);
-    try {
-      await doc.validate();
-    } catch (err) {
-      valid = false;
-      error(err);
-      error(JSON.stringify(d, null, 4));
-    }
-    softwareDocuments.push(doc);
-  }
-
-  const swInstallDocuments: SWInstall[] = [];
-  for (const d of swInstalls.values()) {
-    info('Create SWInstall document and validate: "%s" (Host: %s)', d.name, d.host);
-    const doc = new SWInstall(d);
-    try {
-      await doc.validate();
-    } catch (err) {
-      valid = false;
-      error(err);
-      error(JSON.stringify(d, null, 4));
-    }
-    swInstallDocuments.push(doc);
-  }
-
-  if (!valid) {
-    return;
-  }
-
-  if (cfg.dryrun !== false && cfg.dryrun !== 'false') {
-    info('DRYRUN DONE');
+  const updateBy = cfg.updateBy ? String(cfg.updateBy).trim().toUpperCase() : '';
+  if (!updateBy) {
+    error(`Error: Parameter 'updateBy' is required`);
+    process.exitCode = 1;
     return;
   }
 
@@ -198,31 +163,98 @@ async function main() {
   info('Connected to database: mongodb://%s/%s', cfg.mongo.host, cfg.mongo.db);
 
   // Clean DB before saving data
-  await mongoose.connection.db.dropDatabase();
-  await Software.ensureIndexes();
-  await SWInstall.ensureIndexes();
+  // await mongoose.connection.db.dropDatabase();
+  // await Software.ensureIndexes();
+  // await SWInstall.ensureIndexes();
 
-  const updatedBy = auth.formatRole(auth.RoleScheme.SYS, 'IMPORTXLSX');
+  // const updatedBy = auth.formatRole(auth.RoleScheme.SYS, 'IMPORTXLSX');
 
-  for (const doc of softwareDocuments) {
+
+  try {
+    await Promise.all([
+      Software.find().exec().then((docs) => {
+        for (const doc of docs) {
+          softwareDB.set(genSoftwareKey(doc.name, doc.version), doc);
+        }
+      }),
+      SWInstall.find().exec().then((docs) => {
+        for (const doc of docs) {
+          swInstallDB.set(genSWInstallKey(doc.host, doc.name, String(doc.software)), doc);
+        }
+      }),
+    ]);
+
+    for (const filePath of cfg._) {
+      const absFilePath = path.resolve(String(filePath));
+      info('Loading file: %s', absFilePath);
+      await loadXLSX(absFilePath, cfg);
+    }
+
+    let valid = true;
+
+    const softwareDocuments: Software[] = [];
+    for (const d of softwares) {
+      info('Create Software document and validate: "%s" (Version: %s)', d.name, d.version);
+      const doc = new Software(d);
+      try {
+        await doc.validate();
+      } catch (err) {
+        valid = false;
+        error(err);
+        error(JSON.stringify(d, null, 4));
+      }
+      softwareDocuments.push(doc);
+    }
+
+    const swInstallDocuments: SWInstall[] = [];
+    for (const d of swInstalls) {
+      info('Create SWInstall document and validate: "%s" (Host: %s)', d.name, d.host);
+      const doc = new SWInstall(d);
+      try {
+        await doc.validate();
+      } catch (err) {
+        valid = false;
+        error(err);
+        error(JSON.stringify(d, null, 4));
+      }
+      swInstallDocuments.push(doc);
+    }
+
+    if (!valid) {
+      return;
+    }
+
+    if (cfg.dryrun !== false && cfg.dryrun !== 'false') {
+      info('DRYRUN DONE');
+      return;
+    }
+
+    for (const doc of softwareDocuments) {
+      try {
+        await doc.saveWithHistory(updateBy);
+      } catch (err) {
+        error(err);
+      }
+    }
+    info('Software documents saved with history: %s', softwareDocuments.length);
+
+    for (const doc of swInstallDocuments) {
+      try {
+        await doc.saveWithHistory(updateBy);
+      } catch (err) {
+        error(err);
+      }
+    }
+    info('SWInstall documents saved with history: %s', swInstallDocuments.length);
+
+  } finally {
     try {
-      await doc.saveWithHistory(updatedBy);
+      await mongoose.disconnect();
+      info('Disconnected from database');
     } catch (err) {
-      error(err);
+      warn('Failed to disconnect from database: %s', err);
     }
   }
-  info('Software documents saved with history: %s', softwareDocuments.length);
-
-  for (const doc of swInstallDocuments) {
-    try {
-      await doc.saveWithHistory(updatedBy);
-    } catch (err) {
-      error(err);
-    }
-  }
-  info('SWInstall documents saved with history: %s', swInstallDocuments.length);
-
-  await mongoose.disconnect();
 }
 
 /**
@@ -440,9 +472,9 @@ async function loadXLSX(fileName: string, cfg: Config): Promise<void> {
         softwareStatusDate = swInstallVVApprovalDate;
       }
 
-      const softwareKey =  `${softwareName}-${softwareVersion}`;
+      const softwareKey =  genSoftwareKey(softwareName, softwareVersion);
 
-      let software = softwares.get(softwareKey);
+      let software = softwareDB.get(softwareKey);
       if (software) {
         if (software.owner !== softwareOwner) {
           warn('Software found with key: "%s", except "%s" !== "%s"',
@@ -490,13 +522,14 @@ async function loadXLSX(fileName: string, cfg: Config): Promise<void> {
           versionControlLoc: softwareVersionControlLoc,
           comment: `Imported from file: ${path.basename(fileName)}`,
         };
-        softwares.set(softwareKey, software);
+        softwares.push(software);
+        softwareDB.set(softwareKey, software);
         info('New Software with key: "%s", adding it', softwareKey);
       }
 
       for (const host of swInstallHosts) {
-        const swInstallKey = `${host}-${swInstallName}-${software._id}`;
-        if (swInstalls.has(swInstallKey)) {
+        const swInstallKey = genSWInstallKey(host, swInstallName, software._id);
+        if (swInstallDB.has(swInstallKey)) {
           throw new Errorf('SWInstall exists with key: "%s"', swInstallKey);
         }
 
@@ -512,12 +545,21 @@ async function loadXLSX(fileName: string, cfg: Config): Promise<void> {
           software: software._id,
           drr: sheet,
         };
-        swInstalls.set(swInstallKey, swInstall);
+        swInstalls.push(swInstall);
+        swInstallDB.set(swInstallKey, swInstall);
         info('New SWInstall with key: "%s"', swInstallKey);
       }
     }
   }
   return;
+}
+
+function genSoftwareKey(name: string, version: string): string {
+  return `${name}-${version}`;
+}
+
+function genSWInstallKey(host: string, name: string, swid: string): string {
+  return `${host}-${name}-${swid}`;
 }
 
 main().catch((err: any) => {
