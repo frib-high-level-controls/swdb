@@ -5,7 +5,7 @@
   "description": "Software Database application",
   "scripts": {
     "build-all": "grunt clean build-all",
-    "postinstall": "cd ./public; npm install",
+    "postinstall": "cd ./public; npm ci",
     "start": "./bin/app",
     "grunt": "./node_modules/.bin/grunt",
     "mocha": "./node_modules/.bin/mocha",

@@ -16,7 +16,7 @@ which can be obtained from the respective home pages or a package manager.
 Then run the following commands from the root of the source directory:
 ```sh
 # Obtain the build and runtime dependencies
-npm install
+npm ci
 # Compile the application using TypeScript
 npm run grunt clean build-all
 # Start the application with an example configuration
