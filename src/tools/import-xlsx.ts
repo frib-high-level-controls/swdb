@@ -64,7 +64,7 @@ interface Config {
 }
 
 
-const debug = Debug('import-file');
+const debug = Debug('import-xlsx');
 
 // Custom Error class that accepts a format string and parameters.
 class Errorf extends Error {
@@ -119,7 +119,7 @@ async function main() {
   if (debug.enabled) {
     debug(JSON.stringify(cfg, null, 4));
   }
-  info(JSON.stringify(cfg, null, 4));
+
   if (cfg.h || cfg.help) {
     info(`Usage: import-xlsx [ options ] data.xlsx [ ... ]
 
@@ -275,7 +275,7 @@ async function loadXLSX(fileName: string, cfg: Config): Promise<void> {
     }
 
     // Cast worksheet data from type '{}[]' to more specific 'WorksheetRow[]'
-    const rows = XLSX.utils.sheet_to_json(worksheet) as WorksheetRow[];
+    const rows = XLSX.utils.sheet_to_json(worksheet, { raw: false }) as WorksheetRow[];
     if (rows.length === 0) {
       throw new Errorf(`Cannot convert sheet to json: ${sheet}`);
     }
@@ -299,6 +299,10 @@ async function loadXLSX(fileName: string, cfg: Config): Promise<void> {
 
     for (let rowidx = 0; rowidx < rows.length; rowidx += 1) {
       const row = rows[rowidx];
+
+      if (debug.enabled) {
+        debug('Sheet: %s, row: %s: %s', sheet, rowidx, JSON.stringify(row, null, 4));
+      }
 
       // SWInstall name is required, otherwise the row is considered empty (and is skipped).
       const swInstallName = row[COL_NAME] ? String(row[COL_NAME]).trim() : '';
@@ -328,7 +332,7 @@ async function loadXLSX(fileName: string, cfg: Config): Promise<void> {
         swInstallVVApprovalDate = `${('20' + m[3]).slice(-4)}-${('0' + m[1]).slice(-2)}-${('0' + m[2]).slice(-2)}`;
         if (Number.isNaN(Date.parse(swInstallVVApprovalDate))) {
           throw new Errorf('Sheet: %s, name: %s: SWInstall VV Approval date is not valid: %s',
-                                                                        sheet, swInstallName, swInstallVVApprovalDate);
+                                                                sheet, swInstallName, swInstallVVApprovalDate);
         }
         // Use V&V Approval Date for Status Date if it is valid.
         swInstallStatusDate = swInstallVVApprovalDate;
