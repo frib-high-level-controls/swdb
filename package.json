@@ -15,6 +15,7 @@
     "pug-lint": "pug-lint"
   },
   "dependencies": {
+    "@jcu/passport-cas": "^0.1.2",
     "body-parser": "^1.18.3",
     "debug": "^4.1.0",
     "express": "^4.16.4",
@@ -26,7 +27,6 @@
     "mongoose": "^5.4.0",
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
-    "passport-cas": "^0.1.1",
     "passport-http": "^0.3.0",
     "pug": "^2.0.3",
     "rc": "^1.2.8",

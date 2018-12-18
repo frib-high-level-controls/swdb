@@ -2,7 +2,7 @@
  * Type declaration for the 'passport-cas' package
  * See: https://www.npmjs.com/package/passport-cas
  */
-declare module 'passport-cas' {
+declare module '@jcu/passport-cas' {
 
   import * as express from 'express';
   import * as passport from 'passport';

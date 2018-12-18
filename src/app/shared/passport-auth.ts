@@ -1,10 +1,10 @@
 /*
  * Abstract class for a Passport based auth provider.
  */
+import * as ppcas from '@jcu/passport-cas';
 import * as dbg from 'debug';
 import * as express from 'express';
 import * as passport from 'passport';
-import * as ppcas from 'passport-cas';
 import * as pphttp from 'passport-http';
 
 import * as auth from './auth';
