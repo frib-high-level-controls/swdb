@@ -25,6 +25,7 @@ import {
   ensureAccepts,
   ensurePackage,
   HttpStatus,
+  noopHandler,
   pkgErrorDetailFormatter,
   RequestError,
   validationResult,
@@ -37,6 +38,7 @@ import {
 
 type Request = express.Request;
 type Response = express.Response;
+type RequestHandler = express.RequestHandler;
 
 const CREATED = HttpStatus.CREATED;
 const NOT_FOUND = HttpStatus.NOT_FOUND;
@@ -50,6 +52,22 @@ const router = express.Router();
 
 export function getRouter(opts?: {}): express.Router {
   return router;
+}
+
+let tokenAuthcHandler = noopHandler();
+
+export function getTokenAuthcHandler(): RequestHandler {
+  return tokenAuthcHandler;
+}
+
+export function setTokenAuthcHandler(handler: RequestHandler) {
+  tokenAuthcHandler = handler;
+}
+
+function tokenAuthc(): RequestHandler {
+  return (req, res, next) => {
+    tokenAuthcHandler(req, res, next);
+  };
 }
 
 // Convert DB Model to Web API
@@ -357,7 +375,7 @@ router.post('/api/v1/swdb', auth.ensureAuthenticated, catchAll(async (req, res) 
 }));
 
 // tslint:disable:max-line-length
-router.post('/api/v2/software', ensureAccepts('json'), ensurePackage(), auth.ensureAuthc(), catchAll(async (req, res) => {
+router.post('/api/v2/software', tokenAuthc(), auth.ensureAuthc(), ensureAccepts('json'), ensurePackage(), catchAll(async (req, res) => {
   debug('POST /api/v2/software');
   req.params.v = 'v2';
   return postSoftwareHandler(req, res);
@@ -419,7 +437,7 @@ router.put('/api/v1/swdb/:id([a-fA-F\\d]{24})', auth.ensureAuthenticated, catchA
 }));
 
 // tslint:disable:max-line-length
-router.put('/api/v2/software/:id([a-fA-F\\d]{24})', ensureAccepts('json'), ensurePackage(), auth.ensureAuthc(), catchAll(async (req, res) => {
+router.put('/api/v2/software/:id([a-fA-F\\d]{24})', tokenAuthc(), auth.ensureAuthc(), ensureAccepts('json'), ensurePackage(), catchAll(async (req, res) => {
   debug('PUT /api/v2/software/%s request', req.params.id);
   req.params.v = 'v2';
   return putSoftwareHandler(req, res);

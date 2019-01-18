@@ -27,6 +27,8 @@ import * as promises from './shared/promises';
 import * as status from './shared/status';
 import * as tasks from './shared/tasks';
 
+import * as apiauth from './lib/forg-api-auth';
+
 import * as dataproxy from './routes/dataproxy';
 import * as metadata from './routes/metadata';
 import * as softwares from './routes/softwares';
@@ -354,6 +356,22 @@ async function doStart(): Promise<express.Application> {
       casVersion: cfg.cas.version ? String(cfg.cas.version) : undefined,
     }));
     info('CAS authentication provider enabled');
+
+    const oauth20Provider = new apiauth.ForgCasOAuth20Provider({
+      forgClient: forgClient,
+      serviceId: String(cfg.cas.service_base_url) + '/api/v2(/.*)?',
+      casProfileUrl: String(cfg.cas.cas_url) + '/oauth2.0/profile',
+    });
+
+    app.use(oauth20Provider.initialize());
+
+    const tokenAuthcHandler = oauth20Provider.authenticate({
+      session: false,
+      ifTokenFound: true,
+    });
+
+    softwares.setTokenAuthcHandler(tokenAuthcHandler);
+    swinstalls.setTokenAuthcHandler(tokenAuthcHandler);
   } else {
     // Use this provider for local development that DISABLES authentication!
     auth.setProvider(new forgauth.DevForgBasicProvider(forgClient, {}));

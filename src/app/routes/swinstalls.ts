@@ -25,6 +25,7 @@ import {
   ensureAccepts,
   ensurePackage,
   HttpStatus,
+  noopHandler,
   pkgErrorDetailFormatter,
   RequestError,
   validationResult,
@@ -37,6 +38,7 @@ import {
 
 type Request = express.Request;
 type Response = express.Response;
+type RequestHandler = express.RequestHandler;
 
 const CREATED = HttpStatus.CREATED;
 const NOT_FOUND = HttpStatus.NOT_FOUND;
@@ -52,6 +54,21 @@ export function getRouter(opts?: {}): express.Router {
   return router;
 }
 
+let tokenAuthcHandler = noopHandler();
+
+export function getTokenAuthcHandler(): RequestHandler {
+  return tokenAuthcHandler;
+}
+
+export function setTokenAuthcHandler(handler: RequestHandler) {
+  tokenAuthcHandler = handler;
+}
+
+function tokenAuthc(): RequestHandler {
+  return (req, res, next) => {
+    tokenAuthcHandler(req, res, next);
+  };
+}
 
 // Convert DB Model to Web API
 function toWebAPI(doc: ISWInstall): webapi.Inst {
@@ -307,7 +324,7 @@ router.post('/api/v1/inst', auth.ensureAuthenticated, catchAll(async (req, res) 
 }));
 
 // tslint:disable:max-line-length
-router.post('/api/v2/swinstall', ensureAccepts('json'), ensurePackage(), auth.ensureAuthc(), catchAll(async (req, res) => {
+router.post('/api/v2/swinstall', tokenAuthc(), auth.ensureAuthc(), ensureAccepts('json'), ensurePackage(), catchAll(async (req, res) => {
   debug('POST /api/v2/swinstall');
   req.params.v = 'v2';
   return postSWInstallHandler(req, res);
@@ -380,7 +397,7 @@ router.put('/api/v1/inst/:id([a-fA-F\\d]{24})', auth.ensureAuthenticated, catchA
 }));
 
 // tslint:disable:max-line-length
-router.put('/api/v2/swinstall/:id([a-fA-F\\d]{24})', ensureAccepts('json'), ensurePackage(), auth.ensureAuthc(), catchAll(async (req, res) => {
+router.put('/api/v2/swinstall/:id([a-fA-F\\d]{24})', tokenAuthc(), auth.ensureAuthc(), ensureAccepts('json'), ensurePackage(), catchAll(async (req, res) => {
   debug('PUT /api/v2/swinstall/%s', req.params.id);
   req.params.v = 'v2';
   return putSWInstallHandler(req, res);
