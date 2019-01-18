@@ -265,6 +265,21 @@ export function requestErrorHandler(): ErrorRequestHandler {
   };
 }
 
+
+/**
+ * Noop request handler useful for initial values or placeholders.
+ */
+export function noopHandler(err?: any): RequestHandler {
+  return (req, res, next) => {
+    if (err) {
+      next(err);
+      return;
+    }
+    next();
+  };
+}
+
+
 /**
  * Set the response local 'basePath' to relative
  * path of application base. Redirect GET requests

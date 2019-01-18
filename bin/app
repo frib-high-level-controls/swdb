@@ -87,13 +87,14 @@ function listen(handler) {
     srv.on('error', function onError(err) {
       if (err.syscall !== 'listen') {
         reject(err);
+        return;
       }
       switch (err.code) {
       case 'EACCES':
-        reject(new Error('Listen on port ' + port + ': permission denied'))
+        reject(new Error('Listen on port ' + port + ': permission denied'));
         break;
       case 'EADDRINUSE':
-        reject(new Error('Listen on port ' + port + ': already in use'))
+        reject(new Error('Listen on port ' + port + ': already in use'));
         break;
       default:
         reject(err);
@@ -124,7 +125,7 @@ function close() {
       reject(new Error('Server not created'));
       return;
     }
-    srv.close(function(err) {
+    srv.close(function (err) {
       if (err) {
         error('Server close failure');
         reject(err);

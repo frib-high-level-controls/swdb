@@ -23,7 +23,7 @@ export function resolveTimeout<T>(timeout: number, value?: T | PromiseLike<T>) {
  * Return a promise that will be rejected with the specified reason after the timeout.
  */
 export function rejectTimeout(timeout: number, reason?: any) {
-  return new Promise((resolve, reject) => {
+  return new Promise<never>((resolve, reject) => {
     setTimeout(() => reject(reason), timeout);
   });
 }
@@ -41,7 +41,7 @@ export function resolveImmediate<T>(value?: T | PromiseLike<T>) {
  * Return a promise that will be rejected with the specified reason immediately.
  */
 export function rejectImmediate(reason?: any) {
-  return new Promise((resolve, reject) => {
+  return new Promise<never>((resolve, reject) => {
     setImmediate(() => reject(reason));
   });
 }

@@ -16,11 +16,12 @@ type AuthenticateOptions = passport.AuthenticateOptions;
 
 export type CasProfile = ppcas.Profile;
 
-export type VerifyCallback = (err: any, user?: auth.IUser | false) => void;
+// Extracted from the definition of BasicVerifyFunction with the addition of optional 'info' property.
+export type BasicDoneCallback = (err: any, user?: any, info?: any) => void;
 
-export interface BasicProviderOptions {
-  realm?: string;
-}
+export type BasicProviderOptions = pphttp.BasicStrategyOptions;
+
+export type CasDoneCallback = ppcas.DoneCallback;
 
 export interface CasProviderOptions {
   casUrl: string;
@@ -113,7 +114,7 @@ export abstract class BasicPassportAbstractProvider<AO extends AuthenticateOptio
     return this.strategy;
   }
 
-  protected abstract verify(username: string, password: string, done: VerifyCallback): void;
+  protected abstract verify(username: string, password: string, done: BasicDoneCallback): void;
 }
 
 export abstract class CasPassportAbstractProvider<AO extends CasAuthenticateOptions>
@@ -239,5 +240,5 @@ export abstract class CasPassportAbstractProvider<AO extends CasAuthenticateOpti
     return this.strategy;
   }
 
-  protected abstract verify(profile: string | CasProfile, done: VerifyCallback): void;
+  protected abstract verify(profile: string | CasProfile, done: CasDoneCallback): void;
 }
