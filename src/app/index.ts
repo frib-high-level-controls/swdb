@@ -27,6 +27,7 @@ import * as promises from './shared/promises';
 import * as status from './shared/status';
 import * as tasks from './shared/tasks';
 
+import * as casapi from './lib/casapi';
 import * as apiauth from './lib/forg-api-auth';
 
 import * as dataproxy from './routes/dataproxy';
@@ -357,18 +358,19 @@ async function doStart(): Promise<express.Application> {
     }));
     info('CAS authentication provider enabled');
 
+    const casClient = new casapi.Client({
+      url: String(cfg.cas.cas_url),
+    });
+
     const oauth20Provider = new apiauth.ForgCasOAuth20Provider({
       forgClient: forgClient,
-      serviceId: String(cfg.cas.service_base_url) + '/api/v2(/.*)?',
-      casProfileUrl: String(cfg.cas.cas_url) + '/oauth2.0/profile',
+      casClient: casClient,
     });
 
-    app.use(oauth20Provider.initialize());
-
-    const tokenAuthcHandler = oauth20Provider.authenticate({
-      session: false,
-      ifTokenFound: true,
-    });
+    const tokenAuthcHandler = express.Router().use([
+      oauth20Provider.authenticate({ ifTokenFound: true, failWithError: true, session: false }),
+      apiauth.ifAuthcEnsureHasAnyRole(oauth20Provider, 'SYS:NETDB_API_V2'),
+    ]);
 
     softwares.setTokenAuthcHandler(tokenAuthcHandler);
     swinstalls.setTokenAuthcHandler(tokenAuthcHandler);

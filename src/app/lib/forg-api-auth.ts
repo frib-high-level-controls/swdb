@@ -1,5 +1,5 @@
 /**
- *  Auth support for CAS
+ *  Auth support for OAuth 2.0 support CAS with FORG integration.
  */
 import * as querystring from 'querystring';
 
@@ -7,41 +7,32 @@ import * as Debug from 'debug';
 import * as express from 'express';
 import * as passport from 'passport';
 import * as bearer from 'passport-http-bearer';
-import * as request from 'request';
 
 import * as auth from '../shared/auth';
 import * as forgauth from '../shared/forg-auth';
 import * as forgapi from '../shared/forgapi';
+import * as handlers from '../shared/handlers';
 import * as ppauth from '../shared/passport-auth';
 
-import {
-  HttpStatus,
-} from '../shared/handlers';
+import * as casapi from './casapi';
 
 type Request = express.Request;
 type RequestHandler = express.RequestHandler;
 
-export interface AuthenticateOptions extends passport.AuthenticateOptions {
+export interface ForgCasOAuth20AuthcOptions extends passport.AuthenticateOptions {
   ifTokenFound?: boolean;
-}
-
-export interface CasOAuth2NestedProfile {
-  attributes?: {};
-  id: string;
-  client_id?: {};
-  service?: {};
 }
 
 export interface CasOAuth20ProviderOptions {
   serviceId?: string;
+  casClient: casapi.IClient;
   forgClient: forgapi.IClient;
-  casProfileUrl: string;
 }
 
-const debug = Debug('swdb:cas-auth');
+const debug = Debug('swdb:forg-api-auth');
 
 /// Consider moving this to shared library, passport-auth.ts  ///
-export abstract class BearerPassportAbstractProvider<AO extends AuthenticateOptions>
+export abstract class BearerPassportAbstractProvider<AO extends passport.AuthenticateOptions>
     extends ppauth.PassportAbstractProvider<bearer.Strategy, AO> {
 
   private strategy: bearer.Strategy;
@@ -82,19 +73,23 @@ function verifyWithForg(client: forgapi.IClient, uid: string, required: boolean)
   });
 }
 
-export class ForgCasOAuth20Provider extends BearerPassportAbstractProvider<AuthenticateOptions> {
-
-  private serviceId?: string;
+export class ForgCasOAuth20Provider extends BearerPassportAbstractProvider<ForgCasOAuth20AuthcOptions> {
 
   private forgClient: forgapi.IClient;
 
-  private casProfileUrl: string;
+  private casClient: casapi.IClient;
 
   constructor(options: CasOAuth20ProviderOptions) {
     super();
-    this.serviceId = options.serviceId;
     this.forgClient = options.forgClient;
-    this.casProfileUrl = options.casProfileUrl;
+    this.casClient = options.casClient;
+
+    // Stategy is initialized in the constructor
+    // instead of the initialize() function!
+    // This auth provider must be used in
+    // conjunction with another "properly"
+    // initialized auth provider.
+    passport.use(this.getStrategy());
   }
 
   public getUsername(req: Request): string | undefined {
@@ -105,7 +100,11 @@ export class ForgCasOAuth20Provider extends BearerPassportAbstractProvider<Authe
     return forgauth.getRoles(this, req);
   }
 
-  public authenticate(options?: AuthenticateOptions): RequestHandler {
+  public initialize(): RequestHandler {
+    throw new Error('Initialization not allowed for this Auth Provider!');
+  }
+
+  public authenticate(options?: ForgCasOAuth20AuthcOptions): RequestHandler {
     const ifTokenFound = options && options.ifTokenFound;
     const authc = super.authenticate(options);
     return (req, res, next) => {
@@ -123,7 +122,7 @@ export class ForgCasOAuth20Provider extends BearerPassportAbstractProvider<Authe
           debug('Access token found in request query parameter');
           authc(req, res, next);
         } else {
-          debug('Access token not found so do not authenticate');
+          debug('Access token not found so skip authentication');
           next();
         }
         return;
@@ -133,95 +132,70 @@ export class ForgCasOAuth20Provider extends BearerPassportAbstractProvider<Authe
   }
 
   protected async verify(token: string): Promise<{ user?: auth.IUser | false, info?: any }> {
-    const profile = await this.getCasProfile(token);
+    const profile = await this.casClient.getOAuth20Profile(token);
     if (!profile) {
       return {};
     }
 
-    const uid = profile.id;
+    debug('CAS OAuth2 profile contains id: %s', profile.id);
+    debug('CAS OAuth2 profile contains service: %s', profile.service);
+    debug('CAS OAuth2 profile contains client_id: %s', profile.client_id);
 
-    const info = {
-      service: profile.service ? String(profile.service) : undefined,
-      client_id: profile.client_id ? String(profile.client_id) : undefined,
-    };
+    let uid: string = profile.id;
 
-    debug('CAS OAuth2 profile contains id: %s', uid);
-    debug('CAS OAuth2 profile contains client_id: %s', info.client_id);
-    debug('CAS OAuth2 profile contains service: %s', info.service);
-
-    if (!this.verifyService(info.service)) {
-      debug('CAS OAuth2 service not verified');
-      return { info };
-    }
-
-    return verifyWithForg(this.forgClient, uid, false);
-  }
-
-  protected verifyService(service?: string) {
-    if (this.serviceId) {
-      debug('Verify service using serviceId: %s', this.serviceId);
+    // Check if the UID is encoded in 'UE1' format
+    if (/^UE1-/.test(uid)) {
       try {
-        return Boolean(service && service.match(this.serviceId));
+        const buf = Buffer.from(uid.substr(4), 'base64');
+        const data = querystring.parse(buf.toString('utf8'));
+        uid = (Array.isArray(data.uid) ? data.uid[0] : data.uid) || '';
       } catch (err) {
-        return false;
+        throw new Error(`Error decoding UID format UE1: ${err}`);
       }
     }
-    debug('Service verification disabled: no serviceId');
-    return true;
-  }
+    // else {
+    //   // Assume that UID is valid (maybe check with RegExp?)
+    // }
 
-  protected async getCasProfile(accessToken: string): Promise<CasOAuth2NestedProfile | null> {
-    const qs = {
-      access_token: accessToken,
-    };
-    const headers = {
-      Accept: 'application/json,appliation/x-www-form-urlencoded;q=0.9',
-    };
-    const agentOptions = {
-      rejectUnauthorized: false,
-    };
-
-    const res = await new Promise<request.Response>((resolve, reject) => {
-      request.get({ url: this.casProfileUrl, qs, headers, agentOptions }, (err, response) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-        resolve(response);
-      });
-    });
-
-    if (res.statusCode === HttpStatus.UNAUTHORIZED) {
-      return null;
+    if (!uid) {
+      return { info: profile };
     }
 
-    if (res.statusCode !== HttpStatus.OK) {
-      throw new Error(`CAS OAuth2 Profile response error with status: ${res.statusCode}`);
-    }
-
-    let profile: any;
-    const contentType = String(res.caseless.get('content-type'));
-    switch (contentType.toLowerCase().split(';')[0]) {
-    case 'text/json':
-    case 'application/json':
-      profile = JSON.parse(res.body);
-      break;
-    case 'application/x-www-form-urlencoded':
-      profile = querystring.parse(res.body);
-      break;
-    default:
-      throw new Error(`CAS OAuth2 Profile Content-Type not supported: ${contentType}`);
-    }
-
-    if (!profile) {
-      throw new Error('CAS OAuth2 Profile is empty');
-    }
-
-    if (typeof profile.id !== 'string' || !profile.id) {
-      throw new Error(`CAS OAuth2 Profile 'id' attribute missing or not a string`);
-    }
-
-    return profile;
+    debug('CAS OAuth2 token resolved to UID: %s', uid);
+    return verifyWithForg(this.forgClient, uid, true);
   }
 }
 /////////////////////////////////////////////////////////////////////
+
+
+/**
+ * If request is authenticated then ensure user has all of the specified roles.
+ */
+export function ifAuthcEnsureHasRole(provider: auth.IProvider, ...roles: Array<string | string[]>): RequestHandler {
+  return (req, res, next) => {
+    if (provider.getUsername(req)) {
+      if (!provider.hasRole(req, ...roles)) {
+        // auth.sendForbidden(req, res);
+        next(new handlers.RequestError(handlers.HttpStatus.FORBIDDEN));
+        return;
+      }
+      next();
+    }
+  };
+}
+
+/**
+ * If request os authenticated then ensure user has one of the specified roles.
+ */
+export function ifAuthcEnsureHasAnyRole(provider: auth.IProvider, ...roles: Array<string | string[]>): RequestHandler {
+  return (req, res, next) => {
+    if (provider.getUsername(req)) {
+      if (!provider.hasAnyRole(req, ...roles)) {
+        // auth.sendForbidden(req, res);
+        next(new handlers.RequestError(handlers.HttpStatus.FORBIDDEN));
+        return;
+      }
+      next();
+    }
+  };
+}
