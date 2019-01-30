@@ -53,7 +53,7 @@ test.describe('Installations record tests', () => {
 
   test.it('should show search page with login button', () => {
     driver.manage().window().setPosition(200, 0);
-    driver.get(props.webUrl + '#!/inst/list');
+    driver.get(props.webUrl + '#/inst/list');
     driver.wait(until.elementLocated(By.id('usrBtn')));
     driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')), 'Log in'));
   });
@@ -68,7 +68,7 @@ test.describe('Installations record tests', () => {
   });
 
   test.it('should show search page with username on logout button', () => {
-    driver.get(props.webUrl + '#!/inst/list');
+    driver.get(props.webUrl + '#/inst/list');
     driver.wait(until.elementLocated(By.id('usrBtn')), 5000);
     driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
       props.test.username.toUpperCase()), 5000);
@@ -125,7 +125,7 @@ test.describe('Installations record tests', () => {
 
   // find an installation record
   test.it('should find a record', () => {
-    driver.get(props.webUrl + '#!/inst/list');
+    driver.get(props.webUrl + '#/inst/list');
     driver.wait(until.elementLocated(By.id('hostSrch'))).sendKeys('host2');
     driver.wait(until.elementLocated(By.linkText('host2')));
   });

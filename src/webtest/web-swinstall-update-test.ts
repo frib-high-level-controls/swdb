@@ -56,7 +56,7 @@ test.describe('Installations update screen tests', () => {
   test.describe('1. should add a new installation record', () => {
     test.it('should show search page with login button', () => {
       driver.manage().window().setPosition(200, 0);
-      driver.get(props.webUrl + '#!/inst/list');
+      driver.get(props.webUrl + '#/inst/list');
       driver.wait(until.elementLocated(By.id('usrBtn')));
       driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')), 'Log in'));
     });
@@ -71,14 +71,14 @@ test.describe('Installations update screen tests', () => {
     });
 
     test.it('should show search page with username on logout button', () => {
-      driver.get(props.webUrl + '#!/inst/list');
+      driver.get(props.webUrl + '#/inst/list');
       driver.wait(until.elementLocated(By.id('usrBtn')));
       driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
         props.test.username.toUpperCase()));
     });
 
     test.it('should show update page with username on logout button', () => {
-      driver.get(props.webUrl + '#!/inst/new');
+      driver.get(props.webUrl + '#/inst/new');
       driver.wait(until.elementLocated(By.id('usrBtn')));
       driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
         props.test.username.toUpperCase()));

@@ -551,144 +551,148 @@ app.filter('areasNopromiseFilter', () => {
   };
 });
 
-app.config(['$routeProvider', ($routeProvider: ng.route.IRouteParamsService) => {
-    $routeProvider.
-        when('/list', {
-            templateUrl: 'partials/list.html',
-            controller: 'ListController',
-            title: 'List',
-            resolve: {
-                configServiceData: (configService: IConfigService) => {
-                    return configService.promise;
-                },
-                userServiceData: (userService: IUserService) => {
-                    return userService.promise;
-                },
-                softwareList: ['software', (software: SoftwareService) => {
-                  return software.getList();
-                }],
-            },
-        })
-        .when('/inst/list', {
-            templateUrl: 'partials/instList.html',
-            controller: 'InstListController',
-            title: 'Installations List',
-            resolve: {
-                configServiceData: (configService: IConfigService) => {
-                    return configService.promise;
-                },
-                userServiceData: (userService: IUserService) => {
-                    return userService.promise;
-                },
-            },
-        })
-        .when('/details/:itemId', {
-            templateUrl: 'partials/details.html',
-            controller: 'DetailsController',
-            title: 'Details',
-            resolve: {
-                configServiceData: (configService: IConfigService) => {
-                    return configService.promise;
-                },
-                userServiceData: (userService: IUserService) => {
-                    return userService.promise;
-                },
-                swServiceData: (swService: ISwService) => {
-                    return swService.promise;
-                },
-            },
-        })
-        .when('/inst/details/:itemId', {
-            templateUrl: 'partials/instDetails.html',
-            controller: 'InstDetailsController',
-            title: 'Installation Details',
-            resolve: {
-                configServiceData: (configService: IConfigService) => {
-                    return configService.promise;
-                },
-                userServiceData: (userService: IUserService) => {
-                    return userService.promise;
-                },
-                instServiceData: (instService: IInstService) => {
-                    return instService.promise;
-                },
-            },
-        })
-        .when('/new', {
-            templateUrl: 'partials/new.html',
-            controller: 'NewController',
-            title: 'New',
-            resolve: {
-                configServiceData: (configService: IConfigService) => {
-                    return configService.promise;
-                },
-                userServiceData: (userService: IUserService) => {
-                    return userService.promise;
-                },
-            },
-        })
-        .when('/inst/new', {
-            templateUrl: 'partials/instNew.html',
-            controller: 'InstNewController',
-            title: 'New Installation',
-            resolve: {
-                configServiceData: (configService: IUserService) => {
-                    return configService.promise;
-                },
-                userServiceData: (userService: IUserService) => {
-                    return userService.promise;
-                },
-                swServiceData: (swService: ISwService) => {
-                    return swService.promise;
-                },
-            },
-        })
-        .when('/update/:itemId', {
-            templateUrl: 'partials/new.html',
-            controller: 'UpdateController',
-            title: 'Update',
-            resolve: {
-                configServiceData: (configService: IUserService) => {
-                    return configService.promise;
-                },
-                userServiceData: (userService: IUserService) => {
-                    return userService.promise;
-                },
-                swServiceData: (swService: ISwService) => {
-                    return swService.promise;
-                },
-                instServiceData: (instService: IInstService) => {
-                    return instService.promise;
-                },
-            },
-        })
-        .when('/inst/update/:itemId', {
-            templateUrl: 'partials/instNew.html',
-            controller: 'InstUpdateController',
-            title: 'Update Installation',
-            resolve: {
-                configServiceData: (configService: IConfigService) => {
-                    return configService.promise;
-                },
-                userServiceData: (userService: IUserService) => {
-                    return userService.promise;
-                },
-                swServiceData: (swService: ISwService) => {
-                    return swService.promise;
-                },
-                instServiceData: (instService: IInstService) => {
-                    return instService.promise;
-                },
-            },
-        })
-        .when('/del/:itemId', {
-            templateUrl: 'partials/del.html',
-            controller: 'DelController',
-            title: 'Delete',
-        })
-        .otherwise({
-            redirectTo: '/list',
-        });
+app.config(['$locationProvider', '$routeProvider', (
+    $locationProvider: ng.ILocationProvider,
+    $routeProvider: ng.route.IRouteParamsService) => {
+
+  $locationProvider.hashPrefix('');
+  $routeProvider.
+      when('/list', {
+          templateUrl: 'partials/list.html',
+          controller: 'ListController',
+          title: 'List',
+          resolve: {
+              configServiceData: (configService: IConfigService) => {
+                  return configService.promise;
+              },
+              userServiceData: (userService: IUserService) => {
+                  return userService.promise;
+              },
+              softwareList: ['software', (software: SoftwareService) => {
+                return software.getList();
+              }],
+          },
+      })
+      .when('/inst/list', {
+          templateUrl: 'partials/instList.html',
+          controller: 'InstListController',
+          title: 'Installations List',
+          resolve: {
+              configServiceData: (configService: IConfigService) => {
+                  return configService.promise;
+              },
+              userServiceData: (userService: IUserService) => {
+                  return userService.promise;
+              },
+          },
+      })
+      .when('/details/:itemId', {
+          templateUrl: 'partials/details.html',
+          controller: 'DetailsController',
+          title: 'Details',
+          resolve: {
+              configServiceData: (configService: IConfigService) => {
+                  return configService.promise;
+              },
+              userServiceData: (userService: IUserService) => {
+                  return userService.promise;
+              },
+              swServiceData: (swService: ISwService) => {
+                  return swService.promise;
+              },
+          },
+      })
+      .when('/inst/details/:itemId', {
+          templateUrl: 'partials/instDetails.html',
+          controller: 'InstDetailsController',
+          title: 'Installation Details',
+          resolve: {
+              configServiceData: (configService: IConfigService) => {
+                  return configService.promise;
+              },
+              userServiceData: (userService: IUserService) => {
+                  return userService.promise;
+              },
+              instServiceData: (instService: IInstService) => {
+                  return instService.promise;
+              },
+          },
+      })
+      .when('/new', {
+          templateUrl: 'partials/new.html',
+          controller: 'NewController',
+          title: 'New',
+          resolve: {
+              configServiceData: (configService: IConfigService) => {
+                  return configService.promise;
+              },
+              userServiceData: (userService: IUserService) => {
+                  return userService.promise;
+              },
+          },
+      })
+      .when('/inst/new', {
+          templateUrl: 'partials/instNew.html',
+          controller: 'InstNewController',
+          title: 'New Installation',
+          resolve: {
+              configServiceData: (configService: IUserService) => {
+                  return configService.promise;
+              },
+              userServiceData: (userService: IUserService) => {
+                  return userService.promise;
+              },
+              swServiceData: (swService: ISwService) => {
+                  return swService.promise;
+              },
+          },
+      })
+      .when('/update/:itemId', {
+          templateUrl: 'partials/new.html',
+          controller: 'UpdateController',
+          title: 'Update',
+          resolve: {
+              configServiceData: (configService: IUserService) => {
+                  return configService.promise;
+              },
+              userServiceData: (userService: IUserService) => {
+                  return userService.promise;
+              },
+              swServiceData: (swService: ISwService) => {
+                  return swService.promise;
+              },
+              instServiceData: (instService: IInstService) => {
+                  return instService.promise;
+              },
+          },
+      })
+      .when('/inst/update/:itemId', {
+          templateUrl: 'partials/instNew.html',
+          controller: 'InstUpdateController',
+          title: 'Update Installation',
+          resolve: {
+              configServiceData: (configService: IConfigService) => {
+                  return configService.promise;
+              },
+              userServiceData: (userService: IUserService) => {
+                  return userService.promise;
+              },
+              swServiceData: (swService: ISwService) => {
+                  return swService.promise;
+              },
+              instServiceData: (instService: IInstService) => {
+                  return instService.promise;
+              },
+          },
+      })
+      .when('/del/:itemId', {
+          templateUrl: 'partials/del.html',
+          controller: 'DelController',
+          title: 'Delete',
+      })
+      .otherwise({
+          redirectTo: '/list',
+      });
 }]);
 
 

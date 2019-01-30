@@ -52,7 +52,7 @@ test.describe('Installations record tests', () => {
 
   test.it('should show search page with login button', () => {
     driver.manage().window().setPosition(200, 0);
-    driver.get(props.webUrl + '#!/list');
+    driver.get(props.webUrl + '#/list');
     driver.wait(until.elementLocated(By.id('usrBtn')));
     driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
       'Log in'));
@@ -68,7 +68,7 @@ test.describe('Installations record tests', () => {
   });
 
   test.it('should show search page with username on logout button', () => {
-    driver.get(props.webUrl + '#!/list');
+    driver.get(props.webUrl + '#/list');
     driver.wait(until.elementLocated(By.id('usrBtn')));
     driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
       props.test.username.toUpperCase()));
@@ -146,7 +146,7 @@ test.describe('Installations record tests', () => {
   });
 
   test.it('should show a known record', async () => {
-    const elementPath = By.xpath('//a[@href="#!/details/5947589458a6aa0face9a554"]');
+    const elementPath = By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]');
     driver.wait(until.elementLocated(elementPath));
     const link = await driver.findElement(elementPath).getText();
     expect(link).to.equal('BEAST');
@@ -154,14 +154,14 @@ test.describe('Installations record tests', () => {
 
   // find a software record
   test.it('should find a sw record', () => {
-    driver.get(props.webUrl + '#!/list');
+    driver.get(props.webUrl + '#/list');
     driver.wait(until.elementLocated(By.id('swNameSrch'))).sendKeys('beast');
     driver.wait(until.elementLocated(By.id('versionSrch'))).sendKeys('0.2');
     driver.wait(until.elementLocated(By.id('branchSrch'))).sendKeys('b4');
     driver.wait(until.elementLocated(By.linkText('BEAST')));
     const link = driver.findElement(By.linkText('BEAST'));
     link.getAttribute('href').then((result: string) => {
-      expect(result).to.equal(props.webUrl + '#!/details/5947589458a6aa0face9a554');
+      expect(result).to.equal(props.webUrl + '#/details/5947589458a6aa0face9a554');
     });
   });
 });

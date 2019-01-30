@@ -57,7 +57,7 @@ test.describe('Installations add screen tests', () => {
   test.describe('1. Test basic error handling', () => {
     test.it('should show search page with login button', () => {
       driver.manage().window().setPosition(200, 0);
-      driver.get(props.webUrl + '#!/list');
+      driver.get(props.webUrl + '#/list');
       driver.wait(until.elementLocated(By.id('usrBtn')));
       driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')), 'Log in'));
     });
@@ -72,14 +72,14 @@ test.describe('Installations add screen tests', () => {
     });
 
     test.it('should show search page with username on logout button', () => {
-      driver.get(props.webUrl + '#!/list');
+      driver.get(props.webUrl + '#/list');
       driver.wait(until.elementLocated(By.id('usrBtn')));
       driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
         props.test.username.toUpperCase()));
     });
 
     test.it('should show search page with username on logout button', () => {
-      driver.get(props.webUrl + '#!/inst/new');
+      driver.get(props.webUrl + '#/inst/new');
       driver.wait(until.elementLocated(By.id('usrBtn')));
       driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
         props.test.username.toUpperCase()));
@@ -174,14 +174,14 @@ test.describe('Installations add screen tests', () => {
 
   test.describe('2. Add new installation', () => {
     test.it('should show search page with username on logout button', () => {
-      driver.get(props.webUrl + '#!/inst/list');
+      driver.get(props.webUrl + '#/inst/list');
       driver.wait(until.elementLocated(By.id('usrBtn')));
       driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
         props.test.username.toUpperCase()));
     });
 
     test.it('should show new page with username on logout button', () => {
-      driver.get(props.webUrl + '#!/inst/new');
+      driver.get(props.webUrl + '#/inst/new');
       driver.wait(until.elementLocated(By.id('usrBtn')));
       driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
         props.test.username.toUpperCase()));

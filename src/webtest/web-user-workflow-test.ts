@@ -56,7 +56,7 @@ test.describe('User flow2 tests', () => {
    */
   test.it('should show search page with login button', function(this: Mocha.ITestCallbackContext) {
     driver.manage().window().setPosition(200, 0);
-    driver.get(props.webUrl + '#!/list');
+    driver.get(props.webUrl + '#/list');
     driver.wait(until.elementLocated(By.id('usrBtn')));
     driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')), 'Log in'));
   });
@@ -71,14 +71,14 @@ test.describe('User flow2 tests', () => {
   });
 
   test.it('should show search page with username on logout button', function(this: Mocha.ITestCallbackContext) {
-    driver.get(props.webUrl + '#!/list');
+    driver.get(props.webUrl + '#/list');
     driver.wait(until.elementLocated(By.id('usrBtn')));
     driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
       props.test.username.toUpperCase()));
   });
 
   test.it('should show new page with username on logout button', function(this: Mocha.ITestCallbackContext) {
-    driver.get(props.webUrl + '#!/new');
+    driver.get(props.webUrl + '#/new');
     driver.wait(until.elementLocated(By.id('usrBtn')));
     driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
       props.test.username.toUpperCase()));
@@ -306,7 +306,7 @@ test.describe('User flow2 tests', () => {
      * 4. Make a new installation record
      */
     test.it('should show search page with username on logout button', function(this: Mocha.ITestCallbackContext) {
-      driver.get(props.webUrl + '#!/inst/new');
+      driver.get(props.webUrl + '#/inst/new');
       driver.wait(until.elementLocated(By.id('usrBtn')));
       driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
         props.test.username.toUpperCase()));
@@ -526,7 +526,7 @@ test.describe('User flow2 tests', () => {
      * 7. Update software to Development status
      */
     test.it('should find the sw record', function(this: Mocha.ITestCallbackContext) {
-      driver.get(props.webUrl + '#!/list');
+      driver.get(props.webUrl + '#/list');
       driver.wait(until.elementLocated(By.id('swNameSrch')))
         .sendKeys('EXTA IOC');
       driver.wait(until.elementLocated(By.linkText('EXTA IOC')));
@@ -576,7 +576,7 @@ test.describe('User flow2 tests', () => {
      * 8. Attempt to bump the version to the same as existing version number
      */
     test.it('should find the sw record', function(this: Mocha.ITestCallbackContext) {
-      driver.get(props.webUrl + '#!/list');
+      driver.get(props.webUrl + '#/list');
       driver.wait(until.elementLocated(By.id('swNameSrch')))
         .sendKeys('EXTA IOC');
       driver.wait(until.elementLocated(By.linkText('EXTA IOC')));
@@ -650,7 +650,7 @@ test.describe('User flow2 tests', () => {
      * 11. Update status of bumped version to Ready for install
      */
     test.it('should find the sw record', function(this: Mocha.ITestCallbackContext) {
-      driver.get(props.webUrl + '#!/list');
+      driver.get(props.webUrl + '#/list');
       driver.wait(until.elementLocated(By.id('swNameSrch')))
         .sendKeys('EXTA IOC');
       driver.wait(until.elementLocated(By.id('versionSrch')))
@@ -694,7 +694,7 @@ test.describe('User flow2 tests', () => {
      */
 
     test.it('should find the installation record', function(this: Mocha.ITestCallbackContext) {
-      driver.get(props.webUrl + '#!/inst/list');
+      driver.get(props.webUrl + '#/inst/list');
       driver.wait(until.elementLocated(By.id('hostSrch'))).sendKeys('vmachine01');
       driver.wait(until.elementLocated(By.linkText('vmachine01'))).click();
     });
@@ -886,7 +886,7 @@ test.describe('User flow2 tests', () => {
 
   test.describe('16. Update software status as Deprecated', () => {
     test.it('should find the sw record', function(this: Mocha.ITestCallbackContext) {
-      driver.get(props.webUrl + '#!/list');
+      driver.get(props.webUrl + '#/list');
       driver.wait(until.elementLocated(By.id('swNameSrch')))
         .sendKeys('EXTA IOC');
       driver.wait(until.elementLocated(By.id('versionSrch')))
@@ -947,7 +947,7 @@ test.describe('User flow2 tests', () => {
   test.describe('Cancel from new sw goes back to list', () => {
     // test cancel from new sw record foes back to the mail search screen
     test.it('should show new page with username on logout button', function(this: Mocha.ITestCallbackContext) {
-      driver.get(props.webUrl + '#!/new');
+      driver.get(props.webUrl + '#/new');
       driver.wait(until.elementLocated(By.id('usrBtn')));
       driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
         props.test.username.toUpperCase()));
@@ -969,7 +969,7 @@ test.describe('User flow2 tests', () => {
     // Test cancel from sw update goes back to the appropriate detauils screen
     // find the created record
     test.it('should find a record', function(this: Mocha.ITestCallbackContext) {
-      driver.get(props.webUrl + '#!/list');
+      driver.get(props.webUrl + '#/list');
       driver.wait(until.elementLocated(By.id('swNameSrch')))
         .sendKeys('EXTA IOC');
       driver.wait(until.elementLocated(By.id('versionSrch')))
@@ -999,7 +999,7 @@ test.describe('User flow2 tests', () => {
     // test cancel from new sw record foes back to the mail search screen
     test.it('should show new installation page with username on logout button',
       function(this: Mocha.ITestCallbackContext) {
-      driver.get(props.webUrl + '#!/inst/new');
+      driver.get(props.webUrl + '#/inst/new');
       driver.wait(until.elementLocated(By.id('usrBtn')));
       driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
         props.test.username.toUpperCase()));
@@ -1020,7 +1020,7 @@ test.describe('User flow2 tests', () => {
     // Test cancel from sw update goes back to the appropriate detauils screen
     // find the created record
     test.it('should find installation record', function(this: Mocha.ITestCallbackContext) {
-      driver.get(props.webUrl + '#!/inst/list');
+      driver.get(props.webUrl + '#/inst/list');
       driver.wait(until.elementLocated(By.id('hostSrch')))
         .sendKeys('vmachine01');
     });

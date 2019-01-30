@@ -54,7 +54,7 @@ test.describe('Preload db record tests', () => {
 
   test.it('should show search page with login button', () => {
     driver.manage().window().setPosition(200, 0);
-    driver.get(props.webUrl + '#!/list');
+    driver.get(props.webUrl + '#/list');
     driver.wait(until.elementLocated(By.id('usrBtn')));
     driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')), 'Log in'));
   });
@@ -69,7 +69,7 @@ test.describe('Preload db record tests', () => {
   });
 
   test.it('should show search page with username on logout button', () => {
-    driver.get(props.webUrl + '#!/list');
+    driver.get(props.webUrl + '#/list');
     driver.wait(until.elementLocated(By.id('usrBtn')));
     driver.wait(until.elementTextContains(driver.findElement(By.id('usrBtn')),
       props.test.username.toUpperCase()));
@@ -81,8 +81,8 @@ test.describe('Preload db record tests', () => {
   });
 
   test.it('should show a known record', async () => {
-    driver.wait(until.elementLocated(By.xpath('//a[@href="#!/details/5947589458a6aa0face9a554"]')));
-    const link = await driver.findElement(By.xpath('//a[@href="#!/details/5947589458a6aa0face9a554"]'));
+    driver.wait(until.elementLocated(By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]')));
+    const link = await driver.findElement(By.xpath('//a[@href="#/details/5947589458a6aa0face9a554"]'));
     const linkText = await link.getText();
     expect(linkText).to.equal('BEAST');
     link.click();
