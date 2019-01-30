@@ -234,6 +234,13 @@ export function requestErrorHandler(): ErrorRequestHandler {
     } else if (err instanceof Error) {
       message = err.message;
       details.message = message;
+      // If the error includes a 'status' property then use it.
+      // (Specifically added to support passport's AuthenticationError)
+      const s = Number((err as any).status);
+      if (s >= 100 && s < 600) {
+        status = Math.floor(s);
+        details.code = status;
+      }
     }
 
     if (status >= 500) {
