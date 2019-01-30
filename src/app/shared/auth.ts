@@ -3,13 +3,17 @@
  */
 import * as util from 'util';
 
-import * as HttpStatus from 'http-status-codes';
 import * as URI from 'uri-js';
 
 import * as dbg from 'debug';
 import * as express from 'express';
 
 import * as log from './logging';
+
+import {
+  HttpStatus,
+  RequestError,
+} from './handlers';
 
 type Request = express.Request;
 type Response = express.Response;
@@ -190,16 +194,17 @@ class NullProvider extends AbstractProvider {
   }
 }
 
-export function sendUnauthorized(req: Request, res: Response, type: string, realm: string, msg?: string) {
+// tslint:disable:max-line-length
+export const sendUnauthorized = util.deprecate((req: Request, res: Response, type: string, realm: string, msg?: string) => {
   res.header('WWW-Authenticate', util.format('%s realm="%s"', type, realm));
   res.status(HttpStatus.UNAUTHORIZED);
   res.send(msg ? msg : HttpStatus.getStatusText(HttpStatus.UNAUTHORIZED));
-}
+}, 'auth.sendUnauthorized() is deprecated');
 
-export function sendForbidden(req: Request, res: Response, msg?: string) {
+export const sendForbidden = util.deprecate((req: Request, res: Response, msg?: string) => {
   res.status(HttpStatus.FORBIDDEN);
   res.send(msg ? msg : HttpStatus.getStatusText(HttpStatus.FORBIDDEN));
-}
+}, 'auth.sendForbidden() is deprecated: consider using auth.setFailWithError(true)');
 
 
 const nullProvider = new NullProvider();
@@ -212,6 +217,16 @@ export function getProvider(): IProvider {
 
 export function setProvider(provider: IProvider) {
   defaultProvider = provider;
+}
+
+let failWithError = false;
+
+export function isFailWithError() {
+  return failWithError;
+}
+
+export function setFailWithError(value: boolean) {
+  failWithError = value;
 }
 
 export function getUsername(req: Request): string | undefined {
@@ -251,7 +266,11 @@ export function ensureHasUsername(...usernames: Array<string | string[]>): Reque
   return (req, res, next) => {
     authc(req, res, (err: any) => {
       if (!hasUsername(req, ...usernames)) {
-        sendForbidden(req, res);
+        if (failWithError) {
+          next(new RequestError(HttpStatus.FORBIDDEN));
+        } else {
+          sendForbidden(req, res);
+        }
         return;
       }
       next();
@@ -264,7 +283,11 @@ export function ensureHasRole(...roles: Array<string | string[]>): RequestHandle
   return (req, res, next) => {
     authc(req, res, (err: any) => {
       if (!hasRole(req, ...roles)) {
-        sendForbidden(req, res);
+        if (failWithError) {
+          next(new RequestError(HttpStatus.FORBIDDEN));
+        } else {
+          sendForbidden(req, res);
+        }
         return;
       }
       next();
@@ -277,7 +300,11 @@ export function ensureHasAnyRole(...roles: Array<string | string[]>): RequestHan
   return (req, res, next) => {
     authc(req, res, (err: any) => {
       if (!hasAnyRole(req, ...roles)) {
-        sendForbidden(req, res);
+        if (failWithError) {
+          next(new RequestError(HttpStatus.FORBIDDEN));
+        } else {
+          sendForbidden(req, res);
+        }
         return;
       }
       next();
