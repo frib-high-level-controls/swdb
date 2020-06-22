@@ -24,7 +24,7 @@
     "http-status-codes": "^1.1.6",
     "jstransformer-marked": "^1.0.3",
     "lodash": "^4.17.11",
-    "mongoose": "^5.4.8",
+    "mongoose": "^5.7.5",
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-http": "^0.3.0",
