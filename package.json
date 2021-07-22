@@ -35,7 +35,7 @@
     "serve-favicon": "^2.5.0",
     "tough-cookie": "^2.5.0",
     "uri-js": "^4.2.2",
-    "xlsx": "^0.14.1"
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "@types/angular": "^1.6.53",
